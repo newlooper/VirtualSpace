@@ -182,11 +182,29 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 取消隐藏窗口.
+        /// </summary>
+        internal static string VDW_CTM_Desktop_UnHideWindow {
+            get {
+                return ResourceManager.GetString("VDW.CTM.Desktop.UnHideWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 关闭.
         /// </summary>
         internal static string VDW_CTM_Window_Close {
             get {
                 return ResourceManager.GetString("VDW.CTM.Window.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 从视图隐藏.
+        /// </summary>
+        internal static string VDW_CTM_Window_HideFromView {
+            get {
+                return ResourceManager.GetString("VDW.CTM.Window.HideFromView", resourceCulture);
             }
         }
         

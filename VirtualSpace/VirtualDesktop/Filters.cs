@@ -32,7 +32,8 @@ namespace VirtualSpace.VirtualDesktop
             "WinFormsDesigner"
         };
 
-        public static readonly List<IntPtr> WndHandleIgnoreList = new();
+        public static readonly List<IntPtr> WndHandleIgnoreList       = new();
+        public static readonly List<IntPtr> WndHandleManualIgnoreList = new();
 
         public static bool IsCloaked( IntPtr handle )
         {

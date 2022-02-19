@@ -188,4 +188,10 @@ VirtualSpace(11)	Windows 11	21H2(22000)
   <data name="Error.Title" xml:space="preserve">
     <value>错误！</value>
   </data>
+  <data name="VDW.CTM.Window.HideFromView" xml:space="preserve">
+    <value>从视图隐藏</value>
+  </data>
+  <data name="VDW.CTM.Desktop.UnHideWindow" xml:space="preserve">
+    <value>取消隐藏窗口</value>
+  </data>
 </root>

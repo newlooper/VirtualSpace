@@ -182,11 +182,29 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unhide Window.
+        /// </summary>
+        internal static string VDW_CTM_Desktop_UnHideWindow {
+            get {
+                return ResourceManager.GetString("VDW.CTM.Desktop.UnHideWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string VDW_CTM_Window_Close {
             get {
                 return ResourceManager.GetString("VDW.CTM.Window.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide from view.
+        /// </summary>
+        internal static string VDW_CTM_Window_HideFromView {
+            get {
+                return ResourceManager.GetString("VDW.CTM.Window.HideFromView", resourceCulture);
             }
         }
         

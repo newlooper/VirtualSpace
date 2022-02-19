@@ -11,7 +11,10 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualSpace.Config;
@@ -51,6 +54,21 @@ namespace VirtualSpace.VirtualDesktop
                 VirtualDesktopManager.ShowVisibleWindowsForDesktops();
             };
             _ctm.Items.Add( pinApp );
+
+            var ignoreWindow = new ToolStripMenuItem
+            {
+                Text = Agent.Langs.GetString( "VDW.CTM.Window.HideFromView" )
+            };
+
+            void OnIgnoreWindowClick( object? s, EventArgs evt )
+            {
+                Filters.WndHandleManualIgnoreList.Add( mi.Vw.Handle );
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
+            }
+
+            ignoreWindow.Click += OnIgnoreWindowClick;
+            ignoreWindow.Enabled = !DesktopWrapper.IsWindowPinned( mi.Vw.Handle );
+            _ctm.Items.Add( ignoreWindow );
 
             var closeWindow = new ToolStripMenuItem
             {
@@ -127,6 +145,40 @@ namespace VirtualSpace.VirtualDesktop
             };
             _ctm.Items.Add( desktopName );
             _ctm.Items.Add( "-" );
+
+            var unHideWindow = new ToolStripMenuItem( Agent.Langs.GetString( "VDW.CTM.Desktop.UnHideWindow" ) );
+
+            void OnUnHideWindow( object? s, EventArgs evt )
+            {
+                var item = s as ToolStripMenuItem;
+                var m    = Regex.Match( item.Text, @".*?\|(.*)" );
+
+                Filters.WndHandleManualIgnoreList.Remove( (IntPtr)int.Parse( m.Groups[1].Value ) );
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
+            }
+
+            foreach ( var handle in Filters.WndHandleManualIgnoreList )
+            {
+                if ( DesktopWrapper.IsWindowPinned( handle ) ) continue;
+                if ( !User32.IsWindow( handle ) ) continue;
+                if ( DesktopWrapper.FromWindow( handle ).Guid != mi.Self.VdId ) continue;
+
+                _ = User32.GetWindowThreadProcessId( handle, out var pId );
+                var process = Process.GetProcessById( pId );
+
+                var sb = new StringBuilder( 1024 );
+                User32.GetWindowText( handle, sb, sb.Capacity );
+                var title = sb.ToString();
+
+                var item = new ToolStripMenuItem( $"[{title}] of {process.ProcessName}(.exe) |{handle}" );
+                item.Click += OnUnHideWindow;
+                unHideWindow.DropDownItems.Add( item );
+            }
+
+            unHideWindow.Enabled = unHideWindow.DropDownItems.Count > 0;
+            _ctm.Items.Add( unHideWindow );
+            _ctm.Items.Add( "-" );
+
             var delVirtualDesktop = new ToolStripMenuItem( Agent.Langs.GetString( "VDW.CTM.Desktop.Remove" ) );
             delVirtualDesktop.Click += ( s, evt ) =>
             {
@@ -146,6 +198,7 @@ namespace VirtualSpace.VirtualDesktop
                 }
             };
             _ctm.Items.Add( delVirtualDesktop );
+
             var addVirtualDesktop = new ToolStripMenuItem( Agent.Langs.GetString( "VDW.CTM.Desktop.Create" ) );
 
             void BatchAdd( object? s, EventArgs evt )
@@ -158,7 +211,7 @@ namespace VirtualSpace.VirtualDesktop
 
                     for ( var i = 0; i < count; i++ )
                         _ = DesktopWrapper.Create();
-                    
+
                     VirtualDesktopManager.FixLayout();
                     VirtualDesktopManager.ShowAllVirtualDesktops();
                     if ( VirtualDesktopManager.NeedRepaintThumbs )

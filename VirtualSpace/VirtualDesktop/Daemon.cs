@@ -142,6 +142,7 @@ namespace VirtualSpace.VirtualDesktop
                  !Filters.WndClsIgnoreList.Contains( classname ) &&
                  !Filters.WndTitleIgnoreList.Contains( title ) &&
                  !Filters.WndHandleIgnoreList.Contains( hWnd ) &&
+                 !Filters.WndHandleManualIgnoreList.Contains( hWnd ) &&
                  !Filters.IsCloaked( hWnd )
                )
             {
