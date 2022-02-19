@@ -1,0 +1,152 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFrameworks>netcoreapp3.1;net5.0-windows;net6.0-windows</TargetFrameworks>
+        <UseWPF>true</UseWPF>
+        <StartupObject>VirtualSpace.App</StartupObject>
+        <ApplicationIcon>Resources\TrayIcon.ico</ApplicationIcon>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <UseWindowsForms>True</UseWindowsForms>
+        <LangVersion>9</LangVersion>
+        <Nullable>enable</Nullable>
+        <CsWinRTEnabled>false</CsWinRTEnabled>
+    </PropertyGroup>
+
+    <Import Condition=" '$(Configuration)'=='Release' " Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v17.0\TextTemplating\Microsoft.TextTemplating.targets" />
+
+    <PropertyGroup>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <TransformOnBuild>true</TransformOnBuild>
+        <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
+        <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="app.manifest" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="app.manifest" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\VirtualSpace\About.cs" Link="About.cs" />
+        <Compile Include="..\VirtualSpace\About.Designer.cs" Link="About.Designer.cs" />
+        <Compile Include="..\VirtualSpace\Agent.cs" Link="Agent.cs" />
+        <Compile Include="..\VirtualSpace\App.xaml.cs" Link="App.xaml.cs" />
+        <Compile Include="..\VirtualSpace\AppController.cs" Link="AppController.cs" />
+        <Compile Include="..\VirtualSpace\AppController.Designer.cs" Link="AppController.Designer.cs" />
+        <Compile Include="..\VirtualSpace\AppController.logs.cs" Link="AppController.logs.cs" />
+        <Compile Include="..\VirtualSpace\AppController.rules.cs" Link="AppController.rules.cs" />
+        <Compile Include="..\VirtualSpace\AutoVersion.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>AutoVersion.tt</DependentUpon>
+        </Compile>
+        <Compile Include="..\VirtualSpace\IpcPipe.cs" Link="IpcPipe.cs" />
+        <Compile Include="..\VirtualSpace\MainWindow.hotkeys.cs" Link="MainWindow.hotkeys.cs" />
+        <Compile Include="..\VirtualSpace\MainWindow.layout.cs" Link="MainWindow.layout.cs" />
+        <Compile Include="..\VirtualSpace\MainWindow.main.cs" Link="MainWindow.main.cs" />
+        <Compile Include="..\VirtualSpace\MainWindow.style.cs" Link="MainWindow.style.cs" />
+        <Compile Include="..\VirtualSpace\Resources\Langs\WinFormStrings.Designer.cs" Link="Resources\Langs\WinFormStrings.Designer.cs" />
+        <Compile Include="..\VirtualSpace\Resources\Langs\WinFormStrings.zh-Hans.Designer.cs" Link="Resources\Langs\WinFormStrings.zh-Hans.Designer.cs" />
+        <Compile Include="..\VirtualSpace\RuleForm.cs" Link="RuleForm.cs" />
+        <Compile Include="..\VirtualSpace\RuleForm.Designer.cs" Link="RuleForm.Designer.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\Api\DesktopManagerWrapper.cs" Link="VirtualDesktop\Api\DesktopManagerWrapper.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\Daemon.cs" Link="VirtualDesktop\Daemon.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\DragWindow.cs" Link="VirtualDesktop\DragWindow.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\DragWindow.Designer.cs" Link="VirtualDesktop\DragWindow.Designer.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\Filters.cs" Link="VirtualDesktop\Filters.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\Manager.cs" Link="VirtualDesktop\Manager.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\Menus.cs" Link="VirtualDesktop\Menus.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\VirtualDesktopWindow.cs" Link="VirtualDesktop\VirtualDesktopWindow.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\VirtualDesktopWindow.Designer.cs" Link="VirtualDesktop\VirtualDesktopWindow.Designer.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\VirtualDesktopWindow.Mouse.cs" Link="VirtualDesktop\VirtualDesktopWindow.Mouse.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\VisibleWindow.cs" Link="VirtualDesktop\VisibleWindow.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Resources\TrayIcon.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="..\VirtualSpace\About.resx" Link="About.resx" />
+        <EmbeddedResource Include="..\VirtualSpace\AppController.resx" Link="AppController.resx" />
+        <EmbeddedResource Include="..\VirtualSpace\AppController.zh-Hans.resx" Link="AppController.zh-Hans.resx" />
+        <EmbeddedResource Include="..\VirtualSpace\Resources\Langs\WinFormStrings.resx" Link="Resources\Langs\WinFormStrings.resx" />
+        <EmbeddedResource Include="..\VirtualSpace\Resources\Langs\WinFormStrings.zh-Hans.resx" Link="Resources\Langs\WinFormStrings.zh-Hans.resx" />
+        <EmbeddedResource Include="..\VirtualSpace\RuleForm.resx" Link="RuleForm.resx" />
+        <EmbeddedResource Include="..\VirtualSpace\RuleForm.zh-Hans.resx" Link="RuleForm.zh-Hans.resx" />
+        <EmbeddedResource Include="..\VirtualSpace\VirtualDesktop\DragWindow.resx" Link="VirtualDesktop\DragWindow.resx" />
+        <EmbeddedResource Include="..\VirtualSpace\VirtualDesktop\VirtualDesktopWindow.resx" Link="VirtualDesktop\VirtualDesktopWindow.resx" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0-windows' Or '$(TargetFramework)' == 'net6.0-windows' ">
+        <PackageReference Include="Microsoft.Windows.CsWinRT" Version="1.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\VirtualSpace\AutoVersion.tt">
+            <Link>AutoVersion.tt</Link>
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>AutoVersion.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Configuration\Configuration.csproj" />
+        <ProjectReference Include="..\Helpers\Helpers.csproj" />
+        <ProjectReference Include="..\UiAutomation\UiAutomation.csproj" />
+        <ProjectReference Include="..\VirtualDesktop10\VirtualDesktop10.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Page Update="MainWindow.xaml">
+            <SubType>Designer</SubType>
+            <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+            <Generator>MSBuild:Compile</Generator>
+        </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Resources\Langs\" />
+    </ItemGroup>
+
+    <Target Name="DeletePdb" AfterTargets="Publish">
+        <ItemGroup>
+            <FileToDelete Include="bin\**\*.pdb" />
+        </ItemGroup>
+        <Delete Files="@(FileToDelete)" />
+        <Message Text="Deleted files: '@(FileToDelete)'" Importance="high" />
+    </Target>
+
+</Project>

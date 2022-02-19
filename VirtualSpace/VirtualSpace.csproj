@@ -1,0 +1,164 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFrameworks>netcoreapp3.1;net5.0-windows;net6.0-windows</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <StartupObject>VirtualSpace.App</StartupObject>
+        <UseWindowsForms>True</UseWindowsForms>
+        <ApplicationIcon>Resources\TrayIcon.ico</ApplicationIcon>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <Platforms>AnyCPU;x64;x86</Platforms>
+        <LangVersion>9</LangVersion>
+        <CsWinRTEnabled>false</CsWinRTEnabled>
+    </PropertyGroup>
+
+    <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v17.0\TextTemplating\Microsoft.TextTemplating.targets" />
+
+    <PropertyGroup>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <TransformOnBuild>true</TransformOnBuild>
+        <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
+        <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|x64'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|x64'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|x86'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|x86'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|x64'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|x64'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|x86'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|x86'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|AnyCPU'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|x64'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|x64'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|x86'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|x86'">
+      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="Resources\TrayIcon.ico" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0-windows' Or '$(TargetFramework)' == 'net6.0-windows' ">
+        <PackageReference Include="Microsoft.Windows.CsWinRT" Version="1.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Configuration\Configuration.csproj" />
+        <ProjectReference Include="..\Helpers\Helpers.csproj" />
+        <ProjectReference Include="..\UiAutomation\UiAutomation.csproj" />
+        <ProjectReference Include="..\VirtualDesktop11\VirtualDesktop11.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="AutoVersion.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>AutoVersion.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Langs\WinFormStrings.zh-Hans.Designer.cs">
+            <DependentUpon>WinFormStrings.zh-Hans.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+        </Compile>
+        <Compile Update="Resources\Langs\WinFormStrings.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>WinFormStrings.resx</DependentUpon>
+        </Compile>
+        <Compile Update="VirtualDesktop\VirtualDesktopWindow.cs">
+            <SubType>Form</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\Langs\WinFormStrings.zh-Hans.resx">
+            <LastGenOutput>WinFormStrings.zh-Hans.Designer.cs</LastGenOutput>
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Langs\WinFormStrings.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>WinFormStrings.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="AutoVersion.tt">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>AutoVersion.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    </ItemGroup>
+
+    <Target Name="DeletePdb" AfterTargets="Publish">
+        <ItemGroup>
+            <FileToDelete Include="bin\**\*.pdb" />
+        </ItemGroup>
+        <Delete Files="@(FileToDelete)" />
+        <Message Text="Deleted files: '@(FileToDelete)'" Importance="high" />
+    </Target>
+
+</Project>

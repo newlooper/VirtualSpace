@@ -1,0 +1,203 @@
+﻿<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="quitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 34</value>
+  </data>
+  <data name="quitToolStripMenuItem.Text" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 28</value>
+  </data>
+  <data name="fileToolStripMenuItem.Text" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="langToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 34</value>
+  </data>
+  <data name="langToolStripMenuItem.Text" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="optionsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 28</value>
+  </data>
+  <data name="optionsToolStripMenuItem.Text" xml:space="preserve">
+    <value>选项</value>
+  </data>
+  <data name="aboutToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 28</value>
+  </data>
+  <data name="aboutToolStripMenuItem.Text" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="logTabInfo.Text" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="logTabDebug.Text" xml:space="preserve">
+    <value>调试</value>
+  </data>
+  <data name="logTabEvent.Text" xml:space="preserve">
+    <value>事件</value>
+  </data>
+  <data name="logTabWarning.Text" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="logTabError.Text" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="MT_Logs.Text" xml:space="preserve">
+    <value>日志</value>
+  </data>
+  <data name="MT_General.Text" xml:space="preserve">
+    <value>通用</value>
+  </data>
+  <data name="MT_UI.Text" xml:space="preserve">
+    <value>界面</value>
+  </data>
+  <data name="lvc_Name.Text" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="lvc_Created.Text" xml:space="preserve">
+    <value>创建时间</value>
+  </data>
+  <data name="lvc_Updated.Text" xml:space="preserve">
+    <value>更新时间</value>
+  </data>
+  <data name="btn_RuleEdit.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAu
+        IgAALiIBquLdkgAAAbhJREFUSEut1r8rRWEcx/EzsGBgY6EkCxnIYDFJMphMpMjAoDAZDEpmi6KwKH8D
+        m2Rh8DMhKRsZWFAkOt6f7nPufTzOee653OFV3+f7fJ/zud3TOfcGQRAWUzkO8YA+08PPof+oxAlYZHWA
+        vd/Df7UBih8+0KDNOmzhvAAXuEYJopA2fMEOkRttHjnNtDah8yu4NHUL7BkjtpmXvhqdHbF626bXa/Vk
+        Wc1Xs9Cn6U6hCzqn2r6YrEJ7Y2Z9kFkH4bNp7GQaqTSBItYcNDOMqkydC9nPNPKqxRtYJBqFdaawkDLc
+        gUWiT3TCOldYyDEovNrhnEsfomeJwst6ldjShayDwmsccWeRP2QeFF4LiDtr+EOGoD2fNWh2Ev2mdvhD
+        9OxoL4nuk+Z6zHrJrB3+kD1oL84pNMNbNtubMD2HP+QK2nPdowKa0Q2P+lOm50gO0UXeoT2bnnb9PERz
+        g4j2Cg7Re0f9yBP0FbkP2wCimbwhu7lmVjUaUWr1XPbbODHkBVThGZod+mOgAP1+16Ae7swMdF6m4QRI
+        bqAYZuEESBDegqoo9KvoBEgQtkJ/DHRv/uoRi3AuLmHwDTVanr01N1gtAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btn_RuleEdit.Text" xml:space="preserve">
+    <value>编辑...</value>
+  </data>
+  <data name="btn_RuleClone.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAu
+        IgAALiIBquLdkgAAASdJREFUSEvt1j9KA0EUx/EtvIOQ2gi2Eey0srAxGARFEVG8gYUnsPAaNrmJVmlj
+        qXeQEPy//r7DezDGCWwmI1ik+Cy8md33IzOTTap6UKWcyKOM5vAsd9JOBaxKXdBDKuRQ/IYruch0K6FP
+        KmRdPCQ139S20GPsA23Zla5cC5Nf0pL4wVmcCX1GFEdWTHqTYiFjKya9S7EQloWCTaapT6JYCGeaYl+o
+        N63+kxCOHTWbvwiJLUJm8r9Clmwsx55MDTmwGh1ZznQp9PhMhcTf+HBTQ6/mw2p//iUVgr6NlXA6LQRb
+        0mvoXPxFe2Nj7MmahGb+qt9hYA4sE302orGACxPgN5ljl4NN9k9yLL9ChuJBJYQlinFZkXvhfxL7k+tJ
+        2JsfAfWgqr4BuhhlyEKF8m4AAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="btn_RuleClone.Text" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="btn_RuleNew.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAu
+        IgAALiIBquLdkgAAAbVJREFUSEutlt0qBVEYhic2FyE5kJyLXISfAyIugRDiApRrUIiIe1CUwpH8lJ92
+        ckYccEJ+QlLb8+5ZZn9jz6wYvqen9lqr+d7ZzayZCYJC4LMSe3AO9/AGH/EW93EeezGHSceHJk6GjuEF
+        /oRLHMekPgkThaAedzEL+rcNGO/5baIJn/EvvGALlvqaQQ2+4X/wjrVYFpLHVNpgzdABdj2BM4yFDKKX
+        GbA1C3Y9hREsBlTgQ3HKwxTYmga7noJu90qFdLkJLxlDRI9ClqKhhwGwNQx23cOKQo6ioUMXWWdu2QJb
+        22DXRTvYPo4ThdxFQ8cxZKk82D6OO4WU7Y0NyFKbYPs4XhVyHw0dJ5ClUv7JvUKOo6FDG013j0XXwNYO
+        2HXRCbaP41Qhy9HQwyDY+sXdtaqQ7mjoQXePLZ25XffQqxDteO1MLxlDnjCnEDlUnPKQ8dk1isWAL/XU
+        TEUbbd2QcpEt5xj2jn6Ez3+9B/6DD6zDshDZjHqz/QVt7lYs9Y0NQvWO1pdIFg6xEeM9yyZKTuAV/oRr
+        nMSkPgkTcauwDxfwAPW99fXdpbNexH6sxqTjMQg+Aa1zHP0aaDh2AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btn_RuleNew.Text" xml:space="preserve">
+    <value>新建...</value>
+  </data>
+  <data name="btn_RuleRemove.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAu
+        IgAALiIBquLdkgAAAWJJREFUSEvt1r1KA0EYheHF3yakSCM2NhZiwE5R0cpKRcktWHsJYiGIegmCpdgK
+        IooI4gUIXoE2AX9BMIKIlfE9w3w6yGx015RbPAl7ZuY7YQPJJs0kaaUPZ2jiHa8BXX/gHP2InXeiYeAC
+        KvjNJWLnnWjorcOG7GAEs5jz77rehu3ZQmyOeyljEANeJ+Zhh1+Qdjt0O59hexfQAZuluWVtrMM2xaik
+        8SML1yS2ZuoqSRvQLg2VVLAShHsYgu59Vjq3C5u1iord2zEfyprP8tJgmzWhzBZalSxiE+5AYBwbqAWZ
+        ZC7pwi2Un/jMHEH5A3p8JplLunEH5ac+M8dQ/ohen0lR4vKi5GuhKFH+7xL9t9xAuYZaLodQfg99GMsz
+        l8gUllENMhmG8ukgk1wlWaWWjPpQDjCDpRx0bh82S7/UrkBK0Bdoi+3wBD0/cPVNrVfQhjeEz1h/pXN6
+        FrvGJJibJJ8pRI1RloGcIgAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="btn_RuleRemove.Text" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="groupBox2.Text" xml:space="preserve">
+    <value>规则</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>当前配置</value>
+  </data>
+  <data name="MT_Rules.Text" xml:space="preserve">
+    <value>规则</value>
+  </data>
+  <data name="clearToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>116, 30</value>
+  </data>
+  <data name="clearToolStripMenuItem.Text" xml:space="preserve">
+    <value>清空</value>
+  </data>
+  <data name="logCMS.Size" type="System.Drawing.Size, System.Drawing">
+    <value>117, 34</value>
+  </data>
+</root>

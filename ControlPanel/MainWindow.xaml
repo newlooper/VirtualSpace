@@ -1,0 +1,49 @@
+﻿<Window x:Class="ControlPanel.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:LocalizeDictionary.DesignCulture="zh-Hans"
+        lex:LocalizeDictionary.OutputMissingKeys="True"
+        lex:ResxLocalizationProvider.DefaultAssembly="ControlPanel"
+        lex:ResxLocalizationProvider.DefaultDictionary="Langs"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="720" Width="1280">
+
+    <Grid x:Name="LayoutRoot">
+
+        <ui:NavigationView x:Name="TopNav"
+                           PaneDisplayMode="Top"
+                           Header=""
+                           IsTabStop="False"
+                           IsBackButtonVisible="Collapsed"
+                           IsSettingsVisible="False"
+                           SelectionChanged="NavigationView_SelectionChanged">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="{lex:Loc TopBar.General}" Icon="Home" Tag="General" />
+                <ui:NavigationViewItem Content="{lex:Loc TopBar.UI}" Icon="ViewAll" Tag="UI" />
+                <ui:NavigationViewItem Content="{lex:Loc TopBar.Rules}" Icon="Sort" Tag="Rules" />
+                <ui:NavigationViewItem Content="{lex:Loc TopBar.Logs}" Icon="TwoPage" Tag="Logs" />
+            </ui:NavigationView.MenuItems>
+            <ui:NavigationView.PaneFooter>
+                <StackPanel Orientation="Horizontal">
+                    <ui:AppBarButton ToolTip="{lex:Loc TopBar.Theme}" Width="40" x:Name="ThemeButton" Click="ThemeButton_OnClick" Label="">
+                        <ui:AppBarButton.Icon>
+                            <ui:FontIcon
+                                Glyph="&#xE771;"
+                                Margin="0,0,0,0" />
+                        </ui:AppBarButton.Icon>
+                    </ui:AppBarButton>
+                    <ui:AppBarButton ToolTip="{lex:Loc TopBar.Setting}" Width="40" Icon="Setting" x:Name="SettingsButton" Click="SettingsButton_OnClick"
+                                     Label="" />
+                </StackPanel>
+            </ui:NavigationView.PaneFooter>
+            <ui:Frame x:Name="ContentFrame" />
+        </ui:NavigationView>
+
+    </Grid>
+
+</Window>

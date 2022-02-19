@@ -1,0 +1,151 @@
+﻿<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cb_Enabled.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 28</value>
+  </data>
+  <data name="cb_Enabled.Text" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="lb_Name.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 24</value>
+  </data>
+  <data name="lb_Name.Text" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>基本</value>
+  </data>
+  <data name="groupBox2.Text" xml:space="preserve">
+    <value>基础窗口规则</value>
+  </data>
+  <data name="cb_WndClass.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 28</value>
+  </data>
+  <data name="cb_WndClass.Text" xml:space="preserve">
+    <value>窗口类名</value>
+  </data>
+  <data name="cb_ProcessPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 28</value>
+  </data>
+  <data name="cb_ProcessPath.Text" xml:space="preserve">
+    <value>进程路径</value>
+  </data>
+  <data name="cb_ProcessName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 28</value>
+  </data>
+  <data name="cb_ProcessName.Text" xml:space="preserve">
+    <value>进程名称</value>
+  </data>
+  <data name="cb_Title.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 28</value>
+  </data>
+  <data name="cb_Title.Text" xml:space="preserve">
+    <value>窗口标题</value>
+  </data>
+  <data name="groupBox3.Text" xml:space="preserve">
+    <value>窗口动作</value>
+  </data>
+  <data name="cb_PinApp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>288, 28</value>
+  </data>
+  <data name="cb_PinApp.Text" xml:space="preserve">
+    <value>在所有桌面上显示此应用的窗口</value>
+  </data>
+  <data name="cb_PinWindow.Size" type="System.Drawing.Size, System.Drawing">
+    <value>234, 28</value>
+  </data>
+  <data name="cb_PinWindow.Text" xml:space="preserve">
+    <value>在所有桌面上显示此窗口</value>
+  </data>
+  <data name="cb_FollowWindow.Size" type="System.Drawing.Size, System.Drawing">
+    <value>162, 28</value>
+  </data>
+  <data name="cb_FollowWindow.Text" xml:space="preserve">
+    <value>跟随窗口到桌面</value>
+  </data>
+  <data name="cb_MoveToDesktop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>126, 28</value>
+  </data>
+  <data name="cb_MoveToDesktop.Text" xml:space="preserve">
+    <value>移动到桌面</value>
+  </data>
+  <data name="btn_RuleSave.Text" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="groupBox4.Text" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="lb_Updated.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 24</value>
+  </data>
+  <data name="lb_Updated.Text" xml:space="preserve">
+    <value>更新时间</value>
+  </data>
+  <data name="lb_Created.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 24</value>
+  </data>
+  <data name="lb_Created.Text" xml:space="preserve">
+    <value>创建时间</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>规则定义</value>
+  </data>
+</root>

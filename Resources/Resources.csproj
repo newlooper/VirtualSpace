@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netcoreapp3.1;net5.0-windows;net6.0-windows</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<LangVersion>9</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Update="Images.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Images.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Images.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Images.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+</Project>

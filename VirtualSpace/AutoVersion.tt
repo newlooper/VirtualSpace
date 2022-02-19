@@ -1,0 +1,45 @@
+﻿/* Copyright (C) 2022 Dylan Cheng (https://github.com/newlooper)
+
+This file is part of VirtualSpace.
+
+VirtualSpace is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
+*/
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="System.Windows.Forms.dll" #>
+<#@ import namespace="System.IO" #>
+
+using System.Reflection;
+
+[assembly: AssemblyProduct("<#= AppName #>")]
+
+[assembly: AssemblyTitle("<#= AppDesc #>")]
+[assembly: AssemblyDescription("<#= AppDesc #>")]
+
+[assembly: AssemblyCompany("https://github.com/newlooper")]
+
+[assembly: AssemblyCopyright("Copyright © <#= Copyright #>")]
+
+[assembly: AssemblyVersion("<#= MAJOR #>.<#= MINOR #>.<#= DaysSinceProjectStarted #>.<#= MinutesSinceMidnight #>")]
+[assembly: AssemblyFileVersion("<#= MAJOR #>.<#= MINOR #>.<#= DaysSinceProjectStarted #>.<#= MinutesSinceMidnight #>")]
+
+<#+
+    private static readonly DateTime ProjectStartedDate = new( 2021, 12, 5 );
+
+    private static readonly string Copyright = ProjectStartedDate.Year + " - " + DateTime.Now.Year;
+    private static readonly string AppName = new DirectoryInfo( "." ).Name;
+    private static readonly string AppDesc = "Windows 10/11 Virtual Desktop Enhancement";
+
+        private const int MAJOR = 0;
+        private const int MINOR = 1;
+
+    private static readonly int DaysSinceProjectStarted = (int)( DateTime.UtcNow - ProjectStartedDate ).TotalDays;
+    private static readonly int MinutesSinceMidnight = (int)DateTime.UtcNow.TimeOfDay.TotalMinutes;
+#>

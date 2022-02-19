@@ -1,0 +1,62 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="aboutToolStripMenuItem1.Text" xml:space="preserve">
+        <value>About</value>
+    </data>
+    <data name="clearToolStripMenuItem.Text" xml:space="preserve">
+        <value>Clear</value>
+    </data>
+    <data name="fileToolStripMenuItem.Text" xml:space="preserve">
+        <value>File</value>
+    </data>
+    <data name="langToolStripMenuItem.Text" xml:space="preserve">
+        <value>Languages</value>
+    </data>
+    <data name="logTabDebug.Text" xml:space="preserve">
+        <value>Debug</value>
+    </data>
+    <data name="logTabError.Text" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="TopBar.Rules" xml:space="preserve">
+        <value>Rules</value>
+    </data>
+    <data name="logTabInfo.Text" xml:space="preserve">
+        <value>Info</value>
+    </data>
+    <data name="logTabWarning.Text" xml:space="preserve">
+        <value>Warning</value>
+    </data>
+    <data name="TopBar.General" xml:space="preserve">
+        <value>General</value>
+    </data>
+    <data name="TopBar.Logs" xml:space="preserve">
+        <value>Logs</value>
+    </data>
+    <data name="optionsToolStripMenuItem.Text" xml:space="preserve">
+        <value>Option</value>
+    </data>
+    <data name="quitToolStripMenuItem.Text" xml:space="preserve">
+        <value>Quit</value>
+    </data>
+    <data name="TopBar.UI" xml:space="preserve">
+        <value>UI</value>
+    </data>
+    <data name="TopBar.Theme" xml:space="preserve">
+        <value>Theme</value>
+    </data>
+    <data name="TopBar.Setting" xml:space="preserve">
+        <value>Setting</value>
+    </data>
+</root>

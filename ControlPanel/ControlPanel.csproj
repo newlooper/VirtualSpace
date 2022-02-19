@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFrameworks>
+            netcoreapp3.1;
+            net5.0-windows10.0.19041.0;net5.0-windows10.0.22000.0;
+            net6.0-windows10.0.19041.0;net6.0-windows10.0.22000.0;
+        </TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <CsWinRTEnabled>false</CsWinRTEnabled>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup Condition="
+               '$(TargetFramework)' == 'net5.0-windows10.0.19041.0' Or '$(TargetFramework)' == 'net5.0-windows10.0.22000.0'
+            Or '$(TargetFramework)' == 'net6.0-windows10.0.19041.0' Or '$(TargetFramework)' == 'net6.0-windows10.0.22000.0' ">
+        <PackageReference Include="Microsoft.Windows.CsWinRT" Version="1.4.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\Langs.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Langs.Designer.cs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ModernWpfUI" Version="0.9.4"/>
+        <PackageReference Include="WPFLocalizeExtension" Version="3.9.4"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Resources\Langs.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Langs.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Properties\"/>
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="pwsh.exe -File &quot;$(ProjectDir)lang_dir_clean.ps1&quot;"/>
+    </Target>
+
+</Project>
