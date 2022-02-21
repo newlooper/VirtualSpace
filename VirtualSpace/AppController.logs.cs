@@ -15,6 +15,7 @@ using System.Threading.Channels;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
+using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace
 {
@@ -25,6 +26,8 @@ namespace VirtualSpace
 
         private async void PickLogAndWrite()
         {
+            Logger.ShowLogsInGui = ConfigManager.Configs.LogConfig.ShowLogsInGui;
+            showLogsInGuiToolStripMenuItem.Checked = ConfigManager.Configs.LogConfig.ShowLogsInGui;
             while ( await LogChannel.Reader.WaitToReadAsync() )
             {
                 if ( LogChannel.Reader.TryRead( out var message ) )

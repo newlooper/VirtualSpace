@@ -23,29 +23,35 @@ namespace VirtualSpace.AppLogs
     public static class Logger
     {
         private static readonly Channel<LogMessage> LogChannel = Channels.LogChannel;
+        public static           bool                ShowLogsInGui { get; set; } = false;
 
         public static void Debug( string str )
         {
+            Log( "DEBUG", str );
             LogManager.RootLogger.Verbose( str );
         }
 
         public static void Event( string str )
         {
+            Log( "EVENT", str );
             LogManager.RootLogger.Debug( str );
         }
 
         public static void Info( string str )
         {
+            Log( "INFO", str );
             LogManager.RootLogger.Information( str );
         }
 
         public static void Warning( string str )
         {
+            Log( "WARNING", str );
             LogManager.RootLogger.Warning( str );
         }
 
         public static void Error( string str, NotifyObject? notify = null )
         {
+            Log( "ERROR", str );
             LogManager.RootLogger.Error( str );
             if ( notify != null )
             {
@@ -58,6 +64,7 @@ namespace VirtualSpace.AppLogs
 
         private static async void Log( string type, string str )
         {
+            if ( !ShowLogsInGui ) return;
             var logMessage = LogMessage.CreateMessage(
                 type,
                 $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}][{type}] {str} {{ThreadId:{Thread.CurrentThread.ManagedThreadId}}}\r\n" );

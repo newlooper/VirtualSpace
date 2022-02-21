@@ -16,6 +16,7 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Config.Entity;
 using VirtualSpace.Config.Profiles;
 using VirtualSpace.Log;
 
@@ -69,7 +70,7 @@ namespace VirtualSpace.Config
                 {
                     CurrentProfileName = nameof( Default ),
                     Version = Const.DefaultVersion,
-                    LogLevel = Const.DefaultLogLevel,
+                    LogConfig = new LogConfig {LogLevel = Const.DefaultLogLevel},
                     Profiles = new Dictionary<string, Profile>
                     {
                         {nameof( Default ), new Default()}
@@ -78,7 +79,7 @@ namespace VirtualSpace.Config
                 Save( filePath );
             }
 
-            LogManager.SetLogLevel( Configs.LogLevel );
+            LogManager.SetLogLevel( Configs.LogConfig.LogLevel );
         }
 
         public static async void Save( string? filePath = null )

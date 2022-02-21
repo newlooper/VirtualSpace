@@ -10,6 +10,7 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System.Collections.Generic;
+using VirtualSpace.Config.Entity;
 
 namespace VirtualSpace.Config
 {
@@ -18,6 +19,6 @@ namespace VirtualSpace.Config
         public Dictionary<string, Profile> Profiles           { get; set; }
         public string                      CurrentProfileName { get; set; }
         public string                      Version            { get; set; }
-        public string                      LogLevel           { get; set; }
+        public LogConfig                   LogConfig          { get; set; }
     }
 }

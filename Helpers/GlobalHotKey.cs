@@ -44,7 +44,7 @@ namespace VirtualSpace.Helpers
         [DllImport( "user32.dll", SetLastError = true )]
         private static extern bool UnregisterHotKey( IntPtr hWnd, int id );
 
-        public static void UnRegHoKey()
+        public static void UnRegHotKey()
         {
             Logger.Info( "Unregister Global HotKeys" );
             foreach ( var id in Ids )

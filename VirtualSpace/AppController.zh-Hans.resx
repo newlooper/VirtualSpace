@@ -70,11 +70,17 @@
   <data name="fileToolStripMenuItem.Text" xml:space="preserve">
     <value>文件</value>
   </data>
-  <data name="langToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 34</value>
-  </data>
   <data name="langToolStripMenuItem.Text" xml:space="preserve">
     <value>语言</value>
+  </data>
+  <data name="showLogsInGuiToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>285, 34</value>
+  </data>
+  <data name="showLogsInGuiToolStripMenuItem.Text" xml:space="preserve">
+    <value>在GUI中显示完整日志</value>
+  </data>
+  <data name="logsToolStripMenuItem.Text" xml:space="preserve">
+    <value>日志</value>
   </data>
   <data name="optionsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>62, 28</value>

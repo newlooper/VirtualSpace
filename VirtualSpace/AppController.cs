@@ -209,5 +209,13 @@ namespace VirtualSpace
 
             about.ShowDialog();
         }
+
+        private void showLogsInGuiToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripMenuItem;
+            Logger.ShowLogsInGui = item.Checked;
+            ConfigManager.Configs.LogConfig.ShowLogsInGui = item.Checked;
+            ConfigManager.Save();
+        }
     }
 }

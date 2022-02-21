@@ -84,7 +84,7 @@ namespace VirtualSpace
         private void Window_Closing( object sender, CancelEventArgs e )
         {
             LowLevelGlobalHotKey.UnHook();
-            GlobalHotKey.UnRegHoKey();
+            GlobalHotKey.UnRegHotKey();
         }
     }
 
