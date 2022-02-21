@@ -92,5 +92,8 @@ namespace VirtualSpace.Helpers
 
         [DllImport( "user32.dll", SetLastError = true )]
         public static extern uint SendInput( uint numberOfInputs, INPUT[] inputs, int sizeOfInputStructure );
+
+        [DllImport( "user32.dll", CharSet = CharSet.Unicode )]
+        public static extern uint RegisterWindowMessage( string lpProcName );
     }
 }

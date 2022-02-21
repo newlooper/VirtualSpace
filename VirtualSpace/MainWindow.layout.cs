@@ -29,6 +29,8 @@ namespace VirtualSpace
         private static int           _rowsCols;
         private static UserInterface Ui => Manager.GetCurrentProfile().UI;
 
+        public static Size MainGridCellSize => _instance.MainGrid.Children[0].RenderSize;
+
         public static void UpdateHoverBorder( int hover )
         {
             var borderColorHover = new SolidColorBrush
@@ -153,7 +155,5 @@ namespace VirtualSpace
         {
             return _instance.MainGrid;
         }
-
-        public static Size MainGridCellSize => _instance.MainGrid.Children[0].RenderSize;
     }
 }

@@ -9,17 +9,17 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System.Windows;
 using System;
 using System.Threading;
+using System.Windows;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Log;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
-using ConfigManager = VirtualSpace.Config.Manager;
 using Application = System.Windows.Application;
+using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace
 {

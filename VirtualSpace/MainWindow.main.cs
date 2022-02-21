@@ -15,10 +15,12 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
+using Application = System.Windows.Forms.Application;
 using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace
@@ -28,6 +30,7 @@ namespace VirtualSpace
         private static readonly Stopwatch     RiseViewTimer = Stopwatch.StartNew();
         private static          MainWindow    _instance;
         private readonly        AppController _acForm = new();
+        private                 uint          _taskbarCreatedMessage;
 
         public MainWindow()
         {
@@ -69,13 +72,19 @@ namespace VirtualSpace
 
         private void Window_Loaded( object sender, RoutedEventArgs e )
         {
+            Bootstrap();
+            VirtualDesktopManager.InitLayout();
+            DesktopManagerWrapper.ListenVirtualDesktopEvents();
+            DesktopManagerWrapper.RegisterVirtualDesktopEvents();
+        }
+
+        private void Bootstrap()
+        {
             Handle = new WindowInteropHelper( this ).Handle;
             RegisterHotKey( Handle );
             FixStyle();
             EnableBlur();
-            VirtualDesktopManager.InitLayout();
-            DesktopManagerWrapper.ListenVirtualDesktopEvents();
-            DesktopManagerWrapper.RegisterVirtualDesktopEvents();
+            _taskbarCreatedMessage = User32.RegisterWindowMessage( "TaskbarCreated" );
         }
 
         private void Window_MouseDown( object sender, MouseButtonEventArgs e )
@@ -127,6 +136,13 @@ namespace VirtualSpace
 
         private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
         {
+            if ( msg == _taskbarCreatedMessage )
+            {
+                Logger.Warning( "explorer.exe restarted, program will restart to handle it." );
+                Application.Restart();
+                System.Windows.Application.Current.Shutdown();
+            }
+
             switch ( msg )
             {
                 case WinMsg.WM_SYSCOMMAND:

@@ -159,8 +159,8 @@ namespace VirtualSpace.VirtualDesktop
 
             foreach ( var handle in Filters.WndHandleManualIgnoreList )
             {
-                if ( DesktopWrapper.IsWindowPinned( handle ) ) continue;
                 if ( !User32.IsWindow( handle ) ) continue;
+                if ( DesktopWrapper.IsWindowPinned( handle ) ) continue;
                 if ( DesktopWrapper.FromWindow( handle ).Guid != mi.Self.VdId ) continue;
 
                 _ = User32.GetWindowThreadProcessId( handle, out var pId );
