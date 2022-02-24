@@ -55,7 +55,7 @@ namespace VirtualSpace
             base.OnExit( e );
 
             _mutex?.ReleaseMutex();
-            IpcPipe.IsRunning = false;
+            IpcPipe.SimpleShutdown();
         }
 
         private static Mutex? SingleInstanceCheck()

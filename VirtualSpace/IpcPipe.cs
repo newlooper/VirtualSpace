@@ -18,15 +18,16 @@ namespace VirtualSpace.Commons
 {
     public static class IpcPipe
     {
-        private const string PIPE_NAME                = "IPC";
-        private const string MULTIPLE_PROCESS_STARTED = "1";
-        public static bool   IsRunning                = true;
+        private const  string PIPE_NAME                = "IPC";
+        private const  string MULTIPLE_PROCESS_STARTED = "1";
+        private static bool   _isRunning               = true;
 
         public static void AsServer()
         {
             Task.Factory.StartNew( () =>
             {
-                while ( IsRunning )
+                Logger.Info( "Ipc Pipe Server Wait For Connections." );
+                while ( _isRunning )
                 {
                     using var server = new NamedPipeServerStream( PIPE_NAME );
                     server.WaitForConnection();
@@ -42,6 +43,8 @@ namespace VirtualSpace.Commons
 
                     server.Close();
                 }
+
+                Logger.Info( "Ipc Pipe Server Shutdown." );
             }, TaskCreationOptions.LongRunning );
         }
 
@@ -52,6 +55,14 @@ namespace VirtualSpace.Commons
             using var writer = new StreamWriter( client );
             writer.WriteLine( MULTIPLE_PROCESS_STARTED );
             writer.Flush();
+        }
+
+        public static void SimpleShutdown()
+        {
+            _isRunning = false;
+            using var client = new NamedPipeClientStream( ".", PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
+            client.Connect( 1000 );
+            client.Close();
         }
     }
 }
