@@ -11,16 +11,18 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System.IO;
 using System.IO.Pipes;
+using System.Text.Json;
 using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Commons;
 
 namespace VirtualSpace.Commons
 {
     public static class IpcPipe
     {
-        private const  string PIPE_NAME                = "IPC";
-        private const  string MULTIPLE_PROCESS_STARTED = "1";
-        private static bool   _isRunning               = true;
+        private const  string PIPE_NAME   = "VIRTUAL_SPACE_IPC_PIPE";
+        private const  string PIPE_SERVER = ".";
+        private static bool   _isRunning  = true;
 
         public static void AsServer()
         {
@@ -33,12 +35,18 @@ namespace VirtualSpace.Commons
                     server.WaitForConnection();
                     using var reader = new StreamReader( server );
                     var       line   = reader.ReadLine();
-                    switch ( line )
+                    if ( line != null )
                     {
-                        case MULTIPLE_PROCESS_STARTED:
-                            Logger.Info( "Only single instance allowed, just bring to top." );
-                            MainWindow.DelegateBringToTop();
-                            break;
+                        var msg = JsonSerializer.Deserialize<PipeMessage>( line );
+                        switch ( msg?.Type )
+                        {
+                            case PipeMessageType.INSTANCE:
+                                Logger.Info( "Only single instance allowed, just bring to top." );
+                                MainWindow.DelegateBringToTop();
+                                break;
+                            default:
+                                break;
+                        }
                     }
 
                     server.Close();
@@ -50,17 +58,18 @@ namespace VirtualSpace.Commons
 
         public static void AsClient()
         {
-            using var client = new NamedPipeClientStream( ".", PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
+            using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
             client.Connect( 3000 );
             using var writer = new StreamWriter( client );
-            writer.WriteLine( MULTIPLE_PROCESS_STARTED );
+            var       msg    = new PipeMessage {Type = PipeMessageType.INSTANCE};
+            writer.WriteLine( JsonSerializer.Serialize( msg ) );
             writer.Flush();
         }
 
         public static void SimpleShutdown()
         {
             _isRunning = false;
-            using var client = new NamedPipeClientStream( ".", PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
+            using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
             client.Connect( 1000 );
             client.Close();
         }

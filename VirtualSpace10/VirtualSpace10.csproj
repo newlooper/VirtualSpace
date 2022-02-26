@@ -68,7 +68,9 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>AutoVersion.tt</DependentUpon>
         </Compile>
-        <Compile Include="..\VirtualSpace\IpcPipe.cs" Link="IpcPipe.cs" />
+        <Compile Include="..\VirtualSpace\Ipc\IpcPipe.cs" Link="Ipc\IpcPipe.cs" />
+        <Compile Include="..\VirtualSpace\Ipc\PipeMessage.cs" Link="Ipc\PipeMessage.cs" />
+        <Compile Include="..\VirtualSpace\Ipc\PipeMessageType.cs" Link="Ipc\PipeMessageType.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.hotkeys.cs" Link="MainWindow.hotkeys.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.layout.cs" Link="MainWindow.layout.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.main.cs" Link="MainWindow.main.cs" />
@@ -139,6 +141,7 @@
 
     <ItemGroup>
         <Folder Include="Resources\Langs\" />
+        <Folder Include="Ipc\" />
     </ItemGroup>
 
     <Target Name="DeletePdb" AfterTargets="Publish">
