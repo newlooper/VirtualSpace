@@ -96,6 +96,7 @@ namespace VirtualSpace
 
             // ProcessWatcher.Start();
             // WindowWatcher.Start();
+
             Daemon.TakeWndHandleSnapshot();
         }
     }

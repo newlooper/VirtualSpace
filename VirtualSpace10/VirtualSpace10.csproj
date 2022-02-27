@@ -68,9 +68,6 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>AutoVersion.tt</DependentUpon>
         </Compile>
-        <Compile Include="..\VirtualSpace\Ipc\IpcPipe.cs" Link="Ipc\IpcPipe.cs" />
-        <Compile Include="..\VirtualSpace\Ipc\PipeMessage.cs" Link="Ipc\PipeMessage.cs" />
-        <Compile Include="..\VirtualSpace\Ipc\PipeMessageType.cs" Link="Ipc\PipeMessageType.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.hotkeys.cs" Link="MainWindow.hotkeys.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.layout.cs" Link="MainWindow.layout.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.main.cs" Link="MainWindow.main.cs" />
@@ -86,6 +83,7 @@
         <Compile Include="..\VirtualSpace\VirtualDesktop\Filters.cs" Link="VirtualDesktop\Filters.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Manager.cs" Link="VirtualDesktop\Manager.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Menus.cs" Link="VirtualDesktop\Menus.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\Navigation.cs" Link="VirtualDesktop\Navigation.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\VirtualDesktopWindow.cs" Link="VirtualDesktop\VirtualDesktopWindow.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\VirtualDesktopWindow.Designer.cs" Link="VirtualDesktop\VirtualDesktopWindow.Designer.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\VirtualDesktopWindow.Mouse.cs" Link="VirtualDesktop\VirtualDesktopWindow.Mouse.cs" />
@@ -141,7 +139,6 @@
 
     <ItemGroup>
         <Folder Include="Resources\Langs\" />
-        <Folder Include="Ipc\" />
     </ItemGroup>
 
     <Target Name="DeletePdb" AfterTargets="Publish">

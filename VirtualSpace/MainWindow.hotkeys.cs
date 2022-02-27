@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Input;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
 using GHK = VirtualSpace.Helpers.GlobalHotKey;
 using LLGHK = VirtualSpace.Helpers.LowLevelGlobalHotKey;
@@ -24,10 +25,12 @@ namespace VirtualSpace
 {
     public partial class MainWindow
     {
-        private static bool _inRising;
+        private static          bool   _inRising;
+        private static readonly IntPtr Handled = (IntPtr)1;
 
         private void RegisterHotKey( IntPtr hWnd )
         {
+            IpcPipe.MainWindowHandle = hWnd;
             GHK.RegHotKey( hWnd, UserMessage.RiseView,
                 GHK.KeyModifiers.Ctrl | GHK.KeyModifiers.Shift,
                 KeyInterop.VirtualKeyFromKey( Key.Tab ) );
@@ -55,16 +58,32 @@ namespace VirtualSpace
             {
                 if ( keyType == LLGHK.WM_KEYDOWN
                      && info.vkCode == (int)Keys.Tab
-                     && User32.GetAsyncKeyState( (int)Keys.LWin ) < 0 )
+                     && User32.GetAsyncKeyState( (int)Keys.LWin ) < 0 ) // hook LWin+Tab to replace TaskView
                 {
                     LLGHK.MultipleKeyPress( new List<int> {LLGHK.DUMMY_KEY} );
                     LLGHK.MultipleKeyUp( new List<int> {(int)Keys.LWin} );
                     User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
                     _inRising = true;
-                    return (IntPtr)1;
+                    return Handled;
                 }
 
-                if ( keyType == LLGHK.WM_KEYDOWN && info.vkCode == (int)Keys.Escape )
+                if ( keyType == LLGHK.WM_KEYDOWN
+                     && User32.GetAsyncKeyState( (int)Keys.LWin ) < 0
+                     && User32.GetAsyncKeyState( (int)Keys.LControlKey ) < 0 ) // hook LWin+LCtrl+<DirKey> for switch virtual desktop
+                {
+                    var key = (Keys)info.vkCode;
+                    switch ( key )
+                    {
+                        case Keys.Left:
+                        case Keys.Right:
+                        case Keys.Up:
+                        case Keys.Down:
+                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)info.vkCode );
+                            return Handled;
+                    }
+                }
+
+                if ( keyType == LLGHK.WM_KEYDOWN && info.vkCode == (int)Keys.Escape ) // hook Esc to hide MainView
                 {
                     HideAll();
                 }
@@ -72,7 +91,7 @@ namespace VirtualSpace
 
             if ( keyType == LLGHK.WM_KEYUP
                  && info.vkCode == (int)Keys.LWin
-                 && _inRising )
+                 && _inRising ) // when MainView rising, send dummy_key to avoid other apps which listen LWin key trigger their actions
             {
                 LLGHK.MultipleKeyPress( new List<int> {LLGHK.DUMMY_KEY} );
                 _inRising = false;
@@ -86,12 +105,5 @@ namespace VirtualSpace
             LowLevelGlobalHotKey.UnHook();
             GlobalHotKey.UnRegHotKey();
         }
-    }
-
-    public static class UserMessage
-    {
-        public const int RiseView          = 1000;
-        public const int ShowAppController = 1001;
-        public const int CloseView         = 1002;
     }
 }

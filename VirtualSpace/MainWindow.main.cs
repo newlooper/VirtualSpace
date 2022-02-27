@@ -12,10 +12,12 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Commons;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop;
@@ -163,6 +165,15 @@ namespace VirtualSpace
                             break;
                         case UserMessage.ShowAppController:
                             _acForm.BringToTop();
+                            break;
+                        case UserMessage.SwitchDesktop:
+                            if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                            {
+                                var dir         = (Keys)lParam.ToInt32();
+                                var targetIndex = Navigation.CalculateTargetIndex( DesktopWrapper.Count, DesktopWrapper.CurrentIndex, dir );
+                                DesktopWrapper.MakeVisibleByIndex( targetIndex );
+                            }
+
                             break;
                     }
 

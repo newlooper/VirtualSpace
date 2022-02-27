@@ -9,12 +9,13 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.IO;
 using System.IO.Pipes;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
-using VirtualSpace.Commons;
 
 namespace VirtualSpace.Commons
 {
@@ -22,7 +23,12 @@ namespace VirtualSpace.Commons
     {
         private const  string PIPE_NAME   = "VIRTUAL_SPACE_IPC_PIPE";
         private const  string PIPE_SERVER = ".";
+        private const  int    WM_HOTKEY   = 0x0312;
         private static bool   _isRunning  = true;
+        public static  IntPtr MainWindowHandle { get; set; }
+
+        [DllImport( "user32.dll", CharSet = CharSet.Auto )]
+        private static extern bool PostMessage( IntPtr hWnd, int msg, uint wParam, uint lParam );
 
         public static void AsServer()
         {
@@ -42,7 +48,7 @@ namespace VirtualSpace.Commons
                         {
                             case PipeMessageType.INSTANCE:
                                 Logger.Info( "Only single instance allowed, just bring to top." );
-                                MainWindow.DelegateBringToTop();
+                                PostMessage( MainWindowHandle, WM_HOTKEY, UserMessage.RiseView, 0 );
                                 break;
                             default:
                                 break;
