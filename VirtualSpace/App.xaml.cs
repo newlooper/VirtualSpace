@@ -20,6 +20,7 @@ using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
 using Application = System.Windows.Application;
 using ConfigManager = VirtualSpace.Config.Manager;
+using Point = System.Drawing.Point;
 
 namespace VirtualSpace
 {
@@ -75,16 +76,16 @@ namespace VirtualSpace
         private static MainWindow CreateCanvas( StartupEventArgs args )
         {
             var canvas = VirtualSpace.MainWindow.Create();
-            Bootstrap( canvas );
+            Bootstrap();
             return canvas;
         }
 
-        private static void Bootstrap( MainWindow mainWindow )
+        private static void Bootstrap()
         {
             Logger.Info( "System Version: " + Environment.OSVersion );
             Logger.Info( "Total Screens: " + Screen.AllScreens.Length );
             Logger.Info( "Total Virtual Desktops: " + DesktopWrapper.Count );
-            Logger.Info( "Start Screen: " + Screen.FromHandle( mainWindow.Handle ).DeviceName );
+            Logger.Info( "Start Screen: " + Screen.FromPoint( new Point() ).DeviceName );
             Logger.Info( "Start Virtual Desktop: Desktop[" + DesktopWrapper.CurrentIndex + "]" );
             Logger.Info( "Start Position: " +
                          Screen.PrimaryScreen.Bounds.Location.X + ", " +

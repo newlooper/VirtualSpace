@@ -34,10 +34,10 @@ namespace VirtualSpace.Helpers
         public static extern int GetWindowLong( IntPtr hWnd, int nIndex );
 
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-        public static extern bool PostMessage( IntPtr hWnd, int msg, uint wParam, uint lParam );
+        public static extern bool PostMessage( IntPtr hWnd, int Msg, uint wParam, uint lParam );
 
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-        public static extern bool SendMessage( IntPtr hWnd, int msg, uint wParam, uint lParam );
+        public static extern bool SendMessage( IntPtr hWnd, int Msg, uint wParam, uint lParam );
 
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
         public static extern int SetWindowLong( IntPtr hWnd, int nIndex, int newLong );

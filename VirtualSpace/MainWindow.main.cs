@@ -10,7 +10,9 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -169,9 +171,21 @@ namespace VirtualSpace
                         case UserMessage.SwitchDesktop:
                             if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
                             {
-                                var dir         = (Keys)lParam.ToInt32();
-                                var targetIndex = Navigation.CalculateTargetIndex( DesktopWrapper.Count, DesktopWrapper.CurrentIndex, dir );
+                                var dir         = lParam.ToInt32();
+                                var targetIndex = Navigation.CalculateTargetIndex( DesktopWrapper.Count, DesktopWrapper.CurrentIndex, (Keys)dir );
+                                var valid       = new List<IntPtr>();
+
+                                foreach ( var handle in IpcPipe.VirtualDesktopSwitchObservers.Where( User32.IsWindow ) )
+                                {
+                                    valid.Add( handle );
+                                    var w = DesktopWrapper.Count;
+                                    w += DesktopWrapper.CurrentIndex * IpcPipe.Power;
+                                    w += dir * IpcPipe.Power * IpcPipe.Power;
+                                    User32.SendMessage( handle, WinMsg.WM_HOTKEY, (uint)w, (uint)targetIndex );
+                                }
+
                                 DesktopWrapper.MakeVisibleByIndex( targetIndex );
+                                IpcPipe.VirtualDesktopSwitchObservers = valid;
                             }
 
                             break;

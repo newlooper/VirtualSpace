@@ -12,6 +12,7 @@ namespace VirtualSpace.Commons
 {
     public enum PipeMessageType
     {
-        INSTANCE
+        INSTANCE,
+        PLUGIN_VD_SWITCH_OBSERVER
     }
 }
