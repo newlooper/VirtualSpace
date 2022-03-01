@@ -12,7 +12,9 @@ namespace VirtualSpace.Commons
 {
     public class PipeMessage
     {
-        public PipeMessageType Type  { get; set; }
-        public string?         Value { get; set; }
+        public PipeMessageType Type      { get; set; }
+        public int             Handle    { get; set; }
+        public int             ProcessId { get; set; }
+        public string          Name      { get; set; }
     }
 }

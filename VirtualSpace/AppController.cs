@@ -113,6 +113,13 @@ namespace VirtualSpace
                     Resources.ApplyResources( ch, ch.Name, ci );
                 }
             }
+            else if ( control is ToolStrip ts )
+            {
+                foreach ( ToolStripButton c in ts.Items )
+                {
+                    SetToolStripButtonLang( c, lang );
+                }
+            }
 
             foreach ( Control c in control.Controls )
             {
@@ -132,6 +139,12 @@ namespace VirtualSpace
                     SetMenuItemLang( c, lang );
                 }
             }
+        }
+
+        private static void SetToolStripButtonLang( ToolStripButton item, string lang )
+        {
+            var ci = new CultureInfo( lang );
+            Resources.ApplyResources( item, item.Name, ci );
         }
 
         public static void UpdateRuleListView( int index, RuleTemplate rule )
@@ -210,12 +223,52 @@ namespace VirtualSpace
             about.ShowDialog();
         }
 
-        private void showLogsInGuiToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void showLogsInGuiToolStripMenuItem_CheckedChanged( object sender, EventArgs e )
         {
             var item = sender as ToolStripMenuItem;
             Logger.ShowLogsInGui = item.Checked;
             ConfigManager.Configs.LogConfig.ShowLogsInGui = item.Checked;
             ConfigManager.Save();
+        }
+
+        private void tsb_general_Click( object sender, EventArgs e )
+        {
+            ts_PageNavButton_Click( sender, e );
+
+            mainTabs.SelectTab( 0 );
+        }
+
+        private void tsb_ui_Click( object sender, EventArgs e )
+        {
+            ts_PageNavButton_Click( sender, e );
+            mainTabs.SelectTab( 1 );
+        }
+
+        private void tsb_rules_Click( object sender, EventArgs e )
+        {
+            ts_PageNavButton_Click( sender, e );
+            mainTabs.SelectTab( 2 );
+        }
+
+        private void tsb_plugins_Click( object sender, EventArgs e )
+        {
+            ts_PageNavButton_Click( sender, e );
+            mainTabs.SelectTab( 3 );
+        }
+
+        private void tsb_logs_Click( object sender, EventArgs e )
+        {
+            ts_PageNavButton_Click( sender, e );
+            mainTabs.SelectTab( 4 );
+        }
+
+        private void ts_PageNavButton_Click( object sender, EventArgs e )
+        {
+            foreach ( var item in ts_PageNav.Items )
+            {
+                var button = item as ToolStripButton;
+                button.Checked = sender == item;
+            }
         }
     }
 }

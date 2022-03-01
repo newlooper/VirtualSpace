@@ -29,6 +29,7 @@ namespace VirtualSpace.Config
         public static string         AppFolder;
         public static string         ProfileFolder;
         public static string         CacheFolder;
+        public static string         PluginsFolder;
         public static string         ConfigFilePath;
 
         public static bool Init()
@@ -102,8 +103,12 @@ namespace VirtualSpace.Config
         {
             ProfileFolder = Path.Combine( AppFolder, Const.ProfilesFolder );
             Directory.CreateDirectory( ProfileFolder );
+
             CacheFolder = Path.Combine( AppFolder, Const.CacheFolder );
             Directory.CreateDirectory( CacheFolder );
+
+            PluginsFolder = Path.Combine( AppFolder, Const.PluginsFolder );
+            Directory.CreateDirectory( PluginsFolder );
         }
 
         public static string GetRulesPath( string? path = null )
@@ -118,6 +123,12 @@ namespace VirtualSpace.Config
         {
             CheckFolders();
             return CacheFolder;
+        }
+
+        public static string GetPluginsPath()
+        {
+            CheckFolders();
+            return PluginsFolder;
         }
 
         public static Profile GetCurrentProfile()

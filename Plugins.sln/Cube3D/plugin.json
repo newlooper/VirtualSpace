@@ -1,0 +1,21 @@
+{
+  "Name": "Cube3D",
+  "Display": "Cube3D",
+  "Version": "1.0",
+  "Author": "Dylan Cheng",
+  "Email": "newlooper@hotmail.com",
+  "Entry": "Cube3D.exe",
+  "AutoStart": true,
+  "RestartPolicy": {
+    "Type": 0,
+    "Value": "HotplugDetected"
+  },
+  "Requirements": {
+    "WinVer": {
+      "Min": {
+        "Major": 10,
+        "Build": 20348
+      }
+    }
+  }
+}

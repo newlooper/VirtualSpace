@@ -75,9 +75,19 @@ namespace VirtualSpace
             this.btn_RuleRemove = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cb_RuleProfiles = new System.Windows.Forms.ComboBox();
+            this.MT_Plugins = new System.Windows.Forms.TabPage();
             this.logCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel_Pages = new System.Windows.Forms.Panel();
+            this.ts_PageNav = new System.Windows.Forms.ToolStrip();
+            this.tsb_general = new System.Windows.Forms.ToolStripButton();
+            this.tsb_ui = new System.Windows.Forms.ToolStripButton();
+            this.tsb_rules = new System.Windows.Forms.ToolStripButton();
+            this.tsb_plugins = new System.Windows.Forms.ToolStripButton();
+            this.tsb_logs = new System.Windows.Forms.ToolStripButton();
+            this.panel_PageNav = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.mainStatusStrip = new System.Windows.Forms.StatusStrip();
             this.mainMenu.SuspendLayout();
             this.MT_Logs.SuspendLayout();
             this.logTabs.SuspendLayout();
@@ -91,7 +101,9 @@ namespace VirtualSpace
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.logCMS.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.panel_Pages.SuspendLayout();
+            this.ts_PageNav.SuspendLayout();
+            this.panel_PageNav.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu
@@ -246,6 +258,7 @@ namespace VirtualSpace
             this.mainTabs.Controls.Add(this.MT_General);
             this.mainTabs.Controls.Add(this.MT_UI);
             this.mainTabs.Controls.Add(this.MT_Rules);
+            this.mainTabs.Controls.Add(this.MT_Plugins);
             this.mainTabs.Controls.Add(this.MT_Logs);
             resources.ApplyResources(this.mainTabs, "mainTabs");
             this.mainTabs.Name = "mainTabs";
@@ -348,6 +361,12 @@ namespace VirtualSpace
             resources.ApplyResources(this.cb_RuleProfiles, "cb_RuleProfiles");
             this.cb_RuleProfiles.Name = "cb_RuleProfiles";
             // 
+            // MT_Plugins
+            // 
+            resources.ApplyResources(this.MT_Plugins, "MT_Plugins");
+            this.MT_Plugins.Name = "MT_Plugins";
+            this.MT_Plugins.UseVisualStyleBackColor = true;
+            // 
             // logCMS
             // 
             this.logCMS.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -362,18 +381,95 @@ namespace VirtualSpace
             resources.ApplyResources(this.clearToolStripMenuItem, "clearToolStripMenuItem");
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
+            // panel_Pages
+            // 
+            this.panel_Pages.Controls.Add(this.mainTabs);
+            resources.ApplyResources(this.panel_Pages, "panel_Pages");
+            this.panel_Pages.Name = "panel_Pages";
+            // 
+            // ts_PageNav
+            // 
+            this.ts_PageNav.BackColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.ts_PageNav, "ts_PageNav");
+            this.ts_PageNav.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.ts_PageNav.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.ts_PageNav.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsb_general,
+            this.tsb_ui,
+            this.tsb_rules,
+            this.tsb_plugins,
+            this.tsb_logs});
+            this.ts_PageNav.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.ts_PageNav.Name = "ts_PageNav";
+            // 
+            // tsb_general
+            // 
+            resources.ApplyResources(this.tsb_general, "tsb_general");
+            this.tsb_general.Name = "tsb_general";
+            this.tsb_general.Padding = new System.Windows.Forms.Padding(10);
+            this.tsb_general.Tag = "";
+            this.tsb_general.Click += new System.EventHandler(this.tsb_general_Click);
+            // 
+            // tsb_ui
+            // 
+            resources.ApplyResources(this.tsb_ui, "tsb_ui");
+            this.tsb_ui.Name = "tsb_ui";
+            this.tsb_ui.Padding = new System.Windows.Forms.Padding(10);
+            this.tsb_ui.Tag = "";
+            this.tsb_ui.Click += new System.EventHandler(this.tsb_ui_Click);
+            // 
+            // tsb_rules
+            // 
+            resources.ApplyResources(this.tsb_rules, "tsb_rules");
+            this.tsb_rules.Name = "tsb_rules";
+            this.tsb_rules.Padding = new System.Windows.Forms.Padding(10);
+            this.tsb_rules.Tag = "";
+            this.tsb_rules.Click += new System.EventHandler(this.tsb_rules_Click);
+            // 
+            // tsb_plugins
+            // 
+            resources.ApplyResources(this.tsb_plugins, "tsb_plugins");
+            this.tsb_plugins.Name = "tsb_plugins";
+            this.tsb_plugins.Padding = new System.Windows.Forms.Padding(10);
+            this.tsb_plugins.Tag = "";
+            this.tsb_plugins.Click += new System.EventHandler(this.tsb_plugins_Click);
+            // 
+            // tsb_logs
+            // 
+            resources.ApplyResources(this.tsb_logs, "tsb_logs");
+            this.tsb_logs.Name = "tsb_logs";
+            this.tsb_logs.Padding = new System.Windows.Forms.Padding(10);
+            this.tsb_logs.Tag = "";
+            this.tsb_logs.Click += new System.EventHandler(this.tsb_logs_Click);
+            // 
+            // panel_PageNav
+            // 
+            this.panel_PageNav.Controls.Add(this.ts_PageNav);
+            resources.ApplyResources(this.panel_PageNav, "panel_PageNav");
+            this.panel_PageNav.Name = "panel_PageNav";
+            // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.mainTabs);
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
+            // 
+            // mainStatusStrip
+            // 
+            this.mainStatusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+            resources.ApplyResources(this.mainStatusStrip, "mainStatusStrip");
+            this.mainStatusStrip.Name = "mainStatusStrip";
+            this.mainStatusStrip.SizingGrip = false;
             // 
             // AppController
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.mainStatusStrip);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel_PageNav);
+            this.Controls.Add(this.panel_Pages);
             this.Controls.Add(this.mainMenu);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.mainMenu;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -399,7 +495,11 @@ namespace VirtualSpace
             this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.logCMS.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.panel_Pages.ResumeLayout(false);
+            this.ts_PageNav.ResumeLayout(false);
+            this.ts_PageNav.PerformLayout();
+            this.panel_PageNav.ResumeLayout(false);
+            this.panel_PageNav.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -426,7 +526,7 @@ namespace VirtualSpace
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
         private System.Windows.Forms.TabPage logTabEvent;
         private System.Windows.Forms.TextBox tbEvent;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel_Pages;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem langToolStripMenuItem;
@@ -445,5 +545,15 @@ namespace VirtualSpace
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ToolStripMenuItem logsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLogsInGuiToolStripMenuItem;
+        private System.Windows.Forms.ToolStrip ts_PageNav;
+        private System.Windows.Forms.ToolStripButton tsb_general;
+        private System.Windows.Forms.ToolStripButton tsb_ui;
+        private System.Windows.Forms.ToolStripButton tsb_rules;
+        private System.Windows.Forms.ToolStripButton tsb_plugins;
+        private System.Windows.Forms.ToolStripButton tsb_logs;
+        private System.Windows.Forms.Panel panel_PageNav;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TabPage MT_Plugins;
+        private System.Windows.Forms.StatusStrip mainStatusStrip;
     }
 }

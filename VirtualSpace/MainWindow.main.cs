@@ -10,7 +10,6 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -22,6 +21,7 @@ using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
+using VirtualSpace.Plugin;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
 using Application = System.Windows.Forms.Application;
@@ -35,6 +35,7 @@ namespace VirtualSpace
         private static          MainWindow    _instance;
         private readonly        AppController _acForm = new();
         private                 uint          _taskbarCreatedMessage;
+        private                 uint          _hotplugDetected;
 
         public MainWindow()
         {
@@ -88,7 +89,13 @@ namespace VirtualSpace
             RegisterHotKey( Handle );
             FixStyle();
             EnableBlur();
-            _taskbarCreatedMessage = User32.RegisterWindowMessage( "TaskbarCreated" );
+            RegisterSystemMessages();
+        }
+
+        private void RegisterSystemMessages()
+        {
+            _taskbarCreatedMessage = User32.RegisterWindowMessage( Const.TaskbarCreated );
+            _hotplugDetected = User32.RegisterWindowMessage( Const.HotplugDetected );
         }
 
         private void Window_MouseDown( object sender, MouseButtonEventArgs e )
@@ -147,6 +154,18 @@ namespace VirtualSpace
                 System.Windows.Application.Current.Shutdown();
             }
 
+            if ( msg == _hotplugDetected )
+            {
+                foreach ( var plugin in PluginManager.Plugins )
+                {
+                    if ( plugin.RestartPolicy?.Type == RestartPolicyType.WINDOWS_MESSAGE
+                         && plugin.RestartPolicy.Value == Const.HotplugDetected )
+                    {
+                        PluginManager.RestartPlugin( plugin );
+                    }
+                }
+            }
+
             switch ( msg )
             {
                 case WinMsg.WM_SYSCOMMAND:
@@ -173,19 +192,17 @@ namespace VirtualSpace
                             {
                                 var dir         = lParam.ToInt32();
                                 var targetIndex = Navigation.CalculateTargetIndex( DesktopWrapper.Count, DesktopWrapper.CurrentIndex, (Keys)dir );
-                                var valid       = new List<IntPtr>();
 
-                                foreach ( var handle in IpcPipe.VirtualDesktopSwitchObservers.Where( User32.IsWindow ) )
+                                foreach ( var pluginInfo in PluginManager.Plugins.Where(
+                                             p => p.Type == PluginType.VD_SWITCH_OBSERVER && User32.IsWindow( p.Handle ) ) )
                                 {
-                                    valid.Add( handle );
                                     var w = DesktopWrapper.Count;
                                     w += DesktopWrapper.CurrentIndex * IpcPipe.Power;
                                     w += dir * IpcPipe.Power * IpcPipe.Power;
-                                    User32.SendMessage( handle, WinMsg.WM_HOTKEY, (uint)w, (uint)targetIndex );
+                                    User32.SendMessage( pluginInfo.Handle, WinMsg.WM_HOTKEY, (uint)w, (uint)targetIndex );
                                 }
 
                                 DesktopWrapper.MakeVisibleByIndex( targetIndex );
-                                IpcPipe.VirtualDesktopSwitchObservers = valid;
                             }
 
                             break;

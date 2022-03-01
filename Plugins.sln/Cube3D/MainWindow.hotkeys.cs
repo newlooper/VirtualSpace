@@ -42,10 +42,12 @@ namespace Cube3D
             }
             else
             {
-                Left = -10000.0;
-                Top = -10000.0;
-                Width = SystemParameters.PrimaryScreenWidth / 100;
-                Height = SystemParameters.PrimaryScreenHeight / 100;
+                //Left = -10000.0;
+                //Top = -10000.0;
+                //Width = SystemParameters.PrimaryScreenWidth / 100;
+                //Height = SystemParameters.PrimaryScreenHeight / 100;
+                Width = 0;
+                Height = 0;
                 _frameProcessor.D3DImages[Front].Draw = true;
                 _frameProcessor.D3DImages[Others].Draw = false;
                 // _frameProcessor.Interval = 50;

@@ -15,7 +15,9 @@ using System.Windows;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
+using VirtualSpace.Config;
 using VirtualSpace.Log;
+using VirtualSpace.Plugin;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
 using Application = System.Windows.Application;
@@ -44,6 +46,7 @@ namespace VirtualSpace
             {
                 Current.MainWindow = CreateCanvas( e );
                 Current.MainWindow.Show();
+                PluginManager.RegisterPlugins( ConfigManager.GetPluginsPath(), Const.PluginInfoFile );
             }
             else
             {

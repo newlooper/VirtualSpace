@@ -2,17 +2,14 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFrameworks>
-            netcoreapp3.1;
-            net5.0-windows10.0.20348.0;net5.0-windows10.0.22000.0;
-            net6.0-windows10.0.20348.0;net6.0-windows10.0.22000.0;
+        <TargetFrameworks>netcoreapp3.1;net5.0-windows10.0.20348.0;net5.0-windows10.0.22000.0;net6.0-windows10.0.20348.0;net6.0-windows10.0.22000.0;
         </TargetFrameworks>
         <UseWPF>true</UseWPF>
         <UseWindowsForms>True</UseWindowsForms>
         <CsWinRTEnabled>false</CsWinRTEnabled>
     </PropertyGroup>
 
-    <ItemGroup Condition="&#xA;           '$(TargetFramework)' == 'net5.0-windows10.0.20348.0' Or '$(TargetFramework)' == 'net5.0-windows10.0.22000.0'&#xA;        Or '$(TargetFramework)' == 'net6.0-windows10.0.20348.0' Or '$(TargetFramework)' == 'net6.0-windows10.0.22000.0' ">
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0-windows10.0.20348.0' Or '$(TargetFramework)' == 'net5.0-windows10.0.22000.0' Or '$(TargetFramework)' == 'net6.0-windows10.0.20348.0' Or '$(TargetFramework)' == 'net6.0-windows10.0.22000.0' ">
         <PackageReference Include="Microsoft.Windows.CsWinRT" Version="1.4.1" />
     </ItemGroup>
 
@@ -30,6 +27,12 @@
 
     <ItemGroup>
       <Folder Include="Helpers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="plugin.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

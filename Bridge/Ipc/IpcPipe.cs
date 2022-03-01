@@ -10,24 +10,24 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Plugin;
 
 namespace VirtualSpace.Commons
 {
     public static class IpcPipe
     {
-        private const  string       PIPE_NAME                     = "VIRTUAL_SPACE_IPC_PIPE";
-        private const  string       PIPE_SERVER                   = ".";
-        private static bool         _isRunning                    = true;
-        public const   int          Power                         = 1000;
-        public static  List<IntPtr> VirtualDesktopSwitchObservers = new();
-        public static  IntPtr       MainWindowHandle { get; set; }
+        private const  string PIPE_NAME   = "VIRTUAL_SPACE_IPC_PIPE";
+        private const  string PIPE_SERVER = ".";
+        public const   int    Power       = 1000;
+        private static bool   _isRunning  = true;
+        public static  IntPtr MainWindowHandle { get; set; }
 
         public static void AsServer()
         {
@@ -50,10 +50,15 @@ namespace VirtualSpace.Commons
                                 WinApi.PostMessage( MainWindowHandle, WinApi.WM_HOTKEY, UserMessage.RiseView, 0 );
                                 break;
                             case PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER:
-                                Logger.Info( "Virtual Desktop Switch Observer Plugin Registered." );
-                                var handle = (IntPtr)int.Parse( msg.Value );
-                                if ( !VirtualDesktopSwitchObservers.Contains( handle ) )
-                                    VirtualDesktopSwitchObservers.Add( handle );
+                                foreach ( var p in PluginManager.Plugins.Where( p => p.Name == msg.Name ) )
+                                {
+                                    Logger.Info( $"Virtual Desktop Switch Observer Plugin ({p.Display}) Registered." );
+                                    p.Handle = (IntPtr)msg.Handle;
+                                    p.ProcessId = msg.ProcessId;
+                                    p.Type = PluginType.VD_SWITCH_OBSERVER;
+                                    break;
+                                }
+
                                 break;
                             default:
                                 break;
@@ -84,34 +89,30 @@ namespace VirtualSpace.Commons
             client.Connect( 1000 );
             client.Close();
 
-            foreach ( var hWnd in VirtualDesktopSwitchObservers )
+            foreach ( var pluginInfo in PluginManager.Plugins )
             {
-                WinApi.PostMessage( hWnd, WinApi.WM_SYSCOMMAND, WinApi.SC_CLOSE, 0 );
-                WinApi.PostMessage( hWnd, WinApi.WM_CLOSE, 0, 0 );
-                WinApi.PostMessage( hWnd, WinApi.WM_QUIT, 0, 0 );
-                WinApi.PostMessage( hWnd, WinApi.WM_DESTROY, 0, 0 );
+                PluginManager.ClosePlugin( pluginInfo );
             }
         }
 
-        public static bool RegisterVdSwitchObserver( string handle )
+        public static bool RegisterVdSwitchObserver( string name, IntPtr handle, int pId )
         {
             using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
             try
             {
                 client.Connect( 1000 );
+                if ( client.IsConnected )
+                {
+                    using var writer = new StreamWriter( client );
+                    var       msg = new PipeMessage {Type = PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER, Handle = handle.ToInt32(), ProcessId = pId, Name = name};
+                    writer.WriteLine( JsonSerializer.Serialize( msg ) );
+                    writer.Flush();
+                    return true;
+                }
             }
             catch
             {
-                return false;
-            }
-
-            if ( client.IsConnected )
-            {
-                using var writer = new StreamWriter( client );
-                var       msg    = new PipeMessage {Type = PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER, Value = handle};
-                writer.WriteLine( JsonSerializer.Serialize( msg ) );
-                writer.Flush();
-                return true;
+                // ignored
             }
 
             return false;
