@@ -12,6 +12,8 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using VirtualSpace.Commons;
@@ -62,6 +64,8 @@ namespace Cube3D
                 Application.Current.Shutdown();
             }
 
+            CheckAlive( pluginInfo.Name, _handle, pId );
+
             SetWindowDisplayAffinity( _handle, WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
             FixStyle();
 
@@ -98,6 +102,19 @@ namespace Cube3D
         {
             var appPath = Process.GetCurrentProcess().MainModule.FileName;
             return Directory.GetParent( appPath ).FullName;
+        }
+
+        private static async void CheckAlive( string name, IntPtr handle, int pId )
+        {
+            await Task.Run( () =>
+            {
+                while ( IpcPipe.AskAlive( name, handle, pId ) )
+                {
+                    Thread.Sleep( 5000 );
+                }
+            } );
+
+            Application.Current.Shutdown();
         }
     }
 }

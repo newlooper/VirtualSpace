@@ -60,6 +60,18 @@ namespace VirtualSpace.Commons
                                 }
 
                                 break;
+                            case PipeMessageType.PLUGIN_CHECK_ALIVE:
+                                var askHandle = (IntPtr)msg.Handle;
+                                var runningPlugin = PluginManager.Plugins.Find( p =>
+                                    p.Name == msg.Name
+                                    && p.Handle == askHandle
+                                    && p.ProcessId == msg.ProcessId );
+                                if ( runningPlugin == null )
+                                {
+                                    PluginManager.ClosePlugin( new PluginInfo {Handle = askHandle} );
+                                }
+
+                                break;
                             default:
                                 break;
                         }
@@ -105,6 +117,29 @@ namespace VirtualSpace.Commons
                 {
                     using var writer = new StreamWriter( client );
                     var       msg = new PipeMessage {Type = PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER, Handle = handle.ToInt32(), ProcessId = pId, Name = name};
+                    writer.WriteLine( JsonSerializer.Serialize( msg ) );
+                    writer.Flush();
+                    return true;
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return false;
+        }
+
+        public static bool AskAlive( string name, IntPtr handle, int pId )
+        {
+            using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
+            try
+            {
+                client.Connect( 1000 );
+                if ( client.IsConnected )
+                {
+                    using var writer = new StreamWriter( client );
+                    var       msg    = new PipeMessage {Type = PipeMessageType.PLUGIN_CHECK_ALIVE, Handle = handle.ToInt32(), ProcessId = pId, Name = name};
                     writer.WriteLine( JsonSerializer.Serialize( msg ) );
                     writer.Flush();
                     return true;

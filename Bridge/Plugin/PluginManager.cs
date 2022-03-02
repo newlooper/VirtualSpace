@@ -58,9 +58,9 @@ namespace VirtualSpace.Plugin
             return JsonSerializer.Deserialize<PluginInfo>( ref utf8Reader );
         }
 
-        private static Process StartExe( string exe )
+        private static void StartExe( string exe )
         {
-            return Process.Start( exe );
+            Task.Run( () => Process.Start( exe ) );
         }
 
         public static void ClosePlugin( PluginInfo pluginInfo )
