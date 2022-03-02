@@ -46,7 +46,6 @@ namespace VirtualSpace
             {
                 Current.MainWindow = CreateCanvas( e );
                 Current.MainWindow.Show();
-                PluginManager.RegisterPlugins( ConfigManager.GetPluginsPath(), Const.PluginInfoFile );
             }
             else
             {
@@ -85,6 +84,17 @@ namespace VirtualSpace
 
         private static void Bootstrap()
         {
+            BootInfo();
+            // ProcessWatcher.Start();
+            // WindowWatcher.Start();
+
+            PluginManager.RegisterPlugins( ConfigManager.GetPluginsPath(), Const.PluginInfoFile );
+            Daemon.TakeWndHandleSnapshot();
+        }
+
+        private static void BootInfo()
+        {
+            Logger.Info( "Application Start Successfully: " + ConfigManager.AppPath );
             Logger.Info( "System Version: " + Environment.OSVersion );
             Logger.Info( "Total Screens: " + Screen.AllScreens.Length );
             Logger.Info( "Total Virtual Desktops: " + DesktopWrapper.Count );
@@ -97,11 +107,6 @@ namespace VirtualSpace
                          Screen.PrimaryScreen.Bounds.Width + "*" +
                          Screen.PrimaryScreen.Bounds.Height );
             Logger.Info( "Is Running On Administrator: " + Agent.IsAdministrator() );
-
-            // ProcessWatcher.Start();
-            // WindowWatcher.Start();
-
-            Daemon.TakeWndHandleSnapshot();
         }
     }
 }

@@ -41,7 +41,6 @@ namespace VirtualSpace.Config
                 ConfigFilePath = Path.Combine( AppFolder, Const.SettingsFile );
                 CheckFolders();
                 InitConfig( ConfigFilePath );
-                Logger.Info( "Application Start From: " + AppPath );
             }
             catch ( Exception ex )
             {
