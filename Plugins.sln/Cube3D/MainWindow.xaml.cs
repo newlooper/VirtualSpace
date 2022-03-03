@@ -52,7 +52,7 @@ namespace Cube3D
 
             if ( !PluginManager.CheckRequirements( pluginInfo.Requirements ) )
             {
-                MessageBox.Show( "The system does not meet the Requirements." );
+                MessageBox.Show( "Plugin Error.\nThe system does not meet the Requirements." );
                 Application.Current.Shutdown();
             }
 
