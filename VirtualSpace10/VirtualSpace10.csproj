@@ -68,6 +68,8 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>AutoVersion.tt</DependentUpon>
         </Compile>
+        <Compile Include="..\VirtualSpace\Factory\AppControllerFactory.cs" Link="Factory\AppControllerFactory.cs" />
+        <Compile Include="..\VirtualSpace\IAppController.cs" Link="IAppController.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.hotkeys.cs" Link="MainWindow.hotkeys.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.layout.cs" Link="MainWindow.layout.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.main.cs" Link="MainWindow.main.cs" />
@@ -138,6 +140,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Factory\" />
         <Folder Include="Resources\Langs\" />
     </ItemGroup>
 

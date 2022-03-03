@@ -31,11 +31,11 @@ namespace VirtualSpace
 {
     public partial class MainWindow
     {
-        private static readonly Stopwatch     RiseViewTimer = Stopwatch.StartNew();
-        private static          MainWindow    _instance;
-        private readonly        AppController _acForm = new();
-        private                 uint          _taskbarCreatedMessage;
-        private                 uint          _hotplugDetected;
+        private static readonly Stopwatch      RiseViewTimer = Stopwatch.StartNew();
+        private static          MainWindow     _instance;
+        private                 IAppController _acForm;
+        private                 uint           _hotplugDetected;
+        private                 uint           _taskbarCreatedMessage;
 
         public MainWindow()
         {
@@ -66,6 +66,11 @@ namespace VirtualSpace
                 BlurOpacity = Ui.CanvasOpacity,
                 BlurBackGroundColor = Ui.CanvasBackColor.GetLongOfColor()
             };
+        }
+
+        public void SetAppController( IAppController ac )
+        {
+            _acForm = ac;
         }
 
         protected override void OnSourceInitialized( EventArgs e )

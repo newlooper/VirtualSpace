@@ -53,6 +53,28 @@ namespace VirtualSpace
             }
         }
 
+        public static void UpdateRuleListView( int index, RuleTemplate rule )
+        {
+            if ( index == -1 )
+            {
+                AddRule( rule );
+            }
+            else
+            {
+                UpdateRule( index, rule );
+            }
+        }
+
+        private static void AddRule( RuleTemplate rule )
+        {
+            _instance.lv_Rules.Items.Add( LviByRule( rule ) );
+        }
+
+        private static void UpdateRule( int index, RuleTemplate rule )
+        {
+            _instance.lv_Rules.Items[index] = LviByRule( rule );
+        }
+
         private static ListViewItem LviByRule( RuleTemplate rule )
         {
             var item = new ListViewItem( rule.Name );

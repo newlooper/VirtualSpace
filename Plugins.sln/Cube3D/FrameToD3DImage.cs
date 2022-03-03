@@ -19,7 +19,8 @@ namespace Cube3D
 {
     public class FrameToD3DImage : FrameProcessor
     {
-        public readonly Dictionary<string, D3DImageInfo> D3DImages = new Dictionary<string, D3DImageInfo>();
+        public readonly  Dictionary<string, D3DImageInfo> D3DImages = new Dictionary<string, D3DImageInfo>();
+        private readonly Duration                         _duration = new Duration( new TimeSpan( 0, 0, 0, 0, 16 ) );
 
         public override void Proceed( IntPtr pointer )
         {
@@ -28,7 +29,7 @@ namespace Cube3D
                 if ( !value.Draw ) continue;
                 var d3DImage = value.Image;
 
-                if ( d3DImage.TryLock( new Duration( new TimeSpan( 0, 0, 0, 0, 16 ) ) ) )
+                if ( d3DImage.IsFrontBufferAvailable && d3DImage.TryLock( _duration ) )
                 {
                     d3DImage.SetBackBuffer( D3DResourceType.IDirect3DSurface9, pointer );
                     d3DImage.AddDirtyRect( new Int32Rect( 0, 0, d3DImage.PixelWidth, d3DImage.PixelHeight ) );

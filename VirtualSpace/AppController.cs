@@ -15,12 +15,11 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
-using VirtualSpace.Config.Events.Entity;
 using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace
 {
-    public partial class AppController : Form
+    public partial class AppController : Form, IAppController
     {
         private static readonly ComponentResourceManager Resources = new( typeof( AppController ) );
         private static          AppController            _instance;
@@ -30,14 +29,11 @@ namespace VirtualSpace
             Application.EnableVisualStyles();
 
             var lang = ConfigManager.GetCurrentProfile().UI.Language;
-            Logger.Info( "Language Setting In Profile: " + lang );
             if ( Agent.ValidLangs.Keys.ToList().Contains( lang ) )
             {
                 CultureInfo.CurrentCulture = new CultureInfo( lang );
                 CultureInfo.CurrentUICulture = new CultureInfo( lang );
             }
-
-            Logger.Info( "Current Language: " + CultureInfo.CurrentUICulture.DisplayName );
 
             _instance = this;
 
@@ -57,6 +53,13 @@ namespace VirtualSpace
             }
         }
 
+        public void BringToTop()
+        {
+            TopMost = true;
+            ReadRules();
+            Show();
+        }
+
         public static void SetAllLang( string lang )
         {
             CultureInfo.CurrentCulture = new CultureInfo( lang );
@@ -67,6 +70,7 @@ namespace VirtualSpace
             void Invoker()
             {
                 SetControlLang( _instance.logCMS, lang );
+                SetControlLang( _instance.trayMenu, lang );
                 SetControlLang( _instance, lang );
             }
 
@@ -84,47 +88,59 @@ namespace VirtualSpace
         {
             var ci = new CultureInfo( lang );
 
-            if ( control is MenuStrip strip )
+            switch ( control )
             {
-                Resources.ApplyResources( control, strip.Name, ci );
-                if ( strip.Items.Count > 0 )
+                case MenuStrip strip:
                 {
-                    foreach ( ToolStripMenuItem c in strip.Items )
+                    Resources.ApplyResources( control, strip.Name, ci );
+                    foreach ( var item in strip.Items )
                     {
-                        SetMenuItemLang( c, lang );
+                        if ( item is ToolStripMenuItem c )
+                            SetMenuItemLang( c, lang );
                     }
+
+                    break;
                 }
-            }
-            else if ( control is ContextMenuStrip ms )
-            {
-                Resources.ApplyResources( control, ms.Name, ci );
-                if ( ms.Items.Count > 0 )
+                case ContextMenuStrip ms:
                 {
-                    foreach ( ToolStripMenuItem c in ms.Items )
+                    Resources.ApplyResources( control, ms.Name, ci );
+                    foreach ( var item in ms.Items )
                     {
-                        SetMenuItemLang( c, lang );
+                        if ( item is ToolStripMenuItem c )
+                            SetMenuItemLang( c, lang );
                     }
+
+                    break;
                 }
-            }
-            else if ( control is ListView lv )
-            {
-                foreach ( ColumnHeader ch in lv.Columns )
+                case ListView lv:
                 {
-                    Resources.ApplyResources( ch, ch.Name, ci );
+                    foreach ( var item in lv.Columns )
+                    {
+                        if ( item is ColumnHeader ch )
+                            Resources.ApplyResources( ch, ch.Name, ci );
+                    }
+
+                    break;
                 }
-            }
-            else if ( control is ToolStrip ts )
-            {
-                foreach ( ToolStripButton c in ts.Items )
+                case ToolStrip ts:
                 {
-                    SetToolStripButtonLang( c, lang );
+                    foreach ( var item in ts.Items )
+                    {
+                        if ( item is ToolStripButton c )
+                            SetToolStripButtonLang( c, lang );
+                    }
+
+                    break;
                 }
             }
 
-            foreach ( Control c in control.Controls )
+            foreach ( var item in control.Controls )
             {
-                Resources.ApplyResources( c, c.Name, ci );
-                SetControlLang( c, lang );
+                if ( item is Control c )
+                {
+                    Resources.ApplyResources( c, c.Name, ci );
+                    SetControlLang( c, lang );
+                }
             }
         }
 
@@ -145,35 +161,6 @@ namespace VirtualSpace
         {
             var ci = new CultureInfo( lang );
             Resources.ApplyResources( item, item.Name, ci );
-        }
-
-        public static void UpdateRuleListView( int index, RuleTemplate rule )
-        {
-            if ( index == -1 )
-            {
-                AddRule( rule );
-            }
-            else
-            {
-                UpdateRule( index, rule );
-            }
-        }
-
-        private static void AddRule( RuleTemplate rule )
-        {
-            _instance.lv_Rules.Items.Add( LviByRule( rule ) );
-        }
-
-        private static void UpdateRule( int index, RuleTemplate rule )
-        {
-            _instance.lv_Rules.Items[index] = LviByRule( rule );
-        }
-
-        public void BringToTop()
-        {
-            TopMost = true;
-            ReadRules();
-            Show();
         }
 
         private void optionsToolStripMenuItem_DropDownOpening( object sender, EventArgs e )
@@ -223,14 +210,6 @@ namespace VirtualSpace
             about.ShowDialog();
         }
 
-        private void showLogsInGuiToolStripMenuItem_CheckedChanged( object sender, EventArgs e )
-        {
-            var item = sender as ToolStripMenuItem;
-            Logger.ShowLogsInGui = item.Checked;
-            ConfigManager.Configs.LogConfig.ShowLogsInGui = item.Checked;
-            ConfigManager.Save();
-        }
-
         private void tsb_general_Click( object sender, EventArgs e )
         {
             ts_PageNavButton_Click( sender, e );
@@ -269,6 +248,21 @@ namespace VirtualSpace
                 var button = item as ToolStripButton;
                 button.Checked = sender == item;
             }
+        }
+
+        private void AppController_Load( object sender, EventArgs e )
+        {
+            Logger.Info( "Current Language: " + CultureInfo.CurrentUICulture.DisplayName );
+        }
+
+        private void exitToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            MainWindow.Quit();
+        }
+
+        private void settingsToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            BringToTop();
         }
     }
 }

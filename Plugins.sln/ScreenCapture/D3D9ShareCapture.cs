@@ -67,7 +67,7 @@ namespace ScreenCapture
 
             _sharpDxD3D11Device = Direct3D11Helper.CreateSharpDXDevice( _rawD3DDevice );
             _framePool = Direct3D11CaptureFramePool.Create( _rawD3DDevice,
-                DirectXPixelFormat.B8G8R8A8UIntNormalized, 2, i.Size );
+                DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, i.Size );
             _session = _framePool.CreateCaptureSession( i );
             _lastSize = i.Size;
 
@@ -181,7 +181,7 @@ namespace ScreenCapture
                 _framePool.Recreate(
                     _rawD3DDevice,
                     DirectXPixelFormat.B8G8R8A8UIntNormalized,
-                    2,
+                    1,
                     _lastSize );
             }
         }

@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Config;
+using VirtualSpace.Factory;
 using VirtualSpace.Log;
 using VirtualSpace.Plugin;
 using VirtualSpace.VirtualDesktop;
@@ -78,6 +79,7 @@ namespace VirtualSpace
         private static MainWindow CreateCanvas( StartupEventArgs args )
         {
             var canvas = VirtualSpace.MainWindow.Create();
+            canvas.SetAppController( AppControllerFactory.Create( "WinForm" ) );
             Bootstrap();
             return canvas;
         }
@@ -107,6 +109,7 @@ namespace VirtualSpace
                          Screen.PrimaryScreen.Bounds.Width + "*" +
                          Screen.PrimaryScreen.Bounds.Height );
             Logger.Info( "Is Running On Administrator: " + Agent.IsAdministrator() );
+            Logger.Info( "Language Setting In Profile: " + ConfigManager.GetCurrentProfile().UI.Language );
         }
     }
 }
