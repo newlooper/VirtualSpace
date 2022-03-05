@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -75,16 +76,16 @@ namespace Cube3D
             _animationNotifyGrid.Completed += AnimationCompleted;
         }
 
-        private static void FixStyle()
+        private void FixStyle()
         {
             var style = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_STYLE );
             style = unchecked(style | (int)0x80000000); // WS_POPUP
-            User32.SetWindowLong( _handle, (int)GetWindowLongFields.GWL_STYLE, style );
+            User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_STYLE, style );
 
             var exStyle = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_EXSTYLE );
             exStyle |= 0x08000000; // WS_EX_NOACTIVATE
             exStyle &= ~0x00040000; // WS_EX_APPWINDOW
-            User32.SetWindowLong( _handle, (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
+            User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
         }
 
         private void Window_Loaded( object sender, RoutedEventArgs e )

@@ -33,12 +33,12 @@ namespace VirtualSpace
         {
             var style = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_STYLE );
             style = unchecked(style | (int)0x80000000); // WS_POPUP
-            User32.SetWindowLong( Handle, (int)GetWindowLongFields.GWL_STYLE, style );
+            User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_STYLE, style );
 
             var exStyle = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_EXSTYLE );
             exStyle |= 0x08000000; // WS_EX_NOACTIVATE
             exStyle &= ~0x00040000; // WS_EX_APPWINDOW
-            User32.SetWindowLong( Handle, (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
+            User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
         }
 
         private void EnableBlur()
