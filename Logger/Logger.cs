@@ -15,15 +15,14 @@ using System.Threading.Channels;
 using System.Windows.Media;
 using Notification.Wpf;
 using Notification.Wpf.Constants;
-using VirtualSpace.Commons;
 using VirtualSpace.Log;
 
 namespace VirtualSpace.AppLogs
 {
     public static class Logger
     {
-        private static readonly Channel<LogMessage> LogChannel = Channels.LogChannel;
-        public static           bool                ShowLogsInGui { get; set; } = false;
+        public static readonly Channel<LogMessage> LogChannel = Channel.CreateUnbounded<LogMessage>();
+        public static          bool                ShowLogsInGui { get; set; } = false;
 
         public static void Debug( string str )
         {

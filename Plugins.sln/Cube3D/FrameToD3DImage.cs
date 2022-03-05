@@ -19,8 +19,8 @@ namespace Cube3D
 {
     public class FrameToD3DImage : FrameProcessor
     {
-        public readonly  Dictionary<string, D3DImageInfo> D3DImages = new Dictionary<string, D3DImageInfo>();
         private readonly Duration                         _duration = new Duration( new TimeSpan( 0, 0, 0, 0, 16 ) );
+        public readonly  Dictionary<string, D3DImageInfo> D3DImages = new Dictionary<string, D3DImageInfo>();
 
         public override void Proceed( IntPtr pointer )
         {

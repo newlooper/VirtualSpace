@@ -67,9 +67,9 @@ namespace Cube3D
                     if ( _runningAnimationCount > 0 ) break;
 
                     var n           = wParam.ToInt32();
-                    var vdCount     = n % IpcPipe.Power;
-                    var fromIndex   = n / IpcPipe.Power % IpcPipe.Power;
-                    var dir         = (Keys)( n / IpcPipe.Power / IpcPipe.Power % 100 );
+                    var vdCount     = n % IpcPipeClient.Power;
+                    var fromIndex   = n / IpcPipeClient.Power % IpcPipeClient.Power;
+                    var dir         = (Keys)( n / IpcPipeClient.Power / IpcPipeClient.Power % 100 );
                     var targetIndex = lParam.ToInt32();
 
                     NotificationGridLayout( vdCount );

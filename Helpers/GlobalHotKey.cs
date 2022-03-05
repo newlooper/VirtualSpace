@@ -12,7 +12,6 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using VirtualSpace.AppLogs;
 
 namespace VirtualSpace.Helpers
 {
@@ -46,7 +45,6 @@ namespace VirtualSpace.Helpers
 
         public static void UnRegHotKey()
         {
-            Logger.Info( "Unregister Global HotKeys" );
             foreach ( var id in Ids )
             {
                 UnregisterHotKey( _handle, id );
@@ -69,7 +67,6 @@ namespace VirtualSpace.Helpers
         public static void SetHook( User32.LowLevelKeyboardProc proc )
         {
             _hookProc = proc;
-            Logger.Info( "Set Windows LowLevelKeyboardProc Hook" );
             HookId = User32.SetWindowsHookEx( WH_KEYBOARD_LL, _hookProc, Kernel32.GetModuleHandle( null ), 0 );
         }
 
@@ -126,7 +123,6 @@ namespace VirtualSpace.Helpers
 
         public static void UnHook()
         {
-            Logger.Info( "Unset Windows LowLevelKeyboardProc Hook" );
             User32.UnhookWindowsHookEx( HookId );
         }
 

@@ -16,11 +16,10 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
-using VirtualSpace.Commons;
 
 namespace VirtualSpace.Plugin
 {
-    public static class PluginManager
+    public static class PluginManagerServer
     {
         public static readonly List<PluginInfo> Plugins = new();
 
@@ -49,7 +48,7 @@ namespace VirtualSpace.Plugin
             }
         }
 
-        public static PluginInfo? LoadFromJson( string infoFile )
+        private static PluginInfo? LoadFromJson( string infoFile )
         {
             using var fs     = new FileStream( infoFile, FileMode.Open, FileAccess.ReadWrite );
             var       buffer = new byte[fs.Length];
@@ -91,7 +90,7 @@ namespace VirtualSpace.Plugin
             }
         }
 
-        public static bool CheckRequirements( Requirements? req )
+        private static bool CheckRequirements( Requirements? req )
         {
             var check   = false;
             var version = Environment.OSVersion.Version;

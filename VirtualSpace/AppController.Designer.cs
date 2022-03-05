@@ -47,7 +47,6 @@ namespace VirtualSpace
             this.langToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogsInGuiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MT_Logs = new System.Windows.Forms.TabPage();
             this.logTabs = new System.Windows.Forms.TabControl();
             this.logTabInfo = new System.Windows.Forms.TabPage();
@@ -76,6 +75,14 @@ namespace VirtualSpace
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cb_RuleProfiles = new System.Windows.Forms.ComboBox();
             this.MT_Plugins = new System.Windows.Forms.TabPage();
+            this.MT_About = new System.Windows.Forms.TabPage();
+            this.lb_AppName = new System.Windows.Forms.Label();
+            this.llb_Company = new System.Windows.Forms.LinkLabel();
+            this.lbox_Env = new System.Windows.Forms.ListBox();
+            this.lb_Copyright = new System.Windows.Forms.Label();
+            this.lb_Version = new System.Windows.Forms.Label();
+            this.lbVersion = new System.Windows.Forms.Label();
+            this.pb_AboutLogo = new System.Windows.Forms.PictureBox();
             this.logCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_Pages = new System.Windows.Forms.Panel();
@@ -85,8 +92,9 @@ namespace VirtualSpace
             this.tsb_rules = new System.Windows.Forms.ToolStripButton();
             this.tsb_plugins = new System.Windows.Forms.ToolStripButton();
             this.tsb_logs = new System.Windows.Forms.ToolStripButton();
+            this.tsb_about = new System.Windows.Forms.ToolStripButton();
             this.panel_PageNav = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel_mask = new System.Windows.Forms.Panel();
             this.mainStatusStrip = new System.Windows.Forms.StatusStrip();
             this.niTray = new System.Windows.Forms.NotifyIcon(this.components);
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -105,6 +113,8 @@ namespace VirtualSpace
             this.MT_Rules.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.MT_About.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_AboutLogo)).BeginInit();
             this.logCMS.SuspendLayout();
             this.panel_Pages.SuspendLayout();
             this.ts_PageNav.SuspendLayout();
@@ -118,8 +128,7 @@ namespace VirtualSpace
             this.mainMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.optionsToolStripMenuItem,
-            this.aboutToolStripMenuItem});
+            this.optionsToolStripMenuItem});
             this.mainMenu.Name = "mainMenu";
             // 
             // fileToolStripMenuItem
@@ -162,12 +171,6 @@ namespace VirtualSpace
             this.showLogsInGuiToolStripMenuItem.CheckOnClick = true;
             this.showLogsInGuiToolStripMenuItem.Name = "showLogsInGuiToolStripMenuItem";
             this.showLogsInGuiToolStripMenuItem.CheckedChanged += new System.EventHandler(this.showLogsInGuiToolStripMenuItem_CheckedChanged);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            resources.ApplyResources(this.aboutToolStripMenuItem, "aboutToolStripMenuItem");
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // MT_Logs
             // 
@@ -267,6 +270,7 @@ namespace VirtualSpace
             this.mainTabs.Controls.Add(this.MT_Rules);
             this.mainTabs.Controls.Add(this.MT_Plugins);
             this.mainTabs.Controls.Add(this.MT_Logs);
+            this.mainTabs.Controls.Add(this.MT_About);
             this.mainTabs.Name = "mainTabs";
             this.mainTabs.SelectedIndex = 0;
             // 
@@ -373,6 +377,58 @@ namespace VirtualSpace
             this.MT_Plugins.Name = "MT_Plugins";
             this.MT_Plugins.UseVisualStyleBackColor = true;
             // 
+            // MT_About
+            // 
+            resources.ApplyResources(this.MT_About, "MT_About");
+            this.MT_About.Controls.Add(this.lb_AppName);
+            this.MT_About.Controls.Add(this.llb_Company);
+            this.MT_About.Controls.Add(this.lbox_Env);
+            this.MT_About.Controls.Add(this.lb_Copyright);
+            this.MT_About.Controls.Add(this.lb_Version);
+            this.MT_About.Controls.Add(this.lbVersion);
+            this.MT_About.Controls.Add(this.pb_AboutLogo);
+            this.MT_About.Name = "MT_About";
+            this.MT_About.UseVisualStyleBackColor = true;
+            // 
+            // lb_AppName
+            // 
+            resources.ApplyResources(this.lb_AppName, "lb_AppName");
+            this.lb_AppName.Name = "lb_AppName";
+            // 
+            // llb_Company
+            // 
+            resources.ApplyResources(this.llb_Company, "llb_Company");
+            this.llb_Company.Name = "llb_Company";
+            this.llb_Company.TabStop = true;
+            this.llb_Company.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llb_Company_LinkClicked);
+            // 
+            // lbox_Env
+            // 
+            resources.ApplyResources(this.lbox_Env, "lbox_Env");
+            this.lbox_Env.FormattingEnabled = true;
+            this.lbox_Env.Name = "lbox_Env";
+            // 
+            // lb_Copyright
+            // 
+            resources.ApplyResources(this.lb_Copyright, "lb_Copyright");
+            this.lb_Copyright.Name = "lb_Copyright";
+            // 
+            // lb_Version
+            // 
+            resources.ApplyResources(this.lb_Version, "lb_Version");
+            this.lb_Version.Name = "lb_Version";
+            // 
+            // lbVersion
+            // 
+            resources.ApplyResources(this.lbVersion, "lbVersion");
+            this.lbVersion.Name = "lbVersion";
+            // 
+            // pb_AboutLogo
+            // 
+            resources.ApplyResources(this.pb_AboutLogo, "pb_AboutLogo");
+            this.pb_AboutLogo.Name = "pb_AboutLogo";
+            this.pb_AboutLogo.TabStop = false;
+            // 
             // logCMS
             // 
             resources.ApplyResources(this.logCMS, "logCMS");
@@ -404,7 +460,8 @@ namespace VirtualSpace
             this.tsb_ui,
             this.tsb_rules,
             this.tsb_plugins,
-            this.tsb_logs});
+            this.tsb_logs,
+            this.tsb_about});
             this.ts_PageNav.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ts_PageNav.Name = "ts_PageNav";
             // 
@@ -448,16 +505,24 @@ namespace VirtualSpace
             this.tsb_logs.Tag = "";
             this.tsb_logs.Click += new System.EventHandler(this.tsb_logs_Click);
             // 
+            // tsb_about
+            // 
+            resources.ApplyResources(this.tsb_about, "tsb_about");
+            this.tsb_about.Name = "tsb_about";
+            this.tsb_about.Padding = new System.Windows.Forms.Padding(10);
+            this.tsb_about.Tag = "";
+            this.tsb_about.Click += new System.EventHandler(this.tsb_about_Click);
+            // 
             // panel_PageNav
             // 
             resources.ApplyResources(this.panel_PageNav, "panel_PageNav");
             this.panel_PageNav.Controls.Add(this.ts_PageNav);
             this.panel_PageNav.Name = "panel_PageNav";
             // 
-            // panel1
+            // panel_mask
             // 
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.Name = "panel1";
+            resources.ApplyResources(this.panel_mask, "panel_mask");
+            this.panel_mask.Name = "panel_mask";
             // 
             // mainStatusStrip
             // 
@@ -503,7 +568,7 @@ namespace VirtualSpace
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.mainStatusStrip);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel_mask);
             this.Controls.Add(this.panel_PageNav);
             this.Controls.Add(this.panel_Pages);
             this.Controls.Add(this.mainMenu);
@@ -533,6 +598,9 @@ namespace VirtualSpace
             this.MT_Rules.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
+            this.MT_About.ResumeLayout(false);
+            this.MT_About.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_AboutLogo)).EndInit();
             this.logCMS.ResumeLayout(false);
             this.panel_Pages.ResumeLayout(false);
             this.ts_PageNav.ResumeLayout(false);
@@ -549,7 +617,6 @@ namespace VirtualSpace
 
         private System.Windows.Forms.MenuStrip mainMenu;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.TabPage MT_Logs;
         private System.Windows.Forms.TabPage MT_General;
         private System.Windows.Forms.TabControl mainTabs;
@@ -592,7 +659,7 @@ namespace VirtualSpace
         private System.Windows.Forms.ToolStripButton tsb_plugins;
         private System.Windows.Forms.ToolStripButton tsb_logs;
         private System.Windows.Forms.Panel panel_PageNav;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel_mask;
         private System.Windows.Forms.TabPage MT_Plugins;
         private System.Windows.Forms.StatusStrip mainStatusStrip;
         private System.Windows.Forms.NotifyIcon niTray;
@@ -600,5 +667,14 @@ namespace VirtualSpace
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.TabPage MT_About;
+        private System.Windows.Forms.LinkLabel llb_Company;
+        private System.Windows.Forms.ListBox lbox_Env;
+        private System.Windows.Forms.Label lb_Copyright;
+        private System.Windows.Forms.Label lb_Version;
+        private System.Windows.Forms.Label lbVersion;
+        private System.Windows.Forms.PictureBox pb_AboutLogo;
+        private System.Windows.Forms.ToolStripButton tsb_about;
+        private System.Windows.Forms.Label lb_AppName;
     }
 }

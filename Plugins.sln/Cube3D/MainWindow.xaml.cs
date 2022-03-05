@@ -58,7 +58,7 @@ namespace Cube3D
 
             _handle = new WindowInteropHelper( this ).Handle;
             var pId = Process.GetCurrentProcess().Id;
-            if ( !IpcPipe.RegisterVdSwitchObserver( pluginInfo.Name, _handle, pId ) )
+            if ( !IpcPipeClient.RegisterVdSwitchObserver( pluginInfo.Name, _handle, pId ) )
             {
                 MessageBox.Show( "This Program require VirtualSpace running first." );
                 Application.Current.Shutdown();
@@ -108,7 +108,7 @@ namespace Cube3D
         {
             await Task.Run( () =>
             {
-                while ( IpcPipe.AskAlive( name, handle, pId ) )
+                while ( IpcPipeClient.AskAlive( name, handle, pId ) )
                 {
                     Thread.Sleep( 5000 );
                 }

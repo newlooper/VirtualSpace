@@ -29,12 +29,12 @@ namespace VirtualSpace.VirtualDesktop.Api
         {
             DesktopManager.Created += ( _, e ) =>
             {
-                Channels.VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification {Type = VirtualDesktopNotificationType.CREATED} );
+                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification {Type = VirtualDesktopNotificationType.CREATED} );
             };
 
             DesktopManager.Destroyed += ( _, e ) =>
             {
-                Channels.VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
+                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
                 {
                     Type = VirtualDesktopNotificationType.DELETED,
                     TargetId = e.Fallback.GetId()
@@ -43,7 +43,7 @@ namespace VirtualSpace.VirtualDesktop.Api
 
             DesktopManager.CurrentChanged += ( _, e ) =>
             {
-                Channels.VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
+                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
                 {
                     Type = VirtualDesktopNotificationType.CURRENT_CHANGED,
                     TargetId = e.NewDesktop.GetId()

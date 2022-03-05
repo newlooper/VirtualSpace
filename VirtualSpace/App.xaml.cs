@@ -59,7 +59,7 @@ namespace VirtualSpace
             base.OnExit( e );
 
             _mutex?.ReleaseMutex();
-            IpcPipe.SimpleShutdown();
+            IpcPipeServer.SimpleShutdown();
         }
 
         private static Mutex? SingleInstanceCheck()
@@ -68,11 +68,11 @@ namespace VirtualSpace
 
             if ( createdNew )
             {
-                IpcPipe.AsServer();
+                IpcPipeServer.Start();
                 return m;
             }
 
-            IpcPipe.AsClient();
+            IpcPipeServer.AsClient();
             return null;
         }
 
@@ -90,8 +90,8 @@ namespace VirtualSpace
             // ProcessWatcher.Start();
             // WindowWatcher.Start();
 
-            PluginManager.RegisterPlugins( ConfigManager.GetPluginsPath(), Const.PluginInfoFile );
-            Daemon.TakeWndHandleSnapshot();
+            PluginManagerServer.RegisterPlugins( ConfigManager.GetPluginsPath(), Const.PluginInfoFile );
+            Daemon.Start();
         }
 
         private static void BootInfo()

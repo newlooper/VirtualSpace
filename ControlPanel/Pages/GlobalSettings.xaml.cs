@@ -22,7 +22,7 @@ namespace ControlPanel.Pages
     /// </summary>
     public partial class GlobalSettings
     {
-        private readonly List<string> _locales = new ()
+        private readonly List<string> _locales = new()
         {
             "en-US",
             "zh-CN"
@@ -42,7 +42,7 @@ namespace ControlPanel.Pages
         private void LanguageChooser_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
         {
             LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
-            LocalizeDictionary.Instance.Culture = new CultureInfo((string)((ComboBoxItem)LanguageChooser.SelectedItem).Content);
+            LocalizeDictionary.Instance.Culture = new CultureInfo( (string)( (ComboBoxItem)LanguageChooser.SelectedItem ).Content );
         }
     }
 }

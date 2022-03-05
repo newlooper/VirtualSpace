@@ -87,7 +87,7 @@ namespace VirtualSpace.VirtualDesktop
             }
         }
 
-        public static void TakeWndHandleSnapshot()
+        public static void Start()
         {
             WaitForAction();
             User32.EnumWindows( WindowHandleFilter, 0 );

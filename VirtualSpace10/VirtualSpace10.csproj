@@ -23,27 +23,27 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
@@ -55,8 +55,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="..\VirtualSpace\About.cs" Link="About.cs" />
-        <Compile Include="..\VirtualSpace\About.Designer.cs" Link="About.Designer.cs" />
         <Compile Include="..\VirtualSpace\Agent.cs" Link="Agent.cs" />
         <Compile Include="..\VirtualSpace\App.xaml.cs" Link="App.xaml.cs" />
         <Compile Include="..\VirtualSpace\AppController.cs" Link="AppController.cs" />
@@ -69,7 +67,7 @@
             <DependentUpon>AutoVersion.tt</DependentUpon>
         </Compile>
         <Compile Include="..\VirtualSpace\Factory\AppControllerFactory.cs" Link="Factory\AppControllerFactory.cs" />
-        <Compile Include="..\VirtualSpace\IAppController.cs" Link="IAppController.cs" />
+        <Compile Include="..\VirtualSpace\Factory\IAppController.cs" Link="Factory\IAppController.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.hotkeys.cs" Link="MainWindow.hotkeys.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.layout.cs" Link="MainWindow.layout.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.main.cs" Link="MainWindow.main.cs" />
@@ -97,7 +95,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="..\VirtualSpace\About.resx" Link="About.resx" />
         <EmbeddedResource Include="..\VirtualSpace\AppController.resx" Link="AppController.resx" />
         <EmbeddedResource Include="..\VirtualSpace\AppController.zh-Hans.resx" Link="AppController.zh-Hans.resx" />
         <EmbeddedResource Include="..\VirtualSpace\Resources\Langs\WinFormStrings.resx" Link="Resources\Langs\WinFormStrings.resx" />
@@ -123,6 +120,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Configuration\Configuration.csproj" />
         <ProjectReference Include="..\Helpers\Helpers.csproj" />
+        <ProjectReference Include="..\Ipc\IpcServer\IpcServer.csproj" />
         <ProjectReference Include="..\UiAutomation\UiAutomation.csproj" />
         <ProjectReference Include="..\VirtualDesktop10\VirtualDesktop10.csproj" />
     </ItemGroup>

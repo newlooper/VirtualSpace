@@ -161,12 +161,12 @@ namespace VirtualSpace
 
             if ( msg == _hotplugDetected )
             {
-                foreach ( var plugin in PluginManager.Plugins )
+                foreach ( var plugin in PluginManagerServer.Plugins )
                 {
                     if ( plugin.RestartPolicy?.Type == RestartPolicyType.WINDOWS_MESSAGE
                          && plugin.RestartPolicy.Value == Const.HotplugDetected )
                     {
-                        PluginManager.RestartPlugin( plugin );
+                        PluginManagerServer.RestartPlugin( plugin );
                     }
                 }
             }
@@ -198,12 +198,12 @@ namespace VirtualSpace
                                 var dir         = lParam.ToInt32();
                                 var targetIndex = Navigation.CalculateTargetIndex( DesktopWrapper.Count, DesktopWrapper.CurrentIndex, (Keys)dir );
 
-                                foreach ( var pluginInfo in PluginManager.Plugins.Where(
+                                foreach ( var pluginInfo in PluginManagerServer.Plugins.Where(
                                              p => p.Type == PluginType.VD_SWITCH_OBSERVER && User32.IsWindow( p.Handle ) ) )
                                 {
                                     var w = DesktopWrapper.Count;
-                                    w += DesktopWrapper.CurrentIndex * IpcPipe.Power;
-                                    w += dir * IpcPipe.Power * IpcPipe.Power;
+                                    w += DesktopWrapper.CurrentIndex * IpcPipeServer.Power;
+                                    w += dir * IpcPipeServer.Power * IpcPipeServer.Power;
                                     User32.SendMessage( pluginInfo.Handle, WinMsg.WM_HOTKEY, (uint)w, (uint)targetIndex );
                                 }
 

@@ -24,75 +24,75 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|x64'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|x64'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|x86'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|x86'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|x64'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|x64'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|x86'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|x86'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|AnyCPU'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|x64'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|x64'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|x86'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|x86'">
-      <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
+        <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
@@ -106,6 +106,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Configuration\Configuration.csproj" />
         <ProjectReference Include="..\Helpers\Helpers.csproj" />
+        <ProjectReference Include="..\Ipc\IpcServer\IpcServer.csproj" />
         <ProjectReference Include="..\UiAutomation\UiAutomation.csproj" />
         <ProjectReference Include="..\VirtualDesktop11\VirtualDesktop11.csproj" />
     </ItemGroup>

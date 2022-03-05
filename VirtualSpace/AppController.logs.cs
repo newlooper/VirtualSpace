@@ -14,14 +14,13 @@ using System.Drawing;
 using System.Threading.Channels;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
-using VirtualSpace.Commons;
 using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace
 {
     public partial class AppController
     {
-        private static readonly Channel<LogMessage> LogChannel = Channels.LogChannel;
+        private static readonly Channel<LogMessage> LogChannel = Logger.LogChannel;
         private                 Point               _logTabCursorPos;
 
         private async void PickLogAndWrite()

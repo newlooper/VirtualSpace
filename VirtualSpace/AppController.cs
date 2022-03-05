@@ -11,8 +11,11 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
 using ConfigManager = VirtualSpace.Config.Manager;
@@ -203,13 +206,6 @@ namespace VirtualSpace
             Hide();
         }
 
-        private void aboutToolStripMenuItem_Click( object sender, EventArgs e )
-        {
-            var about = About.Create();
-
-            about.ShowDialog();
-        }
-
         private void tsb_general_Click( object sender, EventArgs e )
         {
             ts_PageNavButton_Click( sender, e );
@@ -241,6 +237,31 @@ namespace VirtualSpace
             mainTabs.SelectTab( 4 );
         }
 
+        private void tsb_about_Click( object sender, EventArgs e )
+        {
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            lb_AppName.Text = ( (AssemblyProductAttribute)Attribute.GetCustomAttribute(
+                executingAssembly,
+                typeof( AssemblyProductAttribute ),
+                false ) ).Product;
+            lb_Version.Text = ( (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(
+                executingAssembly,
+                typeof( AssemblyFileVersionAttribute ),
+                false ) ).Version;
+            lb_Copyright.Text = ( (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(
+                executingAssembly,
+                typeof( AssemblyCopyrightAttribute ),
+                false ) ).Copyright;
+            llb_Company.Text = ( (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(
+                executingAssembly,
+                typeof( AssemblyCompanyAttribute ),
+                false ) ).Company;
+            if ( lbox_Env.Items.Count == 0 )
+                lbox_Env.Items.Add( RuntimeInformation.FrameworkDescription );
+            ts_PageNavButton_Click( sender, e );
+            mainTabs.SelectTab( 5 );
+        }
+
         private void ts_PageNavButton_Click( object sender, EventArgs e )
         {
             foreach ( var item in ts_PageNav.Items )
@@ -263,6 +284,26 @@ namespace VirtualSpace
         private void settingsToolStripMenuItem_Click( object sender, EventArgs e )
         {
             BringToTop();
+        }
+
+        private void llb_Company_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+        {
+            string url;
+            if ( e.Link.LinkData != null )
+                url = e.Link.LinkData.ToString();
+            else
+                url = llb_Company.Text.Substring( e.Link.Start, e.Link.Length );
+
+            if ( !url.Contains( "://" ) )
+                url = "https://" + url;
+
+            var psi = new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            };
+            Process.Start( psi );
+            llb_Company.LinkVisited = true;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace VirtualSpace
 
         private void RegisterHotKey( IntPtr hWnd )
         {
-            IpcPipe.MainWindowHandle = hWnd;
+            IpcPipeServer.MainWindowHandle = hWnd;
             GHK.RegHotKey( hWnd, UserMessage.RiseView,
                 GHK.KeyModifiers.Ctrl | GHK.KeyModifiers.Shift,
                 KeyInterop.VirtualKeyFromKey( Key.Tab ) );
@@ -47,6 +47,7 @@ namespace VirtualSpace
             // Logger.Info( "Register Global HotKey For Close MainView - [Escape]" );
 
             var hookProc = new User32.LowLevelKeyboardProc( KeyboardHookCallback );
+            Logger.Info( "Set Windows LowLevelKeyboardProc Hook" );
             LLGHK.SetHook( hookProc );
         }
 
@@ -102,7 +103,9 @@ namespace VirtualSpace
 
         private void Window_Closing( object sender, CancelEventArgs e )
         {
+            Logger.Info( "Unset Windows LowLevelKeyboardProc Hook" );
             LowLevelGlobalHotKey.UnHook();
+            Logger.Info( "Unregister Global HotKeys" );
             GlobalHotKey.UnRegHotKey();
         }
     }

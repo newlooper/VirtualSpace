@@ -22,7 +22,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Bridge\Bridge.csproj" />
+        <ProjectReference Include="..\..\Ipc\IpcClient\IpcClient.csproj" />
+        <ProjectReference Include="..\..\Plugin\PluginClient\PluginClient.csproj" />
         <ProjectReference Include="..\ScreenCapture\ScreenCapture.csproj" />
     </ItemGroup>
 
