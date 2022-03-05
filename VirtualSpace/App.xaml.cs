@@ -17,6 +17,7 @@ using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Config;
 using VirtualSpace.Factory;
+using VirtualSpace.Helpers;
 using VirtualSpace.Log;
 using VirtualSpace.Plugin;
 using VirtualSpace.VirtualDesktop;
@@ -108,7 +109,7 @@ namespace VirtualSpace
             Logger.Info( "Start Size: " +
                          Screen.PrimaryScreen.Bounds.Width + "*" +
                          Screen.PrimaryScreen.Bounds.Height );
-            Logger.Info( "Is Running On Administrator: " + Agent.IsAdministrator() );
+            Logger.Info( "Is Running On Administrator: " + SysInfo.IsAdministrator() );
             Logger.Info( "Language Setting In Profile: " + ConfigManager.GetCurrentProfile().UI.Language );
         }
     }

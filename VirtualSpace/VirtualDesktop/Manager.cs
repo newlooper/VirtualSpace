@@ -48,7 +48,7 @@ namespace VirtualSpace.VirtualDesktop
         private static void SyncVirtualDesktops()
         {
             var vdCount    = DesktopWrapper.Count;
-            var dpi        = Agent.Dpi;
+            var dpi        = SysInfo.Dpi;
             var size       = MainWindow.MainGridCellSize;
             var vdwWidth   = ( size.Width - 2 * Ui.VDWBorderSize ) * dpi[0] + 1;
             var vdwHeight  = ( size.Height - 2 * Ui.VDWBorderSize ) * dpi[1] + 1;
@@ -104,7 +104,7 @@ namespace VirtualSpace.VirtualDesktop
             MainWindow.ResetMainGrid();
 
             var vdCount    = DesktopWrapper.Count;
-            var dpi        = Agent.Dpi;
+            var dpi        = SysInfo.Dpi;
             var size       = MainWindow.MainGridCellSize;
             var vdwWidth   = ( size.Width - 2 * Ui.VDWBorderSize ) * dpi[0] + 1;
             var vdwHeight  = ( size.Height - 2 * Ui.VDWBorderSize ) * dpi[1] + 1;

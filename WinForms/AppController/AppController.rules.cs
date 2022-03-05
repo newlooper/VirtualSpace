@@ -21,6 +21,13 @@ namespace VirtualSpace
 {
     public partial class AppController
     {
+        private IVirtualDesktopInfo _vdi;
+
+        public void SetVirsualDesktopInfo( IVirtualDesktopInfo vdi )
+        {
+            _vdi = vdi;
+        }
+
         private void InitRuleListView()
         {
             ///////////////////////////////////////
@@ -136,7 +143,7 @@ namespace VirtualSpace
         private void OpenRuleDialog( int index = -1 )
         {
             var ruleForm = new RuleForm( index );
-            ruleForm.Init();
+            ruleForm.Init( _vdi );
             ruleForm.TopMost = true;
             ruleForm.ShowDialog();
         }

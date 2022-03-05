@@ -10,11 +10,14 @@ https://newlooper.com/post/original/cs/os/windows/virtualdesktop/
 
 ### Main Projects
 
-- build and run VirtualSpace —— for  Windows 11
+#### main program
 
+- build and run VirtualSpace —— for  Windows 11
 - build and run VirtualSpace10 —— for window 10 19041+
 
-- build and run Cube3D after VirtualSpace(10) started —— plugin for virtual desktop switch effects
+#### plugins
+
+- build Cube3D, put `all generated files` into main program's plugins Folder eg: `plugins\Cube3D`, then Run Cube3D.exe after VirtualSpace(10) started —— plugin for virtual desktop switch effects
 
 > Suggested Target Platform `x64`
 

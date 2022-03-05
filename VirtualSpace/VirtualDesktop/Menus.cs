@@ -18,6 +18,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualSpace.Config;
+using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
 using VirtualSpace.UIA;
 using VirtualSpace.VirtualDesktop.Api;
@@ -112,7 +113,7 @@ namespace VirtualSpace.VirtualDesktop
             void OnCreateRuleFromWindow( object? s, EventArgs evt )
             {
                 var ruleForm = new RuleForm( -1 );
-                ruleForm.Init();
+                ruleForm.Init( new VirtualDesktopInfo() );
                 ruleForm.SetFormValuesFromWindow( mi.Vw.Handle );
                 ruleForm.TopMost = true;
                 ruleForm.ShowDialog();

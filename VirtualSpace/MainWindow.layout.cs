@@ -18,6 +18,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using VirtualSpace.Config;
 using VirtualSpace.Config.Entity;
+using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
 
@@ -134,7 +135,7 @@ namespace VirtualSpace
         {
             var cells = _instance.MainGrid.Children;
             var index = -1;
-            var dpi   = Agent.Dpi;
+            var dpi   = SysInfo.Dpi;
             for ( var i = 0; i < cells.Count; i++ )
             {
                 var topLeft = cells[i].TranslatePoint( new Point(), _instance );

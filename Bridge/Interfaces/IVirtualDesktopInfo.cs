@@ -8,23 +8,11 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-using System;
-
-namespace VirtualSpace.Factory
+namespace VirtualSpace
 {
-    public static class AppControllerFactory
+    public interface IVirtualDesktopInfo
     {
-        public static IAppController Create( string name )
-        {
-            switch ( name )
-            {
-                case "WinForm":
-                    var ac = new AppController();
-                    ac.SetVirsualDesktopInfo( new VirtualDesktopInfo() );
-                    return ac;
-                default:
-                    return null;
-            }
-        }
+        public int    GetDesktopCount();
+        public string DesktopNameFromIndex( int index );
     }
 }

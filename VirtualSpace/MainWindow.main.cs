@@ -91,6 +91,7 @@ namespace VirtualSpace
         private void Bootstrap()
         {
             Handle = new WindowInteropHelper( this ).Handle;
+            _acForm.SetMainWindowHandle( Handle );
             RegisterHotKey( Handle );
             FixStyle();
             EnableBlur();

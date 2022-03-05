@@ -6,4 +6,28 @@
         <LangVersion>9</LangVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Update="Resources\Langs\WinFormStrings.Designer.cs">
+        <DependentUpon>WinFormStrings.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Resources\Langs\WinFormStrings.zh-Hans.Designer.cs">
+        <DependentUpon>WinFormStrings.zh-Hans.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Langs\WinFormStrings.resx">
+        <LastGenOutput>WinFormStrings.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Langs\WinFormStrings.zh-Hans.resx">
+        <LastGenOutput>WinFormStrings.zh-Hans.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

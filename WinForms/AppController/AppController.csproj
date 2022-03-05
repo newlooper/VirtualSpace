@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netcoreapp3.1;net5.0-windows;net6.0-windows</TargetFrameworks>
+        <LangVersion>9</LangVersion>
+        <Nullable>enable</Nullable>
+        <UseWindowsForms>true</UseWindowsForms>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Configuration\Configuration.csproj" />
+      <ProjectReference Include="..\..\Helpers\Helpers.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="AppController.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="AppController.logs.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="AppController.rules.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="RuleForm.cs">
+        <SubType>Form</SubType>
+      </Compile>
+    </ItemGroup>
+
+</Project>

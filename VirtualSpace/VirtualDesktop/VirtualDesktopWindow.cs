@@ -231,7 +231,7 @@ namespace VirtualSpace.VirtualDesktop
         public void ShowByVdIndex()
         {
             var ui       = VirtualDesktopManager.Ui;
-            var dpi      = Agent.Dpi;
+            var dpi      = SysInfo.Dpi;
             var location = MainWindow.GetCellLocation( VdIndex );
             var point    = new Point( (int)( ( location.X + ui.VDWBorderSize ) * dpi[0] ), (int)( ( location.Y + ui.VDWBorderSize ) * dpi[1] ) );
             Location = point;

@@ -104,11 +104,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Configuration\Configuration.csproj" />
-        <ProjectReference Include="..\Helpers\Helpers.csproj" />
         <ProjectReference Include="..\Ipc\IpcServer\IpcServer.csproj" />
         <ProjectReference Include="..\UiAutomation\UiAutomation.csproj" />
         <ProjectReference Include="..\VirtualDesktop11\VirtualDesktop11.csproj" />
+        <ProjectReference Include="..\WinForms\AppController\AppController.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -117,30 +116,9 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>AutoVersion.tt</DependentUpon>
         </Compile>
-        <Compile Update="Resources\Langs\WinFormStrings.zh-Hans.Designer.cs">
-            <DependentUpon>WinFormStrings.zh-Hans.resx</DependentUpon>
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-        </Compile>
-        <Compile Update="Resources\Langs\WinFormStrings.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>WinFormStrings.resx</DependentUpon>
-        </Compile>
         <Compile Update="VirtualDesktop\VirtualDesktopWindow.cs">
             <SubType>Form</SubType>
         </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Update="Resources\Langs\WinFormStrings.zh-Hans.resx">
-            <LastGenOutput>WinFormStrings.zh-Hans.Designer.cs</LastGenOutput>
-            <Generator>ResXFileCodeGenerator</Generator>
-        </EmbeddedResource>
-        <EmbeddedResource Update="Resources\Langs\WinFormStrings.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>WinFormStrings.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

@@ -21,7 +21,6 @@ using VirtualSpace.Config;
 using VirtualSpace.Config.Events.Entity;
 using VirtualSpace.Config.Events.Expression;
 using VirtualSpace.Helpers;
-using VirtualSpace.VirtualDesktop.Api;
 using Process = System.Diagnostics.Process;
 
 namespace VirtualSpace
@@ -30,6 +29,7 @@ namespace VirtualSpace
     {
         private readonly Dictionary<string, Guid> _editIds = new();
         private readonly int                      _editIndex;
+        private          IVirtualDesktopInfo      _vdi;
 
         public RuleForm()
         {
@@ -43,8 +43,9 @@ namespace VirtualSpace
             _editIndex = index;
         }
 
-        public void Init()
+        public void Init( IVirtualDesktopInfo vdi )
         {
+            _vdi = vdi;
             InitOperators();
             SetFormValues();
         }
@@ -160,11 +161,11 @@ namespace VirtualSpace
             OperatorList( cbb_WndClass );
             cbb_MoveToDesktop.DisplayMember = "Text";
             cbb_MoveToDesktop.ValueMember = "Value";
-            var count    = DesktopWrapper.Count;
+            var count    = _vdi.GetDesktopCount();
             var desktops = new List<object>();
             for ( var i = 0; i < count; i++ )
             {
-                desktops.Add( new {Value = i, Text = DesktopWrapper.DesktopNameFromIndex( i )} );
+                desktops.Add( new {Value = i, Text = _vdi.DesktopNameFromIndex( i )} );
             }
 
             cbb_MoveToDesktop.DataSource = desktops;

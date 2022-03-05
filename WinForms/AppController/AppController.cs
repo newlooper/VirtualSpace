@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Helpers;
 using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace
@@ -26,6 +27,7 @@ namespace VirtualSpace
     {
         private static readonly ComponentResourceManager Resources = new( typeof( AppController ) );
         private static          AppController            _instance;
+        private                 IntPtr                   _mainWindowHandle;
 
         public AppController()
         {
@@ -61,6 +63,11 @@ namespace VirtualSpace
             TopMost = true;
             ReadRules();
             Show();
+        }
+
+        public void SetMainWindowHandle( IntPtr handle )
+        {
+            _mainWindowHandle = handle;
         }
 
         public static void SetAllLang( string lang )
@@ -197,7 +204,7 @@ namespace VirtualSpace
 
         private void quitToolStripMenuItem_Click( object sender, EventArgs e )
         {
-            MainWindow.Quit();
+            User32.PostMessage( _mainWindowHandle, WinMsg.WM_CLOSE, 0, 0 );
         }
 
         private void AppController_FormClosing( object sender, FormClosingEventArgs e )
@@ -239,25 +246,6 @@ namespace VirtualSpace
 
         private void tsb_about_Click( object sender, EventArgs e )
         {
-            var executingAssembly = Assembly.GetExecutingAssembly();
-            lb_AppName.Text = ( (AssemblyProductAttribute)Attribute.GetCustomAttribute(
-                executingAssembly,
-                typeof( AssemblyProductAttribute ),
-                false ) ).Product;
-            lb_Version.Text = ( (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(
-                executingAssembly,
-                typeof( AssemblyFileVersionAttribute ),
-                false ) ).Version;
-            lb_Copyright.Text = ( (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(
-                executingAssembly,
-                typeof( AssemblyCopyrightAttribute ),
-                false ) ).Copyright;
-            llb_Company.Text = ( (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(
-                executingAssembly,
-                typeof( AssemblyCompanyAttribute ),
-                false ) ).Company;
-            if ( lbox_Env.Items.Count == 0 )
-                lbox_Env.Items.Add( RuntimeInformation.FrameworkDescription );
             ts_PageNavButton_Click( sender, e );
             mainTabs.SelectTab( 5 );
         }
@@ -278,7 +266,7 @@ namespace VirtualSpace
 
         private void exitToolStripMenuItem_Click( object sender, EventArgs e )
         {
-            MainWindow.Quit();
+            User32.PostMessage( _mainWindowHandle, WinMsg.WM_CLOSE, 0, 0 );
         }
 
         private void settingsToolStripMenuItem_Click( object sender, EventArgs e )
@@ -304,6 +292,31 @@ namespace VirtualSpace
             };
             Process.Start( psi );
             llb_Company.LinkVisited = true;
+        }
+
+        private void MT_About_Paint( object sender, PaintEventArgs e )
+        {
+            var entryAssembly = Assembly.GetEntryAssembly();
+
+            lb_AppName.Text = ( (AssemblyProductAttribute)Attribute.GetCustomAttribute(
+                entryAssembly,
+                typeof( AssemblyProductAttribute ),
+                false ) ).Product;
+            lb_Version.Text = ( (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(
+                entryAssembly,
+                typeof( AssemblyFileVersionAttribute ),
+                false ) ).Version;
+            lb_Copyright.Text = ( (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(
+                entryAssembly,
+                typeof( AssemblyCopyrightAttribute ),
+                false ) ).Copyright;
+            llb_Company.Text = ( (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(
+                entryAssembly,
+                typeof( AssemblyCompanyAttribute ),
+                false ) ).Company;
+
+            if ( lbox_Env.Items.Count == 0 )
+                lbox_Env.Items.Add( RuntimeInformation.FrameworkDescription );
         }
     }
 }

@@ -10,21 +10,11 @@
 
 using System;
 
-namespace VirtualSpace.Factory
+namespace VirtualSpace
 {
-    public static class AppControllerFactory
+    public interface IAppController
     {
-        public static IAppController Create( string name )
-        {
-            switch ( name )
-            {
-                case "WinForm":
-                    var ac = new AppController();
-                    ac.SetVirsualDesktopInfo( new VirtualDesktopInfo() );
-                    return ac;
-                default:
-                    return null;
-            }
-        }
+        public void BringToTop();
+        public void SetMainWindowHandle( IntPtr handle );
     }
 }

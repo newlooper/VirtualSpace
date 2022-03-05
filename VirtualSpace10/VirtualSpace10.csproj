@@ -55,27 +55,18 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="..\VirtualSpace\Agent.cs" Link="Agent.cs" />
         <Compile Include="..\VirtualSpace\App.xaml.cs" Link="App.xaml.cs" />
-        <Compile Include="..\VirtualSpace\AppController.cs" Link="AppController.cs" />
-        <Compile Include="..\VirtualSpace\AppController.Designer.cs" Link="AppController.Designer.cs" />
-        <Compile Include="..\VirtualSpace\AppController.logs.cs" Link="AppController.logs.cs" />
-        <Compile Include="..\VirtualSpace\AppController.rules.cs" Link="AppController.rules.cs" />
         <Compile Include="..\VirtualSpace\AutoVersion.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
             <DependentUpon>AutoVersion.tt</DependentUpon>
         </Compile>
         <Compile Include="..\VirtualSpace\Factory\AppControllerFactory.cs" Link="Factory\AppControllerFactory.cs" />
-        <Compile Include="..\VirtualSpace\Factory\IAppController.cs" Link="Factory\IAppController.cs" />
+        <Compile Include="..\VirtualSpace\Factory\VirtualDesktopInfo.cs" Link="Factory\VirtualDesktopInfo.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.hotkeys.cs" Link="MainWindow.hotkeys.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.layout.cs" Link="MainWindow.layout.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.main.cs" Link="MainWindow.main.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.style.cs" Link="MainWindow.style.cs" />
-        <Compile Include="..\VirtualSpace\Resources\Langs\WinFormStrings.Designer.cs" Link="Resources\Langs\WinFormStrings.Designer.cs" />
-        <Compile Include="..\VirtualSpace\Resources\Langs\WinFormStrings.zh-Hans.Designer.cs" Link="Resources\Langs\WinFormStrings.zh-Hans.Designer.cs" />
-        <Compile Include="..\VirtualSpace\RuleForm.cs" Link="RuleForm.cs" />
-        <Compile Include="..\VirtualSpace\RuleForm.Designer.cs" Link="RuleForm.Designer.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Api\DesktopManagerWrapper.cs" Link="VirtualDesktop\Api\DesktopManagerWrapper.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Daemon.cs" Link="VirtualDesktop\Daemon.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\DragWindow.cs" Link="VirtualDesktop\DragWindow.cs" />
@@ -95,12 +86,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="..\VirtualSpace\AppController.resx" Link="AppController.resx" />
-        <EmbeddedResource Include="..\VirtualSpace\AppController.zh-Hans.resx" Link="AppController.zh-Hans.resx" />
-        <EmbeddedResource Include="..\VirtualSpace\Resources\Langs\WinFormStrings.resx" Link="Resources\Langs\WinFormStrings.resx" />
-        <EmbeddedResource Include="..\VirtualSpace\Resources\Langs\WinFormStrings.zh-Hans.resx" Link="Resources\Langs\WinFormStrings.zh-Hans.resx" />
-        <EmbeddedResource Include="..\VirtualSpace\RuleForm.resx" Link="RuleForm.resx" />
-        <EmbeddedResource Include="..\VirtualSpace\RuleForm.zh-Hans.resx" Link="RuleForm.zh-Hans.resx" />
         <EmbeddedResource Include="..\VirtualSpace\VirtualDesktop\DragWindow.resx" Link="VirtualDesktop\DragWindow.resx" />
         <EmbeddedResource Include="..\VirtualSpace\VirtualDesktop\VirtualDesktopWindow.resx" Link="VirtualDesktop\VirtualDesktopWindow.resx" />
     </ItemGroup>
@@ -118,11 +103,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Configuration\Configuration.csproj" />
-        <ProjectReference Include="..\Helpers\Helpers.csproj" />
         <ProjectReference Include="..\Ipc\IpcServer\IpcServer.csproj" />
         <ProjectReference Include="..\UiAutomation\UiAutomation.csproj" />
         <ProjectReference Include="..\VirtualDesktop10\VirtualDesktop10.csproj" />
+        <ProjectReference Include="..\WinForms\AppController\AppController.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -139,7 +123,6 @@
 
     <ItemGroup>
         <Folder Include="Factory\" />
-        <Folder Include="Resources\Langs\" />
     </ItemGroup>
 
     <Target Name="DeletePdb" AfterTargets="Publish">

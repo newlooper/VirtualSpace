@@ -8,10 +8,20 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace
+using VirtualDesktop;
+
+namespace VirtualSpace.Factory
 {
-    public interface IAppController
+    public class VirtualDesktopInfo : IVirtualDesktopInfo
     {
-        public void BringToTop();
+        public int GetDesktopCount()
+        {
+            return Desktop.Count;
+        }
+
+        public string DesktopNameFromIndex( int index )
+        {
+            return Desktop.DesktopNameFromIndex( index );
+        }
     }
 }
