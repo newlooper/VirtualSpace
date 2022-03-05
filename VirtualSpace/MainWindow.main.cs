@@ -50,6 +50,11 @@ namespace VirtualSpace
             Topmost = true;
         }
 
+        public static MainWindow GetMainWindow()
+        {
+            return _instance;
+        }
+
         public IntPtr Handle { get; private set; }
 
         public static MainWindow Create()
@@ -215,9 +220,9 @@ namespace VirtualSpace
                     }
 
                     break;
-                case WinMsg.WM_MOUSEACTIVATE:
-                    handled = true;
-                    return new IntPtr( WinMsg.MA_NOACTIVATE );
+                // case WinMsg.WM_MOUSEACTIVATE:
+                //     handled = true;
+                //     return new IntPtr( WinMsg.MA_NOACTIVATE );
             }
 
             return IntPtr.Zero;

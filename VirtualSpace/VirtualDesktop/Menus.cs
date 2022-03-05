@@ -31,7 +31,8 @@ namespace VirtualSpace.VirtualDesktop
 
         public static void ThumbCtm( MenuInfo mi )
         {
-            _ctm = new ContextMenuStrip();
+            _ctm ??= new ContextMenuStrip();
+            _ctm.Items.Clear();
             var pinWindow = new ToolStripMenuItem
             {
                 Text = Agent.Langs.GetString( "VDW.CTM.Window.PinWin" ),
@@ -126,7 +127,8 @@ namespace VirtualSpace.VirtualDesktop
 
         public static void VdCtm( MenuInfo mi )
         {
-            _ctm = new ContextMenuStrip();
+            _ctm ??= new ContextMenuStrip();
+            _ctm.Items.Clear();
             var vdIndex     = DesktopWrapper.IndexFromGuid( mi.Self.VdId );
             var currentName = DesktopWrapper.DesktopNameFromIndex( vdIndex );
             var desktopName = new ToolStripTextBox {Text = currentName, AutoSize = false, Width = 200};

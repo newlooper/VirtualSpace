@@ -12,7 +12,9 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
@@ -28,6 +30,7 @@ namespace VirtualSpace.VirtualDesktop
         private static   Rectangle                   _dragBounds = Rectangle.Empty;
         private static   VisibleWindow?              _selectedWindow;
         private static   DragWindow?                 _dw;
+        private static   WindowInteropHelper         _windowInteropHelper;
         private readonly List<VisibleWindow>         _visibleWindows = new();
         private          string                      _desktopName;
         private          Point                       _fixedPosition;
@@ -55,7 +58,7 @@ namespace VirtualSpace.VirtualDesktop
 
         public static VirtualDesktopWindow Create( int index, Guid guid, Color defaultBackColor, Size commonSize, int VDWPadding )
         {
-            return new VirtualDesktopWindow
+            var vdw = new VirtualDesktopWindow
             {
                 StartPosition = FormStartPosition.Manual,
                 TabStop = false,
@@ -68,6 +71,29 @@ namespace VirtualSpace.VirtualDesktop
                 Size = commonSize,
                 Padding = new Padding( VDWPadding )
             };
+            vdw.SetOwner( MainWindow.GetMainWindow() );
+            return vdw;
+        }
+
+        private void SetOwner( System.Windows.Window owner )
+        {
+            _windowInteropHelper ??= new WindowInteropHelper( owner );
+            if ( owner.Dispatcher.CheckAccess() )
+            {
+                User32.SetWindowLongPtr( new HandleRef( this, Handle ),
+                    (int)GetWindowLongFields.GWL_HWNDPARENT,
+                    _windowInteropHelper.Handle.ToInt32()
+                );
+            }
+            else
+            {
+                owner.Dispatcher.Invoke( () =>
+                    User32.SetWindowLongPtr( new HandleRef( this, Handle ),
+                        (int)GetWindowLongFields.GWL_HWNDPARENT,
+                        _windowInteropHelper.Handle.ToInt32()
+                    )
+                );
+            }
         }
 
         public void SetBackground( Wallpaper wp )
