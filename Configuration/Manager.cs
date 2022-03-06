@@ -18,7 +18,6 @@ using System.Windows;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Config.Profiles;
-using VirtualSpace.Log;
 
 namespace VirtualSpace.Config
 {

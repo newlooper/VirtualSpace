@@ -15,7 +15,6 @@ using System.Threading.Channels;
 using System.Windows.Media;
 using Notification.Wpf;
 using Notification.Wpf.Constants;
-using VirtualSpace.Log;
 
 namespace VirtualSpace.AppLogs
 {

@@ -13,8 +13,8 @@ using System;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
-using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
+using IpcConfig = VirtualSpace.Commons.Config;
 
 namespace Cube3D
 {
@@ -66,10 +66,11 @@ namespace Cube3D
                 case WinMsg.WM_HOTKEY:
                     if ( _runningAnimationCount > 0 ) break;
 
-                    var n           = wParam.ToInt32();
-                    var vdCount     = n % IpcPipeClient.Power;
-                    var fromIndex   = n / IpcPipeClient.Power % IpcPipeClient.Power;
-                    var dir         = (Keys)( n / IpcPipeClient.Power / IpcPipeClient.Power % 100 );
+                    var nWParam   = wParam.ToInt32();
+                    var vdCount   = nWParam % IpcConfig.DigitOfVdCount;
+                    var fromIndex = nWParam / IpcConfig.DigitOfVdCount % IpcConfig.DigitOfCurrentVdIndex;
+                    var dir       = (Keys)( nWParam / IpcConfig.DigitOfVdCount / IpcConfig.DigitOfCurrentVdIndex % IpcConfig.DigitOfNavDirKey );
+
                     var targetIndex = lParam.ToInt32();
 
                     NotificationGridLayout( vdCount );

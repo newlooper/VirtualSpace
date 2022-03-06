@@ -20,7 +20,6 @@ namespace VirtualSpace.Commons
     {
         private const string PIPE_NAME   = Config.PIPE_NAME;
         private const string PIPE_SERVER = Config.PIPE_SERVER;
-        public const  int    Power       = Config.Power;
 
         public static bool RegisterVdSwitchObserver( string name, IntPtr handle, int pId )
         {

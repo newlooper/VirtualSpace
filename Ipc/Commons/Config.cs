@@ -12,8 +12,10 @@ namespace VirtualSpace.Commons
 {
     public static class Config
     {
-        public const string PIPE_NAME   = "VIRTUAL_SPACE_IPC_PIPE";
-        public const string PIPE_SERVER = ".";
-        public const int    Power       = 1000;
+        public const string PIPE_NAME             = "VIRTUAL_SPACE_IPC_PIPE";
+        public const string PIPE_SERVER           = ".";
+        public const int    DigitOfVdCount        = 1000;
+        public const int    DigitOfCurrentVdIndex = 1000;
+        public const int    DigitOfNavDirKey      = 100;
     }
 }

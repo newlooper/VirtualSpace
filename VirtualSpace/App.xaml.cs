@@ -18,7 +18,6 @@ using VirtualSpace.Commons;
 using VirtualSpace.Config;
 using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
-using VirtualSpace.Log;
 using VirtualSpace.Plugin;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;

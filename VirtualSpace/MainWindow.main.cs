@@ -26,6 +26,7 @@ using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
 using Application = System.Windows.Forms.Application;
 using ConfigManager = VirtualSpace.Config.Manager;
+using IpcConfig = VirtualSpace.Commons.Config;
 
 namespace VirtualSpace
 {
@@ -50,12 +51,12 @@ namespace VirtualSpace
             Topmost = true;
         }
 
+        public IntPtr Handle { get; private set; }
+
         public static MainWindow GetMainWindow()
         {
             return _instance;
         }
-
-        public IntPtr Handle { get; private set; }
 
         public static MainWindow Create()
         {
@@ -208,8 +209,8 @@ namespace VirtualSpace
                                              p => p.Type == PluginType.VD_SWITCH_OBSERVER && User32.IsWindow( p.Handle ) ) )
                                 {
                                     var w = DesktopWrapper.Count;
-                                    w += DesktopWrapper.CurrentIndex * IpcPipeServer.Power;
-                                    w += dir * IpcPipeServer.Power * IpcPipeServer.Power;
+                                    w += DesktopWrapper.CurrentIndex * IpcConfig.DigitOfVdCount;
+                                    w += dir * IpcConfig.DigitOfVdCount * IpcConfig.DigitOfCurrentVdIndex;
                                     User32.SendMessage( pluginInfo.Handle, WinMsg.WM_HOTKEY, (uint)w, (uint)targetIndex );
                                 }
 

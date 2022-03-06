@@ -13,13 +13,13 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace VirtualSpace.Log
+namespace VirtualSpace.AppLogs
 {
     public static class LogManager
     {
         private static readonly LoggingLevelSwitch LevelSwitch = new( LogEventLevel.Verbose );
 
-        public static readonly Logger RootLogger = new LoggerConfiguration()
+        public static readonly Serilog.Core.Logger RootLogger = new LoggerConfiguration()
             .MinimumLevel.ControlledBy( LevelSwitch )
             .WriteTo.Logger( c =>
                 c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Verbose )
