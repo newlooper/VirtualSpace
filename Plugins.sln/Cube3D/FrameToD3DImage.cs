@@ -19,12 +19,35 @@ namespace Cube3D
 {
     public class FrameToD3DImage : FrameProcessor
     {
-        private readonly Duration                         _duration = new Duration( new TimeSpan( 0, 0, 0, 0, 16 ) );
-        public readonly  Dictionary<string, D3DImageInfo> D3DImages = new Dictionary<string, D3DImageInfo>();
+        private readonly Dictionary<string, D3DImageInfo> _d3DImageDict;
+        private readonly Duration                         _duration = new( new TimeSpan( 0, 0, 0, 0, 16 ) );
+
+        private FrameToD3DImage()
+        {
+        }
+
+        public FrameToD3DImage( Dictionary<string, D3DImageInfo> d3dImageDict )
+        {
+            _d3DImageDict = d3dImageDict;
+        }
+
+        public void Draw( bool inAnimation )
+        {
+            if ( inAnimation )
+            {
+                _d3DImageDict[D3DImages.Front].Draw = false;
+                _d3DImageDict[D3DImages.Others].Draw = true;
+            }
+            else
+            {
+                _d3DImageDict[D3DImages.Front].Draw = true;
+                _d3DImageDict[D3DImages.Others].Draw = false;
+            }
+        }
 
         public override void Proceed( IntPtr pointer )
         {
-            foreach ( var (_, value) in D3DImages )
+            foreach ( var (_, value) in _d3DImageDict )
             {
                 if ( !value.Draw ) continue;
                 var d3DImage = value.Image;

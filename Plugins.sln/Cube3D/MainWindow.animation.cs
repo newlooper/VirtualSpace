@@ -10,120 +10,29 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
-using System.Windows.Forms;
+using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
-using Button = System.Windows.Controls.Button;
 
 namespace Cube3D
 {
     public partial class MainWindow
     {
-        private static readonly int _animationDuration = 500;
+        public static int RunningAnimationCount;
 
-        private static readonly Dictionary<Keys, RotateTransform3D> RotateTransDirections = new Dictionary<Keys, RotateTransform3D>
+        private readonly ThicknessAnimation _animationNotifyGrid = new()
         {
-            {
-                Keys.Left, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( 0, 1, 0 ), 0 ) )
-                {
-                    CenterX = _meshWidth / 2,
-                    CenterZ = -_meshWidth / 2
-                }
-            },
-            {
-                Keys.Right, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( 0, -1, 0 ), 0 ) )
-                {
-                    CenterX = _meshWidth / 2,
-                    CenterZ = -_meshWidth / 2
-                }
-            },
-            {
-                Keys.Up, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( 1, 0, 0 ), 0 ) )
-                {
-                    CenterY = _meshHeight / 2,
-                    CenterZ = -_meshHeight / 2
-                }
-            },
-            {
-                Keys.Down, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( -1, 0, 0 ), 0 ) )
-                {
-                    CenterY = _meshHeight / 2,
-                    CenterZ = -_meshHeight / 2
-                }
-            }
-        };
-
-        private readonly DoubleAnimation _animationCube = new DoubleAnimation
-        {
-            From = 0,
-            To = 90,
-            Duration = new Duration( TimeSpan.FromMilliseconds( _animationDuration ) ),
+            Duration = new Duration( TimeSpan.FromMilliseconds( Config.Settings.AnimationDuration ) ),
             FillBehavior = FillBehavior.Stop
         };
-
-        private readonly ThicknessAnimation _animationNotifyGrid = new ThicknessAnimation
-        {
-            Duration = new Duration( TimeSpan.FromMilliseconds( _animationDuration ) ),
-            FillBehavior = FillBehavior.Stop
-        };
-
-        private readonly Transform3DGroup  _transGroup = new Transform3DGroup();
-        private          RotateTransform3D _rotateTrans;
-        private          int               _runningAnimationCount;
 
         private void AnimationCompleted( object sender, EventArgs e )
         {
-            Interlocked.Decrement( ref _runningAnimationCount );
-            if ( _runningAnimationCount == 0 )
+            Interlocked.Decrement( ref RunningAnimationCount );
+            if ( RunningAnimationCount == 0 )
                 ShowHide();
-        }
-
-        private void CubeAnimation( Keys dir )
-        {
-            switch ( dir )
-            {
-                case Keys.Left:
-                    _rotateTrans = RotateTransDirections[Keys.Left];
-                    break;
-                case Keys.Right:
-                    _rotateTrans = RotateTransDirections[Keys.Right];
-                    break;
-                case Keys.Up:
-                    _rotateTrans = RotateTransDirections[Keys.Up];
-                    break;
-                case Keys.Down:
-                    _rotateTrans = RotateTransDirections[Keys.Down];
-                    break;
-            }
-
-            if ( _transGroup.Children.Count == 0 )
-            {
-                _transGroup.Children.Add( _rotateTrans );
-            }
-            else
-            {
-                _transGroup.Children[0] = _rotateTrans;
-            }
-
-            CubeModel3DGroup.Transform = _transGroup;
-
-            // _animationCube.EasingFunction = new CircleEase();
-            _rotateTrans.Rotation.BeginAnimation( AxisAngleRotation3D.AngleProperty, _animationCube );
-            Interlocked.Increment( ref _runningAnimationCount );
-
-            // var animationCamera = new Point3DAnimation 
-            // {
-            //     From = new Point3D( MainCamera.Position.X, MainCamera.Position.Y, MainCamera.Position.Z + 0.1),
-            //     To = new Point3D( MainCamera.Position.X, MainCamera.Position.Y, MainCamera.Position.Z + 0.5),
-            //     Duration = new Duration( TimeSpan.FromMilliseconds( _animationDuration / 2 ) ),
-            //     FillBehavior = FillBehavior.Stop,
-            //     AutoReverse = true
-            // };
-            //
-            // MainCamera.BeginAnimation( ProjectionCamera.PositionProperty , animationCamera );
         }
 
         private void NotificationGridAnimation( int fromIndex, int toIndex, int vdCount )
@@ -136,7 +45,6 @@ namespace Cube3D
             var toRow    = toIndex / rowsCols; // divide
             var toCol    = toIndex % rowsCols; // modulus 
 
-            // Debug.WriteLine( $"Row: {toRow}, Column:{toCol}" );
             var buttonMargin = (Thickness)Resources["NotifyButtonMargin"];
 
             var cellCenterToCell00Distance = rowsCols - 1; // 默认 margin all=0 在中心，需计算与左上角的单位距离
@@ -166,7 +74,21 @@ namespace Cube3D
             _animationNotifyGrid.To = targetCellMargin;
             // _animationNotifyGrid.EasingFunction = new CircleEase();
             CurrentIndicator.BeginAnimation( MarginProperty, _animationNotifyGrid );
-            Interlocked.Increment( ref _runningAnimationCount );
+            Interlocked.Increment( ref RunningAnimationCount );
+        }
+
+        private void CameraAnimation()
+        {
+            var animationCamera = new Point3DAnimation
+            {
+                From = new Point3D( MainCamera.Position.X, MainCamera.Position.Y, MainCamera.Position.Z + 0.1 ),
+                To = new Point3D( MainCamera.Position.X, MainCamera.Position.Y, MainCamera.Position.Z + 0.5 ),
+                Duration = new Duration( TimeSpan.FromMilliseconds( Config.Settings.AnimationDuration / 2.0 ) ),
+                FillBehavior = FillBehavior.Stop,
+                AutoReverse = true
+            };
+
+            MainCamera.BeginAnimation( ProjectionCamera.PositionProperty, animationCamera );
         }
     }
 }

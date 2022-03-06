@@ -3,25 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:interop="clr-namespace:System.Windows.Interop;assembly=PresentationCore"
         mc:Ignorable="d"
         Title="MainWindow" Left="0" Top="0" Height="1440" Width="2560"
         WindowStyle="None" ResizeMode="NoResize"
         Loaded="Window_Loaded">
     <Window.Resources>
         <ResourceDictionary>
-            <interop:D3DImage x:Key="Front"></interop:D3DImage>
-            <interop:D3DImage x:Key="Others"></interop:D3DImage>
             <Thickness x:Key="NotifyButtonMargin"></Thickness>
             <ControlTemplate x:Key="NotifyButtonTemplate" TargetType="Button">
                 <Border BorderThickness="0" CornerRadius="5" Background="#C4C4C4"
-                    Margin="{DynamicResource NotifyButtonMargin}">
+                        Margin="{DynamicResource NotifyButtonMargin}">
                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Border>
             </ControlTemplate>
             <ControlTemplate x:Key="NotifyButtonTemplateCurrent" TargetType="Button">
                 <Border BorderThickness="0" CornerRadius="5" Background="White"
-                    Margin="{DynamicResource NotifyButtonMargin}">
+                        Margin="{DynamicResource NotifyButtonMargin}">
                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Border>
             </ControlTemplate>
@@ -42,7 +39,7 @@
             </Viewport3D.Camera>
             <ModelVisual3D x:Name="Mv3D">
                 <ModelVisual3D.Content>
-                    <Model3DGroup x:Name="CubeModel3DGroup">
+                    <Model3DGroup x:Name="MainModel3DGroup">
                         <AmbientLight Color="White" />
                     </Model3DGroup>
                 </ModelVisual3D.Content>
@@ -60,9 +57,9 @@
         </Viewport3D>
         <Grid x:Name="NotifyContainer" Visibility="Hidden">
             <Border x:Name="NotifyBorder" Background="#6C6C6C" CornerRadius="10">
-                <UniformGrid x:Name="NotifyGrid"></UniformGrid>
+                <UniformGrid x:Name="NotifyGrid" />
             </Border>
-            <Button x:Name="CurrentIndicator" Template="{DynamicResource NotifyButtonTemplateCurrent}"></Button>
+            <Button x:Name="CurrentIndicator" Template="{DynamicResource NotifyButtonTemplateCurrent}" />
         </Grid>
     </Grid>
 </Window>

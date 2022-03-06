@@ -31,7 +31,7 @@ namespace VirtualSpace.Plugin
                 var infoFile = Path.Combine( path, pluginInfoFile );
                 if ( !File.Exists( infoFile ) ) continue;
 
-                var pluginInfo = LoadFromJson( infoFile );
+                var pluginInfo = LoadFromJson<PluginInfo>( infoFile );
                 if ( pluginInfo == null ) continue;
 
                 var loaded = Plugins.Find( p => p.Name == pluginInfo.Name );
@@ -48,13 +48,13 @@ namespace VirtualSpace.Plugin
             }
         }
 
-        private static PluginInfo? LoadFromJson( string infoFile )
+        private static T? LoadFromJson<T>( string infoFile )
         {
             using var fs     = new FileStream( infoFile, FileMode.Open, FileAccess.ReadWrite );
             var       buffer = new byte[fs.Length];
             fs.Read( buffer, 0, (int)fs.Length );
             var utf8Reader = new Utf8JsonReader( buffer );
-            return JsonSerializer.Deserialize<PluginInfo>( ref utf8Reader );
+            return JsonSerializer.Deserialize<T>( ref utf8Reader );
         }
 
         private static void StartExe( string exe )

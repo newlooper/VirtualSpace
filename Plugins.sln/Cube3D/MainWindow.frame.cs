@@ -10,9 +10,7 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Interop;
 using ScreenCapture;
 
 namespace Cube3D
@@ -33,16 +31,7 @@ namespace Cube3D
         {
             var item = CaptureHelper.CreateItemForMonitor( hMon );
             if ( item == null ) return;
-            _frameProcessor = new FrameToD3DImage();
-            foreach ( var surface in new List<string> {Front, Others} )
-            {
-                _frameProcessor.D3DImages[surface] = new D3DImageInfo
-                {
-                    Draw = true,
-                    Image = Resources[surface] as D3DImage
-                };
-            }
-
+            _frameProcessor = new FrameToD3DImage( D3DImages.D3DImageDict );
             var capture = new D3D9ShareCapture( item, _frameProcessor );
             capture.StartCapture();
         }

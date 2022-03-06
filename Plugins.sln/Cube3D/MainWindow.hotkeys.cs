@@ -32,8 +32,7 @@ namespace Cube3D
             if ( show )
             {
                 // _frameProcessor.Interval = 50;
-                _frameProcessor.D3DImages[Front].Draw = false;
-                _frameProcessor.D3DImages[Others].Draw = true;
+                _frameProcessor.Draw( true );
                 Left = 0;
                 Top = 0;
                 Width = SystemParameters.PrimaryScreenWidth;
@@ -48,8 +47,7 @@ namespace Cube3D
                 //Height = SystemParameters.PrimaryScreenHeight / 100;
                 Width = 0;
                 Height = 0;
-                _frameProcessor.D3DImages[Front].Draw = true;
-                _frameProcessor.D3DImages[Others].Draw = false;
+                _frameProcessor.Draw( false );
                 // _frameProcessor.Interval = 50;
             }
         }
@@ -64,7 +62,7 @@ namespace Cube3D
                         handled = true;
                     break;
                 case WinMsg.WM_HOTKEY:
-                    if ( _runningAnimationCount > 0 ) break;
+                    if ( RunningAnimationCount > 0 ) break;
 
                     var nWParam   = wParam.ToInt32();
                     var vdCount   = nWParam % IpcConfig.DigitOfVdCount;
@@ -79,7 +77,7 @@ namespace Cube3D
                     NotificationGridAnimation( fromIndex, targetIndex, vdCount );
                     if ( targetIndex != fromIndex )
                     {
-                        CubeAnimation( dir );
+                        _effect.AnimationInDirection( dir, MainModel3DGroup );
                     }
 
                     break;

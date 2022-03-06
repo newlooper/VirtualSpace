@@ -16,13 +16,13 @@ namespace VirtualSpace.Plugin
 {
     public class PluginManager
     {
-        public static PluginInfo? LoadFromJson( string infoFile )
+        public static T? LoadFromJson<T>( string infoFile )
         {
             using var fs     = new FileStream( infoFile, FileMode.Open, FileAccess.ReadWrite );
             var       buffer = new byte[fs.Length];
             fs.Read( buffer, 0, (int)fs.Length );
             var utf8Reader = new Utf8JsonReader( buffer );
-            return JsonSerializer.Deserialize<PluginInfo>( ref utf8Reader );
+            return JsonSerializer.Deserialize<T>( ref utf8Reader );
         }
 
         public static bool CheckRequirements( Requirements? req )

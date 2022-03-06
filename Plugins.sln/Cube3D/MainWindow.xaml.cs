@@ -11,7 +11,6 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +18,6 @@ using System.Windows;
 using System.Windows.Interop;
 using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
-using VirtualSpace.Plugin;
 
 namespace Cube3D
 {
@@ -43,36 +41,13 @@ namespace Cube3D
 
         private void Bootstrap()
         {
-            var pluginInfoFile = Path.Combine( GetAppFolder(), "plugin.json" );
-            var pluginInfo     = PluginManager.LoadFromJson( pluginInfoFile );
-            if ( pluginInfo == null || string.IsNullOrEmpty( pluginInfo.Name ) )
-            {
-                MessageBox.Show( "plugin.json invalid." );
-                Application.Current.Shutdown();
-            }
-
-            if ( !PluginManager.CheckRequirements( pluginInfo.Requirements ) )
-            {
-                MessageBox.Show( "Plugin Error.\nThe system does not meet the Requirements." );
-                Application.Current.Shutdown();
-            }
-
             _handle = new WindowInteropHelper( this ).Handle;
-            var pId = Process.GetCurrentProcess().Id;
-            if ( !IpcPipeClient.RegisterVdSwitchObserver( pluginInfo.Name, _handle, pId ) )
-            {
-                MessageBox.Show( "This Program require VirtualSpace running first." );
-                Application.Current.Shutdown();
-            }
 
-            CheckAlive( pluginInfo.Name, _handle, pId );
+            CheckHost();
+            _ = SetWindowDisplayAffinity( _handle, WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
 
-            SetWindowDisplayAffinity( _handle, WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
             FixStyle();
-
-            CameraPosition( 0 );
-
-            _animationCube.Completed += AnimationCompleted;
+            CameraPosition();
             _animationNotifyGrid.Completed += AnimationCompleted;
         }
 
@@ -92,17 +67,24 @@ namespace Cube3D
         {
             Bootstrap();
 
-            BuildCube();
+            Build3D();
 
             StartPrimaryMonitorCapture();
 
             ShowHide();
         }
 
-        private string GetAppFolder()
+        private static void CheckHost()
         {
-            var appPath = Process.GetCurrentProcess().MainModule.FileName;
-            return Directory.GetParent( appPath ).FullName;
+            var pluginInfo = Config.PluginInfo;
+            var pId        = Process.GetCurrentProcess().Id;
+            if ( !IpcPipeClient.RegisterVdSwitchObserver( pluginInfo.Name, _handle, pId ) )
+            {
+                MessageBox.Show( "This Program require VirtualSpace running first." );
+                Application.Current.Shutdown();
+            }
+
+            CheckAlive( pluginInfo.Name, _handle, pId );
         }
 
         private static async void CheckAlive( string name, IntPtr handle, int pId )

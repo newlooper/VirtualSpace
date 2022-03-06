@@ -1,10 +1,14 @@
 ﻿<Application x:Class="Cube3D.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:interop="clr-namespace:System.Windows.Interop;assembly=PresentationCore"
              StartupUri="MainWindow.xaml">
 
     <Application.Resources>
-
+        <ResourceDictionary>
+            <interop:D3DImage x:Key="Front" />
+            <interop:D3DImage x:Key="Others" />
+        </ResourceDictionary>
     </Application.Resources>
 
 </Application>
