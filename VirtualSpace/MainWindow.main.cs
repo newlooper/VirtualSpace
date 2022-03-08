@@ -231,6 +231,8 @@ namespace VirtualSpace
 
         public static void BringToTop()
         {
+            _instance.Left = 0;
+            _instance.Top = 0;
             _instance.Show();
 
             VirtualDesktopManager.FixLayout();
@@ -238,20 +240,10 @@ namespace VirtualSpace
             VirtualDesktopManager.ShowVisibleWindowsForDesktops();
         }
 
-        public static void DelegateBringToTop()
-        {
-            _instance.Dispatcher.Invoke( BringToTop );
-        }
-
         public static void HideAll()
         {
             _instance.Hide();
             VirtualDesktopManager.HideAllVirtualDesktops();
-        }
-
-        public static void Quit()
-        {
-            _instance.Close();
         }
 
         public static bool IsShowing()

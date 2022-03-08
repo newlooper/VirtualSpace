@@ -12,7 +12,6 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
@@ -150,11 +149,6 @@ namespace VirtualSpace
             }
 
             return index;
-        }
-
-        public static UniformGrid GetMainGrid()
-        {
-            return _instance.MainGrid;
         }
     }
 }
