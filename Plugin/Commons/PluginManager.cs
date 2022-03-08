@@ -14,7 +14,7 @@ using System.Text.Json;
 
 namespace VirtualSpace.Plugin
 {
-    public class PluginManager
+    public static class PluginManager
     {
         public static T? LoadFromJson<T>( string infoFile )
         {

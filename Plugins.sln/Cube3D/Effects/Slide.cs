@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
@@ -21,19 +20,19 @@ namespace Cube3D.Effects
 {
     public class Slide : Effect
     {
-        private static readonly Dictionary<Keys, TranslateTransform3D> TransformDirections = new()
+        private static readonly Dictionary<KeyCode, TranslateTransform3D> TransformDirections = new()
         {
             {
-                Keys.Left, new TranslateTransform3D()
+                KeyCode.Left, new TranslateTransform3D()
             },
             {
-                Keys.Right, new TranslateTransform3D()
+                KeyCode.Right, new TranslateTransform3D()
             },
             {
-                Keys.Up, new TranslateTransform3D()
+                KeyCode.Up, new TranslateTransform3D()
             },
             {
-                Keys.Down, new TranslateTransform3D()
+                KeyCode.Down, new TranslateTransform3D()
             }
         };
 
@@ -56,7 +55,6 @@ namespace Cube3D.Effects
             Animation = new DoubleAnimation
             {
                 From = 0,
-                Duration = new Duration( TimeSpan.FromMilliseconds( Config.Settings.AnimationDuration ) ),
                 FillBehavior = FillBehavior.Stop
             };
         }
@@ -151,27 +149,28 @@ namespace Cube3D.Effects
             model3DGroup.Children.Add( _face );
         }
 
-        public override void AnimationInDirection( Keys dir, Model3DGroup model3DGroup )
+        public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup )
         {
             var offsetProperty = TranslateTransform3D.OffsetXProperty;
             var animation      = (DoubleAnimation)Animation;
+            animation.Duration = new Duration( TimeSpan.FromMilliseconds( ConfigManager.Settings.AnimationDuration ) );
             switch ( dir )
             {
-                case Keys.Left:
-                    Transform3D = TransformDirections[Keys.Left];
+                case KeyCode.Left:
+                    Transform3D = TransformDirections[KeyCode.Left];
                     animation.To = MeshWidth;
                     break;
-                case Keys.Right:
-                    Transform3D = TransformDirections[Keys.Right];
+                case KeyCode.Right:
+                    Transform3D = TransformDirections[KeyCode.Right];
                     animation.To = -MeshWidth;
                     break;
-                case Keys.Up:
-                    Transform3D = TransformDirections[Keys.Up];
+                case KeyCode.Up:
+                    Transform3D = TransformDirections[KeyCode.Up];
                     animation.To = -MeshHeight;
                     offsetProperty = TranslateTransform3D.OffsetYProperty;
                     break;
-                case Keys.Down:
-                    Transform3D = TransformDirections[Keys.Down];
+                case KeyCode.Down:
+                    Transform3D = TransformDirections[KeyCode.Down];
                     animation.To = MeshHeight;
                     offsetProperty = TranslateTransform3D.OffsetYProperty;
                     break;

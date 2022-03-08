@@ -44,7 +44,7 @@ namespace Cube3D
             _handle = new WindowInteropHelper( this ).Handle;
 
             CheckHost();
-            _ = SetWindowDisplayAffinity( _handle, WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
+            _ = User32.SetWindowDisplayAffinity( _handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
 
             FixStyle();
             CameraPosition();
@@ -76,7 +76,7 @@ namespace Cube3D
 
         private static void CheckHost()
         {
-            var pluginInfo = Config.PluginInfo;
+            var pluginInfo = ConfigManager.PluginInfo;
             var pId        = Process.GetCurrentProcess().Id;
             if ( !IpcPipeClient.RegisterVdSwitchObserver( pluginInfo.Name, _handle, pId ) )
             {

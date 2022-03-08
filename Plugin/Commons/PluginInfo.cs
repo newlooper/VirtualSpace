@@ -14,6 +14,7 @@ namespace VirtualSpace.Plugin
 {
     public class PluginInfo
     {
+        public string         Folder;
         public IntPtr         Handle;
         public int            ProcessId;
         public PluginType     Type;

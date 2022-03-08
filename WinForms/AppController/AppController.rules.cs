@@ -23,7 +23,7 @@ namespace VirtualSpace
     {
         private IVirtualDesktopInfo _vdi;
 
-        public void SetVirsualDesktopInfo( IVirtualDesktopInfo vdi )
+        public void SetVirtualDesktopInfo( IVirtualDesktopInfo vdi )
         {
             _vdi = vdi;
         }

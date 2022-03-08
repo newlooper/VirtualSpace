@@ -10,6 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Configuration\Configuration.csproj" />
       <ProjectReference Include="..\..\Helpers\Helpers.csproj" />
+      <ProjectReference Include="..\..\Ipc\IpcServer\IpcServer.csproj" />
     </ItemGroup>
 
     <ItemGroup>

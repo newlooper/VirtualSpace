@@ -21,7 +21,7 @@ namespace Cube3D
             get => _animationDuration;
             set
             {
-                if ( value < 500 || value > 3000 )
+                if ( value < 500 || value > 1000 )
                 {
                     _animationDuration = 500;
                 }

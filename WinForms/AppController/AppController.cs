@@ -44,6 +44,7 @@ namespace VirtualSpace
 
             InitializeComponent();
             InitRuleListView();
+            InitPluginListView();
             PickLogAndWrite();
         }
 

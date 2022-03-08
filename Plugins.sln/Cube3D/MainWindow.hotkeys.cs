@@ -11,9 +11,10 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Interop;
+using Cube3D.Effects;
 using VirtualSpace.Helpers;
+using VirtualSpace.Plugin;
 using IpcConfig = VirtualSpace.Commons.Config;
 
 namespace Cube3D
@@ -61,13 +62,13 @@ namespace Cube3D
                     if ( wP == WinMsg.SC_RESTORE || wP == WinMsg.SC_MINIMIZE || wP == WinMsg.SC_MAXIMIZE )
                         handled = true;
                     break;
-                case WinMsg.WM_HOTKEY:
+                case WinApi.UM_SWITCHDESKTOP:
                     if ( RunningAnimationCount > 0 ) break;
 
                     var nWParam   = wParam.ToInt32();
                     var vdCount   = nWParam % IpcConfig.DigitOfVdCount;
                     var fromIndex = nWParam / IpcConfig.DigitOfVdCount % IpcConfig.DigitOfCurrentVdIndex;
-                    var dir       = (Keys)( nWParam / IpcConfig.DigitOfVdCount / IpcConfig.DigitOfCurrentVdIndex % IpcConfig.DigitOfNavDirKey );
+                    var dir       = nWParam / IpcConfig.DigitOfVdCount / IpcConfig.DigitOfCurrentVdIndex % IpcConfig.DigitOfNavDirKey;
 
                     var targetIndex = lParam.ToInt32();
 
@@ -77,9 +78,13 @@ namespace Cube3D
                     NotificationGridAnimation( fromIndex, targetIndex, vdCount );
                     if ( targetIndex != fromIndex )
                     {
-                        _effect.AnimationInDirection( dir, MainModel3DGroup );
+                        _effect.AnimationInDirection( (KeyCode)dir, MainModel3DGroup );
                     }
 
+                    break;
+                case WinApi.UM_PLUGINSETTINGS:
+                    var sw = new SettingsWindow();
+                    sw.ShowDialog();
                     break;
                 case WinMsg.WM_MOUSEACTIVATE:
                     handled = true;

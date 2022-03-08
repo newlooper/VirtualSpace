@@ -115,7 +115,7 @@ namespace VirtualSpace
             var profile = ConfigManager.GetCurrentProfile();
             if ( e.ChangedButton == MouseButton.Left )
             {
-                switch ( profile.LeftClickOnCanvas )
+                switch ( profile.Mouse.LeftClickOnCanvas )
                 {
                     case 0:
                         break;
@@ -129,7 +129,7 @@ namespace VirtualSpace
             }
             else if ( e.ChangedButton == MouseButton.Right )
             {
-                switch ( profile.RightClickOnCanvas )
+                switch ( profile.Mouse.RightClickOnCanvas )
                 {
                     case 0:
                         break;
@@ -143,7 +143,7 @@ namespace VirtualSpace
             }
             else if ( e.ChangedButton == MouseButton.Middle )
             {
-                switch ( profile.MiddleClickOnCanvas )
+                switch ( profile.Mouse.MiddleClickOnCanvas )
                 {
                     case 0:
                         break;
@@ -168,12 +168,12 @@ namespace VirtualSpace
 
             if ( msg == _hotplugDetected )
             {
-                foreach ( var plugin in PluginManagerServer.Plugins )
+                foreach ( var plugin in PluginHost.Plugins )
                 {
                     if ( plugin.RestartPolicy?.Type == RestartPolicyType.WINDOWS_MESSAGE
                          && plugin.RestartPolicy.Value == Const.HotplugDetected )
                     {
-                        PluginManagerServer.RestartPlugin( plugin );
+                        PluginHost.RestartPlugin( plugin );
                     }
                 }
             }
@@ -205,13 +205,13 @@ namespace VirtualSpace
                                 var dir         = lParam.ToInt32();
                                 var targetIndex = Navigation.CalculateTargetIndex( DesktopWrapper.Count, DesktopWrapper.CurrentIndex, (Keys)dir );
 
-                                foreach ( var pluginInfo in PluginManagerServer.Plugins.Where(
+                                foreach ( var pluginInfo in PluginHost.Plugins.Where(
                                              p => p.Type == PluginType.VD_SWITCH_OBSERVER && User32.IsWindow( p.Handle ) ) )
                                 {
                                     var w = DesktopWrapper.Count;
                                     w += DesktopWrapper.CurrentIndex * IpcConfig.DigitOfVdCount;
                                     w += dir * IpcConfig.DigitOfVdCount * IpcConfig.DigitOfCurrentVdIndex;
-                                    User32.SendMessage( pluginInfo.Handle, WinMsg.WM_HOTKEY, (uint)w, (uint)targetIndex );
+                                    User32.SendMessage( pluginInfo.Handle, WinApi.UM_SWITCHDESKTOP, (uint)w, (uint)targetIndex );
                                 }
 
                                 DesktopWrapper.MakeVisibleByIndex( targetIndex );

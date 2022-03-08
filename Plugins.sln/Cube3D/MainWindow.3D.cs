@@ -41,7 +41,7 @@ namespace Cube3D
 
         private void Build3D()
         {
-            var settings = Config.Settings;
+            var settings = ConfigManager.Settings;
             switch ( settings.SelectedEffect )
             {
                 case EffectType.Cube:

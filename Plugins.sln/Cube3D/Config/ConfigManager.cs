@@ -10,11 +10,12 @@
 
 using System.Diagnostics;
 using System.IO;
+using System.Text.Json;
 using VirtualSpace.Plugin;
 
 namespace Cube3D
 {
-    public static class Config
+    public static class ConfigManager
     {
         public static readonly PluginInfo PluginInfo = GetPluginInfo();
         public static readonly Settings   Settings   = GetSettings();
@@ -31,10 +32,21 @@ namespace Cube3D
             return PluginManager.LoadFromJson<Settings>( file );
         }
 
+        public static string GetAppPath()
+        {
+            return Process.GetCurrentProcess().MainModule.FileName;
+        }
+
         private static string GetAppFolder()
         {
-            var appPath = Process.GetCurrentProcess().MainModule.FileName;
-            return Directory.GetParent( appPath ).FullName;
+            return Directory.GetParent( GetAppPath() ).FullName;
+        }
+
+        public static void SaveJson( string file = null )
+        {
+            file ??= Path.Combine( GetAppFolder(), "settings.json" );
+            var contents = JsonSerializer.SerializeToUtf8Bytes( Settings, new JsonSerializerOptions {WriteIndented = true} );
+            File.WriteAllBytesAsync( file, contents );
         }
     }
 }

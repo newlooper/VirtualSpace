@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
@@ -21,31 +20,31 @@ namespace Cube3D.Effects
 {
     public class Cube : Effect
     {
-        private static readonly Dictionary<Keys, RotateTransform3D> TransformDirections = new()
+        private static readonly Dictionary<KeyCode, RotateTransform3D> TransformDirections = new()
         {
             {
-                Keys.Left, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( 0, 1, 0 ), 0 ) )
+                KeyCode.Left, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( 0, 1, 0 ), 0 ) )
                 {
                     CenterX = MeshWidth / 2,
                     CenterZ = -MeshWidth / 2
                 }
             },
             {
-                Keys.Right, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( 0, -1, 0 ), 0 ) )
+                KeyCode.Right, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( 0, -1, 0 ), 0 ) )
                 {
                     CenterX = MeshWidth / 2,
                     CenterZ = -MeshWidth / 2
                 }
             },
             {
-                Keys.Up, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( 1, 0, 0 ), 0 ) )
+                KeyCode.Up, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( 1, 0, 0 ), 0 ) )
                 {
                     CenterY = MeshHeight / 2,
                     CenterZ = -MeshHeight / 2
                 }
             },
             {
-                Keys.Down, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( -1, 0, 0 ), 0 ) )
+                KeyCode.Down, new RotateTransform3D( new AxisAngleRotation3D( new Vector3D( -1, 0, 0 ), 0 ) )
                 {
                     CenterY = MeshHeight / 2,
                     CenterZ = -MeshHeight / 2
@@ -78,7 +77,6 @@ namespace Cube3D.Effects
             {
                 From = 0,
                 To = 90,
-                Duration = new Duration( TimeSpan.FromMilliseconds( Config.Settings.AnimationDuration ) ),
                 FillBehavior = FillBehavior.Stop
             };
         }
@@ -187,21 +185,21 @@ namespace Cube3D.Effects
             model3DGroup.Children.Add( _cube );
         }
 
-        public override void AnimationInDirection( Keys dir, Model3DGroup model3DGroup )
+        public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup )
         {
             switch ( dir )
             {
-                case Keys.Left:
-                    Transform3D = TransformDirections[Keys.Left];
+                case KeyCode.Left:
+                    Transform3D = TransformDirections[KeyCode.Left];
                     break;
-                case Keys.Right:
-                    Transform3D = TransformDirections[Keys.Right];
+                case KeyCode.Right:
+                    Transform3D = TransformDirections[KeyCode.Right];
                     break;
-                case Keys.Up:
-                    Transform3D = TransformDirections[Keys.Up];
+                case KeyCode.Up:
+                    Transform3D = TransformDirections[KeyCode.Up];
                     break;
-                case Keys.Down:
-                    Transform3D = TransformDirections[Keys.Down];
+                case KeyCode.Down:
+                    Transform3D = TransformDirections[KeyCode.Down];
                     break;
             }
 
@@ -217,6 +215,7 @@ namespace Cube3D.Effects
             model3DGroup.Transform = TransGroup;
 
             var animation = (DoubleAnimation)Animation;
+            animation.Duration = new Duration( TimeSpan.FromMilliseconds( ConfigManager.Settings.AnimationDuration ) );
             // animation.EasingFunction = new CircleEase();
             var transform = (RotateTransform3D)Transform3D;
             transform.Rotation.BeginAnimation( AxisAngleRotation3D.AngleProperty, animation );

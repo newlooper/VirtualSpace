@@ -30,14 +30,21 @@ namespace VirtualSpace.Helpers
         public const uint AW_SLIDE          = 0x40000;
         public const uint AW_BLEND          = 0x80000;
 
+        public const uint WDA_NONE               = 0;
+        public const uint WDA_MONITOR            = 1;
+        public const uint WDA_EXCLUDEFROMCAPTURE = 0x00000011;
+
+        [DllImport( "user32.dll" )]
+        public static extern uint SetWindowDisplayAffinity( IntPtr hWnd, uint dwAffinity );
+
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
         public static extern int GetWindowLong( IntPtr hWnd, int nIndex );
 
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-        public static extern bool PostMessage( IntPtr hWnd, int Msg, uint wParam, uint lParam );
+        public static extern bool PostMessage( IntPtr hWnd, int msg, uint wParam, uint lParam );
 
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-        public static extern bool SendMessage( IntPtr hWnd, int Msg, uint wParam, uint lParam );
+        public static extern bool SendMessage( IntPtr hWnd, int msg, uint wParam, uint lParam );
 
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
         public static extern int SetWindowLong( IntPtr hWnd, int nIndex, int newLong );

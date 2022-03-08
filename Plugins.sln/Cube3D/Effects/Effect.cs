@@ -10,7 +10,6 @@
 
 using System;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
 
@@ -44,7 +43,7 @@ namespace Cube3D.Effects
 
         public abstract void Build( Model3DGroup model3DGroup );
 
-        public abstract void AnimationInDirection( Keys dir, Model3DGroup model3DGroup );
+        public abstract void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup );
 
         public void AddAnimationCompletedListener( EventHandler handler )
         {
@@ -60,5 +59,13 @@ namespace Cube3D.Effects
         Reveal,
         Fade,
         Flip
+    }
+
+    public enum KeyCode
+    {
+        Left  = 0x25,
+        Up    = 0x26,
+        Right = 0x27,
+        Down  = 0x28
     }
 }

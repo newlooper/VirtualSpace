@@ -47,7 +47,11 @@ namespace VirtualSpace.Commons
                                 WinApi.PostMessage( MainWindowHandle, WinApi.WM_HOTKEY, UserMessage.RiseView, 0 );
                                 break;
                             case PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER:
-                                foreach ( var p in PluginManagerServer.Plugins.Where( p => p.Name == msg.Name ) )
+
+                                /////////////////////////////////
+                                // 只接受已注册成功的插件
+                                // 同时若插件名相同，则后启动的覆盖先启动的
+                                foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
                                 {
                                     Logger.Info( $"Virtual Desktop Switch Observer Plugin ({p.Display}) Registered." );
                                     p.Handle = (IntPtr)msg.Handle;
@@ -58,13 +62,17 @@ namespace VirtualSpace.Commons
 
                                 break;
                             case PipeMessageType.PLUGIN_CHECK_ALIVE:
-                                var runningPlugin = PluginManagerServer.Plugins.Find( p =>
+
+                                var runningPlugin = PluginHost.Plugins.Find( p =>
                                     p.Name == msg.Name
                                     && p.Handle == (IntPtr)msg.Handle
                                     && p.ProcessId == msg.ProcessId );
+                                ////////////////////////////////////////////////
+                                // 若插件提供的信息在宿主中查不到，就通知该插件自行关闭
+                                // 这通常是因为有同名插件启动，覆盖了先启动的插件的信息
                                 if ( runningPlugin == null )
                                 {
-                                    PluginManagerServer.ClosePlugin( new PluginInfo {Handle = (IntPtr)msg.Handle} );
+                                    PluginHost.ClosePlugin( new PluginInfo {Handle = (IntPtr)msg.Handle} );
                                 }
 
                                 break;
@@ -97,9 +105,9 @@ namespace VirtualSpace.Commons
             client.Connect( 1000 );
             client.Close();
 
-            foreach ( var pluginInfo in PluginManagerServer.Plugins )
+            foreach ( var pluginInfo in PluginHost.Plugins )
             {
-                PluginManagerServer.ClosePlugin( pluginInfo );
+                PluginHost.ClosePlugin( pluginInfo );
             }
         }
     }

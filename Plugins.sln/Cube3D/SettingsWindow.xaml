@@ -1,0 +1,33 @@
+﻿<Window x:Class="Cube3D.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="Cube3D Settings" Height="450" Width="800" Topmost="True" Loaded="Window_Loaded">
+    <Grid>
+        <StackPanel>
+            <StackPanel>
+                <GroupBox Header="Basic" Margin="10">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Margin="10,10,0,0" Width="160">Animation Duration(ms):</Label>
+                            <Slider x:Name="SliderAnimationDuration" Margin="5,15,0,0" HorizontalAlignment="Left" Width="300"
+                                    IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
+                                    Minimum="500" Maximum="1000" Value="{Binding AnimationDuration}" TickFrequency="10" TickPlacement="None" LargeChange="10" />
+                            <TextBlock Margin="5,16,0,0" Text="{Binding ElementName=SliderAnimationDuration, Path=Value}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Margin="10,10,0,0" Width="160">Transaction Type:</Label>
+                            <ComboBox Width="120" Margin="5,10,0,0" x:Name="ComboBoxEffects" SelectionChanged="ComboBoxEffects_SelectionChanged" />
+                            <TextBlock Margin="10,15,0,0" Text="(Restart Required)" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button Padding="5" Click="ButtonBase_OnClick">Apply &amp; Restart</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

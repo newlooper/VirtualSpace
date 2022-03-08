@@ -17,11 +17,9 @@ namespace VirtualSpace.Config
 {
     public class Profile
     {
-        public UserInterface UI                  { get; set; }
-        public bool          DaemonAutoStart     { get; set; }
-        public List<Guid>?   DesktopOrder        { get; set; }
-        public int           LeftClickOnCanvas   { get; set; }
-        public int           RightClickOnCanvas  { get; set; }
-        public int           MiddleClickOnCanvas { get; set; }
+        public UserInterface UI              { get; set; }
+        public bool          DaemonAutoStart { get; set; }
+        public List<Guid>?   DesktopOrder    { get; set; }
+        public Mouse         Mouse           { get; set; }
     }
 }

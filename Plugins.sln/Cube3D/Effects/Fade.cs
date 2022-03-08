@@ -11,7 +11,6 @@
 using System;
 using System.Threading;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
@@ -24,7 +23,6 @@ namespace Cube3D.Effects
         {
             From = 0,
             To = 1,
-            Duration = new Duration( TimeSpan.FromMilliseconds( Config.Settings.AnimationDuration ) ),
             FillBehavior = FillBehavior.Stop
         };
 
@@ -45,7 +43,6 @@ namespace Cube3D.Effects
             {
                 From = 1,
                 To = 0,
-                Duration = new Duration( TimeSpan.FromMilliseconds( Config.Settings.AnimationDuration ) ),
                 FillBehavior = FillBehavior.Stop
             };
         }
@@ -89,9 +86,13 @@ namespace Cube3D.Effects
             model3DGroup.Children.Add( _face );
         }
 
-        public override void AnimationInDirection( Keys dir, Model3DGroup model3DGroup )
+        public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup )
         {
-            _frontD3DImage.BeginAnimation( Brush.OpacityProperty, (DoubleAnimation)Animation );
+            var animationOfFace1 = (DoubleAnimation)Animation;
+            animationOfFace1.Duration = new Duration( TimeSpan.FromMilliseconds( ConfigManager.Settings.AnimationDuration ) );
+            _animationOfFace2.Duration = animationOfFace1.Duration;
+
+            _frontD3DImage.BeginAnimation( Brush.OpacityProperty, animationOfFace1 );
             _othersD3DImage.BeginAnimation( Brush.OpacityProperty, _animationOfFace2 );
             Interlocked.Increment( ref MainWindow.RunningAnimationCount );
         }

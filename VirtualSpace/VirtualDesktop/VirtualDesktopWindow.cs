@@ -13,11 +13,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace VirtualSpace.VirtualDesktop
 {
@@ -75,7 +78,7 @@ namespace VirtualSpace.VirtualDesktop
             return vdw;
         }
 
-        private void SetOwner( System.Windows.Window owner )
+        private void SetOwner( Window owner )
         {
             _windowInteropHelper ??= new WindowInteropHelper( owner );
             if ( owner.Dispatcher.CheckAccess() )

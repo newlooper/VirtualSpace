@@ -11,7 +11,7 @@ namespace Cube3D
         protected override void OnStartup( StartupEventArgs e )
         {
             base.OnStartup( e );
-            var pluginInfo = Config.PluginInfo;
+            var pluginInfo = ConfigManager.PluginInfo;
             if ( pluginInfo == null || string.IsNullOrEmpty( pluginInfo.Name ) )
             {
                 MessageBox.Show( "plugin.json invalid." );

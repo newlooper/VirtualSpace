@@ -34,9 +34,13 @@ namespace VirtualSpace.Config.Profiles
                 Language = "en"
             };
             DaemonAutoStart = true;
-            LeftClickOnCanvas = 1;
-            RightClickOnCanvas = 0;
-            MiddleClickOnCanvas = 0;
+            Mouse = new Mouse
+            {
+                DragSizeFactor = 10,
+                LeftClickOnCanvas = 1,
+                RightClickOnCanvas = 0,
+                MiddleClickOnCanvas = 0
+            };
         }
     }
 }

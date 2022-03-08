@@ -8,18 +8,16 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
 
 namespace VirtualSpace.Plugin
 {
-    public static class PluginManagerServer
+    public static class PluginHost
     {
         public static readonly List<PluginInfo> Plugins = new();
 
@@ -31,35 +29,39 @@ namespace VirtualSpace.Plugin
                 var infoFile = Path.Combine( path, pluginInfoFile );
                 if ( !File.Exists( infoFile ) ) continue;
 
-                var pluginInfo = LoadFromJson<PluginInfo>( infoFile );
+                var pluginInfo = PluginManager.LoadFromJson<PluginInfo>( infoFile );
                 if ( pluginInfo == null ) continue;
 
                 var loaded = Plugins.Find( p => p.Name == pluginInfo.Name );
                 if ( loaded != null ) continue;
 
-                if ( CheckRequirements( pluginInfo.Requirements ) && pluginInfo.AutoStart )
-                {
-                    Logger.Info( $"Auto Start Plugin: {pluginInfo.Display}" );
-                    var exe = Path.Combine( path, pluginInfo.Entry );
-                    StartExe( exe );
-                }
+                pluginInfo.Folder = path;
+
+                if ( pluginInfo.AutoStart )
+                    StartPlugin( pluginInfo );
 
                 Plugins.Add( pluginInfo );
             }
         }
 
-        private static T? LoadFromJson<T>( string infoFile )
-        {
-            using var fs     = new FileStream( infoFile, FileMode.Open, FileAccess.ReadWrite );
-            var       buffer = new byte[fs.Length];
-            fs.Read( buffer, 0, (int)fs.Length );
-            var utf8Reader = new Utf8JsonReader( buffer );
-            return JsonSerializer.Deserialize<T>( ref utf8Reader );
-        }
-
         private static void StartExe( string exe )
         {
             Task.Run( () => Process.Start( exe ) );
+        }
+
+        public static void PluginSettings( PluginInfo pluginInfo )
+        {
+            WinApi.PostMessage( pluginInfo.Handle, WinApi.UM_PLUGINSETTINGS, 0, 0 );
+        }
+
+        public static void StartPlugin( PluginInfo pluginInfo )
+        {
+            if ( PluginManager.CheckRequirements( pluginInfo.Requirements ) )
+            {
+                Logger.Info( $"Auto Start Plugin: {pluginInfo.Display}" );
+                var exe = Path.Combine( pluginInfo.Folder, pluginInfo.Entry );
+                StartExe( exe );
+            }
         }
 
         public static void ClosePlugin( PluginInfo pluginInfo )
@@ -88,20 +90,6 @@ namespace VirtualSpace.Plugin
             {
                 Logger.Warning( "Failed Restart Plugin, Abort Operation." );
             }
-        }
-
-        private static bool CheckRequirements( Requirements? req )
-        {
-            var check   = false;
-            var version = Environment.OSVersion.Version;
-
-            if ( version.Major >= req?.WinVer.Min.Major && version.Build >= req.WinVer.Min.Build )
-                check = true;
-
-            if ( req?.WinVer.Max != null && ( version.Major > req.WinVer.Max.Major || version.Build > req.WinVer.Max.Build ) )
-                check = false;
-
-            return check;
         }
     }
 }

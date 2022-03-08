@@ -104,7 +104,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Ipc\IpcServer\IpcServer.csproj" />
         <ProjectReference Include="..\UiAutomation\UiAutomation.csproj" />
         <ProjectReference Include="..\VirtualDesktop11\VirtualDesktop11.csproj" />
         <ProjectReference Include="..\WinForms\AppController\AppController.csproj" />

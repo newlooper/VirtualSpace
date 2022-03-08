@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cube3D", "Cube3D\Cube3D.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenCapture", "ScreenCapture\ScreenCapture.csproj", "{7BDE967F-E467-4775-8BFE-3F63F02499F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginClient", "..\Plugin\PluginClient\PluginClient.csproj", "{11379C1A-6C45-4969-81DE-9B8E8C081A63}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin", "..\Plugin\Commons\Plugin.csproj", "{A60FFB45-5547-4CEB-9B41-3D9C58ED9B86}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ipc", "..\Ipc\Commons\Ipc.csproj", "{498FD176-AB55-466C-80A5-C11B51C6B8C4}"
@@ -29,10 +27,6 @@ Global
 		{7BDE967F-E467-4775-8BFE-3F63F02499F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BDE967F-E467-4775-8BFE-3F63F02499F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BDE967F-E467-4775-8BFE-3F63F02499F0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11379C1A-6C45-4969-81DE-9B8E8C081A63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11379C1A-6C45-4969-81DE-9B8E8C081A63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11379C1A-6C45-4969-81DE-9B8E8C081A63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11379C1A-6C45-4969-81DE-9B8E8C081A63}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A60FFB45-5547-4CEB-9B41-3D9C58ED9B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A60FFB45-5547-4CEB-9B41-3D9C58ED9B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A60FFB45-5547-4CEB-9B41-3D9C58ED9B86}.Release|Any CPU.ActiveCfg = Release|Any CPU

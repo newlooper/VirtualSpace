@@ -90,7 +90,7 @@ namespace VirtualSpace
             // ProcessWatcher.Start();
             // WindowWatcher.Start();
 
-            PluginManagerServer.RegisterPlugins( ConfigManager.GetPluginsPath(), Const.PluginInfoFile );
+            PluginHost.RegisterPlugins( ConfigManager.GetPluginsPath(), Const.PluginInfoFile );
             Daemon.Start();
         }
 

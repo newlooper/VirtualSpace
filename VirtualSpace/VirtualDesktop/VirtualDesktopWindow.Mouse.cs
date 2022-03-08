@@ -25,7 +25,7 @@ namespace VirtualSpace.VirtualDesktop
         {
             _virtualDesktops = VirtualDesktopManager.GetAllVirtualDesktops();
             _startPoint = e.Location;
-            var dragSize = SystemInformation.DragSize;
+            var dragSize = SystemInformation.DragSize * ConfigManager.GetCurrentProfile().Mouse.DragSizeFactor;
             _dragBounds = new Rectangle(
                 new Point( _startPoint.X - dragSize.Width / 2, _startPoint.Y - dragSize.Height / 2 ),
                 dragSize );

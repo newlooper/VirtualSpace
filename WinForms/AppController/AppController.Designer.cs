@@ -75,6 +75,13 @@ namespace VirtualSpace
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cb_RuleProfiles = new System.Windows.Forms.ComboBox();
             this.MT_Plugins = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lv_Plugins = new System.Windows.Forms.ListView();
+            this.lvc_PluginName = new System.Windows.Forms.ColumnHeader();
+            this.lvc_PluginVersion = new System.Windows.Forms.ColumnHeader();
+            this.lvc_PluginAuthor = new System.Windows.Forms.ColumnHeader();
+            this.lvc_PluginEmail = new System.Windows.Forms.ColumnHeader();
+            this.btn_PluginSettings = new System.Windows.Forms.Button();
             this.MT_About = new System.Windows.Forms.TabPage();
             this.lb_AppName = new System.Windows.Forms.Label();
             this.llb_Company = new System.Windows.Forms.LinkLabel();
@@ -113,6 +120,8 @@ namespace VirtualSpace
             this.MT_Rules.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.MT_Plugins.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.MT_About.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_AboutLogo)).BeginInit();
             this.logCMS.SuspendLayout();
@@ -273,6 +282,7 @@ namespace VirtualSpace
             resources.ApplyResources(this.mainTabs, "mainTabs");
             this.mainTabs.Name = "mainTabs";
             this.mainTabs.SelectedIndex = 0;
+            this.mainTabs.SelectedIndexChanged += new System.EventHandler(this.mainTabs_SelectedIndexChanged);
             // 
             // MT_UI
             // 
@@ -373,9 +383,60 @@ namespace VirtualSpace
             // 
             // MT_Plugins
             // 
+            this.MT_Plugins.Controls.Add(this.groupBox3);
             resources.ApplyResources(this.MT_Plugins, "MT_Plugins");
             this.MT_Plugins.Name = "MT_Plugins";
             this.MT_Plugins.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.lv_Plugins);
+            this.groupBox3.Controls.Add(this.btn_PluginSettings);
+            resources.ApplyResources(this.groupBox3, "groupBox3");
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.TabStop = false;
+            // 
+            // lv_Plugins
+            // 
+            this.lv_Plugins.CheckBoxes = true;
+            this.lv_Plugins.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lvc_PluginName,
+            this.lvc_PluginVersion,
+            this.lvc_PluginAuthor,
+            this.lvc_PluginEmail});
+            this.lv_Plugins.FullRowSelect = true;
+            this.lv_Plugins.GridLines = true;
+            this.lv_Plugins.HideSelection = false;
+            resources.ApplyResources(this.lv_Plugins, "lv_Plugins");
+            this.lv_Plugins.MultiSelect = false;
+            this.lv_Plugins.Name = "lv_Plugins";
+            this.lv_Plugins.UseCompatibleStateImageBehavior = false;
+            this.lv_Plugins.View = System.Windows.Forms.View.Details;
+            this.lv_Plugins.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lv_Plugins_ItemChecked);
+            this.lv_Plugins.SelectedIndexChanged += new System.EventHandler(this.lv_Plugins_SelectedIndexChanged);
+            // 
+            // lvc_PluginName
+            // 
+            resources.ApplyResources(this.lvc_PluginName, "lvc_PluginName");
+            // 
+            // lvc_PluginVersion
+            // 
+            resources.ApplyResources(this.lvc_PluginVersion, "lvc_PluginVersion");
+            // 
+            // lvc_PluginAuthor
+            // 
+            resources.ApplyResources(this.lvc_PluginAuthor, "lvc_PluginAuthor");
+            // 
+            // lvc_PluginEmail
+            // 
+            resources.ApplyResources(this.lvc_PluginEmail, "lvc_PluginEmail");
+            // 
+            // btn_PluginSettings
+            // 
+            resources.ApplyResources(this.btn_PluginSettings, "btn_PluginSettings");
+            this.btn_PluginSettings.Name = "btn_PluginSettings";
+            this.btn_PluginSettings.UseVisualStyleBackColor = true;
+            this.btn_PluginSettings.Click += new System.EventHandler(this.btn_PluginSettings_Click);
             // 
             // MT_About
             // 
@@ -599,6 +660,8 @@ namespace VirtualSpace
             this.MT_Rules.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
+            this.MT_Plugins.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.MT_About.ResumeLayout(false);
             this.MT_About.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_AboutLogo)).EndInit();
@@ -677,5 +740,12 @@ namespace VirtualSpace
         private System.Windows.Forms.PictureBox pb_AboutLogo;
         private System.Windows.Forms.ToolStripButton tsb_about;
         private System.Windows.Forms.Label lb_AppName;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ListView lv_Plugins;
+        private System.Windows.Forms.ColumnHeader lvc_PluginName;
+        private System.Windows.Forms.ColumnHeader lvc_PluginVersion;
+        private System.Windows.Forms.ColumnHeader lvc_PluginAuthor;
+        private System.Windows.Forms.ColumnHeader lvc_PluginEmail;
+        private System.Windows.Forms.Button btn_PluginSettings;
     }
 }

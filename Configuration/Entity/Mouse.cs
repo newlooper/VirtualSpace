@@ -8,21 +8,19 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace.Factory
+namespace VirtualSpace.Config.Entity
 {
-    public static class AppControllerFactory
+    public class Mouse
     {
-        public static IAppController Create( string name )
+        private int _dragSizeFactor;
+        public  int LeftClickOnCanvas   { get; set; }
+        public  int RightClickOnCanvas  { get; set; }
+        public  int MiddleClickOnCanvas { get; set; }
+
+        public int DragSizeFactor
         {
-            switch ( name )
-            {
-                case "WinForm":
-                    var ac = new AppController();
-                    ac.SetVirtualDesktopInfo( new VirtualDesktopInfo() );
-                    return ac;
-                default:
-                    return null;
-            }
+            get => _dragSizeFactor;
+            set => _dragSizeFactor = value is < 1 or > 100 ? 10 : value;
         }
     }
 }
