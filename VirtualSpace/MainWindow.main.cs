@@ -112,7 +112,7 @@ namespace VirtualSpace
 
         private void Window_MouseDown( object sender, MouseButtonEventArgs e )
         {
-            var profile = ConfigManager.GetCurrentProfile();
+            var profile = ConfigManager.CurrentProfile;
             if ( e.ChangedButton == MouseButton.Left )
             {
                 switch ( profile.Mouse.LeftClickOnCanvas )

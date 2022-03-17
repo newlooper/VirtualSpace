@@ -109,7 +109,7 @@ namespace VirtualSpace
                          Screen.PrimaryScreen.Bounds.Width + "*" +
                          Screen.PrimaryScreen.Bounds.Height );
             Logger.Info( "Is Running On Administrator: " + SysInfo.IsAdministrator() );
-            Logger.Info( "Language Setting In Profile: " + ConfigManager.GetCurrentProfile().UI.Language );
+            Logger.Info( "Language Setting In Profile: " + ConfigManager.CurrentProfile.UI.Language );
         }
     }
 }

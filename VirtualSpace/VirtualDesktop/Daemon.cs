@@ -59,7 +59,7 @@ namespace VirtualSpace.VirtualDesktop
                         }
                         catch
                         {
-                            CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.GetCurrentProfile().UI.Language );
+                            CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
                             Logger.Error(
                                 $"ERROR.MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]",
                                 new NotifyObject
@@ -93,7 +93,7 @@ namespace VirtualSpace.VirtualDesktop
             User32.EnumWindows( WindowHandleFilter, 0 );
             _initialized = true;
             StartDaemon();
-            if ( ConfigManager.GetCurrentProfile().DaemonAutoStart )
+            if ( ConfigManager.CurrentProfile.DaemonAutoStart )
                 CanRun.Set();
         }
 

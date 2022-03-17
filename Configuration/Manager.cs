@@ -31,6 +31,8 @@ namespace VirtualSpace.Config
         public static string         PluginsFolder;
         public static string         ConfigFilePath;
 
+        public static Profile CurrentProfile => Configs.Profiles[Configs.CurrentProfileName];
+
         public static bool Init()
         {
             try
@@ -127,11 +129,6 @@ namespace VirtualSpace.Config
         {
             CheckFolders();
             return PluginsFolder;
-        }
-
-        public static Profile GetCurrentProfile()
-        {
-            return Configs.Profiles[Configs.CurrentProfileName];
         }
     }
 }

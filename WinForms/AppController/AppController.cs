@@ -33,7 +33,7 @@ namespace VirtualSpace
         {
             Application.EnableVisualStyles();
 
-            var lang = ConfigManager.GetCurrentProfile().UI.Language;
+            var lang = ConfigManager.CurrentProfile.UI.Language;
             if ( Agent.ValidLangs.Keys.ToList().Contains( lang ) )
             {
                 CultureInfo.CurrentCulture = new CultureInfo( lang );
@@ -180,7 +180,7 @@ namespace VirtualSpace
             {
                 var o = (ToolStripMenuItem)s;
                 SetAllLang( o.Name );
-                ConfigManager.GetCurrentProfile().UI.Language = o.Name;
+                ConfigManager.CurrentProfile.UI.Language = o.Name;
                 ConfigManager.Save();
 
                 foreach ( ToolStripMenuItem lang in langToolStripMenuItem.DropDownItems )

@@ -35,7 +35,7 @@ namespace VirtualSpace.VirtualDesktop
         private static          IntPtr                      _coreWindowHandle;
         private static          Color                       _defaultBackColor;
         public static           bool                        NeedRepaintThumbs;
-        public static           UserInterface               Ui            => ConfigManager.GetCurrentProfile().UI;
+        public static           UserInterface               Ui            => ConfigManager.CurrentProfile.UI;
         public static           bool                        IsBatchCreate { get; set; }
 
         public static int CurrentDesktopIndex()
@@ -146,7 +146,7 @@ namespace VirtualSpace.VirtualDesktop
 
         private static void ReOrder( bool needSort = false )
         {
-            var profile = ConfigManager.GetCurrentProfile();
+            var profile = ConfigManager.CurrentProfile;
             if ( needSort )
                 _virtualDesktops.Sort( ( x, y ) => x.VdIndex.CompareTo( y.VdIndex ) );
 
@@ -256,7 +256,7 @@ namespace VirtualSpace.VirtualDesktop
 
             vdws ??= _virtualDesktops;
 
-            var profile = ConfigManager.GetCurrentProfile();
+            var profile = ConfigManager.CurrentProfile;
             Parallel.ForEach( vdws, ( vdw, loopState ) => { vdw.ClearWindows(); } );
             foreach ( var win in windows )
             {
@@ -339,7 +339,7 @@ namespace VirtualSpace.VirtualDesktop
         {
             if ( newOrder != null )
             {
-                ConfigManager.Configs.Profiles[ConfigManager.Configs.CurrentProfileName].DesktopOrder = newOrder;
+                ConfigManager.CurrentProfile.DesktopOrder = newOrder;
             }
 
             ConfigManager.Save();

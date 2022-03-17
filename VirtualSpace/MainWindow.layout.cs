@@ -27,7 +27,7 @@ namespace VirtualSpace
     {
         private static int           _desktopCount;
         private static int           _rowsCols;
-        private static UserInterface Ui => Manager.GetCurrentProfile().UI;
+        private static UserInterface Ui => Manager.CurrentProfile.UI;
 
         public static Size MainGridCellSize => _instance.MainGrid.Children[0].RenderSize;
 
