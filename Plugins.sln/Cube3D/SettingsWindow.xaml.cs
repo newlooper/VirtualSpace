@@ -49,6 +49,11 @@ namespace Cube3D
         private void ButtonBase_OnClick( object sender, RoutedEventArgs e )
         {
             ConfigManager.SaveJson();
+            Restart();
+        }
+
+        public static void Restart()
+        {
             Process.Start( ConfigManager.GetAppPath() );
             Application.Current.Shutdown();
         }

@@ -15,5 +15,6 @@
         public const int WM_DESTROY       = 0x0002;
         public const int WM_MOUSEACTIVATE = 0x0021;
         public const int MA_NOACTIVATE    = 0x3;
+        public const int WM_DISPLAYCHANGE = 0x007E;
     }
 }

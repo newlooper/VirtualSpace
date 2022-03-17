@@ -86,6 +86,9 @@ namespace Cube3D
                     var sw = new SettingsWindow();
                     sw.ShowDialog();
                     break;
+                case WinMsg.WM_DISPLAYCHANGE:
+                    SettingsWindow.Restart();
+                    break;
                 case WinMsg.WM_MOUSEACTIVATE:
                     handled = true;
                     return new IntPtr( WinMsg.MA_NOACTIVATE );
