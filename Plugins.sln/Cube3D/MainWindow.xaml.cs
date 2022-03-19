@@ -93,7 +93,7 @@ namespace Cube3D
             {
                 while ( IpcPipeClient.AskAlive( name, handle, pId ) )
                 {
-                    Thread.Sleep( 5000 );
+                    Thread.Sleep( ConfigManager.Settings.CheckAliveInterval * 1000 );
                 }
             } );
 

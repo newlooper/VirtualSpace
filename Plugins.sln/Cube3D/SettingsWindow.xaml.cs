@@ -30,6 +30,12 @@ namespace Cube3D
             set => ConfigManager.Settings.AnimationDuration = value;
         }
 
+        public int CheckAliveInterval
+        {
+            get => ConfigManager.Settings.CheckAliveInterval;
+            set => ConfigManager.Settings.CheckAliveInterval = value;
+        }
+
         private void Window_Loaded( object sender, RoutedEventArgs e )
         {
             foreach ( EffectType effect in Enum.GetValues( typeof( EffectType ) ) )

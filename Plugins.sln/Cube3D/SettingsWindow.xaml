@@ -11,16 +11,27 @@
                 <GroupBox Header="Basic" Margin="10">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="160">Animation Duration(ms):</Label>
-                            <Slider x:Name="SliderAnimationDuration" Margin="5,15,0,0" HorizontalAlignment="Left" Width="300"
+                            <Label Margin="10,10,0,0" Width="180">Animation Duration(ms):</Label>
+                            <Slider x:Name="SliderAnimationDuration" Margin="10,15,0,0" HorizontalAlignment="Left" Width="300"
                                     IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
                                     Minimum="500" Maximum="1000" Value="{Binding AnimationDuration}" TickFrequency="10" TickPlacement="None" LargeChange="10" />
                             <TextBlock Margin="5,16,0,0" Text="{Binding ElementName=SliderAnimationDuration, Path=Value}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="160">Transaction Type:</Label>
-                            <ComboBox Width="120" Margin="5,10,0,0" x:Name="ComboBoxEffects" SelectionChanged="ComboBoxEffects_SelectionChanged" />
+                            <Label Margin="10,10,0,0" Width="180">Transaction Type:</Label>
+                            <ComboBox Width="120" Margin="10,10,0,0" x:Name="ComboBoxEffects" SelectionChanged="ComboBoxEffects_SelectionChanged" />
                             <TextBlock Margin="10,15,0,0" Text="(Restart Required)" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Others" Margin="10">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Margin="10,10,0,0" Width="180">Check Alive Interval(seconds):</Label>
+                            <Slider x:Name="SliderCheckAliveInterval" Margin="10,15,0,0" HorizontalAlignment="Left" Width="300"
+                                    IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
+                                    Minimum="1" Maximum="60" Value="{Binding CheckAliveInterval}" TickPlacement="None" />
+                            <TextBlock Margin="5,16,0,0" Text="{Binding ElementName=SliderCheckAliveInterval, Path=Value}" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

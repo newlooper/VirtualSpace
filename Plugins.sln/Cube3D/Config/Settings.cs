@@ -16,6 +16,8 @@ namespace Cube3D
     {
         private int _animationDuration;
 
+        private int _checkAliveInterval;
+
         public int AnimationDuration
         {
             get => _animationDuration;
@@ -28,6 +30,22 @@ namespace Cube3D
                 else
                 {
                     _animationDuration = value;
+                }
+            }
+        }
+
+        public int CheckAliveInterval
+        {
+            get => _checkAliveInterval;
+            set
+            {
+                if ( value < 1 || value > 60 )
+                {
+                    _checkAliveInterval = 10;
+                }
+                else
+                {
+                    _checkAliveInterval = value;
                 }
             }
         }

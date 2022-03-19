@@ -1,4 +1,5 @@
 {
   "SelectedEffect": 0,
-  "AnimationDuration": 500
+  "AnimationDuration": 500,
+  "CheckAliveInterval": 10
 }
