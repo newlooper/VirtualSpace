@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -57,7 +58,7 @@ namespace VirtualSpace.VirtualDesktop
             };
             _ctm.Items.Add( pinApp );
 
-            var ignoreWindow = new ToolStripMenuItem
+            var hideWindow = new ToolStripMenuItem
             {
                 Text = Agent.Langs.GetString( "VDW.CTM.Window.HideFromView" )
             };
@@ -68,9 +69,9 @@ namespace VirtualSpace.VirtualDesktop
                 VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
             }
 
-            ignoreWindow.Click += OnIgnoreWindowClick;
-            ignoreWindow.Enabled = !DesktopWrapper.IsWindowPinned( mi.Vw.Handle );
-            _ctm.Items.Add( ignoreWindow );
+            hideWindow.Click += OnIgnoreWindowClick;
+            hideWindow.Enabled = !DesktopWrapper.IsWindowPinned( mi.Vw.Handle );
+            _ctm.Items.Add( hideWindow );
 
             var closeWindow = new ToolStripMenuItem
             {
@@ -106,6 +107,39 @@ namespace VirtualSpace.VirtualDesktop
             _ctm.Items.Add( closeWindow );
             _ctm.Items.Add( "-" );
 
+            var itemScreen = new ToolStripMenuItem( Agent.Langs.GetString( "VDW.CTM.Window.Screen" ) );
+
+            void MoveToScreen( object? s, EventArgs evt )
+            {
+                var selectedScreen = s as ToolStripMenuItem;
+                var srcScreen      = Screen.FromHandle( mi.Vw.Handle );
+                if ( srcScreen.DeviceName == selectedScreen?.Text ) return;
+
+                var rect = new User32.Rect();
+                User32.GetWindowRect( mi.Vw.Handle, ref rect );
+                var offsetX = rect.Left - srcScreen.WorkingArea.Left;
+                var offsetY = rect.Top - srcScreen.WorkingArea.Top;
+
+                var destScreen = Screen.AllScreens.First( x => x.DeviceName == selectedScreen?.Text );
+                if ( destScreen != null )
+                    User32.SetWindowPos( mi.Vw.Handle, IntPtr.Zero,
+                        destScreen.WorkingArea.X + offsetX, destScreen.WorkingArea.Y + offsetY,
+                        rect.Right - rect.Left, rect.Bottom - rect.Top,
+                        0 );
+            }
+
+            foreach ( var s in Screen.AllScreens )
+            {
+                var screen = Screen.FromHandle( mi.Vw.Handle );
+                var item   = new ToolStripMenuItem( s.DeviceName );
+                item.Checked = screen.DeviceName == s.DeviceName;
+                item.Click += MoveToScreen;
+                itemScreen.DropDownItems.Add( item );
+            }
+
+            _ctm.Items.Add( itemScreen );
+            _ctm.Items.Add( "-" );
+
             var newRuleFromWindow = new ToolStripMenuItem
             {
                 Text = Agent.Langs.GetString( "VDW.CTM.Window.NewRule" )
@@ -122,6 +156,9 @@ namespace VirtualSpace.VirtualDesktop
 
             newRuleFromWindow.Click += OnCreateRuleFromWindow;
             _ctm.Items.Add( newRuleFromWindow );
+
+            //////////////////////////
+            // Show Window ContextMenu 
             _ctm.Show( mi.Sender as Control, mi.Location );
         }
 
@@ -154,7 +191,7 @@ namespace VirtualSpace.VirtualDesktop
             void OnUnHideWindow( object? s, EventArgs evt )
             {
                 var item = s as ToolStripMenuItem;
-                var m    = Regex.Match( item.Text, @".*?\|(.*)" );
+                var m    = Regex.Match( item.Text, $@".*\|\|\|(.*)" );
 
                 Filters.WndHandleManualIgnoreList.Remove( (IntPtr)int.Parse( m.Groups[1].Value ) );
                 VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
@@ -173,7 +210,7 @@ namespace VirtualSpace.VirtualDesktop
                 User32.GetWindowText( handle, sb, sb.Capacity );
                 var title = sb.ToString();
 
-                var item = new ToolStripMenuItem( $"[{title}] of {process.ProcessName}(.exe) |{handle}" );
+                var item = new ToolStripMenuItem( $"[{title}] of {process.ProcessName}(.exe) |||{handle}" );
                 item.Click += OnUnHideWindow;
                 unHideWindow.DropDownItems.Add( item );
             }
@@ -240,6 +277,9 @@ namespace VirtualSpace.VirtualDesktop
             }
 
             _ctm.Items.Add( addVirtualDesktop );
+
+            ///////////////////////////////////
+            // Show Virtual Desktop ContextMenu 
             _ctm.Show( mi.Sender as Control, mi.Location );
         }
 

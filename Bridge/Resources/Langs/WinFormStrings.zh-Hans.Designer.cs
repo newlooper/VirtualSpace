@@ -39,7 +39,7 @@ namespace VirtualSpace.Resources.Langs {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VirtualSpace.Resources.Langs.WinFormStrings.zh-Hans", typeof(WinFormStrings_zh_Hans).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Bridge.Resources.Langs.WinFormStrings.zh-Hans", typeof(WinFormStrings_zh_Hans).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -232,6 +232,15 @@ namespace VirtualSpace.Resources.Langs {
         internal static string VDW_CTM_Window_PinWin {
             get {
                 return ResourceManager.GetString("VDW.CTM.Window.PinWin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 屏幕.
+        /// </summary>
+        internal static string VDW_CTM_Window_Screen {
+            get {
+                return ResourceManager.GetString("VDW.CTM.Window.Screen", resourceCulture);
             }
         }
         

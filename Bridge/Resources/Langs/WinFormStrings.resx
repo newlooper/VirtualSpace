@@ -194,4 +194,7 @@ possible reason:
   <data name="VDW.CTM.Desktop.UnHideWindow" xml:space="preserve">
     <value>Unhide Window</value>
   </data>
+  <data name="VDW.CTM.Window.Screen" xml:space="preserve">
+    <value>Screen</value>
+  </data>
 </root>
