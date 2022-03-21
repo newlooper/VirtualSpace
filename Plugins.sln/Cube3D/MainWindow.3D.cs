@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Windows;
 using System.Windows.Media.Media3D;
+using Cube3D.Config;
 using Cube3D.Effects;
 
 namespace Cube3D

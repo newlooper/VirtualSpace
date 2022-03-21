@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Left="0" Top="0" Height="1440" Width="2560"
+        Title="Cube3D For VirtualSpace" Left="0" Top="0" Height="1440" Width="2560"
         WindowStyle="None" ResizeMode="NoResize"
         Loaded="Window_Loaded">
     <Window.Resources>

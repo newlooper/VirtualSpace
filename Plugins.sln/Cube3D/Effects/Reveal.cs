@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
+using Cube3D.Config;
 
 namespace Cube3D.Effects
 {
@@ -71,12 +72,12 @@ namespace Cube3D.Effects
 
             ////////////////////////////////////////////////////////////////
             // Front 永远显示当前桌面；其在动画中定格，动画结束后归位并继续截屏
-            var frontMaterial = new DiffuseMaterial( new ImageBrush( D3DImages.FrontD3DImage ) );
+            var frontMaterial = new DiffuseMaterial( new ImageBrush( D3DImages.D3DImages.FrontD3DImage ) );
             _face1.Material = frontMaterial;
 
             ////////////////////////////////////////////////////////////////
             // 其他位面永远显示目标桌面，可以共享同一个材质；其在动画中持续截屏，动画结束后归位并停止截屏
-            var othersMaterial = new DiffuseMaterial( new ImageBrush( D3DImages.OthersD3DImage ) );
+            var othersMaterial = new DiffuseMaterial( new ImageBrush( D3DImages.D3DImages.OthersD3DImage ) );
             _face2.Material = othersMaterial;
 
             ////////////////////////////////////////////

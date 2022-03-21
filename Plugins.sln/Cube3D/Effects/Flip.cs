@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
+using Cube3D.Config;
 
 namespace Cube3D.Effects
 {
@@ -80,12 +81,12 @@ namespace Cube3D.Effects
 
             ////////////////////////////////////////////////////////////////
             // Front 永远显示当前桌面；其在动画中定格，动画结束后归位并继续截屏
-            var frontMaterial = new DiffuseMaterial( new ImageBrush( D3DImages.FrontD3DImage ) );
+            var frontMaterial = new DiffuseMaterial( new ImageBrush( D3DImages.D3DImages.FrontD3DImage ) );
             _faceFront.Material = frontMaterial;
 
             ////////////////////////////////////////////////////////////////
             // Flip 特效利用了 BackMaterial, 水平/垂直翻转的贴图映射需要差异化
-            _backH = new DiffuseMaterial( new ImageBrush( D3DImages.OthersD3DImage )
+            _backH = new DiffuseMaterial( new ImageBrush( D3DImages.D3DImages.OthersD3DImage )
             {
                 RelativeTransform = new ScaleTransform
                 {
@@ -93,7 +94,7 @@ namespace Cube3D.Effects
                 }
             } );
 
-            _backV = new DiffuseMaterial( new ImageBrush( D3DImages.OthersD3DImage )
+            _backV = new DiffuseMaterial( new ImageBrush( D3DImages.D3DImages.OthersD3DImage )
             {
                 RelativeTransform = new ScaleTransform
                 {

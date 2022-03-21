@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
+using Cube3D.Config;
 
 namespace Cube3D.Effects
 {
@@ -34,8 +35,8 @@ namespace Cube3D.Effects
         private readonly GeometryModel3D _face2     = new();
         private readonly MeshGeometry3D  _face2Mesh = new();
 
-        private readonly ImageBrush _frontD3DImage  = new( D3DImages.FrontD3DImage );
-        private readonly ImageBrush _othersD3DImage = new( D3DImages.OthersD3DImage );
+        private readonly ImageBrush _frontD3DImage  = new( D3DImages.D3DImages.FrontD3DImage );
+        private readonly ImageBrush _othersD3DImage = new( D3DImages.D3DImages.OthersD3DImage );
 
         public Fade()
         {

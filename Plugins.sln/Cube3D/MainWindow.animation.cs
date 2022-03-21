@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
+using Cube3D.Config;
 
 namespace Cube3D
 {
@@ -31,7 +32,7 @@ namespace Cube3D
         {
             Interlocked.Decrement( ref RunningAnimationCount );
             if ( RunningAnimationCount == 0 )
-                ShowHide();
+                FakeHide( true );
         }
 
         private void NotificationGridAnimation( int fromIndex, int toIndex, int vdCount )

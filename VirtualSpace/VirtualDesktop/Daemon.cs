@@ -114,19 +114,18 @@ namespace VirtualSpace.VirtualDesktop
             _runlevel = i < 1 ? 1 : i;
         }
 
-        private static async void StartDaemon()
+        private static void StartDaemon()
         {
-            await Task.Run( () =>
+            Task.Factory.StartNew( () =>
+            {
+                while ( true )
                 {
-                    while ( true )
-                    {
-                        CanRun.WaitOne();
-                        User32.EnumWindows( WindowHandleFilter, 0 );
-                        Logger.Debug( "Daemon one turn done." );
-                        Thread.Sleep( _runlevel * 1000 );
-                    }
+                    CanRun.WaitOne();
+                    User32.EnumWindows( WindowHandleFilter, 0 );
+                    Logger.Debug( "Daemon one turn done." );
+                    Thread.Sleep( _runlevel * 1000 );
                 }
-            );
+            }, TaskCreationOptions.LongRunning );
         }
 
         private static bool WindowHandleFilter( IntPtr hWnd, int lParam )

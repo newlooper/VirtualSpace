@@ -12,6 +12,9 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -32,10 +35,11 @@ namespace VirtualSpace
 {
     public partial class MainWindow
     {
-        private static readonly Stopwatch      RiseViewTimer = Stopwatch.StartNew();
+        private static readonly Stopwatch      RiseViewTimer      = Stopwatch.StartNew();
+        private static readonly Stopwatch      SwitchDesktopTimer = Stopwatch.StartNew();
         private static          MainWindow     _instance;
+        private static          int            _forceSwitchOnTimeout;
         private                 IAppController _acForm;
-        private                 uint           _hotplugDetected;
         private                 uint           _taskbarCreatedMessage;
 
         public MainWindow()
@@ -74,11 +78,6 @@ namespace VirtualSpace
             };
         }
 
-        public void SetAppController( IAppController ac )
-        {
-            _acForm = ac;
-        }
-
         protected override void OnSourceInitialized( EventArgs e )
         {
             base.OnSourceInitialized( e );
@@ -107,7 +106,10 @@ namespace VirtualSpace
         private void RegisterSystemMessages()
         {
             _taskbarCreatedMessage = User32.RegisterWindowMessage( Const.TaskbarCreated );
-            _hotplugDetected = User32.RegisterWindowMessage( Const.HotplugDetected );
+            foreach ( var (strMsg, _) in PluginHost.CareAboutMessages )
+            {
+                PluginHost.CareAboutMessages[strMsg] = User32.RegisterWindowMessage( strMsg );
+            }
         }
 
         private void Window_MouseDown( object sender, MouseButtonEventArgs e )
@@ -165,16 +167,28 @@ namespace VirtualSpace
                 Application.Restart();
                 System.Windows.Application.Current.Shutdown();
             }
-
-            if ( msg == _hotplugDetected )
+            else
             {
-                foreach ( var plugin in PluginHost.Plugins )
+                if ( PluginHost.CareAboutMessages.Values.Contains( (uint)msg ) )
                 {
-                    if ( plugin.RestartPolicy?.Type == RestartPolicyType.WINDOWS_MESSAGE
-                         && plugin.RestartPolicy.Value == Const.HotplugDetected )
+                    var (key, _) = PluginHost.CareAboutMessages.First( m => m.Value == msg );
+                    foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
+                                 plugin.RestartPolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
+                                 plugin.RestartPolicy.Enabled &&
+                                 plugin.RestartPolicy.Values.Contains( key ) ) )
                     {
                         PluginHost.RestartPlugin( plugin );
                     }
+
+                    foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
+                                 plugin.ClosePolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
+                                 plugin.ClosePolicy.Enabled &&
+                                 plugin.ClosePolicy.Values.Contains( key ) ) )
+                    {
+                        PluginHost.ClosePlugin( plugin );
+                    }
+
+                    goto RETURN;
                 }
             }
 
@@ -200,24 +214,64 @@ namespace VirtualSpace
                             _acForm.BringToTop();
                             break;
                         case UserMessage.SwitchDesktop:
-                            if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                            if ( SwitchDesktopTimer.ElapsedMilliseconds > Const.SwitchDesktopInterval )
                             {
                                 var dir         = lParam.ToInt32();
                                 var targetIndex = Navigation.CalculateTargetIndex( DesktopWrapper.Count, DesktopWrapper.CurrentIndex, (Keys)dir );
 
+                                var vDsi = new VirtualDesktopSwitchInfo
+                                {
+                                    hostHandle = Handle,
+                                    vdCount = DesktopWrapper.Count,
+                                    fromIndex = DesktopWrapper.CurrentIndex,
+                                    dir = dir,
+                                    targetIndex = targetIndex
+                                };
+                                var vDsiSize = Marshal.SizeOf( typeof( VirtualDesktopSwitchInfo ) );
+                                var pVDsi    = Marshal.AllocHGlobal( vDsiSize );
+                                Marshal.StructureToPtr( vDsi, pVDsi, true );
+
+                                var cds = new COPYDATASTRUCT
+                                {
+                                    dwData = (IntPtr)WinApi.UM_SWITCHDESKTOP,
+                                    cbData = vDsiSize,
+                                    lpData = pVDsi
+                                };
+                                var pCds = Marshal.AllocHGlobal( Marshal.SizeOf( typeof( COPYDATASTRUCT ) ) );
+                                Marshal.StructureToPtr( cds, pCds, true );
+
                                 foreach ( var pluginInfo in PluginHost.Plugins.Where(
                                              p => p.Type == PluginType.VD_SWITCH_OBSERVER && User32.IsWindow( p.Handle ) ) )
                                 {
-                                    var w = DesktopWrapper.Count;
-                                    w += DesktopWrapper.CurrentIndex * IpcConfig.DigitOfVdCount;
-                                    w += dir * IpcConfig.DigitOfVdCount * IpcConfig.DigitOfCurrentVdIndex;
-                                    User32.SendMessage( pluginInfo.Handle, WinApi.UM_SWITCHDESKTOP, (uint)w, (uint)targetIndex );
+                                    User32.SendMessage( pluginInfo.Handle, WinApi.WM_COPYDATA, 0, (ulong)pCds );
+                                    Interlocked.Increment( ref _forceSwitchOnTimeout );
                                 }
 
-                                DesktopWrapper.MakeVisibleByIndex( targetIndex );
+                                ////////////////////////////////////////////////////////////////////////////////////
+                                // if none of plugins send back message after 100 ms, host will force switch desktop
+                                Task.Run( () =>
+                                {
+                                    Thread.Sleep( 100 );
+                                    if ( _forceSwitchOnTimeout == 0 ) return;
+                                    Debug.WriteLine( "Force Switch" );
+                                    DesktopWrapper.MakeVisibleByIndex( targetIndex );
+                                } );
+
+                                Marshal.FreeHGlobal( pVDsi );
+                                Marshal.FreeHGlobal( pCds );
+                                SwitchDesktopTimer.Restart();
                             }
 
                             break;
+                    }
+
+                    break;
+                case WinApi.UM_SWITCHDESKTOP:
+                    var targetVdIndex = wParam.ToInt32();
+                    if ( targetVdIndex >= 0 && targetVdIndex < DesktopWrapper.Count )
+                    {
+                        Interlocked.Exchange( ref _forceSwitchOnTimeout, 0 );
+                        DesktopWrapper.MakeVisibleByIndex( targetVdIndex );
                     }
 
                     break;
@@ -226,10 +280,16 @@ namespace VirtualSpace
                 //     return new IntPtr( WinMsg.MA_NOACTIVATE );
             }
 
+            RETURN:
             return IntPtr.Zero;
         }
 
-        public static void BringToTop()
+        public void SetAppController( IAppController ac )
+        {
+            _acForm = ac;
+        }
+
+        private static void BringToTop()
         {
             _instance.Left = 0;
             _instance.Top = 0;

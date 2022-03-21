@@ -12,10 +12,10 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+using Cube3D.Config;
 using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
 
@@ -32,11 +32,18 @@ namespace Cube3D
         {
             InitializeComponent();
 
-            Left = 0;
-            Top = 0;
+            Left = Const.FakeHideX;
+            Top = Const.FakeHideY;
             Width = SystemParameters.PrimaryScreenWidth;
             Height = SystemParameters.PrimaryScreenHeight;
             Topmost = true;
+        }
+
+        protected override void OnSourceInitialized( EventArgs e )
+        {
+            base.OnSourceInitialized( e );
+            var source = PresentationSource.FromVisual( this ) as HwndSource;
+            source?.AddHook( WndProc );
         }
 
         private void Bootstrap()
@@ -63,15 +70,15 @@ namespace Cube3D
             User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
         }
 
-        private void Window_Loaded( object sender, RoutedEventArgs e )
+        private async void Window_Loaded( object sender, RoutedEventArgs e )
         {
             Bootstrap();
 
             Build3D();
 
-            StartPrimaryMonitorCapture();
+            await StartPrimaryMonitorCapture();
 
-            ShowHide();
+            FakeHide();
         }
 
         private static void CheckHost()
@@ -89,13 +96,10 @@ namespace Cube3D
 
         private static async void CheckAlive( string name, IntPtr handle, int pId )
         {
-            await Task.Run( () =>
+            while ( IpcPipeClient.AskAlive( name, handle, pId ) )
             {
-                while ( IpcPipeClient.AskAlive( name, handle, pId ) )
-                {
-                    Thread.Sleep( ConfigManager.Settings.CheckAliveInterval * 1000 );
-                }
-            } );
+                await Task.Delay( ConfigManager.Settings.CheckAliveInterval * 1000 );
+            }
 
             Application.Current.Shutdown();
         }

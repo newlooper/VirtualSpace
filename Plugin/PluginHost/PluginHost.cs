@@ -21,6 +21,12 @@ namespace VirtualSpace.Plugin
     {
         public static readonly List<PluginInfo> Plugins = new();
 
+        public static readonly Dictionary<string, uint> CareAboutMessages = new()
+        {
+            {PluginConst.DirectInputNotificationMsgString, 0},
+            {PluginConst.HotPlugDetected, 0}
+        };
+
         public static void RegisterPlugins( string pluginsPath, string pluginInfoFile )
         {
             var pluginFolders = Directory.GetDirectories( pluginsPath );
@@ -66,10 +72,12 @@ namespace VirtualSpace.Plugin
 
         public static void ClosePlugin( PluginInfo pluginInfo )
         {
+            if ( !string.IsNullOrEmpty( pluginInfo.Display ) )
+                Logger.Info( $"Close Plugin ({pluginInfo.Display})." );
             WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_SYSCOMMAND, WinApi.SC_CLOSE, 0 );
-            WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_CLOSE, 0, 0 );
-            WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_QUIT, 0, 0 );
-            WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_DESTROY, 0, 0 );
+            // WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_CLOSE, 0, 0 );
+            // WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_QUIT, 0, 0 );
+            // WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_DESTROY, 0, 0 );
         }
 
         public static void RestartPlugin( PluginInfo pluginInfo )

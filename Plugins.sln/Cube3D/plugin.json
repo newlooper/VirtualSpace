@@ -7,8 +7,18 @@
   "Entry": "Cube3D.exe",
   "AutoStart": true,
   "RestartPolicy": {
-    "Type": 0,
-    "Value": "HotplugDetected"
+    "Trigger": 0,
+    "Values": [
+      "HotplugDetected"
+    ],
+    "Enabled": false
+  },
+  "ClosePolicy": {
+    "Trigger": 0,
+    "Values": [
+      "DIRECTINPUT_NOTIFICATION_MSGSTRING"
+    ],
+    "Enabled": false
   },
   "Requirements": {
     "WinVer": {

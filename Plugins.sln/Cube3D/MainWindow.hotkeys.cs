@@ -10,9 +10,12 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
+using Cube3D.Config;
 using Cube3D.Effects;
+using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
 using IpcConfig = VirtualSpace.Commons.Config;
@@ -21,36 +24,27 @@ namespace Cube3D
 {
     public partial class MainWindow
     {
-        protected override void OnSourceInitialized( EventArgs e )
+        private void FakeHide( bool stopCapture = false )
         {
-            base.OnSourceInitialized( e );
-            var source = PresentationSource.FromVisual( this ) as HwndSource;
-            source?.AddHook( WndProc );
+            Left = Const.FakeHideX;
+            Top = Const.FakeHideY;
+            // Width = SystemParameters.PrimaryScreenWidth / 10;
+            // Height = SystemParameters.PrimaryScreenHeight / 10;
+            // Width = 0;
+            // Height = 0;
+            if ( stopCapture )
+                _capture?.StopCaptureSession();
         }
 
-        private void ShowHide( bool show = false )
+        private void RealShow()
         {
-            if ( show )
-            {
-                // _frameProcessor.Interval = 50;
-                _frameProcessor.Draw( true );
-                Left = 0;
-                Top = 0;
-                Width = SystemParameters.PrimaryScreenWidth;
-                Height = SystemParameters.PrimaryScreenHeight;
+            Left = 0;
+            Top = 0;
+            Width = SystemParameters.PrimaryScreenWidth;
+            Height = SystemParameters.PrimaryScreenHeight;
+
+            if ( ConfigManager.Settings.ForceOnTop )
                 Activate();
-            }
-            else
-            {
-                //Left = -10000.0;
-                //Top = -10000.0;
-                //Width = SystemParameters.PrimaryScreenWidth / 100;
-                //Height = SystemParameters.PrimaryScreenHeight / 100;
-                Width = 0;
-                Height = 0;
-                _frameProcessor.Draw( false );
-                // _frameProcessor.Interval = 50;
-            }
         }
 
         private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
@@ -62,33 +56,58 @@ namespace Cube3D
                     if ( wP == WinMsg.SC_RESTORE || wP == WinMsg.SC_MINIMIZE || wP == WinMsg.SC_MAXIMIZE )
                         handled = true;
                     break;
-                case WinApi.UM_SWITCHDESKTOP:
-                    if ( RunningAnimationCount > 0 ) break;
 
-                    var nWParam   = wParam.ToInt32();
-                    var vdCount   = nWParam % IpcConfig.DigitOfVdCount;
-                    var fromIndex = nWParam / IpcConfig.DigitOfVdCount % IpcConfig.DigitOfCurrentVdIndex;
-                    var dir       = nWParam / IpcConfig.DigitOfVdCount / IpcConfig.DigitOfCurrentVdIndex % IpcConfig.DigitOfNavDirKey;
-
-                    var targetIndex = lParam.ToInt32();
-
-                    NotificationGridLayout( vdCount );
-                    ShowHide( true );
-
-                    NotificationGridAnimation( fromIndex, targetIndex, vdCount );
-                    if ( targetIndex != fromIndex )
+                case WinApi.WM_COPYDATA:
+                    var copyDataStruct = (COPYDATASTRUCT)Marshal.PtrToStructure( lParam, typeof( COPYDATASTRUCT ) );
+                    switch ( copyDataStruct.dwData.ToInt32() )
                     {
-                        _effect.AnimationInDirection( (KeyCode)dir, MainModel3DGroup );
+                        case WinApi.UM_SWITCHDESKTOP:
+                            if ( RunningAnimationCount == 0 )
+                            {
+                                var vdSwitchInfo =
+                                    (VirtualDesktopSwitchInfo)Marshal.PtrToStructure( copyDataStruct.lpData, typeof( VirtualDesktopSwitchInfo ) );
+                                var vdCount     = vdSwitchInfo.vdCount;
+                                var fromIndex   = vdSwitchInfo.fromIndex;
+                                var dir         = vdSwitchInfo.dir;
+                                var targetIndex = vdSwitchInfo.targetIndex;
+                                Task.Run( () =>
+                                {
+                                    Dispatcher.Invoke( () =>
+                                    {
+                                        _capture.StartCaptureSession();
+                                        NotificationGridLayout( vdCount );
+
+                                        _frameProcessor.SetAction( () =>
+                                        {
+                                            //////////////////////////////////////////////////////
+                                            // trigger action only after first frame be proceeded
+                                            // see FrameToD3DImage.Proceed() for detail.
+                                            RealShow();
+                                            NotificationGridAnimation( fromIndex, targetIndex, vdCount );
+                                            if ( targetIndex != fromIndex )
+                                            {
+                                                _effect.AnimationInDirection( (KeyCode)dir, MainModel3DGroup );
+                                                WinApi.PostMessage( vdSwitchInfo.hostHandle, WinApi.UM_SWITCHDESKTOP, (uint)targetIndex, 0 );
+                                            }
+                                        } );
+                                    } );
+                                } );
+                            }
+
+                            break;
                     }
 
                     break;
+
                 case WinApi.UM_PLUGINSETTINGS:
                     var sw = new SettingsWindow();
                     sw.ShowDialog();
                     break;
+
                 case WinMsg.WM_DISPLAYCHANGE:
-                    SettingsWindow.Restart();
+                    // SettingsWindow.Restart();
                     break;
+
                 case WinMsg.WM_MOUSEACTIVATE:
                     handled = true;
                     return new IntPtr( WinMsg.MA_NOACTIVATE );

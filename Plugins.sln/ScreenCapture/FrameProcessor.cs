@@ -15,24 +15,6 @@ namespace ScreenCapture
 {
     public abstract class FrameProcessor
     {
-        private int _interval = 50;
-
-        public int Interval
-        {
-            get => _interval;
-            set
-            {
-                if ( value < 50 || value > 1000 )
-                {
-                    _interval = 50;
-                }
-                else
-                {
-                    _interval = value;
-                }
-            }
-        }
-
-        public abstract void Proceed( IntPtr pointer );
+        public abstract void Proceed( IntPtr pointer, ulong frameNumber );
     }
 }

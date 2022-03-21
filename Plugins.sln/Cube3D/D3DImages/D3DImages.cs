@@ -11,29 +11,26 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Interop;
+using Cube3D.Config;
 
-namespace Cube3D
+namespace Cube3D.D3DImages
 {
     public static class D3DImages
     {
-        public const           string   Front          = nameof( Front );
-        public const           string   Others         = nameof( Others );
-        public static readonly D3DImage FrontD3DImage  = Application.Current.Resources[Front] as D3DImage;
-        public static readonly D3DImage OthersD3DImage = Application.Current.Resources[Others] as D3DImage;
+        public static readonly D3DImage FrontD3DImage  = Application.Current.Resources[Const.Front] as D3DImage;
+        public static readonly D3DImage OthersD3DImage = Application.Current.Resources[Const.Others] as D3DImage;
 
         public static readonly Dictionary<string, D3DImageInfo> D3DImageDict = new()
         {
             {
-                Front, new D3DImageInfo
+                Const.Front, new D3DImageInfo
                 {
-                    Draw = true,
                     Image = FrontD3DImage
                 }
             },
             {
-                Others, new D3DImageInfo
+                Const.Others, new D3DImageInfo
                 {
-                    Draw = true,
                     Image = OthersD3DImage
                 }
             }

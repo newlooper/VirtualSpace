@@ -13,7 +13,7 @@ using System.IO;
 using System.Text.Json;
 using VirtualSpace.Plugin;
 
-namespace Cube3D
+namespace Cube3D.Config
 {
     public static class ConfigManager
     {
@@ -22,13 +22,13 @@ namespace Cube3D
 
         private static PluginInfo GetPluginInfo()
         {
-            var file = Path.Combine( GetAppFolder(), "plugin.json" );
+            var file = Path.Combine( GetAppFolder(), Const.PluginInfoFile );
             return PluginManager.LoadFromJson<PluginInfo>( file );
         }
 
         private static Settings GetSettings()
         {
-            var file = Path.Combine( GetAppFolder(), "settings.json" );
+            var file = Path.Combine( GetAppFolder(), Const.PluginSettingFile );
             return PluginManager.LoadFromJson<Settings>( file );
         }
 
@@ -44,7 +44,7 @@ namespace Cube3D
 
         public static void SaveJson( string file = null )
         {
-            file ??= Path.Combine( GetAppFolder(), "settings.json" );
+            file ??= Path.Combine( GetAppFolder(), Const.PluginSettingFile );
             var contents = JsonSerializer.SerializeToUtf8Bytes( Settings, new JsonSerializerOptions {WriteIndented = true} );
             File.WriteAllBytesAsync( file, contents );
         }

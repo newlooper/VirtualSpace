@@ -9,33 +9,36 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 
 namespace VirtualSpace.Plugin
 {
     public class PluginInfo
     {
-        public string         Folder;
-        public IntPtr         Handle;
-        public int            ProcessId;
-        public PluginType     Type;
-        public string         Name          { get; set; }
-        public string         Display       { get; set; }
-        public string         Version       { get; set; }
-        public string         Author        { get; set; }
-        public string         Email         { get; set; }
-        public string         Entry         { get; set; }
-        public bool           AutoStart     { get; set; }
-        public RestartPolicy? RestartPolicy { get; set; }
-        public Requirements?  Requirements  { get; set; }
+        public string        Folder;
+        public IntPtr        Handle;
+        public int           ProcessId;
+        public PluginType    Type;
+        public string        Name          { get; set; }
+        public string        Display       { get; set; }
+        public string        Version       { get; set; }
+        public string        Author        { get; set; }
+        public string        Email         { get; set; }
+        public string        Entry         { get; set; }
+        public bool          AutoStart     { get; set; }
+        public Policy?       RestartPolicy { get; set; }
+        public Policy?       ClosePolicy   { get; set; }
+        public Requirements? Requirements  { get; set; }
     }
 
-    public class RestartPolicy
+    public class Policy
     {
-        public RestartPolicyType Type  { get; set; }
-        public string            Value { get; set; }
+        public PolicyTrigger Trigger { get; set; }
+        public List<string>  Values  { get; set; }
+        public bool          Enabled { get; set; }
     }
 
-    public enum RestartPolicyType
+    public enum PolicyTrigger
     {
         WINDOWS_MESSAGE
     }

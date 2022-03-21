@@ -10,12 +10,11 @@
 
 using Cube3D.Effects;
 
-namespace Cube3D
+namespace Cube3D.Config
 {
     public class Settings
     {
         private int _animationDuration;
-
         private int _checkAliveInterval;
 
         public int AnimationDuration
@@ -23,9 +22,9 @@ namespace Cube3D
             get => _animationDuration;
             set
             {
-                if ( value < 500 || value > 1000 )
+                if ( value < Const.AnimationDurationMin || value > Const.AnimationDurationMax )
                 {
-                    _animationDuration = 500;
+                    _animationDuration = Const.AnimationDurationMin;
                 }
                 else
                 {
@@ -39,9 +38,9 @@ namespace Cube3D
             get => _checkAliveInterval;
             set
             {
-                if ( value < 1 || value > 60 )
+                if ( value < Const.CheckAliveIntervalMin || value > Const.CheckAliveIntervalMax )
                 {
-                    _checkAliveInterval = 10;
+                    _checkAliveInterval = Const.CheckAliveIntervalDefault;
                 }
                 else
                 {
@@ -51,5 +50,6 @@ namespace Cube3D
         }
 
         public EffectType SelectedEffect { get; set; }
+        public bool       ForceOnTop     { get; set; }
     }
 }

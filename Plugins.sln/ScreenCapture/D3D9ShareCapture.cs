@@ -26,7 +26,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Windows.Graphics;
 using Windows.Graphics.Capture;
@@ -46,38 +45,32 @@ namespace ScreenCapture
             IntPtr.Zero, D3D9.CreateFlags.HardwareVertexProcessing | D3D9.CreateFlags.Multithreaded | D3D9.CreateFlags.FpuPreserve,
             GetPresentParameters() );
 
-        private readonly FrameProcessor _fp;
-
+        private readonly GraphicsCaptureItem                 _captureItem;
+        private readonly FrameProcessor                      _fp;
         private readonly Dictionary<IntPtr, D3D11.Texture2D> _frameCopyPool = new Dictionary<IntPtr, D3D11.Texture2D>();
-        private readonly Direct3D11CaptureFramePool          _framePool;
         private readonly IDirect3DDevice                     _rawD3DDevice;
         private readonly Dictionary<IntPtr, D3D9.Texture>    _renderTargets = new Dictionary<IntPtr, D3D9.Texture>();
-        private readonly GraphicsCaptureSession              _session;
         private readonly D3D11.Device                        _sharpDxD3D11Device;
-        private readonly Stopwatch                           _sw = Stopwatch.StartNew();
-        private          GraphicsCaptureItem                 _item;
+        private          Direct3D11CaptureFramePool          _captureFramePool;
+        private          GraphicsCaptureSession              _captureSession;
+        private          ulong                               _frameCount;
         private          SizeInt32                           _lastSize;
         private          D3D9.Surface                        _targetSurface;
 
         public D3D9ShareCapture( GraphicsCaptureItem i, FrameProcessor fp )
         {
             _rawD3DDevice = Direct3D11Helper.CreateDevice();
-            _item = i;
-            _fp = fp;
-
             _sharpDxD3D11Device = Direct3D11Helper.CreateSharpDXDevice( _rawD3DDevice );
-            _framePool = Direct3D11CaptureFramePool.Create( _rawD3DDevice,
-                DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, i.Size );
-            _session = _framePool.CreateCaptureSession( i );
-            _lastSize = i.Size;
 
-            _framePool.FrameArrived += OnFrameArrived;
+            _captureItem = i;
+            _fp = fp;
+            _lastSize = i.Size;
         }
 
         public void Dispose()
         {
-            _session?.Dispose();
-            _framePool?.Dispose();
+            _captureSession?.Dispose();
+            _captureFramePool?.Dispose();
             _sharpDxD3D11Device?.Dispose();
 
             foreach ( var renderTarget in _renderTargets )
@@ -91,14 +84,27 @@ namespace ScreenCapture
             _d3D9Context?.Dispose();
         }
 
-        public void StartCapture()
+        public void StartCaptureSession()
         {
-            _session.IsBorderRequired = false;
-            _session.IsCursorCaptureEnabled = false;
-            _session.StartCapture();
+            _captureFramePool = Direct3D11CaptureFramePool.Create( _rawD3DDevice, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, _captureItem.Size );
+            _captureFramePool.FrameArrived += OnCaptureFrameArrived;
+
+            _captureSession = _captureFramePool.CreateCaptureSession( _captureItem );
+            _captureSession.IsBorderRequired = false;
+            _captureSession.IsCursorCaptureEnabled = false;
+            _captureSession.StartCapture();
         }
 
-        private void OnFrameArrived( Direct3D11CaptureFramePool sender, object args )
+        public void StopCaptureSession()
+        {
+            _captureSession?.Dispose();
+            if ( _captureFramePool != null )
+                _captureFramePool.FrameArrived -= OnCaptureFrameArrived;
+            _captureFramePool?.Dispose();
+            _frameCount = 0;
+        }
+
+        private void OnCaptureFrameArrived( Direct3D11CaptureFramePool sender, object args )
         {
             var newSize = false;
 
@@ -116,69 +122,64 @@ namespace ScreenCapture
 
                 using ( var bitmap = Direct3D11Helper.CreateSharpDXTexture2D( frame.Surface ) )
                 {
-                    if ( _sw.ElapsedMilliseconds > _fp.Interval )
+                    if ( !_frameCopyPool.ContainsKey( bitmap.NativePointer ) || newSize )
                     {
-                        if ( !_frameCopyPool.ContainsKey( bitmap.NativePointer ) || newSize )
+                        var desc = new D3D11.Texture2DDescription
                         {
-                            var desc = new D3D11.Texture2DDescription
-                            {
-                                BindFlags = D3D11.BindFlags.RenderTarget | D3D11.BindFlags.ShaderResource,
-                                Format = Format.B8G8R8A8_UNorm,
-                                Width = bitmap.Description.Width,
-                                Height = bitmap.Description.Height,
-                                MipLevels = 1,
-                                SampleDescription = new SampleDescription( 1, 0 ),
-                                Usage = D3D11.ResourceUsage.Default,
-                                OptionFlags = D3D11.ResourceOptionFlags.Shared,
-                                CpuAccessFlags = D3D11.CpuAccessFlags.None,
-                                ArraySize = 1
-                            };
-                            _frameCopyPool[bitmap.NativePointer] = new D3D11.Texture2D( _sharpDxD3D11Device, desc );
-                        }
-
-                        var copy = _frameCopyPool[bitmap.NativePointer];
-                        _sharpDxD3D11Device.ImmediateContext.CopyResource( bitmap, copy );
-                        var sharedHandle = GetSharedHandle( copy );
-
-                        if ( !_renderTargets.ContainsKey( sharedHandle ) )
-                        {
-                            try
-                            {
-                                _renderTargets[sharedHandle] = new D3D9.Texture( _d3D9Device,
-                                    copy.Description.Width, copy.Description.Height,
-                                    1, D3D9.Usage.RenderTarget,
-                                    TranslateFormat( bitmap.Description.Format ),
-                                    D3D9.Pool.Default,
-                                    ref sharedHandle );
-                            }
-                            catch
-                            {
-                                _d3D9Context = new D3D9.Direct3DEx();
-                                _d3D9Device = new D3D9.DeviceEx( _d3D9Context, 0, D3D9.DeviceType.Hardware,
-                                    IntPtr.Zero, D3D9.CreateFlags.HardwareVertexProcessing | D3D9.CreateFlags.Multithreaded | D3D9.CreateFlags.FpuPreserve,
-                                    GetPresentParameters() );
-
-                                _renderTargets[sharedHandle] = new D3D9.Texture( _d3D9Device,
-                                    copy.Description.Width, copy.Description.Height,
-                                    1, D3D9.Usage.RenderTarget,
-                                    TranslateFormat( bitmap.Description.Format ),
-                                    D3D9.Pool.Default,
-                                    ref sharedHandle );
-                            }
-                        }
-
-                        _targetSurface = _renderTargets[sharedHandle].GetSurfaceLevel( 0 );
-
-                        _fp?.Proceed( _targetSurface.NativePointer );
-
-                        _sw.Restart();
+                            BindFlags = D3D11.BindFlags.RenderTarget | D3D11.BindFlags.ShaderResource,
+                            Format = Format.B8G8R8A8_UNorm,
+                            Width = bitmap.Description.Width,
+                            Height = bitmap.Description.Height,
+                            MipLevels = 1,
+                            SampleDescription = new SampleDescription( 1, 0 ),
+                            Usage = D3D11.ResourceUsage.Default,
+                            OptionFlags = D3D11.ResourceOptionFlags.Shared,
+                            CpuAccessFlags = D3D11.CpuAccessFlags.None,
+                            ArraySize = 1
+                        };
+                        _frameCopyPool[bitmap.NativePointer] = new D3D11.Texture2D( _sharpDxD3D11Device, desc );
                     }
+
+                    var copy = _frameCopyPool[bitmap.NativePointer];
+                    _sharpDxD3D11Device.ImmediateContext.CopyResource( bitmap, copy );
+                    var sharedHandle = GetSharedHandle( copy );
+
+                    if ( !_renderTargets.ContainsKey( sharedHandle ) )
+                    {
+                        try
+                        {
+                            _renderTargets[sharedHandle] = new D3D9.Texture( _d3D9Device,
+                                copy.Description.Width, copy.Description.Height,
+                                1, D3D9.Usage.RenderTarget,
+                                TranslateFormat( bitmap.Description.Format ),
+                                D3D9.Pool.Default,
+                                ref sharedHandle );
+                        }
+                        catch
+                        {
+                            _d3D9Context = new D3D9.Direct3DEx();
+                            _d3D9Device = new D3D9.DeviceEx( _d3D9Context, 0, D3D9.DeviceType.Hardware,
+                                IntPtr.Zero, D3D9.CreateFlags.HardwareVertexProcessing | D3D9.CreateFlags.Multithreaded | D3D9.CreateFlags.FpuPreserve,
+                                GetPresentParameters() );
+
+                            _renderTargets[sharedHandle] = new D3D9.Texture( _d3D9Device,
+                                copy.Description.Width, copy.Description.Height,
+                                1, D3D9.Usage.RenderTarget,
+                                TranslateFormat( bitmap.Description.Format ),
+                                D3D9.Pool.Default,
+                                ref sharedHandle );
+                        }
+                    }
+
+                    _targetSurface = _renderTargets[sharedHandle].GetSurfaceLevel( 0 );
+
+                    _fp?.Proceed( _targetSurface.NativePointer, ++_frameCount );
                 }
             } // Retire the frame.
 
             if ( newSize )
             {
-                _framePool.Recreate(
+                _captureFramePool.Recreate(
                     _rawD3DDevice,
                     DirectXPixelFormat.B8G8R8A8UIntNormalized,
                     1,

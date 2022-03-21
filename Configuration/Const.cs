@@ -13,25 +13,24 @@ namespace VirtualSpace.Config
 {
     public static class Const
     {
-        public const string RuleFileExt             = ".rules";
-        public const string ProfilesFolder          = "Profiles";
-        public const string CacheFolder             = "Cache";
-        public const string PluginsFolder           = "Plugins";
-        public const string PluginInfoFile          = "plugin.json";
-        public const string SettingsFile            = "settings.json";
-        public const string DefaultVersion          = "1.0";
-        public const string DefaultLogLevel         = "EVENT";
-        public const int    WindowTitleMaxLength    = 2048;
-        public const int    WindowClassMaxLength    = 512;
-        public const int    WindowCheckTimeout      = 10 * 1000;
-        public const int    WindowCheckInterval     = 200;
-        public const int    WindowCloseDelay        = 300;
-        public const int    RiseViewInterval        = 500;
-        public const int    DefaultDpi              = 96;
-        public const string ApplicationFrameWindow  = "ApplicationFrameWindow";
-        public const string WindowsUiCoreWindow     = "Windows.UI.Core.CoreWindow";
-        public const string TaskbarCreated          = "TaskbarCreated";
-        public const string UxdDisplayChangeMessage = "UxdDisplayChangeMessage";
-        public const string HotplugDetected         = "HotplugDetected";
+        public const string RuleFileExt            = ".rules";
+        public const string ProfilesFolder         = "Profiles";
+        public const string CacheFolder            = "Cache";
+        public const string PluginsFolder          = "Plugins";
+        public const string PluginInfoFile         = "plugin.json";
+        public const string SettingsFile           = "settings.json";
+        public const string DefaultVersion         = "1.0";
+        public const string DefaultLogLevel        = "EVENT";
+        public const int    WindowTitleMaxLength   = 2048;
+        public const int    WindowClassMaxLength   = 512;
+        public const int    WindowCheckTimeout     = 10 * 1000;
+        public const int    WindowCheckInterval    = 200;
+        public const int    WindowCloseDelay       = 300;
+        public const int    RiseViewInterval       = 500;
+        public const int    SwitchDesktopInterval  = 500;
+        public const int    DefaultDpi             = 96;
+        public const string ApplicationFrameWindow = "ApplicationFrameWindow";
+        public const string WindowsUiCoreWindow    = "Windows.UI.Core.CoreWindow";
+        public const string TaskbarCreated         = "TaskbarCreated";
     }
 }

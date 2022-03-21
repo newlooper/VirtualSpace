@@ -12,6 +12,7 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using Cube3D.Config;
 using Cube3D.Effects;
 
 namespace Cube3D

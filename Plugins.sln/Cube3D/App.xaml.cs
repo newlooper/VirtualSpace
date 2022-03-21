@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Cube3D.Config;
 using VirtualSpace.Plugin;
 
 namespace Cube3D
@@ -14,7 +15,7 @@ namespace Cube3D
             var pluginInfo = ConfigManager.PluginInfo;
             if ( pluginInfo == null || string.IsNullOrEmpty( pluginInfo.Name ) )
             {
-                MessageBox.Show( "plugin.json invalid." );
+                MessageBox.Show( $"{Const.PluginInfoFile} invalid." );
                 Current.Shutdown();
             }
 

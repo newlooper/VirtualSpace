@@ -8,11 +8,12 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace.Commons
+namespace VirtualSpace.Plugin
 {
-    public static class Config
+    public static class PluginConst
     {
-        public const string PIPE_NAME   = "VIRTUAL_SPACE_IPC_PIPE";
-        public const string PIPE_SERVER = ".";
+        public const string UxdDisplayChangeMessage          = "UxdDisplayChangeMessage";
+        public const string HotPlugDetected                  = "HotplugDetected";
+        public const string DirectInputNotificationMsgString = "DIRECTINPUT_NOTIFICATION_MSGSTRING";
     }
 }

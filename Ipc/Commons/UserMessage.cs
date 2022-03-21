@@ -8,6 +8,9 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
+using System;
+using System.Runtime.InteropServices;
+
 namespace VirtualSpace.Commons
 {
     public static class UserMessage
@@ -16,5 +19,23 @@ namespace VirtualSpace.Commons
         public const int ShowAppController = 1001;
         public const int CloseView         = 1002;
         public const int SwitchDesktop     = 1003;
+    }
+
+    [StructLayout( LayoutKind.Sequential )]
+    public struct COPYDATASTRUCT
+    {
+        public IntPtr dwData;
+        public int    cbData;
+        public IntPtr lpData;
+    }
+
+    [StructLayout( LayoutKind.Sequential )]
+    public struct VirtualDesktopSwitchInfo
+    {
+        public IntPtr hostHandle;
+        public int    vdCount;
+        public int    fromIndex;
+        public int    dir;
+        public int    targetIndex;
     }
 }

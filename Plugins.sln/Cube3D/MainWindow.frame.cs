@@ -11,29 +11,34 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Cube3D.Config;
 using ScreenCapture;
 
 namespace Cube3D
 {
     public partial class MainWindow
     {
-        private FrameToD3DImage _frameProcessor;
+        private D3D9ShareCapture _capture;
+        private FrameToD3DImage  _frameProcessor;
 
-        private void StartPrimaryMonitorCapture()
+        private Task StartPrimaryMonitorCapture()
         {
             var monitor = ( from m in MonitorEnumerationHelper.GetMonitors()
                 where m.IsPrimary
                 select m ).First();
-            StartMonitorCapture( monitor.Hmon );
+            return StartMonitorCapture( monitor.Hmon );
         }
 
-        private void StartMonitorCapture( IntPtr hMon )
+        private async Task StartMonitorCapture( IntPtr hMon )
         {
             var item = CaptureHelper.CreateItemForMonitor( hMon );
             if ( item == null ) return;
-            _frameProcessor = new FrameToD3DImage( D3DImages.D3DImageDict );
-            var capture = new D3D9ShareCapture( item, _frameProcessor );
-            capture.StartCapture();
+            _frameProcessor = new FrameToD3DImage( D3DImages.D3DImages.D3DImageDict );
+            _capture = new D3D9ShareCapture( item, _frameProcessor );
+            _capture.StartCaptureSession();
+            await Task.Delay( Const.CaptureInitTimer );
+            _capture.StopCaptureSession();
         }
     }
 }
