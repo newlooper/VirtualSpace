@@ -102,6 +102,7 @@ namespace VirtualSpace.VirtualDesktop
         public void SetBackground( Wallpaper wp )
         {
             pbWallpaper.Image?.Dispose();
+            pbWallpaper.Image = null;
             if ( wp.Image != null )
             {
                 var cloneImage = new Bitmap( wp.Image );

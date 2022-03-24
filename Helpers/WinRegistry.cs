@@ -32,8 +32,8 @@ namespace VirtualSpace.Helpers
 
             if ( string.IsNullOrEmpty( path ) )
             {
-                path = Registry.GetValue( COLOR_REGISTRY_PREFIX, "Background", "" ).ToString();
-                var strColor = path.Split( ' ' );
+                var color    = Registry.GetValue( COLOR_REGISTRY_PREFIX, "Background", "" ).ToString();
+                var strColor = color.Split( ' ' );
                 wallpaper.Color = Color.FromArgb( int.Parse( strColor[0] ), int.Parse( strColor[1] ), int.Parse( strColor[2] ) );
             }
             else

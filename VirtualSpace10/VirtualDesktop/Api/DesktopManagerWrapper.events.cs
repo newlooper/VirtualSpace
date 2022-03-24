@@ -46,6 +46,8 @@ namespace VirtualSpace.VirtualDesktop.Api
                     TargetId = e.NewDesktop.GetId()
                 } );
             };
+
+            WatchWallpaperEvents();
         }
 
         public static async void ListenVirtualDesktopEvents()
