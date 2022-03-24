@@ -106,7 +106,7 @@ namespace VirtualSpace
         private void RegisterSystemMessages()
         {
             _taskbarCreatedMessage = User32.RegisterWindowMessage( Const.TaskbarCreated );
-            foreach ( var (strMsg, _) in PluginHost.CareAboutMessages )
+            foreach ( var strMsg in PluginHost.CareAboutMessages.Keys.ToList() )
             {
                 PluginHost.CareAboutMessages[strMsg] = User32.RegisterWindowMessage( strMsg );
             }

@@ -90,8 +90,20 @@ namespace ScreenCapture
             _captureFramePool.FrameArrived += OnCaptureFrameArrived;
 
             _captureSession = _captureFramePool.CreateCaptureSession( _captureItem );
-            _captureSession.IsBorderRequired = false;
-            _captureSession.IsCursorCaptureEnabled = false;
+
+            var tGraphicsCaptureSession = _captureSession.GetType();
+            var pIsBorderRequired       = tGraphicsCaptureSession.GetProperty( "IsBorderRequired" );
+            if ( pIsBorderRequired != null )
+            {
+                pIsBorderRequired.SetValue( _captureSession, false );
+            }
+
+            var pIsCursorCaptureEnabled = tGraphicsCaptureSession.GetProperty( "IsCursorCaptureEnabled" );
+            if ( pIsCursorCaptureEnabled != null )
+            {
+                pIsCursorCaptureEnabled.SetValue( _captureSession, false );
+            }
+
             _captureSession.StartCapture();
         }
 
