@@ -244,16 +244,15 @@ namespace VirtualSpace
                                              p => p.Type == PluginType.VD_SWITCH_OBSERVER && User32.IsWindow( p.Handle ) ) )
                                 {
                                     User32.SendMessage( pluginInfo.Handle, WinApi.WM_COPYDATA, 0, (ulong)pCds );
-                                    Interlocked.Increment( ref _forceSwitchOnTimeout );
                                 }
 
                                 ////////////////////////////////////////////////////////////////////////////////////
                                 // if none of plugins send back message after 100 ms, host will force switch desktop
+                                Interlocked.Increment( ref _forceSwitchOnTimeout );
                                 Task.Run( () =>
                                 {
                                     Thread.Sleep( 100 );
                                     if ( _forceSwitchOnTimeout == 0 ) return;
-                                    Debug.WriteLine( "Force Switch" );
                                     DesktopWrapper.MakeVisibleByIndex( targetIndex );
                                 } );
 
