@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Windows.Graphics;
 using Windows.Graphics.Capture;
@@ -45,26 +46,21 @@ namespace ScreenCapture
             IntPtr.Zero, D3D9.CreateFlags.HardwareVertexProcessing | D3D9.CreateFlags.Multithreaded | D3D9.CreateFlags.FpuPreserve,
             GetPresentParameters() );
 
-        private readonly GraphicsCaptureItem                 _captureItem;
-        private readonly FrameProcessor                      _fp;
         private readonly Dictionary<IntPtr, D3D11.Texture2D> _frameCopyPool = new Dictionary<IntPtr, D3D11.Texture2D>();
-        private readonly IDirect3DDevice                     _rawD3DDevice;
         private readonly Dictionary<IntPtr, D3D9.Texture>    _renderTargets = new Dictionary<IntPtr, D3D9.Texture>();
-        private readonly D3D11.Device                        _sharpDxD3D11Device;
         private          Direct3D11CaptureFramePool          _captureFramePool;
+        private          GraphicsCaptureItem                 _captureItem;
         private          GraphicsCaptureSession              _captureSession;
+        private          FrameProcessor                      _fp;
         private          ulong                               _frameCount;
         private          SizeInt32                           _lastSize;
+        private          MonitorInfo                         _monitorInfo;
+        private          IDirect3DDevice                     _rawD3DDevice;
+        private          D3D11.Device                        _sharpDxD3D11Device;
         private          D3D9.Surface                        _targetSurface;
 
-        public D3D9ShareCapture( GraphicsCaptureItem i, FrameProcessor fp )
+        private D3D9ShareCapture()
         {
-            _rawD3DDevice = Direct3D11Helper.CreateDevice();
-            _sharpDxD3D11Device = Direct3D11Helper.CreateSharpDXDevice( _rawD3DDevice );
-
-            _captureItem = i;
-            _fp = fp;
-            _lastSize = i.Size;
         }
 
         public void Dispose()
@@ -84,8 +80,41 @@ namespace ScreenCapture
             _d3D9Context?.Dispose();
         }
 
+        public static D3D9ShareCapture Create( MonitorInfo mi, FrameProcessor fp )
+        {
+            var item = CaptureHelper.CreateItemForMonitor( mi.Hmon );
+            if ( item == null ) return null;
+
+            var d3dDevice = Direct3D11Helper.CreateDevice();
+            var capture = new D3D9ShareCapture
+            {
+                _rawD3DDevice = d3dDevice,
+                _sharpDxD3D11Device = Direct3D11Helper.CreateSharpDXDevice( d3dDevice ),
+                _captureItem = item,
+                _fp = fp,
+                _lastSize = item.Size,
+                _monitorInfo = mi
+            };
+
+            return capture;
+        }
+
+        public void UpdateCapturePrimaryMonitor()
+        {
+            var monitor = ( from m in MonitorEnumerationHelper.GetMonitors()
+                where m.IsPrimary
+                select m ).First();
+            if ( monitor.Hmon == _monitorInfo.Hmon ) return;
+            _monitorInfo = monitor;
+
+            var item = CaptureHelper.CreateItemForMonitor( _monitorInfo.Hmon );
+            if ( item != null ) _captureItem = item;
+        }
+
         public void StartCaptureSession()
         {
+            if ( _captureItem == null ) return;
+
             _captureFramePool = Direct3D11CaptureFramePool.Create( _rawD3DDevice, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, _captureItem.Size );
             _captureFramePool.FrameArrived += OnCaptureFrameArrived;
 

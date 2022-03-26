@@ -9,7 +9,6 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Cube3D.Config;
@@ -27,18 +26,19 @@ namespace Cube3D
             var monitor = ( from m in MonitorEnumerationHelper.GetMonitors()
                 where m.IsPrimary
                 select m ).First();
-            return StartMonitorCapture( monitor.Hmon );
+            return StartMonitorCapture( monitor );
         }
 
-        private async Task StartMonitorCapture( IntPtr hMon )
+        private async Task StartMonitorCapture( MonitorInfo mi )
         {
-            var item = CaptureHelper.CreateItemForMonitor( hMon );
-            if ( item == null ) return;
             _frameProcessor = new FrameToD3DImage( D3DImages.D3DImages.D3DImageDict );
-            _capture = new D3D9ShareCapture( item, _frameProcessor );
-            _capture.StartCaptureSession();
-            await Task.Delay( Const.CaptureInitTimer );
-            _capture.StopCaptureSession();
+            _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
+            if ( _capture != null )
+            {
+                _capture.StartCaptureSession();
+                await Task.Delay( Const.CaptureInitTimer );
+                _capture.StopCaptureSession();
+            }
         }
     }
 }

@@ -18,7 +18,6 @@ using Cube3D.Effects;
 using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
-using IpcConfig = VirtualSpace.Commons.Config;
 
 namespace Cube3D
 {
@@ -74,7 +73,7 @@ namespace Cube3D
                                 {
                                     Dispatcher.Invoke( () =>
                                     {
-                                        _capture.StartCaptureSession();
+                                        _capture?.StartCaptureSession();
                                         NotificationGridLayout( vdCount );
 
                                         _frameProcessor.SetAction( () =>
@@ -105,7 +104,7 @@ namespace Cube3D
                     break;
 
                 case WinMsg.WM_DISPLAYCHANGE:
-                    // SettingsWindow.Restart();
+                    _capture?.UpdateCapturePrimaryMonitor();
                     break;
 
                 case WinMsg.WM_MOUSEACTIVATE:
