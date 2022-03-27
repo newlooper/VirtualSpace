@@ -10,11 +10,13 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using Cube3D.Config;
 using Cube3D.Effects;
+using ScreenCapture;
 using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
@@ -23,7 +25,7 @@ namespace Cube3D
 {
     public partial class MainWindow
     {
-        private void FakeHide( bool stopCapture = false )
+        private void FakeHide( bool recreateCapture = false )
         {
             Left = Const.FakeHideX;
             Top = Const.FakeHideY;
@@ -31,8 +33,16 @@ namespace Cube3D
             // Height = SystemParameters.PrimaryScreenHeight / 10;
             // Width = 0;
             // Height = 0;
-            if ( stopCapture )
-                _capture?.StopCaptureSession();
+            if ( recreateCapture ) RecreateCapture();
+        }
+
+        private void RecreateCapture()
+        {
+            _capture?.StopCaptureSession();
+            var mi = ( from m in MonitorEnumerationHelper.GetMonitors()
+                where m.IsPrimary
+                select m ).First();
+            _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
         }
 
         private void RealShow()

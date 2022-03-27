@@ -31,7 +31,7 @@ namespace Cube3D
         private void AnimationCompleted( object sender, EventArgs e )
         {
             Interlocked.Decrement( ref RunningAnimationCount );
-            if ( RunningAnimationCount == 0 )
+            if ( RunningAnimationCount <= 0 )
                 FakeHide( true );
         }
 

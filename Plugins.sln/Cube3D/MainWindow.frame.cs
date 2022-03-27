@@ -37,7 +37,7 @@ namespace Cube3D
             {
                 _capture.StartCaptureSession();
                 await Task.Delay( Const.CaptureInitTimer );
-                _capture.StopCaptureSession();
+                RecreateCapture();
             }
         }
     }
