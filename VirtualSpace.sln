@@ -31,11 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpcServer", "Ipc\IpcServer\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin", "Plugin\Commons\Plugin.csproj", "{36332EB5-80A3-4B90-998A-55D24AB17715}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlPanel", "WPF\ControlPanel\ControlPanel.csproj", "{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppController", "WinForms\AppController\AppController.csproj", "{0C239946-4CA8-44B0-B0A3-7785931FAEB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginHost", "Plugin\PluginHost\PluginHost.csproj", "{8789C787-2125-413E-BB38-C9065C405D42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginHost", "Plugin\PluginHost\PluginHost.csproj", "{8789C787-2125-413E-BB38-C9065C405D42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -215,18 +213,6 @@ Global
 		{36332EB5-80A3-4B90-998A-55D24AB17715}.Release|x64.Build.0 = Release|Any CPU
 		{36332EB5-80A3-4B90-998A-55D24AB17715}.Release|x86.ActiveCfg = Release|Any CPU
 		{36332EB5-80A3-4B90-998A-55D24AB17715}.Release|x86.Build.0 = Release|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Debug|x64.Build.0 = Debug|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Debug|x86.Build.0 = Debug|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Release|x64.ActiveCfg = Release|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Release|x64.Build.0 = Release|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Release|x86.ActiveCfg = Release|Any CPU
-		{D40B4CED-A35E-42AE-8637-EEFDB7DCF701}.Release|x86.Build.0 = Release|Any CPU
 		{0C239946-4CA8-44B0-B0A3-7785931FAEB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0C239946-4CA8-44B0-B0A3-7785931FAEB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C239946-4CA8-44B0-B0A3-7785931FAEB9}.Debug|x64.ActiveCfg = Debug|Any CPU
