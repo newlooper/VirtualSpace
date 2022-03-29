@@ -91,19 +91,33 @@ namespace VirtualSpace.Commons
         public static void AsClient()
         {
             using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
-            client.Connect( 3000 );
-            using var writer = new StreamWriter( client );
-            var       msg    = new PipeMessage {Type = PipeMessageType.INSTANCE};
-            writer.WriteLine( JsonSerializer.Serialize( msg ) );
-            writer.Flush();
+            try
+            {
+                client.Connect( 3000 );
+                using var writer = new StreamWriter( client );
+                var       msg    = new PipeMessage {Type = PipeMessageType.INSTANCE};
+                writer.WriteLine( JsonSerializer.Serialize( msg ) );
+                writer.Flush();
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         public static void SimpleShutdown()
         {
             _isRunning = false;
             using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
-            client.Connect( 1000 );
-            client.Close();
+            try
+            {
+                client.Connect( 1000 );
+                client.Close();
+            }
+            catch
+            {
+                // ignored
+            }
 
             foreach ( var pluginInfo in PluginHost.Plugins )
             {
