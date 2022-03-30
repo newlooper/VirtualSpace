@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -115,17 +116,39 @@ namespace VirtualSpace.VirtualDesktop
                 var srcScreen      = Screen.FromHandle( mi.Vw.Handle );
                 if ( srcScreen.DeviceName == selectedScreen?.Text ) return;
 
-                var rect = new User32.Rect();
-                User32.GetWindowRect( mi.Vw.Handle, ref rect );
-                var offsetX = rect.Left - srcScreen.WorkingArea.Left;
-                var offsetY = rect.Top - srcScreen.WorkingArea.Top;
+                var destScreen = Screen.AllScreens.FirstOrDefault( x => x.DeviceName == selectedScreen?.Text );
+                if ( destScreen == null ) return;
 
-                var destScreen = Screen.AllScreens.First( x => x.DeviceName == selectedScreen?.Text );
-                if ( destScreen != null )
-                    User32.SetWindowPos( mi.Vw.Handle, IntPtr.Zero,
-                        destScreen.WorkingArea.X + offsetX, destScreen.WorkingArea.Y + offsetY,
-                        rect.Right - rect.Left, rect.Bottom - rect.Top,
-                        0 );
+                var wp = new WINDOWPLACEMENT();
+                wp.Length = Marshal.SizeOf( wp );
+                if ( !User32.GetWindowPlacement( mi.Vw.Handle, ref wp ) ) return;
+
+                var rect         = wp.NormalPosition;
+                var targetX      = destScreen.WorkingArea.X + rect.Left - srcScreen.WorkingArea.Left;
+                var targetY      = destScreen.WorkingArea.Y + rect.Top - srcScreen.WorkingArea.Top;
+                var targetWidth  = rect.Right - rect.Left;
+                var targetHeight = rect.Bottom - rect.Top;
+
+                switch ( wp.ShowCmd )
+                {
+                    case ShowState.SW_SHOWMAXIMIZED:
+                        User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_RESTORE );
+                        User32.SetWindowPos( mi.Vw.Handle, IntPtr.Zero,
+                            targetX, targetY, targetWidth, targetHeight, 0 );
+                        User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_MAXIMIZE );
+                        break;
+                    case ShowState.SW_MINIMIZE:
+                    case ShowState.SW_SHOWMINIMIZED:
+                        User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_RESTORE );
+                        User32.SetWindowPos( mi.Vw.Handle, IntPtr.Zero,
+                            targetX, targetY, targetWidth, targetHeight, 0 );
+                        // User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_SHOWMINIMIZED );
+                        break;
+                    case ShowState.SW_NORMAL:
+                        User32.SetWindowPos( mi.Vw.Handle, IntPtr.Zero,
+                            targetX, targetY, targetWidth, targetHeight, 0 );
+                        break;
+                }
             }
 
             foreach ( var s in Screen.AllScreens )

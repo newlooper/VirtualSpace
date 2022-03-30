@@ -131,18 +131,14 @@ namespace VirtualSpace.Helpers
         public static extern uint RegisterWindowMessage( string lpProcName );
 
         [DllImport( "user32.dll" )]
-        public static extern bool GetWindowRect( IntPtr hWnd, ref Rect rectangle );
+        public static extern bool GetWindowRect( IntPtr hWnd, ref RECT rectangle );
 
         [DllImport( "user32.dll" )]
         [return: MarshalAs( UnmanagedType.Bool )]
         public static extern bool SetWindowPos( IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, SetWindowPosFlags uFlags );
 
-        public struct Rect
-        {
-            public int Left   { get; set; }
-            public int Top    { get; set; }
-            public int Right  { get; set; }
-            public int Bottom { get; set; }
-        }
+        [DllImport( "user32.dll", SetLastError = true )]
+        [return: MarshalAs( UnmanagedType.Bool )]
+        public static extern bool GetWindowPlacement( IntPtr hWnd, ref WINDOWPLACEMENT lpWndPl );
     }
 }

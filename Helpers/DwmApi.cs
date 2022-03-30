@@ -137,28 +137,4 @@ namespace VirtualSpace.Helpers
         public bool fVisible;
         public bool fSourceClientAreaOnly;
     }
-
-    [StructLayout( LayoutKind.Sequential )]
-    public struct RECT
-    {
-        public int Left;
-        public int Top;
-        public int Right;
-        public int Bottom;
-
-        public RECT( int left, int top, int right, int bottom )
-        {
-            Left = left;
-            Top = top;
-            Right = right;
-            Bottom = bottom;
-        }
-    }
-
-    [StructLayout( LayoutKind.Sequential )]
-    public struct SIZE
-    {
-        public int cx;
-        public int cy;
-    }
 }
