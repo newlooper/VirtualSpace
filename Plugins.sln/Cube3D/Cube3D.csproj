@@ -5,9 +5,17 @@
         <TargetFrameworks>netcoreapp3.1;net5.0-windows10.0.19041.0;net5.0-windows10.0.22000.0;net6.0-windows10.0.19041.0;net6.0-windows10.0.22000.0;</TargetFrameworks>
         <LangVersion>9</LangVersion>
         <UseWPF>true</UseWPF>
-        <UseWindowsForms>False</UseWindowsForms>
         <CsWinRTEnabled>false</CsWinRTEnabled>
         <ApplicationManifest>app.manifest</ApplicationManifest>
+    </PropertyGroup>
+
+    <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v17.0\TextTemplating\Microsoft.TextTemplating.targets" />
+
+    <PropertyGroup>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <TransformOnBuild>true</TransformOnBuild>
+        <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
+        <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
     </PropertyGroup>
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0-windows10.0.19041.0' Or '$(TargetFramework)' == 'net5.0-windows10.0.22000.0' Or '$(TargetFramework)' == 'net6.0-windows10.0.19041.0' Or '$(TargetFramework)' == 'net6.0-windows10.0.22000.0' ">
@@ -20,6 +28,9 @@
         <None Remove="Properties\**" />
         <Page Remove="Properties\**" />
         <None Update="settings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="plugin.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
@@ -35,9 +46,19 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="plugin.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <None Update="AutoVersion.tt">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>AutoVersion.cs</LastGenOutput>
         </None>
+        <Compile Update="AutoVersion.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>AutoVersion.tt</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
     </ItemGroup>
 
 </Project>
