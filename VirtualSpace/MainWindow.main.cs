@@ -27,7 +27,7 @@ using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
-using Application = System.Windows.Forms.Application;
+using Application = System.Windows.Application;
 using ConfigManager = VirtualSpace.Config.Manager;
 using IpcConfig = VirtualSpace.Commons.Config;
 
@@ -164,8 +164,9 @@ namespace VirtualSpace
             if ( msg == _taskbarCreatedMessage )
             {
                 Logger.Warning( "explorer.exe restarted, program will restart to handle it." );
-                Application.Restart();
-                System.Windows.Application.Current.Shutdown();
+                ( (App)Application.Current ).ReleaseMutex();
+                Process.Start( ConfigManager.AppPath );
+                Application.Current.Shutdown();
             }
             else
             {

@@ -62,6 +62,13 @@ namespace VirtualSpace
             IpcPipeServer.SimpleShutdown();
         }
 
+        public void ReleaseMutex()
+        {
+            _mutex?.ReleaseMutex();
+            _mutex?.Dispose();
+            _mutex = null;
+        }
+
         private static Mutex? SingleInstanceCheck()
         {
             var m = new Mutex( true, "乱花渐欲迷人眼", out var createdNew );
