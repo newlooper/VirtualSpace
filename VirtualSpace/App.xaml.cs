@@ -10,6 +10,7 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
@@ -33,10 +34,12 @@ namespace VirtualSpace
     public partial class App : Application
     {
         private Mutex? _mutex;
+        public  bool   HideOnStartup;
 
         protected override void OnStartup( StartupEventArgs e )
         {
             base.OnStartup( e );
+            if ( e.Args.Contains( Const.Args.HIDE_ON_STARTUP ) ) HideOnStartup = true;
 
             LogManager.GorgeousDividingLine();
             _mutex = SingleInstanceCheck();
@@ -46,6 +49,12 @@ namespace VirtualSpace
                  ConfigManager.Init() )
             {
                 Current.MainWindow = CreateCanvas( e );
+                if ( ConfigManager.CurrentProfile.HideOnStartup || HideOnStartup )
+                {
+                    Current.MainWindow.Left = Const.FakeHideX;
+                    Current.MainWindow.Top = Const.FakeHideY;
+                }
+
                 Current.MainWindow.Show();
             }
             else

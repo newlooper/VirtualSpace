@@ -88,7 +88,13 @@ namespace VirtualSpace
         private void Window_Loaded( object sender, RoutedEventArgs e )
         {
             Bootstrap();
-            VirtualDesktopManager.InitLayout();
+
+            VirtualDesktopManager.Bootstrap();
+
+            if ( !( ConfigManager.CurrentProfile.HideOnStartup ||
+                    ( (App)Application.Current ).HideOnStartup ) )
+                VirtualDesktopManager.InitLayout();
+
             DesktopManagerWrapper.ListenVirtualDesktopEvents();
             DesktopManagerWrapper.RegisterVirtualDesktopEvents();
         }
@@ -165,7 +171,14 @@ namespace VirtualSpace
             {
                 Logger.Warning( "explorer.exe restarted, program will restart to handle it." );
                 ( (App)Application.Current ).ReleaseMutex();
-                Process.Start( ConfigManager.AppPath );
+
+                Thread.Sleep( 1000 );
+                var startInfo = new ProcessStartInfo( ConfigManager.AppPath )
+                {
+                    Arguments = Const.Args.HIDE_ON_STARTUP
+                };
+                Process.Start( startInfo );
+
                 Application.Current.Shutdown();
             }
             else

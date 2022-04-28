@@ -100,8 +100,6 @@ namespace VirtualSpace.VirtualDesktop
 
         public static async void InitLayout()
         {
-            BootStrap();
-
             MainWindow.ResetMainGrid();
 
             var vdCount    = DesktopWrapper.Count;
@@ -323,11 +321,9 @@ namespace VirtualSpace.VirtualDesktop
             foreach ( var vdw in _virtualDesktops ) vdw.Hide();
         }
 
-        private static void BootStrap()
+        public static void Bootstrap()
         {
             _defaultBackColor = Color.FromArgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B );
-            foreach ( var vdw in _virtualDesktops ) vdw.RealClose();
-            _virtualDesktops.Clear();
         }
 
         public static List<VirtualDesktopWindow> GetAllVirtualDesktops()

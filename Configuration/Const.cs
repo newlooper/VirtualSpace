@@ -29,8 +29,15 @@ namespace VirtualSpace.Config
         public const int    RiseViewInterval       = 500;
         public const int    SwitchDesktopInterval  = 500;
         public const int    DefaultDpi             = 96;
+        public const int    FakeHideX              = -10000;
+        public const int    FakeHideY              = -10000;
         public const string ApplicationFrameWindow = "ApplicationFrameWindow";
         public const string WindowsUiCoreWindow    = "Windows.UI.Core.CoreWindow";
         public const string TaskbarCreated         = "TaskbarCreated";
+
+        public static class Args
+        {
+            public const string HIDE_ON_STARTUP = "--HideOnStartup";
+        }
     }
 }

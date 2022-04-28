@@ -20,6 +20,7 @@ namespace VirtualSpace.Config
         public UserInterface UI              { get; set; }
         public bool          DaemonAutoStart { get; set; }
         public List<Guid>?   DesktopOrder    { get; set; }
+        public bool          HideOnStartup   { get; set; }
         public Mouse         Mouse           { get; set; }
     }
 }
