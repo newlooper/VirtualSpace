@@ -55,6 +55,7 @@ namespace VirtualSpace
                     Current.MainWindow.Top = Const.FakeHideY;
                 }
 
+                Bootstrap();
                 Current.MainWindow.Show();
             }
             else
@@ -96,7 +97,6 @@ namespace VirtualSpace
         {
             var canvas = VirtualSpace.MainWindow.Create();
             canvas.SetAppController( AppControllerFactory.Create( "WinForm" ) );
-            Bootstrap();
             return canvas;
         }
 
@@ -106,8 +106,9 @@ namespace VirtualSpace
             // ProcessWatcher.Start();
             // WindowWatcher.Start();
 
-            PluginHost.RegisterPlugins( ConfigManager.GetPluginsPath(), Const.PluginInfoFile );
             Daemon.Start();
+
+            PluginHost.RegisterPlugins( ConfigManager.GetPluginsPath(), Const.PluginInfoFile );
         }
 
         private static void BootInfo()

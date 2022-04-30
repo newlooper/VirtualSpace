@@ -13,6 +13,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -318,6 +319,21 @@ namespace VirtualSpace
 
             if ( lbox_Env.Items.Count == 0 )
                 lbox_Env.Items.Add( RuntimeInformation.FrameworkDescription );
+        }
+
+        private void openLogFolderToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            var logFolder = Path.Combine( ConfigManager.AppFolder, "Logs" );
+            if ( Directory.Exists( logFolder ) )
+            {
+                var startInfo = new ProcessStartInfo
+                {
+                    Arguments = logFolder,
+                    FileName = "explorer.exe"
+                };
+
+                Process.Start( startInfo );
+            }
         }
     }
 }
