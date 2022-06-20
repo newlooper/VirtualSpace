@@ -22,5 +22,12 @@ namespace VirtualSpace.Config
         public List<Guid>?   DesktopOrder    { get; set; }
         public bool          HideOnStartup   { get; set; }
         public Mouse         Mouse           { get; set; }
+
+        public Navigation Navigation { get; set; } = new()
+        {
+            CirculationH = false,
+            CirculationV = false,
+            CirculationHType = 0,
+        };
     }
 }

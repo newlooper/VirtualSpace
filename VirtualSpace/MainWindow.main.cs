@@ -230,8 +230,12 @@ namespace VirtualSpace
                         case UserMessage.SwitchDesktop:
                             if ( SwitchDesktopTimer.ElapsedMilliseconds > Const.SwitchDesktopInterval )
                             {
-                                var dir         = lParam.ToInt32();
-                                var targetIndex = Navigation.CalculateTargetIndex( DesktopWrapper.Count, DesktopWrapper.CurrentIndex, (Keys)dir );
+                                var dir = lParam.ToInt32();
+                                var targetIndex = Navigation.CalculateTargetIndex(
+                                    DesktopWrapper.Count,
+                                    DesktopWrapper.CurrentIndex,
+                                    (Keys)dir,
+                                    ConfigManager.CurrentProfile.Navigation );
 
                                 var vDsi = new VirtualDesktopSwitchInfo
                                 {

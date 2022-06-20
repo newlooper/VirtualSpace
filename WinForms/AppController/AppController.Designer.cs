@@ -61,6 +61,11 @@ namespace VirtualSpace
             this.logTabError = new System.Windows.Forms.TabPage();
             this.tbError = new System.Windows.Forms.TextBox();
             this.MT_General = new System.Windows.Forms.TabPage();
+            this.gb_nav = new System.Windows.Forms.GroupBox();
+            this.lb_nav_circle_h_type = new System.Windows.Forms.Label();
+            this.cb_nav_circle_h_type = new System.Windows.Forms.ComboBox();
+            this.cb_nav_circle_v = new System.Windows.Forms.CheckBox();
+            this.cb_nav_circle_h = new System.Windows.Forms.CheckBox();
             this.mainTabs = new System.Windows.Forms.TabControl();
             this.MT_UI = new System.Windows.Forms.TabPage();
             this.MT_Rules = new System.Windows.Forms.TabPage();
@@ -117,6 +122,8 @@ namespace VirtualSpace
             this.logTabEvent.SuspendLayout();
             this.logTabWarning.SuspendLayout();
             this.logTabError.SuspendLayout();
+            this.MT_General.SuspendLayout();
+            this.gb_nav.SuspendLayout();
             this.mainTabs.SuspendLayout();
             this.MT_Rules.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -276,8 +283,46 @@ namespace VirtualSpace
             // MT_General
             // 
             resources.ApplyResources(this.MT_General, "MT_General");
+            this.MT_General.Controls.Add(this.gb_nav);
             this.MT_General.Name = "MT_General";
             this.MT_General.UseVisualStyleBackColor = true;
+            // 
+            // gb_nav
+            // 
+            resources.ApplyResources(this.gb_nav, "gb_nav");
+            this.gb_nav.Controls.Add(this.lb_nav_circle_h_type);
+            this.gb_nav.Controls.Add(this.cb_nav_circle_h_type);
+            this.gb_nav.Controls.Add(this.cb_nav_circle_v);
+            this.gb_nav.Controls.Add(this.cb_nav_circle_h);
+            this.gb_nav.Name = "gb_nav";
+            this.gb_nav.TabStop = false;
+            // 
+            // lb_nav_circle_h_type
+            // 
+            resources.ApplyResources(this.lb_nav_circle_h_type, "lb_nav_circle_h_type");
+            this.lb_nav_circle_h_type.Name = "lb_nav_circle_h_type";
+            // 
+            // cb_nav_circle_h_type
+            // 
+            resources.ApplyResources(this.cb_nav_circle_h_type, "cb_nav_circle_h_type");
+            this.cb_nav_circle_h_type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_nav_circle_h_type.FormattingEnabled = true;
+            this.cb_nav_circle_h_type.Name = "cb_nav_circle_h_type";
+            this.cb_nav_circle_h_type.SelectedIndexChanged += new System.EventHandler(this.cb_nav_circle_h_type_SelectedIndexChanged);
+            // 
+            // cb_nav_circle_v
+            // 
+            resources.ApplyResources(this.cb_nav_circle_v, "cb_nav_circle_v");
+            this.cb_nav_circle_v.Name = "cb_nav_circle_v";
+            this.cb_nav_circle_v.UseVisualStyleBackColor = true;
+            this.cb_nav_circle_v.CheckedChanged += new System.EventHandler(this.cb_nav_circle_v_CheckedChanged);
+            // 
+            // cb_nav_circle_h
+            // 
+            resources.ApplyResources(this.cb_nav_circle_h, "cb_nav_circle_h");
+            this.cb_nav_circle_h.Name = "cb_nav_circle_h";
+            this.cb_nav_circle_h.UseVisualStyleBackColor = true;
+            this.cb_nav_circle_h.CheckedChanged += new System.EventHandler(this.cb_nav_circle_h_CheckedChanged);
             // 
             // mainTabs
             // 
@@ -664,6 +709,9 @@ namespace VirtualSpace
             this.logTabWarning.PerformLayout();
             this.logTabError.ResumeLayout(false);
             this.logTabError.PerformLayout();
+            this.MT_General.ResumeLayout(false);
+            this.gb_nav.ResumeLayout(false);
+            this.gb_nav.PerformLayout();
             this.mainTabs.ResumeLayout(false);
             this.MT_Rules.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -756,5 +804,10 @@ namespace VirtualSpace
         private System.Windows.Forms.ColumnHeader lvc_PluginEmail;
         private System.Windows.Forms.Button btn_PluginSettings;
         private System.Windows.Forms.ToolStripMenuItem openLogFolderToolStripMenuItem;
+        private System.Windows.Forms.GroupBox gb_nav;
+        private System.Windows.Forms.CheckBox cb_nav_circle_v;
+        private System.Windows.Forms.CheckBox cb_nav_circle_h;
+        private System.Windows.Forms.Label lb_nav_circle_h_type;
+        private System.Windows.Forms.ComboBox cb_nav_circle_h_type;
     }
 }

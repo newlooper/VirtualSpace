@@ -34,6 +34,8 @@ namespace VirtualSpace.Config
         public const string ApplicationFrameWindow = "ApplicationFrameWindow";
         public const string WindowsUiCoreWindow    = "Windows.UI.Core.CoreWindow";
         public const string TaskbarCreated         = "TaskbarCreated";
+        public const int    NavHTypeNextRow        = 0;
+        public const int    NavHTypeSameRow        = 1;
 
         public static class Args
         {

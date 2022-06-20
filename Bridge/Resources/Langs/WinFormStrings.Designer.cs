@@ -83,6 +83,24 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next row.
+        /// </summary>
+        internal static string Nav_CircleHType_NextRow {
+            get {
+                return ResourceManager.GetString("Nav.CircleHType.NextRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same row.
+        /// </summary>
+        internal static string Nav_CircleHType_SameRow {
+            get {
+                return ResourceManager.GetString("Nav.CircleHType.SameRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to At least one common rule is required..
         /// </summary>
         internal static string Rule_AtLeastOne {

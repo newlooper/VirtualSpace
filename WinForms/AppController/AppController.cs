@@ -64,6 +64,7 @@ namespace VirtualSpace
         {
             TopMost = true;
             ReadRules();
+            ReadNavConfig();
             Show();
         }
 
@@ -188,6 +189,8 @@ namespace VirtualSpace
                 {
                     lang.Checked = lang.Name == o.Name;
                 }
+
+                ReadNavConfig();
             }
 
             langToolStripMenuItem.DropDownItems.Clear();

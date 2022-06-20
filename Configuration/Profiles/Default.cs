@@ -42,6 +42,12 @@ namespace VirtualSpace.Config.Profiles
                 MiddleClickOnCanvas = 0
             };
             HideOnStartup = false;
+            Navigation = new Navigation
+            {
+                CirculationH = false,
+                CirculationV = false,
+                CirculationHType = 0
+            };
         }
     }
 }

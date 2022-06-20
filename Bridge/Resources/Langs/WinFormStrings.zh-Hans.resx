@@ -197,4 +197,10 @@ VirtualSpace(11)	Windows 11	21H2(22000)
   <data name="VDW.CTM.Window.Screen" xml:space="preserve">
     <value>屏幕</value>
   </data>
+  <data name="Nav.CircleHType.NextRow" xml:space="preserve">
+    <value>切换到下一行</value>
+  </data>
+  <data name="Nav.CircleHType.SameRow" xml:space="preserve">
+    <value>在同一行内循环</value>
+  </data>
 </root>

@@ -197,4 +197,10 @@ possible reason:
   <data name="VDW.CTM.Window.Screen" xml:space="preserve">
     <value>Screen</value>
   </data>
+  <data name="Nav.CircleHType.NextRow" xml:space="preserve">
+    <value>Next row</value>
+  </data>
+  <data name="Nav.CircleHType.SameRow" xml:space="preserve">
+    <value>Same row</value>
+  </data>
 </root>

@@ -83,6 +83,24 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 切换到下一行.
+        /// </summary>
+        internal static string Nav_CircleHType_NextRow {
+            get {
+                return ResourceManager.GetString("Nav.CircleHType.NextRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 在同一行内循环.
+        /// </summary>
+        internal static string Nav_CircleHType_SameRow {
+            get {
+                return ResourceManager.GetString("Nav.CircleHType.SameRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 至少需要一条窗口规则。.
         /// </summary>
         internal static string Rule_AtLeastOne {
