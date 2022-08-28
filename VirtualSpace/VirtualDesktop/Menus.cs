@@ -67,11 +67,19 @@ namespace VirtualSpace.VirtualDesktop
             void OnIgnoreWindowClick( object? s, EventArgs evt )
             {
                 Filters.WndHandleManualIgnoreList.Add( mi.Vw.Handle );
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
+                if ( DesktopWrapper.IsWindowPinned( mi.Vw.Handle ) ||
+                     DesktopWrapper.IsApplicationPinned( mi.Vw.Handle ) )
+                {
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+                }
+                else
+                {
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
+                }
             }
 
             hideWindow.Click += OnIgnoreWindowClick;
-            hideWindow.Enabled = !DesktopWrapper.IsWindowPinned( mi.Vw.Handle );
+            // hideWindow.Enabled = !DesktopWrapper.IsWindowPinned( mi.Vw.Handle );
             _ctm.Items.Add( hideWindow );
 
             var closeWindow = new ToolStripMenuItem
@@ -216,15 +224,26 @@ namespace VirtualSpace.VirtualDesktop
                 var item = s as ToolStripMenuItem;
                 var m    = Regex.Match( item.Text, $@".*\|\|\|(.*)" );
 
-                Filters.WndHandleManualIgnoreList.Remove( (IntPtr)int.Parse( m.Groups[1].Value ) );
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
+                var h = (IntPtr)int.Parse( m.Groups[1].Value );
+
+                Filters.WndHandleManualIgnoreList.Remove( h );
+                if ( DesktopWrapper.IsWindowPinned( h ) ||
+                     DesktopWrapper.IsApplicationPinned( h ) )
+                {
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+                }
+                else
+                {
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
+                }
             }
 
             foreach ( var handle in Filters.WndHandleManualIgnoreList )
             {
                 if ( !User32.IsWindow( handle ) ) continue;
-                if ( DesktopWrapper.IsWindowPinned( handle ) ) continue;
-                if ( DesktopWrapper.FromWindow( handle ).Guid != mi.Self.VdId ) continue;
+                if ( !DesktopWrapper.IsWindowPinned( handle ) &&
+                     !DesktopWrapper.IsApplicationPinned( handle ) &&
+                     DesktopWrapper.FromWindow( handle ).Guid != mi.Self.VdId ) continue;
 
                 _ = User32.GetWindowThreadProcessId( handle, out var pId );
                 var process = Process.GetProcessById( pId );
