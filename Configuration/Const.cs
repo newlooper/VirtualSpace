@@ -27,7 +27,7 @@ namespace VirtualSpace.Config
         public const int    WindowCheckInterval    = 200;
         public const int    WindowCloseDelay       = 300;
         public const int    RiseViewInterval       = 500;
-        public const int    SwitchDesktopInterval  = 500;
+        public const int    SwitchDesktopInterval  = 10;
         public const int    DefaultDpi             = 96;
         public const int    FakeHideX              = -10000;
         public const int    FakeHideY              = -10000;
