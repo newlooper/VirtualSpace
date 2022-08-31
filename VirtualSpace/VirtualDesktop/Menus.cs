@@ -197,8 +197,8 @@ namespace VirtualSpace.VirtualDesktop
         {
             _ctm ??= new ContextMenuStrip();
             _ctm.Items.Clear();
-            var vdIndex     = DesktopWrapper.IndexFromGuid( mi.Self.VdId );
-            var currentName = DesktopWrapper.DesktopNameFromIndex( vdIndex );
+            var sysIndex    = DesktopWrapper.IndexFromGuid( mi.Self.VdId );
+            var currentName = DesktopWrapper.DesktopNameFromIndex( sysIndex );
             var desktopName = new ToolStripTextBox {Text = currentName, AutoSize = false, Width = 200};
             desktopName.KeyPress += ( s, evt ) =>
             {
@@ -206,7 +206,7 @@ namespace VirtualSpace.VirtualDesktop
                 {
                     if ( currentName != desktopName.Text )
                     {
-                        DesktopWrapper.SetNameByIndex( vdIndex, desktopName.Text );
+                        DesktopWrapper.SetNameByIndex( sysIndex, desktopName.Text );
                         mi.Self.UpdateDesktopName( desktopName.Text );
                     }
 
@@ -264,7 +264,7 @@ namespace VirtualSpace.VirtualDesktop
             var delVirtualDesktop = new ToolStripMenuItem( Agent.Langs.GetString( "VDW.CTM.Desktop.Remove" ) );
             delVirtualDesktop.Click += ( s, evt ) =>
             {
-                if ( DesktopWrapper.RemoveDesktopByIndex( vdIndex ) )
+                if ( DesktopWrapper.RemoveDesktopByGuid( mi.Self.VdId ) )
                 {
                     var vdw = mi.Self;
                     vdw.RealClose();

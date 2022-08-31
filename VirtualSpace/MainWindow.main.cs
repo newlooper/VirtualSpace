@@ -230,10 +230,14 @@ namespace VirtualSpace
                         case UserMessage.SwitchDesktop:
                             if ( SwitchDesktopTimer.ElapsedMilliseconds > Const.SwitchDesktopInterval )
                             {
+                                var desktopOrder = ConfigManager.CurrentProfile.DesktopOrder;
+                                var currentDesktopMatrixIndex =
+                                    VirtualDesktopManager.GetMatrixIndexByVdIndex( desktopOrder.IndexOf( DesktopWrapper.CurrentGuid ) );
+
                                 var dir = lParam.ToInt32();
                                 var targetIndex = Navigation.CalculateTargetIndex(
                                     DesktopWrapper.Count,
-                                    DesktopWrapper.CurrentIndex,
+                                    currentDesktopMatrixIndex,
                                     (Keys)dir,
                                     ConfigManager.CurrentProfile.Navigation );
 
@@ -241,7 +245,7 @@ namespace VirtualSpace
                                 {
                                     hostHandle = Handle,
                                     vdCount = DesktopWrapper.Count,
-                                    fromIndex = DesktopWrapper.CurrentIndex,
+                                    fromIndex = currentDesktopMatrixIndex,
                                     dir = dir,
                                     targetIndex = targetIndex
                                 };
@@ -271,7 +275,7 @@ namespace VirtualSpace
                                 {
                                     Thread.Sleep( 100 );
                                     if ( _forceSwitchOnTimeout == 0 ) return;
-                                    DesktopWrapper.MakeVisibleByIndex( targetIndex );
+                                    DesktopWrapper.MakeVisibleByGuid( desktopOrder[VirtualDesktopManager.GetVdIndexByMatrixIndex( targetIndex )] );
                                 } );
 
                                 Marshal.FreeHGlobal( pVDsi );
@@ -284,11 +288,12 @@ namespace VirtualSpace
 
                     break;
                 case WinApi.UM_SWITCHDESKTOP:
-                    var targetVdIndex = wParam.ToInt32();
-                    if ( targetVdIndex >= 0 && targetVdIndex < DesktopWrapper.Count )
+                    var targetMatrixIndex = wParam.ToInt32();
+                    if ( targetMatrixIndex >= 0 && targetMatrixIndex < DesktopWrapper.Count )
                     {
                         Interlocked.Exchange( ref _forceSwitchOnTimeout, 0 );
-                        DesktopWrapper.MakeVisibleByIndex( targetVdIndex );
+                        DesktopWrapper.MakeVisibleByGuid(
+                            ConfigManager.CurrentProfile.DesktopOrder[VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
                     }
 
                     break;

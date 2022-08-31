@@ -72,6 +72,7 @@
         <Compile Include="..\VirtualSpace\VirtualDesktop\DragWindow.cs" Link="VirtualDesktop\DragWindow.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\DragWindow.Designer.cs" Link="VirtualDesktop\DragWindow.Designer.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Filters.cs" Link="VirtualDesktop\Filters.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\Manager.arrangement.cs" Link="VirtualDesktop\Manager.arrangement.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Manager.cs" Link="VirtualDesktop\Manager.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Menus.cs" Link="VirtualDesktop\Menus.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Navigation.cs" Link="VirtualDesktop\Navigation.cs" />

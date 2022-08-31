@@ -262,7 +262,7 @@ namespace VirtualSpace.VirtualDesktop
         {
             var ui       = VirtualDesktopManager.Ui;
             var dpi      = SysInfo.Dpi;
-            var location = MainWindow.GetCellLocation( VdIndex );
+            var location = MainWindow.GetCellLocation( VirtualDesktopManager.GetMatrixIndexByVdIndex( VdIndex ) );
             var point    = new Point( (int)( ( location.X + ui.VDWBorderSize ) * dpi[0] ), (int)( ( location.Y + ui.VDWBorderSize ) * dpi[1] ) );
             Location = point;
             _fixedPosition = point;

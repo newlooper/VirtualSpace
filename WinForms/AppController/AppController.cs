@@ -221,13 +221,15 @@ namespace VirtualSpace
         private void tsb_general_Click( object sender, EventArgs e )
         {
             ts_PageNavButton_Click( sender, e );
-
             mainTabs.SelectTab( 0 );
         }
 
         private void tsb_ui_Click( object sender, EventArgs e )
         {
             ts_PageNavButton_Click( sender, e );
+
+            CheckDesktopArrangement( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
+
             mainTabs.SelectTab( 1 );
         }
 

@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Commons;
 using VirtualSpace.Config;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
@@ -24,7 +25,7 @@ using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace.VirtualDesktop
 {
-    internal static class VirtualDesktopManager
+    internal static partial class VirtualDesktopManager
     {
         private static readonly List<VisibleWindow>         VisibleWindows       = new();
         private static readonly User32.EnumChildWindowsProc EnumChildWindowsProc = ChildWindowFilter;
@@ -54,8 +55,8 @@ namespace VirtualSpace.VirtualDesktop
             var vdwHeight  = ( size.Height - 2 * Ui.VDWBorderSize ) * dpi[1] + 1;
             var commonSize = new Size( (int)vdwWidth, (int)vdwHeight );
 
-            var currentImage = new List<VirtualDesktopWindow>();
-            var cachePath    = ConfigManager.GetCachePath();
+            var survivalDesktops = new List<VirtualDesktopWindow>();
+            var cachePath        = ConfigManager.GetCachePath();
             for ( var index = 0; index < vdCount; index++ ) // build new list for current desktops
             {
                 var guid = DesktopManagerWrapper.GetIdByIndex( index );
@@ -79,16 +80,16 @@ namespace VirtualSpace.VirtualDesktop
                     survival.Size = commonSize;
                 }
 
-                currentImage.Add( survival );
+                survivalDesktops.Add( survival );
             }
 
-            var guids = currentImage.Select( v => v.VdId ).ToList();
+            var guids = survivalDesktops.Select( v => v.VdId ).ToList();
             foreach ( var old in _virtualDesktops.Where( old => !guids.Contains( old.VdId ) ) )
             {
                 old.RealClose();
             }
 
-            _virtualDesktops = currentImage;
+            _virtualDesktops = survivalDesktops;
         }
 
         public static void FixLayout()
@@ -144,46 +145,45 @@ namespace VirtualSpace.VirtualDesktop
 
         private static void ReOrder( bool needSort = false )
         {
-            var profile = ConfigManager.CurrentProfile;
             if ( needSort )
                 _virtualDesktops.Sort( ( x, y ) => x.VdIndex.CompareTo( y.VdIndex ) );
 
-            var guids = _virtualDesktops.Select( vdw => vdw.VdId ).ToList();
+            var profile = ConfigManager.CurrentProfile;
+            var guids   = _virtualDesktops.Select( vdw => vdw.VdId ).ToList();
 
             if ( profile.DesktopOrder == null || profile.DesktopOrder.Count == 0 ) // no custom order, using system's
             {
                 SaveOrder( guids );
+                return;
             }
-            else
+
+            var diff = profile.DesktopOrder.FindAll( o => !guids.Contains( o ) );
+            foreach ( var d in diff )
             {
-                var diff = profile.DesktopOrder.FindAll( o => !guids.Contains( o ) );
-                foreach ( var d in diff )
-                {
-                    profile.DesktopOrder.Remove( d );
-                }
-
-                var reOrdered = new List<VirtualDesktopWindow>();
-                for ( var idx = 0; idx < profile.DesktopOrder.Count; idx++ )
-                {
-                    var vdw = _virtualDesktops.Find( vdw => vdw.VdId == profile.DesktopOrder[idx] );
-                    vdw.VdIndex = idx; // reposition
-                    reOrdered.Add( vdw );
-                    _virtualDesktops.Remove( vdw );
-                }
-
-                foreach ( var unOrdered in _virtualDesktops )
-                {
-                    unOrdered.VdIndex = reOrdered.Count;
-                    reOrdered.Add( unOrdered ); // change reOrdered.Count every turn
-                    profile.DesktopOrder.Add( unOrdered.VdId ); // append to tail
-                }
-
-                _virtualDesktops = reOrdered;
-                SaveOrder();
+                profile.DesktopOrder.Remove( d );
             }
+
+            var reOrdered = new List<VirtualDesktopWindow>();
+            for ( var idx = 0; idx < profile.DesktopOrder.Count; idx++ )
+            {
+                var vdw = _virtualDesktops.Find( vdw => vdw.VdId == profile.DesktopOrder[idx] );
+                vdw.VdIndex = idx; // reposition
+                reOrdered.Add( vdw );
+                _virtualDesktops.Remove( vdw );
+            }
+
+            foreach ( var unOrdered in _virtualDesktops )
+            {
+                unOrdered.VdIndex = reOrdered.Count;
+                reOrdered.Add( unOrdered ); // change reOrdered.Count every turn
+                profile.DesktopOrder.Add( unOrdered.VdId ); // append to tail
+            }
+
+            _virtualDesktops = reOrdered;
+            SaveOrder();
         }
 
-        public static void ResetLayout()
+        public static void ResetLayout( VirtualDesktopNotification? vdn = null )
         {
             FixLayout();
             ShowAllVirtualDesktops();
@@ -191,6 +191,21 @@ namespace VirtualSpace.VirtualDesktop
             {
                 ShowVisibleWindowsForDesktops();
                 NeedRepaintThumbs = false;
+            }
+            else
+            {
+                if ( vdn is null ) return;
+
+                var vdwList = GetAllVirtualDesktops();
+                try
+                {
+                    var fallback = vdwList[DesktopWrapper.IndexFromGuid( vdn.TargetId )];
+                    ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {fallback} );
+                }
+                catch ( Exception e )
+                {
+                    Logger.Warning( e.StackTrace );
+                }
             }
         }
 
@@ -302,6 +317,8 @@ namespace VirtualSpace.VirtualDesktop
 
         public static void ShowAllVirtualDesktops()
         {
+            RebuildMatrixMap( MainWindow.RowsCols );
+
             foreach ( var vdw in _virtualDesktops )
             {
                 vdw.ShowByVdIndex();

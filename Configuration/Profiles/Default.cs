@@ -31,7 +31,8 @@ namespace VirtualSpace.Config.Profiles
                 VDWDragTargetOpacity = 0.8f,
                 ThumbMargin = new Margin {Top = 20, Left = 10},
                 ThumbDragSourceOpacity = 150,
-                Language = "en"
+                Language = "en",
+                DesktopArrangement = 0
             };
             DaemonAutoStart = true;
             Mouse = new Mouse

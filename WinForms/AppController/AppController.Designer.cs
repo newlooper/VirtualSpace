@@ -68,8 +68,20 @@ namespace VirtualSpace
             this.cb_nav_circle_h = new System.Windows.Forms.CheckBox();
             this.mainTabs = new System.Windows.Forms.TabControl();
             this.MT_UI = new System.Windows.Forms.TabPage();
+            this.panel_UI = new System.Windows.Forms.Panel();
+            this.gb_DesktopArrangement = new System.Windows.Forms.GroupBox();
+            this.tlp_DesktopArrangement = new System.Windows.Forms.TableLayoutPanel();
+            this.btn_m7 = new System.Windows.Forms.Button();
+            this.btn_m6 = new System.Windows.Forms.Button();
+            this.btn_m5 = new System.Windows.Forms.Button();
+            this.btn_m4 = new System.Windows.Forms.Button();
+            this.btn_m3 = new System.Windows.Forms.Button();
+            this.btn_m2 = new System.Windows.Forms.Button();
+            this.btn_m1 = new System.Windows.Forms.Button();
+            this.btn_m0 = new System.Windows.Forms.Button();
+            this.lb_DesktopArrangementNote = new System.Windows.Forms.Label();
             this.MT_Rules = new System.Windows.Forms.TabPage();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.gb_Rules = new System.Windows.Forms.GroupBox();
             this.lv_Rules = new System.Windows.Forms.ListView();
             this.lvc_Name = new System.Windows.Forms.ColumnHeader();
             this.lvc_Created = new System.Windows.Forms.ColumnHeader();
@@ -78,10 +90,10 @@ namespace VirtualSpace
             this.btn_RuleClone = new System.Windows.Forms.Button();
             this.btn_RuleNew = new System.Windows.Forms.Button();
             this.btn_RuleRemove = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gb_CurrentProfile = new System.Windows.Forms.GroupBox();
             this.cb_RuleProfiles = new System.Windows.Forms.ComboBox();
             this.MT_Plugins = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.gb_Plugins = new System.Windows.Forms.GroupBox();
             this.lv_Plugins = new System.Windows.Forms.ListView();
             this.lvc_PluginName = new System.Windows.Forms.ColumnHeader();
             this.lvc_PluginVersion = new System.Windows.Forms.ColumnHeader();
@@ -125,11 +137,15 @@ namespace VirtualSpace
             this.MT_General.SuspendLayout();
             this.gb_nav.SuspendLayout();
             this.mainTabs.SuspendLayout();
+            this.MT_UI.SuspendLayout();
+            this.panel_UI.SuspendLayout();
+            this.gb_DesktopArrangement.SuspendLayout();
+            this.tlp_DesktopArrangement.SuspendLayout();
             this.MT_Rules.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.gb_Rules.SuspendLayout();
+            this.gb_CurrentProfile.SuspendLayout();
             this.MT_Plugins.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.gb_Plugins.SuspendLayout();
             this.MT_About.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_AboutLogo)).BeginInit();
             this.logCMS.SuspendLayout();
@@ -141,84 +157,84 @@ namespace VirtualSpace
             // 
             // mainMenu
             // 
-            resources.ApplyResources(this.mainMenu, "mainMenu");
             this.mainMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.optionsToolStripMenuItem});
+            resources.ApplyResources(this.mainMenu, "mainMenu");
             this.mainMenu.Name = "mainMenu";
             // 
             // fileToolStripMenuItem
             // 
-            resources.ApplyResources(this.fileToolStripMenuItem, "fileToolStripMenuItem");
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            resources.ApplyResources(this.fileToolStripMenuItem, "fileToolStripMenuItem");
             // 
             // quitToolStripMenuItem
             // 
-            resources.ApplyResources(this.quitToolStripMenuItem, "quitToolStripMenuItem");
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
+            resources.ApplyResources(this.quitToolStripMenuItem, "quitToolStripMenuItem");
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
-            resources.ApplyResources(this.optionsToolStripMenuItem, "optionsToolStripMenuItem");
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.langToolStripMenuItem,
             this.logsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            resources.ApplyResources(this.optionsToolStripMenuItem, "optionsToolStripMenuItem");
             this.optionsToolStripMenuItem.DropDownOpening += new System.EventHandler(this.optionsToolStripMenuItem_DropDownOpening);
             // 
             // langToolStripMenuItem
             // 
-            resources.ApplyResources(this.langToolStripMenuItem, "langToolStripMenuItem");
             this.langToolStripMenuItem.Name = "langToolStripMenuItem";
+            resources.ApplyResources(this.langToolStripMenuItem, "langToolStripMenuItem");
             // 
             // logsToolStripMenuItem
             // 
-            resources.ApplyResources(this.logsToolStripMenuItem, "logsToolStripMenuItem");
             this.logsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showLogsInGuiToolStripMenuItem,
             this.openLogFolderToolStripMenuItem});
             this.logsToolStripMenuItem.Name = "logsToolStripMenuItem";
+            resources.ApplyResources(this.logsToolStripMenuItem, "logsToolStripMenuItem");
             // 
             // showLogsInGuiToolStripMenuItem
             // 
-            resources.ApplyResources(this.showLogsInGuiToolStripMenuItem, "showLogsInGuiToolStripMenuItem");
             this.showLogsInGuiToolStripMenuItem.CheckOnClick = true;
             this.showLogsInGuiToolStripMenuItem.Name = "showLogsInGuiToolStripMenuItem";
+            resources.ApplyResources(this.showLogsInGuiToolStripMenuItem, "showLogsInGuiToolStripMenuItem");
             this.showLogsInGuiToolStripMenuItem.CheckedChanged += new System.EventHandler(this.showLogsInGuiToolStripMenuItem_CheckedChanged);
             // 
             // openLogFolderToolStripMenuItem
             // 
-            resources.ApplyResources(this.openLogFolderToolStripMenuItem, "openLogFolderToolStripMenuItem");
             this.openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
+            resources.ApplyResources(this.openLogFolderToolStripMenuItem, "openLogFolderToolStripMenuItem");
             this.openLogFolderToolStripMenuItem.Click += new System.EventHandler(this.openLogFolderToolStripMenuItem_Click);
             // 
             // MT_Logs
             // 
-            resources.ApplyResources(this.MT_Logs, "MT_Logs");
             this.MT_Logs.Controls.Add(this.logTabs);
+            resources.ApplyResources(this.MT_Logs, "MT_Logs");
             this.MT_Logs.Name = "MT_Logs";
             this.MT_Logs.UseVisualStyleBackColor = true;
             // 
             // logTabs
             // 
-            resources.ApplyResources(this.logTabs, "logTabs");
             this.logTabs.Controls.Add(this.logTabInfo);
             this.logTabs.Controls.Add(this.logTabDebug);
             this.logTabs.Controls.Add(this.logTabEvent);
             this.logTabs.Controls.Add(this.logTabWarning);
             this.logTabs.Controls.Add(this.logTabError);
+            resources.ApplyResources(this.logTabs, "logTabs");
             this.logTabs.Name = "logTabs";
             this.logTabs.SelectedIndex = 0;
             this.logTabs.Click += new System.EventHandler(this.logTabs_Click);
             // 
             // logTabInfo
             // 
-            resources.ApplyResources(this.logTabInfo, "logTabInfo");
             this.logTabInfo.Controls.Add(this.tbInfo);
+            resources.ApplyResources(this.logTabInfo, "logTabInfo");
             this.logTabInfo.Name = "logTabInfo";
             this.logTabInfo.UseVisualStyleBackColor = true;
             // 
@@ -230,8 +246,8 @@ namespace VirtualSpace
             // 
             // logTabDebug
             // 
-            resources.ApplyResources(this.logTabDebug, "logTabDebug");
             this.logTabDebug.Controls.Add(this.tbDebug);
+            resources.ApplyResources(this.logTabDebug, "logTabDebug");
             this.logTabDebug.Name = "logTabDebug";
             this.logTabDebug.UseVisualStyleBackColor = true;
             // 
@@ -243,8 +259,8 @@ namespace VirtualSpace
             // 
             // logTabEvent
             // 
-            resources.ApplyResources(this.logTabEvent, "logTabEvent");
             this.logTabEvent.Controls.Add(this.tbEvent);
+            resources.ApplyResources(this.logTabEvent, "logTabEvent");
             this.logTabEvent.Name = "logTabEvent";
             this.logTabEvent.UseVisualStyleBackColor = true;
             // 
@@ -256,8 +272,8 @@ namespace VirtualSpace
             // 
             // logTabWarning
             // 
-            resources.ApplyResources(this.logTabWarning, "logTabWarning");
             this.logTabWarning.Controls.Add(this.tbWarning);
+            resources.ApplyResources(this.logTabWarning, "logTabWarning");
             this.logTabWarning.Name = "logTabWarning";
             this.logTabWarning.UseVisualStyleBackColor = true;
             // 
@@ -269,8 +285,8 @@ namespace VirtualSpace
             // 
             // logTabError
             // 
-            resources.ApplyResources(this.logTabError, "logTabError");
             this.logTabError.Controls.Add(this.tbError);
+            resources.ApplyResources(this.logTabError, "logTabError");
             this.logTabError.Name = "logTabError";
             this.logTabError.UseVisualStyleBackColor = true;
             // 
@@ -282,18 +298,18 @@ namespace VirtualSpace
             // 
             // MT_General
             // 
-            resources.ApplyResources(this.MT_General, "MT_General");
             this.MT_General.Controls.Add(this.gb_nav);
+            resources.ApplyResources(this.MT_General, "MT_General");
             this.MT_General.Name = "MT_General";
             this.MT_General.UseVisualStyleBackColor = true;
             // 
             // gb_nav
             // 
-            resources.ApplyResources(this.gb_nav, "gb_nav");
             this.gb_nav.Controls.Add(this.lb_nav_circle_h_type);
             this.gb_nav.Controls.Add(this.cb_nav_circle_h_type);
             this.gb_nav.Controls.Add(this.cb_nav_circle_v);
             this.gb_nav.Controls.Add(this.cb_nav_circle_h);
+            resources.ApplyResources(this.gb_nav, "gb_nav");
             this.gb_nav.Name = "gb_nav";
             this.gb_nav.TabStop = false;
             // 
@@ -304,9 +320,9 @@ namespace VirtualSpace
             // 
             // cb_nav_circle_h_type
             // 
-            resources.ApplyResources(this.cb_nav_circle_h_type, "cb_nav_circle_h_type");
             this.cb_nav_circle_h_type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_nav_circle_h_type.FormattingEnabled = true;
+            resources.ApplyResources(this.cb_nav_circle_h_type, "cb_nav_circle_h_type");
             this.cb_nav_circle_h_type.Name = "cb_nav_circle_h_type";
             this.cb_nav_circle_h_type.SelectedIndexChanged += new System.EventHandler(this.cb_nav_circle_h_type_SelectedIndexChanged);
             // 
@@ -326,45 +342,142 @@ namespace VirtualSpace
             // 
             // mainTabs
             // 
-            resources.ApplyResources(this.mainTabs, "mainTabs");
             this.mainTabs.Controls.Add(this.MT_General);
             this.mainTabs.Controls.Add(this.MT_UI);
             this.mainTabs.Controls.Add(this.MT_Rules);
             this.mainTabs.Controls.Add(this.MT_Plugins);
             this.mainTabs.Controls.Add(this.MT_Logs);
             this.mainTabs.Controls.Add(this.MT_About);
+            resources.ApplyResources(this.mainTabs, "mainTabs");
             this.mainTabs.Name = "mainTabs";
             this.mainTabs.SelectedIndex = 0;
             this.mainTabs.SelectedIndexChanged += new System.EventHandler(this.mainTabs_SelectedIndexChanged);
             // 
             // MT_UI
             // 
+            this.MT_UI.Controls.Add(this.panel_UI);
             resources.ApplyResources(this.MT_UI, "MT_UI");
             this.MT_UI.Name = "MT_UI";
             this.MT_UI.UseVisualStyleBackColor = true;
             // 
+            // panel_UI
+            // 
+            resources.ApplyResources(this.panel_UI, "panel_UI");
+            this.panel_UI.Controls.Add(this.gb_DesktopArrangement);
+            this.panel_UI.Name = "panel_UI";
+            // 
+            // gb_DesktopArrangement
+            // 
+            resources.ApplyResources(this.gb_DesktopArrangement, "gb_DesktopArrangement");
+            this.gb_DesktopArrangement.Controls.Add(this.tlp_DesktopArrangement);
+            this.gb_DesktopArrangement.Controls.Add(this.lb_DesktopArrangementNote);
+            this.gb_DesktopArrangement.Name = "gb_DesktopArrangement";
+            this.gb_DesktopArrangement.TabStop = false;
+            // 
+            // tlp_DesktopArrangement
+            // 
+            resources.ApplyResources(this.tlp_DesktopArrangement, "tlp_DesktopArrangement");
+            this.tlp_DesktopArrangement.Controls.Add(this.btn_m7, 3, 1);
+            this.tlp_DesktopArrangement.Controls.Add(this.btn_m6, 2, 1);
+            this.tlp_DesktopArrangement.Controls.Add(this.btn_m5, 1, 1);
+            this.tlp_DesktopArrangement.Controls.Add(this.btn_m4, 0, 1);
+            this.tlp_DesktopArrangement.Controls.Add(this.btn_m3, 3, 0);
+            this.tlp_DesktopArrangement.Controls.Add(this.btn_m2, 2, 0);
+            this.tlp_DesktopArrangement.Controls.Add(this.btn_m1, 1, 0);
+            this.tlp_DesktopArrangement.Controls.Add(this.btn_m0, 0, 0);
+            this.tlp_DesktopArrangement.Name = "tlp_DesktopArrangement";
+            // 
+            // btn_m7
+            // 
+            this.btn_m7.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(this.btn_m7, "btn_m7");
+            this.btn_m7.Name = "btn_m7";
+            this.btn_m7.UseVisualStyleBackColor = false;
+            this.btn_m7.Click += new System.EventHandler(this.tlp_DesktopArrangement_SubControlClicked);
+            // 
+            // btn_m6
+            // 
+            this.btn_m6.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(this.btn_m6, "btn_m6");
+            this.btn_m6.Name = "btn_m6";
+            this.btn_m6.UseVisualStyleBackColor = false;
+            this.btn_m6.Click += new System.EventHandler(this.tlp_DesktopArrangement_SubControlClicked);
+            // 
+            // btn_m5
+            // 
+            this.btn_m5.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(this.btn_m5, "btn_m5");
+            this.btn_m5.Name = "btn_m5";
+            this.btn_m5.UseVisualStyleBackColor = false;
+            this.btn_m5.Click += new System.EventHandler(this.tlp_DesktopArrangement_SubControlClicked);
+            // 
+            // btn_m4
+            // 
+            this.btn_m4.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(this.btn_m4, "btn_m4");
+            this.btn_m4.Name = "btn_m4";
+            this.btn_m4.UseVisualStyleBackColor = false;
+            this.btn_m4.Click += new System.EventHandler(this.tlp_DesktopArrangement_SubControlClicked);
+            // 
+            // btn_m3
+            // 
+            this.btn_m3.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(this.btn_m3, "btn_m3");
+            this.btn_m3.Name = "btn_m3";
+            this.btn_m3.UseVisualStyleBackColor = false;
+            this.btn_m3.Click += new System.EventHandler(this.tlp_DesktopArrangement_SubControlClicked);
+            // 
+            // btn_m2
+            // 
+            this.btn_m2.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(this.btn_m2, "btn_m2");
+            this.btn_m2.Name = "btn_m2";
+            this.btn_m2.UseVisualStyleBackColor = false;
+            this.btn_m2.Click += new System.EventHandler(this.tlp_DesktopArrangement_SubControlClicked);
+            // 
+            // btn_m1
+            // 
+            this.btn_m1.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(this.btn_m1, "btn_m1");
+            this.btn_m1.Name = "btn_m1";
+            this.btn_m1.UseVisualStyleBackColor = false;
+            this.btn_m1.Click += new System.EventHandler(this.tlp_DesktopArrangement_SubControlClicked);
+            // 
+            // btn_m0
+            // 
+            this.btn_m0.BackColor = System.Drawing.Color.MistyRose;
+            resources.ApplyResources(this.btn_m0, "btn_m0");
+            this.btn_m0.Name = "btn_m0";
+            this.btn_m0.UseVisualStyleBackColor = false;
+            this.btn_m0.Click += new System.EventHandler(this.tlp_DesktopArrangement_SubControlClicked);
+            // 
+            // lb_DesktopArrangementNote
+            // 
+            resources.ApplyResources(this.lb_DesktopArrangementNote, "lb_DesktopArrangementNote");
+            this.lb_DesktopArrangementNote.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lb_DesktopArrangementNote.Name = "lb_DesktopArrangementNote";
+            // 
             // MT_Rules
             // 
+            this.MT_Rules.Controls.Add(this.gb_Rules);
+            this.MT_Rules.Controls.Add(this.gb_CurrentProfile);
             resources.ApplyResources(this.MT_Rules, "MT_Rules");
-            this.MT_Rules.Controls.Add(this.groupBox2);
-            this.MT_Rules.Controls.Add(this.groupBox1);
             this.MT_Rules.Name = "MT_Rules";
             this.MT_Rules.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
+            // gb_Rules
             // 
-            resources.ApplyResources(this.groupBox2, "groupBox2");
-            this.groupBox2.Controls.Add(this.lv_Rules);
-            this.groupBox2.Controls.Add(this.btn_RuleEdit);
-            this.groupBox2.Controls.Add(this.btn_RuleClone);
-            this.groupBox2.Controls.Add(this.btn_RuleNew);
-            this.groupBox2.Controls.Add(this.btn_RuleRemove);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.TabStop = false;
+            this.gb_Rules.Controls.Add(this.lv_Rules);
+            this.gb_Rules.Controls.Add(this.btn_RuleEdit);
+            this.gb_Rules.Controls.Add(this.btn_RuleClone);
+            this.gb_Rules.Controls.Add(this.btn_RuleNew);
+            this.gb_Rules.Controls.Add(this.btn_RuleRemove);
+            resources.ApplyResources(this.gb_Rules, "gb_Rules");
+            this.gb_Rules.Name = "gb_Rules";
+            this.gb_Rules.TabStop = false;
             // 
             // lv_Rules
             // 
-            resources.ApplyResources(this.lv_Rules, "lv_Rules");
             this.lv_Rules.CheckBoxes = true;
             this.lv_Rules.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.lvc_Name,
@@ -373,6 +486,7 @@ namespace VirtualSpace
             this.lv_Rules.FullRowSelect = true;
             this.lv_Rules.GridLines = true;
             this.lv_Rules.HideSelection = false;
+            resources.ApplyResources(this.lv_Rules, "lv_Rules");
             this.lv_Rules.MultiSelect = false;
             this.lv_Rules.Name = "lv_Rules";
             this.lv_Rules.UseCompatibleStateImageBehavior = false;
@@ -420,38 +534,37 @@ namespace VirtualSpace
             this.btn_RuleRemove.UseVisualStyleBackColor = true;
             this.btn_RuleRemove.Click += new System.EventHandler(this.btn_RuleRemove_Click);
             // 
-            // groupBox1
+            // gb_CurrentProfile
             // 
-            resources.ApplyResources(this.groupBox1, "groupBox1");
-            this.groupBox1.Controls.Add(this.cb_RuleProfiles);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.TabStop = false;
+            this.gb_CurrentProfile.Controls.Add(this.cb_RuleProfiles);
+            resources.ApplyResources(this.gb_CurrentProfile, "gb_CurrentProfile");
+            this.gb_CurrentProfile.Name = "gb_CurrentProfile";
+            this.gb_CurrentProfile.TabStop = false;
             // 
             // cb_RuleProfiles
             // 
-            resources.ApplyResources(this.cb_RuleProfiles, "cb_RuleProfiles");
             this.cb_RuleProfiles.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_RuleProfiles.FormattingEnabled = true;
+            resources.ApplyResources(this.cb_RuleProfiles, "cb_RuleProfiles");
             this.cb_RuleProfiles.Name = "cb_RuleProfiles";
             // 
             // MT_Plugins
             // 
+            this.MT_Plugins.Controls.Add(this.gb_Plugins);
             resources.ApplyResources(this.MT_Plugins, "MT_Plugins");
-            this.MT_Plugins.Controls.Add(this.groupBox3);
             this.MT_Plugins.Name = "MT_Plugins";
             this.MT_Plugins.UseVisualStyleBackColor = true;
             // 
-            // groupBox3
+            // gb_Plugins
             // 
-            resources.ApplyResources(this.groupBox3, "groupBox3");
-            this.groupBox3.Controls.Add(this.lv_Plugins);
-            this.groupBox3.Controls.Add(this.btn_PluginSettings);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.TabStop = false;
+            this.gb_Plugins.Controls.Add(this.lv_Plugins);
+            this.gb_Plugins.Controls.Add(this.btn_PluginSettings);
+            resources.ApplyResources(this.gb_Plugins, "gb_Plugins");
+            this.gb_Plugins.Name = "gb_Plugins";
+            this.gb_Plugins.TabStop = false;
             // 
             // lv_Plugins
             // 
-            resources.ApplyResources(this.lv_Plugins, "lv_Plugins");
             this.lv_Plugins.CheckBoxes = true;
             this.lv_Plugins.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.lvc_PluginName,
@@ -461,6 +574,7 @@ namespace VirtualSpace
             this.lv_Plugins.FullRowSelect = true;
             this.lv_Plugins.GridLines = true;
             this.lv_Plugins.HideSelection = false;
+            resources.ApplyResources(this.lv_Plugins, "lv_Plugins");
             this.lv_Plugins.MultiSelect = false;
             this.lv_Plugins.Name = "lv_Plugins";
             this.lv_Plugins.UseCompatibleStateImageBehavior = false;
@@ -493,7 +607,6 @@ namespace VirtualSpace
             // 
             // MT_About
             // 
-            resources.ApplyResources(this.MT_About, "MT_About");
             this.MT_About.Controls.Add(this.lb_AppName);
             this.MT_About.Controls.Add(this.llb_Company);
             this.MT_About.Controls.Add(this.lbox_Env);
@@ -501,6 +614,7 @@ namespace VirtualSpace
             this.MT_About.Controls.Add(this.lb_Version);
             this.MT_About.Controls.Add(this.lbVersion);
             this.MT_About.Controls.Add(this.pb_AboutLogo);
+            resources.ApplyResources(this.MT_About, "MT_About");
             this.MT_About.Name = "MT_About";
             this.MT_About.UseVisualStyleBackColor = true;
             this.MT_About.Paint += new System.Windows.Forms.PaintEventHandler(this.MT_About_Paint);
@@ -519,8 +633,8 @@ namespace VirtualSpace
             // 
             // lbox_Env
             // 
-            resources.ApplyResources(this.lbox_Env, "lbox_Env");
             this.lbox_Env.FormattingEnabled = true;
+            resources.ApplyResources(this.lbox_Env, "lbox_Env");
             this.lbox_Env.Name = "lbox_Env";
             // 
             // lb_Copyright
@@ -546,28 +660,28 @@ namespace VirtualSpace
             // 
             // logCMS
             // 
-            resources.ApplyResources(this.logCMS, "logCMS");
             this.logCMS.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.logCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearToolStripMenuItem});
             this.logCMS.Name = "logCMS";
+            resources.ApplyResources(this.logCMS, "logCMS");
             // 
             // clearToolStripMenuItem
             // 
-            resources.ApplyResources(this.clearToolStripMenuItem, "clearToolStripMenuItem");
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            resources.ApplyResources(this.clearToolStripMenuItem, "clearToolStripMenuItem");
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
             // panel_Pages
             // 
-            resources.ApplyResources(this.panel_Pages, "panel_Pages");
             this.panel_Pages.Controls.Add(this.mainTabs);
+            resources.ApplyResources(this.panel_Pages, "panel_Pages");
             this.panel_Pages.Name = "panel_Pages";
             // 
             // ts_PageNav
             // 
-            resources.ApplyResources(this.ts_PageNav, "ts_PageNav");
             this.ts_PageNav.BackColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.ts_PageNav, "ts_PageNav");
             this.ts_PageNav.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.ts_PageNav.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.ts_PageNav.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -630,8 +744,8 @@ namespace VirtualSpace
             // 
             // panel_PageNav
             // 
-            resources.ApplyResources(this.panel_PageNav, "panel_PageNav");
             this.panel_PageNav.Controls.Add(this.ts_PageNav);
+            resources.ApplyResources(this.panel_PageNav, "panel_PageNav");
             this.panel_PageNav.Name = "panel_PageNav";
             // 
             // panel_mask
@@ -641,41 +755,41 @@ namespace VirtualSpace
             // 
             // mainStatusStrip
             // 
-            resources.ApplyResources(this.mainStatusStrip, "mainStatusStrip");
             this.mainStatusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+            resources.ApplyResources(this.mainStatusStrip, "mainStatusStrip");
             this.mainStatusStrip.Name = "mainStatusStrip";
             this.mainStatusStrip.SizingGrip = false;
             // 
             // niTray
             // 
-            resources.ApplyResources(this.niTray, "niTray");
             this.niTray.ContextMenuStrip = this.trayMenu;
+            resources.ApplyResources(this.niTray, "niTray");
             // 
             // trayMenu
             // 
-            resources.ApplyResources(this.trayMenu, "trayMenu");
             this.trayMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
             this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
+            resources.ApplyResources(this.trayMenu, "trayMenu");
             // 
             // settingsToolStripMenuItem
             // 
-            resources.ApplyResources(this.settingsToolStripMenuItem, "settingsToolStripMenuItem");
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            resources.ApplyResources(this.settingsToolStripMenuItem, "settingsToolStripMenuItem");
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
-            resources.ApplyResources(this.toolStripMenuItem1, "toolStripMenuItem1");
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            resources.ApplyResources(this.toolStripMenuItem1, "toolStripMenuItem1");
             // 
             // exitToolStripMenuItem
             // 
-            resources.ApplyResources(this.exitToolStripMenuItem, "exitToolStripMenuItem");
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            resources.ApplyResources(this.exitToolStripMenuItem, "exitToolStripMenuItem");
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // AppController
@@ -713,11 +827,16 @@ namespace VirtualSpace
             this.gb_nav.ResumeLayout(false);
             this.gb_nav.PerformLayout();
             this.mainTabs.ResumeLayout(false);
+            this.MT_UI.ResumeLayout(false);
+            this.panel_UI.ResumeLayout(false);
+            this.panel_UI.PerformLayout();
+            this.gb_DesktopArrangement.ResumeLayout(false);
+            this.tlp_DesktopArrangement.ResumeLayout(false);
             this.MT_Rules.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.gb_Rules.ResumeLayout(false);
+            this.gb_CurrentProfile.ResumeLayout(false);
             this.MT_Plugins.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
+            this.gb_Plugins.ResumeLayout(false);
             this.MT_About.ResumeLayout(false);
             this.MT_About.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_AboutLogo)).EndInit();
@@ -768,8 +887,8 @@ namespace VirtualSpace
         private System.Windows.Forms.Button btn_RuleEdit;
         private System.Windows.Forms.Button btn_RuleClone;
         private System.Windows.Forms.Button btn_RuleNew;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gb_Rules;
+        private System.Windows.Forms.GroupBox gb_CurrentProfile;
         private System.Windows.Forms.ToolStripMenuItem logsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLogsInGuiToolStripMenuItem;
         private System.Windows.Forms.ToolStrip ts_PageNav;
@@ -796,7 +915,7 @@ namespace VirtualSpace
         private System.Windows.Forms.PictureBox pb_AboutLogo;
         private System.Windows.Forms.ToolStripButton tsb_about;
         private System.Windows.Forms.Label lb_AppName;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox gb_Plugins;
         private System.Windows.Forms.ListView lv_Plugins;
         private System.Windows.Forms.ColumnHeader lvc_PluginName;
         private System.Windows.Forms.ColumnHeader lvc_PluginVersion;
@@ -809,5 +928,17 @@ namespace VirtualSpace
         private System.Windows.Forms.CheckBox cb_nav_circle_h;
         private System.Windows.Forms.Label lb_nav_circle_h_type;
         private System.Windows.Forms.ComboBox cb_nav_circle_h_type;
+        private System.Windows.Forms.Panel panel_UI;
+        private System.Windows.Forms.GroupBox gb_DesktopArrangement;
+        private System.Windows.Forms.Label lb_DesktopArrangementNote;
+        private System.Windows.Forms.TableLayoutPanel tlp_DesktopArrangement;
+        private System.Windows.Forms.Button btn_m7;
+        private System.Windows.Forms.Button btn_m6;
+        private System.Windows.Forms.Button btn_m5;
+        private System.Windows.Forms.Button btn_m4;
+        private System.Windows.Forms.Button btn_m3;
+        private System.Windows.Forms.Button btn_m2;
+        private System.Windows.Forms.Button btn_m1;
+        private System.Windows.Forms.Button btn_m0;
     }
 }
