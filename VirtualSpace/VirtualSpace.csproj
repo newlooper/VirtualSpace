@@ -96,10 +96,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Include="..\Configuration\Const.cs" Link="Const.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Content Include="Resources\TrayIcon.ico" />
     </ItemGroup>
 
