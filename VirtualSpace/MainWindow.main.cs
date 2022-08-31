@@ -217,7 +217,11 @@ namespace VirtualSpace
                     switch ( wParam.ToInt32() )
                     {
                         case UserMessage.RiseView:
-                            if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                            if (IsShowing())
+                            {
+                                HideAll();
+                            }
+                            else if (RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval)
                             {
                                 BringToTop();
                                 RiseViewTimer.Restart();
