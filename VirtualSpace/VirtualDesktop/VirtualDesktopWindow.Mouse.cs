@@ -157,8 +157,7 @@ namespace VirtualSpace.VirtualDesktop
                     }
                     else
                     {
-                        var profile = ConfigManager.CurrentProfile;
-                        Swap( profile.DesktopOrder, VdIndex, _hoverVdIndex );
+                        Swap( ConfigManager.CurrentProfile.DesktopOrder, VdIndex, _hoverVdIndex );
 
                         VirtualDesktopManager.SaveOrder();
 
@@ -178,7 +177,7 @@ namespace VirtualSpace.VirtualDesktop
                     {
                         Logger.Debug( $"ACTIVE.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )})" );
                         Logger.Debug( $"CHANGE CURRENT DESKTOP TO Desktop[{_hoverVdIndex}]" );
-                        DesktopWrapper.MakeVisibleByIndex( _hoverVdIndex );
+                        DesktopWrapper.FromWindow( _selectedWindow.Handle ).MakeVisible();
                         User32.SwitchToThisWindow( _selectedWindow.Handle, true );
                     }
 
@@ -285,7 +284,7 @@ namespace VirtualSpace.VirtualDesktop
                         }
                         else
                         {
-                            Logger.Debug( $"DRAGGING.Desk Desktop[{VdIndex}]) IN Desktop[{vdw.VdIndex}])" );
+                            Logger.Debug( $"DRAGGING.Desk Desktop[{VdIndex}]) ON Desktop[{vdw.VdIndex}])" );
                         }
                     }
                 }
@@ -301,7 +300,7 @@ namespace VirtualSpace.VirtualDesktop
         private void SwitchDesktop()
         {
             Logger.Debug( $"SWITCH TO DESKTOP Desktop[{_hoverVdIndex}]" );
-            DesktopWrapper.MakeVisibleByIndex( DesktopWrapper.IndexFromGuid( VdId ) );
+            DesktopWrapper.MakeVisibleByGuid( VdId );
         }
 
         private static void Swap<T>( IList<T> list, int indexA, int indexB )

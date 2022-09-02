@@ -17,6 +17,7 @@ namespace VirtualSpace.Config.Entity
         private int     _vDwBorderSize;
         private int     _vDwMargin;
         private int     _vDwPadding;
+        private int     _desktopArrangement;
         public  Colour? CanvasBackColor       { get; set; }
         public  Colour? VDWDefaultBackColor   { get; set; }
         public  Colour? VDWCurrentBackColor   { get; set; }
@@ -69,5 +70,19 @@ namespace VirtualSpace.Config.Entity
         public Margin? ThumbMargin { get; set; }
 
         public byte ThumbDragSourceOpacity { get; set; }
+
+        public int? DesktopArrangement
+        {
+            get => _desktopArrangement;
+            set
+            {
+                _desktopArrangement = value switch
+                {
+                    null => 0,
+                    >= 0 and <= 7 => (int)value,
+                    _ => 0
+                };
+            }
+        }
     }
 }

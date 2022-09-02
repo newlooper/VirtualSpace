@@ -44,6 +44,22 @@ namespace VirtualSpace.VirtualDesktop.Api
             }
         }
 
+        public static bool RemoveDesktopByGuid( Guid guid )
+        {
+            if ( Count <= 1 ) return false;
+            try
+            {
+                var desktop = DesktopFromId( guid );
+                desktop.Remove( null );
+                return true;
+            }
+            catch ( Exception e )
+            {
+                Logger.Error( e.Message );
+                return false;
+            }
+        }
+
         public static void SetPosWithIndex( int srcIndex, int destIndex )
         {
         }
@@ -118,9 +134,21 @@ namespace VirtualSpace.VirtualDesktop.Api
             desktop.MakeVisible();
         }
 
+        public static void MakeVisibleByGuid( Guid guid )
+        {
+            var desktop = DesktopFromId( guid );
+            desktop.MakeVisible();
+        }
+
         public static void SetNameByIndex( int vdIndex, string name )
         {
             var desktop = FromIndex( vdIndex );
+            desktop.SetName( name );
+        }
+
+        public static void SetNameByGuid( Guid guid, string name )
+        {
+            var desktop = DesktopFromId( guid );
             desktop.SetName( name );
         }
 

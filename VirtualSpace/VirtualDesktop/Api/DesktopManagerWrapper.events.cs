@@ -10,7 +10,6 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Channels;
 using VirtualDesktop;
@@ -71,35 +70,16 @@ namespace VirtualSpace.VirtualDesktop.Api
                     switch ( vdn.Type )
                     {
                         case VirtualDesktopNotificationType.CREATED:
-                            if ( MainWindow.IsShowing() )
+                            if ( MainWindow.IsShowing() && !VirtualDesktopManager.IsBatchCreate )
                             {
-                                if ( !VirtualDesktopManager.IsBatchCreate ) VirtualDesktopManager.ResetLayout();
+                                VirtualDesktopManager.ResetLayout();
                             }
 
                             break;
                         case VirtualDesktopNotificationType.DELETED:
                             if ( MainWindow.IsShowing() )
                             {
-                                VirtualDesktopManager.FixLayout();
-                                VirtualDesktopManager.ShowAllVirtualDesktops();
-                                if ( VirtualDesktopManager.NeedRepaintThumbs )
-                                {
-                                    VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-                                    VirtualDesktopManager.NeedRepaintThumbs = false;
-                                }
-                                else
-                                {
-                                    var vdwList = VirtualDesktopManager.GetAllVirtualDesktops();
-                                    try
-                                    {
-                                        var fallback = vdwList[DesktopWrapper.IndexFromGuid( vdn.TargetId )];
-                                        VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {fallback} );
-                                    }
-                                    catch ( Exception e )
-                                    {
-                                        Logger.Warning( e.StackTrace );
-                                    }
-                                }
+                                VirtualDesktopManager.ResetLayout( vdn );
                             }
 
                             break;

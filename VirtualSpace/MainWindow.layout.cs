@@ -26,8 +26,9 @@ namespace VirtualSpace
     public partial class MainWindow
     {
         private static int           _desktopCount;
-        private static int           _rowsCols;
         private static UserInterface Ui => Manager.CurrentProfile.UI;
+
+        public static int RowsCols { get; private set; }
 
         public static Size MainGridCellSize => _instance.MainGrid.Children[0].RenderSize;
 
@@ -50,7 +51,7 @@ namespace VirtualSpace
 
         public static void ResetAllBorder()
         {
-            var currentVdIndex = VirtualDesktopManager.CurrentDesktopIndex();
+            var currentMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( VirtualDesktopManager.CurrentDesktopIndex() );
 
             var borderColorHover = Color.FromRgb( Ui.VDWHighlightBackColor.R, Ui.VDWHighlightBackColor.G, Ui.VDWHighlightBackColor.B );
 
@@ -62,10 +63,10 @@ namespace VirtualSpace
             var borderShadowDefault = _instance.Resources["VdwShadowDefault"] as DropShadowEffect;
             var borderShadowCurrent = _instance.Resources["VdwShadowCurrent"] as DropShadowEffect;
 
-            for ( var i = 0; i < _desktopCount; i++ )
+            for ( var i = 0; i < Math.Pow( RowsCols, 2 ); i++ )
             {
                 var border = (Border)_instance.MainGrid.Children[i];
-                if ( i == currentVdIndex )
+                if ( i == currentMatrixIndex )
                 {
                     border.Effect = borderShadowCurrent;
                     border.BorderBrush = borderBrushCurrent;
@@ -92,7 +93,7 @@ namespace VirtualSpace
 
             _instance.MainGrid.Children.Clear();
 
-            if ( _rowsCols != rowsCols )
+            if ( RowsCols != rowsCols )
             {
                 VirtualDesktopManager.NeedRepaintThumbs = true;
                 _instance.Dispatcher.Invoke( new Action( () => { } ), DispatcherPriority.ContextIdle, null );
@@ -102,7 +103,7 @@ namespace VirtualSpace
                 {Color = Color.FromRgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
             var borderShadowDefault = _instance.Resources["VdwShadowDefault"] as DropShadowEffect;
 
-            for ( var i = 0; i < vdCount; i++ )
+            for ( var i = 0; i < Math.Pow( rowsCols, 2 ); i++ )
             {
                 var border = new Border
                 {
@@ -116,7 +117,7 @@ namespace VirtualSpace
             }
 
             _desktopCount = vdCount; // remember last count
-            _rowsCols = rowsCols;
+            RowsCols = rowsCols;
             _instance.UpdateLayout();
         }
 
