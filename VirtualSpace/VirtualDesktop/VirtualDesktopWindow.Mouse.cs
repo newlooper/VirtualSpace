@@ -11,9 +11,12 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Config;
 using VirtualSpace.Helpers;
+using VirtualSpace.UIA;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
 
@@ -186,7 +189,27 @@ namespace VirtualSpace.VirtualDesktop
                             MainWindow.HideAll();
                             break;
                         case MouseButtons.Middle:
-                            ActiveWindow();
+                            if (_selectedWindow.Classname == Const.WindowsUiCoreWindow)
+                            {
+                                Uia.CloseButtonInvokeByWindowHandle(_selectedWindow.Handle);
+                            }
+                            else if (_selectedWindow.CoreUiWindowHandle != default)
+                            {
+                                User32.ShowWindow(_selectedWindow.Handle, 0);
+                                User32.ShowWindow(_selectedWindow.CoreUiWindowHandle, 0);
+                                User32.PostMessage(_selectedWindow.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0);
+                                User32.PostMessage(_selectedWindow.CoreUiWindowHandle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0);
+                            }
+                            else
+                            {
+                                User32.PostMessage(_selectedWindow.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0);
+                                // User32.PostMessage( _selectedWindow.Handle, WinMsg.WM_CLOSE, 0, 0 );
+                                // User32.PostMessage( _selectedWindow.Handle, WinMsg.WM_QUIT, 0, 0 );
+                                // User32.PostMessage( _selectedWindow.Handle, WinMsg.WM_DESTROY, 0, 0 );
+                            }
+
+                            Task.Delay(Const.WindowCloseDelay);
+                            VirtualDesktopManager.ShowVisibleWindowsForDesktops();
                             break;
                         case MouseButtons.Right:
 
