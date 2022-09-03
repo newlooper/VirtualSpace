@@ -11,6 +11,8 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Windows.Forms;
+using VirtualSpace.Commons;
+using VirtualSpace.Helpers;
 
 namespace VirtualSpace
 {
@@ -20,10 +22,11 @@ namespace VirtualSpace
         {
             var btn        = sender as Button;
             var selectedDa = btn.Name[^1..];
-            CheckDesktopArrangement( selectedDa );
 
             Config.Manager.CurrentProfile.UI.DesktopArrangement = Int32.Parse( selectedDa );
             Config.Manager.Save();
+
+            User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.DesktopArrangement, 0 );
         }
 
         public static void CheckDesktopArrangement( string selectedDa )

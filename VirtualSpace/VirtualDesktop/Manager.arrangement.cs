@@ -21,7 +21,7 @@ namespace VirtualSpace.VirtualDesktop
         private static Dictionary<int, int>? _vdToMatrixMap;
         private static Dictionary<int, int>? _matrixToVdMap;
 
-        private static void RebuildMatrixMap( int rowsCols )
+        public static void RebuildMatrixMap( int rowsCols )
         {
             var matrixDefault = new int[rowsCols, rowsCols];
             var index         = 0;
@@ -40,8 +40,9 @@ namespace VirtualSpace.VirtualDesktop
             {
                 ConfigManager.CurrentProfile.UI.DesktopArrangement = 0;
                 ConfigManager.Save();
-                AppController.CheckDesktopArrangement( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
             }
+
+            AppController.CheckDesktopArrangement( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
 
             var da = ConfigManager.CurrentProfile.UI.DesktopArrangement;
 

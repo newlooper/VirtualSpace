@@ -284,6 +284,20 @@ namespace VirtualSpace
                             }
 
                             break;
+                        case UserMessage.DesktopArrangement:
+
+                            VirtualDesktopManager.FixLayout();
+                            if ( IsShowing() )
+                            {
+                                VirtualDesktopManager.ShowAllVirtualDesktops();
+                                VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+                            }
+                            else
+                            {
+                                VirtualDesktopManager.RebuildMatrixMap( RowsCols );
+                            }
+
+                            break;
                     }
 
                     break;

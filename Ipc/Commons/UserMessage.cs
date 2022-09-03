@@ -15,10 +15,11 @@ namespace VirtualSpace.Commons
 {
     public static class UserMessage
     {
-        public const int RiseView          = 1000;
-        public const int ShowAppController = 1001;
-        public const int CloseView         = 1002;
-        public const int SwitchDesktop     = 1003;
+        public const int RiseView           = 1000;
+        public const int ShowAppController  = 1001;
+        public const int CloseView          = 1002;
+        public const int SwitchDesktop      = 1003;
+        public const int DesktopArrangement = 1004;
     }
 
     [StructLayout( LayoutKind.Sequential )]
