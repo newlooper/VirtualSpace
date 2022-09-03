@@ -25,7 +25,7 @@ namespace VirtualSpace.Config
         public const int    WindowClassMaxLength   = 512;
         public const int    WindowCheckTimeout     = 10 * 1000;
         public const int    WindowCheckInterval    = 200;
-        public const int    WindowCloseDelay       = 300;
+        public const int    WindowCloseTimeout     = 60 * 1000;
         public const int    RiseViewInterval       = 500;
         public const int    SwitchDesktopInterval  = 500;
         public const int    DefaultDpi             = 96;
