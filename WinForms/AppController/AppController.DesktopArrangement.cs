@@ -10,8 +10,9 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
-using VirtualSpace.Commons;
+using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 
 namespace VirtualSpace
@@ -23,8 +24,8 @@ namespace VirtualSpace
             var btn        = sender as Button;
             var selectedDa = btn.Name[^1..];
 
-            Config.Manager.CurrentProfile.UI.DesktopArrangement = Int32.Parse( selectedDa );
-            Config.Manager.Save();
+            Manager.CurrentProfile.UI.DesktopArrangement = int.Parse( selectedDa );
+            Manager.Save();
 
             User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.DesktopArrangement, 0 );
         }
@@ -34,7 +35,7 @@ namespace VirtualSpace
             foreach ( var c in _instance.tlp_DesktopArrangement.Controls )
             {
                 var i = c as Button;
-                i.BackColor = i.Name.EndsWith( selectedDa ) ? System.Drawing.Color.MistyRose : System.Drawing.Color.Gainsboro;
+                i.BackColor = i.Name.EndsWith( selectedDa ) ? Color.MistyRose : Color.Gainsboro;
             }
         }
     }

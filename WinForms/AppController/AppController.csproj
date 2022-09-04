@@ -9,11 +9,13 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Configuration\Configuration.csproj" />
-      <ProjectReference Include="..\..\Helpers\Helpers.csproj" />
       <ProjectReference Include="..\..\Ipc\IpcServer\IpcServer.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="AppController.keyboard.cs">
+        <SubType>Form</SubType>
+      </Compile>
       <Compile Update="AppController.cs">
         <SubType>Form</SubType>
       </Compile>

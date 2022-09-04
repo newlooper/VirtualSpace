@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
+using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using GHK = VirtualSpace.Helpers.GlobalHotKey;
 using LLGHK = VirtualSpace.Helpers.LowLevelGlobalHotKey;
@@ -31,20 +32,44 @@ namespace VirtualSpace
         private void RegisterHotKey( IntPtr hWnd )
         {
             IpcPipeServer.MainWindowHandle = hWnd;
-            GHK.RegHotKey( hWnd, UserMessage.RiseView,
-                GHK.KeyModifiers.Ctrl | GHK.KeyModifiers.Shift,
-                KeyInterop.VirtualKeyFromKey( Key.Tab ) );
-            Logger.Info( "Register Global HotKey For Rise MainView - [CTRL+SHIFT+Tab]" );
 
-            GHK.RegHotKey( hWnd, UserMessage.ShowAppController,
-                GHK.KeyModifiers.Ctrl | GHK.KeyModifiers.Alt,
-                KeyInterop.VirtualKeyFromKey( Key.F12 ) );
-            Logger.Info( "Register Global HotKey For Open AppControl Panel - [CTRL+ALT+F12]" );
+            foreach ( var kv in Manager.Configs.KeyBindings )
+            {
+                var func = Const.Hotkey.Info[kv.Key].Item1;
+                var kb   = kv.Value;
 
-            // GHK.RegHotKey( hWnd, UserMessage.CloseView,
-            //     GlobalHotKey.KeyModifiers.None,
-            //     KeyInterop.VirtualKeyFromKey( Key.Escape ) );
-            // Logger.Info( "Register Global HotKey For Close MainView - [Escape]" );
+                var ghkCode = kb.GhkCode;
+                if ( ghkCode == "" ) continue;
+
+                var hotkey = ghkCode.Replace( Const.Hotkey.NONE + Const.Hotkey.SPLITTER, "" );
+
+                var arr = ghkCode.Split( Const.Hotkey.SPLITTER );
+                if ( arr.Length == 5 )
+                {
+                    var km = arr[0] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.WindowsKey;
+                    km |= arr[1] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.Ctrl;
+                    km |= arr[2] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.Alt;
+                    km |= arr[3] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.Shift;
+
+                    try
+                    {
+                        var key = Enum.Parse<Key>( arr[4] );
+                        Logger.Info( string.Format( "Register Global HotKey [{0}] For \"{1}\", {2}",
+                            hotkey,
+                            func,
+                            GHK.RegHotKey( hWnd, kb.MessageId, km, KeyInterop.VirtualKeyFromKey( key ) )
+                                ? "Success"
+                                : "Fail" ) );
+                    }
+                    catch ( Exception ex )
+                    {
+                        Logger.Error( string.Format( "Register Global HotKey [{0}] For \"{1}\" Error: {2}",
+                            hotkey,
+                            func,
+                            ex.Message ) );
+                    }
+                }
+            }
 
             var hookProc = new User32.LowLevelKeyboardProc( KeyboardHookCallback );
             Logger.Info( "Set Windows LowLevelKeyboardProc Hook" );
@@ -59,7 +84,10 @@ namespace VirtualSpace
             {
                 if ( keyType == LLGHK.WM_KEYDOWN
                      && info.vkCode == (int)Keys.Tab
-                     && User32.GetAsyncKeyState( (int)Keys.LWin ) < 0 ) // hook LWin+Tab to replace TaskView
+                     && User32.GetAsyncKeyState( (int)Keys.LWin ) < 0
+                     && User32.GetAsyncKeyState( (int)Keys.ControlKey ) >= 0
+                     && User32.GetAsyncKeyState( (int)Keys.ShiftKey ) >= 0
+                   ) // hook LWin+Tab to replace TaskView
                 {
                     LLGHK.MultipleKeyPress( new List<int> {LLGHK.DUMMY_KEY} );
                     LLGHK.MultipleKeyUp( new List<int> {(int)Keys.LWin} );
@@ -106,7 +134,7 @@ namespace VirtualSpace
             Logger.Info( "Unset Windows LowLevelKeyboardProc Hook" );
             LowLevelGlobalHotKey.UnHook();
             Logger.Info( "Unregister Global HotKeys" );
-            GlobalHotKey.UnRegHotKey();
+            GlobalHotKey.UnRegAllHotKey();
         }
     }
 }

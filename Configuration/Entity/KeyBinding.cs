@@ -9,25 +9,11 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using VirtualSpace.Config.Entity;
-
-namespace VirtualSpace.Config
+namespace VirtualSpace.Config.Entity
 {
-    public class Profile
+    public class KeyBinding
     {
-        public UserInterface UI              { get; set; }
-        public bool          DaemonAutoStart { get; set; }
-        public List<Guid>?   DesktopOrder    { get; set; }
-        public bool          HideOnStartup   { get; set; }
-        public Mouse         Mouse           { get; set; }
-
-        public Navigation Navigation { get; set; } = new()
-        {
-            CirculationH = false,
-            CirculationV = false,
-            CirculationHType = 0
-        };
+        public string GhkCode   { get; set; } = "";
+        public int    MessageId { get; set; }
     }
 }

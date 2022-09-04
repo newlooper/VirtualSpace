@@ -30,20 +30,20 @@ namespace VirtualSpace.Helpers
         private static          IntPtr    _handle = IntPtr.Zero;
         private static readonly List<int> Ids     = new();
 
-        public static void RegHotKey( IntPtr hWnd, int id, KeyModifiers fsModifiers, int vk )
+        public static bool RegHotKey( IntPtr hWnd, int id, KeyModifiers fsModifiers, int vk )
         {
             _handle = hWnd;
             Ids.Add( id );
-            RegisterHotKey( hWnd, id, fsModifiers, vk );
+            return RegisterHotKey( hWnd, id, fsModifiers, vk );
         }
 
         [DllImport( "user32.dll", SetLastError = true )]
         private static extern bool RegisterHotKey( IntPtr hWnd, int id, KeyModifiers fsModifiers, int vk );
 
         [DllImport( "user32.dll", SetLastError = true )]
-        private static extern bool UnregisterHotKey( IntPtr hWnd, int id );
+        public static extern bool UnregisterHotKey( IntPtr hWnd, int id );
 
-        public static void UnRegHotKey()
+        public static void UnRegAllHotKey()
         {
             foreach ( var id in Ids )
             {

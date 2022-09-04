@@ -203,4 +203,19 @@ VirtualSpace(11)	Windows 11	21H2(22000)
   <data name="Nav.CircleHType.SameRow" xml:space="preserve">
     <value>在同一行内循环</value>
   </data>
+  <data name="KB.Hotkey.Cleared" xml:space="preserve">
+    <value>热键已清除。</value>
+  </data>
+  <data name="KB.Hotkey.Reg.Success" xml:space="preserve">
+    <value>热键注册成功。</value>
+  </data>
+  <data name="KB.Hotkey.Reg.Fail" xml:space="preserve">
+    <value>热键注册失败。</value>
+  </data>
+  <data name="KB.Hotkey.SettingsSaved" xml:space="preserve">
+    <value>设置已保存。</value>
+  </data>
+  <data name="KB.Hotkey.KeyCheck" xml:space="preserve">
+    <value>必须选择一个非修改类键。</value>
+  </data>
 </root>
