@@ -13,8 +13,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Bridge\Bridge.csproj" />
+        <ProjectReference Include="..\Helpers\Helpers.csproj" />
         <ProjectReference Include="..\LinqExpressionBuilder\LinqExpressionBuilder.csproj" />
-        <ProjectReference Include="..\Logger\Logger.csproj" />
     </ItemGroup>
 
 </Project>

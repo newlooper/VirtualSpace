@@ -61,6 +61,27 @@ namespace VirtualSpace
             this.logTabError = new System.Windows.Forms.TabPage();
             this.tbError = new System.Windows.Forms.TextBox();
             this.MT_General = new System.Windows.Forms.TabPage();
+            this.panel_General = new System.Windows.Forms.Panel();
+            this.gb_Cluster = new System.Windows.Forms.GroupBox();
+            this.gb_Mouse = new System.Windows.Forms.GroupBox();
+            this.gb_Hotkey = new System.Windows.Forms.GroupBox();
+            this.tc_Keyboard = new System.Windows.Forms.TabControl();
+            this.tp_hk_main = new System.Windows.Forms.TabPage();
+            this.tb_hk_tip = new System.Windows.Forms.TextBox();
+            this.ts_HotkeySave = new System.Windows.Forms.ToolStrip();
+            this.tssb_hk_save_reg = new System.Windows.Forms.ToolStripSplitButton();
+            this.tsmi_hk_save = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_hk_reg = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_hk_clear_save = new System.Windows.Forms.ToolStripMenuItem();
+            this.lb_hk_func = new System.Windows.Forms.Label();
+            this.cb_hk_key = new System.Windows.Forms.ComboBox();
+            this.cb_hk_shift = new System.Windows.Forms.CheckBox();
+            this.cb_hk_alt = new System.Windows.Forms.CheckBox();
+            this.cb_hk_ctrl = new System.Windows.Forms.CheckBox();
+            this.cb_hk_win = new System.Windows.Forms.CheckBox();
+            this.tp_hk_extra = new System.Windows.Forms.TabPage();
+            this.lb_hk_extra = new System.Windows.Forms.Label();
+            this.tv_keyboard = new System.Windows.Forms.TreeView();
             this.gb_nav = new System.Windows.Forms.GroupBox();
             this.lb_nav_circle_h_type = new System.Windows.Forms.Label();
             this.cb_nav_circle_h_type = new System.Windows.Forms.ComboBox();
@@ -135,6 +156,12 @@ namespace VirtualSpace
             this.logTabWarning.SuspendLayout();
             this.logTabError.SuspendLayout();
             this.MT_General.SuspendLayout();
+            this.panel_General.SuspendLayout();
+            this.gb_Hotkey.SuspendLayout();
+            this.tc_Keyboard.SuspendLayout();
+            this.tp_hk_main.SuspendLayout();
+            this.ts_HotkeySave.SuspendLayout();
+            this.tp_hk_extra.SuspendLayout();
             this.gb_nav.SuspendLayout();
             this.mainTabs.SuspendLayout();
             this.MT_UI.SuspendLayout();
@@ -298,10 +325,237 @@ namespace VirtualSpace
             // 
             // MT_General
             // 
-            this.MT_General.Controls.Add(this.gb_nav);
+            this.MT_General.Controls.Add(this.panel_General);
             resources.ApplyResources(this.MT_General, "MT_General");
             this.MT_General.Name = "MT_General";
             this.MT_General.UseVisualStyleBackColor = true;
+            // 
+            // panel_General
+            // 
+            resources.ApplyResources(this.panel_General, "panel_General");
+            this.panel_General.Controls.Add(this.gb_Cluster);
+            this.panel_General.Controls.Add(this.gb_Mouse);
+            this.panel_General.Controls.Add(this.gb_Hotkey);
+            this.panel_General.Controls.Add(this.gb_nav);
+            this.panel_General.Name = "panel_General";
+            // 
+            // gb_Cluster
+            // 
+            resources.ApplyResources(this.gb_Cluster, "gb_Cluster");
+            this.gb_Cluster.Name = "gb_Cluster";
+            this.gb_Cluster.TabStop = false;
+            // 
+            // gb_Mouse
+            // 
+            resources.ApplyResources(this.gb_Mouse, "gb_Mouse");
+            this.gb_Mouse.Name = "gb_Mouse";
+            this.gb_Mouse.TabStop = false;
+            // 
+            // gb_Hotkey
+            // 
+            this.gb_Hotkey.Controls.Add(this.tc_Keyboard);
+            this.gb_Hotkey.Controls.Add(this.tv_keyboard);
+            resources.ApplyResources(this.gb_Hotkey, "gb_Hotkey");
+            this.gb_Hotkey.Name = "gb_Hotkey";
+            this.gb_Hotkey.TabStop = false;
+            // 
+            // tc_Keyboard
+            // 
+            this.tc_Keyboard.Controls.Add(this.tp_hk_main);
+            this.tc_Keyboard.Controls.Add(this.tp_hk_extra);
+            resources.ApplyResources(this.tc_Keyboard, "tc_Keyboard");
+            this.tc_Keyboard.Name = "tc_Keyboard";
+            this.tc_Keyboard.SelectedIndex = 0;
+            // 
+            // tp_hk_main
+            // 
+            this.tp_hk_main.Controls.Add(this.tb_hk_tip);
+            this.tp_hk_main.Controls.Add(this.ts_HotkeySave);
+            this.tp_hk_main.Controls.Add(this.lb_hk_func);
+            this.tp_hk_main.Controls.Add(this.cb_hk_key);
+            this.tp_hk_main.Controls.Add(this.cb_hk_shift);
+            this.tp_hk_main.Controls.Add(this.cb_hk_alt);
+            this.tp_hk_main.Controls.Add(this.cb_hk_ctrl);
+            this.tp_hk_main.Controls.Add(this.cb_hk_win);
+            resources.ApplyResources(this.tp_hk_main, "tp_hk_main");
+            this.tp_hk_main.Name = "tp_hk_main";
+            this.tp_hk_main.UseVisualStyleBackColor = true;
+            // 
+            // tb_hk_tip
+            // 
+            resources.ApplyResources(this.tb_hk_tip, "tb_hk_tip");
+            this.tb_hk_tip.Name = "tb_hk_tip";
+            // 
+            // ts_HotkeySave
+            // 
+            resources.ApplyResources(this.ts_HotkeySave, "ts_HotkeySave");
+            this.ts_HotkeySave.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.ts_HotkeySave.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.ts_HotkeySave.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tssb_hk_save_reg});
+            this.ts_HotkeySave.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.ts_HotkeySave.Name = "ts_HotkeySave";
+            this.ts_HotkeySave.ShowItemToolTips = false;
+            // 
+            // tssb_hk_save_reg
+            // 
+            resources.ApplyResources(this.tssb_hk_save_reg, "tssb_hk_save_reg");
+            this.tssb_hk_save_reg.BackColor = System.Drawing.SystemColors.Control;
+            this.tssb_hk_save_reg.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tssb_hk_save_reg.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmi_hk_save,
+            this.tsmi_hk_reg,
+            this.tsmi_hk_clear_save});
+            this.tssb_hk_save_reg.Margin = new System.Windows.Forms.Padding(0);
+            this.tssb_hk_save_reg.Name = "tssb_hk_save_reg";
+            this.tssb_hk_save_reg.ButtonClick += new System.EventHandler(this.tssb_hk_save_reg_ButtonClick);
+            this.tssb_hk_save_reg.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tssb_hk_save_reg_DropDownItemClicked);
+            // 
+            // tsmi_hk_save
+            // 
+            this.tsmi_hk_save.Name = "tsmi_hk_save";
+            resources.ApplyResources(this.tsmi_hk_save, "tsmi_hk_save");
+            // 
+            // tsmi_hk_reg
+            // 
+            this.tsmi_hk_reg.Name = "tsmi_hk_reg";
+            resources.ApplyResources(this.tsmi_hk_reg, "tsmi_hk_reg");
+            // 
+            // tsmi_hk_clear_save
+            // 
+            this.tsmi_hk_clear_save.Name = "tsmi_hk_clear_save";
+            resources.ApplyResources(this.tsmi_hk_clear_save, "tsmi_hk_clear_save");
+            // 
+            // lb_hk_func
+            // 
+            resources.ApplyResources(this.lb_hk_func, "lb_hk_func");
+            this.lb_hk_func.Name = "lb_hk_func";
+            // 
+            // cb_hk_key
+            // 
+            this.cb_hk_key.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_hk_key.FormattingEnabled = true;
+            this.cb_hk_key.Items.AddRange(new object[] {
+            resources.GetString("cb_hk_key.Items"),
+            resources.GetString("cb_hk_key.Items1"),
+            resources.GetString("cb_hk_key.Items2"),
+            resources.GetString("cb_hk_key.Items3"),
+            resources.GetString("cb_hk_key.Items4"),
+            resources.GetString("cb_hk_key.Items5"),
+            resources.GetString("cb_hk_key.Items6"),
+            resources.GetString("cb_hk_key.Items7"),
+            resources.GetString("cb_hk_key.Items8"),
+            resources.GetString("cb_hk_key.Items9"),
+            resources.GetString("cb_hk_key.Items10"),
+            resources.GetString("cb_hk_key.Items11"),
+            resources.GetString("cb_hk_key.Items12"),
+            resources.GetString("cb_hk_key.Items13"),
+            resources.GetString("cb_hk_key.Items14"),
+            resources.GetString("cb_hk_key.Items15"),
+            resources.GetString("cb_hk_key.Items16"),
+            resources.GetString("cb_hk_key.Items17"),
+            resources.GetString("cb_hk_key.Items18"),
+            resources.GetString("cb_hk_key.Items19"),
+            resources.GetString("cb_hk_key.Items20"),
+            resources.GetString("cb_hk_key.Items21"),
+            resources.GetString("cb_hk_key.Items22"),
+            resources.GetString("cb_hk_key.Items23"),
+            resources.GetString("cb_hk_key.Items24"),
+            resources.GetString("cb_hk_key.Items25"),
+            resources.GetString("cb_hk_key.Items26"),
+            resources.GetString("cb_hk_key.Items27"),
+            resources.GetString("cb_hk_key.Items28"),
+            resources.GetString("cb_hk_key.Items29"),
+            resources.GetString("cb_hk_key.Items30"),
+            resources.GetString("cb_hk_key.Items31"),
+            resources.GetString("cb_hk_key.Items32"),
+            resources.GetString("cb_hk_key.Items33"),
+            resources.GetString("cb_hk_key.Items34"),
+            resources.GetString("cb_hk_key.Items35"),
+            resources.GetString("cb_hk_key.Items36"),
+            resources.GetString("cb_hk_key.Items37"),
+            resources.GetString("cb_hk_key.Items38"),
+            resources.GetString("cb_hk_key.Items39"),
+            resources.GetString("cb_hk_key.Items40"),
+            resources.GetString("cb_hk_key.Items41"),
+            resources.GetString("cb_hk_key.Items42"),
+            resources.GetString("cb_hk_key.Items43"),
+            resources.GetString("cb_hk_key.Items44"),
+            resources.GetString("cb_hk_key.Items45"),
+            resources.GetString("cb_hk_key.Items46"),
+            resources.GetString("cb_hk_key.Items47"),
+            resources.GetString("cb_hk_key.Items48"),
+            resources.GetString("cb_hk_key.Items49"),
+            resources.GetString("cb_hk_key.Items50"),
+            resources.GetString("cb_hk_key.Items51"),
+            resources.GetString("cb_hk_key.Items52"),
+            resources.GetString("cb_hk_key.Items53"),
+            resources.GetString("cb_hk_key.Items54"),
+            resources.GetString("cb_hk_key.Items55"),
+            resources.GetString("cb_hk_key.Items56"),
+            resources.GetString("cb_hk_key.Items57"),
+            resources.GetString("cb_hk_key.Items58"),
+            resources.GetString("cb_hk_key.Items59"),
+            resources.GetString("cb_hk_key.Items60"),
+            resources.GetString("cb_hk_key.Items61"),
+            resources.GetString("cb_hk_key.Items62"),
+            resources.GetString("cb_hk_key.Items63"),
+            resources.GetString("cb_hk_key.Items64"),
+            resources.GetString("cb_hk_key.Items65"),
+            resources.GetString("cb_hk_key.Items66"),
+            resources.GetString("cb_hk_key.Items67")});
+            resources.ApplyResources(this.cb_hk_key, "cb_hk_key");
+            this.cb_hk_key.Name = "cb_hk_key";
+            this.cb_hk_key.SelectedIndexChanged += new System.EventHandler(this.cb_hk_key_SelectedIndexChanged);
+            // 
+            // cb_hk_shift
+            // 
+            resources.ApplyResources(this.cb_hk_shift, "cb_hk_shift");
+            this.cb_hk_shift.Name = "cb_hk_shift";
+            this.cb_hk_shift.UseVisualStyleBackColor = true;
+            this.cb_hk_shift.CheckedChanged += new System.EventHandler(this.cb_hk_shift_CheckedChanged);
+            // 
+            // cb_hk_alt
+            // 
+            resources.ApplyResources(this.cb_hk_alt, "cb_hk_alt");
+            this.cb_hk_alt.Name = "cb_hk_alt";
+            this.cb_hk_alt.UseVisualStyleBackColor = true;
+            this.cb_hk_alt.CheckedChanged += new System.EventHandler(this.cb_hk_alt_CheckedChanged);
+            // 
+            // cb_hk_ctrl
+            // 
+            resources.ApplyResources(this.cb_hk_ctrl, "cb_hk_ctrl");
+            this.cb_hk_ctrl.Name = "cb_hk_ctrl";
+            this.cb_hk_ctrl.UseVisualStyleBackColor = true;
+            this.cb_hk_ctrl.CheckedChanged += new System.EventHandler(this.cb_hk_ctrl_CheckedChanged);
+            // 
+            // cb_hk_win
+            // 
+            resources.ApplyResources(this.cb_hk_win, "cb_hk_win");
+            this.cb_hk_win.Name = "cb_hk_win";
+            this.cb_hk_win.UseVisualStyleBackColor = true;
+            this.cb_hk_win.CheckedChanged += new System.EventHandler(this.cb_hk_win_CheckedChanged);
+            // 
+            // tp_hk_extra
+            // 
+            this.tp_hk_extra.Controls.Add(this.lb_hk_extra);
+            resources.ApplyResources(this.tp_hk_extra, "tp_hk_extra");
+            this.tp_hk_extra.Name = "tp_hk_extra";
+            this.tp_hk_extra.UseVisualStyleBackColor = true;
+            // 
+            // lb_hk_extra
+            // 
+            resources.ApplyResources(this.lb_hk_extra, "lb_hk_extra");
+            this.lb_hk_extra.Name = "lb_hk_extra";
+            // 
+            // tv_keyboard
+            // 
+            resources.ApplyResources(this.tv_keyboard, "tv_keyboard");
+            this.tv_keyboard.Name = "tv_keyboard";
+            this.tv_keyboard.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            ((System.Windows.Forms.TreeNode)(resources.GetObject("tv_keyboard.Nodes"))),
+            ((System.Windows.Forms.TreeNode)(resources.GetObject("tv_keyboard.Nodes1")))});
+            this.tv_keyboard.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_keyboard_AfterSelect);
             // 
             // gb_nav
             // 
@@ -824,6 +1078,14 @@ namespace VirtualSpace
             this.logTabError.ResumeLayout(false);
             this.logTabError.PerformLayout();
             this.MT_General.ResumeLayout(false);
+            this.panel_General.ResumeLayout(false);
+            this.gb_Hotkey.ResumeLayout(false);
+            this.tc_Keyboard.ResumeLayout(false);
+            this.tp_hk_main.ResumeLayout(false);
+            this.tp_hk_main.PerformLayout();
+            this.ts_HotkeySave.ResumeLayout(false);
+            this.ts_HotkeySave.PerformLayout();
+            this.tp_hk_extra.ResumeLayout(false);
             this.gb_nav.ResumeLayout(false);
             this.gb_nav.PerformLayout();
             this.mainTabs.ResumeLayout(false);
@@ -940,5 +1202,26 @@ namespace VirtualSpace
         private System.Windows.Forms.Button btn_m2;
         private System.Windows.Forms.Button btn_m1;
         private System.Windows.Forms.Button btn_m0;
+        private System.Windows.Forms.Panel panel_General;
+        private System.Windows.Forms.GroupBox gb_Cluster;
+        private System.Windows.Forms.GroupBox gb_Mouse;
+        private System.Windows.Forms.GroupBox gb_Hotkey;
+        private System.Windows.Forms.TreeView tv_keyboard;
+        private System.Windows.Forms.TabControl tc_Keyboard;
+        private System.Windows.Forms.TabPage tp_hk_main;
+        private System.Windows.Forms.TextBox tb_hk_tip;
+        private System.Windows.Forms.ComboBox cb_hk_key;
+        private System.Windows.Forms.CheckBox cb_hk_shift;
+        private System.Windows.Forms.CheckBox cb_hk_alt;
+        private System.Windows.Forms.CheckBox cb_hk_ctrl;
+        private System.Windows.Forms.CheckBox cb_hk_win;
+        private System.Windows.Forms.TabPage tp_hk_extra;
+        private System.Windows.Forms.Label lb_hk_func;
+        private System.Windows.Forms.ToolStrip ts_HotkeySave;
+        private System.Windows.Forms.ToolStripSplitButton tssb_hk_save_reg;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_hk_save;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_hk_reg;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_hk_clear_save;
+        private System.Windows.Forms.Label lb_hk_extra;
     }
 }

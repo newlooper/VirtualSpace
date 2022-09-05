@@ -14,10 +14,10 @@ namespace VirtualSpace.Config.Entity
     public class UserInterface
     {
         private byte    _canvasOpacity;
+        private int     _desktopArrangement;
         private int     _vDwBorderSize;
         private int     _vDwMargin;
         private int     _vDwPadding;
-        private int     _desktopArrangement;
         public  Colour? CanvasBackColor       { get; set; }
         public  Colour? VDWDefaultBackColor   { get; set; }
         public  Colour? VDWCurrentBackColor   { get; set; }

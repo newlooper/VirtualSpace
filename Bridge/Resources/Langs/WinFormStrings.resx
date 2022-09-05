@@ -203,4 +203,19 @@ possible reason:
   <data name="Nav.CircleHType.SameRow" xml:space="preserve">
     <value>Same row</value>
   </data>
+  <data name="KB.Hotkey.Cleared" xml:space="preserve">
+    <value>Hotkey Cleared.</value>
+  </data>
+  <data name="KB.Hotkey.Reg.Success" xml:space="preserve">
+    <value>Register new Hotkey Success.</value>
+  </data>
+  <data name="KB.Hotkey.Reg.Fail" xml:space="preserve">
+    <value>Register new Hotkey Failed.</value>
+  </data>
+  <data name="KB.Hotkey.SettingsSaved" xml:space="preserve">
+    <value>Settings Saved.</value>
+  </data>
+  <data name="KB.Hotkey.KeyCheck" xml:space="preserve">
+    <value>Must choose a none-modifier Key.</value>
+  </data>
 </root>

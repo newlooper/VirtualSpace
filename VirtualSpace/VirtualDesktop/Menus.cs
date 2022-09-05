@@ -17,6 +17,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualSpace.Config;
@@ -108,8 +109,19 @@ namespace VirtualSpace.VirtualDesktop
                     // User32.PostMessage( mi.Vw.Handle, WinMsg.WM_DESTROY, 0, 0 );
                 }
 
-                await Task.Delay( Const.WindowCloseDelay );
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
+                await Task.Run( () =>
+                {
+                    var sw = Stopwatch.StartNew();
+                    while ( sw.ElapsedMilliseconds < Const.WindowCloseTimeout )
+                    {
+                        Thread.Sleep( 100 );
+                        if ( User32.IsWindow( mi.Vw.Handle ) ) continue;
+                        VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
+                        return;
+                    }
+
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
+                } );
             }
 
             closeWindow.Click += OnCloseWindowClick;

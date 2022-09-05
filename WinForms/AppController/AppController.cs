@@ -84,6 +84,15 @@ namespace VirtualSpace
             {
                 SetControlLang( _instance.logCMS, lang );
                 SetControlLang( _instance.trayMenu, lang );
+                SetControlLang( _instance.ts_HotkeySave, lang );
+
+                _instance.tv_keyboard.Nodes.Clear();
+                _instance.tv_keyboard.Nodes.AddRange( new[]
+                {
+                    (TreeNode)Resources.GetObject( "tv_keyboard.Nodes" ),
+                    (TreeNode)Resources.GetObject( "tv_keyboard.Nodes1" )
+                } );
+
                 SetControlLang( _instance, lang );
             }
 
@@ -139,8 +148,20 @@ namespace VirtualSpace
                 {
                     foreach ( var item in ts.Items )
                     {
-                        if ( item is ToolStripButton c )
-                            SetToolStripButtonLang( c, lang );
+                        switch ( item )
+                        {
+                            case ToolStripButton tsb:
+                                SetToolStripButtonLang( tsb, lang );
+                                break;
+                            case ToolStripSplitButton tssb:
+                                Resources.ApplyResources( tssb, tssb.Name, ci );
+                                foreach ( var m in tssb.DropDownItems )
+                                {
+                                    SetMenuItemLang( m as ToolStripMenuItem, lang );
+                                }
+
+                                break;
+                        }
                     }
 
                     break;

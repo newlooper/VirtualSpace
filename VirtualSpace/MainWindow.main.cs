@@ -21,7 +21,6 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using VirtualSpace.AppLogs;
-using VirtualSpace.Commons;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
@@ -206,6 +205,12 @@ namespace VirtualSpace
                 }
             }
 
+            void SwitchByIndex( int index )
+            {
+                if ( ConfigManager.CurrentProfile.DesktopOrder.Count > index )
+                    DesktopWrapper.MakeVisibleByGuid( ConfigManager.CurrentProfile.DesktopOrder[index] );
+            }
+
             switch ( msg )
             {
                 case WinMsg.WM_SYSCOMMAND:
@@ -287,6 +292,59 @@ namespace VirtualSpace
                                 SwitchDesktopTimer.Restart();
                             }
 
+                            break;
+                        case UserMessage.DesktopArrangement:
+
+                            VirtualDesktopManager.FixLayout();
+                            if ( IsShowing() )
+                            {
+                                VirtualDesktopManager.ShowAllVirtualDesktops();
+                                VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+                            }
+                            else
+                            {
+                                VirtualDesktopManager.RebuildMatrixMap( RowsCols );
+                            }
+
+                            break;
+                        case UserMessage.SVD1:
+                            SwitchByIndex( 0 );
+                            break;
+                        case UserMessage.SVD2:
+                            SwitchByIndex( 1 );
+                            break;
+                        case UserMessage.SVD3:
+                            SwitchByIndex( 2 );
+                            break;
+                        case UserMessage.SVD4:
+                            SwitchByIndex( 3 );
+                            break;
+                        case UserMessage.SVD5:
+                            SwitchByIndex( 4 );
+                            break;
+                        case UserMessage.SVD6:
+                            SwitchByIndex( 5 );
+                            break;
+                        case UserMessage.SVD7:
+                            SwitchByIndex( 6 );
+                            break;
+                        case UserMessage.SVD8:
+                            SwitchByIndex( 7 );
+                            break;
+                        case UserMessage.SVD9:
+                            SwitchByIndex( 8 );
+                            break;
+                        case UserMessage.NavLeft:
+                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)Keys.Left );
+                            break;
+                        case UserMessage.NavRight:
+                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)Keys.Right );
+                            break;
+                        case UserMessage.NavUp:
+                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)Keys.Up );
+                            break;
+                        case UserMessage.NavDown:
+                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)Keys.Down );
                             break;
                     }
 
