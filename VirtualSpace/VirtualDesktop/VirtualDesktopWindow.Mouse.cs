@@ -10,10 +10,15 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Config;
 using VirtualSpace.Helpers;
+using VirtualSpace.UIA;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
 
@@ -178,50 +183,93 @@ namespace VirtualSpace.VirtualDesktop
                         User32.SwitchToThisWindow( _selectedWindow.Handle, true );
                     }
 
+                    void WindowAction( Const.MouseAction.Action action )
+                    {
+                        switch ( action )
+                        {
+                            case Const.MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
+                                ActiveWindow();
+                                MainWindow.HideAll();
+                                break;
+                            case Const.MouseAction.Action.WindowActiveDesktopVisibleOnly:
+                                ActiveWindow();
+                                break;
+                            case Const.MouseAction.Action.WindowClose:
+                                CloseSelectedWindow( _selectedWindow );
+                                break;
+                            case Const.MouseAction.Action.ContextMenu:
+                                Menus.ThumbCtm( new MenuInfo
+                                {
+                                    Vw = _selectedWindow,
+                                    Sender = sender,
+                                    Location = e.Location,
+                                    Self = this
+                                } );
+                                break;
+                            case Const.MouseAction.Action.DoNothing:
+                                break;
+                            default:
+                                ActiveWindow();
+                                MainWindow.HideAll();
+                                break;
+                        }
+                    }
+
                     switch ( e.Button )
                     {
                         case MouseButtons.Left:
-                            ActiveWindow();
-                            MainWindow.HideAll();
+                            WindowAction( ConfigManager.Configs.MouseActions[Const.MouseAction.WINDOW_LEFT_CLICK] );
                             break;
                         case MouseButtons.Middle:
-                            ActiveWindow();
+                            WindowAction( ConfigManager.Configs.MouseActions[Const.MouseAction.WINDOW_MIDDLE_CLICK] );
                             break;
                         case MouseButtons.Right:
-
-                            Menus.ThumbCtm( new MenuInfo
-                            {
-                                Vw = _selectedWindow,
-                                Sender = sender,
-                                Location = e.Location,
-                                Self = this
-                            } );
-
+                            WindowAction( ConfigManager.Configs.MouseActions[Const.MouseAction.WINDOW_RIGHT_CLICK] );
                             break;
                     }
                 }
                 else // click on a virtual desktop
                 {
+                    void DesktopAction( Const.MouseAction.Action action )
+                    {
+                        switch ( action )
+                        {
+                            case Const.MouseAction.Action.DesktopVisibleAndCloseView:
+                                SwitchDesktop();
+                                MainWindow.HideAll();
+                                break;
+                            case Const.MouseAction.Action.DesktopVisibleOnly:
+                                SwitchDesktop();
+                                break;
+                            case Const.MouseAction.Action.ContextMenu:
+                                Menus.VdCtm( new MenuInfo
+                                    {
+                                        Sender = sender,
+                                        Location = e.Location,
+                                        Self = this,
+                                        Vdws = _virtualDesktops
+                                    }
+                                );
+                                break;
+                            case Const.MouseAction.Action.DoNothing:
+                                break;
+                            default:
+                                SwitchDesktop();
+                                MainWindow.HideAll();
+                                break;
+                        }
+                    }
+
                     switch ( e.Button )
                     {
                         case MouseButtons.Left:
-                            SwitchDesktop();
-                            MainWindow.HideAll();
+                            DesktopAction( ConfigManager.Configs.MouseActions[Const.MouseAction.DESKTOP_LEFT_CLICK] );
                             break;
                         case MouseButtons.Middle:
-                            SwitchDesktop();
+                            DesktopAction( ConfigManager.Configs.MouseActions[Const.MouseAction.DESKTOP_MIDDLE_CLICK] );
                             break;
                         case MouseButtons.Right:
-
-                            Menus.VdCtm( new MenuInfo
-                                {
-                                    Sender = sender,
-                                    Location = e.Location,
-                                    Self = this,
-                                    Vdws = _virtualDesktops
-                                }
-                            );
-
+                            DesktopAction( ConfigManager.Configs.MouseActions[Const.MouseAction.DESKTOP_RIGHT_CLICK] );
                             break;
                     }
                 }
@@ -283,6 +331,40 @@ namespace VirtualSpace.VirtualDesktop
         private static void Swap<T>( IList<T> list, int indexA, int indexB )
         {
             ( list[indexA], list[indexB] ) = ( list[indexB], list[indexA] );
+        }
+
+        public async void CloseSelectedWindow( VisibleWindow vw )
+        {
+            if ( vw.Classname == Const.WindowsUiCoreWindow )
+            {
+                Uia.CloseButtonInvokeByWindowHandle( vw.Handle );
+            }
+            else if ( vw.CoreUiWindowHandle != default )
+            {
+                User32.ShowWindow( vw.Handle, 0 );
+                User32.ShowWindow( vw.CoreUiWindowHandle, 0 );
+                User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
+                User32.PostMessage( vw.CoreUiWindowHandle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
+            }
+            else
+            {
+                User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
+            }
+
+            await Task.Run( () =>
+            {
+                var sw = Stopwatch.StartNew();
+                while ( sw.ElapsedMilliseconds < Const.WindowCloseTimeout )
+                {
+                    Thread.Sleep( 100 );
+                    // if ( User32.IsWindow( vw.Handle ) ) continue; // 严格的判断
+                    if ( User32.IsWindowVisible( vw.Handle ) ) continue; // 宽松的判断
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this} );
+                    return;
+                }
+
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this} );
+            } );
         }
     }
 }

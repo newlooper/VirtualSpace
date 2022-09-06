@@ -218,4 +218,25 @@ possible reason:
   <data name="KB.Hotkey.KeyCheck" xml:space="preserve">
     <value>Must choose a none-modifier Key.</value>
   </data>
+  <data name="Mouse.Action.DoNothing" xml:space="preserve">
+    <value>Do Nothing</value>
+  </data>
+  <data name="Mouse.Action.DesktopVisibleAndCloseView" xml:space="preserve">
+    <value>Switch Virtual Desktop And Close View</value>
+  </data>
+  <data name="Mouse.Action.DesktopVisibleOnly" xml:space="preserve">
+    <value>Switch Virtual Desktop Only</value>
+  </data>
+  <data name="Mouse.Action.ContextMenu" xml:space="preserve">
+    <value>Show Context Menu</value>
+  </data>
+  <data name="Mouse.Action.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
+    <value>Active Window, Switch Virtual Desktop And Close View</value>
+  </data>
+  <data name="Mouse.Action.WindowActiveDesktopVisibleOnly" xml:space="preserve">
+    <value>Active Window, Switch Virtual Desktop Only</value>
+  </data>
+  <data name="Mouse.Action.WindowClose" xml:space="preserve">
+    <value>Close Window</value>
+  </data>
 </root>

@@ -205,5 +205,11 @@ namespace VirtualSpace
         {
             tb_hk_tip.Clear();
         }
+
+        private void KeyboardTopNodeExpand()
+        {
+            tv_keyboard.Nodes[0].Expand();
+            tv_keyboard.Nodes[1].Expand();
+        }
     }
 }

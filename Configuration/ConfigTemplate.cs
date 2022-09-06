@@ -42,5 +42,15 @@ namespace VirtualSpace.Config
             {Const.Hotkey.NAV_UP, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_UP].Item2}},
             {Const.Hotkey.NAV_DOWN, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_DOWN].Item2}}
         };
+
+        public Dictionary<string, Const.MouseAction.Action>? MouseActions { get; set; } = new()
+        {
+            {Const.MouseAction.DESKTOP_LEFT_CLICK, Const.MouseAction.Action.DesktopVisibleAndCloseView},
+            {Const.MouseAction.DESKTOP_MIDDLE_CLICK, Const.MouseAction.Action.DesktopVisibleOnly},
+            {Const.MouseAction.DESKTOP_RIGHT_CLICK, Const.MouseAction.Action.ContextMenu},
+            {Const.MouseAction.WINDOW_LEFT_CLICK, Const.MouseAction.Action.WindowActiveDesktopVisibleAndCloseView},
+            {Const.MouseAction.WINDOW_MIDDLE_CLICK, Const.MouseAction.Action.WindowActiveDesktopVisibleOnly},
+            {Const.MouseAction.WINDOW_RIGHT_CLICK, Const.MouseAction.Action.ContextMenu},
+        };
     }
 }

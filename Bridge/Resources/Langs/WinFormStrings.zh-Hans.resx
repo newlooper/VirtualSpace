@@ -218,4 +218,25 @@ VirtualSpace(11)	Windows 11	21H2(22000)
   <data name="KB.Hotkey.KeyCheck" xml:space="preserve">
     <value>必须选择一个非修改类键。</value>
   </data>
+  <data name="Mouse.Action.DoNothing" xml:space="preserve">
+    <value>什么都不做</value>
+  </data>
+  <data name="Mouse.Action.DesktopVisibleOnly" xml:space="preserve">
+    <value>仅切换虚拟桌面</value>
+  </data>
+  <data name="Mouse.Action.DesktopVisibleAndCloseView" xml:space="preserve">
+    <value>切换虚拟桌面并关闭视图</value>
+  </data>
+  <data name="Mouse.Action.ContextMenu" xml:space="preserve">
+    <value>显示上下文菜单</value>
+  </data>
+  <data name="Mouse.Action.WindowClose" xml:space="preserve">
+    <value>关闭窗口</value>
+  </data>
+  <data name="Mouse.Action.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
+    <value>激活窗口，切换桌面并关闭视图</value>
+  </data>
+  <data name="Mouse.Action.WindowActiveDesktopVisibleOnly" xml:space="preserve">
+    <value>激活窗口，切换桌面</value>
+  </data>
 </root>

@@ -28,6 +28,9 @@
       <Compile Update="RuleForm.cs">
         <SubType>Form</SubType>
       </Compile>
+      <Compile Update="AppController.mouse.cs">
+        <SubType>Form</SubType>
+      </Compile>
     </ItemGroup>
 
 </Project>

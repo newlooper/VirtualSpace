@@ -127,6 +127,69 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Context Menu.
+        /// </summary>
+        internal static string Mouse_Action_ContextMenu {
+            get {
+                return ResourceManager.GetString("Mouse.Action.ContextMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch Virtual Desktop And Close View.
+        /// </summary>
+        internal static string Mouse_Action_DesktopVisibleAndCloseView {
+            get {
+                return ResourceManager.GetString("Mouse.Action.DesktopVisibleAndCloseView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch Virtual Desktop Only.
+        /// </summary>
+        internal static string Mouse_Action_DesktopVisibleOnly {
+            get {
+                return ResourceManager.GetString("Mouse.Action.DesktopVisibleOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do Nothing.
+        /// </summary>
+        internal static string Mouse_Action_DoNothing {
+            get {
+                return ResourceManager.GetString("Mouse.Action.DoNothing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Active Window, Switch Virtual Desktop And Close View.
+        /// </summary>
+        internal static string Mouse_Action_WindowActiveDesktopVisibleAndCloseView {
+            get {
+                return ResourceManager.GetString("Mouse.Action.WindowActiveDesktopVisibleAndCloseView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Active Window, Switch Virtual Desktop Only.
+        /// </summary>
+        internal static string Mouse_Action_WindowActiveDesktopVisibleOnly {
+            get {
+                return ResourceManager.GetString("Mouse.Action.WindowActiveDesktopVisibleOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close Window.
+        /// </summary>
+        internal static string Mouse_Action_WindowClose {
+            get {
+                return ResourceManager.GetString("Mouse.Action.WindowClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next row.
         /// </summary>
         internal static string Nav_CircleHType_NextRow {

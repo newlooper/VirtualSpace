@@ -17,13 +17,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using VirtualSpace.Config;
 using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
-using VirtualSpace.UIA;
 using VirtualSpace.VirtualDesktop.Api;
 
 namespace VirtualSpace.VirtualDesktop
@@ -88,40 +84,9 @@ namespace VirtualSpace.VirtualDesktop
                 Text = Agent.Langs.GetString( "VDW.CTM.Window.Close" )
             };
 
-            async void OnCloseWindowClick( object? s, EventArgs evt )
+            void OnCloseWindowClick( object? s, EventArgs evt )
             {
-                if ( mi.Vw.Classname == Const.WindowsUiCoreWindow )
-                {
-                    Uia.CloseButtonInvokeByWindowHandle( mi.Vw.Handle );
-                }
-                else if ( mi.Vw.CoreUiWindowHandle != default )
-                {
-                    User32.ShowWindow( mi.Vw.Handle, 0 );
-                    User32.ShowWindow( mi.Vw.CoreUiWindowHandle, 0 );
-                    User32.PostMessage( mi.Vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
-                    User32.PostMessage( mi.Vw.CoreUiWindowHandle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
-                }
-                else
-                {
-                    User32.PostMessage( mi.Vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
-                    // User32.PostMessage( mi.Vw.Handle, WinMsg.WM_CLOSE, 0, 0 );
-                    // User32.PostMessage( mi.Vw.Handle, WinMsg.WM_QUIT, 0, 0 );
-                    // User32.PostMessage( mi.Vw.Handle, WinMsg.WM_DESTROY, 0, 0 );
-                }
-
-                await Task.Run( () =>
-                {
-                    var sw = Stopwatch.StartNew();
-                    while ( sw.ElapsedMilliseconds < Const.WindowCloseTimeout )
-                    {
-                        Thread.Sleep( 100 );
-                        if ( User32.IsWindow( mi.Vw.Handle ) ) continue;
-                        VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
-                        return;
-                    }
-
-                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
-                } );
+                mi.Self.CloseSelectedWindow( mi.Vw );
             }
 
             closeWindow.Click += OnCloseWindowClick;

@@ -127,6 +127,69 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 显示上下文菜单.
+        /// </summary>
+        internal static string Mouse_Action_ContextMenu {
+            get {
+                return ResourceManager.GetString("Mouse.Action.ContextMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 切换虚拟桌面并关闭视图.
+        /// </summary>
+        internal static string Mouse_Action_DesktopVisibleAndCloseView {
+            get {
+                return ResourceManager.GetString("Mouse.Action.DesktopVisibleAndCloseView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 仅切换虚拟桌面.
+        /// </summary>
+        internal static string Mouse_Action_DesktopVisibleOnly {
+            get {
+                return ResourceManager.GetString("Mouse.Action.DesktopVisibleOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 什么都不做.
+        /// </summary>
+        internal static string Mouse_Action_DoNothing {
+            get {
+                return ResourceManager.GetString("Mouse.Action.DoNothing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 激活窗口，切换桌面并关闭视图.
+        /// </summary>
+        internal static string Mouse_Action_WindowActiveDesktopVisibleAndCloseView {
+            get {
+                return ResourceManager.GetString("Mouse.Action.WindowActiveDesktopVisibleAndCloseView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 激活窗口，切换桌面.
+        /// </summary>
+        internal static string Mouse_Action_WindowActiveDesktopVisibleOnly {
+            get {
+                return ResourceManager.GetString("Mouse.Action.WindowActiveDesktopVisibleOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 关闭窗口.
+        /// </summary>
+        internal static string Mouse_Action_WindowClose {
+            get {
+                return ResourceManager.GetString("Mouse.Action.WindowClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 切换到下一行.
         /// </summary>
         internal static string Nav_CircleHType_NextRow {

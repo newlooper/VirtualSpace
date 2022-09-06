@@ -76,7 +76,10 @@ namespace VirtualSpace.Config
             public const string NAV_DOWN            = "hk_node_nav_down";
 
             ////////////////////////////////////////////////////////////////
-            // 可由热键调用的程序功能表，信息包括与 UserMessage 的映射以及友好名称等
+            // 可由热键调用的程序功能表
+            // tuple.Item1 => friendly name
+            // tuple.Item2 => UserMessageId
+            // tuple.Item3 => alternate hotkey, 由程序保留，只能在源码中修改
             public static Dictionary<string, Tuple<string, int, string>> Info = new()
             {
                 {RISE_VIEW, new Tuple<string, int, string>( "Rise MainView", UserMessage.RiseView, "LWin+Tab" )},
@@ -95,6 +98,41 @@ namespace VirtualSpace.Config
                 {NAV_UP, new Tuple<string, int, string>( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" )},
                 {NAV_DOWN, new Tuple<string, int, string>( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" )}
             };
+        }
+
+        public static class MouseAction
+        {
+            ///////////////////////////////////////////////////
+            // 值与控件名称一一对应，若控件名被修改，则此处也须对应改变
+            public const string DESKTOP_LEFT_CLICK   = "mouse_node_d_l";
+            public const string DESKTOP_MIDDLE_CLICK = "mouse_node_d_m";
+            public const string DESKTOP_RIGHT_CLICK  = "mouse_node_d_r";
+            public const string WINDOW_LEFT_CLICK    = "mouse_node_w_l";
+            public const string WINDOW_MIDDLE_CLICK  = "mouse_node_w_m";
+            public const string WINDOW_RIGHT_CLICK   = "mouse_node_w_r";
+
+            ////////////////////////////////////////////////////////////////
+            // 鼠标动作表，信息包含友好名称和默认行为
+            public static Dictionary<string, Tuple<string, Action>> Info = new()
+            {
+                {DESKTOP_LEFT_CLICK, new Tuple<string, Action>( "Mouse LeftClick on VirtualDesktop", Action.DesktopVisibleAndCloseView )},
+                {DESKTOP_MIDDLE_CLICK, new Tuple<string, Action>( "Mouse MiddleClick on VirtualDesktop", Action.DesktopVisibleOnly )},
+                {DESKTOP_RIGHT_CLICK, new Tuple<string, Action>( "Mouse RightClick on VirtualDesktop", Action.ContextMenu )},
+                {WINDOW_LEFT_CLICK, new Tuple<string, Action>( "Mouse LeftClick on Window Thumbnail", Action.WindowActiveDesktopVisibleAndCloseView )},
+                {WINDOW_MIDDLE_CLICK, new Tuple<string, Action>( "Mouse MiddleClick on Window Thumbnail", Action.WindowActiveDesktopVisibleOnly )},
+                {WINDOW_RIGHT_CLICK, new Tuple<string, Action>( "Mouse RightClick on Window Thumbnail", Action.ContextMenu )},
+            };
+
+            public enum Action
+            {
+                DoNothing,
+                ContextMenu,
+                DesktopVisibleAndCloseView,
+                DesktopVisibleOnly,
+                WindowActiveDesktopVisibleAndCloseView,
+                WindowActiveDesktopVisibleOnly,
+                WindowClose
+            }
         }
     }
 }

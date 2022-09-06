@@ -63,8 +63,12 @@ namespace VirtualSpace
         public void BringToTop()
         {
             TopMost = true;
+
             ReadRules();
             ReadNavConfig();
+            KeyboardTopNodeExpand();
+            MouseTopNodeExpand();
+
             Show();
         }
 
@@ -92,6 +96,14 @@ namespace VirtualSpace
                     (TreeNode)Resources.GetObject( "tv_keyboard.Nodes" ),
                     (TreeNode)Resources.GetObject( "tv_keyboard.Nodes1" )
                 } );
+                _instance.KeyboardTopNodeExpand();
+
+                _instance.tv_mouse.Nodes.Clear();
+                _instance.tv_mouse.Nodes.AddRange( new[]
+                {
+                    (TreeNode)Resources.GetObject( "tv_mouse.Nodes" ),
+                } );
+                _instance.MouseTopNodeExpand();
 
                 SetControlLang( _instance, lang );
             }
@@ -360,6 +372,11 @@ namespace VirtualSpace
 
                 Process.Start( startInfo );
             }
+        }
+
+        private void closeThisWindowToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            Hide();
         }
     }
 }
