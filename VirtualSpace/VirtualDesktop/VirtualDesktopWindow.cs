@@ -263,7 +263,7 @@ namespace VirtualSpace.VirtualDesktop
             var ui       = VirtualDesktopManager.Ui;
             var dpi      = SysInfo.Dpi;
             var location = MainWindow.GetCellLocation( VirtualDesktopManager.GetMatrixIndexByVdIndex( VdIndex ) );
-            var point    = new Point( (int)( ( location.X + ui.VDWBorderSize ) * dpi[0] ), (int)( ( location.Y + ui.VDWBorderSize ) * dpi[1] ) );
+            var point    = new Point( (int)( ( location.X + ui.VDWBorderSize ) * dpi.ScaleX ), (int)( ( location.Y + ui.VDWBorderSize ) * dpi.ScaleY ) );
             Location = point;
             _fixedPosition = point;
             _desktopName = DesktopWrapper.DesktopNameFromGuid( VdId );
@@ -273,9 +273,24 @@ namespace VirtualSpace.VirtualDesktop
 
         private void pbWallpaper_Paint( object sender, PaintEventArgs e )
         {
+            var ui  = ConfigManager.CurrentProfile.UI;
+            var str = "";
+
+            if ( ui.ShowVdName )
+            {
+                str += _desktopName;
+            }
+
+            if ( ui.ShowVdIndex )
+            {
+                str += ui.ShowVdIndexType == 0 ? $"[{VdIndex}]" : $"[{VdIndex + 1}]";
+            }
+
+            if ( str == "" ) return;
+
             using var font = new Font( "Segoe UI emoji", 10 );
             e.Graphics.DrawString(
-                $"{_desktopName}[{VdIndex}]",
+                str,
                 font,
                 Brushes.Beige,
                 new Point( 2, Height - 30 )

@@ -9,26 +9,21 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
-using System.Drawing;
-using System.Security.Principal;
+using ConfigManager = VirtualSpace.Config.Manager;
 
-namespace VirtualSpace.Helpers
+namespace VirtualSpace
 {
-    public static class SysInfo
+    public partial class AppController
     {
-        public static (float ScaleX, float ScaleY) Dpi => GetDpi();
-
-        public static bool IsAdministrator()
+        private void ReadClusterConfig()
         {
-            var current          = WindowsIdentity.GetCurrent();
-            var windowsPrincipal = new WindowsPrincipal( current );
-            return windowsPrincipal.IsInRole( WindowsBuiltInRole.Administrator );
+            chb_HideMainViewIfItsShown.Checked = ConfigManager.Configs.Cluster.HideMainViewIfItsShown;
         }
 
-        private static (float ScaleX, float ScaleY) GetDpi()
+        private void chb_HideMainViewIfItsShown_CheckedChanged( object sender, EventArgs e )
         {
-            using var g = Graphics.FromHwnd( IntPtr.Zero );
-            return ( g.DpiX / 96, g.DpiY / 96 );
+            ConfigManager.Configs.Cluster.HideMainViewIfItsShown = chb_HideMainViewIfItsShown.Checked;
+            ConfigManager.Save();
         }
     }
 }

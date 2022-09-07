@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using VirtualSpace.Config;
 using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
@@ -179,7 +180,7 @@ namespace VirtualSpace.VirtualDesktop
             var desktopName = new ToolStripTextBox {Text = currentName, AutoSize = false, Width = 200};
             desktopName.KeyPress += ( s, evt ) =>
             {
-                if ( evt.KeyChar == 13 )
+                if ( evt.KeyChar == (char)Keys.Enter )
                 {
                     if ( currentName != desktopName.Text )
                     {
@@ -225,7 +226,7 @@ namespace VirtualSpace.VirtualDesktop
                 _ = User32.GetWindowThreadProcessId( handle, out var pId );
                 var process = Process.GetProcessById( pId );
 
-                var sb = new StringBuilder( 1024 );
+                var sb = new StringBuilder( Const.WindowTitleMaxLength );
                 User32.GetWindowText( handle, sb, sb.Capacity );
                 var title = sb.ToString();
 

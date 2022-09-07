@@ -65,6 +65,7 @@ namespace VirtualSpace
             this.panel_General = new System.Windows.Forms.Panel();
             this.lb_dummy_Placeholder = new System.Windows.Forms.Label();
             this.gb_Cluster = new System.Windows.Forms.GroupBox();
+            this.chb_HideMainViewIfItsShown = new System.Windows.Forms.CheckBox();
             this.gb_Mouse = new System.Windows.Forms.GroupBox();
             this.tc_Mouse = new System.Windows.Forms.TabControl();
             this.tp_mouse_action = new System.Windows.Forms.TabPage();
@@ -98,6 +99,12 @@ namespace VirtualSpace
             this.mainTabs = new System.Windows.Forms.TabControl();
             this.MT_UI = new System.Windows.Forms.TabPage();
             this.panel_UI = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lb_ui_vd_view = new System.Windows.Forms.GroupBox();
+            this.rb_vd_index_1 = new System.Windows.Forms.RadioButton();
+            this.rb_vd_index_0 = new System.Windows.Forms.RadioButton();
+            this.chb_show_vd_index = new System.Windows.Forms.CheckBox();
+            this.chb_show_vd_name = new System.Windows.Forms.CheckBox();
             this.gb_DesktopArrangement = new System.Windows.Forms.GroupBox();
             this.tlp_DesktopArrangement = new System.Windows.Forms.TableLayoutPanel();
             this.btn_m7 = new System.Windows.Forms.Button();
@@ -165,6 +172,7 @@ namespace VirtualSpace
             this.logTabError.SuspendLayout();
             this.MT_General.SuspendLayout();
             this.panel_General.SuspendLayout();
+            this.gb_Cluster.SuspendLayout();
             this.gb_Mouse.SuspendLayout();
             this.tc_Mouse.SuspendLayout();
             this.tp_mouse_action.SuspendLayout();
@@ -177,6 +185,7 @@ namespace VirtualSpace
             this.mainTabs.SuspendLayout();
             this.MT_UI.SuspendLayout();
             this.panel_UI.SuspendLayout();
+            this.lb_ui_vd_view.SuspendLayout();
             this.gb_DesktopArrangement.SuspendLayout();
             this.tlp_DesktopArrangement.SuspendLayout();
             this.MT_Rules.SuspendLayout();
@@ -366,8 +375,16 @@ namespace VirtualSpace
             // gb_Cluster
             // 
             resources.ApplyResources(this.gb_Cluster, "gb_Cluster");
+            this.gb_Cluster.Controls.Add(this.chb_HideMainViewIfItsShown);
             this.gb_Cluster.Name = "gb_Cluster";
             this.gb_Cluster.TabStop = false;
+            // 
+            // chb_HideMainViewIfItsShown
+            // 
+            resources.ApplyResources(this.chb_HideMainViewIfItsShown, "chb_HideMainViewIfItsShown");
+            this.chb_HideMainViewIfItsShown.Name = "chb_HideMainViewIfItsShown";
+            this.chb_HideMainViewIfItsShown.UseVisualStyleBackColor = true;
+            this.chb_HideMainViewIfItsShown.CheckedChanged += new System.EventHandler(this.chb_HideMainViewIfItsShown_CheckedChanged);
             // 
             // gb_Mouse
             // 
@@ -686,8 +703,55 @@ namespace VirtualSpace
             // panel_UI
             // 
             resources.ApplyResources(this.panel_UI, "panel_UI");
+            this.panel_UI.Controls.Add(this.label1);
+            this.panel_UI.Controls.Add(this.lb_ui_vd_view);
             this.panel_UI.Controls.Add(this.gb_DesktopArrangement);
             this.panel_UI.Name = "panel_UI";
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
+            // 
+            // lb_ui_vd_view
+            // 
+            resources.ApplyResources(this.lb_ui_vd_view, "lb_ui_vd_view");
+            this.lb_ui_vd_view.Controls.Add(this.rb_vd_index_1);
+            this.lb_ui_vd_view.Controls.Add(this.rb_vd_index_0);
+            this.lb_ui_vd_view.Controls.Add(this.chb_show_vd_index);
+            this.lb_ui_vd_view.Controls.Add(this.chb_show_vd_name);
+            this.lb_ui_vd_view.Name = "lb_ui_vd_view";
+            this.lb_ui_vd_view.TabStop = false;
+            // 
+            // rb_vd_index_1
+            // 
+            resources.ApplyResources(this.rb_vd_index_1, "rb_vd_index_1");
+            this.rb_vd_index_1.Name = "rb_vd_index_1";
+            this.rb_vd_index_1.TabStop = true;
+            this.rb_vd_index_1.UseVisualStyleBackColor = true;
+            this.rb_vd_index_1.CheckedChanged += new System.EventHandler(this.rb_vd_index_1_CheckedChanged);
+            // 
+            // rb_vd_index_0
+            // 
+            resources.ApplyResources(this.rb_vd_index_0, "rb_vd_index_0");
+            this.rb_vd_index_0.Name = "rb_vd_index_0";
+            this.rb_vd_index_0.TabStop = true;
+            this.rb_vd_index_0.UseVisualStyleBackColor = true;
+            this.rb_vd_index_0.CheckedChanged += new System.EventHandler(this.rb_vd_index_0_CheckedChanged);
+            // 
+            // chb_show_vd_index
+            // 
+            resources.ApplyResources(this.chb_show_vd_index, "chb_show_vd_index");
+            this.chb_show_vd_index.Name = "chb_show_vd_index";
+            this.chb_show_vd_index.UseVisualStyleBackColor = true;
+            this.chb_show_vd_index.CheckedChanged += new System.EventHandler(this.chb_show_vd_index_CheckedChanged);
+            // 
+            // chb_show_vd_name
+            // 
+            resources.ApplyResources(this.chb_show_vd_name, "chb_show_vd_name");
+            this.chb_show_vd_name.Name = "chb_show_vd_name";
+            this.chb_show_vd_name.UseVisualStyleBackColor = true;
+            this.chb_show_vd_name.CheckedChanged += new System.EventHandler(this.chb_show_vd_name_CheckedChanged);
             // 
             // gb_DesktopArrangement
             // 
@@ -1149,6 +1213,7 @@ namespace VirtualSpace
             this.MT_General.ResumeLayout(false);
             this.panel_General.ResumeLayout(false);
             this.panel_General.PerformLayout();
+            this.gb_Cluster.ResumeLayout(false);
             this.gb_Mouse.ResumeLayout(false);
             this.tc_Mouse.ResumeLayout(false);
             this.tp_mouse_action.ResumeLayout(false);
@@ -1166,6 +1231,8 @@ namespace VirtualSpace
             this.MT_UI.ResumeLayout(false);
             this.panel_UI.ResumeLayout(false);
             this.panel_UI.PerformLayout();
+            this.lb_ui_vd_view.ResumeLayout(false);
+            this.lb_ui_vd_view.PerformLayout();
             this.gb_DesktopArrangement.ResumeLayout(false);
             this.tlp_DesktopArrangement.ResumeLayout(false);
             this.MT_Rules.ResumeLayout(false);
@@ -1305,5 +1372,12 @@ namespace VirtualSpace
         private System.Windows.Forms.Button btn_mouse_save;
         private System.Windows.Forms.Label lb_mouse_action;
         private System.Windows.Forms.ComboBox cb_mouse_func;
+        private System.Windows.Forms.GroupBox lb_ui_vd_view;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RadioButton rb_vd_index_1;
+        private System.Windows.Forms.RadioButton rb_vd_index_0;
+        private System.Windows.Forms.CheckBox chb_show_vd_index;
+        private System.Windows.Forms.CheckBox chb_show_vd_name;
+        private System.Windows.Forms.CheckBox chb_HideMainViewIfItsShown;
     }
 }

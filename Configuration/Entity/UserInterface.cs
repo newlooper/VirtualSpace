@@ -13,17 +13,33 @@ namespace VirtualSpace.Config.Entity
 {
     public class UserInterface
     {
-        private byte    _canvasOpacity;
-        private int     _desktopArrangement;
-        private int     _vDwBorderSize;
-        private int     _vDwMargin;
-        private int     _vDwPadding;
-        public  Colour? CanvasBackColor       { get; set; }
-        public  Colour? VDWDefaultBackColor   { get; set; }
-        public  Colour? VDWCurrentBackColor   { get; set; }
-        public  Colour? VDWHighlightBackColor { get; set; }
-        public  float   VDWDragTargetOpacity  { get; set; }
-        public  string  Language              { get; set; }
+        private byte _canvasOpacity;
+        private int  _desktopArrangement;
+        private int  _vDwBorderSize;
+        private int  _vDwMargin;
+        private int  _vDwPadding;
+        private byte _showVdIndexType;
+
+        public Colour? CanvasBackColor       { get; set; }
+        public Colour? VDWDefaultBackColor   { get; set; }
+        public Colour? VDWCurrentBackColor   { get; set; }
+        public Colour? VDWHighlightBackColor { get; set; }
+        public float   VDWDragTargetOpacity  { get; set; }
+        public string  Language              { get; set; }
+        public bool    ShowVdName            { get; set; } = true;
+        public bool    ShowVdIndex           { get; set; } = true;
+
+        public byte ShowVdIndexType
+        {
+            get => _showVdIndexType;
+            set
+            {
+                if ( value == 0 || value == 1 )
+                    _showVdIndexType = value;
+                else
+                    _showVdIndexType = 0;
+            }
+        }
 
         public int VDWPadding
         {

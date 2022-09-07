@@ -32,7 +32,10 @@ namespace VirtualSpace.Config.Profiles
                 ThumbMargin = new Margin {Top = 20, Left = 10},
                 ThumbDragSourceOpacity = 150,
                 Language = "en",
-                DesktopArrangement = 0
+                DesktopArrangement = 0,
+                ShowVdName = true,
+                ShowVdIndex = true,
+                ShowVdIndexType = 0
             };
             DaemonAutoStart = true;
             Mouse = new Mouse

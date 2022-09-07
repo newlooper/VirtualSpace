@@ -51,8 +51,8 @@ namespace VirtualSpace.VirtualDesktop
             var vdCount    = DesktopWrapper.Count;
             var dpi        = SysInfo.Dpi;
             var size       = MainWindow.MainGridCellSize;
-            var vdwWidth   = ( size.Width - 2 * Ui.VDWBorderSize ) * dpi[0] + 1;
-            var vdwHeight  = ( size.Height - 2 * Ui.VDWBorderSize ) * dpi[1] + 1;
+            var vdwWidth   = ( size.Width - 2 * Ui.VDWBorderSize ) * dpi.ScaleX + 1;
+            var vdwHeight  = ( size.Height - 2 * Ui.VDWBorderSize ) * dpi.ScaleY + 1;
             var commonSize = new Size( (int)vdwWidth, (int)vdwHeight );
 
             var survivalDesktops = new List<VirtualDesktopWindow>();
@@ -106,8 +106,8 @@ namespace VirtualSpace.VirtualDesktop
             var vdCount    = DesktopWrapper.Count;
             var dpi        = SysInfo.Dpi;
             var size       = MainWindow.MainGridCellSize;
-            var vdwWidth   = ( size.Width - 2 * Ui.VDWBorderSize ) * dpi[0] + 1;
-            var vdwHeight  = ( size.Height - 2 * Ui.VDWBorderSize ) * dpi[1] + 1;
+            var vdwWidth   = ( size.Width - 2 * Ui.VDWBorderSize ) * dpi.ScaleX + 1;
+            var vdwHeight  = ( size.Height - 2 * Ui.VDWBorderSize ) * dpi.ScaleY + 1;
             var commonSize = new Size( (int)vdwWidth, (int)vdwHeight );
 
             var tasks = new List<Task>();

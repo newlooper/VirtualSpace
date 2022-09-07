@@ -139,8 +139,8 @@ namespace VirtualSpace
             for ( var i = 0; i < cells.Count; i++ )
             {
                 var topLeft = cells[i].TranslatePoint( new Point(), _instance );
-                topLeft = new Point( topLeft.X * dpi[0], topLeft.Y * dpi[1] );
-                var bottomRight = new Point( topLeft.X + cells[i].RenderSize.Width * dpi[0], topLeft.Y + cells[i].RenderSize.Height * dpi[1] );
+                topLeft = new Point( topLeft.X * dpi.ScaleX, topLeft.Y * dpi.ScaleY );
+                var bottomRight = new Point( topLeft.X + cells[i].RenderSize.Width * dpi.ScaleX, topLeft.Y + cells[i].RenderSize.Height * dpi.ScaleY );
                 var rect        = new Rect( topLeft, bottomRight );
                 if ( rect.Contains( p ) )
                 {
