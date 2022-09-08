@@ -60,6 +60,24 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current Desktop: .
+        /// </summary>
+        internal static string Cluster_Notification_SVD_Current {
+            get {
+                return ResourceManager.GetString("Cluster.Notification.SVD.Current", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Desktop: .
+        /// </summary>
+        internal static string Cluster_Notification_SVD_Last {
+            get {
+                return ResourceManager.GetString("Cluster.Notification.SVD.Last", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Window 【{0}】 match rule 【{1}】, but error occur when moving.
         ///possible reason:
         ///- window invalid.

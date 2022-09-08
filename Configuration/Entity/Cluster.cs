@@ -13,6 +13,7 @@ namespace VirtualSpace.Config.Entity
 {
     public class Cluster
     {
-        public bool HideMainViewIfItsShown { get; set; } = false;
+        public bool HideMainViewIfItsShown  { get; set; } = false;
+        public bool NotificationOnVdChanged { get; set; } = false;
     }
 }

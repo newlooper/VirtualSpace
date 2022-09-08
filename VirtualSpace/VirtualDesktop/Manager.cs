@@ -199,7 +199,7 @@ namespace VirtualSpace.VirtualDesktop
                 var vdwList = GetAllVirtualDesktops();
                 try
                 {
-                    var fallback = vdwList[DesktopWrapper.IndexFromGuid( vdn.TargetId )];
+                    var fallback = vdwList[DesktopWrapper.IndexFromGuid( vdn.NewId )];
                     ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {fallback} );
                 }
                 catch ( Exception e )

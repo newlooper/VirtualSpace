@@ -60,6 +60,24 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 当前桌面：.
+        /// </summary>
+        internal static string Cluster_Notification_SVD_Current {
+            get {
+                return ResourceManager.GetString("Cluster.Notification.SVD.Current", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 上一个桌面：.
+        /// </summary>
+        internal static string Cluster_Notification_SVD_Last {
+            get {
+                return ResourceManager.GetString("Cluster.Notification.SVD.Last", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 窗口 【{0}】 匹配规则 【{1}】，但移动时发生错误。
         ///可能的原因：
         ///- 窗口无效。

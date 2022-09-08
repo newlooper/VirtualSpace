@@ -239,4 +239,10 @@ possible reason:
   <data name="Mouse.Action.WindowClose" xml:space="preserve">
     <value>Close Window</value>
   </data>
+  <data name="Cluster.Notification.SVD.Current" xml:space="preserve">
+    <value>Current Desktop: </value>
+  </data>
+  <data name="Cluster.Notification.SVD.Last" xml:space="preserve">
+    <value>Last Desktop: </value>
+  </data>
 </root>

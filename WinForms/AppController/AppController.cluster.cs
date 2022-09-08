@@ -18,11 +18,18 @@ namespace VirtualSpace
         private void ReadClusterConfig()
         {
             chb_HideMainViewIfItsShown.Checked = ConfigManager.Configs.Cluster.HideMainViewIfItsShown;
+            chb_notify_vd_changed.Checked = ConfigManager.Configs.Cluster.NotificationOnVdChanged;
         }
 
         private void chb_HideMainViewIfItsShown_CheckedChanged( object sender, EventArgs e )
         {
             ConfigManager.Configs.Cluster.HideMainViewIfItsShown = chb_HideMainViewIfItsShown.Checked;
+            ConfigManager.Save();
+        }
+
+        private void chb_notify_vd_changed_CheckedChanged( object sender, EventArgs e )
+        {
+            ConfigManager.Configs.Cluster.NotificationOnVdChanged = chb_notify_vd_changed.Checked;
             ConfigManager.Save();
         }
     }

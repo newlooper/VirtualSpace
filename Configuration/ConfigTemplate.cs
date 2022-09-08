@@ -53,6 +53,10 @@ namespace VirtualSpace.Config
             {Const.MouseAction.WINDOW_RIGHT_CLICK, Const.MouseAction.Action.ContextMenu},
         };
 
-        public Cluster Cluster { get; set; } = new Cluster {HideMainViewIfItsShown = false};
+        public Cluster Cluster { get; set; } = new Cluster
+        {
+            HideMainViewIfItsShown = false,
+            NotificationOnVdChanged = false
+        };
     }
 }

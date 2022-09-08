@@ -10,9 +10,14 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Globalization;
 using System.Threading.Channels;
+using System.Windows.Media;
+using Notification.Wpf;
 using VirtualDesktop;
+using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
+using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace.VirtualDesktop.Api
 {
@@ -32,7 +37,7 @@ namespace VirtualSpace.VirtualDesktop.Api
                 VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
                 {
                     Type = VirtualDesktopNotificationType.DELETED,
-                    TargetId = e.Fallback.GetId()
+                    NewId = e.Fallback.GetId()
                 } );
             };
 
@@ -41,7 +46,8 @@ namespace VirtualSpace.VirtualDesktop.Api
                 VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
                 {
                     Type = VirtualDesktopNotificationType.CURRENT_CHANGED,
-                    TargetId = e.NewDesktop.GetId()
+                    NewId = e.NewDesktop.GetId(),
+                    OldId = e.OldDesktop.GetId()
                 } );
             };
 
@@ -73,6 +79,21 @@ namespace VirtualSpace.VirtualDesktop.Api
                         case VirtualDesktopNotificationType.CURRENT_CHANGED:
                             if ( MainWindow.IsShowing() )
                                 VirtualDesktopManager.ResetAllBackground();
+
+                            if ( ConfigManager.Configs.Cluster.NotificationOnVdChanged )
+                            {
+                                CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
+                                Logger.Notify( new NotifyObject
+                                {
+                                    Title = Agent.Langs.GetString( "Cluster.Notification.SVD.Current" ) + DesktopWrapper.DesktopNameFromGuid( vdn.NewId ),
+                                    Message = Agent.Langs.GetString( "Cluster.Notification.SVD.Last" ) + DesktopWrapper.DesktopNameFromGuid( vdn.OldId ),
+                                    Background = new SolidColorBrush( Colors.DarkSlateGray ),
+                                    Foreground = new SolidColorBrush( Colors.White ),
+                                    Type = NotificationType.Notification,
+                                    ExpTime = TimeSpan.FromSeconds( 3 )
+                                } );
+                            }
+
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();

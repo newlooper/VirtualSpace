@@ -22,7 +22,8 @@ namespace VirtualSpace.Commons
 
     public class VirtualDesktopNotification
     {
-        public VirtualDesktopNotificationType Type     { get; set; }
-        public Guid                           TargetId { get; set; }
+        public VirtualDesktopNotificationType Type  { get; set; }
+        public Guid                           NewId { get; set; }
+        public Guid                           OldId { get; set; }
     }
 }
