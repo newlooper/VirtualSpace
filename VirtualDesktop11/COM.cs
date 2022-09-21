@@ -165,7 +165,13 @@ namespace VirtualDesktop
         void            MoveViewToDesktop( IApplicationView   view, IVirtualDesktop desktop );
         bool            CanViewMoveDesktops( IApplicationView view );
         IVirtualDesktop GetCurrentDesktop( IntPtr             hWndOrMon );
-        void            GetDesktops( IntPtr                   hWndOrMon, out IObjectArray desktops );
+
+        /////////////////////////////////////////////////////////////////
+        // COM Interface "B2F925B9-5A0F-4D2E-9F4D-2B1507593C10"
+        // for windows 11 22H2 (>22489) COM Interface require this func.
+        // for windows 11 21H2 (22000.xxx) this func must be commented
+        IObjectArray GetAllCurrentDesktops();
+        void         GetDesktops( IntPtr hWndOrMon, out IObjectArray desktops );
 
         [PreserveSig]
         int GetAdjacentDesktop( IVirtualDesktop from, int direction, out IVirtualDesktop desktop );
