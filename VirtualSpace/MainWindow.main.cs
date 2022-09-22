@@ -78,6 +78,11 @@ namespace VirtualSpace
             };
         }
 
+        public static void SendRestartMessage()
+        {
+            User32.SendMessage( _instance.Handle, (int)_instance._taskbarCreatedMessage, 0, 0 );
+        }
+
         protected override void OnSourceInitialized( EventArgs e )
         {
             base.OnSourceInitialized( e );

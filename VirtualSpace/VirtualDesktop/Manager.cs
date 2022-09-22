@@ -94,7 +94,16 @@ namespace VirtualSpace.VirtualDesktop
 
         public static void FixLayout()
         {
-            MainWindow.ResetMainGrid();
+            try
+            {
+                MainWindow.ResetMainGrid();
+            }
+            catch
+            {
+                MainWindow.SendRestartMessage();
+                return;
+            }
+
             SyncVirtualDesktops();
             ReOrder();
         }
