@@ -74,9 +74,12 @@ namespace VirtualSpace.VirtualDesktop.Api
                     switch ( vdn.Type )
                     {
                         case VirtualDesktopNotificationType.CREATED:
-                            if ( MainWindow.IsShowing() && !VirtualDesktopManager.IsBatchCreate )
+                            if ( !VirtualDesktopManager.IsBatchCreate )
                             {
-                                VirtualDesktopManager.ResetLayout();
+                                if ( MainWindow.IsShowing() )
+                                    VirtualDesktopManager.ResetLayout();
+                                else
+                                    VirtualDesktopManager.FixLayout();
                             }
 
                             break;
@@ -103,6 +106,11 @@ namespace VirtualSpace.VirtualDesktop.Api
                                     Type = NotificationType.Notification,
                                     ExpTime = TimeSpan.FromSeconds( 3 )
                                 } );
+                            }
+
+                            if ( ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon )
+                            {
+                                MainWindow.UpdateVDIndexOnTrayIcon( vdn.NewId );
                             }
 
                             break;

@@ -94,6 +94,9 @@ namespace VirtualSpace
         {
             Bootstrap();
 
+            if ( ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon )
+                UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
+
             VirtualDesktopManager.Bootstrap();
 
             if ( !( ConfigManager.CurrentProfile.HideOnStartup ||
@@ -399,6 +402,13 @@ namespace VirtualSpace
         public static bool IsShowing()
         {
             return _instance.IsVisible;
+        }
+
+        public static void UpdateVDIndexOnTrayIcon( Guid guid )
+        {
+            var i     = ConfigManager.CurrentProfile.DesktopOrder.IndexOf( guid );
+            var index = ConfigManager.CurrentProfile.UI.ShowVdIndexType == 0 ? i : i + 1;
+            _instance._acForm.UpdateVDIndexOnTrayIcon( index.ToString() );
         }
     }
 }

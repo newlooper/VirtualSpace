@@ -15,6 +15,7 @@ namespace VirtualSpace
     public interface IAppController
     {
         public void BringToTop();
-        public void SetMainWindowHandle( IntPtr handle );
+        public void SetMainWindowHandle( IntPtr     handle );
+        public void UpdateVDIndexOnTrayIcon( string index );
     }
 }

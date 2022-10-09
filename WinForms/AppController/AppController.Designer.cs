@@ -65,6 +65,7 @@ namespace VirtualSpace
             this.panel_General = new System.Windows.Forms.Panel();
             this.lb_dummy_Placeholder = new System.Windows.Forms.Label();
             this.gb_Cluster = new System.Windows.Forms.GroupBox();
+            this.chb_showVDIndexOnTrayIcon = new System.Windows.Forms.CheckBox();
             this.chb_notify_vd_changed = new System.Windows.Forms.CheckBox();
             this.chb_HideMainViewIfItsShown = new System.Windows.Forms.CheckBox();
             this.gb_Mouse = new System.Windows.Forms.GroupBox();
@@ -376,10 +377,18 @@ namespace VirtualSpace
             // gb_Cluster
             // 
             resources.ApplyResources(this.gb_Cluster, "gb_Cluster");
+            this.gb_Cluster.Controls.Add(this.chb_showVDIndexOnTrayIcon);
             this.gb_Cluster.Controls.Add(this.chb_notify_vd_changed);
             this.gb_Cluster.Controls.Add(this.chb_HideMainViewIfItsShown);
             this.gb_Cluster.Name = "gb_Cluster";
             this.gb_Cluster.TabStop = false;
+            // 
+            // chb_showVDIndexOnTrayIcon
+            // 
+            resources.ApplyResources(this.chb_showVDIndexOnTrayIcon, "chb_showVDIndexOnTrayIcon");
+            this.chb_showVDIndexOnTrayIcon.Name = "chb_showVDIndexOnTrayIcon";
+            this.chb_showVDIndexOnTrayIcon.UseVisualStyleBackColor = true;
+            this.chb_showVDIndexOnTrayIcon.CheckedChanged += new System.EventHandler(this.chb_showVDIndexOnTrayIcon_CheckedChanged);
             // 
             // chb_notify_vd_changed
             // 
@@ -1389,5 +1398,6 @@ namespace VirtualSpace
         private System.Windows.Forms.CheckBox chb_show_vd_name;
         private System.Windows.Forms.CheckBox chb_HideMainViewIfItsShown;
         private System.Windows.Forms.CheckBox chb_notify_vd_changed;
+        private System.Windows.Forms.CheckBox chb_showVDIndexOnTrayIcon;
     }
 }

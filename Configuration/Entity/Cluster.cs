@@ -15,5 +15,6 @@ namespace VirtualSpace.Config.Entity
     {
         public bool HideMainViewIfItsShown  { get; set; } = false;
         public bool NotificationOnVdChanged { get; set; } = false;
+        public bool ShowVDIndexOnTrayIcon   { get; set; } = false;
     }
 }
