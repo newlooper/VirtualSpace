@@ -119,6 +119,8 @@ namespace VirtualSpace
             _desktopCount = vdCount; // remember last count
             RowsCols = rowsCols;
             _instance.UpdateLayout();
+
+            VirtualDesktopManager.RebuildMatrixMap( RowsCols );
         }
 
         public static Point GetCellLocation( int index )

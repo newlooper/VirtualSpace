@@ -326,8 +326,6 @@ namespace VirtualSpace.VirtualDesktop
 
         public static void ShowAllVirtualDesktops()
         {
-            RebuildMatrixMap( MainWindow.RowsCols );
-
             foreach ( var vdw in _virtualDesktops )
             {
                 vdw.ShowByVdIndex();
