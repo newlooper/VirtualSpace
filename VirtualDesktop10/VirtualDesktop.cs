@@ -56,11 +56,24 @@ namespace VirtualDesktop
 
         public static int Count =>
             // return the number of desktops
-            DesktopManager.VirtualDesktopManagerInternal.GetCount();
+            DesktopManager.GetDesktopCount();
 
-        public static Desktop Current =>
-            // returns current desktop
-            new( DesktopManager.VirtualDesktopManagerInternal.GetCurrentDesktop() );
+        public static Desktop Current
+        {
+            get
+            {
+                // returns current desktop
+                try
+                {
+                    return new Desktop( DesktopManager.VirtualDesktopManagerInternal.GetCurrentDesktop() );
+                }
+                catch
+                {
+                    DesktopManager.ResetDesktopManager();
+                    return new Desktop( DesktopManager.VirtualDesktopManagerInternal.GetCurrentDesktop() );
+                }
+            }
+        }
 
         public bool IsVisible =>
             // return true if this desktop is the current displayed one
@@ -216,7 +229,7 @@ namespace VirtualDesktop
             // get index of desktop with partial name, return -1 if no desktop found
             var index = -1;
 
-            for ( var i = 0; i < DesktopManager.VirtualDesktopManagerInternal.GetCount(); i++ )
+            for ( var i = 0; i < DesktopManager.GetDesktopCount(); i++ )
             {
                 // loop through all virtual desktops and compare partial name to desktop name
                 if ( DesktopNameFromIndex( i ).ToUpper().IndexOf( partialName.ToUpper() ) >= 0 )

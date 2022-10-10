@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using VirtualDesktop;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Config;
@@ -177,17 +178,12 @@ namespace VirtualSpace
         {
             if ( msg == _taskbarCreatedMessage )
             {
-                Logger.Warning( "explorer.exe restarted, program will restart to handle it." );
-                ( (App)Application.Current ).ReleaseMutex();
-
-                Thread.Sleep( 1000 );
-                var startInfo = new ProcessStartInfo( ConfigManager.AppPath )
+                Logger.Warning( "explorer.exe restarted, reset DesktopManager and restart all Plugins." );
+                DesktopManager.ResetDesktopManager();
+                foreach ( var plugin in PluginHost.Plugins )
                 {
-                    Arguments = Const.Args.HIDE_ON_STARTUP
-                };
-                Process.Start( startInfo );
-
-                Application.Current.Shutdown();
+                    PluginHost.RestartPlugin( plugin );
+                }
             }
             else
             {

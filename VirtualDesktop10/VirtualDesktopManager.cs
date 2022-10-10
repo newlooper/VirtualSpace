@@ -20,15 +20,25 @@ namespace VirtualDesktop
 {
     public static class DesktopManager
     {
-        private static readonly DisposableNotification             _disposableNotification = new();
-        private static readonly IVirtualDesktopNotificationService VirtualDesktopNotificationService;
-        internal static         IVirtualDesktopManagerInternal     VirtualDesktopManagerInternal;
-        internal static         IVirtualDesktopManagerInternal2    VirtualDesktopManagerInternal2;
-        internal static         IVirtualDesktopManager             VirtualDesktopManager;
-        internal static         IVirtualDesktopPinnedApps          VirtualDesktopPinnedApps;
-        public static           IApplicationViewCollection         ApplicationViewCollection;
+        private static  DisposableNotification             _disposableNotification;
+        private static  IVirtualDesktopNotificationService VirtualDesktopNotificationService;
+        internal static IVirtualDesktopManagerInternal     VirtualDesktopManagerInternal;
+        internal static IVirtualDesktopManagerInternal2    VirtualDesktopManagerInternal2;
+        internal static IVirtualDesktopManager             VirtualDesktopManager;
+        internal static IVirtualDesktopPinnedApps          VirtualDesktopPinnedApps;
+        public static   IApplicationViewCollection         ApplicationViewCollection;
 
         static DesktopManager()
+        {
+            Init();
+        }
+
+        public static void ResetDesktopManager()
+        {
+            Init();
+        }
+
+        private static void Init()
         {
             var shell = (IServiceProvider10)Activator.CreateInstance( Type.GetTypeFromCLSID( Guids.CLSID_ImmersiveShell ) );
 
@@ -59,13 +69,27 @@ namespace VirtualDesktop
                 Guids.CLSID_VirtualDesktopNotificationService,
                 typeof( IVirtualDesktopNotificationService ).GUID );
 
+            _disposableNotification = new DisposableNotification();
             _disposableNotification.DwCookie = VirtualDesktopNotificationService.Register( new EventProxy() );
+        }
+
+        public static int GetDesktopCount()
+        {
+            try
+            {
+                return VirtualDesktopManagerInternal.GetCount();
+            }
+            catch
+            {
+                ResetDesktopManager();
+                return VirtualDesktopManagerInternal.GetCount();
+            }
         }
 
         public static IVirtualDesktop GetDesktop( int index )
         {
             // get desktop with index
-            var count = VirtualDesktopManagerInternal.GetCount();
+            var count = GetDesktopCount();
             if ( index < 0 || index >= count ) throw new ArgumentOutOfRangeException( nameof( index ) );
             VirtualDesktopManagerInternal.GetDesktops( out var desktops );
             desktops.GetAt( index, typeof( IVirtualDesktop ).GUID, out var objDesktop );
@@ -76,10 +100,11 @@ namespace VirtualDesktop
         internal static int GetDesktopIndex( IVirtualDesktop desktop )
         {
             // get index of desktop
+            var count    = GetDesktopCount();
             var index    = -1;
             var idSearch = desktop.GetId();
             VirtualDesktopManagerInternal.GetDesktops( out var desktops );
-            for ( var i = 0; i < VirtualDesktopManagerInternal.GetCount(); i++ )
+            for ( var i = 0; i < count; i++ )
             {
                 desktops.GetAt( i, typeof( IVirtualDesktop ).GUID, out var objDesktop );
                 if ( idSearch.CompareTo( ( (IVirtualDesktop)objDesktop ).GetId() ) == 0 )
