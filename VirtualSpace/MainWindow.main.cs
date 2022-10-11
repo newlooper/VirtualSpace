@@ -195,6 +195,7 @@ namespace VirtualSpace
                                  plugin.RestartPolicy.Enabled &&
                                  plugin.RestartPolicy.Values.Contains( key ) ) )
                     {
+                        Logger.Info( $"Restart Plugin {plugin.Display} because {key}" );
                         PluginHost.RestartPlugin( plugin );
                     }
 
@@ -203,6 +204,7 @@ namespace VirtualSpace
                                  plugin.ClosePolicy.Enabled &&
                                  plugin.ClosePolicy.Values.Contains( key ) ) )
                     {
+                        Logger.Info( $"Close Plugin {plugin.Display} because {key}" );
                         PluginHost.ClosePlugin( plugin );
                     }
 

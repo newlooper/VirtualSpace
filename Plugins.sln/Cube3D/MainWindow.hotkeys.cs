@@ -39,10 +39,6 @@ namespace Cube3D
         private void RecreateCapture()
         {
             _capture?.StopCaptureSession();
-            var mi = ( from m in MonitorEnumerationHelper.GetMonitors()
-                where m.IsPrimary
-                select m ).First();
-            _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
         }
 
         private void RealShow()
@@ -83,6 +79,10 @@ namespace Cube3D
                                 {
                                     Dispatcher.Invoke( () =>
                                     {
+                                        var mi = ( from m in MonitorEnumerationHelper.GetMonitors()
+                                            where m.IsPrimary
+                                            select m ).First();
+                                        _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
                                         _capture?.StartCaptureSession();
                                         NotificationGridLayout( vdCount );
 

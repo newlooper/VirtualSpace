@@ -64,7 +64,7 @@ namespace VirtualSpace.Plugin
         {
             if ( PluginManager.CheckRequirements( pluginInfo.Requirements ) )
             {
-                Logger.Info( $"Auto Start Plugin: {pluginInfo.Display}" );
+                Logger.Info( $"Start Plugin: {pluginInfo.Display}" );
                 var exe = Path.Combine( pluginInfo.Folder, pluginInfo.Entry );
                 StartExe( exe );
             }
@@ -89,7 +89,7 @@ namespace VirtualSpace.Plugin
                 ClosePlugin( pluginInfo );
                 Task.Run( () =>
                 {
-                    Thread.Sleep( 5000 );
+                    Thread.Sleep( PluginConst.RestartDelay );
                     StartExe( exe );
                     Logger.Info( $"Plugin ({pluginInfo.Display}) Restarted." );
                 } );

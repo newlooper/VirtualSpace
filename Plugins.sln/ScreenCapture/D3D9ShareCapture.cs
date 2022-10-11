@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Windows.Graphics;
 using Windows.Graphics.Capture;
@@ -44,6 +45,8 @@ namespace ScreenCapture
         private static          D3D9.DeviceEx   _d3D9Device;
         private static readonly IDirect3DDevice D3D11Device;
         private static readonly D3D11.Device    SharpDxD3D11Device;
+        private static readonly PropertyInfo    PropertyInfoIsBorderRequired;
+        private static readonly PropertyInfo    PropertyInfoIsCursorCaptureEnabled;
 
         private readonly Dictionary<IntPtr, D3D11.Texture2D> _frameCopyPool    = new Dictionary<IntPtr, D3D11.Texture2D>();
         private readonly Dictionary<IntPtr, D3D9.Texture>    _renderTargetPool = new Dictionary<IntPtr, D3D9.Texture>();
@@ -63,6 +66,10 @@ namespace ScreenCapture
                 GetPresentParameters() );
             D3D11Device = Direct3D11Helper.CreateDevice();
             SharpDxD3D11Device = Direct3D11Helper.CreateSharpDXDevice( D3D11Device );
+
+            var typeGraphicsCaptureSession = typeof( GraphicsCaptureSession );
+            PropertyInfoIsBorderRequired = typeGraphicsCaptureSession.GetProperty( "IsBorderRequired" );
+            PropertyInfoIsCursorCaptureEnabled = typeGraphicsCaptureSession.GetProperty( "IsCursorCaptureEnabled" );
         }
 
         private D3D9ShareCapture()
@@ -134,17 +141,14 @@ namespace ScreenCapture
 
             _captureSession = _captureFramePool.CreateCaptureSession( _captureItem );
 
-            var tGraphicsCaptureSession = _captureSession.GetType();
-            var pIsBorderRequired       = tGraphicsCaptureSession.GetProperty( "IsBorderRequired" );
-            if ( pIsBorderRequired != null )
+            if ( PropertyInfoIsBorderRequired != null )
             {
-                pIsBorderRequired.SetValue( _captureSession, false );
+                PropertyInfoIsBorderRequired.SetValue( _captureSession, false );
             }
 
-            var pIsCursorCaptureEnabled = tGraphicsCaptureSession.GetProperty( "IsCursorCaptureEnabled" );
-            if ( pIsCursorCaptureEnabled != null )
+            if ( PropertyInfoIsCursorCaptureEnabled != null )
             {
-                pIsCursorCaptureEnabled.SetValue( _captureSession, false );
+                PropertyInfoIsCursorCaptureEnabled.SetValue( _captureSession, false );
             }
 
             _captureSession.StartCapture();

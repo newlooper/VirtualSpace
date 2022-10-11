@@ -15,5 +15,6 @@ namespace VirtualSpace.Plugin
         public const string UxdDisplayChangeMessage          = "UxdDisplayChangeMessage";
         public const string HotPlugDetected                  = "HotplugDetected";
         public const string DirectInputNotificationMsgString = "DIRECTINPUT_NOTIFICATION_MSGSTRING";
+        public const int    RestartDelay                     = 5000;
     }
 }
