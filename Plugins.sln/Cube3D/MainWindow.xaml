@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="Cube3D For VirtualSpace" Left="0" Top="0" Height="1440" Width="2560"
         WindowStyle="None" ResizeMode="NoResize"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" ShowInTaskbar="False">
     <Window.Resources>
         <ResourceDictionary>
             <Thickness x:Key="NotifyButtonMargin"></Thickness>
