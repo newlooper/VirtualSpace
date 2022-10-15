@@ -8,6 +8,12 @@
 
 https://newlooper.com/post/original/cs/os/windows/virtualdesktop/
 
+### Download
+
+download the corresponding version from [Releases](https://github.com/newlooper/VirtualSpace/releases) page,
+
+or build the program yourself (see below).
+
 ### Main Projects
 
 > Suggested Target Platform `x64`
@@ -44,4 +50,10 @@ S1: Run VirtualSpace as Administrator to fix this.
 
 ## Demos
 
+### Video
+
 [![](https://res.cloudinary.com/marcomontalbano/image/upload/v1662744032/video_to_markdown/images/youtube--aFUo2kLYUy0-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=aFUo2kLYUy0 "")
+
+### Image
+
+![05](https://github.com/newlooper/images/blob/main/VirtualSpace/05-SwitchVirtualDesktopInDirecti.gif?raw=true '05')

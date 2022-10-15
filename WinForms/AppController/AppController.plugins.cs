@@ -72,6 +72,7 @@ namespace VirtualSpace
 
         private void btn_PluginSettings_Click( object sender, EventArgs e )
         {
+            if ( lv_Plugins.SelectedItems.Count <= 0 ) return;
             var p = PluginInfos[lv_Plugins.SelectedIndices[0]];
             PluginHost.PluginSettings( p );
         }
