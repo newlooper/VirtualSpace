@@ -382,6 +382,8 @@ namespace VirtualSpace
 
         private static void BringToTop()
         {
+            CheckScreenArea();
+
             _instance.Left = 0;
             _instance.Top = 0;
             _instance.Show();
@@ -389,6 +391,14 @@ namespace VirtualSpace
             VirtualDesktopManager.FixLayout();
             VirtualDesktopManager.ShowAllVirtualDesktops();
             VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+        }
+
+        private static void CheckScreenArea()
+        {
+            if ( (int)_instance.Width == (int)SystemParameters.PrimaryScreenWidth &&
+                 (int)_instance.Height == (int)SystemParameters.PrimaryScreenHeight ) return;
+            _instance.Width = SystemParameters.PrimaryScreenWidth;
+            _instance.Height = SystemParameters.PrimaryScreenHeight;
         }
 
         public static void HideAll()
