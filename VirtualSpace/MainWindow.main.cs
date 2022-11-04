@@ -303,14 +303,12 @@ namespace VirtualSpace
                         case UserMessage.DesktopArrangement:
 
                             VirtualDesktopManager.FixLayout();
+                            VirtualDesktopManager.RebuildMatrixMap( RowsCols );
+
                             if ( IsShowing() )
                             {
                                 VirtualDesktopManager.ShowAllVirtualDesktops();
                                 VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-                            }
-                            else
-                            {
-                                VirtualDesktopManager.RebuildMatrixMap( RowsCols );
                             }
 
                             break;

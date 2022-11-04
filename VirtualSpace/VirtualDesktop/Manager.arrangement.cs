@@ -42,7 +42,7 @@ namespace VirtualSpace.VirtualDesktop
                 ConfigManager.Save();
             }
 
-            AppController.CheckDesktopArrangement( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
+            AppController.UpdateDesktopArrangementButtons( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
 
             var da = ConfigManager.CurrentProfile.UI.DesktopArrangement;
 

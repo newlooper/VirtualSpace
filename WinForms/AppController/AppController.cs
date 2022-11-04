@@ -264,7 +264,7 @@ namespace VirtualSpace
         {
             ts_PageNavButton_Click( sender, e );
 
-            CheckDesktopArrangement( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
+            UpdateDesktopArrangementButtons( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
 
             mainTabs.SelectTab( 1 );
         }
