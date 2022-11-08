@@ -13,8 +13,6 @@
         <CsWinRTEnabled>false</CsWinRTEnabled>
     </PropertyGroup>
 
-    <Import Condition=" '$(Configuration)'=='Release' " Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v17.0\TextTemplating\Microsoft.TextTemplating.targets" />
-
     <PropertyGroup>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <TransformOnBuild>true</TransformOnBuild>
@@ -56,11 +54,6 @@
 
     <ItemGroup>
         <Compile Include="..\VirtualSpace\App.xaml.cs" Link="App.xaml.cs" />
-        <Compile Include="..\VirtualSpace\AutoVersion.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>AutoVersion.tt</DependentUpon>
-        </Compile>
         <Compile Include="..\VirtualSpace\Factory\AppControllerFactory.cs" Link="Factory\AppControllerFactory.cs" />
         <Compile Include="..\VirtualSpace\Factory\VirtualDesktopInfo.cs" Link="Factory\VirtualDesktopInfo.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.hotkeys.cs" Link="MainWindow.hotkeys.cs" />
@@ -94,8 +87,6 @@
     <ItemGroup>
         <None Include="..\VirtualSpace\AutoVersion.tt">
             <Link>AutoVersion.tt</Link>
-            <Generator>TextTemplatingFileGenerator</Generator>
-            <LastGenOutput>AutoVersion.cs</LastGenOutput>
         </None>
     </ItemGroup>
 
@@ -114,8 +105,19 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+        <Compile Update="AutoVersion.cs">
+            <DesignTime>True</DesignTime>
+        </Compile>
     </ItemGroup>
+
+    <ItemGroup>
+        <TextTemplate Include="..\VirtualSpace\**\*.tt" />
+        <Generated Include="**\*.cs" />
+    </ItemGroup>
+
+    <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet t4 %(TextTemplate.Identity) -o %(TextTemplate.Filename).cs" />
+    </Target>
 
     <ItemGroup>
         <Folder Include="Factory\" />

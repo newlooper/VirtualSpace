@@ -16,12 +16,16 @@ or build the program yourself (see below).
 
 ### Main Projects
 
+> __Note__
+> main projects use [dotnet-t4](https://www.nuget.org/packages/dotnet-t4/) to build, so insure its installed properly.
+> run `dotnet tool restore` before build.
+
 > Suggested Target Platform `x64`
 
 #### main program
 
 - build and run VirtualSpace —— for  Windows 11
-
+  - see comment in the  `VirtualDesktop11.csproj`  before build
 - build and run VirtualSpace10 —— for window 10 19041+
 
 > Note
@@ -30,7 +34,10 @@ or build the program yourself (see below).
 
 #### plugins
 
-- build Cube3D —— plugin for virtual desktop switch effects (put `all generated files` into main program's plugins Folder eg: `plugins\Cube3D`, then Run Cube3D.exe after VirtualSpace(10) started)
+- Cube3D —— plugin for virtual desktop switch effects
+  - build Cube3D project
+  - put `all generated files` into main program's plugins Folder eg: `plugins\Cube3D`
+  - Run Cube3D.exe after VirtualSpace(10) started
 
 ### HowTo
 
@@ -42,11 +49,11 @@ or build the program yourself (see below).
 
 ## Q&A
 
-Q1: Why hotkey not working sometimes.
+- Q1: Why hotkey not working sometimes.
+- A1: This is usually due to Windows UIPI (UAC).
+- S1: Run VirtualSpace as Administrator to fix this.
 
-A1: This is usually due to Windows UIPI (UAC).
-
-S1: Run VirtualSpace as Administrator to fix this.
+[Others](https://github.com/newlooper/VirtualSpace/issues?q=is%3Aissue)
 
 ## Demos
 

@@ -8,6 +8,14 @@
         <LangVersion>9</LangVersion>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <!-- 
+        // before build
+        // for windows 11 22H2 (>22489): set <DefineConstants>WIN22H2</DefineConstants>.
+        // for windows 11 21H2 (22000.xxx): set <DefineConstants></DefineConstants>.
+        -->
+    </PropertyGroup>
+
     <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0-windows' Or '$(TargetFramework)' == 'net6.0-windows' ">
         <PackageReference Include="Microsoft.Windows.CsWinRT" Version="1.4.1" />
     </ItemGroup>
