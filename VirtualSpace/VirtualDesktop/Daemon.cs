@@ -49,10 +49,10 @@ namespace VirtualSpace.VirtualDesktop
                         try
                         {
                             DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
-                            Logger.Debug( $"MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]" );
+                            Logger.Debug( $"[RULE]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]" );
                             if ( action.FollowWindow )
                             {
-                                Logger.Debug( $"CHANGE CURRENT DESKTOP TO Desktop[{action.MoveToDesktop}]" );
+                                Logger.Debug( $"[RULE]CHANGE CURRENT DESKTOP TO Desktop[{action.MoveToDesktop}]" );
                                 DesktopWrapper.MakeVisibleByIndex( action.MoveToDesktop );
                                 User32.SwitchToThisWindow( action.Handle, true );
                             }
@@ -61,7 +61,7 @@ namespace VirtualSpace.VirtualDesktop
                         {
                             CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
                             Logger.Error(
-                                $"ERROR.MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]",
+                                $"[RULE]ERROR.MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]",
                                 new NotifyObject
                                 {
                                     Title = Agent.Langs.GetString( "Error.Title" ),
@@ -73,15 +73,21 @@ namespace VirtualSpace.VirtualDesktop
 
                     if ( action.PinApp )
                     {
-                        Logger.Debug( $"PIN.App of {action.Handle.ToString( "X2" )} TO All Desktops" );
+                        Logger.Debug( $"[RULE]PIN.App of {action.Handle.ToString( "X2" )} TO All Desktops" );
                         DesktopWrapper.PinApp( action.Handle, false );
                         break;
                     }
 
                     if ( action.PinWindow )
                     {
-                        Logger.Debug( $"PIN.Win {action.Handle.ToString( "X2" )} TO All Desktops" );
+                        Logger.Debug( $"[RULE]PIN.Win {action.Handle.ToString( "X2" )} TO All Desktops" );
                         DesktopWrapper.PinWindow( action.Handle, false );
+                    }
+
+                    if ( action.HideFromView )
+                    {
+                        Logger.Debug( $"[RULE]HIDE.Win {action.Handle.ToString( "X2" )}" );
+                        Filters.WndHandleManualIgnoreList.Add( action.Handle );
                     }
                 }
             }

@@ -20,8 +20,9 @@ namespace VirtualSpace.Config.Events.Entity
         public string WindowTitle;
         public int    MoveToDesktop { get; set; } = -1;
         public bool   FollowWindow  { get; set; } = true;
-        public bool   PinWindow     { get; set; } = false;
-        public bool   PinApp        { get; set; } = false;
+        public bool   PinWindow     { get; set; }
+        public bool   PinApp        { get; set; }
         public int    MoveToScreen  { get; set; } = -1;
+        public bool   HideFromView  { get; set; }
     }
 }

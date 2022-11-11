@@ -343,7 +343,7 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 从视图隐藏.
+        ///   Looks up a localized string similar to 从视图中隐藏.
         /// </summary>
         internal static string VDW_CTM_Window_HideFromView {
             get {

@@ -244,6 +244,7 @@ namespace VirtualSpace
             action.FollowWindow = cb_FollowWindow.Checked;
             action.PinWindow = cb_PinWindow.Checked;
             action.PinApp = cb_PinApp.Checked;
+            action.HideFromView = cb_HideFromView.Checked;
 
             var time = DateTime.Now;
             rule.Name = tb_Name.Text;

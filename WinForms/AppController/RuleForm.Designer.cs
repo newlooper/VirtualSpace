@@ -58,6 +58,7 @@ namespace VirtualSpace
             this.cbb_Title = new System.Windows.Forms.ComboBox();
             this.cb_Title = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cb_HideFromView = new System.Windows.Forms.CheckBox();
             this.cb_PinApp = new System.Windows.Forms.CheckBox();
             this.cb_PinWindow = new System.Windows.Forms.CheckBox();
             this.cb_FollowWindow = new System.Windows.Forms.CheckBox();
@@ -81,10 +82,10 @@ namespace VirtualSpace
             // 
             // groupBox1
             // 
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.cb_Enabled);
             this.groupBox1.Controls.Add(this.tb_Name);
             this.groupBox1.Controls.Add(this.lb_Name);
-            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
             // 
@@ -98,8 +99,8 @@ namespace VirtualSpace
             // 
             // tb_Name
             // 
-            this.tb_Name.BackColor = System.Drawing.SystemColors.Info;
             resources.ApplyResources(this.tb_Name, "tb_Name");
+            this.tb_Name.BackColor = System.Drawing.SystemColors.Info;
             this.tb_Name.Name = "tb_Name";
             // 
             // lb_Name
@@ -109,6 +110,7 @@ namespace VirtualSpace
             // 
             // groupBox2
             // 
+            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Controls.Add(this.tb_WndClass);
             this.groupBox2.Controls.Add(this.cbb_WndClass);
             this.groupBox2.Controls.Add(this.cb_WndClass);
@@ -121,7 +123,6 @@ namespace VirtualSpace
             this.groupBox2.Controls.Add(this.tb_Title);
             this.groupBox2.Controls.Add(this.cbb_Title);
             this.groupBox2.Controls.Add(this.cb_Title);
-            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
             // 
@@ -132,8 +133,8 @@ namespace VirtualSpace
             // 
             // cbb_WndClass
             // 
-            this.cbb_WndClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbb_WndClass, "cbb_WndClass");
+            this.cbb_WndClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbb_WndClass.FormattingEnabled = true;
             this.cbb_WndClass.Name = "cbb_WndClass";
             // 
@@ -151,8 +152,8 @@ namespace VirtualSpace
             // 
             // cbb_ProcessPath
             // 
-            this.cbb_ProcessPath.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbb_ProcessPath, "cbb_ProcessPath");
+            this.cbb_ProcessPath.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbb_ProcessPath.FormattingEnabled = true;
             this.cbb_ProcessPath.Name = "cbb_ProcessPath";
             // 
@@ -170,8 +171,8 @@ namespace VirtualSpace
             // 
             // cbb_ProcessName
             // 
-            this.cbb_ProcessName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbb_ProcessName, "cbb_ProcessName");
+            this.cbb_ProcessName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbb_ProcessName.FormattingEnabled = true;
             this.cbb_ProcessName.Name = "cbb_ProcessName";
             // 
@@ -189,8 +190,8 @@ namespace VirtualSpace
             // 
             // cbb_Title
             // 
-            this.cbb_Title.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbb_Title, "cbb_Title");
+            this.cbb_Title.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbb_Title.FormattingEnabled = true;
             this.cbb_Title.Name = "cbb_Title";
             // 
@@ -203,14 +204,21 @@ namespace VirtualSpace
             // 
             // groupBox3
             // 
+            resources.ApplyResources(this.groupBox3, "groupBox3");
+            this.groupBox3.Controls.Add(this.cb_HideFromView);
             this.groupBox3.Controls.Add(this.cb_PinApp);
             this.groupBox3.Controls.Add(this.cb_PinWindow);
             this.groupBox3.Controls.Add(this.cb_FollowWindow);
             this.groupBox3.Controls.Add(this.cbb_MoveToDesktop);
             this.groupBox3.Controls.Add(this.cb_MoveToDesktop);
-            resources.ApplyResources(this.groupBox3, "groupBox3");
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.TabStop = false;
+            // 
+            // cb_HideFromView
+            // 
+            resources.ApplyResources(this.cb_HideFromView, "cb_HideFromView");
+            this.cb_HideFromView.Name = "cb_HideFromView";
+            this.cb_HideFromView.UseVisualStyleBackColor = true;
             // 
             // cb_PinApp
             // 
@@ -234,8 +242,8 @@ namespace VirtualSpace
             // 
             // cbb_MoveToDesktop
             // 
-            this.cbb_MoveToDesktop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbb_MoveToDesktop, "cbb_MoveToDesktop");
+            this.cbb_MoveToDesktop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbb_MoveToDesktop.FormattingEnabled = true;
             this.cbb_MoveToDesktop.Name = "cbb_MoveToDesktop";
             // 
@@ -255,11 +263,11 @@ namespace VirtualSpace
             // 
             // statusBar
             // 
+            resources.ApplyResources(this.statusBar, "statusBar");
             this.statusBar.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2});
-            resources.ApplyResources(this.statusBar, "statusBar");
             this.statusBar.Name = "statusBar";
             this.statusBar.SizingGrip = false;
             // 
@@ -270,16 +278,16 @@ namespace VirtualSpace
             // 
             // toolStripStatusLabel2
             // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             resources.ApplyResources(this.toolStripStatusLabel2, "toolStripStatusLabel2");
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             // 
             // groupBox4
             // 
+            resources.ApplyResources(this.groupBox4, "groupBox4");
             this.groupBox4.Controls.Add(this.lbUpdated);
             this.groupBox4.Controls.Add(this.lbCreated);
             this.groupBox4.Controls.Add(this.lb_Updated);
             this.groupBox4.Controls.Add(this.lb_Created);
-            resources.ApplyResources(this.groupBox4, "groupBox4");
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.TabStop = false;
             // 
@@ -366,5 +374,6 @@ namespace VirtualSpace
         private System.Windows.Forms.Label lb_Created;
         private System.Windows.Forms.Label lbUpdated;
         private System.Windows.Forms.Label lbCreated;
+        private System.Windows.Forms.CheckBox cb_HideFromView;
     }
 }

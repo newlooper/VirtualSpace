@@ -100,8 +100,17 @@
   <data name="cb_Title.Text" xml:space="preserve">
     <value>窗口标题</value>
   </data>
+  <data name="groupBox3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>978, 193</value>
+  </data>
   <data name="groupBox3.Text" xml:space="preserve">
     <value>窗口动作</value>
+  </data>
+  <data name="cb_HideFromView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 28</value>
+  </data>
+  <data name="cb_HideFromView.Text" xml:space="preserve">
+    <value>从视图中隐藏</value>
   </data>
   <data name="cb_PinApp.Size" type="System.Drawing.Size, System.Drawing">
     <value>288, 28</value>
