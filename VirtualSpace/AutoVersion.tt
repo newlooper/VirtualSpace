@@ -28,6 +28,7 @@ using System.Reflection;
 
 [assembly: AssemblyVersion("<#= MAJOR #>.<#= MINOR #>.<#= DaysSinceProjectStarted #>.<#= MinutesSinceMidnight #>")]
 [assembly: AssemblyFileVersion("<#= MAJOR #>.<#= MINOR #>.<#= DaysSinceProjectStarted #>.<#= MinutesSinceMidnight #>")]
+[assembly: AssemblyInformationalVersion("<#= MAJOR #>.<#= MINOR #>.<#= DaysSinceProjectStarted #>.<#= MinutesSinceMidnight+"."+WinVer #>")]
 
 <#+
     private static readonly DateTime ProjectStartedDate = new( 2021, 12, 5 );
@@ -41,4 +42,5 @@ using System.Reflection;
 
     private static readonly int DaysSinceProjectStarted = (int)( DateTime.UtcNow - ProjectStartedDate ).TotalDays;
     private static readonly int MinutesSinceMidnight = (int)DateTime.UtcNow.TimeOfDay.TotalMinutes;
+    private static readonly string WinVer = Environment.GetEnvironmentVariable("VirtualSpaceVersion"); // set in ENV before run `dotnet publish`
 #>

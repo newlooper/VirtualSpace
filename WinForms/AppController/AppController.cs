@@ -345,10 +345,10 @@ namespace VirtualSpace
                 entryAssembly,
                 typeof( AssemblyProductAttribute ),
                 false ) ).Product;
-            lb_Version.Text = ( (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(
+            lb_Version.Text = ( (AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(
                 entryAssembly,
-                typeof( AssemblyFileVersionAttribute ),
-                false ) ).Version;
+                typeof( AssemblyInformationalVersionAttribute ),
+                false ) ).InformationalVersion;
             lb_Copyright.Text = ( (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(
                 entryAssembly,
                 typeof( AssemblyCopyrightAttribute ),
