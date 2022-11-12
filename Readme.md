@@ -6,7 +6,7 @@
 
 ### 1.1 Design memo
 
-https://newlooper.com/post/original/cs/os/windows/virtualdesktop/
+cn: https://newlooper.com/post/original/cs/os/windows/virtualdesktop/
 
 ## 2. Download & Installation
 
@@ -22,13 +22,13 @@ or build the program yourself (see below).
 > 
 > main projects use [dotnet-t4](https://www.nuget.org/packages/dotnet-t4/) to build, so insure its installed properly.
 > run `dotnet tool restore` before build.
-
+> 
 > Suggested Target Platform `x64`
 
 ### 3.1 main program
 
 - build and run VirtualSpace —— for  Windows 11
-  - $\colorbox{red}{{\color{white}{see comment in the  VirtualDesktop11.csproj  before build}}}$
+  - $\colorbox{red}{{\color{white}{see comment in the  VirtualDesktop11.csproj  before build}}}$. [Link](https://github.com/newlooper/VirtualSpace/blob/815e5dc8f10dcec99b2ab997e2053261cb6fe2ad/VirtualDesktop11/VirtualDesktop11.csproj#L11-L17) 
 - build and run VirtualSpace10 —— for window 10 19041+
 
 > Note
