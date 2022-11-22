@@ -44,7 +44,7 @@ namespace VirtualSpace.Config
 
         public static class Args
         {
-            public const string HIDE_ON_STARTUP = "--HideOnStartup";
+            public const string HIDE_ON_START = "--HideOnStart";
         }
 
         public static class Hotkey

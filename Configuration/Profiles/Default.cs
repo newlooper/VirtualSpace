@@ -45,7 +45,6 @@ namespace VirtualSpace.Config.Profiles
                 RightClickOnCanvas = 0,
                 MiddleClickOnCanvas = 0
             };
-            HideOnStartup = false;
             Navigation = new Navigation
             {
                 CirculationH = false,

@@ -13,6 +13,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Forms;
+using VirtualSpace.AppLogs;
 using VirtualSpace.Config.Events.Entity;
 using VirtualSpace.Config.Events.Expression;
 using ConfigManager = VirtualSpace.Config.Manager;
@@ -37,26 +38,26 @@ namespace VirtualSpace
             lvc_Updated.Name = nameof( lvc_Updated );
         }
 
-        public static void ReadRules()
+        private void ReadRules()
         {
             var profiles = ConfigManager.Configs.Profiles;
-            _instance.cb_RuleProfiles.Items.Clear();
+            cb_RuleProfiles.Items.Clear();
             foreach ( var profile in profiles )
             {
-                _instance.cb_RuleProfiles.Items.Add( profile.Key );
+                cb_RuleProfiles.Items.Add( profile.Key );
             }
 
-            _instance.cb_RuleProfiles.SelectedItem = ConfigManager.Configs.CurrentProfileName;
+            cb_RuleProfiles.SelectedItem = ConfigManager.Configs.CurrentProfileName;
 
             var path = ConfigManager.GetRulesPath();
             if ( !File.Exists( path ) ) return;
             var rules = Conditions.FetchRuleList( path );
 
-            _instance.lv_Rules.Items.Clear();
+            lv_Rules.Items.Clear();
             foreach ( var rule in rules )
             {
                 var item = LviByRule( rule );
-                _instance.lv_Rules.Items.Add( item );
+                lv_Rules.Items.Add( item );
             }
         }
 
@@ -172,6 +173,13 @@ namespace VirtualSpace
             var index = lv_Rules.Items.IndexOf( e.Item );
             rules[index].Enabled = e.Item.Checked;
             Conditions.SaveRules( path, rules );
+            Logger.Info( $"Rules.{ConfigManager.Configs.CurrentProfileName} Saved." );
+        }
+
+        private void lv_Rules_VisibleChanged( object sender, EventArgs e )
+        {
+            lv_Rules.ItemChecked -= lv_Rules_ItemChecked;
+            lv_Rules.ItemChecked += lv_Rules_ItemChecked;
         }
 
         private ExpressionTemplate RefreshRuleId( ExpressionTemplate expressionTemplate )

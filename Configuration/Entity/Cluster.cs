@@ -13,8 +13,9 @@ namespace VirtualSpace.Config.Entity
 {
     public class Cluster
     {
-        public bool HideMainViewIfItsShown  { get; set; } = false;
-        public bool NotificationOnVdChanged { get; set; } = false;
-        public bool ShowVDIndexOnTrayIcon   { get; set; } = false;
+        public bool HideMainViewIfItsShown  { get; set; }
+        public bool NotificationOnVdChanged { get; set; }
+        public bool ShowVDIndexOnTrayIcon   { get; set; }
+        public bool HideOnStart           { get; set; }
     }
 }

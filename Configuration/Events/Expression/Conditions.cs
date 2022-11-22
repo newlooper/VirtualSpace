@@ -101,7 +101,7 @@ namespace VirtualSpace.Config.Events.Expression
         {
             using var fs     = new FileStream( path, FileMode.Open, FileAccess.Read );
             var       buffer = new byte[fs.Length];
-            fs.Read( buffer, 0, (int)fs.Length );
+            _ = fs.Read( buffer, 0, (int)fs.Length );
             var utf8Reader = new Utf8JsonReader( buffer );
 
             var readOptions = new JsonSerializerOptions();

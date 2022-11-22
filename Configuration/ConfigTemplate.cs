@@ -57,7 +57,8 @@ namespace VirtualSpace.Config
         {
             HideMainViewIfItsShown = false,
             NotificationOnVdChanged = false,
-            ShowVDIndexOnTrayIcon = false
+            ShowVDIndexOnTrayIcon = false,
+            HideOnStart = false
         };
     }
 }

@@ -100,8 +100,8 @@ namespace VirtualSpace
 
             VirtualDesktopManager.Bootstrap();
 
-            if ( !( ConfigManager.CurrentProfile.HideOnStartup ||
-                    ( (App)Application.Current ).HideOnStartup ) )
+            if ( !( ConfigManager.Configs.Cluster.HideOnStart ||
+                    ( (App)Application.Current ).HideOnStart ) )
                 VirtualDesktopManager.InitLayout();
 
             DesktopManagerWrapper.ListenVirtualDesktopEvents();

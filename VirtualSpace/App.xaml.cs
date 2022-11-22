@@ -34,12 +34,12 @@ namespace VirtualSpace
     public partial class App : Application
     {
         private Mutex? _mutex;
-        public  bool   HideOnStartup;
+        public  bool   HideOnStart;
 
         protected override void OnStartup( StartupEventArgs e )
         {
             base.OnStartup( e );
-            if ( e.Args.Contains( Const.Args.HIDE_ON_STARTUP ) ) HideOnStartup = true;
+            if ( e.Args.Contains( Const.Args.HIDE_ON_START ) ) HideOnStart = true;
 
             LogManager.GorgeousDividingLine();
             _mutex = SingleInstanceCheck();
@@ -49,7 +49,7 @@ namespace VirtualSpace
                  ConfigManager.Init() )
             {
                 Current.MainWindow = CreateCanvas( e );
-                if ( ConfigManager.CurrentProfile.HideOnStartup || HideOnStartup )
+                if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
                 {
                     Current.MainWindow.Left = Const.FakeHideX;
                     Current.MainWindow.Top = Const.FakeHideY;
@@ -57,6 +57,11 @@ namespace VirtualSpace
 
                 Bootstrap();
                 Current.MainWindow.Show();
+
+                if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
+                {
+                    Current.MainWindow.Hide();
+                }
             }
             else
             {
@@ -68,11 +73,11 @@ namespace VirtualSpace
         {
             base.OnExit( e );
 
-            _mutex?.ReleaseMutex();
+            ReleaseMutex();
             IpcPipeServer.SimpleShutdown();
         }
 
-        public void ReleaseMutex()
+        private void ReleaseMutex()
         {
             _mutex?.ReleaseMutex();
             _mutex?.Dispose();

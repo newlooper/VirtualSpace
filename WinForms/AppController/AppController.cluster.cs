@@ -23,6 +23,7 @@ namespace VirtualSpace
             chb_HideMainViewIfItsShown.Checked = ConfigManager.Configs.Cluster.HideMainViewIfItsShown;
             chb_notify_vd_changed.Checked = ConfigManager.Configs.Cluster.NotificationOnVdChanged;
             chb_showVDIndexOnTrayIcon.Checked = ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon;
+            chb_HideOnStart.Checked = ConfigManager.Configs.Cluster.HideOnStart;
         }
 
         private void chb_HideMainViewIfItsShown_CheckedChanged( object sender, EventArgs e )
@@ -49,10 +50,16 @@ namespace VirtualSpace
             ConfigManager.Save();
         }
 
+        private void chb_HideOnStart_CheckedChanged( object sender, EventArgs e )
+        {
+            ConfigManager.Configs.Cluster.HideOnStart = chb_HideOnStart.Checked;
+            ConfigManager.Save();
+        }
+
         public void UpdateVDIndexOnTrayIcon( string index )
         {
             var bitmap = (Bitmap)Resources.GetObject( "pb_AboutLogo.Image" );
-            var rectF = new RectangleF( 0, 0, bitmap.Width, bitmap.Height );
+            var rectF  = new RectangleF( 0, 0, bitmap.Width, bitmap.Height );
             var textFormat = new StringFormat
             {
                 Alignment = StringAlignment.Center,

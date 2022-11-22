@@ -42,53 +42,51 @@ namespace VirtualSpace.VirtualDesktop
         {
             while ( await ActionChannel.Reader.WaitToReadAsync() )
             {
-                if ( ActionChannel.Reader.TryRead( out var action ) )
+                if ( !ActionChannel.Reader.TryRead( out var action ) ) continue;
+                if ( action.MoveToDesktop >= 0 )
                 {
-                    if ( action.MoveToDesktop >= 0 )
+                    try
                     {
-                        try
+                        DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
+                        Logger.Debug( $"[RULE]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]" );
+                        if ( action.FollowWindow )
                         {
-                            DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
-                            Logger.Debug( $"[RULE]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]" );
-                            if ( action.FollowWindow )
+                            Logger.Debug( $"[RULE]CHANGE CURRENT DESKTOP TO Desktop[{action.MoveToDesktop}]" );
+                            DesktopWrapper.MakeVisibleByIndex( action.MoveToDesktop );
+                            User32.SwitchToThisWindow( action.Handle, true );
+                        }
+                    }
+                    catch
+                    {
+                        CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
+                        Logger.Error(
+                            $"[RULE]ERROR.MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]",
+                            new NotifyObject
                             {
-                                Logger.Debug( $"[RULE]CHANGE CURRENT DESKTOP TO Desktop[{action.MoveToDesktop}]" );
-                                DesktopWrapper.MakeVisibleByIndex( action.MoveToDesktop );
-                                User32.SwitchToThisWindow( action.Handle, true );
-                            }
-                        }
-                        catch
-                        {
-                            CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
-                            Logger.Error(
-                                $"[RULE]ERROR.MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]",
-                                new NotifyObject
-                                {
-                                    Title = Agent.Langs.GetString( "Error.Title" ),
-                                    Message = string.Format( Agent.Langs.GetString( "Error.MoveWindowToDesktop" ), action.WindowTitle, action.RuleName )
-                                } );
-                            continue;
-                        }
+                                Title = Agent.Langs.GetString( "Error.Title" ),
+                                Message = string.Format( Agent.Langs.GetString( "Error.MoveWindowToDesktop" ), action.WindowTitle, action.RuleName )
+                            } );
+                        continue;
                     }
+                }
 
-                    if ( action.PinApp )
-                    {
-                        Logger.Debug( $"[RULE]PIN.App of {action.Handle.ToString( "X2" )} TO All Desktops" );
-                        DesktopWrapper.PinApp( action.Handle, false );
-                        break;
-                    }
+                if ( action.PinApp )
+                {
+                    Logger.Debug( $"[RULE]PIN.App of {action.Handle.ToString( "X2" )} TO All Desktops" );
+                    DesktopWrapper.PinApp( action.Handle, false );
+                    break;
+                }
 
-                    if ( action.PinWindow )
-                    {
-                        Logger.Debug( $"[RULE]PIN.Win {action.Handle.ToString( "X2" )} TO All Desktops" );
-                        DesktopWrapper.PinWindow( action.Handle, false );
-                    }
+                if ( action.PinWindow )
+                {
+                    Logger.Debug( $"[RULE]PIN.Win {action.Handle.ToString( "X2" )} TO All Desktops" );
+                    DesktopWrapper.PinWindow( action.Handle, false );
+                }
 
-                    if ( action.HideFromView )
-                    {
-                        Logger.Debug( $"[RULE]HIDE.Win {action.Handle.ToString( "X2" )}" );
-                        Filters.WndHandleManualIgnoreList.Add( action.Handle );
-                    }
+                if ( action.HideFromView )
+                {
+                    Logger.Debug( $"[RULE]HIDE.Win {action.Handle.ToString( "X2" )}" );
+                    Filters.WndHandleManualIgnoreList.Add( action.Handle );
                 }
             }
         }
@@ -96,7 +94,7 @@ namespace VirtualSpace.VirtualDesktop
         public static void Start()
         {
             WaitForAction();
-            User32.EnumWindows( WindowHandleFilter, 0 );
+            _ = User32.EnumWindows( WindowHandleFilter, 0 );
             _initialized = true;
             StartDaemon();
             if ( ConfigManager.CurrentProfile.DaemonAutoStart )
@@ -127,7 +125,7 @@ namespace VirtualSpace.VirtualDesktop
                 while ( true )
                 {
                     CanRun.WaitOne();
-                    User32.EnumWindows( WindowHandleFilter, 0 );
+                    _ = User32.EnumWindows( WindowHandleFilter, 0 );
                     Logger.Debug( "Daemon one turn done." );
                     Thread.Sleep( _runlevel * 1000 );
                 }
@@ -136,10 +134,10 @@ namespace VirtualSpace.VirtualDesktop
 
         private static bool WindowHandleFilter( IntPtr hWnd, int lParam )
         {
-            User32.GetWindowText( hWnd, SbWinText, SbWinText.Capacity );
+            _ = User32.GetWindowText( hWnd, SbWinText, SbWinText.Capacity );
             var title = SbWinText.ToString();
 
-            User32.GetClassName( hWnd, SbCName, SbCName.Capacity );
+            _ = User32.GetClassName( hWnd, SbCName, SbCName.Capacity );
             var classname = SbCName.ToString();
 
             if ( User32.IsWindowVisible( hWnd ) &&
@@ -172,7 +170,7 @@ namespace VirtualSpace.VirtualDesktop
         private static bool ChildWindowHandleFilter( IntPtr hWnd, int lParam )
         {
             var sbCName = new StringBuilder( Const.WindowClassMaxLength );
-            User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
+            _ = User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
             var classname = sbCName.ToString();
             if ( classname == Const.WindowsUiCoreWindow && _isVisibleCoreWindow == default )
                 _isVisibleCoreWindow = hWnd;
