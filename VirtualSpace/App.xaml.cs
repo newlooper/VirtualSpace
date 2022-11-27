@@ -33,8 +33,8 @@ namespace VirtualSpace
     /// </summary>
     public partial class App : Application
     {
-        private Mutex? _mutex;
-        public  bool   HideOnStart;
+        private static Mutex? _mutex;
+        public         bool   HideOnStart;
 
         protected override void OnStartup( StartupEventArgs e )
         {
@@ -42,7 +42,7 @@ namespace VirtualSpace
             if ( e.Args.Contains( Const.Args.HIDE_ON_START ) ) HideOnStart = true;
 
             LogManager.GorgeousDividingLine();
-            _mutex = SingleInstanceCheck();
+            SingleInstanceCheck();
 
             if ( _mutex != null &&
                  AssemblyLoader.VersionCheck() &&
@@ -77,25 +77,27 @@ namespace VirtualSpace
             IpcPipeServer.SimpleShutdown();
         }
 
-        private void ReleaseMutex()
+        public void ReleaseMutex()
         {
             _mutex?.ReleaseMutex();
             _mutex?.Dispose();
             _mutex = null;
         }
 
-        private static Mutex? SingleInstanceCheck()
+        private static void SingleInstanceCheck()
         {
-            var m = new Mutex( true, "乱花渐欲迷人眼", out var createdNew );
-
-            if ( createdNew )
+            if ( TryMutex() )
             {
                 IpcPipeServer.Start();
-                return m;
             }
 
             IpcPipeServer.AsClient();
-            return null;
+        }
+
+        public static bool TryMutex()
+        {
+            _mutex = new Mutex( true, "乱花渐欲迷人眼", out var createdNew );
+            return createdNew;
         }
 
         private static MainWindow CreateCanvas( StartupEventArgs args )
@@ -130,7 +132,7 @@ namespace VirtualSpace
             Logger.Info( "Start Size: " +
                          Screen.PrimaryScreen.Bounds.Width + "*" +
                          Screen.PrimaryScreen.Bounds.Height );
-            Logger.Info( "Is Running On Administrator: " + SysInfo.IsAdministrator() );
+            Logger.Info( "Is Running As Administrator: " + SysInfo.IsAdministrator() );
             Logger.Info( "Language Setting In Profile: " + ConfigManager.CurrentProfile.UI.Language );
         }
     }

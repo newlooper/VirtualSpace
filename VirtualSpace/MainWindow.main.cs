@@ -312,6 +312,9 @@ namespace VirtualSpace
                             }
 
                             break;
+                        case UserMessage.RunAsAdministrator:
+                            TryRunAsAdmin();
+                            goto RETURN;
                         case UserMessage.SVD1:
                             SwitchByIndex( 0 );
                             break;
@@ -415,6 +418,27 @@ namespace VirtualSpace
             var i     = ConfigManager.CurrentProfile.DesktopOrder.IndexOf( guid );
             var index = ConfigManager.CurrentProfile.UI.ShowVdIndexType == 0 ? i : i + 1;
             _instance._acForm.UpdateVDIndexOnTrayIcon( index.ToString() );
+        }
+
+        private static void TryRunAsAdmin()
+        {
+            var app = (App)Application.Current;
+            var psi = new ProcessStartInfo
+            {
+                FileName = ConfigManager.AppPath,
+                UseShellExecute = true,
+                Verb = "runas"
+            };
+            try
+            {
+                app.ReleaseMutex();
+                Process.Start( psi );
+                Application.Current.Shutdown();
+            }
+            catch
+            {
+                App.TryMutex();
+            }
         }
     }
 }

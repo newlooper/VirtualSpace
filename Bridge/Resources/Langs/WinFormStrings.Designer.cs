@@ -100,6 +100,15 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot access task with your current permissions level. You need to run this application &apos;as administrator&apos; even if you are using an administrator account..
+        /// </summary>
+        internal static string General_RunOnStartup_Error_Permission {
+            get {
+                return ResourceManager.GetString("General.RunOnStartup.Error.Permission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hotkey Cleared..
         /// </summary>
         internal static string KB_Hotkey_Cleared {

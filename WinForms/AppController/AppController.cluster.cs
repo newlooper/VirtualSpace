@@ -12,6 +12,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using AppController.WinTaskScheduler;
+using VirtualSpace.Config;
 using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace
@@ -54,6 +56,27 @@ namespace VirtualSpace
         {
             ConfigManager.Configs.Cluster.HideOnStart = chb_HideOnStart.Checked;
             ConfigManager.Save();
+        }
+
+        private void chb_RunOnStartup_CheckedChanged( object sender, EventArgs e )
+        {
+            if ( chb_RunOnStartup.Checked )
+            {
+                if ( TaskSchedulerHelper.IsTaskExistsByName( Const.AppName ) ) return;
+                if ( !TaskSchedulerHelper.CreateTask() )
+                    chb_RunOnStartup.Checked = false;
+            }
+            else
+            {
+                if ( !TaskSchedulerHelper.IsTaskExistsByName( Const.AppName ) ) return;
+                if ( !TaskSchedulerHelper.DeleteTaskByName( Const.AppName ) )
+                    chb_RunOnStartup.Checked = true;
+            }
+        }
+
+        private void chb_RunOnStartup_VisibleChanged( object sender, EventArgs e )
+        {
+            chb_RunOnStartup.Checked = TaskSchedulerHelper.IsTaskExistsByName( Const.AppName );
         }
 
         public void UpdateVDIndexOnTrayIcon( string index )

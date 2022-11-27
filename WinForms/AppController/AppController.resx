@@ -62,13 +62,22 @@
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="closeThisWindowToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>271, 34</value>
+    <value>295, 34</value>
   </data>
   <data name="closeThisWindowToolStripMenuItem.Text" xml:space="preserve">
     <value>Close This Window</value>
   </data>
+  <data name="runAsAdministratorToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>295, 34</value>
+  </data>
+  <data name="runAsAdministratorToolStripMenuItem.Text" xml:space="preserve">
+    <value>Run As Administrator</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>292, 6</value>
+  </data>
   <data name="quitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>271, 34</value>
+    <value>295, 34</value>
   </data>
   <data name="quitToolStripMenuItem.Text" xml:space="preserve">
     <value>Quit Program</value>
@@ -495,6 +504,87 @@
   <data name="panel_General.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="lb_RunOnStartup.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lb_RunOnStartup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 83</value>
+  </data>
+  <data name="lb_RunOnStartup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>696, 24</value>
+  </data>
+  <data name="lb_RunOnStartup.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lb_RunOnStartup.Text" xml:space="preserve">
+    <value>Note: more details such as delay of start can be set in "Computer Management"</value>
+  </data>
+  <data name="&gt;&gt;lb_RunOnStartup.Name" xml:space="preserve">
+    <value>lb_RunOnStartup</value>
+  </data>
+  <data name="&gt;&gt;lb_RunOnStartup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lb_RunOnStartup.Parent" xml:space="preserve">
+    <value>gb_general</value>
+  </data>
+  <data name="&gt;&gt;lb_RunOnStartup.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="chb_RunOnStartup.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chb_RunOnStartup.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="chb_RunOnStartup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 37</value>
+  </data>
+  <data name="chb_RunOnStartup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>595, 28</value>
+  </data>
+  <data name="chb_RunOnStartup.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="chb_RunOnStartup.Text" xml:space="preserve">
+    <value>Launch program at system startup (use Windows Task Scheduler)</value>
+  </data>
+  <data name="&gt;&gt;chb_RunOnStartup.Name" xml:space="preserve">
+    <value>chb_RunOnStartup</value>
+  </data>
+  <data name="&gt;&gt;chb_RunOnStartup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chb_RunOnStartup.Parent" xml:space="preserve">
+    <value>gb_general</value>
+  </data>
+  <data name="&gt;&gt;chb_RunOnStartup.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="gb_general.Location" type="System.Drawing.Point, System.Drawing">
+    <value>18, 20</value>
+  </data>
+  <data name="gb_general.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1223, 134</value>
+  </data>
+  <data name="gb_general.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="gb_general.Text" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="&gt;&gt;gb_general.Name" xml:space="preserve">
+    <value>gb_general</value>
+  </data>
+  <data name="&gt;&gt;gb_general.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gb_general.Parent" xml:space="preserve">
+    <value>panel_General</value>
+  </data>
+  <data name="&gt;&gt;gb_general.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="lb_dummy_Placeholder.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -520,7 +610,7 @@
     <value>panel_General</value>
   </data>
   <data name="&gt;&gt;lb_dummy_Placeholder.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="chb_HideOnStart.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -628,7 +718,7 @@
     <value>3</value>
   </data>
   <data name="gb_Cluster.Location" type="System.Drawing.Point, System.Drawing">
-    <value>18, 1111</value>
+    <value>18, 1249</value>
   </data>
   <data name="gb_Cluster.Size" type="System.Drawing.Size, System.Drawing">
     <value>1223, 216</value>
@@ -649,7 +739,7 @@
     <value>panel_General</value>
   </data>
   <data name="&gt;&gt;gb_Cluster.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="btn_mouse_save.Location" type="System.Drawing.Point, System.Drawing">
     <value>20, 115</value>
@@ -848,7 +938,7 @@
     <value>1</value>
   </data>
   <data name="gb_Mouse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>18, 748</value>
+    <value>18, 889</value>
   </data>
   <data name="gb_Mouse.Size" type="System.Drawing.Size, System.Drawing">
     <value>1223, 347</value>
@@ -869,7 +959,7 @@
     <value>panel_General</value>
   </data>
   <data name="&gt;&gt;gb_Mouse.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="tb_hk_tip.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -1574,7 +1664,7 @@
     <value>1</value>
   </data>
   <data name="gb_Hotkey.Location" type="System.Drawing.Point, System.Drawing">
-    <value>18, 197</value>
+    <value>18, 341</value>
   </data>
   <data name="gb_Hotkey.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>30, 10, 3, 20</value>
@@ -1598,7 +1688,7 @@
     <value>panel_General</value>
   </data>
   <data name="&gt;&gt;gb_Hotkey.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="lb_nav_circle_h_type.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1706,7 +1796,7 @@
     <value>3</value>
   </data>
   <data name="gb_nav.Location" type="System.Drawing.Point, System.Drawing">
-    <value>18, 20</value>
+    <value>18, 167</value>
   </data>
   <data name="gb_nav.Size" type="System.Drawing.Size, System.Drawing">
     <value>1223, 161</value>
@@ -1727,7 +1817,7 @@
     <value>panel_General</value>
   </data>
   <data name="&gt;&gt;gb_nav.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="panel_General.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -7372,6 +7462,18 @@
   </data>
   <data name="&gt;&gt;closeThisWindowToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;runAsAdministratorToolStripMenuItem.Name" xml:space="preserve">
+    <value>runAsAdministratorToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;runAsAdministratorToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
+    <value>toolStripSeparator1</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;quitToolStripMenuItem.Name" xml:space="preserve">
     <value>quitToolStripMenuItem</value>

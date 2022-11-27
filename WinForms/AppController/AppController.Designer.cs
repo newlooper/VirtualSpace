@@ -43,6 +43,8 @@ namespace VirtualSpace
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeThisWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runAsAdministratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.langToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,6 +65,9 @@ namespace VirtualSpace
             this.tbError = new System.Windows.Forms.TextBox();
             this.MT_General = new System.Windows.Forms.TabPage();
             this.panel_General = new System.Windows.Forms.Panel();
+            this.gb_general = new System.Windows.Forms.GroupBox();
+            this.lb_RunOnStartup = new System.Windows.Forms.Label();
+            this.chb_RunOnStartup = new System.Windows.Forms.CheckBox();
             this.lb_dummy_Placeholder = new System.Windows.Forms.Label();
             this.gb_Cluster = new System.Windows.Forms.GroupBox();
             this.chb_HideOnStart = new System.Windows.Forms.CheckBox();
@@ -175,6 +180,7 @@ namespace VirtualSpace
             this.logTabError.SuspendLayout();
             this.MT_General.SuspendLayout();
             this.panel_General.SuspendLayout();
+            this.gb_general.SuspendLayout();
             this.gb_Cluster.SuspendLayout();
             this.gb_Mouse.SuspendLayout();
             this.tc_Mouse.SuspendLayout();
@@ -218,6 +224,8 @@ namespace VirtualSpace
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.closeThisWindowToolStripMenuItem,
+            this.runAsAdministratorToolStripMenuItem,
+            this.toolStripSeparator1,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             resources.ApplyResources(this.fileToolStripMenuItem, "fileToolStripMenuItem");
@@ -227,6 +235,17 @@ namespace VirtualSpace
             this.closeThisWindowToolStripMenuItem.Name = "closeThisWindowToolStripMenuItem";
             resources.ApplyResources(this.closeThisWindowToolStripMenuItem, "closeThisWindowToolStripMenuItem");
             this.closeThisWindowToolStripMenuItem.Click += new System.EventHandler(this.closeThisWindowToolStripMenuItem_Click);
+            // 
+            // runAsAdministratorToolStripMenuItem
+            // 
+            this.runAsAdministratorToolStripMenuItem.Name = "runAsAdministratorToolStripMenuItem";
+            resources.ApplyResources(this.runAsAdministratorToolStripMenuItem, "runAsAdministratorToolStripMenuItem");
+            this.runAsAdministratorToolStripMenuItem.Click += new System.EventHandler(this.runAsAdministratorToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // quitToolStripMenuItem
             // 
@@ -363,12 +382,34 @@ namespace VirtualSpace
             // panel_General
             // 
             resources.ApplyResources(this.panel_General, "panel_General");
+            this.panel_General.Controls.Add(this.gb_general);
             this.panel_General.Controls.Add(this.lb_dummy_Placeholder);
             this.panel_General.Controls.Add(this.gb_Cluster);
             this.panel_General.Controls.Add(this.gb_Mouse);
             this.panel_General.Controls.Add(this.gb_Hotkey);
             this.panel_General.Controls.Add(this.gb_nav);
             this.panel_General.Name = "panel_General";
+            // 
+            // gb_general
+            // 
+            this.gb_general.Controls.Add(this.lb_RunOnStartup);
+            this.gb_general.Controls.Add(this.chb_RunOnStartup);
+            resources.ApplyResources(this.gb_general, "gb_general");
+            this.gb_general.Name = "gb_general";
+            this.gb_general.TabStop = false;
+            // 
+            // lb_RunOnStartup
+            // 
+            resources.ApplyResources(this.lb_RunOnStartup, "lb_RunOnStartup");
+            this.lb_RunOnStartup.Name = "lb_RunOnStartup";
+            // 
+            // chb_RunOnStartup
+            // 
+            resources.ApplyResources(this.chb_RunOnStartup, "chb_RunOnStartup");
+            this.chb_RunOnStartup.Name = "chb_RunOnStartup";
+            this.chb_RunOnStartup.UseVisualStyleBackColor = true;
+            this.chb_RunOnStartup.CheckedChanged += new System.EventHandler(this.chb_RunOnStartup_CheckedChanged);
+            this.chb_RunOnStartup.VisibleChanged += new System.EventHandler(this.chb_RunOnStartup_VisibleChanged);
             // 
             // lb_dummy_Placeholder
             // 
@@ -1240,6 +1281,8 @@ namespace VirtualSpace
             this.MT_General.ResumeLayout(false);
             this.panel_General.ResumeLayout(false);
             this.panel_General.PerformLayout();
+            this.gb_general.ResumeLayout(false);
+            this.gb_general.PerformLayout();
             this.gb_Cluster.ResumeLayout(false);
             this.gb_Mouse.ResumeLayout(false);
             this.tc_Mouse.ResumeLayout(false);
@@ -1409,5 +1452,10 @@ namespace VirtualSpace
         private System.Windows.Forms.CheckBox chb_notify_vd_changed;
         private System.Windows.Forms.CheckBox chb_showVDIndexOnTrayIcon;
         private System.Windows.Forms.CheckBox chb_HideOnStart;
+        private System.Windows.Forms.ToolStripMenuItem runAsAdministratorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.GroupBox gb_general;
+        private System.Windows.Forms.Label lb_RunOnStartup;
+        private System.Windows.Forms.CheckBox chb_RunOnStartup;
     }
 }

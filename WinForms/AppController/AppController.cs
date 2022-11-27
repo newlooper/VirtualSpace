@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -44,12 +45,35 @@ namespace VirtualSpace
             _instance = this;
 
             InitializeComponent();
+
             InitRuleListView();
             InitPluginListView();
             ReadUiConfig();
             ReadClusterConfig();
+            CheckAdmin();
 
             PickLogAndWrite();
+        }
+
+        private void CheckAdmin()
+        {
+            if ( SysInfo.IsAdministrator() )
+            {
+                runAsAdministratorToolStripMenuItem.Visible = false;
+                return;
+            }
+
+            var iconResult = new User32.SHSTOCKICONINFO();
+            iconResult.cbSize = (uint)Marshal.SizeOf( iconResult );
+
+            _ = User32.SHGetStockIconInfo(
+                User32.SHSTOCKICONID.SIID_SHIELD,
+                User32.SHGSI.SHGSI_ICON | User32.SHGSI.SHGSI_SMALLICON,
+                ref iconResult );
+            runAsAdministratorToolStripMenuItem.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+            var icon = Bitmap.FromHicon( iconResult.hIcon );
+            icon.MakeTransparent();
+            runAsAdministratorToolStripMenuItem.Image = icon;
         }
 
         protected override CreateParams CreateParams
@@ -199,9 +223,12 @@ namespace VirtualSpace
             Resources.ApplyResources( item, item.Name, ci );
             if ( item.DropDownItems.Count > 0 )
             {
-                foreach ( ToolStripMenuItem c in item.DropDownItems )
+                foreach ( ToolStripItem c in item.DropDownItems )
                 {
-                    SetMenuItemLang( c, lang );
+                    if ( c is ToolStripMenuItem menuItem )
+                    {
+                        SetMenuItemLang( menuItem, lang );
+                    }
                 }
             }
         }
@@ -380,6 +407,11 @@ namespace VirtualSpace
         private void closeThisWindowToolStripMenuItem_Click( object sender, EventArgs e )
         {
             Hide();
+        }
+
+        private void runAsAdministratorToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RunAsAdministrator, 0 );
         }
     }
 }

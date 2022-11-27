@@ -245,4 +245,8 @@ VirtualSpace(11)	Windows 11	21H2(22000)
   <data name="Cluster.Notification.SVD.Last" xml:space="preserve">
     <value>上一个桌面：</value>
   </data>
+  <data name="General.RunOnStartup.Error.Permission" xml:space="preserve">
+    <value>当前权限级别无法访问计划任务，
+请确保当前账户是此计算机的管理员并且“以管理员身份运行”运行此程序。</value>
+  </data>
 </root>

@@ -245,4 +245,7 @@ possible reason:
   <data name="Cluster.Notification.SVD.Last" xml:space="preserve">
     <value>Last Desktop: </value>
   </data>
+  <data name="General.RunOnStartup.Error.Permission" xml:space="preserve">
+    <value>Cannot access task with your current permissions level. You need to run this application 'as administrator' even if you are using an administrator account.</value>
+  </data>
 </root>

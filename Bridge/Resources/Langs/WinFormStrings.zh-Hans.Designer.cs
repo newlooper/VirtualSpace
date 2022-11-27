@@ -100,6 +100,15 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 当前权限级别无法访问计划任务，请确保当前账户是此计算机的管理员并且“以管理员身份运行”运行此程序。.
+        /// </summary>
+        internal static string General_RunOnStartup_Error_Permission {
+            get {
+                return ResourceManager.GetString("General.RunOnStartup.Error.Permission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 热键已清除。.
         /// </summary>
         internal static string KB_Hotkey_Cleared {
