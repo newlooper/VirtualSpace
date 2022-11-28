@@ -42,6 +42,7 @@ namespace VirtualSpace.Config
         public const int    NavHTypeSameRow        = 1;
         public const string WindowsCRLF            = "\r\n";
         public const string AppName                = "VirtualSpace";
+        public const string HideWindowSplitter     = "🔙🔜";
 
         public static class Args
         {

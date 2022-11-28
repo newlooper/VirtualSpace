@@ -504,6 +504,33 @@
   <data name="panel_General.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="llb_TaskScheduler.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="llb_TaskScheduler.Location" type="System.Drawing.Point, System.Drawing">
+    <value>497, 83</value>
+  </data>
+  <data name="llb_TaskScheduler.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 24</value>
+  </data>
+  <data name="llb_TaskScheduler.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="llb_TaskScheduler.Text" xml:space="preserve">
+    <value>Task Scheduler</value>
+  </data>
+  <data name="&gt;&gt;llb_TaskScheduler.Name" xml:space="preserve">
+    <value>llb_TaskScheduler</value>
+  </data>
+  <data name="&gt;&gt;llb_TaskScheduler.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;llb_TaskScheduler.Parent" xml:space="preserve">
+    <value>gb_general</value>
+  </data>
+  <data name="&gt;&gt;llb_TaskScheduler.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="lb_RunOnStartup.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -511,13 +538,13 @@
     <value>34, 83</value>
   </data>
   <data name="lb_RunOnStartup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>696, 24</value>
+    <value>467, 24</value>
   </data>
   <data name="lb_RunOnStartup.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="lb_RunOnStartup.Text" xml:space="preserve">
-    <value>Note: more details such as delay of start can be set in "Computer Management"</value>
+    <value>Note: more details such as delay of start can be set in</value>
   </data>
   <data name="&gt;&gt;lb_RunOnStartup.Name" xml:space="preserve">
     <value>lb_RunOnStartup</value>
@@ -529,7 +556,7 @@
     <value>gb_general</value>
   </data>
   <data name="&gt;&gt;lb_RunOnStartup.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="chb_RunOnStartup.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -541,13 +568,13 @@
     <value>34, 37</value>
   </data>
   <data name="chb_RunOnStartup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>595, 28</value>
+    <value>336, 28</value>
   </data>
   <data name="chb_RunOnStartup.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="chb_RunOnStartup.Text" xml:space="preserve">
-    <value>Launch program at system startup (use Windows Task Scheduler)</value>
+    <value>Launch program at system startup.</value>
   </data>
   <data name="&gt;&gt;chb_RunOnStartup.Name" xml:space="preserve">
     <value>chb_RunOnStartup</value>
@@ -559,7 +586,7 @@
     <value>gb_general</value>
   </data>
   <data name="&gt;&gt;chb_RunOnStartup.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="gb_general.Location" type="System.Drawing.Point, System.Drawing">
     <value>18, 20</value>

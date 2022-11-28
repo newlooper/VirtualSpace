@@ -9,9 +9,11 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using System.Windows.Forms;
 using AppController.WinTaskScheduler;
 using VirtualSpace.Config;
 using ConfigManager = VirtualSpace.Config.Manager;
@@ -77,6 +79,16 @@ namespace VirtualSpace
         private void chb_RunOnStartup_VisibleChanged( object sender, EventArgs e )
         {
             chb_RunOnStartup.Checked = TaskSchedulerHelper.IsTaskExistsByName( Const.AppName );
+        }
+
+        private void llb_TaskScheduler_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = "taskschd.msc",
+                UseShellExecute = true
+            };
+            Process.Start( psi );
         }
 
         public void UpdateVDIndexOnTrayIcon( string index )

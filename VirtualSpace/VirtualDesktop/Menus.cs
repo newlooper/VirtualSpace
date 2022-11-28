@@ -77,7 +77,6 @@ namespace VirtualSpace.VirtualDesktop
             }
 
             hideWindow.Click += OnIgnoreWindowClick;
-            // hideWindow.Enabled = !DesktopWrapper.IsWindowPinned( mi.Vw.Handle );
             _ctm.Items.Add( hideWindow );
 
             var closeWindow = new ToolStripMenuItem
@@ -200,7 +199,7 @@ namespace VirtualSpace.VirtualDesktop
             void OnUnHideWindow( object? s, EventArgs evt )
             {
                 var item = s as ToolStripMenuItem;
-                var m    = Regex.Match( item.Text, $@".*\|\|\|(.*)" );
+                var m    = Regex.Match( item.Text, $@".*{Const.HideWindowSplitter}(.*)" );
 
                 var h = (IntPtr)int.Parse( m.Groups[1].Value );
 
@@ -230,7 +229,7 @@ namespace VirtualSpace.VirtualDesktop
                 User32.GetWindowText( handle, sb, sb.Capacity );
                 var title = sb.ToString();
 
-                var item = new ToolStripMenuItem( $"[{title}] of {process.ProcessName}(.exe) |||{handle}" );
+                var item = new ToolStripMenuItem( $"[{title}] of {process.ProcessName}(.exe){Const.HideWindowSplitter}{handle}" );
                 item.Click += OnUnHideWindow;
                 unHideWindow.DropDownItems.Add( item );
             }
@@ -247,14 +246,6 @@ namespace VirtualSpace.VirtualDesktop
                     var vdw = mi.Self;
                     vdw.RealClose();
                     mi.Vdws.RemoveAt( mi.Self.VdIndex );
-
-                    // VirtualDesktopManager.FixLayout();
-                    // VirtualDesktopManager.ShowAllVirtualDesktops();
-                    // if ( VirtualDesktopManager.NeedRepaintThumbs )
-                    // {
-                    //     VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-                    //     VirtualDesktopManager.NeedRepaintThumbs = false;
-                    // }
                 }
             };
             _ctm.Items.Add( delVirtualDesktop );

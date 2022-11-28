@@ -66,6 +66,7 @@ namespace VirtualSpace
             this.MT_General = new System.Windows.Forms.TabPage();
             this.panel_General = new System.Windows.Forms.Panel();
             this.gb_general = new System.Windows.Forms.GroupBox();
+            this.llb_TaskScheduler = new System.Windows.Forms.LinkLabel();
             this.lb_RunOnStartup = new System.Windows.Forms.Label();
             this.chb_RunOnStartup = new System.Windows.Forms.CheckBox();
             this.lb_dummy_Placeholder = new System.Windows.Forms.Label();
@@ -392,11 +393,19 @@ namespace VirtualSpace
             // 
             // gb_general
             // 
+            this.gb_general.Controls.Add(this.llb_TaskScheduler);
             this.gb_general.Controls.Add(this.lb_RunOnStartup);
             this.gb_general.Controls.Add(this.chb_RunOnStartup);
             resources.ApplyResources(this.gb_general, "gb_general");
             this.gb_general.Name = "gb_general";
             this.gb_general.TabStop = false;
+            // 
+            // llb_TaskScheduler
+            // 
+            resources.ApplyResources(this.llb_TaskScheduler, "llb_TaskScheduler");
+            this.llb_TaskScheduler.Name = "llb_TaskScheduler";
+            this.llb_TaskScheduler.TabStop = true;
+            this.llb_TaskScheduler.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llb_TaskScheduler_LinkClicked);
             // 
             // lb_RunOnStartup
             // 
@@ -1457,5 +1466,6 @@ namespace VirtualSpace
         private System.Windows.Forms.GroupBox gb_general;
         private System.Windows.Forms.Label lb_RunOnStartup;
         private System.Windows.Forms.CheckBox chb_RunOnStartup;
+        private System.Windows.Forms.LinkLabel llb_TaskScheduler;
     }
 }
