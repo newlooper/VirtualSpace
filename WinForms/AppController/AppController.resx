@@ -1018,9 +1018,6 @@
   <metadata name="ts_HotkeySave.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>934, 17</value>
   </metadata>
-  <data name="ts_HotkeySave.AutoSize" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
   <data name="ts_HotkeySave.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -1028,19 +1025,19 @@
     <value>False</value>
   </data>
   <data name="tsmi_hk_save.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 34</value>
+    <value>270, 34</value>
   </data>
   <data name="tsmi_hk_save.Text" xml:space="preserve">
     <value>Save</value>
   </data>
   <data name="tsmi_hk_reg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 34</value>
+    <value>270, 34</value>
   </data>
   <data name="tsmi_hk_reg.Text" xml:space="preserve">
     <value>Register</value>
   </data>
   <data name="tsmi_hk_clear_save.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 34</value>
+    <value>270, 34</value>
   </data>
   <data name="tsmi_hk_clear_save.Text" xml:space="preserve">
     <value>Clear &amp;&amp; Save</value>
@@ -1075,7 +1072,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="ts_HotkeySave.Size" type="System.Drawing.Size, System.Drawing">
-    <value>470, 50</value>
+    <value>468, 50</value>
   </data>
   <data name="ts_HotkeySave.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
