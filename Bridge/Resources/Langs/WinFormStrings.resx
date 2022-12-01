@@ -145,7 +145,9 @@ VirtualSpace10	Windows 10	20H1(19041)
 VirtualSpace10	Windows 10	20H2(19042)
 VirtualSpace10	Windows 10	21H1(19043)
 VirtualSpace10	Windows 10	21H2(19044)
+VirtualSpace10	Windows 10	22H2(19045)
 VirtualSpace(11)	Windows 11	21H2(22000)
+VirtualSpace(11)	Windows 11	22H2(22621)
 ====================================</value>
   </data>
   <data name="Rule.NameRequired" xml:space="preserve">

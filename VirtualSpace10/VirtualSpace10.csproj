@@ -53,6 +53,7 @@
         <Compile Include="..\VirtualSpace\MainWindow.main.cs" Link="MainWindow.main.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.style.cs" Link="MainWindow.style.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Api\DesktopManagerWrapper.cs" Link="VirtualDesktop\Api\DesktopManagerWrapper.cs" />
+        <Compile Include="..\VirtualSpace\VirtualDesktop\Api\DesktopWrapper.cs" Link="VirtualDesktop\Api\DesktopWrapper.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Daemon.cs" Link="VirtualDesktop\Daemon.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\DragWindow.cs" Link="VirtualDesktop\DragWindow.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\DragWindow.Designer.cs" Link="VirtualDesktop\DragWindow.Designer.cs" />

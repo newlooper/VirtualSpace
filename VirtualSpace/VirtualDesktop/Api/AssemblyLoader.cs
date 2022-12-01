@@ -21,7 +21,7 @@ namespace VirtualSpace.VirtualDesktop.Api
             var version = Environment.OSVersion.Version;
             if ( version.Major >= 10 )
             {
-                if ( version.Build >= 22000 )
+                if ( version.Build is >= 22000 and < 25000 )
                 {
                     return true;
                 }
