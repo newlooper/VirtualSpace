@@ -2,6 +2,10 @@
 
 > A Virtual Desktop Enhancement GUI Program For Win10 & Win11
 
+[![License](https://img.shields.io/github/license/newlooper/VirtualSpace "License")](https://github.com/newlooper/VirtualSpace/blob/main/COPYING)
+[![Download Lastest](https://img.shields.io/github/v/release/newlooper/VirtualSpace "Download Lastest")](https://github.com/newlooper/VirtualSpace/releases)
+[![Total Downloads](https://img.shields.io/github/downloads/newlooper/VirtualSpace/total "Total Downloads")](https://github.com/newlooper/VirtualSpace/releases)
+
 ## 1. Intro
 
 ### 1.1 Design memo
