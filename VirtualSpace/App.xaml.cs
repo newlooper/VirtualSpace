@@ -39,15 +39,15 @@ namespace VirtualSpace
         protected override void OnStartup( StartupEventArgs e )
         {
             base.OnStartup( e );
-            if ( e.Args.Contains( Const.Args.HIDE_ON_START ) ) HideOnStart = true;
 
             LogManager.GorgeousDividingLine();
-            SingleInstanceCheck();
 
-            if ( _mutex != null &&
-                 AssemblyLoader.VersionCheck() &&
+            if ( AssemblyLoader.VersionCheck() &&
+                 SingleInstanceCheck() &&
                  ConfigManager.Init() )
             {
+                if ( e.Args.Contains( Const.Args.HIDE_ON_START ) ) HideOnStart = true;
+
                 Current.MainWindow = CreateCanvas( e );
                 if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
                 {
@@ -84,14 +84,19 @@ namespace VirtualSpace
             _mutex = null;
         }
 
-        private static void SingleInstanceCheck()
+        private static bool SingleInstanceCheck()
         {
-            if ( TryMutex() )
+            var createdNew = TryMutex();
+            if ( createdNew )
             {
                 IpcPipeServer.Start();
             }
+            else
+            {
+                IpcPipeServer.AsClient();
+            }
 
-            IpcPipeServer.AsClient();
+            return createdNew;
         }
 
         public static bool TryMutex()
