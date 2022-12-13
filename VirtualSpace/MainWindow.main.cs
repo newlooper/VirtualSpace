@@ -102,7 +102,13 @@ namespace VirtualSpace
 
             if ( !( ConfigManager.Configs.Cluster.HideOnStart ||
                     ( (App)Application.Current ).HideOnStart ) )
+            {
                 VirtualDesktopManager.InitLayout();
+            }
+            else
+            {
+                MainWindow.ResetMainGrid();
+            }
 
             DesktopManagerWrapper.ListenVirtualDesktopEvents();
             DesktopManagerWrapper.RegisterVirtualDesktopEvents();
