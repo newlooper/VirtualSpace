@@ -14,7 +14,7 @@
                             <Label Margin="10,10,0,0" Width="180">Animation Duration(ms):</Label>
                             <Slider x:Name="SliderAnimationDuration" Margin="10,15,0,0" HorizontalAlignment="Left" Width="300"
                                     IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
-                                    Minimum="500" Maximum="1000" Value="{Binding AnimationDuration}" TickFrequency="10" TickPlacement="None" LargeChange="10" />
+                                    Minimum="100" Maximum="1000" Value="{Binding AnimationDuration}" TickFrequency="10" TickPlacement="None" LargeChange="10" />
                             <TextBlock Margin="5,16,0,0" Text="{Binding ElementName=SliderAnimationDuration, Path=Value}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">

@@ -27,6 +27,7 @@ namespace VirtualSpace
     public partial class MainWindow
     {
         private static          bool   _inRising;
+        private static          bool   _switching;
         private static readonly IntPtr Handled = (IntPtr)1;
 
         private void RegisterHotKey( IntPtr hWnd )
@@ -107,7 +108,27 @@ namespace VirtualSpace
                         case Keys.Right:
                         case Keys.Up:
                         case Keys.Down:
-                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)info.vkCode );
+                            if (!_switching)
+                            {
+                                _switching = true;
+                                User32.PostMessage(Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)info.vkCode);
+                            }
+                            return Handled;
+                    }
+                }
+
+                if (keyType == LLGHK.WM_KEYUP
+                     && User32.GetAsyncKeyState((int)Keys.LWin) < 0
+                     && User32.GetAsyncKeyState((int)Keys.LControlKey) < 0) // hook LWin+LCtrl+<DirKey> for switch virtual desktop
+                {
+                    var key = (Keys)info.vkCode;
+                    switch (key)
+                    {
+                        case Keys.Left:
+                        case Keys.Right:
+                        case Keys.Up:
+                        case Keys.Down:
+                            _switching = false;
                             return Handled;
                     }
                 }
