@@ -28,7 +28,7 @@ namespace VirtualSpace
         private static int           _desktopCount;
         private static UserInterface Ui => Manager.CurrentProfile.UI;
 
-        public static int RowsCols { get; private set; }
+        private static int RowsCols { get; set; }
 
         public static Size MainGridCellSize => _instance.MainGrid.Children[0].RenderSize;
 
@@ -87,9 +87,9 @@ namespace VirtualSpace
 
         public static void ResetMainGrid()
         {
-            var vdCount  = DesktopWrapper.Count;
-            var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
+            var vdCount = DesktopWrapper.Count;
             if ( vdCount == _desktopCount ) return;
+            var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
 
             _instance.MainGrid.Children.Clear();
 

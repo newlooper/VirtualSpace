@@ -48,19 +48,20 @@ namespace VirtualSpace
             {
                 if ( e.Args.Contains( Const.Args.HIDE_ON_START ) ) HideOnStart = true;
 
-                Current.MainWindow = CreateCanvas( e );
+                var mw = CreateCanvas( e );
+                Current.MainWindow = mw;
                 if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
                 {
-                    Current.MainWindow.Left = Const.FakeHideX;
-                    Current.MainWindow.Top = Const.FakeHideY;
+                    mw.Left = Const.FakeHideX;
+                    mw.Top = Const.FakeHideY;
                 }
 
                 Bootstrap();
-                Current.MainWindow.Show();
+                mw.Show();
 
                 if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
                 {
-                    Current.MainWindow.Hide();
+                    mw.FakeHide();
                 }
             }
             else

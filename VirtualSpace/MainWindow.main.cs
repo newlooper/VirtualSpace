@@ -381,6 +381,12 @@ namespace VirtualSpace
             _acForm = ac;
         }
 
+        public void FakeHide()
+        {
+            ResetMainGrid();
+            Hide();
+        }
+
         private static void BringToTop()
         {
             CheckScreenArea();
