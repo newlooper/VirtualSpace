@@ -220,10 +220,10 @@ namespace VirtualSpace.VirtualDesktop
 
         private static bool WindowFilter( IntPtr hWnd, int lParam )
         {
-            User32.GetWindowText( hWnd, SbWinTitle, SbWinTitle.Capacity );
+            _ = User32.GetWindowText( hWnd, SbWinTitle, SbWinTitle.Capacity );
             var title = SbWinTitle.ToString();
 
-            User32.GetClassName( hWnd, SbClsName, SbClsName.Capacity );
+            _ = User32.GetClassName( hWnd, SbClsName, SbClsName.Capacity );
             var classname = SbClsName.ToString();
 
             if ( User32.IsWindowVisible( hWnd ) &&
@@ -256,7 +256,7 @@ namespace VirtualSpace.VirtualDesktop
         private static bool ChildWindowFilter( IntPtr hWnd, int lParam )
         {
             var sbCName = new StringBuilder( Const.WindowClassMaxLength );
-            User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
+            _ = User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
             var classname = sbCName.ToString();
             if ( classname == Const.WindowsUiCoreWindow && _coreWindowHandle == default )
                 _coreWindowHandle = hWnd;
@@ -266,21 +266,20 @@ namespace VirtualSpace.VirtualDesktop
         private static List<VisibleWindow> GetVisibleWindows()
         {
             VisibleWindows.Clear();
-            User32.EnumWindows( EnumWindowsProc, 0 );
+            _ = User32.EnumWindows( EnumWindowsProc, 0 );
             return VisibleWindows;
         }
 
-        public static void ShowVisibleWindowsForDesktops( List<VirtualDesktopWindow>? vdws = null )
+        public static void ShowVisibleWindowsForDesktops( List<VirtualDesktopWindow>? vdwList = null )
         {
-            var count   = DesktopManagerWrapper.GetViewCount();
-            var windows = GetVisibleWindows();
-            Logger.Debug( $"VisibleWindows/ApplicationViews: {windows.Count}/{count}" );
+            var visibleWindows = GetVisibleWindows();
+            Logger.Debug( $"VisibleWindows/ApplicationViews: {visibleWindows.Count}/{DesktopManagerWrapper.GetViewCount()}" );
 
-            vdws ??= _virtualDesktops;
+            vdwList ??= _virtualDesktops;
 
-            var profile = ConfigManager.CurrentProfile;
-            Parallel.ForEach( vdws, ( vdw, loopState ) => { vdw.ClearWindows(); } );
-            foreach ( var win in windows )
+            Parallel.ForEach( vdwList, ( vdw, loopState ) => { vdw.ClearWindows(); } );
+
+            foreach ( var win in visibleWindows )
             {
                 try
                 {
@@ -293,21 +292,18 @@ namespace VirtualSpace.VirtualDesktop
                         continue;
                     }
 
-                    var vdIndex = profile.DesktopOrder.IndexOf( DesktopWrapper.FromWindow( win.Handle ).Guid );
-                    if ( vdws.Count == _virtualDesktops.Count )
+                    var vdIndex = ConfigManager.CurrentProfile.DesktopOrder.IndexOf( DesktopWrapper.FromWindow( win.Handle ).Guid );
+                    if ( vdwList.Count == _virtualDesktops.Count ) // show for all VDs
                     {
-                        vdws[vdIndex].AddWindow( win );
+                        vdwList[vdIndex].AddWindow( win );
                         Logger.Debug( $"Desktop[{vdIndex}]({DesktopWrapper.DesktopNameFromIndex( vdIndex )}) CONTAINS {win.Title}" );
                     }
-                    else
+                    else // show for specific VDs
                     {
-                        foreach ( var vdw in vdws )
+                        foreach ( var vdw in vdwList.Where( vdw => vdw.VdIndex == vdIndex ) )
                         {
-                            if ( vdw.VdIndex == vdIndex )
-                            {
-                                vdw.AddWindow( win );
-                                Logger.Debug( $"Desktop[{vdIndex}]({DesktopWrapper.DesktopNameFromIndex( vdIndex )}) CONTAINS {win.Title}" );
-                            }
+                            vdw.AddWindow( win );
+                            Logger.Debug( $"Desktop[{vdIndex}]({DesktopWrapper.DesktopNameFromIndex( vdIndex )}) CONTAINS {win.Title}" );
                         }
                     }
                 }
@@ -318,7 +314,7 @@ namespace VirtualSpace.VirtualDesktop
                 }
             }
 
-            foreach ( var vdw in vdws )
+            foreach ( var vdw in vdwList )
             {
                 vdw.ShowThumbnails();
             }

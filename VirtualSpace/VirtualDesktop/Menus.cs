@@ -117,14 +117,14 @@ namespace VirtualSpace.VirtualDesktop
                 switch ( wp.ShowCmd )
                 {
                     case ShowState.SW_SHOWMAXIMIZED:
-                        User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_RESTORE );
+                        _ = User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_RESTORE );
                         User32.SetWindowPos( mi.Vw.Handle, IntPtr.Zero,
                             targetX, targetY, targetWidth, targetHeight, 0 );
-                        User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_MAXIMIZE );
+                        _ = User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_MAXIMIZE );
                         break;
                     case ShowState.SW_MINIMIZE:
                     case ShowState.SW_SHOWMINIMIZED:
-                        User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_RESTORE );
+                        _ = User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_RESTORE );
                         User32.SetWindowPos( mi.Vw.Handle, IntPtr.Zero,
                             targetX, targetY, targetWidth, targetHeight, 0 );
                         // User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_SHOWMINIMIZED );
@@ -226,7 +226,7 @@ namespace VirtualSpace.VirtualDesktop
                 var process = Process.GetProcessById( pId );
 
                 var sb = new StringBuilder( Const.WindowTitleMaxLength );
-                User32.GetWindowText( handle, sb, sb.Capacity );
+                _ = User32.GetWindowText( handle, sb, sb.Capacity );
                 var title = sb.ToString();
 
                 var item = new ToolStripMenuItem( $"[{title}] of {process.ProcessName}(.exe){Const.HideWindowSplitter}{handle}" );
