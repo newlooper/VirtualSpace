@@ -184,32 +184,32 @@ namespace VirtualSpace
                 {
                     PluginHost.RestartPlugin( plugin );
                 }
+
+                goto RETURN;
             }
-            else
+
+            if ( PluginHost.CareAboutMessages.Values.Contains( (uint)msg ) )
             {
-                if ( PluginHost.CareAboutMessages.Values.Contains( (uint)msg ) )
+                var (key, _) = PluginHost.CareAboutMessages.First( m => m.Value == msg );
+                foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
+                             plugin.RestartPolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
+                             plugin.RestartPolicy.Enabled &&
+                             plugin.RestartPolicy.Values.Contains( key ) ) )
                 {
-                    var (key, _) = PluginHost.CareAboutMessages.First( m => m.Value == msg );
-                    foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
-                                 plugin.RestartPolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
-                                 plugin.RestartPolicy.Enabled &&
-                                 plugin.RestartPolicy.Values.Contains( key ) ) )
-                    {
-                        Logger.Info( $"Restart Plugin {plugin.Display} because {key}" );
-                        PluginHost.RestartPlugin( plugin );
-                    }
-
-                    foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
-                                 plugin.ClosePolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
-                                 plugin.ClosePolicy.Enabled &&
-                                 plugin.ClosePolicy.Values.Contains( key ) ) )
-                    {
-                        Logger.Info( $"Close Plugin {plugin.Display} because {key}" );
-                        PluginHost.ClosePlugin( plugin );
-                    }
-
-                    goto RETURN;
+                    Logger.Info( $"Restart Plugin {plugin.Display} because {key}" );
+                    PluginHost.RestartPlugin( plugin );
                 }
+
+                foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
+                             plugin.ClosePolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
+                             plugin.ClosePolicy.Enabled &&
+                             plugin.ClosePolicy.Values.Contains( key ) ) )
+                {
+                    Logger.Info( $"Close Plugin {plugin.Display} because {key}" );
+                    PluginHost.ClosePlugin( plugin );
+                }
+
+                goto RETURN;
             }
 
             void SwitchByIndex( int index )
