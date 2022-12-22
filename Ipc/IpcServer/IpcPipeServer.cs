@@ -32,13 +32,15 @@ namespace VirtualSpace.Commons
             Task.Factory.StartNew( () =>
             {
                 Logger.Info( "Ipc Pipe Server Wait For Connections." );
+
                 while ( _isRunning )
                 {
                     using var server = new NamedPipeServerStream( PIPE_NAME );
                     server.WaitForConnection();
                     using var reader = new StreamReader( server );
                     var       line   = reader.ReadLine();
-                    if ( line != null )
+
+                    if ( !string.IsNullOrEmpty( line ) )
                     {
                         var msg = JsonSerializer.Deserialize<PipeMessage>( line );
                         switch ( msg?.Type )
@@ -47,8 +49,9 @@ namespace VirtualSpace.Commons
                                 Logger.Info( "Only single instance allowed, just bring to top." );
                                 WinApi.PostMessage( MainWindowHandle, WinApi.WM_HOTKEY, UserMessage.RiseView, 0 );
                                 break;
-                            case PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER:
 
+                            case PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER:
+                            {
                                 /////////////////////////////////
                                 // 只接受已注册成功的插件
                                 // 同时若插件名相同，则后启动的覆盖先启动的
@@ -62,12 +65,15 @@ namespace VirtualSpace.Commons
                                 }
 
                                 break;
-                            case PipeMessageType.PLUGIN_CHECK_ALIVE:
+                            }
 
+                            case PipeMessageType.PLUGIN_CHECK_ALIVE:
+                            {
                                 var runningPlugin = PluginHost.Plugins.Find( p =>
                                     p.Name == msg.Name
                                     && p.Handle == (IntPtr)msg.Handle
                                     && p.ProcessId == msg.ProcessId );
+
                                 ////////////////////////////////////////////////
                                 // 若插件提供的信息在宿主中查不到，就通知该插件自行关闭
                                 // 这通常是因为有同名插件启动，覆盖了先启动的插件的信息
@@ -77,7 +83,13 @@ namespace VirtualSpace.Commons
                                 }
 
                                 break;
+                            }
+
                             case PipeMessageType.PLUGIN_UPDATER:
+                            {
+                                using var writer = new StreamWriter( server );
+                                writer.WriteLine( JsonSerializer.Serialize( HostInfoHelper.GetHostInfo() ) );
+                                writer.Flush();
 
                                 foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
                                 {
@@ -89,6 +101,14 @@ namespace VirtualSpace.Commons
                                 }
 
                                 break;
+                            }
+
+                            case PipeMessageType.RESTART:
+                            {
+                                WinApi.PostMessage( MainWindowHandle, WinApi.WM_HOTKEY, UserMessage.RestartApp, 0 );
+                                break;
+                            }
+
                             default:
                                 break;
                         }

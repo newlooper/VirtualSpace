@@ -100,7 +100,7 @@ namespace VirtualSpace.VirtualDesktop
             }
             catch
             {
-                MainWindow.SendRestartMessage();
+                MainWindow.NotifyDesktopManagerReset();
                 return;
             }
 

@@ -35,6 +35,7 @@ namespace VirtualSpace.Helpers
         public const int SwitchDesktop      = 1003;
         public const int DesktopArrangement = 1004;
         public const int RunAsAdministrator = 1005;
+        public const int RestartApp         = 1006;
 
         public const int SVD1 = 1101;
         public const int SVD2 = 1102;

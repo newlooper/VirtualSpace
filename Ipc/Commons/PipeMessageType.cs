@@ -15,6 +15,7 @@ namespace VirtualSpace.Commons
         INSTANCE,
         PLUGIN_VD_SWITCH_OBSERVER,
         PLUGIN_CHECK_ALIVE,
-        PLUGIN_UPDATER
+        PLUGIN_UPDATER,
+        RESTART
     }
 }

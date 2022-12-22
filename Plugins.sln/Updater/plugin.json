@@ -1,0 +1,27 @@
+{
+  "Name": "Updater",
+  "Display": "Updater",
+  "Version": "1.0",
+  "Author": "Dylan Cheng",
+  "Email": "newlooper@hotmail.com",
+  "Entry": "Updater.exe",
+  "AutoStart": true,
+  "RestartPolicy": {
+    "Trigger": 0,
+    "Values": [],
+    "Enabled": false
+  },
+  "ClosePolicy": {
+    "Trigger": 0,
+    "Values": [],
+    "Enabled": false
+  },
+  "Requirements": {
+    "WinVer": {
+      "Min": {
+        "Major": 10,
+        "Build": 19041
+      }
+    }
+  }
+}

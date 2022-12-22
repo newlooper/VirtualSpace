@@ -23,7 +23,7 @@ namespace VirtualSpace.Commons
         private const string PIPE_NAME   = Config.PIPE_NAME;
         private const string PIPE_SERVER = Config.PIPE_SERVER;
 
-        private static bool CheckIn( PipeMessageType pmt, string name, IntPtr handle, int pId )
+        private static bool CheckIn( PipeMessage pipeMessage )
         {
             using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
             try
@@ -32,9 +32,9 @@ namespace VirtualSpace.Commons
                 if ( client.IsConnected )
                 {
                     using var writer = new StreamWriter( client );
-                    var       msg    = new PipeMessage {Type = pmt, Handle = handle.ToInt32(), ProcessId = pId, Name = name};
-                    writer.WriteLine( JsonSerializer.Serialize( msg ) );
+                    writer.WriteLine( JsonSerializer.Serialize( pipeMessage ) );
                     writer.Flush();
+
                     return true;
                 }
             }
@@ -46,7 +46,7 @@ namespace VirtualSpace.Commons
             return false;
         }
 
-        private static bool AskAlive( string name, IntPtr handle, int pId )
+        private static bool CheckInAndWaitResponse<T>( PipeMessage pipeMessage, Action<T> callback )
         {
             using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
             try
@@ -54,10 +54,14 @@ namespace VirtualSpace.Commons
                 client.Connect( 1000 );
                 if ( client.IsConnected )
                 {
+                    using var reader = new StreamReader( client );
                     using var writer = new StreamWriter( client );
-                    var       msg    = new PipeMessage {Type = PipeMessageType.PLUGIN_CHECK_ALIVE, Handle = handle.ToInt32(), ProcessId = pId, Name = name};
-                    writer.WriteLine( JsonSerializer.Serialize( msg ) );
+                    writer.WriteLine( JsonSerializer.Serialize( pipeMessage ) );
                     writer.Flush();
+
+                    var line = reader.ReadLine();
+                    callback( JsonSerializer.Deserialize<T>( line ) );
+
                     return true;
                 }
             }
@@ -69,7 +73,31 @@ namespace VirtualSpace.Commons
             return false;
         }
 
-        private static async void CheckAlive( string name, IntPtr handle, int pId, int interval, Action exit )
+        private static bool AskAlive( string name, int handle, int pId )
+        {
+            using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
+            try
+            {
+                client.Connect( 1000 );
+                if ( client.IsConnected )
+                {
+                    var       msg    = new PipeMessage {Type = PipeMessageType.PLUGIN_CHECK_ALIVE, Handle = handle, ProcessId = pId, Name = name};
+                    using var writer = new StreamWriter( client );
+                    writer.WriteLine( JsonSerializer.Serialize( msg ) );
+                    writer.Flush();
+
+                    return true;
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return false;
+        }
+
+        public static async void CheckAlive( string name, int handle, int pId, int interval, Action exit )
         {
             while ( AskAlive( name, handle, pId ) )
             {
@@ -79,16 +107,45 @@ namespace VirtualSpace.Commons
             exit();
         }
 
-        public static void PluginCheckIn( PipeMessageType pmt, string name, IntPtr handle, int interval, Action error, Action exit )
+        public static void PluginCheckIn( PipeMessage pipeMessage, Action error, Action exit )
         {
             var pId = Process.GetCurrentProcess().Id;
-            if ( !CheckIn( pmt, name, handle, pId ) )
-            {
-                error();
-                exit();
-            }
+            pipeMessage.ProcessId = pId;
 
-            CheckAlive( name, handle, pId, interval, exit );
+            if ( CheckIn( pipeMessage ) ) return;
+
+            error();
+            exit();
+        }
+
+        public static void PluginCheckIn<T>( PipeMessage pipeMessage, Action error, Action exit, Action<T> callback )
+        {
+            var pId = Process.GetCurrentProcess().Id;
+            pipeMessage.ProcessId = pId;
+
+            if ( CheckInAndWaitResponse<T>( pipeMessage, callback ) ) return;
+
+            error();
+            exit();
+        }
+
+        public static void NotifyHostRestart()
+        {
+            using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
+            try
+            {
+                client.Connect( 1000 );
+                if ( client.IsConnected )
+                {
+                    using var writer = new StreamWriter( client );
+                    writer.WriteLine( JsonSerializer.Serialize( new PipeMessage {Type = PipeMessageType.RESTART} ) );
+                    writer.Flush();
+                }
+            }
+            catch
+            {
+                // ignored
+            }
         }
     }
 }

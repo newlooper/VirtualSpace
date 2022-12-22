@@ -79,7 +79,7 @@ namespace VirtualSpace
             };
         }
 
-        public static void SendRestartMessage()
+        public static void NotifyDesktopManagerReset()
         {
             User32.SendMessage( _instance.Handle, (int)_instance._taskbarCreatedMessage, 0, 0 );
         }
@@ -315,6 +315,9 @@ namespace VirtualSpace
                         case UserMessage.RunAsAdministrator:
                             TryRunAsAdmin();
                             goto RETURN;
+                        case UserMessage.RestartApp:
+                            RestartApp();
+                            goto RETURN;
                         case UserMessage.SVD1:
                             SwitchByIndex( 0 );
                             break;
@@ -428,13 +431,20 @@ namespace VirtualSpace
 
         private static void TryRunAsAdmin()
         {
+            RestartApp( true );
+        }
+
+        private static void RestartApp( bool runas = false )
+        {
             var app = (App)Application.Current;
             var psi = new ProcessStartInfo
             {
                 FileName = ConfigManager.AppPath,
-                UseShellExecute = true,
-                Verb = "runas"
+                UseShellExecute = true
             };
+
+            if ( runas ) psi.Verb = "runas";
+
             try
             {
                 app.ReleaseMutex();

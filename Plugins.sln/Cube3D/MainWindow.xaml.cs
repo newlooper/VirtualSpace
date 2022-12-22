@@ -49,14 +49,25 @@ namespace Cube3D
         {
             _handle = new WindowInteropHelper( this ).Handle;
 
+            var pipeMessage = new PipeMessage
+            {
+                Type = PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER,
+                Name = PluginManager.PluginInfo.Name,
+                Handle = _handle.ToInt32()
+            };
+
+            void Exit()
+            {
+                Application.Current.Shutdown();
+            }
+
             IpcPipeClient.PluginCheckIn(
-                PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER,
-                PluginManager.PluginInfo.Name,
-                _handle,
-                SettingsManager.Settings.CheckAliveInterval,
+                pipeMessage,
                 () => { MessageBox.Show( "This Program require VirtualSpace running first." ); },
-                () => { Application.Current.Shutdown(); }
+                Exit
             );
+
+            IpcPipeClient.CheckAlive( pipeMessage.Name, pipeMessage.Handle, pipeMessage.ProcessId, SettingsManager.Settings.CheckAliveInterval, Exit );
 
             _ = User32.SetWindowDisplayAffinity( _handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
 
