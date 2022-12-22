@@ -10,7 +10,6 @@ You should have received a copy of the GNU General Public License along with Cub
 */
 
 using System.Windows;
-using Cube3D.Config;
 using VirtualSpace.Plugin;
 
 namespace Cube3D
@@ -23,10 +22,10 @@ namespace Cube3D
         protected override void OnStartup( StartupEventArgs e )
         {
             base.OnStartup( e );
-            var pluginInfo = ConfigManager.PluginInfo;
+            var pluginInfo = PluginManager.PluginInfo;
             if ( pluginInfo == null || string.IsNullOrEmpty( pluginInfo.Name ) )
             {
-                MessageBox.Show( $"{Const.PluginInfoFile} invalid." );
+                MessageBox.Show( $"{PluginManager.PluginInfoFile} invalid." );
                 Current.Shutdown();
             }
 

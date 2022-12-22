@@ -216,7 +216,7 @@ namespace Cube3D.Effects
             model3DGroup.Transform = TransGroup;
 
             var animation = (DoubleAnimation)Animation;
-            animation.Duration = new Duration( TimeSpan.FromMilliseconds( ConfigManager.Settings.AnimationDuration ) );
+            animation.Duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
             // animation.EasingFunction = new CircleEase();
             var transform = (RotateTransform3D)Transform3D;
             transform.Rotation.BeginAnimation( AxisAngleRotation3D.AngleProperty, animation );

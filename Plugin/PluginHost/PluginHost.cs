@@ -62,12 +62,9 @@ namespace VirtualSpace.Plugin
 
         public static void StartPlugin( PluginInfo pluginInfo )
         {
-            if ( PluginManager.CheckRequirements( pluginInfo.Requirements ) )
-            {
-                Logger.Info( $"Start Plugin: {pluginInfo.Display}" );
-                var exe = Path.Combine( pluginInfo.Folder, pluginInfo.Entry );
-                StartExe( exe );
-            }
+            if ( !PluginManager.CheckRequirements( pluginInfo.Requirements ) ) return;
+            Logger.Info( $"Start Plugin: {pluginInfo.Display}" );
+            StartExe( Path.Combine( pluginInfo.Folder, pluginInfo.Entry ) );
         }
 
         public static void ClosePlugin( PluginInfo pluginInfo )

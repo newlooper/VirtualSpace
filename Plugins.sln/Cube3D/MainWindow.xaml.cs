@@ -18,6 +18,7 @@ using System.Windows.Interop;
 using Cube3D.Config;
 using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
+using VirtualSpace.Plugin;
 
 namespace Cube3D
 {
@@ -83,7 +84,7 @@ namespace Cube3D
 
         private static void CheckHost()
         {
-            var pluginInfo = ConfigManager.PluginInfo;
+            var pluginInfo = PluginManager.PluginInfo;
             var pId        = Process.GetCurrentProcess().Id;
             if ( !IpcPipeClient.RegisterVdSwitchObserver( pluginInfo.Name, _handle, pId ) )
             {
@@ -98,7 +99,7 @@ namespace Cube3D
         {
             while ( IpcPipeClient.AskAlive( name, handle, pId ) )
             {
-                await Task.Delay( ConfigManager.Settings.CheckAliveInterval * 1000 );
+                await Task.Delay( SettingsManager.Settings.CheckAliveInterval * 1000 );
             }
 
             Application.Current.Shutdown();

@@ -154,7 +154,7 @@ namespace Cube3D.Effects
         {
             var offsetProperty = TranslateTransform3D.OffsetXProperty;
             var animation      = (DoubleAnimation)Animation;
-            animation.Duration = new Duration( TimeSpan.FromMilliseconds( ConfigManager.Settings.AnimationDuration ) );
+            animation.Duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
             switch ( dir )
             {
                 case KeyCode.Left:

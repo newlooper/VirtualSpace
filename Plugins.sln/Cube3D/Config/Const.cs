@@ -20,8 +20,6 @@ namespace Cube3D.Config
         public const int    CheckAliveIntervalMin     = 1;
         public const int    CheckAliveIntervalMax     = 60;
         public const int    CheckAliveIntervalDefault = 10;
-        public const string PluginInfoFile            = "plugin.json";
-        public const string PluginSettingFile         = "settings.json";
         public const string Front                     = nameof( Front );
         public const string Others                    = nameof( Others );
     }

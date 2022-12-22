@@ -48,7 +48,7 @@ namespace Cube3D
             Width = SystemParameters.PrimaryScreenWidth;
             Height = SystemParameters.PrimaryScreenHeight;
 
-            if ( ConfigManager.Settings.ForceOnTop )
+            if ( SettingsManager.Settings.ForceOnTop )
                 Activate();
         }
 

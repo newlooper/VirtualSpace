@@ -72,7 +72,7 @@ namespace Cube3D
             // animation
             _animationNotifyGrid.From = CurrentIndicator.Margin;
             _animationNotifyGrid.To = targetCellMargin;
-            _animationNotifyGrid.Duration = new Duration( TimeSpan.FromMilliseconds( ConfigManager.Settings.AnimationDuration ) );
+            _animationNotifyGrid.Duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
             // _animationNotifyGrid.EasingFunction = new CircleEase();
             CurrentIndicator.BeginAnimation( MarginProperty, _animationNotifyGrid );
             Interlocked.Increment( ref RunningAnimationCount );
@@ -84,7 +84,7 @@ namespace Cube3D
             {
                 From = new Point3D( MainCamera.Position.X, MainCamera.Position.Y, MainCamera.Position.Z + 0.1 ),
                 To = new Point3D( MainCamera.Position.X, MainCamera.Position.Y, MainCamera.Position.Z + 0.5 ),
-                Duration = new Duration( TimeSpan.FromMilliseconds( ConfigManager.Settings.AnimationDuration / 2.0 ) ),
+                Duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration / 2.0 ) ),
                 FillBehavior = FillBehavior.Stop,
                 AutoReverse = true
             };

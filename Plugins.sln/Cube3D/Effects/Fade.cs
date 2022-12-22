@@ -90,7 +90,7 @@ namespace Cube3D.Effects
         public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup )
         {
             var animationOfFace1 = (DoubleAnimation)Animation;
-            animationOfFace1.Duration = new Duration( TimeSpan.FromMilliseconds( ConfigManager.Settings.AnimationDuration ) );
+            animationOfFace1.Duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
             _animationOfFace2.Duration = animationOfFace1.Duration;
 
             _frontD3DImage.BeginAnimation( Brush.OpacityProperty, animationOfFace1 );

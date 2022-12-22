@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Cube3D.Config;
 using Cube3D.Effects;
+using VirtualSpace.Plugin;
 
 namespace Cube3D
 {
@@ -27,14 +28,14 @@ namespace Cube3D
 
         public int AnimationDuration
         {
-            get => ConfigManager.Settings.AnimationDuration;
-            set => ConfigManager.Settings.AnimationDuration = value;
+            get => SettingsManager.Settings.AnimationDuration;
+            set => SettingsManager.Settings.AnimationDuration = value;
         }
 
         public int CheckAliveInterval
         {
-            get => ConfigManager.Settings.CheckAliveInterval;
-            set => ConfigManager.Settings.CheckAliveInterval = value;
+            get => SettingsManager.Settings.CheckAliveInterval;
+            set => SettingsManager.Settings.CheckAliveInterval = value;
         }
 
         private void Window_Loaded( object sender, RoutedEventArgs e )
@@ -44,24 +45,24 @@ namespace Cube3D
                 ComboBoxEffects.Items.Add( effect );
             }
 
-            ComboBoxEffects.SelectedItem = ConfigManager.Settings.SelectedEffect;
+            ComboBoxEffects.SelectedItem = SettingsManager.Settings.SelectedEffect;
         }
 
         private void ComboBoxEffects_SelectionChanged( object sender, SelectionChangedEventArgs e )
         {
-            ConfigManager.Settings.SelectedEffect = (EffectType)ComboBoxEffects.SelectedItem;
-            ConfigManager.SaveJson();
+            SettingsManager.Settings.SelectedEffect = (EffectType)ComboBoxEffects.SelectedItem;
+            SettingsManager.SaveJson();
         }
 
         private void ButtonBase_OnClick( object sender, RoutedEventArgs e )
         {
-            ConfigManager.SaveJson();
+            SettingsManager.SaveJson();
             Restart();
         }
 
         public static void Restart()
         {
-            Process.Start( ConfigManager.GetAppPath() );
+            Process.Start( PluginManager.GetAppPath() );
             Application.Current.Shutdown();
         }
     }
