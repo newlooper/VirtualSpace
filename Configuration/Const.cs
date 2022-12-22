@@ -21,7 +21,6 @@ namespace VirtualSpace.Config
         public const string ProfilesFolder         = "Profiles";
         public const string CacheFolder            = "Cache";
         public const string PluginsFolder          = "Plugins";
-        public const string PluginInfoFile         = "plugin.json";
         public const string SettingsFile           = "settings.json";
         public const string DefaultVersion         = "1.0";
         public const string DefaultLogLevel        = "EVENT";

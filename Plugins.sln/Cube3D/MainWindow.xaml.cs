@@ -10,9 +10,7 @@ You should have received a copy of the GNU General Public License along with Cub
 */
 
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using Cube3D.Config;
@@ -51,7 +49,15 @@ namespace Cube3D
         {
             _handle = new WindowInteropHelper( this ).Handle;
 
-            CheckHost();
+            IpcPipeClient.PluginCheckIn(
+                PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER,
+                PluginManager.PluginInfo.Name,
+                _handle,
+                SettingsManager.Settings.CheckAliveInterval,
+                () => { MessageBox.Show( "This Program require VirtualSpace running first." ); },
+                () => { Application.Current.Shutdown(); }
+            );
+
             _ = User32.SetWindowDisplayAffinity( _handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
 
             FixStyle();
@@ -80,29 +86,6 @@ namespace Cube3D
             await StartPrimaryMonitorCapture();
 
             FakeHide();
-        }
-
-        private static void CheckHost()
-        {
-            var pluginInfo = PluginManager.PluginInfo;
-            var pId        = Process.GetCurrentProcess().Id;
-            if ( !IpcPipeClient.RegisterVdSwitchObserver( pluginInfo.Name, _handle, pId ) )
-            {
-                MessageBox.Show( "This Program require VirtualSpace running first." );
-                Application.Current.Shutdown();
-            }
-
-            CheckAlive( pluginInfo.Name, _handle, pId );
-        }
-
-        private static async void CheckAlive( string name, IntPtr handle, int pId )
-        {
-            while ( IpcPipeClient.AskAlive( name, handle, pId ) )
-            {
-                await Task.Delay( SettingsManager.Settings.CheckAliveInterval * 1000 );
-            }
-
-            Application.Current.Shutdown();
         }
     }
 }

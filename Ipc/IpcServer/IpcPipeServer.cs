@@ -77,6 +77,18 @@ namespace VirtualSpace.Commons
                                 }
 
                                 break;
+                            case PipeMessageType.PLUGIN_UPDATER:
+
+                                foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
+                                {
+                                    Logger.Info( $"Updater Plugin ({p.Display}) Registered." );
+                                    p.Handle = (IntPtr)msg.Handle;
+                                    p.ProcessId = msg.ProcessId;
+                                    p.Type = PluginType.UPDATER;
+                                    break;
+                                }
+
+                                break;
                             default:
                                 break;
                         }

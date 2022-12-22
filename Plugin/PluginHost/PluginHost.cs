@@ -27,12 +27,17 @@ namespace VirtualSpace.Plugin
             {PluginConst.HotPlugDetected, 0}
         };
 
-        public static void RegisterPlugins( string pluginsPath, string pluginInfoFile )
+        /// <summary>
+        /// 此处注册的是插件的静态信息；
+        /// 插件的运行时信息，则在插件启动后通过 IPC 自行报道给宿主
+        /// </summary>
+        /// <param name="pluginsPath"></param>
+        public static void RegisterPlugins( string pluginsPath )
         {
             var pluginFolders = Directory.GetDirectories( pluginsPath );
             foreach ( var path in pluginFolders )
             {
-                var infoFile = Path.Combine( path, pluginInfoFile );
+                var infoFile = Path.Combine( path, PluginManager.PluginInfoFile );
                 if ( !File.Exists( infoFile ) ) continue;
 
                 var pluginInfo = PluginManager.LoadFromJson<PluginInfo>( infoFile );

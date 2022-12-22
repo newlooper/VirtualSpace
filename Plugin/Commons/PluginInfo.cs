@@ -46,7 +46,8 @@ namespace VirtualSpace.Plugin
     public enum PluginType
     {
         NONE,
-        VD_SWITCH_OBSERVER
+        VD_SWITCH_OBSERVER,
+        UPDATER
     }
 
     public class Requirements

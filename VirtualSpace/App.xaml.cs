@@ -121,7 +121,7 @@ namespace VirtualSpace
 
             Daemon.Start();
 
-            PluginHost.RegisterPlugins( ConfigManager.GetPluginsPath(), Const.PluginInfoFile );
+            PluginHost.RegisterPlugins( ConfigManager.GetPluginsPath() );
         }
 
         private static void BootInfo()
