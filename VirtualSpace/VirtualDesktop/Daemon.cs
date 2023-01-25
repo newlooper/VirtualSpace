@@ -43,6 +43,43 @@ namespace VirtualSpace.VirtualDesktop
             while ( await ActionChannel.Reader.WaitToReadAsync() )
             {
                 if ( !ActionChannel.Reader.TryRead( out var action ) ) continue;
+
+                if ( action.HideFromView )
+                {
+                    Logger.Debug( $"[RULE]HIDE.Win {action.Handle.ToString( "X2" )}" );
+                    Filters.WndHandleManualIgnoreList.Add( action.Handle );
+                }
+
+                if ( action.PinApp )
+                {
+                    Logger.Debug( $"[RULE]PIN.App of {action.Handle.ToString( "X2" )} TO All Desktops" );
+                    try
+                    {
+                        DesktopWrapper.PinApp( action.Handle, false );
+                    }
+                    catch
+                    {
+                        Logger.Error( $"[RULE]PIN.Win {action.Handle.ToString( "X2" )} Failed" );
+                    }
+
+                    continue; // <- if PinApp, then PinWindow & MoveToDesktop is invalid
+                }
+
+                if ( action.PinWindow )
+                {
+                    Logger.Debug( $"[RULE]PIN.Win {action.Handle.ToString( "X2" )} TO All Desktops" );
+                    try
+                    {
+                        DesktopWrapper.PinWindow( action.Handle, false );
+                    }
+                    catch
+                    {
+                        Logger.Error( $"[RULE]PIN.Win {action.Handle.ToString( "X2" )} Failed" );
+                    }
+
+                    continue; // <- if PinWindow, then MoveToDesktop is invalid
+                }
+
                 if ( action.MoveToDesktop >= 0 )
                 {
                     try
@@ -66,27 +103,7 @@ namespace VirtualSpace.VirtualDesktop
                                 Title = Agent.Langs.GetString( "Error.Title" ),
                                 Message = string.Format( Agent.Langs.GetString( "Error.MoveWindowToDesktop" ), action.WindowTitle, action.RuleName )
                             } );
-                        continue;
                     }
-                }
-
-                if ( action.PinApp )
-                {
-                    Logger.Debug( $"[RULE]PIN.App of {action.Handle.ToString( "X2" )} TO All Desktops" );
-                    DesktopWrapper.PinApp( action.Handle, false );
-                    break;
-                }
-
-                if ( action.PinWindow )
-                {
-                    Logger.Debug( $"[RULE]PIN.Win {action.Handle.ToString( "X2" )} TO All Desktops" );
-                    DesktopWrapper.PinWindow( action.Handle, false );
-                }
-
-                if ( action.HideFromView )
-                {
-                    Logger.Debug( $"[RULE]HIDE.Win {action.Handle.ToString( "X2" )}" );
-                    Filters.WndHandleManualIgnoreList.Add( action.Handle );
                 }
             }
         }

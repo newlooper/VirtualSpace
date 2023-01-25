@@ -957,6 +957,7 @@ namespace VirtualSpace
             this.lv_Rules.View = System.Windows.Forms.View.Details;
             this.lv_Rules.SelectedIndexChanged += new System.EventHandler(this.lv_Rules_SelectedIndexChanged);
             this.lv_Rules.VisibleChanged += new System.EventHandler(this.lv_Rules_VisibleChanged);
+            this.lv_Rules.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lv_Rules_KeyDown);
             // 
             // lvc_Name
             // 

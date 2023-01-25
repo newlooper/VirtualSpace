@@ -10,7 +10,6 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.IO;
 using System.Text.Json;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
@@ -49,9 +48,7 @@ namespace VirtualSpace
 
             cb_RuleProfiles.SelectedItem = ConfigManager.Configs.CurrentProfileName;
 
-            var path = ConfigManager.GetRulesPath();
-            if ( !File.Exists( path ) ) return;
-            var rules = Conditions.FetchRuleList( path );
+            var rules = Conditions.FetchRules();
 
             lv_Rules.Items.Clear();
             foreach ( var rule in rules )
@@ -108,11 +105,12 @@ namespace VirtualSpace
         private void btn_RuleClone_Click( object sender, EventArgs e )
         {
             if ( lv_Rules.SelectedItems.Count == 0 ) return;
-            var path = ConfigManager.GetRulesPath();
-            if ( !File.Exists( path ) ) return;
-            var rules = Conditions.FetchRuleList( path );
-            var rule  = rules[lv_Rules.SelectedIndices[0]];
-            var time  = DateTime.Now;
+
+            var rules = Conditions.FetchRules();
+            if ( rules.Count == 0 ) return;
+
+            var rule = rules[lv_Rules.SelectedIndices[0]];
+            var time = DateTime.Now;
 
             var et = RefreshRuleId( Conditions.ParseExpressionTemplate( rule.Expression ) );
 
@@ -126,18 +124,24 @@ namespace VirtualSpace
                 Updated = time
             };
             rules.Add( clone );
-            Conditions.SaveRules( path, rules );
+            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
             lv_Rules.Items.Add( LviByRule( clone ) );
         }
 
         private void btn_RuleRemove_Click( object sender, EventArgs e )
         {
+            DeleteSelectedItem();
+        }
+
+        private void DeleteSelectedItem()
+        {
             if ( lv_Rules.SelectedItems.Count == 0 ) return;
-            var path = ConfigManager.GetRulesPath();
-            if ( !File.Exists( path ) ) return;
-            var rules = Conditions.FetchRuleList( path );
+
+            var rules = Conditions.FetchRules();
+            if ( rules.Count == 0 ) return;
+
             rules.RemoveAt( lv_Rules.SelectedIndices[0] );
-            Conditions.SaveRules( path, rules );
+            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
             lv_Rules.Items.RemoveAt( lv_Rules.SelectedIndices[0] );
         }
 
@@ -167,12 +171,12 @@ namespace VirtualSpace
 
         private void lv_Rules_ItemChecked( object sender, ItemCheckedEventArgs e )
         {
-            var path = ConfigManager.GetRulesPath();
-            if ( !File.Exists( path ) ) return;
-            var rules = Conditions.FetchRuleList( path );
+            var rules = Conditions.FetchRules();
+            if ( rules.Count == 0 ) return;
+
             var index = lv_Rules.Items.IndexOf( e.Item );
             rules[index].Enabled = e.Item.Checked;
-            Conditions.SaveRules( path, rules );
+            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
             Logger.Info( $"Rules.{ConfigManager.Configs.CurrentProfileName} Saved." );
         }
 
@@ -195,6 +199,12 @@ namespace VirtualSpace
             }
 
             return expressionTemplate;
+        }
+
+        private void lv_Rules_KeyDown( object sender, KeyEventArgs e )
+        {
+            if ( Keys.Delete != e.KeyCode ) return;
+            DeleteSelectedItem();
         }
     }
 }

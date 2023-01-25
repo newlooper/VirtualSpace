@@ -76,6 +76,12 @@
   <data name="groupBox2.Text" xml:space="preserve">
     <value>基础窗口规则</value>
   </data>
+  <data name="cb_WinInScreen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 28</value>
+  </data>
+  <data name="cb_WinInScreen.Text" xml:space="preserve">
+    <value>窗口位于屏幕</value>
+  </data>
   <data name="cb_WndClass.Size" type="System.Drawing.Size, System.Drawing">
     <value>108, 28</value>
   </data>

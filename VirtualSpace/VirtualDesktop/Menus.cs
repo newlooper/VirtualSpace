@@ -33,6 +33,9 @@ namespace VirtualSpace.VirtualDesktop
         {
             _ctm ??= new ContextMenuStrip();
             _ctm.Items.Clear();
+
+            ////////////////////////////////////////////////////////////////
+            // pin window 
             var pinWindow = new ToolStripMenuItem
             {
                 Text = Agent.Langs.GetString( "VDW.CTM.Window.PinWin" ),
@@ -45,6 +48,8 @@ namespace VirtualSpace.VirtualDesktop
             };
             _ctm.Items.Add( pinWindow );
 
+            ////////////////////////////////////////////////////////////////
+            // pin app
             var pinApp = new ToolStripMenuItem
             {
                 Text = Agent.Langs.GetString( "VDW.CTM.Window.PinApp" ),
@@ -57,6 +62,8 @@ namespace VirtualSpace.VirtualDesktop
             };
             _ctm.Items.Add( pinApp );
 
+            ////////////////////////////////////////////////////////////////
+            // hide from view
             var hideWindow = new ToolStripMenuItem
             {
                 Text = Agent.Langs.GetString( "VDW.CTM.Window.HideFromView" )
@@ -79,20 +86,10 @@ namespace VirtualSpace.VirtualDesktop
             hideWindow.Click += OnIgnoreWindowClick;
             _ctm.Items.Add( hideWindow );
 
-            var closeWindow = new ToolStripMenuItem
-            {
-                Text = Agent.Langs.GetString( "VDW.CTM.Window.Close" )
-            };
-
-            void OnCloseWindowClick( object? s, EventArgs evt )
-            {
-                mi.Self.CloseSelectedWindow( mi.Vw );
-            }
-
-            closeWindow.Click += OnCloseWindowClick;
-            _ctm.Items.Add( closeWindow );
             _ctm.Items.Add( "-" );
 
+            ////////////////////////////////////////////////////////////////
+            // move to screen
             var itemScreen = new ToolStripMenuItem( Agent.Langs.GetString( "VDW.CTM.Window.Screen" ) );
 
             void MoveToScreen( object? s, EventArgs evt )
@@ -146,8 +143,11 @@ namespace VirtualSpace.VirtualDesktop
             }
 
             _ctm.Items.Add( itemScreen );
+
             _ctm.Items.Add( "-" );
 
+            ////////////////////////////////////////////////////////////////
+            // rule for window
             var newRuleFromWindow = new ToolStripMenuItem
             {
                 Text = Agent.Langs.GetString( "VDW.CTM.Window.NewRule" )
@@ -165,7 +165,24 @@ namespace VirtualSpace.VirtualDesktop
             newRuleFromWindow.Click += OnCreateRuleFromWindow;
             _ctm.Items.Add( newRuleFromWindow );
 
-            //////////////////////////
+            _ctm.Items.Add( "-" );
+
+            ////////////////////////////////////////////////////////////////
+            // close window 
+            var closeWindow = new ToolStripMenuItem
+            {
+                Text = Agent.Langs.GetString( "VDW.CTM.Window.Close" )
+            };
+
+            void OnCloseWindowClick( object? s, EventArgs evt )
+            {
+                mi.Self.CloseSelectedWindow( mi.Vw );
+            }
+
+            closeWindow.Click += OnCloseWindowClick;
+            _ctm.Items.Add( closeWindow );
+
+            ////////////////////////////////////////////////////////////////
             // Show Window ContextMenu 
             _ctm.Show( mi.Sender as Control, mi.Location );
         }

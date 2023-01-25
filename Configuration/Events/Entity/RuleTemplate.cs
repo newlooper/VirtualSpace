@@ -32,5 +32,6 @@ namespace VirtualSpace.Config.Events.Entity
         public const string ProcessName = nameof( ProcessName );
         public const string ProcessPath = nameof( ProcessPath );
         public const string WndClass    = nameof( WndClass );
+        public const string WinInScreen = nameof( WinInScreen );
     }
 }

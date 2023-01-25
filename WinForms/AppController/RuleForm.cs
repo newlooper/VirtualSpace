@@ -78,6 +78,17 @@ namespace VirtualSpace
             var sbCName = new StringBuilder( Const.WindowClassMaxLength );
             User32.GetClassName( handle, sbCName, sbCName.Capacity );
             tb_WndClass.Text = sbCName.ToString();
+
+            var allScreens = Screen.AllScreens;
+            var screen     = Screen.FromHandle( handle );
+            for ( var i = 0; i < allScreens.Length; i++ )
+            {
+                if ( screen.DeviceName == allScreens[i].DeviceName )
+                {
+                    cbb_WinInScreen.SelectedValue = i;
+                    break;
+                }
+            }
         }
 
         private void SetFormValues()
@@ -86,9 +97,8 @@ namespace VirtualSpace
 
             _editIds.Clear();
 
-            var path = Manager.GetRulesPath();
-            if ( !File.Exists( path ) ) return;
-            var ruleList = Conditions.FetchRuleList( path );
+            var ruleList = Conditions.FetchRules();
+            if ( ruleList.Count == 0 ) return;
 
             cb_Enabled.Checked = ruleList[_editIndex].Enabled;
             tb_Name.Text = ruleList[_editIndex].Name;
@@ -118,25 +128,30 @@ namespace VirtualSpace
                         cb_Title.Checked = true;
                         cbb_Title.SelectedValue = @operator;
                         tb_Title.Text = valueNode.V;
-                        _editIds["Title"] = id;
+                        _editIds[RuleFields.Title] = id;
                         break;
                     case RuleFields.ProcessName:
                         cb_ProcessName.Checked = true;
                         cbb_ProcessName.SelectedValue = @operator;
                         tb_ProcessName.Text = valueNode.V;
-                        _editIds["ProcessName"] = id;
+                        _editIds[RuleFields.ProcessName] = id;
                         break;
                     case RuleFields.ProcessPath:
                         cb_ProcessPath.Checked = true;
                         cbb_ProcessPath.SelectedValue = @operator;
                         tb_ProcessPath.Text = valueNode.V;
-                        _editIds["ProcessPath"] = id;
+                        _editIds[RuleFields.ProcessPath] = id;
                         break;
                     case RuleFields.WndClass:
                         cb_WndClass.Checked = true;
                         cbb_WndClass.SelectedValue = @operator;
                         tb_WndClass.Text = valueNode.V;
-                        _editIds["WndClass"] = id;
+                        _editIds[RuleFields.WndClass] = id;
+                        break;
+                    case RuleFields.WinInScreen:
+                        cb_WinInScreen.Checked = true;
+                        cbb_WinInScreen.SelectedValue = int.Parse( valueNode.V );
+                        _editIds[RuleFields.WinInScreen] = id;
                         break;
                 }
 
@@ -159,6 +174,9 @@ namespace VirtualSpace
             OperatorList( cbb_ProcessName );
             OperatorList( cbb_ProcessPath );
             OperatorList( cbb_WndClass );
+
+            //////////////////////////
+            // all virtual desktops
             cbb_MoveToDesktop.DisplayMember = "Text";
             cbb_MoveToDesktop.ValueMember = "Value";
             var count    = _vdi.GetDesktopCount();
@@ -169,6 +187,19 @@ namespace VirtualSpace
             }
 
             cbb_MoveToDesktop.DataSource = desktops;
+
+            //////////////////////////
+            // all screens
+            cbb_WinInScreen.DisplayMember = "Text";
+            cbb_WinInScreen.ValueMember = "Value";
+            var screens    = new List<object>();
+            var allScreens = Screen.AllScreens;
+            for ( var i = 0; i < allScreens.Length; i++ )
+            {
+                screens.Add( new {Value = i, Text = allScreens[i].DeviceName} );
+            }
+
+            cbb_WinInScreen.DataSource = screens;
         }
 
         private static void OperatorList( ComboBox cbb )
@@ -197,18 +228,17 @@ namespace VirtualSpace
                 return;
             }
 
-            if ( ( cb_Title.Checked || cb_ProcessName.Checked || cb_ProcessPath.Checked || cb_WndClass.Checked ) == false )
+            if ( ( cb_Title.Checked ||
+                   cb_ProcessName.Checked ||
+                   cb_ProcessPath.Checked ||
+                   cb_WndClass.Checked ||
+                   cb_WinInScreen.Checked ) == false )
             {
                 toolStripStatusLabel2.Text = Agent.Langs.GetString( "Rule.AtLeastOne" );
                 return;
             }
 
-            var path     = Manager.GetRulesPath();
-            var ruleList = new List<RuleTemplate>();
-            if ( File.Exists( path ) )
-            {
-                ruleList = Conditions.FetchRuleList( path );
-            }
+            var ruleList = Conditions.FetchRules();
 
             var rule = new RuleTemplate();
             var exp = new ExpressionTemplate
@@ -216,6 +246,7 @@ namespace VirtualSpace
                 condition = Keywords.And,
                 rules = new List<ExpressionTemplate>()
             };
+
             if ( _editIndex > -1 )
             {
                 rule.Id = ruleList[_editIndex].Id;
@@ -228,6 +259,7 @@ namespace VirtualSpace
                 BuildRule( cb_ProcessName, cbb_ProcessName, tb_ProcessName, exp );
                 BuildRule( cb_ProcessPath, cbb_ProcessPath, tb_ProcessPath, exp );
                 BuildRule( cb_WndClass, cbb_WndClass, tb_WndClass, exp );
+                BuildRule( cb_WinInScreen, cbb_WinInScreen, null, exp );
             }
             catch ( Exception ex )
             {
@@ -264,23 +296,31 @@ namespace VirtualSpace
                 ruleList[_editIndex] = rule;
             }
 
-            Conditions.SaveRules( path, ruleList );
+            Conditions.SaveRules( Manager.GetRulesPath(), ruleList );
             AppController.UpdateRuleListView( _editIndex, rule );
 
             Close();
         }
 
-        private void BuildRule( CheckBox cb, ComboBox cbb, TextBox tb, ExpressionTemplate exp )
+        private void BuildRule( CheckBox cb, ComboBox cbb, TextBox? tb, ExpressionTemplate exp )
         {
             if ( cb.Checked )
             {
+                var V   = new Value();
                 var opt = cbb.SelectedValue.ToString();
-                if ( opt == Keywords.RegexIsMatch[0] )
+                if ( tb is null )
                 {
-                    if ( !IsValidRegex( tb.Text ) )
+                    opt = Keywords.Eq[0];
+                    V = new Value {V = cbb.SelectedValue.ToString()};
+                }
+                else
+                {
+                    if ( opt == Keywords.RegexIsMatch[0] && !IsValidRegex( tb.Text ) )
                     {
                         throw new Exception( "Invalid Regex." );
                     }
+
+                    V = new Value {V = tb.Text};
                 }
 
                 var name = cb.Name[3..]; // 偷懒的做法，依赖控件名称，因此控件更名时需要注意不要破坏对应关系
@@ -290,7 +330,7 @@ namespace VirtualSpace
                     type = Keywords.String,
                     field = cb.Name[3..],
                     @operator = opt,
-                    value = new Value {V = tb.Text}
+                    value = V
                 };
                 if ( _editIds.ContainsKey( name ) )
                 {
@@ -372,6 +412,15 @@ namespace VirtualSpace
             {
                 cbb_MoveToDesktop.Enabled = false;
                 cb_FollowWindow.Enabled = false;
+            }
+
+            if ( cb_WinInScreen.Checked )
+            {
+                cbb_WinInScreen.Enabled = true;
+            }
+            else
+            {
+                cbb_WinInScreen.Enabled = false;
             }
         }
     }

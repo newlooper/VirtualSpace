@@ -22,6 +22,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using LinqExpressionBuilder;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
@@ -32,19 +33,40 @@ namespace VirtualSpace.Config.Events.Expression
 {
     public static partial class Conditions
     {
-        private static readonly JsonParser        Jp            = new();
-        private static readonly Channel<Behavior> ActionChannel = Channels.ActionChannel;
+        private static readonly JsonParser         Jp            = new();
+        private static readonly Channel<Behavior>  ActionChannel = Channels.ActionChannel;
+        private static          List<RuleTemplate> _rules        = InitRules();
 
-        public static async void CheckWindow( Window win )
+        private static List<RuleTemplate> InitRules()
         {
             var path = Manager.GetRulesPath();
-            if ( !File.Exists( path ) ) return;
+            _rules = new List<RuleTemplate>();
+            if ( !File.Exists( path ) ) return _rules;
 
-            var rules = FetchRuleList( path );
+            _rules = FetchRuleList( path );
+
+            return _rules;
+        }
+
+        private static void BuildRuleExp( List<RuleTemplate> rules )
+        {
             foreach ( var rule in rules )
             {
                 rule.Exp = Jp.ExpressionFromJsonDoc<Window>( rule.Expression );
             }
+        }
+
+        public static List<RuleTemplate> FetchRules()
+        {
+            return _rules;
+        }
+
+        public static async void CheckWindow( Window win )
+        {
+            if ( _rules.Count == 0 ) return;
+
+            var rules = new List<RuleTemplate>( _rules );
+            BuildRuleExp( rules );
 
             Logger.Event( "Current Rules Profile: " + Manager.Configs.CurrentProfileName );
 
@@ -67,6 +89,23 @@ namespace VirtualSpace.Config.Events.Expression
                 _ = GetClassName( win.Handle, sbClass, sbClass.Capacity );
                 win.WndClass = sbClass.ToString();
 
+                var screen      = Screen.FromHandle( win.Handle );
+                var screenIndex = 0;
+                var allScreens  = Screen.AllScreens;
+                for ( var i = 0; i < allScreens.Length; i++ )
+                {
+                    if ( screen.DeviceName == allScreens[i].DeviceName )
+                    {
+                        screenIndex = i;
+                        break;
+                    }
+                }
+
+                win.WinInScreen = screenIndex.ToString();
+
+                /////////////////////////////////////////////////////////////// 
+                // For some windows, whose title will change after creation,
+                // we need give them some time to wait for the final title
                 var sbTitle = new StringBuilder( Const.WindowTitleMaxLength );
                 var sw      = Stopwatch.StartNew();
                 while ( sw.ElapsedMilliseconds < Const.WindowCheckTimeout )
@@ -97,7 +136,7 @@ namespace VirtualSpace.Config.Events.Expression
             } );
         }
 
-        public static List<RuleTemplate> FetchRuleList( string path )
+        private static List<RuleTemplate> FetchRuleList( string path )
         {
             using var fs     = new FileStream( path, FileMode.Open, FileAccess.Read );
             var       buffer = new byte[fs.Length];
@@ -146,6 +185,7 @@ namespace VirtualSpace.Config.Events.Expression
 
         public static async void SaveRules( string path, List<RuleTemplate> ruleList )
         {
+            _rules = ruleList;
             await File.WriteAllBytesAsync( path, JsonSerializer.SerializeToUtf8Bytes(
                 ruleList, GetJsonSerializerOptions() ) );
         }

@@ -45,6 +45,8 @@ namespace VirtualSpace
             this.tb_Name = new System.Windows.Forms.TextBox();
             this.lb_Name = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cbb_WinInScreen = new System.Windows.Forms.ComboBox();
+            this.cb_WinInScreen = new System.Windows.Forms.CheckBox();
             this.tb_WndClass = new System.Windows.Forms.TextBox();
             this.cbb_WndClass = new System.Windows.Forms.ComboBox();
             this.cb_WndClass = new System.Windows.Forms.CheckBox();
@@ -111,6 +113,8 @@ namespace VirtualSpace
             // groupBox2
             // 
             resources.ApplyResources(this.groupBox2, "groupBox2");
+            this.groupBox2.Controls.Add(this.cbb_WinInScreen);
+            this.groupBox2.Controls.Add(this.cb_WinInScreen);
             this.groupBox2.Controls.Add(this.tb_WndClass);
             this.groupBox2.Controls.Add(this.cbb_WndClass);
             this.groupBox2.Controls.Add(this.cb_WndClass);
@@ -125,6 +129,20 @@ namespace VirtualSpace
             this.groupBox2.Controls.Add(this.cb_Title);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
+            // 
+            // cbb_WinInScreen
+            // 
+            resources.ApplyResources(this.cbb_WinInScreen, "cbb_WinInScreen");
+            this.cbb_WinInScreen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbb_WinInScreen.FormattingEnabled = true;
+            this.cbb_WinInScreen.Name = "cbb_WinInScreen";
+            // 
+            // cb_WinInScreen
+            // 
+            resources.ApplyResources(this.cb_WinInScreen, "cb_WinInScreen");
+            this.cb_WinInScreen.Name = "cb_WinInScreen";
+            this.cb_WinInScreen.UseVisualStyleBackColor = true;
+            this.cb_WinInScreen.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
             // 
             // tb_WndClass
             // 
@@ -375,5 +393,7 @@ namespace VirtualSpace
         private System.Windows.Forms.Label lbUpdated;
         private System.Windows.Forms.Label lbCreated;
         private System.Windows.Forms.CheckBox cb_HideFromView;
+        private System.Windows.Forms.ComboBox cbb_WinInScreen;
+        private System.Windows.Forms.CheckBox cb_WinInScreen;
     }
 }

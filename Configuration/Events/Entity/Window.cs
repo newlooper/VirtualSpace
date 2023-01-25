@@ -18,7 +18,7 @@ namespace VirtualSpace.Config.Events.Entity
         public IntPtr  Handle      { get; set; }
         public string  Title       { get; set; }
         public string  WndClass    { get; set; }
-        public string  Screen      { get; set; }
+        public string? WinInScreen { get; set; }
         public int     VdIndex     { get; set; }
         public int?    ProcessId   { get; set; }
         public string? ProcessName { get; set; }
