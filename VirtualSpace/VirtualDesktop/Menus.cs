@@ -136,7 +136,7 @@ namespace VirtualSpace.VirtualDesktop
             foreach ( var s in Screen.AllScreens )
             {
                 var screen = Screen.FromHandle( mi.Vw.Handle );
-                var item   = new ToolStripMenuItem( s.DeviceName );
+                var item   = new ToolStripMenuItem( $"{s.DeviceName}  ({s.DeviceFriendlyName()})" );
                 item.Checked = screen.DeviceName == s.DeviceName;
                 item.Click += MoveToScreen;
                 itemScreen.DropDownItems.Add( item );

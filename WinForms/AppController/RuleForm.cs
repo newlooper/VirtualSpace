@@ -196,7 +196,7 @@ namespace VirtualSpace
             var allScreens = Screen.AllScreens;
             for ( var i = 0; i < allScreens.Length; i++ )
             {
-                screens.Add( new {Value = i, Text = allScreens[i].DeviceName} );
+                screens.Add( new {Value = i, Text = $"{allScreens[i].DeviceName}  ({allScreens[i].DeviceFriendlyName()})"} );
             }
 
             cbb_WinInScreen.DataSource = screens;
