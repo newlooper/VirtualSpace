@@ -50,6 +50,12 @@ namespace VirtualSpace.VirtualDesktop
                     Filters.WndHandleManualIgnoreList.Add( action.Handle );
                 }
 
+                if ( action.MoveToScreen > 0 )
+                {
+                    Logger.Debug( $"[RULE]MOVE_TO_SCREEN.Win {action.Handle.ToString( "X2" )}" );
+                    WindowTool.MoveWindowToScreen( action.Handle, action.MoveToScreen );
+                }
+
                 if ( action.PinApp )
                 {
                     Logger.Debug( $"[RULE]PIN.App of {action.Handle.ToString( "X2" )} TO All Desktops" );

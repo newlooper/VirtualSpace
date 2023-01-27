@@ -93,7 +93,7 @@
         <Generated Include="**\*.cs" />
     </ItemGroup>
 
-    <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">
+    <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild" Condition="'$(Configuration)'=='Release'">
         <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet t4 %(TextTemplate.Identity) -o %(TextTemplate.Filename).cs" />
     </Target>
 

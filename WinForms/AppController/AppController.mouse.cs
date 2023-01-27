@@ -10,8 +10,10 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using VirtualSpace.Config;
+using VirtualSpace.Helpers;
 using KeyBinding = VirtualSpace.Config.Entity.KeyBinding;
 
 namespace VirtualSpace
@@ -39,25 +41,20 @@ namespace VirtualSpace
             lb_mouse_action.Text = e.Node.FullPath;
             tc_Mouse.Visible = true;
 
-            cb_mouse_func.DisplayMember = "Text";
-            cb_mouse_func.ValueMember = "Value";
-
             if ( mouseActionId.StartsWith( "mouse_node_d" ) )
             {
-                cb_mouse_func.DataSource = new[]
+                var items = new List<object>
                 {
-                    new
-                    {
-                        Value = Const.MouseAction.Action.DesktopVisibleAndCloseView, Text = Agent.Langs.GetString( "Mouse.Action.DesktopVisibleAndCloseView" )
-                    },
+                    new {Value = Const.MouseAction.Action.DesktopVisibleAndCloseView, Text = Agent.Langs.GetString( "Mouse.Action.DesktopVisibleAndCloseView" )},
                     new {Value = Const.MouseAction.Action.DesktopVisibleOnly, Text = Agent.Langs.GetString( "Mouse.Action.DesktopVisibleOnly" )},
                     new {Value = Const.MouseAction.Action.ContextMenu, Text = Agent.Langs.GetString( "Mouse.Action.ContextMenu" )},
                     new {Value = Const.MouseAction.Action.DoNothing, Text = Agent.Langs.GetString( "Mouse.Action.DoNothing" )}
                 };
+                WinForms.SetComboBoxDataSource( cb_mouse_func, items );
             }
             else if ( mouseActionId.StartsWith( "mouse_node_w" ) )
             {
-                cb_mouse_func.DataSource = new[]
+                var items = new List<object>
                 {
                     new
                     {
@@ -73,6 +70,7 @@ namespace VirtualSpace
                     new {Value = Const.MouseAction.Action.WindowClose, Text = Agent.Langs.GetString( "Mouse.Action.WindowClose" )},
                     new {Value = Const.MouseAction.Action.DoNothing, Text = Agent.Langs.GetString( "Mouse.Action.DoNothing" )}
                 };
+                WinForms.SetComboBoxDataSource( cb_mouse_func, items );
             }
 
             cb_mouse_func.SelectedValue = ma[mouseActionId];

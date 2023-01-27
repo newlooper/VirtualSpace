@@ -60,6 +60,8 @@ namespace VirtualSpace
             this.cbb_Title = new System.Windows.Forms.ComboBox();
             this.cb_Title = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cbb_MoveToScreen = new System.Windows.Forms.ComboBox();
+            this.cb_MoveToScreen = new System.Windows.Forms.CheckBox();
             this.cb_HideFromView = new System.Windows.Forms.CheckBox();
             this.cb_PinApp = new System.Windows.Forms.CheckBox();
             this.cb_PinWindow = new System.Windows.Forms.CheckBox();
@@ -223,6 +225,8 @@ namespace VirtualSpace
             // groupBox3
             // 
             resources.ApplyResources(this.groupBox3, "groupBox3");
+            this.groupBox3.Controls.Add(this.cbb_MoveToScreen);
+            this.groupBox3.Controls.Add(this.cb_MoveToScreen);
             this.groupBox3.Controls.Add(this.cb_HideFromView);
             this.groupBox3.Controls.Add(this.cb_PinApp);
             this.groupBox3.Controls.Add(this.cb_PinWindow);
@@ -231,6 +235,20 @@ namespace VirtualSpace
             this.groupBox3.Controls.Add(this.cb_MoveToDesktop);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.TabStop = false;
+            // 
+            // cbb_MoveToScreen
+            // 
+            resources.ApplyResources(this.cbb_MoveToScreen, "cbb_MoveToScreen");
+            this.cbb_MoveToScreen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbb_MoveToScreen.FormattingEnabled = true;
+            this.cbb_MoveToScreen.Name = "cbb_MoveToScreen";
+            // 
+            // cb_MoveToScreen
+            // 
+            resources.ApplyResources(this.cb_MoveToScreen, "cb_MoveToScreen");
+            this.cb_MoveToScreen.Name = "cb_MoveToScreen";
+            this.cb_MoveToScreen.UseVisualStyleBackColor = true;
+            this.cb_MoveToScreen.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
             // 
             // cb_HideFromView
             // 
@@ -395,5 +413,7 @@ namespace VirtualSpace
         private System.Windows.Forms.CheckBox cb_HideFromView;
         private System.Windows.Forms.ComboBox cbb_WinInScreen;
         private System.Windows.Forms.CheckBox cb_WinInScreen;
+        private System.Windows.Forms.ComboBox cbb_MoveToScreen;
+        private System.Windows.Forms.CheckBox cb_MoveToScreen;
     }
 }

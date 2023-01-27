@@ -50,45 +50,48 @@ namespace VirtualSpace
             SetFormValues();
         }
 
-        public void SetFormValuesFromWindow( IntPtr handle )
+        private void InitOperators()
         {
-            tb_Name.Text = Agent.Langs.GetString( "Rule.New" );
+            OperatorList( cbb_Title );
+            OperatorList( cbb_ProcessName );
+            OperatorList( cbb_ProcessPath );
+            OperatorList( cbb_WndClass );
 
-            cb_Title.Checked = true;
-            var sbTitle = new StringBuilder( Const.WindowTitleMaxLength );
-            User32.GetWindowText( handle, sbTitle, sbTitle.Capacity );
-            tb_Title.Text = sbTitle.ToString();
-
-            _ = User32.GetWindowThreadProcessId( handle, out var pId );
-            var process = Process.GetProcessById( pId );
-            cb_ProcessName.Checked = true;
-            tb_ProcessName.Text = process.ProcessName;
-
-            try
+            //////////////////////////
+            // all virtual desktops
+            var count    = _vdi.GetDesktopCount();
+            var desktops = new List<object>();
+            for ( var i = 0; i < count; i++ )
             {
-                tb_ProcessPath.Text = process.MainModule?.FileName;
-            }
-            catch ( Exception ex )
-            {
-                cb_ProcessPath.Checked = false;
-                cb_ProcessPath.Enabled = false;
-                tb_ProcessPath.Text = ex.Message;
+                desktops.Add( new {Value = i, Text = _vdi.DesktopNameFromIndex( i )} );
             }
 
-            var sbCName = new StringBuilder( Const.WindowClassMaxLength );
-            User32.GetClassName( handle, sbCName, sbCName.Capacity );
-            tb_WndClass.Text = sbCName.ToString();
+            WinForms.SetComboBoxDataSource( cbb_MoveToDesktop, desktops );
 
+            //////////////////////////
+            // all screens
+            var screens    = new List<object>();
             var allScreens = Screen.AllScreens;
-            var screen     = Screen.FromHandle( handle );
             for ( var i = 0; i < allScreens.Length; i++ )
             {
-                if ( screen.DeviceName == allScreens[i].DeviceName )
-                {
-                    cbb_WinInScreen.SelectedValue = i;
-                    break;
-                }
+                screens.Add( new {Value = i, Text = $"{allScreens[i].DeviceName}  ({allScreens[i].DeviceFriendlyName()})"} );
             }
+
+            WinForms.SetComboBoxDataSource( cbb_WinInScreen, screens );
+            WinForms.SetComboBoxDataSource( cbb_MoveToScreen, new List<object>( screens ) ); // avoid share a same list
+        }
+
+        private static void OperatorList( ComboBox cbb )
+        {
+            var items = new List<object>
+            {
+                new {Value = Keywords.Eq[0], Text = Agent.Langs.GetString( "Rule.Op.Eq" )},
+                new {Value = Keywords.StartsWith[0], Text = Agent.Langs.GetString( "Rule.Op.Ssw" )},
+                new {Value = Keywords.EndsWith[0], Text = Agent.Langs.GetString( "Rule.Op.Esw" )},
+                new {Value = Keywords.Contains[0], Text = Agent.Langs.GetString( "Rule.Op.Sc" )},
+                new {Value = Keywords.RegexIsMatch[0], Text = Agent.Langs.GetString( "Rule.Op.Regex" )}
+            };
+            WinForms.SetComboBoxDataSource( cbb, items );
         }
 
         private void SetFormValues()
@@ -159,62 +162,58 @@ namespace VirtualSpace
 
                 cb_PinWindow.Checked = action.PinWindow;
                 cb_PinApp.Checked = action.PinApp;
+
                 cb_MoveToDesktop.Checked = action.MoveToDesktop >= 0;
                 cbb_MoveToDesktop.SelectedValue = action.MoveToDesktop;
                 cb_FollowWindow.Checked = action.FollowWindow;
+
+                cb_MoveToScreen.Checked = action.MoveToScreen >= 0;
+                cbb_MoveToScreen.SelectedValue = action.MoveToScreen;
             }
 
             lbCreated.Text = $"{ruleList[_editIndex].Created:yyyy-MM-dd HH:mm:ss}";
             lbUpdated.Text = $"{ruleList[_editIndex].Updated:yyyy-MM-dd HH:mm:ss}";
         }
 
-        private void InitOperators()
+        public void SetFormValuesByWindow( IntPtr handle )
         {
-            OperatorList( cbb_Title );
-            OperatorList( cbb_ProcessName );
-            OperatorList( cbb_ProcessPath );
-            OperatorList( cbb_WndClass );
+            tb_Name.Text = Agent.Langs.GetString( "Rule.New" );
 
-            //////////////////////////
-            // all virtual desktops
-            cbb_MoveToDesktop.DisplayMember = "Text";
-            cbb_MoveToDesktop.ValueMember = "Value";
-            var count    = _vdi.GetDesktopCount();
-            var desktops = new List<object>();
-            for ( var i = 0; i < count; i++ )
+            cb_Title.Checked = true;
+            var sbTitle = new StringBuilder( Const.WindowTitleMaxLength );
+            User32.GetWindowText( handle, sbTitle, sbTitle.Capacity );
+            tb_Title.Text = sbTitle.ToString();
+
+            _ = User32.GetWindowThreadProcessId( handle, out var pId );
+            var process = Process.GetProcessById( pId );
+            cb_ProcessName.Checked = true;
+            tb_ProcessName.Text = process.ProcessName;
+
+            try
             {
-                desktops.Add( new {Value = i, Text = _vdi.DesktopNameFromIndex( i )} );
+                tb_ProcessPath.Text = process.MainModule?.FileName;
+            }
+            catch ( Exception ex )
+            {
+                cb_ProcessPath.Checked = false;
+                cb_ProcessPath.Enabled = false;
+                tb_ProcessPath.Text = ex.Message;
             }
 
-            cbb_MoveToDesktop.DataSource = desktops;
+            var sbCName = new StringBuilder( Const.WindowClassMaxLength );
+            User32.GetClassName( handle, sbCName, sbCName.Capacity );
+            tb_WndClass.Text = sbCName.ToString();
 
-            //////////////////////////
-            // all screens
-            cbb_WinInScreen.DisplayMember = "Text";
-            cbb_WinInScreen.ValueMember = "Value";
-            var screens    = new List<object>();
             var allScreens = Screen.AllScreens;
+            var screen     = Screen.FromHandle( handle );
             for ( var i = 0; i < allScreens.Length; i++ )
             {
-                screens.Add( new {Value = i, Text = $"{allScreens[i].DeviceName}  ({allScreens[i].DeviceFriendlyName()})"} );
+                if ( screen.DeviceName == allScreens[i].DeviceName )
+                {
+                    cbb_WinInScreen.SelectedValue = i;
+                    break;
+                }
             }
-
-            cbb_WinInScreen.DataSource = screens;
-        }
-
-        private static void OperatorList( ComboBox cbb )
-        {
-            cbb.DisplayMember = "Text";
-            cbb.ValueMember = "Value";
-            var items = new[]
-            {
-                new {Value = Keywords.Eq[0], Text = Agent.Langs.GetString( "Rule.Op.Eq" )},
-                new {Value = Keywords.StartsWith[0], Text = Agent.Langs.GetString( "Rule.Op.Ssw" )},
-                new {Value = Keywords.EndsWith[0], Text = Agent.Langs.GetString( "Rule.Op.Esw" )},
-                new {Value = Keywords.Contains[0], Text = Agent.Langs.GetString( "Rule.Op.Sc" )},
-                new {Value = Keywords.RegexIsMatch[0], Text = Agent.Langs.GetString( "Rule.Op.Regex" )}
-            };
-            cbb.DataSource = items;
         }
 
         private void btn_RuleSave_Click( object sender, EventArgs e )
@@ -271,6 +270,11 @@ namespace VirtualSpace
             if ( cb_MoveToDesktop.Checked )
             {
                 action.MoveToDesktop = int.Parse( cbb_MoveToDesktop.SelectedValue.ToString() );
+            }
+
+            if ( cb_MoveToScreen.Checked )
+            {
+                action.MoveToScreen = int.Parse( cbb_MoveToScreen.SelectedValue.ToString() );
             }
 
             action.FollowWindow = cb_FollowWindow.Checked;
@@ -421,6 +425,15 @@ namespace VirtualSpace
             else
             {
                 cbb_WinInScreen.Enabled = false;
+            }
+
+            if ( cb_MoveToScreen.Checked )
+            {
+                cbb_MoveToScreen.Enabled = true;
+            }
+            else
+            {
+                cbb_MoveToScreen.Enabled = false;
             }
         }
     }

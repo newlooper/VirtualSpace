@@ -13,8 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -95,42 +93,7 @@ namespace VirtualSpace.VirtualDesktop
             void MoveToScreen( object? s, EventArgs evt )
             {
                 var selectedScreen = s as ToolStripMenuItem;
-                var srcScreen      = Screen.FromHandle( mi.Vw.Handle );
-                if ( srcScreen.DeviceName == selectedScreen?.Text ) return;
-
-                var destScreen = Screen.AllScreens.FirstOrDefault( x => x.DeviceName == selectedScreen?.Text );
-                if ( destScreen == null ) return;
-
-                var wp = new WINDOWPLACEMENT();
-                wp.Length = Marshal.SizeOf( wp );
-                if ( !User32.GetWindowPlacement( mi.Vw.Handle, ref wp ) ) return;
-
-                var rect         = wp.NormalPosition;
-                var targetX      = destScreen.WorkingArea.X + rect.Left - srcScreen.WorkingArea.Left;
-                var targetY      = destScreen.WorkingArea.Y + rect.Top - srcScreen.WorkingArea.Top;
-                var targetWidth  = rect.Right - rect.Left;
-                var targetHeight = rect.Bottom - rect.Top;
-
-                switch ( wp.ShowCmd )
-                {
-                    case ShowState.SW_SHOWMAXIMIZED:
-                        _ = User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_RESTORE );
-                        User32.SetWindowPos( mi.Vw.Handle, IntPtr.Zero,
-                            targetX, targetY, targetWidth, targetHeight, 0 );
-                        _ = User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_MAXIMIZE );
-                        break;
-                    case ShowState.SW_MINIMIZE:
-                    case ShowState.SW_SHOWMINIMIZED:
-                        _ = User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_RESTORE );
-                        User32.SetWindowPos( mi.Vw.Handle, IntPtr.Zero,
-                            targetX, targetY, targetWidth, targetHeight, 0 );
-                        // User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_SHOWMINIMIZED );
-                        break;
-                    case ShowState.SW_NORMAL:
-                        User32.SetWindowPos( mi.Vw.Handle, IntPtr.Zero,
-                            targetX, targetY, targetWidth, targetHeight, 0 );
-                        break;
-                }
+                WindowTool.MoveWindowToScreen( mi.Vw.Handle, itemScreen.DropDownItems.IndexOf( selectedScreen ) );
             }
 
             foreach ( var s in Screen.AllScreens )
@@ -157,7 +120,7 @@ namespace VirtualSpace.VirtualDesktop
             {
                 var ruleForm = new RuleForm( -1 );
                 ruleForm.Init( new VirtualDesktopInfo() );
-                ruleForm.SetFormValuesFromWindow( mi.Vw.Handle );
+                ruleForm.SetFormValuesByWindow( mi.Vw.Handle );
                 ruleForm.TopMost = true;
                 ruleForm.ShowDialog();
             }

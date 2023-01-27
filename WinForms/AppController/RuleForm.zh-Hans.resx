@@ -73,9 +73,6 @@
   <data name="groupBox1.Text" xml:space="preserve">
     <value>基本</value>
   </data>
-  <data name="groupBox2.Text" xml:space="preserve">
-    <value>基础窗口规则</value>
-  </data>
   <data name="cb_WinInScreen.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 28</value>
   </data>
@@ -106,11 +103,14 @@
   <data name="cb_Title.Text" xml:space="preserve">
     <value>窗口标题</value>
   </data>
-  <data name="groupBox3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>978, 193</value>
+  <data name="groupBox2.Text" xml:space="preserve">
+    <value>基础窗口规则</value>
   </data>
-  <data name="groupBox3.Text" xml:space="preserve">
-    <value>窗口动作</value>
+  <data name="cb_MoveToScreen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>126, 28</value>
+  </data>
+  <data name="cb_MoveToScreen.Text" xml:space="preserve">
+    <value>移动到屏幕</value>
   </data>
   <data name="cb_HideFromView.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 28</value>
@@ -142,11 +142,14 @@
   <data name="cb_MoveToDesktop.Text" xml:space="preserve">
     <value>移动到桌面</value>
   </data>
+  <data name="groupBox3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>978, 252</value>
+  </data>
+  <data name="groupBox3.Text" xml:space="preserve">
+    <value>窗口动作</value>
+  </data>
   <data name="btn_RuleSave.Text" xml:space="preserve">
     <value>保存</value>
-  </data>
-  <data name="groupBox4.Text" xml:space="preserve">
-    <value>信息</value>
   </data>
   <data name="lb_Updated.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 24</value>
@@ -159,6 +162,9 @@
   </data>
   <data name="lb_Created.Text" xml:space="preserve">
     <value>创建时间</value>
+  </data>
+  <data name="groupBox4.Text" xml:space="preserve">
+    <value>信息</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>规则定义</value>
