@@ -27,17 +27,20 @@ namespace VirtualSpace.VirtualDesktop
 {
     internal static partial class VirtualDesktopManager
     {
-        private static readonly List<VisibleWindow>         VisibleWindows       = new();
-        private static readonly User32.EnumChildWindowsProc EnumChildWindowsProc = ChildWindowFilter;
-        private static readonly User32.EnumWindowsProc      EnumWindowsProc      = WindowFilter;
-        private static readonly StringBuilder               SbWinTitle           = new( Const.WindowTitleMaxLength );
-        private static readonly StringBuilder               SbClsName            = new( Const.WindowClassMaxLength );
-        private static          List<VirtualDesktopWindow>  _virtualDesktops     = new();
-        private static          IntPtr                      _coreWindowHandle;
-        private static          Color                       _defaultBackColor;
-        public static           bool                        NeedRepaintThumbs;
-        public static           UserInterface               Ui            => ConfigManager.CurrentProfile.UI;
-        public static           bool                        IsBatchCreate { get; set; }
+        private static readonly List<VisibleWindow> VisibleWindows = new();
+
+        // private static readonly User32.EnumChildWindowsProc EnumChildWindowsProc = ChildWindowFilter;
+        private static readonly User32.EnumWindowsProc EnumWindowsProc = WindowFilter;
+        private static readonly StringBuilder          SbWinTitle      = new( Const.WindowTitleMaxLength );
+        private static readonly StringBuilder          SbClsName       = new( Const.WindowClassMaxLength );
+
+        private static List<VirtualDesktopWindow> _virtualDesktops = new();
+
+        // private static          IntPtr                      _coreWindowHandle;
+        private static Color         _defaultBackColor;
+        public static  bool          NeedRepaintThumbs;
+        public static  UserInterface Ui            => ConfigManager.CurrentProfile.UI;
+        public static  bool          IsBatchCreate { get; set; }
 
         public static int CurrentDesktopIndex()
         {
@@ -235,16 +238,7 @@ namespace VirtualSpace.VirtualDesktop
                  !Filters.IsCloaked( hWnd )
                )
             {
-                if ( classname == Const.ApplicationFrameWindow )
-                {
-                    User32.EnumChildWindows( hWnd, EnumChildWindowsProc, 0 );
-                    if ( _coreWindowHandle != default )
-                    {
-                        VisibleWindows.Add( new VisibleWindow( title, classname, hWnd, _coreWindowHandle ) );
-                        _coreWindowHandle = default;
-                    }
-                }
-                else
+                if ( classname != Const.WindowsUiCoreWindow )
                 {
                     VisibleWindows.Add( new VisibleWindow( title, classname, hWnd ) );
                 }
@@ -253,15 +247,15 @@ namespace VirtualSpace.VirtualDesktop
             return true;
         }
 
-        private static bool ChildWindowFilter( IntPtr hWnd, int lParam )
-        {
-            var sbCName = new StringBuilder( Const.WindowClassMaxLength );
-            _ = User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
-            var classname = sbCName.ToString();
-            if ( classname == Const.WindowsUiCoreWindow && _coreWindowHandle == default )
-                _coreWindowHandle = hWnd;
-            return true;
-        }
+        // private static bool ChildWindowFilter( IntPtr hWnd, int lParam )
+        // {
+        //     var sbCName = new StringBuilder( Const.WindowClassMaxLength );
+        //     _ = User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
+        //     var classname = sbCName.ToString();
+        //     if ( classname == Const.WindowsUiCoreWindow && _coreWindowHandle == default )
+        //         _coreWindowHandle = hWnd;
+        //     return true;
+        // }
 
         private static List<VisibleWindow> GetVisibleWindows()
         {

@@ -134,11 +134,11 @@ namespace VirtualSpace.VirtualDesktop
 
                             var sysIndex = DesktopWrapper.IndexFromGuid( _virtualDesktops[_hoverVdIndex].VdId );
                             DesktopWrapper.MoveWindowToDesktop( _selectedWindow.Handle, sysIndex );
-                            if ( _selectedWindow.CoreUiWindowHandle != default )
-                            {
-                                DesktopWrapper.MoveWindowToDesktop( _selectedWindow.CoreUiWindowHandle, sysIndex );
-                                User32.SetParent( _selectedWindow.CoreUiWindowHandle, _selectedWindow.Handle );
-                            }
+                            // if ( _selectedWindow.CoreUiWindowHandle != default )
+                            // {
+                            //     DesktopWrapper.MoveWindowToDesktop( _selectedWindow.CoreUiWindowHandle, sysIndex );
+                            //     User32.SetParent( _selectedWindow.CoreUiWindowHandle, _selectedWindow.Handle );
+                            // }
 
                             var relevantVirtualDesktops = new List<VirtualDesktopWindow>
                             {
@@ -335,21 +335,9 @@ namespace VirtualSpace.VirtualDesktop
 
         public async void CloseSelectedWindow( VisibleWindow vw )
         {
-            if ( vw.Classname == Const.WindowsUiCoreWindow )
-            {
-                Uia.CloseButtonInvokeByWindowHandle( vw.Handle );
-            }
-            else if ( vw.CoreUiWindowHandle != default )
-            {
-                User32.ShowWindow( vw.Handle, 0 );
-                User32.ShowWindow( vw.CoreUiWindowHandle, 0 );
-                User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
-                User32.PostMessage( vw.CoreUiWindowHandle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
-            }
-            else
-            {
-                User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
-            }
+            User32.ShowWindow( vw.Handle, 0 );
+
+            User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
 
             await Task.Run( () =>
             {

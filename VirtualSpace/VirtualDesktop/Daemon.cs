@@ -31,7 +31,7 @@ namespace VirtualSpace.VirtualDesktop
     {
         private static          bool              _initialized;
         private static          int               _runlevel = 1;
-        private static          IntPtr            _isVisibleCoreWindow;
+        // private static          IntPtr            _isVisibleCoreWindow;
         private static readonly List<IntPtr>      WndHandleSnapshot = new();
         private static readonly ManualResetEvent  CanRun            = new( false );
         private static readonly StringBuilder     SbWinText         = new( Const.WindowTitleMaxLength );
@@ -172,16 +172,7 @@ namespace VirtualSpace.VirtualDesktop
                  !Filters.IsCloaked( hWnd )
                )
             {
-                if ( classname == Const.ApplicationFrameWindow )
-                {
-                    User32.EnumChildWindows( hWnd, ChildWindowHandleFilter, 0 );
-                    if ( _isVisibleCoreWindow != default )
-                    {
-                        _isVisibleCoreWindow = default;
-                        AddToSnapshot( hWnd );
-                    }
-                }
-                else
+                if ( classname != Const.WindowsUiCoreWindow )
                 {
                     AddToSnapshot( hWnd );
                 }
@@ -190,15 +181,15 @@ namespace VirtualSpace.VirtualDesktop
             return true;
         }
 
-        private static bool ChildWindowHandleFilter( IntPtr hWnd, int lParam )
-        {
-            var sbCName = new StringBuilder( Const.WindowClassMaxLength );
-            _ = User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
-            var classname = sbCName.ToString();
-            if ( classname == Const.WindowsUiCoreWindow && _isVisibleCoreWindow == default )
-                _isVisibleCoreWindow = hWnd;
-            return true;
-        }
+        // private static bool ChildWindowHandleFilter( IntPtr hWnd, int lParam )
+        // {
+        //     var sbCName = new StringBuilder( Const.WindowClassMaxLength );
+        //     _ = User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
+        //     var classname = sbCName.ToString();
+        //     if ( classname == Const.WindowsUiCoreWindow && _isVisibleCoreWindow == default )
+        //         _isVisibleCoreWindow = hWnd;
+        //     return true;
+        // }
 
         private static void AddToSnapshot( IntPtr hWnd )
         {

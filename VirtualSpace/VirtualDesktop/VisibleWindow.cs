@@ -22,7 +22,7 @@ namespace VirtualSpace.VirtualDesktop
             Title = title;
             Classname = classname;
             Handle = handle;
-            CoreUiWindowHandle = coreUiWindowHandle;
+            // CoreUiWindowHandle = coreUiWindowHandle;
         }
 
         public string Title { get; set; }
@@ -31,7 +31,7 @@ namespace VirtualSpace.VirtualDesktop
 
         public IntPtr Handle { get; set; }
 
-        public IntPtr CoreUiWindowHandle { get; set; }
+        // public IntPtr CoreUiWindowHandle { get; set; }
 
         public Rectangle Rect { get; set; }
 
