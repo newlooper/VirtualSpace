@@ -115,7 +115,6 @@ namespace VirtualSpace
             {
                 SetControlLang( _instance.logCMS, lang );
                 SetControlLang( _instance.trayMenu, lang );
-                SetControlLang( _instance.ts_HotkeySave, lang );
 
                 _instance.tv_keyboard.Nodes.Clear();
                 _instance.tv_keyboard.Nodes.AddRange( new[]

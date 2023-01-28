@@ -66,42 +66,23 @@ namespace VirtualSpace
             }
         }
 
-        private void tssb_hk_save_reg_ButtonClick( object sender, EventArgs e )
+        private void btn_hk_RegAndSave_Click( object sender, EventArgs e )
         {
             tb_hk_tip.Clear();
             if ( !Check() ) return;
 
             var ghk = GetGhk();
 
-
             RegHotkey( ghk );
             SaveHotkey( ghk );
         }
 
-        private void tssb_hk_save_reg_DropDownItemClicked( object sender, ToolStripItemClickedEventArgs e )
+        private void btn_hk_ClearAndSave_Click( object sender, EventArgs e )
         {
-            var index = tssb_hk_save_reg.DropDownItems.IndexOf( e.ClickedItem );
-            switch ( index )
-            {
-                case 0: // save only
-
-                    tb_hk_tip.Clear();
-                    if ( !Check() ) return;
-                    SaveHotkey( GetGhk() );
-                    break;
-                case 1: // register only
-
-                    tb_hk_tip.Clear();
-                    if ( !Check() ) return;
-                    RegHotkey( GetGhk() );
-                    break;
-                case 2: // clear
-                    tb_hk_tip.Clear();
-                    GlobalHotKey.UnregisterHotKey( _mainWindowHandle, Manager.Configs.KeyBindings[tv_keyboard.SelectedNode.Name].MessageId );
-                    ClearHotkey();
-                    SaveHotkey( GetGhk() );
-                    break;
-            }
+            tb_hk_tip.Clear();
+            GlobalHotKey.UnregisterHotKey( _mainWindowHandle, Manager.Configs.KeyBindings[tv_keyboard.SelectedNode.Name].MessageId );
+            ClearHotkey();
+            SaveHotkey( GetGhk() );
         }
 
         private bool Check()

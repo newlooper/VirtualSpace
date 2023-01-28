@@ -85,12 +85,9 @@ namespace VirtualSpace
             this.gb_Hotkey = new System.Windows.Forms.GroupBox();
             this.tc_Keyboard = new System.Windows.Forms.TabControl();
             this.tp_hk_main = new System.Windows.Forms.TabPage();
+            this.btn_hk_ClearAndSave = new System.Windows.Forms.Button();
+            this.btn_hk_RegAndSave = new System.Windows.Forms.Button();
             this.tb_hk_tip = new System.Windows.Forms.TextBox();
-            this.ts_HotkeySave = new System.Windows.Forms.ToolStrip();
-            this.tssb_hk_save_reg = new System.Windows.Forms.ToolStripSplitButton();
-            this.tsmi_hk_save = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmi_hk_reg = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmi_hk_clear_save = new System.Windows.Forms.ToolStripMenuItem();
             this.lb_hk_func = new System.Windows.Forms.Label();
             this.cb_hk_key = new System.Windows.Forms.ComboBox();
             this.cb_hk_shift = new System.Windows.Forms.CheckBox();
@@ -189,7 +186,6 @@ namespace VirtualSpace
             this.gb_Hotkey.SuspendLayout();
             this.tc_Keyboard.SuspendLayout();
             this.tp_hk_main.SuspendLayout();
-            this.ts_HotkeySave.SuspendLayout();
             this.tp_hk_extra.SuspendLayout();
             this.gb_nav.SuspendLayout();
             this.mainTabs.SuspendLayout();
@@ -532,8 +528,9 @@ namespace VirtualSpace
             // 
             // tp_hk_main
             // 
+            this.tp_hk_main.Controls.Add(this.btn_hk_ClearAndSave);
+            this.tp_hk_main.Controls.Add(this.btn_hk_RegAndSave);
             this.tp_hk_main.Controls.Add(this.tb_hk_tip);
-            this.tp_hk_main.Controls.Add(this.ts_HotkeySave);
             this.tp_hk_main.Controls.Add(this.lb_hk_func);
             this.tp_hk_main.Controls.Add(this.cb_hk_key);
             this.tp_hk_main.Controls.Add(this.cb_hk_shift);
@@ -544,50 +541,24 @@ namespace VirtualSpace
             this.tp_hk_main.Name = "tp_hk_main";
             this.tp_hk_main.UseVisualStyleBackColor = true;
             // 
+            // btn_hk_ClearAndSave
+            // 
+            resources.ApplyResources(this.btn_hk_ClearAndSave, "btn_hk_ClearAndSave");
+            this.btn_hk_ClearAndSave.Name = "btn_hk_ClearAndSave";
+            this.btn_hk_ClearAndSave.UseVisualStyleBackColor = true;
+            this.btn_hk_ClearAndSave.Click += new System.EventHandler(this.btn_hk_ClearAndSave_Click);
+            // 
+            // btn_hk_RegAndSave
+            // 
+            resources.ApplyResources(this.btn_hk_RegAndSave, "btn_hk_RegAndSave");
+            this.btn_hk_RegAndSave.Name = "btn_hk_RegAndSave";
+            this.btn_hk_RegAndSave.UseVisualStyleBackColor = true;
+            this.btn_hk_RegAndSave.Click += new System.EventHandler(this.btn_hk_RegAndSave_Click);
+            // 
             // tb_hk_tip
             // 
             resources.ApplyResources(this.tb_hk_tip, "tb_hk_tip");
             this.tb_hk_tip.Name = "tb_hk_tip";
-            // 
-            // ts_HotkeySave
-            // 
-            resources.ApplyResources(this.ts_HotkeySave, "ts_HotkeySave");
-            this.ts_HotkeySave.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.ts_HotkeySave.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.ts_HotkeySave.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tssb_hk_save_reg});
-            this.ts_HotkeySave.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.ts_HotkeySave.Name = "ts_HotkeySave";
-            this.ts_HotkeySave.ShowItemToolTips = false;
-            // 
-            // tssb_hk_save_reg
-            // 
-            resources.ApplyResources(this.tssb_hk_save_reg, "tssb_hk_save_reg");
-            this.tssb_hk_save_reg.BackColor = System.Drawing.SystemColors.Control;
-            this.tssb_hk_save_reg.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tssb_hk_save_reg.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmi_hk_save,
-            this.tsmi_hk_reg,
-            this.tsmi_hk_clear_save});
-            this.tssb_hk_save_reg.Margin = new System.Windows.Forms.Padding(0);
-            this.tssb_hk_save_reg.Name = "tssb_hk_save_reg";
-            this.tssb_hk_save_reg.ButtonClick += new System.EventHandler(this.tssb_hk_save_reg_ButtonClick);
-            this.tssb_hk_save_reg.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tssb_hk_save_reg_DropDownItemClicked);
-            // 
-            // tsmi_hk_save
-            // 
-            this.tsmi_hk_save.Name = "tsmi_hk_save";
-            resources.ApplyResources(this.tsmi_hk_save, "tsmi_hk_save");
-            // 
-            // tsmi_hk_reg
-            // 
-            this.tsmi_hk_reg.Name = "tsmi_hk_reg";
-            resources.ApplyResources(this.tsmi_hk_reg, "tsmi_hk_reg");
-            // 
-            // tsmi_hk_clear_save
-            // 
-            this.tsmi_hk_clear_save.Name = "tsmi_hk_clear_save";
-            resources.ApplyResources(this.tsmi_hk_clear_save, "tsmi_hk_clear_save");
             // 
             // lb_hk_func
             // 
@@ -1302,8 +1273,6 @@ namespace VirtualSpace
             this.tc_Keyboard.ResumeLayout(false);
             this.tp_hk_main.ResumeLayout(false);
             this.tp_hk_main.PerformLayout();
-            this.ts_HotkeySave.ResumeLayout(false);
-            this.ts_HotkeySave.PerformLayout();
             this.tp_hk_extra.ResumeLayout(false);
             this.gb_nav.ResumeLayout(false);
             this.gb_nav.PerformLayout();
@@ -1438,11 +1407,6 @@ namespace VirtualSpace
         private System.Windows.Forms.CheckBox cb_hk_win;
         private System.Windows.Forms.TabPage tp_hk_extra;
         private System.Windows.Forms.Label lb_hk_func;
-        private System.Windows.Forms.ToolStrip ts_HotkeySave;
-        private System.Windows.Forms.ToolStripSplitButton tssb_hk_save_reg;
-        private System.Windows.Forms.ToolStripMenuItem tsmi_hk_save;
-        private System.Windows.Forms.ToolStripMenuItem tsmi_hk_reg;
-        private System.Windows.Forms.ToolStripMenuItem tsmi_hk_clear_save;
         private System.Windows.Forms.Label lb_hk_extra;
         private System.Windows.Forms.ToolStripMenuItem closeThisWindowToolStripMenuItem;
         private System.Windows.Forms.Label lb_dummy_Placeholder;
@@ -1468,5 +1432,7 @@ namespace VirtualSpace
         private System.Windows.Forms.Label lb_RunOnStartup;
         private System.Windows.Forms.CheckBox chb_RunOnStartup;
         private System.Windows.Forms.LinkLabel llb_TaskScheduler;
+        private System.Windows.Forms.Button btn_hk_RegAndSave;
+        private System.Windows.Forms.Button btn_hk_ClearAndSave;
     }
 }
