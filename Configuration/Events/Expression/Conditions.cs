@@ -10,8 +10,8 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -19,7 +19,6 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -33,9 +32,28 @@ namespace VirtualSpace.Config.Events.Expression
 {
     public static partial class Conditions
     {
-        private static readonly JsonParser         Jp            = new();
-        private static readonly Channel<Behavior>  ActionChannel = Channels.ActionChannel;
-        private static          List<RuleTemplate> _rules        = InitRules();
+        private static readonly JsonParser                        Jp                        = new();
+        private static readonly Channel<Behavior>                 ActionChannel             = Channels.ActionChannel;
+        private static          List<RuleTemplate>                _rules                    = InitRules();
+        public static readonly  Channel<Window>                   VisibleWindows            = Channel.CreateUnbounded<Window>();
+        public static readonly  List<IntPtr>                      WndHandleIgnoreListByRule = new();
+        private static readonly ConcurrentDictionary<IntPtr, int> WindowCheckTimes          = new();
+
+        static Conditions()
+        {
+            RuleChecker();
+        }
+
+        private static async void RuleChecker()
+        {
+            while ( await VisibleWindows.Reader.WaitToReadAsync() )
+            {
+                if ( VisibleWindows.Reader.TryRead( out var win ) )
+                {
+                    CheckRulesForWindow( win );
+                }
+            }
+        }
 
         private static List<RuleTemplate> InitRules()
         {
@@ -61,7 +79,7 @@ namespace VirtualSpace.Config.Events.Expression
             return _rules;
         }
 
-        public static async void CheckWindow( Window win )
+        public static async void CheckRulesForWindow( Window win )
         {
             if ( _rules.Count == 0 ) return;
 
@@ -85,10 +103,6 @@ namespace VirtualSpace.Config.Events.Expression
                     Logger.Warning( ex.Message );
                 }
 
-                var sbClass = new StringBuilder( Const.WindowClassMaxLength );
-                _ = GetClassName( win.Handle, sbClass, sbClass.Capacity );
-                win.WndClass = sbClass.ToString();
-
                 var screen      = Screen.FromHandle( win.Handle );
                 var screenIndex = 0;
                 var allScreens  = Screen.AllScreens;
@@ -103,36 +117,53 @@ namespace VirtualSpace.Config.Events.Expression
 
                 win.WinInScreen = screenIndex.ToString();
 
-                /////////////////////////////////////////////////////////////// 
-                // For some windows, whose title will change after creation,
-                // we need give them some time to wait for the final title
-                var sbTitle = new StringBuilder( Const.WindowTitleMaxLength );
-                var sw      = Stopwatch.StartNew();
-                while ( sw.ElapsedMilliseconds < Const.WindowCheckTimeout )
+                if ( !IsWindow( win.Handle ) ) return;
+
+                var hasMatchedRule = false;
+
+                foreach ( var r in rules )
                 {
-                    if ( !IsWindow( win.Handle ) ) break;
-
-                    GetWindowText( win.Handle, sbTitle, sbTitle.Capacity );
-                    win.Title = sbTitle.ToString();
-
-                    foreach ( var r in rules )
+                    if ( !r.Enabled ) continue;
+                    var match = new List<Window> {win}.Where( r.Exp ).Any();
+                    if ( match )
                     {
-                        if ( !r.Enabled ) continue;
-                        var match = new List<Window> {win}.Where( r.Exp ).Any();
-                        if ( match )
-                        {
-                            Logger.Event( win.Title + $" match rule [{r.Name}]" );
-                            r.Action.Handle = win.Handle;
-                            r.Action.RuleName = r.Name;
-                            r.Action.WindowTitle = win.Title;
-                            ActionChannel.Writer.TryWrite( r.Action );
-                            return;
-                        }
-                    }
+                        hasMatchedRule = true;
+                        Logger.Debug( win.Title + $" match rule [{r.Name}]" );
+                        r.Action.Handle = win.Handle;
+                        r.Action.RuleName = r.Name;
+                        r.Action.WindowTitle = win.Title;
+                        ActionChannel.Writer.TryWrite( r.Action );
 
-                    Thread.Sleep( Const.WindowCheckInterval );
-                    Logger.Debug( "Check Rules Until Timeout." );
+                        ////////////////////////////////////////////////////////////////
+                        // 某个窗口可能与多条规则匹配，继续循环就表示所有相应的动作都会按顺序执行
+                        // 但是，如果在此处退出循环，则表示仅执行第一条匹配规则的动作
+                        // if ( OnlyRunActionOfFirstMatchedRule ) // <- 日后可能会引入选项来进行配置
+                        // {
+                        //     break;
+                        // }
+                    }
                 }
+
+                if ( hasMatchedRule )
+                {
+                    WndHandleIgnoreListByRule.Add( win.Handle );
+                    return;
+                }
+
+                if ( Manager.CurrentProfile.IgnoreWindowOnRuleCheckTimeout )
+                {
+                    if ( !WindowCheckTimes.ContainsKey( win.Handle ) )
+                        WindowCheckTimes[win.Handle] = 0;
+
+                    if ( WindowCheckTimes[win.Handle]++ >= Const.WindowCheckTimesLimit )
+                    {
+                        Logger.Debug( $"Try find rules for [{win.Title}] too many times, ignore the window." );
+                        WndHandleIgnoreListByRule.Add( win.Handle );
+                        return;
+                    }
+                }
+
+                Logger.Debug( $"Window [{win.Title}] has no matched rules." );
             } );
         }
 

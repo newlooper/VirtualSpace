@@ -29,14 +29,12 @@ namespace VirtualSpace.VirtualDesktop
 {
     internal static class Daemon
     {
-        private static          bool              _initialized;
-        private static          int               _runlevel = 1;
-        // private static          IntPtr            _isVisibleCoreWindow;
-        private static readonly List<IntPtr>      WndHandleSnapshot = new();
-        private static readonly ManualResetEvent  CanRun            = new( false );
-        private static readonly StringBuilder     SbWinText         = new( Const.WindowTitleMaxLength );
-        private static readonly StringBuilder     SbCName           = new( Const.WindowClassMaxLength );
-        private static readonly Channel<Behavior> ActionChannel     = Channels.ActionChannel;
+        private static          int               _runlevel      = 1;
+        private static readonly ManualResetEvent  CanRun         = new( false );
+        private static readonly StringBuilder     SbWinText      = new( Const.WindowTitleMaxLength );
+        private static readonly StringBuilder     SbCName        = new( Const.WindowClassMaxLength );
+        private static readonly Channel<Behavior> ActionChannel  = Channels.ActionChannel;
+        private static readonly Channel<Window>   VisibleWindows = Conditions.VisibleWindows;
 
         private static async void WaitForAction()
         {
@@ -47,7 +45,7 @@ namespace VirtualSpace.VirtualDesktop
                 if ( action.HideFromView )
                 {
                     Logger.Debug( $"[RULE]HIDE.Win {action.Handle.ToString( "X2" )}" );
-                    Filters.WndHandleManualIgnoreList.Add( action.Handle );
+                    Filters.WndHandleIgnoreListByManual.Add( action.Handle );
                 }
 
                 if ( action.MoveToScreen > 0 )
@@ -117,8 +115,6 @@ namespace VirtualSpace.VirtualDesktop
         public static void Start()
         {
             WaitForAction();
-            _ = User32.EnumWindows( WindowHandleFilter, 0 );
-            _initialized = true;
             StartDaemon();
             if ( ConfigManager.CurrentProfile.DaemonAutoStart )
                 CanRun.Set();
@@ -167,38 +163,23 @@ namespace VirtualSpace.VirtualDesktop
                  !string.IsNullOrEmpty( title ) &&
                  !Filters.WndClsIgnoreList.Contains( classname ) &&
                  !Filters.WndTitleIgnoreList.Contains( title ) &&
-                 !Filters.WndHandleIgnoreList.Contains( hWnd ) &&
-                 !Filters.WndHandleManualIgnoreList.Contains( hWnd ) &&
+                 !Filters.WndHandleIgnoreListByError.Contains( hWnd ) &&
+                 !Conditions.WndHandleIgnoreListByRule.Contains( hWnd ) &&
                  !Filters.IsCloaked( hWnd )
                )
             {
                 if ( classname != Const.WindowsUiCoreWindow )
                 {
-                    AddToSnapshot( hWnd );
+                    AddToSnapshot( hWnd, title, classname );
                 }
             }
 
             return true;
         }
 
-        // private static bool ChildWindowHandleFilter( IntPtr hWnd, int lParam )
-        // {
-        //     var sbCName = new StringBuilder( Const.WindowClassMaxLength );
-        //     _ = User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
-        //     var classname = sbCName.ToString();
-        //     if ( classname == Const.WindowsUiCoreWindow && _isVisibleCoreWindow == default )
-        //         _isVisibleCoreWindow = hWnd;
-        //     return true;
-        // }
-
-        private static void AddToSnapshot( IntPtr hWnd )
+        private static void AddToSnapshot( IntPtr hWnd, string title, string classname )
         {
-            if ( WndHandleSnapshot.Contains( hWnd ) ) return;
-            WndHandleSnapshot.Add( hWnd );
-            if ( _initialized )
-            {
-                Conditions.CheckWindow( new Window {Handle = hWnd} );
-            }
+            VisibleWindows.Writer.TryWrite( new Window {Title = title, WndClass = classname, Handle = hWnd} );
         }
     }
 }

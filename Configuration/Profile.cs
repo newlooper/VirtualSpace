@@ -17,10 +17,11 @@ namespace VirtualSpace.Config
 {
     public class Profile
     {
-        public UserInterface UI              { get; set; }
-        public bool          DaemonAutoStart { get; set; }
-        public List<Guid>?   DesktopOrder    { get; set; }
-        public Mouse         Mouse           { get; set; }
+        public UserInterface UI                             { get; set; }
+        public bool          DaemonAutoStart                { get; set; }
+        public List<Guid>?   DesktopOrder                   { get; set; }
+        public Mouse         Mouse                          { get; set; }
+        public bool          IgnoreWindowOnRuleCheckTimeout { get; set; } = true;
 
         public Navigation Navigation { get; set; } = new()
         {

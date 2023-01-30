@@ -27,16 +27,13 @@ namespace VirtualSpace.VirtualDesktop
 {
     internal static partial class VirtualDesktopManager
     {
-        private static readonly List<VisibleWindow> VisibleWindows = new();
-
-        // private static readonly User32.EnumChildWindowsProc EnumChildWindowsProc = ChildWindowFilter;
+        private static readonly List<VisibleWindow>    VisibleWindows  = new();
         private static readonly User32.EnumWindowsProc EnumWindowsProc = WindowFilter;
         private static readonly StringBuilder          SbWinTitle      = new( Const.WindowTitleMaxLength );
         private static readonly StringBuilder          SbClsName       = new( Const.WindowClassMaxLength );
 
         private static List<VirtualDesktopWindow> _virtualDesktops = new();
 
-        // private static          IntPtr                      _coreWindowHandle;
         private static Color         _defaultBackColor;
         public static  bool          NeedRepaintThumbs;
         public static  UserInterface Ui            => ConfigManager.CurrentProfile.UI;
@@ -233,8 +230,8 @@ namespace VirtualSpace.VirtualDesktop
                  !string.IsNullOrEmpty( title ) &&
                  !Filters.WndClsIgnoreList.Contains( classname ) &&
                  !Filters.WndTitleIgnoreList.Contains( title ) &&
-                 !Filters.WndHandleIgnoreList.Contains( hWnd ) &&
-                 !Filters.WndHandleManualIgnoreList.Contains( hWnd ) &&
+                 !Filters.WndHandleIgnoreListByError.Contains( hWnd ) &&
+                 !Filters.WndHandleIgnoreListByManual.Contains( hWnd ) &&
                  !Filters.IsCloaked( hWnd )
                )
             {
@@ -246,16 +243,6 @@ namespace VirtualSpace.VirtualDesktop
 
             return true;
         }
-
-        // private static bool ChildWindowFilter( IntPtr hWnd, int lParam )
-        // {
-        //     var sbCName = new StringBuilder( Const.WindowClassMaxLength );
-        //     _ = User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
-        //     var classname = sbCName.ToString();
-        //     if ( classname == Const.WindowsUiCoreWindow && _coreWindowHandle == default )
-        //         _coreWindowHandle = hWnd;
-        //     return true;
-        // }
 
         private static List<VisibleWindow> GetVisibleWindows()
         {
@@ -304,7 +291,7 @@ namespace VirtualSpace.VirtualDesktop
                 catch ( Exception ex )
                 {
                     Logger.Warning( $"{ex.Message} ∵ {win.Title}({win.Handle.ToString( "X2" )})" );
-                    Filters.WndHandleIgnoreList.Add( win.Handle );
+                    Filters.WndHandleIgnoreListByError.Add( win.Handle );
                 }
             }
 

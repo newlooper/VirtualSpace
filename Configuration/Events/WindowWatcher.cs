@@ -55,7 +55,7 @@ namespace VirtualSpace.Config.Events
                             title,
                             wndClass,
                             pId );
-                        Conditions.CheckWindow( we );
+                        Conditions.CheckRulesForWindow( we );
                     }
                 }
                 catch ( Exception ex )

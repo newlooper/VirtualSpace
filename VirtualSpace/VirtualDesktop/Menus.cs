@@ -69,7 +69,7 @@ namespace VirtualSpace.VirtualDesktop
 
             void OnIgnoreWindowClick( object? s, EventArgs evt )
             {
-                Filters.WndHandleManualIgnoreList.Add( mi.Vw.Handle );
+                Filters.WndHandleIgnoreListByManual.Add( mi.Vw.Handle );
                 if ( DesktopWrapper.IsWindowPinned( mi.Vw.Handle ) ||
                      DesktopWrapper.IsApplicationPinned( mi.Vw.Handle ) )
                 {
@@ -183,7 +183,7 @@ namespace VirtualSpace.VirtualDesktop
 
                 var h = (IntPtr)int.Parse( m.Groups[1].Value );
 
-                Filters.WndHandleManualIgnoreList.Remove( h );
+                Filters.WndHandleIgnoreListByManual.Remove( h );
                 if ( DesktopWrapper.IsWindowPinned( h ) ||
                      DesktopWrapper.IsApplicationPinned( h ) )
                 {
@@ -195,7 +195,7 @@ namespace VirtualSpace.VirtualDesktop
                 }
             }
 
-            foreach ( var handle in Filters.WndHandleManualIgnoreList )
+            foreach ( var handle in Filters.WndHandleIgnoreListByManual )
             {
                 if ( !User32.IsWindow( handle ) ) continue;
                 if ( !DesktopWrapper.IsWindowPinned( handle ) &&
