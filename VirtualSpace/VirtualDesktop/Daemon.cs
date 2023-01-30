@@ -10,7 +10,6 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Threading;
@@ -48,7 +47,7 @@ namespace VirtualSpace.VirtualDesktop
                     Filters.WndHandleIgnoreListByManual.Add( action.Handle );
                 }
 
-                if ( action.MoveToScreen > 0 )
+                if ( action.MoveToScreen >= 0 )
                 {
                     Logger.Debug( $"[RULE]MOVE_TO_SCREEN.Win {action.Handle.ToString( "X2" )}" );
                     WindowTool.MoveWindowToScreen( action.Handle, action.MoveToScreen );
