@@ -28,21 +28,26 @@ namespace VirtualSpace
             chb_notify_vd_changed.Checked = ConfigManager.Configs.Cluster.NotificationOnVdChanged;
             chb_showVDIndexOnTrayIcon.Checked = ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon;
             chb_HideOnStart.Checked = ConfigManager.Configs.Cluster.HideOnStart;
+
+            chb_HideMainViewIfItsShown.CheckedChanged += chb_HideMainViewIfItsShown_CheckedChanged;
+            chb_notify_vd_changed.CheckedChanged += chb_notify_vd_changed_CheckedChanged;
+            chb_showVDIndexOnTrayIcon.CheckedChanged += chb_showVDIndexOnTrayIcon_CheckedChanged;
+            chb_HideOnStart.CheckedChanged += chb_HideOnStart_CheckedChanged;
         }
 
-        private void chb_HideMainViewIfItsShown_CheckedChanged( object sender, EventArgs e )
+        private void chb_HideMainViewIfItsShown_CheckedChanged( object? sender, EventArgs e )
         {
             ConfigManager.Configs.Cluster.HideMainViewIfItsShown = chb_HideMainViewIfItsShown.Checked;
             ConfigManager.Save();
         }
 
-        private void chb_notify_vd_changed_CheckedChanged( object sender, EventArgs e )
+        private void chb_notify_vd_changed_CheckedChanged( object? sender, EventArgs e )
         {
             ConfigManager.Configs.Cluster.NotificationOnVdChanged = chb_notify_vd_changed.Checked;
             ConfigManager.Save();
         }
 
-        private void chb_showVDIndexOnTrayIcon_CheckedChanged( object sender, EventArgs e )
+        private void chb_showVDIndexOnTrayIcon_CheckedChanged( object? sender, EventArgs e )
         {
             if ( !chb_showVDIndexOnTrayIcon.Checked )
             {
@@ -54,7 +59,7 @@ namespace VirtualSpace
             ConfigManager.Save();
         }
 
-        private void chb_HideOnStart_CheckedChanged( object sender, EventArgs e )
+        private void chb_HideOnStart_CheckedChanged( object? sender, EventArgs e )
         {
             ConfigManager.Configs.Cluster.HideOnStart = chb_HideOnStart.Checked;
             ConfigManager.Save();

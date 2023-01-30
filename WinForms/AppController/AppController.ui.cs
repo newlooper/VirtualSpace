@@ -30,30 +30,28 @@ namespace VirtualSpace
             {
                 rb_vd_index_1.Checked = true;
             }
+
+            chb_show_vd_name.CheckedChanged += chb_show_vd_name_CheckedChanged;
+            chb_show_vd_index.CheckedChanged += chb_show_vd_index_CheckedChanged;
+
+            rb_vd_index_0.CheckedChanged += rb_vd_index_0_CheckedChanged;
         }
 
-        private void chb_show_vd_name_CheckedChanged( object sender, EventArgs e )
+        private void chb_show_vd_name_CheckedChanged( object? sender, EventArgs e )
         {
             var ui = ConfigManager.CurrentProfile.UI;
             ui.ShowVdName = chb_show_vd_name.Checked;
             ConfigManager.Save();
         }
 
-        private void chb_show_vd_index_CheckedChanged( object sender, EventArgs e )
+        private void chb_show_vd_index_CheckedChanged( object? sender, EventArgs e )
         {
             var ui = ConfigManager.CurrentProfile.UI;
             ui.ShowVdIndex = chb_show_vd_index.Checked;
             ConfigManager.Save();
         }
 
-        private void rb_vd_index_0_CheckedChanged( object sender, EventArgs e )
-        {
-            var ui = ConfigManager.CurrentProfile.UI;
-            ui.ShowVdIndexType = (byte)( rb_vd_index_0.Checked ? 0 : 1 );
-            ConfigManager.Save();
-        }
-
-        private void rb_vd_index_1_CheckedChanged( object sender, EventArgs e )
+        private void rb_vd_index_0_CheckedChanged( object? sender, EventArgs e )
         {
             var ui = ConfigManager.CurrentProfile.UI;
             ui.ShowVdIndexType = (byte)( rb_vd_index_0.Checked ? 0 : 1 );

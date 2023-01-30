@@ -17,6 +17,10 @@ namespace VirtualSpace
     {
         private void ReadNavConfig()
         {
+            cb_nav_circle_h.CheckedChanged -= cb_nav_circle_h_CheckedChanged;
+            cb_nav_circle_h_type.SelectedIndexChanged -= cb_nav_circle_h_type_SelectedIndexChanged;
+            cb_nav_circle_v.CheckedChanged -= cb_nav_circle_v_CheckedChanged;
+
             cb_nav_circle_h_type.Items.Clear();
             cb_nav_circle_h_type.Items.Add( Agent.Langs.GetString( "Nav.CircleHType.NextRow" ) );
             cb_nav_circle_h_type.Items.Add( Agent.Langs.GetString( "Nav.CircleHType.SameRow" ) );
@@ -24,21 +28,25 @@ namespace VirtualSpace
             cb_nav_circle_h.Checked = ConfigManager.CurrentProfile.Navigation.CirculationH;
             cb_nav_circle_h_type.SelectedIndex = ConfigManager.CurrentProfile.Navigation.CirculationHType;
             cb_nav_circle_v.Checked = ConfigManager.CurrentProfile.Navigation.CirculationV;
+
+            cb_nav_circle_h.CheckedChanged += cb_nav_circle_h_CheckedChanged;
+            cb_nav_circle_h_type.SelectedIndexChanged += cb_nav_circle_h_type_SelectedIndexChanged;
+            cb_nav_circle_v.CheckedChanged += cb_nav_circle_v_CheckedChanged;
         }
 
-        private void cb_nav_circle_h_CheckedChanged( object sender, EventArgs e )
+        private void cb_nav_circle_h_CheckedChanged( object? sender, EventArgs e )
         {
             ConfigManager.CurrentProfile.Navigation.CirculationH = cb_nav_circle_h.Checked;
             ConfigManager.Save();
         }
 
-        private void cb_nav_circle_v_CheckedChanged( object sender, EventArgs e )
+        private void cb_nav_circle_v_CheckedChanged( object? sender, EventArgs e )
         {
             ConfigManager.CurrentProfile.Navigation.CirculationV = cb_nav_circle_v.Checked;
             ConfigManager.Save();
         }
 
-        private void cb_nav_circle_h_type_SelectedIndexChanged( object sender, EventArgs e )
+        private void cb_nav_circle_h_type_SelectedIndexChanged( object? sender, EventArgs e )
         {
             ConfigManager.CurrentProfile.Navigation.CirculationHType = cb_nav_circle_h_type.SelectedIndex;
             ConfigManager.Save();

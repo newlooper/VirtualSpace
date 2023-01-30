@@ -12,7 +12,6 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Text.Json;
 using System.Windows.Forms;
-using VirtualSpace.AppLogs;
 using VirtualSpace.Config.Events.Entity;
 using VirtualSpace.Config.Events.Expression;
 using ConfigManager = VirtualSpace.Config.Manager;
@@ -50,6 +49,7 @@ namespace VirtualSpace
 
             var rules = Conditions.FetchRules();
 
+            lv_Rules.ItemCheck -= lv_Rules_ItemCheck;
             lv_Rules.Items.Clear();
             foreach ( var rule in rules )
             {
@@ -124,7 +124,6 @@ namespace VirtualSpace
                 Updated = time
             };
             rules.Add( clone );
-            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
             lv_Rules.Items.Add( LviByRule( clone ) );
         }
 
@@ -141,8 +140,8 @@ namespace VirtualSpace
             if ( rules.Count == 0 ) return;
 
             rules.RemoveAt( lv_Rules.SelectedIndices[0] );
-            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
             lv_Rules.Items.RemoveAt( lv_Rules.SelectedIndices[0] );
+            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
         }
 
         private void OpenRuleDialog( int index = -1 )
@@ -169,21 +168,20 @@ namespace VirtualSpace
             }
         }
 
-        private void lv_Rules_ItemChecked( object sender, ItemCheckedEventArgs e )
+        private void lv_Rules_ItemCheck( object? sender, ItemCheckEventArgs e )
         {
             var rules = Conditions.FetchRules();
             if ( rules.Count == 0 ) return;
 
-            var index = lv_Rules.Items.IndexOf( e.Item );
-            rules[index].Enabled = e.Item.Checked;
+            var index = e.Index;
+            rules[index].Enabled = e.NewValue == CheckState.Checked;
             Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
-            Logger.Info( $"Rules.{ConfigManager.Configs.CurrentProfileName} Saved." );
         }
 
         private void lv_Rules_VisibleChanged( object sender, EventArgs e )
         {
-            lv_Rules.ItemChecked -= lv_Rules_ItemChecked;
-            lv_Rules.ItemChecked += lv_Rules_ItemChecked;
+            lv_Rules.ItemCheck -= lv_Rules_ItemCheck;
+            lv_Rules.ItemCheck += lv_Rules_ItemCheck;
         }
 
         private ExpressionTemplate RefreshRuleId( ExpressionTemplate expressionTemplate )

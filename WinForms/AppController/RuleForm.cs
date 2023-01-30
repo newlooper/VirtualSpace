@@ -300,7 +300,6 @@ namespace VirtualSpace
                 ruleList[_editIndex] = rule;
             }
 
-            Conditions.SaveRules( Manager.GetRulesPath(), ruleList );
             AppController.UpdateRuleListView( _editIndex, rule );
 
             Close();

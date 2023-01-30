@@ -219,6 +219,8 @@ namespace VirtualSpace.Config.Events.Expression
             _rules = ruleList;
             await File.WriteAllBytesAsync( path, JsonSerializer.SerializeToUtf8Bytes(
                 ruleList, GetJsonSerializerOptions() ) );
+            
+            Logger.Info( $"Rules.{Manager.Configs.CurrentProfileName} Saved." );
         }
 
         #region WinApi

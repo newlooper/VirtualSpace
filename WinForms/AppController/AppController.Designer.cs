@@ -277,7 +277,6 @@ namespace VirtualSpace
             this.showLogsInGuiToolStripMenuItem.CheckOnClick = true;
             this.showLogsInGuiToolStripMenuItem.Name = "showLogsInGuiToolStripMenuItem";
             resources.ApplyResources(this.showLogsInGuiToolStripMenuItem, "showLogsInGuiToolStripMenuItem");
-            this.showLogsInGuiToolStripMenuItem.CheckedChanged += new System.EventHandler(this.showLogsInGuiToolStripMenuItem_CheckedChanged);
             // 
             // openLogFolderToolStripMenuItem
             // 
@@ -436,28 +435,24 @@ namespace VirtualSpace
             resources.ApplyResources(this.chb_HideOnStart, "chb_HideOnStart");
             this.chb_HideOnStart.Name = "chb_HideOnStart";
             this.chb_HideOnStart.UseVisualStyleBackColor = true;
-            this.chb_HideOnStart.CheckedChanged += new System.EventHandler(this.chb_HideOnStart_CheckedChanged);
             // 
             // chb_showVDIndexOnTrayIcon
             // 
             resources.ApplyResources(this.chb_showVDIndexOnTrayIcon, "chb_showVDIndexOnTrayIcon");
             this.chb_showVDIndexOnTrayIcon.Name = "chb_showVDIndexOnTrayIcon";
             this.chb_showVDIndexOnTrayIcon.UseVisualStyleBackColor = true;
-            this.chb_showVDIndexOnTrayIcon.CheckedChanged += new System.EventHandler(this.chb_showVDIndexOnTrayIcon_CheckedChanged);
             // 
             // chb_notify_vd_changed
             // 
             resources.ApplyResources(this.chb_notify_vd_changed, "chb_notify_vd_changed");
             this.chb_notify_vd_changed.Name = "chb_notify_vd_changed";
             this.chb_notify_vd_changed.UseVisualStyleBackColor = true;
-            this.chb_notify_vd_changed.CheckedChanged += new System.EventHandler(this.chb_notify_vd_changed_CheckedChanged);
             // 
             // chb_HideMainViewIfItsShown
             // 
             resources.ApplyResources(this.chb_HideMainViewIfItsShown, "chb_HideMainViewIfItsShown");
             this.chb_HideMainViewIfItsShown.Name = "chb_HideMainViewIfItsShown";
             this.chb_HideMainViewIfItsShown.UseVisualStyleBackColor = true;
-            this.chb_HideMainViewIfItsShown.CheckedChanged += new System.EventHandler(this.chb_HideMainViewIfItsShown_CheckedChanged);
             // 
             // gb_Mouse
             // 
@@ -712,21 +707,18 @@ namespace VirtualSpace
             this.cb_nav_circle_h_type.FormattingEnabled = true;
             resources.ApplyResources(this.cb_nav_circle_h_type, "cb_nav_circle_h_type");
             this.cb_nav_circle_h_type.Name = "cb_nav_circle_h_type";
-            this.cb_nav_circle_h_type.SelectedIndexChanged += new System.EventHandler(this.cb_nav_circle_h_type_SelectedIndexChanged);
             // 
             // cb_nav_circle_v
             // 
             resources.ApplyResources(this.cb_nav_circle_v, "cb_nav_circle_v");
             this.cb_nav_circle_v.Name = "cb_nav_circle_v";
             this.cb_nav_circle_v.UseVisualStyleBackColor = true;
-            this.cb_nav_circle_v.CheckedChanged += new System.EventHandler(this.cb_nav_circle_v_CheckedChanged);
             // 
             // cb_nav_circle_h
             // 
             resources.ApplyResources(this.cb_nav_circle_h, "cb_nav_circle_h");
             this.cb_nav_circle_h.Name = "cb_nav_circle_h";
             this.cb_nav_circle_h.UseVisualStyleBackColor = true;
-            this.cb_nav_circle_h.CheckedChanged += new System.EventHandler(this.cb_nav_circle_h_CheckedChanged);
             // 
             // mainTabs
             // 
@@ -777,7 +769,6 @@ namespace VirtualSpace
             this.rb_vd_index_1.Name = "rb_vd_index_1";
             this.rb_vd_index_1.TabStop = true;
             this.rb_vd_index_1.UseVisualStyleBackColor = true;
-            this.rb_vd_index_1.CheckedChanged += new System.EventHandler(this.rb_vd_index_1_CheckedChanged);
             // 
             // rb_vd_index_0
             // 
@@ -785,21 +776,18 @@ namespace VirtualSpace
             this.rb_vd_index_0.Name = "rb_vd_index_0";
             this.rb_vd_index_0.TabStop = true;
             this.rb_vd_index_0.UseVisualStyleBackColor = true;
-            this.rb_vd_index_0.CheckedChanged += new System.EventHandler(this.rb_vd_index_0_CheckedChanged);
             // 
             // chb_show_vd_index
             // 
             resources.ApplyResources(this.chb_show_vd_index, "chb_show_vd_index");
             this.chb_show_vd_index.Name = "chb_show_vd_index";
             this.chb_show_vd_index.UseVisualStyleBackColor = true;
-            this.chb_show_vd_index.CheckedChanged += new System.EventHandler(this.chb_show_vd_index_CheckedChanged);
             // 
             // chb_show_vd_name
             // 
             resources.ApplyResources(this.chb_show_vd_name, "chb_show_vd_name");
             this.chb_show_vd_name.Name = "chb_show_vd_name";
             this.chb_show_vd_name.UseVisualStyleBackColor = true;
-            this.chb_show_vd_name.CheckedChanged += new System.EventHandler(this.chb_show_vd_name_CheckedChanged);
             // 
             // gb_DesktopArrangement
             // 

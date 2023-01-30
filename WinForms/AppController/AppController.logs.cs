@@ -26,7 +26,10 @@ namespace VirtualSpace
         private async void PickLogAndWrite()
         {
             Logger.ShowLogsInGui = ConfigManager.Configs.LogConfig.ShowLogsInGui;
+
             showLogsInGuiToolStripMenuItem.Checked = ConfigManager.Configs.LogConfig.ShowLogsInGui;
+            showLogsInGuiToolStripMenuItem.CheckedChanged += showLogsInGuiToolStripMenuItem_CheckedChanged;
+
             while ( await LogChannel.Reader.WaitToReadAsync() )
             {
                 if ( LogChannel.Reader.TryRead( out var message ) )
@@ -98,7 +101,7 @@ namespace VirtualSpace
             }
         }
 
-        private void showLogsInGuiToolStripMenuItem_CheckedChanged( object sender, EventArgs e )
+        private void showLogsInGuiToolStripMenuItem_CheckedChanged( object? sender, EventArgs e )
         {
             var item = sender as ToolStripMenuItem;
             Logger.ShowLogsInGui = item.Checked;
