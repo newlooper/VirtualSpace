@@ -84,7 +84,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\UiAutomation\UiAutomation.csproj" />
         <ProjectReference Include="..\VirtualDesktop10\VirtualDesktop10.csproj" />
         <ProjectReference Include="..\WinForms\AppController\AppController.csproj" />
     </ItemGroup>
