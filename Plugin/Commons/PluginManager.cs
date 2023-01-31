@@ -17,8 +17,8 @@ namespace VirtualSpace.Plugin
 {
     public static class PluginManager
     {
-        public static readonly PluginInfo PluginInfo     = GetPluginInfo();
         public const           string     PluginInfoFile = "plugin.json";
+        public static readonly PluginInfo PluginInfo     = GetPluginInfo();
 
         private static PluginInfo GetPluginInfo()
         {

@@ -55,27 +55,6 @@ namespace VirtualSpace
             PickLogAndWrite();
         }
 
-        private void CheckAdmin()
-        {
-            if ( SysInfo.IsAdministrator() )
-            {
-                runAsAdministratorToolStripMenuItem.Visible = false;
-                return;
-            }
-
-            var iconResult = new User32.SHSTOCKICONINFO();
-            iconResult.cbSize = (uint)Marshal.SizeOf( iconResult );
-
-            _ = User32.SHGetStockIconInfo(
-                User32.SHSTOCKICONID.SIID_SHIELD,
-                User32.SHGSI.SHGSI_ICON | User32.SHGSI.SHGSI_SMALLICON,
-                ref iconResult );
-            runAsAdministratorToolStripMenuItem.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-            var icon = Bitmap.FromHicon( iconResult.hIcon );
-            icon.MakeTransparent();
-            runAsAdministratorToolStripMenuItem.Image = icon;
-        }
-
         protected override CreateParams CreateParams
         {
             get
@@ -104,6 +83,27 @@ namespace VirtualSpace
             _mainWindowHandle = handle;
         }
 
+        private void CheckAdmin()
+        {
+            if ( SysInfo.IsAdministrator() )
+            {
+                runAsAdministratorToolStripMenuItem.Visible = false;
+                return;
+            }
+
+            var iconResult = new User32.SHSTOCKICONINFO();
+            iconResult.cbSize = (uint)Marshal.SizeOf( iconResult );
+
+            _ = User32.SHGetStockIconInfo(
+                User32.SHSTOCKICONID.SIID_SHIELD,
+                User32.SHGSI.SHGSI_ICON | User32.SHGSI.SHGSI_SMALLICON,
+                ref iconResult );
+            runAsAdministratorToolStripMenuItem.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+            var icon = Bitmap.FromHicon( iconResult.hIcon );
+            icon.MakeTransparent();
+            runAsAdministratorToolStripMenuItem.Image = icon;
+        }
+
         public static void SetAllLang( string lang )
         {
             CultureInfo.CurrentCulture = new CultureInfo( lang );
@@ -127,7 +127,7 @@ namespace VirtualSpace
                 _instance.tv_mouse.Nodes.Clear();
                 _instance.tv_mouse.Nodes.AddRange( new[]
                 {
-                    (TreeNode)Resources.GetObject( "tv_mouse.Nodes" ),
+                    (TreeNode)Resources.GetObject( "tv_mouse.Nodes" )
                 } );
                 _instance.MouseTopNodeExpand();
 

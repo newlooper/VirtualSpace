@@ -15,10 +15,10 @@ namespace VirtualSpace.Config.Entity
     {
         private byte _canvasOpacity;
         private int  _desktopArrangement;
+        private byte _showVdIndexType;
         private int  _vDwBorderSize;
         private int  _vDwMargin;
         private int  _vDwPadding;
-        private byte _showVdIndexType;
 
         public Colour? CanvasBackColor       { get; set; }
         public Colour? VDWDefaultBackColor   { get; set; }

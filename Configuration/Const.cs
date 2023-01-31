@@ -103,6 +103,17 @@ namespace VirtualSpace.Config
 
         public static class MouseAction
         {
+            public enum Action
+            {
+                DoNothing,
+                ContextMenu,
+                DesktopVisibleAndCloseView,
+                DesktopVisibleOnly,
+                WindowActiveDesktopVisibleAndCloseView,
+                WindowActiveDesktopVisibleOnly,
+                WindowClose
+            }
+
             ///////////////////////////////////////////////////
             // 值与控件名称一一对应，若控件名被修改，则此处也须对应改变
             public const string DESKTOP_LEFT_CLICK   = "mouse_node_d_l";
@@ -121,19 +132,8 @@ namespace VirtualSpace.Config
                 {DESKTOP_RIGHT_CLICK, new Tuple<string, Action>( "Mouse RightClick on VirtualDesktop", Action.ContextMenu )},
                 {WINDOW_LEFT_CLICK, new Tuple<string, Action>( "Mouse LeftClick on Window Thumbnail", Action.WindowActiveDesktopVisibleAndCloseView )},
                 {WINDOW_MIDDLE_CLICK, new Tuple<string, Action>( "Mouse MiddleClick on Window Thumbnail", Action.WindowActiveDesktopVisibleOnly )},
-                {WINDOW_RIGHT_CLICK, new Tuple<string, Action>( "Mouse RightClick on Window Thumbnail", Action.ContextMenu )},
+                {WINDOW_RIGHT_CLICK, new Tuple<string, Action>( "Mouse RightClick on Window Thumbnail", Action.ContextMenu )}
             };
-
-            public enum Action
-            {
-                DoNothing,
-                ContextMenu,
-                DesktopVisibleAndCloseView,
-                DesktopVisibleOnly,
-                WindowActiveDesktopVisibleAndCloseView,
-                WindowActiveDesktopVisibleOnly,
-                WindowClose
-            }
         }
     }
 }

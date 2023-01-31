@@ -50,7 +50,7 @@ namespace VirtualSpace.Config
             {Const.MouseAction.DESKTOP_RIGHT_CLICK, Const.MouseAction.Action.ContextMenu},
             {Const.MouseAction.WINDOW_LEFT_CLICK, Const.MouseAction.Action.WindowActiveDesktopVisibleAndCloseView},
             {Const.MouseAction.WINDOW_MIDDLE_CLICK, Const.MouseAction.Action.WindowActiveDesktopVisibleOnly},
-            {Const.MouseAction.WINDOW_RIGHT_CLICK, Const.MouseAction.Action.ContextMenu},
+            {Const.MouseAction.WINDOW_RIGHT_CLICK, Const.MouseAction.Action.ContextMenu}
         };
 
         public Cluster Cluster { get; set; } = new()

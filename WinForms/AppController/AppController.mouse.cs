@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
-using KeyBinding = VirtualSpace.Config.Entity.KeyBinding;
 
 namespace VirtualSpace
 {

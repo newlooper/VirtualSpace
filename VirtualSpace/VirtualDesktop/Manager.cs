@@ -290,8 +290,11 @@ namespace VirtualSpace.VirtualDesktop
                 }
                 catch ( Exception ex )
                 {
-                    Logger.Warning( $"{ex.Message} ∵ {win.Title}({win.Handle.ToString( "X2" )})" );
-                    Filters.WndHandleIgnoreListByError.Add( win.Handle );
+                    if ( win.Classname != Const.ApplicationFrameWindow )
+                    {
+                        Logger.Warning( $"{ex.Message} ∵ {win.Title}({win.Handle.ToString( "X2" )}), WndClass: {win.Classname}" );
+                        Filters.WndHandleIgnoreListByError.Add( win.Handle );
+                    }
                 }
             }
 

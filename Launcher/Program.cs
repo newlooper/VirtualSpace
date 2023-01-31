@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 
 namespace Launcher
 {
@@ -21,7 +22,7 @@ namespace Launcher
 
                 var psi = new ProcessStartInfo
                 {
-                    FileName = Path.Combine( System.Reflection.Assembly.GetExecutingAssembly().Location, exe )
+                    FileName = Path.Combine( Assembly.GetExecutingAssembly().Location, exe )
                 };
 
                 try
