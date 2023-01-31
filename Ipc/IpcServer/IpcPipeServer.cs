@@ -113,8 +113,6 @@ namespace VirtualSpace.Commons
                                 break;
                         }
                     }
-
-                    server.Close();
                 }
 
                 Logger.Info( "Ipc Pipe Server Shutdown." );
@@ -141,20 +139,20 @@ namespace VirtualSpace.Commons
         public static void SimpleShutdown()
         {
             _isRunning = false;
+            foreach ( var pluginInfo in PluginHost.Plugins )
+            {
+                PluginHost.ClosePlugin( pluginInfo );
+            }
+
             using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
             try
             {
-                client.Connect( 1000 );
+                client.Connect( 10 );
                 client.Close();
             }
             catch
             {
                 // ignored
-            }
-
-            foreach ( var pluginInfo in PluginHost.Plugins )
-            {
-                PluginHost.ClosePlugin( pluginInfo );
             }
         }
     }
