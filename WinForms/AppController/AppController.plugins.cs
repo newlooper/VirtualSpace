@@ -19,7 +19,6 @@ namespace VirtualSpace
     public partial class AppController
     {
         private static readonly List<PluginInfo> PluginInfos = PluginHost.Plugins;
-        private static          bool             _inInit;
 
         private void InitPluginListView()
         {
@@ -34,18 +33,17 @@ namespace VirtualSpace
         private void mainTabs_SelectedIndexChanged( object sender, EventArgs e )
         {
             var s = sender as TabControl;
-            if ( s?.SelectedTab == MT_Plugins )
+            if ( s?.SelectedTab != MT_Plugins ) return;
+
+            lv_Plugins.ItemCheck -= lv_Plugins_ItemCheck;
+
+            lv_Plugins.Items.Clear();
+            foreach ( var pluginInfo in PluginInfos )
             {
-                _inInit = true;
-
-                lv_Plugins.Items.Clear();
-                foreach ( var pluginInfo in PluginInfos )
-                {
-                    lv_Plugins.Items.Add( LviByPlugin( pluginInfo ) );
-                }
-
-                _inInit = false;
+                lv_Plugins.Items.Add( LviByPlugin( pluginInfo ) );
             }
+
+            lv_Plugins.ItemCheck += lv_Plugins_ItemCheck;
         }
 
         private static ListViewItem LviByPlugin( PluginInfo plugin )
@@ -77,19 +75,21 @@ namespace VirtualSpace
             PluginHost.PluginSettings( p );
         }
 
-        private void lv_Plugins_ItemChecked( object sender, ItemCheckedEventArgs e )
+        private void lv_Plugins_ItemCheck( object? sender, ItemCheckEventArgs e )
         {
-            if ( _inInit ) return;
-
-            var selectedIndex = lv_Plugins.Items.IndexOf( e.Item );
-            if ( e.Item.Checked )
+            var selectedIndex = e.Index;
+            if ( e.NewValue == CheckState.Checked )
             {
+                PluginInfos[selectedIndex].AutoStart = true;
                 PluginHost.StartPlugin( PluginInfos[selectedIndex] );
             }
             else
             {
+                PluginInfos[selectedIndex].AutoStart = false;
                 PluginHost.ClosePlugin( PluginInfos[selectedIndex] );
             }
+
+            PluginManager.SavePluginInfo( PluginInfos[selectedIndex] );
         }
     }
 }

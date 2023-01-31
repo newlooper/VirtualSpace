@@ -334,7 +334,21 @@ namespace VirtualSpace.VirtualDesktop
 
         public async void CloseSelectedWindow( VisibleWindow vw )
         {
-            User32.ShowWindow( vw.Handle, 0 );
+            var isWindowPinned = DesktopWrapper.IsWindowPinned( vw.Handle ) || DesktopWrapper.IsApplicationPinned( vw.Handle );
+
+            void RefreshVDs( bool isPinned )
+            {
+                if ( isPinned )
+                {
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+                }
+                else
+                {
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this} );
+                }
+            }
+
+            _ = User32.ShowWindow( vw.Handle, 0 );
 
             User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
 
@@ -346,11 +360,12 @@ namespace VirtualSpace.VirtualDesktop
                     Thread.Sleep( 100 );
                     // if ( User32.IsWindow( vw.Handle ) ) continue; // 严格的判断
                     if ( User32.IsWindowVisible( vw.Handle ) ) continue; // 宽松的判断
-                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this} );
+
+                    RefreshVDs( isWindowPinned );
                     return;
                 }
 
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this} );
+                RefreshVDs( isWindowPinned );
             } );
         }
     }

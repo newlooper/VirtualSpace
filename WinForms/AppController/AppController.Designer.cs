@@ -1003,7 +1003,6 @@ namespace VirtualSpace
             this.lv_Plugins.Name = "lv_Plugins";
             this.lv_Plugins.UseCompatibleStateImageBehavior = false;
             this.lv_Plugins.View = System.Windows.Forms.View.Details;
-            this.lv_Plugins.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lv_Plugins_ItemChecked);
             this.lv_Plugins.SelectedIndexChanged += new System.EventHandler(this.lv_Plugins_SelectedIndexChanged);
             // 
             // lvc_PluginName

@@ -58,5 +58,12 @@ namespace VirtualSpace.Plugin
 
             return check;
         }
+
+        public static void SavePluginInfo( PluginInfo pi )
+        {
+            var file     = Path.Combine( pi.Folder, PluginInfoFile );
+            var contents = JsonSerializer.SerializeToUtf8Bytes( pi, new JsonSerializerOptions {WriteIndented = true} );
+            File.WriteAllBytesAsync( file, contents );
+        }
     }
 }
