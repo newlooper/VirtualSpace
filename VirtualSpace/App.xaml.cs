@@ -126,20 +126,17 @@ namespace VirtualSpace
 
         private static void BootInfo()
         {
-            Logger.Info( "Application Start Successfully: " + ConfigManager.AppPath );
-            Logger.Info( "System Version: " + Environment.OSVersion );
-            Logger.Info( "Total Screens: " + Screen.AllScreens.Length );
-            Logger.Info( "Total Virtual Desktops: " + DesktopWrapper.Count );
-            Logger.Info( "Start Screen: " + Screen.FromPoint( new Point() ).DeviceName );
-            Logger.Info( "Start Virtual Desktop: Desktop[" + DesktopWrapper.CurrentIndex + "]" );
-            Logger.Info( "Start Position: " +
-                         Screen.PrimaryScreen.Bounds.Location.X + ", " +
-                         Screen.PrimaryScreen.Bounds.Location.Y );
-            Logger.Info( "Start Size: " +
-                         Screen.PrimaryScreen.Bounds.Width + "*" +
-                         Screen.PrimaryScreen.Bounds.Height );
-            Logger.Info( "Is Running As Administrator: " + SysInfo.IsAdministrator() );
-            Logger.Info( "Language Setting In Profile: " + ConfigManager.CurrentProfile.UI.Language );
+            var screen = Screen.FromPoint( new Point() );
+            Logger.Info( $"Application Start Successfully: {ConfigManager.AppPath}" );
+            Logger.Info( $"System Version: {Environment.OSVersion}" );
+            Logger.Info( $"Total Screens: {Screen.AllScreens.Length}" );
+            Logger.Info( $"Total VirtualDesktops: {DesktopWrapper.Count}" );
+            Logger.Info( $"Start Screen: {screen.DeviceName} ({screen.DeviceFriendlyName()})" );
+            Logger.Info( $"Start VirtualDesktop: Desktop[{DesktopWrapper.CurrentIndex}]" );
+            Logger.Info( $"Start Position: [{Screen.PrimaryScreen.Bounds.Location.X}, {Screen.PrimaryScreen.Bounds.Location.Y}]" );
+            Logger.Info( $"Start Size: {Screen.PrimaryScreen.Bounds.Width}*{Screen.PrimaryScreen.Bounds.Height}" );
+            Logger.Info( $"Is Running As Administrator: {SysInfo.IsAdministrator()}" );
+            Logger.Info( $"Language Setting In Profile: {ConfigManager.CurrentProfile.UI.Language}" );
         }
     }
 }

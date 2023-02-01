@@ -35,7 +35,7 @@ using System.Reflection;
 
     private static readonly string Copyright = ProjectStartedDate.Year + " - " + DateTime.Now.Year;
     private static readonly string AppName = new DirectoryInfo( "." ).Name;
-    private static readonly string AppDesc = "Windows 10/11 Virtual Desktop Enhancement";
+    private static readonly string AppDesc = "VirtualSpace - Windows VirtualDesktop Enhancement";
 
         private const int MAJOR = 0;
         private const int MINOR = 1;

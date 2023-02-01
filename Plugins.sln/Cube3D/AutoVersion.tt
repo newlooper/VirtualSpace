@@ -35,7 +35,7 @@ using System.Reflection;
 
     private static readonly string Copyright = ProjectStartedDate.Year + " - " + DateTime.Now.Year;
     private static readonly string AppName = new DirectoryInfo( "." ).Name;
-    private static readonly string AppDesc = "Cube3D For VirtualSpace";
+    private static readonly string AppDesc = "VirtualSpace.Plugin - Cube3D";
 
         private const int MAJOR = 1;
         private const int MINOR = 0;
