@@ -21,6 +21,7 @@ namespace VirtualSpace.Helpers
 {
     public static class SysInfo
     {
+        private const int                          DefaultDpi = 96;
         public static (float ScaleX, float ScaleY) Dpi => GetDpi();
 
         public static bool IsAdministrator()
@@ -33,7 +34,7 @@ namespace VirtualSpace.Helpers
         private static (float ScaleX, float ScaleY) GetDpi()
         {
             using var g = Graphics.FromHwnd( IntPtr.Zero );
-            return ( g.DpiX / 96, g.DpiY / 96 );
+            return ( g.DpiX / DefaultDpi, g.DpiY / DefaultDpi );
         }
     }
 
