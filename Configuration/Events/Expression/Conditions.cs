@@ -86,7 +86,7 @@ namespace VirtualSpace.Config.Events.Expression
             var rules = new List<RuleTemplate>( _rules );
             BuildRuleExp( rules );
 
-            Logger.Event( "Current Rules Profile: " + Manager.Configs.CurrentProfileName );
+            Logger.Debug( $"Checking rules for {win.Title}, current rules profile: {Manager.Configs.CurrentProfileName}" );
 
             await Task.Run( () =>
             {
@@ -219,7 +219,7 @@ namespace VirtualSpace.Config.Events.Expression
             _rules = ruleList;
             await File.WriteAllBytesAsync( path, JsonSerializer.SerializeToUtf8Bytes(
                 ruleList, GetJsonSerializerOptions() ) );
-            
+
             Logger.Info( $"Rules.{Manager.Configs.CurrentProfileName} Saved." );
         }
 
