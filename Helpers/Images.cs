@@ -36,8 +36,8 @@ namespace VirtualSpace.Helpers
                 }
 
                 var md5Path = Wallpaper.Md5Hash( path );
-                var file = Path.Combine( cachePath, md5Path[1], md5Path[2],
-                    md5Path[0] + "_" + Environment.CurrentManagedThreadId );
+                var file = Path.Combine( cachePath, md5Path.Item2, md5Path.Item3,
+                    md5Path.Item1 + "_" + Environment.CurrentManagedThreadId );
                 dest.Save( file, ImageFormat.Jpeg );
                 wp.Fullpath = file;
 
@@ -55,9 +55,9 @@ namespace VirtualSpace.Helpers
         public static Bitmap? CachedWallPaper( string path, string cachePath )
         {
             var md5Path    = Md5Hash( path );
-            var targetPath = Path.Combine( cachePath, md5Path[1], md5Path[2] );
+            var targetPath = Path.Combine( cachePath, md5Path.Item2, md5Path.Item3 );
             Directory.CreateDirectory( targetPath );
-            var file = Path.Combine( targetPath, md5Path[0] );
+            var file = Path.Combine( targetPath, md5Path.Item1 );
             if ( File.Exists( file ) )
             {
                 return new Bitmap( file );
@@ -66,7 +66,7 @@ namespace VirtualSpace.Helpers
             return null;
         }
 
-        public static string[] Md5Hash( string input )
+        public static Tuple<string, string, string> Md5Hash( string input )
         {
             var md5        = MD5.Create();
             var inputBytes = Encoding.ASCII.GetBytes( input );
@@ -79,13 +79,12 @@ namespace VirtualSpace.Helpers
             }
 
             var md5Str = sb.ToString();
-            var result = new string[3];
 
-            result[0] = md5Str;
-            result[1] = md5Str.Substring( 0, 1 );
-            result[2] = md5Str.Substring( 1, 1 );
-
-            return result;
+            return new Tuple<string, string, string>(
+                md5Str,
+                md5Str.Substring( 0, 1 ),
+                md5Str.Substring( 1, 1 )
+            );
         }
 
         public void Release()

@@ -40,8 +40,12 @@ namespace VirtualSpace.Config
                 AppPath = Process.GetCurrentProcess().MainModule.FileName;
                 AppFolder = Directory.GetParent( AppPath ).FullName;
                 ConfigFilePath = Path.Combine( AppFolder, Const.SettingsFile );
+
                 CheckFolders();
+
                 InitConfig( ConfigFilePath );
+
+                LogManager.SetLogLevel( Configs.LogConfig.LogLevel );
             }
             catch ( Exception ex )
             {
@@ -56,9 +60,9 @@ namespace VirtualSpace.Config
         {
             if ( File.Exists( filePath ) )
             {
-                using var fs     = new FileStream( filePath, FileMode.Open, FileAccess.ReadWrite );
+                using var fs     = new FileStream( filePath, FileMode.Open, FileAccess.Read );
                 var       buffer = new byte[fs.Length];
-                fs.Read( buffer, 0, (int)fs.Length );
+                _ = fs.Read( buffer, 0, (int)fs.Length );
                 var utf8Reader = new Utf8JsonReader( buffer );
                 Configs = JsonSerializer.Deserialize<ConfigTemplate>( ref utf8Reader );
 
@@ -79,8 +83,6 @@ namespace VirtualSpace.Config
                 };
                 Save( filePath );
             }
-
-            LogManager.SetLogLevel( Configs.LogConfig.LogLevel );
         }
 
         public static async void Save( string? filePath = null )

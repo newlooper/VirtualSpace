@@ -60,7 +60,7 @@ namespace VirtualSpace.Config.Events
                 }
                 catch ( Exception ex )
                 {
-                    Logger.Warning( ex.Message + $" ∵ {title}({handle})" );
+                    Logger.Warning( ex.Message + $" ∵ {title}({handle.ToString()})" );
                 }
             }
         }

@@ -129,7 +129,7 @@ namespace VirtualSpace.VirtualDesktop
                             ///////////////////////////
                             // goes here means the thumbnail window we dragged is drop in another virtual desktop
                             // we need to move it.
-                            Logger.Debug( $"DROP.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )}) IN Desktop[{_hoverVdIndex}]" );
+                            Logger.Debug( $"DROP.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )}) IN Desktop[{_hoverVdIndex.ToString()}]" );
 
                             var sysIndex = DesktopWrapper.IndexFromGuid( _virtualDesktops[_hoverVdIndex].VdId );
                             DesktopWrapper.MoveWindowToDesktop( _selectedWindow.Handle, sysIndex );
@@ -162,7 +162,7 @@ namespace VirtualSpace.VirtualDesktop
 
                         VirtualDesktopManager.SaveOrder();
 
-                        Logger.Debug( $"SWAP.Desk Desktop[{VdIndex}] WITH Desktop[{_hoverVdIndex}]" );
+                        Logger.Debug( $"SWAP.Desktop Desktop[{VdIndex.ToString()}] WITH Desktop[{_hoverVdIndex.ToString()}]" );
                         VirtualDesktopManager.FixLayout();
                         VirtualDesktopManager.ShowAllVirtualDesktops();
                     }
@@ -177,7 +177,7 @@ namespace VirtualSpace.VirtualDesktop
                     void ActiveWindow()
                     {
                         Logger.Debug( $"ACTIVE.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )})" );
-                        Logger.Debug( $"CHANGE CURRENT DESKTOP TO Desktop[{_hoverVdIndex}]" );
+                        Logger.Debug( $"CHANGE CURRENT DESKTOP TO Desktop[{_hoverVdIndex.ToString()}]" );
                         DesktopWrapper.MakeVisibleByGuid( ConfigManager.CurrentProfile.DesktopOrder[_hoverVdIndex] );
                         User32.SwitchToThisWindow( _selectedWindow.Handle, true );
                     }
@@ -303,12 +303,12 @@ namespace VirtualSpace.VirtualDesktop
                         _hoverVdIndex = vdw.VdIndex;
                         if ( _selectedWindow != null )
                         {
-                            Logger.Debug( $"DRAGGING.Win {_selectedWindow.Title} IN Desktop[{vdw.VdIndex}]" );
+                            Logger.Debug( $"DRAGGING.Win {_selectedWindow.Title} IN Desktop[{vdw.VdIndex.ToString()}]" );
                             vdw.Opacity = VirtualDesktopManager.Ui.VDWDragTargetOpacity;
                         }
                         else
                         {
-                            Logger.Debug( $"DRAGGING.Desk Desktop[{VdIndex}]) ON Desktop[{vdw.VdIndex}])" );
+                            Logger.Debug( $"DRAGGING.Desk Desktop[{VdIndex.ToString()}]) ON Desktop[{vdw.VdIndex.ToString()}])" );
                         }
                     }
                 }
@@ -323,7 +323,7 @@ namespace VirtualSpace.VirtualDesktop
 
         private void SwitchDesktop()
         {
-            Logger.Debug( $"SWITCH TO DESKTOP Desktop[{_hoverVdIndex}]" );
+            Logger.Debug( $"SWITCH TO DESKTOP Desktop[{_hoverVdIndex.ToString()}]" );
             DesktopWrapper.MakeVisibleByGuid( VdId );
         }
 

@@ -38,9 +38,9 @@ namespace VirtualSpace.Plugin
 
         public static T? LoadFromJson<T>( string infoFile )
         {
-            using var fs     = new FileStream( infoFile, FileMode.Open, FileAccess.ReadWrite );
+            using var fs     = new FileStream( infoFile, FileMode.Open, FileAccess.Read );
             var       buffer = new byte[fs.Length];
-            fs.Read( buffer, 0, (int)fs.Length );
+            _ = fs.Read( buffer, 0, (int)fs.Length );
             var utf8Reader = new Utf8JsonReader( buffer );
             return JsonSerializer.Deserialize<T>( ref utf8Reader );
         }

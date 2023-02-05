@@ -49,7 +49,7 @@ namespace VirtualSpace.VirtualDesktop
 
                 if ( action.MoveToScreen >= 0 )
                 {
-                    Logger.Debug( $"[RULE]MOVE_TO_SCREEN.Win {action.Handle.ToString( "X2" )}" );
+                    Logger.Debug( $"[RULE]MOVE_TO_SCREEN.Win {action.Handle.ToString( "X2" )} TO Screen[{action.MoveToScreen.ToString()}]" );
                     WindowTool.MoveWindowToScreen( action.Handle, action.MoveToScreen );
                 }
 
@@ -88,10 +88,10 @@ namespace VirtualSpace.VirtualDesktop
                     try
                     {
                         DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
-                        Logger.Debug( $"[RULE]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]" );
+                        Logger.Debug( $"[RULE]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]" );
                         if ( action.FollowWindow )
                         {
-                            Logger.Debug( $"[RULE]CHANGE CURRENT DESKTOP TO Desktop[{action.MoveToDesktop}]" );
+                            Logger.Debug( $"[RULE]CHANGE CURRENT DESKTOP TO Desktop[{action.MoveToDesktop.ToString()}]" );
                             DesktopWrapper.MakeVisibleByIndex( action.MoveToDesktop );
                             User32.SwitchToThisWindow( action.Handle, true );
                         }
@@ -100,7 +100,7 @@ namespace VirtualSpace.VirtualDesktop
                     {
                         CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
                         Logger.Error(
-                            $"[RULE]ERROR.MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop}]",
+                            $"[RULE]ERROR.MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]",
                             new NotifyObject
                             {
                                 Title = Agent.Langs.GetString( "Error.Title" ),

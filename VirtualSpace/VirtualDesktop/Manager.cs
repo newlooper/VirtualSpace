@@ -254,7 +254,7 @@ namespace VirtualSpace.VirtualDesktop
         public static void ShowVisibleWindowsForDesktops( List<VirtualDesktopWindow>? vdwList = null )
         {
             var visibleWindows = GetVisibleWindows();
-            Logger.Debug( $"VisibleWindows/ApplicationViews: {visibleWindows.Count}/{DesktopManagerWrapper.GetViewCount()}" );
+            Logger.Debug( $"VisibleWindows/ApplicationViews: {visibleWindows.Count.ToString()}/{DesktopManagerWrapper.GetViewCount().ToString()}" );
 
             vdwList ??= _virtualDesktops;
 
@@ -277,14 +277,14 @@ namespace VirtualSpace.VirtualDesktop
                     if ( vdwList.Count == _virtualDesktops.Count ) // show for all VDs
                     {
                         vdwList[vdIndex].AddWindow( win );
-                        Logger.Debug( $"Desktop[{vdIndex}]({DesktopWrapper.DesktopNameFromIndex( vdIndex )}) CONTAINS {win.Title}" );
+                        Logger.Debug( $"Desktop[{vdIndex.ToString()}]({DesktopWrapper.DesktopNameFromIndex( vdIndex )}) CONTAINS {win.Title}" );
                     }
                     else // show for specific VDs
                     {
                         foreach ( var vdw in vdwList.Where( vdw => vdw.VdIndex == vdIndex ) )
                         {
                             vdw.AddWindow( win );
-                            Logger.Debug( $"Desktop[{vdIndex}]({DesktopWrapper.DesktopNameFromIndex( vdIndex )}) CONTAINS {win.Title}" );
+                            Logger.Debug( $"Desktop[{vdIndex.ToString()}]({DesktopWrapper.DesktopNameFromIndex( vdIndex )}) CONTAINS {win.Title}" );
                         }
                     }
                 }
