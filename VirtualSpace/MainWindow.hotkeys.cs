@@ -154,37 +154,38 @@ namespace VirtualSpace
 
         private IntPtr MouseHookCallback( int nCode, IntPtr wParam, IntPtr lParam )
         {
-            if ( nCode >= 0 )
+            if ( nCode < 0 ) goto NEXT;
+
+            var hTaskbar = User32.FindWindow( "Shell_TrayWnd", "" );
+            if ( hTaskbar == IntPtr.Zero ) goto NEXT;
+
+            var exStyle = User32.GetWindowLong( hTaskbar, (int)GetWindowLongFields.GWL_EXSTYLE );
+            if ( User32.WS_EX_TOPMOST != ( exStyle & User32.WS_EX_TOPMOST ) ) goto NEXT;
+
+            var info = (LowLevelMouseHook.MSLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LowLevelMouseHook.MSLLHOOKSTRUCT ) );
+            var msg  = (int)wParam;
+            if ( msg == LowLevelMouseHook.WM_MOUSEWHEEL )
             {
-                var info = (LowLevelMouseHook.MSLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LowLevelMouseHook.MSLLHOOKSTRUCT ) );
-                var msg  = (int)wParam;
-                if ( msg == LowLevelMouseHook.WM_MOUSEWHEEL )
+                var rect = new RECT();
+                _ = User32.GetWindowRect( hTaskbar, ref rect );
+                if ( info.pt.X >= rect.Left && info.pt.Y > rect.Top )
                 {
-                    var hTaskbar = User32.FindWindow( "Shell_TrayWnd", "" );
-
-                    if ( hTaskbar != IntPtr.Zero )
+                    uint dir;
+                    if ( User32.GetAsyncKeyState( (int)Keys.ShiftKey ) < 0 )
                     {
-                        var rect = new RECT();
-                        _ = User32.GetWindowRect( hTaskbar, ref rect );
-                        if ( info.pt.X >= rect.Left && info.pt.Y > rect.Top )
-                        {
-                            uint dir;
-                            if ( User32.GetAsyncKeyState( (int)Keys.ShiftKey ) < 0 )
-                            {
-                                dir = (uint)( info.mouseData >> 16 > 0 ? Keys.Up : Keys.Down );
-                            }
-                            else
-                            {
-                                dir = (uint)( info.mouseData >> 16 > 0 ? Keys.Left : Keys.Right );
-                            }
-
-                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, dir );
-                            return LowLevelHooks.Handled;
-                        }
+                        dir = (uint)( info.mouseData >> 16 > 0 ? Keys.Up : Keys.Down );
                     }
+                    else
+                    {
+                        dir = (uint)( info.mouseData >> 16 > 0 ? Keys.Left : Keys.Right );
+                    }
+
+                    User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, dir );
+                    return LowLevelHooks.Handled;
                 }
             }
 
+            NEXT:
             return User32.CallNextHookEx( LowLevelMouseHook.HookId, nCode, wParam, lParam );
         }
 
