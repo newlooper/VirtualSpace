@@ -59,13 +59,13 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="cb_Enabled.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 28</value>
+    <value>51, 21</value>
   </data>
   <data name="cb_Enabled.Text" xml:space="preserve">
     <value>启用</value>
   </data>
   <data name="lb_Name.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 24</value>
+    <value>32, 17</value>
   </data>
   <data name="lb_Name.Text" xml:space="preserve">
     <value>名称</value>
@@ -73,98 +73,98 @@
   <data name="groupBox1.Text" xml:space="preserve">
     <value>基本</value>
   </data>
+  <data name="groupBox2.Text" xml:space="preserve">
+    <value>基础窗口规则</value>
+  </data>
   <data name="cb_WinInScreen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 28</value>
+    <value>99, 21</value>
   </data>
   <data name="cb_WinInScreen.Text" xml:space="preserve">
     <value>窗口位于屏幕</value>
   </data>
   <data name="cb_WndClass.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 28</value>
+    <value>75, 21</value>
   </data>
   <data name="cb_WndClass.Text" xml:space="preserve">
     <value>窗口类名</value>
   </data>
   <data name="cb_ProcessPath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 28</value>
+    <value>75, 21</value>
   </data>
   <data name="cb_ProcessPath.Text" xml:space="preserve">
     <value>进程路径</value>
   </data>
   <data name="cb_ProcessName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 28</value>
+    <value>75, 21</value>
   </data>
   <data name="cb_ProcessName.Text" xml:space="preserve">
     <value>进程名称</value>
   </data>
   <data name="cb_Title.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 28</value>
+    <value>75, 21</value>
   </data>
   <data name="cb_Title.Text" xml:space="preserve">
     <value>窗口标题</value>
   </data>
-  <data name="groupBox2.Text" xml:space="preserve">
-    <value>基础窗口规则</value>
+  <data name="groupBox3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>765, 174</value>
+  </data>
+  <data name="groupBox3.Text" xml:space="preserve">
+    <value>窗口动作</value>
   </data>
   <data name="cb_MoveToScreen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>126, 28</value>
+    <value>87, 21</value>
   </data>
   <data name="cb_MoveToScreen.Text" xml:space="preserve">
     <value>移动到屏幕</value>
   </data>
   <data name="cb_HideFromView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 28</value>
+    <value>99, 21</value>
   </data>
   <data name="cb_HideFromView.Text" xml:space="preserve">
     <value>从视图中隐藏</value>
   </data>
   <data name="cb_PinApp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>288, 28</value>
+    <value>195, 21</value>
   </data>
   <data name="cb_PinApp.Text" xml:space="preserve">
     <value>在所有桌面上显示此应用的窗口</value>
   </data>
   <data name="cb_PinWindow.Size" type="System.Drawing.Size, System.Drawing">
-    <value>234, 28</value>
+    <value>159, 21</value>
   </data>
   <data name="cb_PinWindow.Text" xml:space="preserve">
     <value>在所有桌面上显示此窗口</value>
   </data>
   <data name="cb_FollowWindow.Size" type="System.Drawing.Size, System.Drawing">
-    <value>162, 28</value>
+    <value>111, 21</value>
   </data>
   <data name="cb_FollowWindow.Text" xml:space="preserve">
     <value>跟随窗口到桌面</value>
   </data>
   <data name="cb_MoveToDesktop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>126, 28</value>
+    <value>87, 21</value>
   </data>
   <data name="cb_MoveToDesktop.Text" xml:space="preserve">
     <value>移动到桌面</value>
   </data>
-  <data name="groupBox3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>978, 252</value>
-  </data>
-  <data name="groupBox3.Text" xml:space="preserve">
-    <value>窗口动作</value>
-  </data>
   <data name="btn_RuleSave.Text" xml:space="preserve">
     <value>保存</value>
   </data>
+  <data name="groupBox4.Text" xml:space="preserve">
+    <value>信息</value>
+  </data>
   <data name="lb_Updated.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 24</value>
+    <value>56, 17</value>
   </data>
   <data name="lb_Updated.Text" xml:space="preserve">
     <value>更新时间</value>
   </data>
   <data name="lb_Created.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 24</value>
+    <value>56, 17</value>
   </data>
   <data name="lb_Created.Text" xml:space="preserve">
     <value>创建时间</value>
-  </data>
-  <data name="groupBox4.Text" xml:space="preserve">
-    <value>信息</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>规则定义</value>
