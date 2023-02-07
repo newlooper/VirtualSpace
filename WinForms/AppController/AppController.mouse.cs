@@ -28,6 +28,8 @@ namespace VirtualSpace
         private void chb_MouseOnTaskbarSwitchDesktop_CheckedChanged( object? sender, EventArgs e )
         {
             Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar = chb_MouseOnTaskbarSwitchDesktop.Checked;
+            var msg = Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar ? UserMessage.EnableMouseHook : UserMessage.DisableMouseHook;
+            User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, (ulong)msg, 0 );
             Manager.Save();
         }
 

@@ -318,6 +318,12 @@ namespace VirtualSpace
                         case UserMessage.RestartApp:
                             RestartApp();
                             goto RETURN;
+                        case UserMessage.EnableMouseHook:
+                            EnableMouseHook();
+                            goto RETURN;
+                        case UserMessage.DisableMouseHook:
+                            DisableMouseHook();
+                            goto RETURN;
                         case UserMessage.SVD1:
                             SwitchByIndex( 0 );
                             break;

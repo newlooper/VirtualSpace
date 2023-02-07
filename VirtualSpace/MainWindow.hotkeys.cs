@@ -73,9 +73,22 @@ namespace VirtualSpace
             Logger.Info( "Set Windows LowLevelKeyboardProc Hook" );
             LowLevelKeyboardHook.SetHook( keyboardHookProc );
 
-            var mouseHookProc = new User32.HookProc( MouseHookCallback );
+            if ( Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar )
+            {
+                EnableMouseHook();
+            }
+        }
+
+        private void EnableMouseHook()
+        {
             Logger.Info( "Set Windows LowLevelMouseProc Hook" );
-            LowLevelMouseHook.SetHook( mouseHookProc );
+            LowLevelMouseHook.SetHook( MouseHookCallback );
+        }
+
+        private static void DisableMouseHook()
+        {
+            Logger.Info( "Unset Windows LowLevelMouseProc Hook" );
+            LowLevelMouseHook.UnHook();
         }
 
         private IntPtr KeyboardHookCallback( int nCode, IntPtr wParam, IntPtr lParam )
@@ -141,7 +154,7 @@ namespace VirtualSpace
 
         private IntPtr MouseHookCallback( int nCode, IntPtr wParam, IntPtr lParam )
         {
-            if ( nCode >= 0 && Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar )
+            if ( nCode >= 0 )
             {
                 var info = (LowLevelMouseHook.MSLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LowLevelMouseHook.MSLLHOOKSTRUCT ) );
                 var msg  = (int)wParam;
@@ -180,8 +193,7 @@ namespace VirtualSpace
             Logger.Info( "Unset Windows LowLevelKeyboardProc Hook" );
             LowLevelKeyboardHook.UnHook();
 
-            Logger.Info( "Unset Windows LowLevelMouseProc Hook" );
-            LowLevelMouseHook.UnHook();
+            DisableMouseHook();
 
             Logger.Info( "Unregister Global HotKeys" );
             GlobalHotKey.UnRegAllHotKey();

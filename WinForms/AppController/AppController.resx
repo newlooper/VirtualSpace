@@ -847,7 +847,7 @@
     <value>3</value>
   </data>
   <data name="chb_MouseOnTaskbarSwitchDesktop.Text" xml:space="preserve">
-    <value>When mouse on Taskbar, Use wheel swith virtual desktop.</value>
+    <value>When mouse on Taskbar, Use wheel switch virtual desktop.</value>
   </data>
   <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.Name" xml:space="preserve">
     <value>chb_MouseOnTaskbarSwitchDesktop</value>
