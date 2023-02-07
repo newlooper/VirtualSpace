@@ -10,7 +10,7 @@ namespace VirtualSpace.Helpers
 
         public delegate bool EnumWindowsProc( IntPtr hWnd, int lParam );
 
-        public delegate IntPtr LowLevelKeyboardProc( int nCode, IntPtr wParam, IntPtr lParam );
+        public delegate IntPtr HookProc( int nCode, IntPtr wParam, IntPtr lParam );
 
         [Flags]
         public enum SetWindowPosFlags : uint
@@ -121,7 +121,7 @@ namespace VirtualSpace.Helpers
         public static extern int GetWindowThreadProcessId( IntPtr hWnd, out int processId );
 
         [DllImport( "user32.dll", CharSet = CharSet.Auto, SetLastError = true )]
-        public static extern IntPtr SetWindowsHookEx( int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId );
+        public static extern IntPtr SetWindowsHookEx( int idHook, HookProc lpfn, IntPtr hMod, uint dwThreadId );
 
         [DllImport( "user32.dll", CharSet = CharSet.Auto, SetLastError = true )]
         [return: MarshalAs( UnmanagedType.Bool )]
