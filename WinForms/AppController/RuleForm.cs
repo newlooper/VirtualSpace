@@ -161,6 +161,7 @@ namespace VirtualSpace
 
                 cb_PinWindow.Checked = action.PinWindow;
                 cb_PinApp.Checked = action.PinApp;
+                cb_HideFromView.Checked = action.HideFromView;
 
                 cb_MoveToDesktop.Checked = action.MoveToDesktop >= 0;
                 cbb_MoveToDesktop.SelectedValue = action.MoveToDesktop;
