@@ -58,6 +58,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 21</value>
+  </data>
+  <data name="fileToolStripMenuItem.Text" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="optionsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 21</value>
+  </data>
+  <data name="optionsToolStripMenuItem.Text" xml:space="preserve">
+    <value>选项</value>
+  </data>
   <data name="closeThisWindowToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>196, 22</value>
   </data>
@@ -79,17 +91,17 @@
   <data name="quitToolStripMenuItem.Text" xml:space="preserve">
     <value>退出程序</value>
   </data>
-  <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 21</value>
-  </data>
-  <data name="fileToolStripMenuItem.Text" xml:space="preserve">
-    <value>文件</value>
-  </data>
   <data name="langToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 22</value>
   </data>
   <data name="langToolStripMenuItem.Text" xml:space="preserve">
     <value>语言</value>
+  </data>
+  <data name="logsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 22</value>
+  </data>
+  <data name="logsToolStripMenuItem.Text" xml:space="preserve">
+    <value>日志</value>
   </data>
   <data name="showLogsInGuiToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>194, 22</value>
@@ -103,17 +115,8 @@
   <data name="openLogFolderToolStripMenuItem.Text" xml:space="preserve">
     <value>打开日志文件夹...</value>
   </data>
-  <data name="logsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 22</value>
-  </data>
-  <data name="logsToolStripMenuItem.Text" xml:space="preserve">
+  <data name="MT_Logs.Text" xml:space="preserve">
     <value>日志</value>
-  </data>
-  <data name="optionsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 21</value>
-  </data>
-  <data name="optionsToolStripMenuItem.Text" xml:space="preserve">
-    <value>选项</value>
   </data>
   <data name="logTabInfo.Text" xml:space="preserve">
     <value>信息</value>
@@ -130,8 +133,11 @@
   <data name="logTabError.Text" xml:space="preserve">
     <value>错误</value>
   </data>
-  <data name="MT_Logs.Text" xml:space="preserve">
-    <value>日志</value>
+  <data name="MT_General.Text" xml:space="preserve">
+    <value>通用</value>
+  </data>
+  <data name="gb_general.Text" xml:space="preserve">
+    <value>通用</value>
   </data>
   <data name="llb_TaskScheduler.Location" type="System.Drawing.Point, System.Drawing">
     <value>265, 59</value>
@@ -154,8 +160,8 @@
   <data name="chb_RunOnStartup.Text" xml:space="preserve">
     <value>随系统启动</value>
   </data>
-  <data name="gb_general.Text" xml:space="preserve">
-    <value>通用</value>
+  <data name="gb_Cluster.Text" xml:space="preserve">
+    <value>杂项</value>
   </data>
   <data name="chb_HideOnStart.Text" xml:space="preserve">
     <value>程序启动时不显示主视图。</value>
@@ -169,14 +175,32 @@
   <data name="chb_HideMainViewIfItsShown.Text" xml:space="preserve">
     <value>当使用热键唤起主视图时，如果主视图已经显示，则关闭之。</value>
   </data>
-  <data name="gb_Cluster.Text" xml:space="preserve">
-    <value>杂项</value>
+  <data name="gb_Mouse.Text" xml:space="preserve">
+    <value>鼠标</value>
   </data>
-  <data name="btn_mouse_save.Text" xml:space="preserve">
-    <value>保存</value>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>160, 304</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>398, 17</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.Text" xml:space="preserve">
+    <value>下滚 =&gt; 导航到右侧桌面                    SHIFT+下滚 =&gt; 导航到下面桌面</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>398, 17</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.Text" xml:space="preserve">
+    <value>上滚 =&gt; 导航到左侧桌面                    SHIFT+上滚 =&gt; 导航到上面桌面</value>
+  </data>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.Text" xml:space="preserve">
+    <value>当鼠标指针在任务栏上时，用滚轮切换虚拟桌面。</value>
   </data>
   <data name="tp_mouse_action.Text" xml:space="preserve">
     <value>动作</value>
+  </data>
+  <data name="btn_mouse_save.Text" xml:space="preserve">
+    <value>保存</value>
   </data>
   <data name="tv_mouse.Nodes" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
@@ -224,17 +248,17 @@
         cgD/////CQQAAAD/////CQQAAAAAAAAACw==
 </value>
   </data>
-  <data name="gb_Mouse.Text" xml:space="preserve">
-    <value>鼠标</value>
+  <data name="gb_Hotkey.Text" xml:space="preserve">
+    <value>键盘</value>
+  </data>
+  <data name="tp_hk_main.Text" xml:space="preserve">
+    <value>热键绑定</value>
   </data>
   <data name="btn_hk_ClearAndSave.Text" xml:space="preserve">
     <value>清除并保存</value>
   </data>
   <data name="btn_hk_RegAndSave.Text" xml:space="preserve">
     <value>注册并保存</value>
-  </data>
-  <data name="tp_hk_main.Text" xml:space="preserve">
-    <value>热键绑定</value>
   </data>
   <data name="tp_hk_extra.Text" xml:space="preserve">
     <value>备用</value>
@@ -336,8 +360,8 @@
         AAAACw==
 </value>
   </data>
-  <data name="gb_Hotkey.Text" xml:space="preserve">
-    <value>键盘</value>
+  <data name="gb_nav.Text" xml:space="preserve">
+    <value>导航</value>
   </data>
   <data name="lb_nav_circle_h_type.Size" type="System.Drawing.Size, System.Drawing">
     <value>284, 17</value>
@@ -347,9 +371,6 @@
   </data>
   <data name="cb_nav_circle_h_type.Location" type="System.Drawing.Point, System.Drawing">
     <value>529, 34</value>
-  </data>
-  <data name="cb_nav_circle_h_type.Size" type="System.Drawing.Size, System.Drawing">
-    <value>120, 25</value>
   </data>
   <data name="cb_nav_circle_v.Size" type="System.Drawing.Size, System.Drawing">
     <value>155, 21</value>
@@ -363,11 +384,11 @@
   <data name="cb_nav_circle_h.Text" xml:space="preserve">
     <value>水平方向循环</value>
   </data>
-  <data name="gb_nav.Text" xml:space="preserve">
-    <value>导航</value>
+  <data name="MT_UI.Text" xml:space="preserve">
+    <value>界面</value>
   </data>
-  <data name="MT_General.Text" xml:space="preserve">
-    <value>通用</value>
+  <data name="lb_ui_vd_view.Text" xml:space="preserve">
+    <value>虚拟桌面视图</value>
   </data>
   <data name="rb_vd_index_1.Text" xml:space="preserve">
     <value>1-基索引</value>
@@ -387,8 +408,8 @@
   <data name="chb_show_vd_name.Text" xml:space="preserve">
     <value>显示虚拟桌面名称</value>
   </data>
-  <data name="lb_ui_vd_view.Text" xml:space="preserve">
-    <value>虚拟桌面视图</value>
+  <data name="gb_DesktopArrangement.Text" xml:space="preserve">
+    <value>虚拟桌面摆放方式</value>
   </data>
   <data name="btn_m7.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -892,11 +913,11 @@
   <data name="lb_DesktopArrangementNote.Text" xml:space="preserve">
     <value>注意：当且仅当虚拟桌面的数量是自然数[1,n]的2次方时，才可以变换摆放方式；条件不满足时程序将自动重置为第一种摆放方式。</value>
   </data>
-  <data name="gb_DesktopArrangement.Text" xml:space="preserve">
-    <value>虚拟桌面摆放方式</value>
+  <data name="MT_Rules.Text" xml:space="preserve">
+    <value>规则</value>
   </data>
-  <data name="MT_UI.Text" xml:space="preserve">
-    <value>界面</value>
+  <data name="gb_Rules.Text" xml:space="preserve">
+    <value>规则列表</value>
   </data>
   <data name="lvc_Name.Text" xml:space="preserve">
     <value>名称</value>
@@ -968,14 +989,14 @@
   <data name="btn_RuleRemove.Text" xml:space="preserve">
     <value>删除</value>
   </data>
-  <data name="gb_Rules.Text" xml:space="preserve">
-    <value>规则列表</value>
-  </data>
   <data name="gb_CurrentProfile.Text" xml:space="preserve">
     <value>当前配置文件</value>
   </data>
-  <data name="MT_Rules.Text" xml:space="preserve">
-    <value>规则</value>
+  <data name="MT_Plugins.Text" xml:space="preserve">
+    <value>插件</value>
+  </data>
+  <data name="gb_Plugins.Text" xml:space="preserve">
+    <value>插件列表</value>
   </data>
   <data name="lvc_PluginName.Text" xml:space="preserve">
     <value>名称</value>
@@ -1004,12 +1025,6 @@
   </data>
   <data name="btn_PluginSettings.Text" xml:space="preserve">
     <value>设置</value>
-  </data>
-  <data name="gb_Plugins.Text" xml:space="preserve">
-    <value>插件列表</value>
-  </data>
-  <data name="MT_Plugins.Text" xml:space="preserve">
-    <value>插件</value>
   </data>
   <data name="pb_AboutLogo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1795,14 +1810,14 @@
         AElFTkSuQmCC
 </value>
   </data>
+  <data name="logCMS.Size" type="System.Drawing.Size, System.Drawing">
+    <value>101, 26</value>
+  </data>
   <data name="clearToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 22</value>
   </data>
   <data name="clearToolStripMenuItem.Text" xml:space="preserve">
     <value>清空</value>
-  </data>
-  <data name="logCMS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>101, 26</value>
   </data>
   <data name="tsb_general.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2142,59 +2157,44 @@
   <data name="tsb_about.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         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
-        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
-        gg==
+        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
+        YII=
 </value>
   </data>
   <data name="tsb_about.Text" xml:space="preserve">
     <value>关于</value>
-  </data>
-  <data name="settingsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 22</value>
-  </data>
-  <data name="settingsToolStripMenuItem.Text" xml:space="preserve">
-    <value>设置</value>
-  </data>
-  <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>97, 6</value>
-  </data>
-  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 22</value>
-  </data>
-  <data name="exitToolStripMenuItem.Text" xml:space="preserve">
-    <value>退出</value>
   </data>
   <data name="trayMenu.Size" type="System.Drawing.Size, System.Drawing">
     <value>101, 54</value>
@@ -4615,5 +4615,20 @@
         S6vs+313jz3Dzsgj4G5pEaSFgHqCVdQfgAg42m1x8c3+JG94wHPjNwUUPvmyH73/zx7fD+J90tU/fC8k
         Pn+QsFGHTz2+gENJGu+dMmTSO9GDZiL0KYg2j+bL2BMbmOvz/wagc5xvkcnx6wAAAABJRU5ErkJggg==
 </value>
+  </data>
+  <data name="settingsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 22</value>
+  </data>
+  <data name="settingsToolStripMenuItem.Text" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>97, 6</value>
+  </data>
+  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 22</value>
+  </data>
+  <data name="exitToolStripMenuItem.Text" xml:space="preserve">
+    <value>退出</value>
   </data>
 </root>

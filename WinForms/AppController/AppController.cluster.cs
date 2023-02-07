@@ -56,7 +56,7 @@ namespace VirtualSpace
             niTray.Icon = Icon.FromHandle( bitmap.GetHicon() );
         }
 
-        private void ReadClusterConfig()
+        private void InitClusterConfig()
         {
             chb_HideMainViewIfItsShown.Checked = ConfigManager.Configs.Cluster.HideMainViewIfItsShown;
             chb_notify_vd_changed.Checked = ConfigManager.Configs.Cluster.NotificationOnVdChanged;

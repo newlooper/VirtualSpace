@@ -76,6 +76,9 @@ namespace VirtualSpace
             this.chb_notify_vd_changed = new System.Windows.Forms.CheckBox();
             this.chb_HideMainViewIfItsShown = new System.Windows.Forms.CheckBox();
             this.gb_Mouse = new System.Windows.Forms.GroupBox();
+            this.lb_MouseOnTaskbarSwitchDesktop2 = new System.Windows.Forms.Label();
+            this.lb_MouseOnTaskbarSwitchDesktop1 = new System.Windows.Forms.Label();
+            this.chb_MouseOnTaskbarSwitchDesktop = new System.Windows.Forms.CheckBox();
             this.tc_Mouse = new System.Windows.Forms.TabControl();
             this.tp_mouse_action = new System.Windows.Forms.TabPage();
             this.btn_mouse_save = new System.Windows.Forms.Button();
@@ -456,11 +459,30 @@ namespace VirtualSpace
             // 
             // gb_Mouse
             // 
+            this.gb_Mouse.Controls.Add(this.lb_MouseOnTaskbarSwitchDesktop2);
+            this.gb_Mouse.Controls.Add(this.lb_MouseOnTaskbarSwitchDesktop1);
+            this.gb_Mouse.Controls.Add(this.chb_MouseOnTaskbarSwitchDesktop);
             this.gb_Mouse.Controls.Add(this.tc_Mouse);
             this.gb_Mouse.Controls.Add(this.tv_mouse);
             resources.ApplyResources(this.gb_Mouse, "gb_Mouse");
             this.gb_Mouse.Name = "gb_Mouse";
             this.gb_Mouse.TabStop = false;
+            // 
+            // lb_MouseOnTaskbarSwitchDesktop2
+            // 
+            resources.ApplyResources(this.lb_MouseOnTaskbarSwitchDesktop2, "lb_MouseOnTaskbarSwitchDesktop2");
+            this.lb_MouseOnTaskbarSwitchDesktop2.Name = "lb_MouseOnTaskbarSwitchDesktop2";
+            // 
+            // lb_MouseOnTaskbarSwitchDesktop1
+            // 
+            resources.ApplyResources(this.lb_MouseOnTaskbarSwitchDesktop1, "lb_MouseOnTaskbarSwitchDesktop1");
+            this.lb_MouseOnTaskbarSwitchDesktop1.Name = "lb_MouseOnTaskbarSwitchDesktop1";
+            // 
+            // chb_MouseOnTaskbarSwitchDesktop
+            // 
+            resources.ApplyResources(this.chb_MouseOnTaskbarSwitchDesktop, "chb_MouseOnTaskbarSwitchDesktop");
+            this.chb_MouseOnTaskbarSwitchDesktop.Name = "chb_MouseOnTaskbarSwitchDesktop";
+            this.chb_MouseOnTaskbarSwitchDesktop.UseVisualStyleBackColor = true;
             // 
             // tc_Mouse
             // 
@@ -1253,6 +1275,7 @@ namespace VirtualSpace
             this.gb_general.PerformLayout();
             this.gb_Cluster.ResumeLayout(false);
             this.gb_Mouse.ResumeLayout(false);
+            this.gb_Mouse.PerformLayout();
             this.tc_Mouse.ResumeLayout(false);
             this.tp_mouse_action.ResumeLayout(false);
             this.tp_mouse_action.PerformLayout();
@@ -1421,5 +1444,8 @@ namespace VirtualSpace
         private System.Windows.Forms.LinkLabel llb_TaskScheduler;
         private System.Windows.Forms.Button btn_hk_RegAndSave;
         private System.Windows.Forms.Button btn_hk_ClearAndSave;
+        private System.Windows.Forms.CheckBox chb_MouseOnTaskbarSwitchDesktop;
+        private System.Windows.Forms.Label lb_MouseOnTaskbarSwitchDesktop2;
+        private System.Windows.Forms.Label lb_MouseOnTaskbarSwitchDesktop1;
     }
 }

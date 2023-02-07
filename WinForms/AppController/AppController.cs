@@ -48,8 +48,10 @@ namespace VirtualSpace
 
             InitRuleListView();
             InitPluginListView();
-            ReadUiConfig();
-            ReadClusterConfig();
+            InitUiConfig();
+            InitClusterConfig();
+            InitMouseConfig();
+
             CheckAdmin();
 
             PickLogAndWrite();

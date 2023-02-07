@@ -101,4 +101,34 @@ namespace VirtualSpace.Helpers
             private int dwExtraInfo;
         }
     }
+
+    public static class LowLevelMouseHook
+    {
+        private const  int             WH_MOUSE_LL   = 14;
+        public const   int             WM_MOUSEWHEEL = 0x020A;
+        private static User32.HookProc _hookProc;
+
+        public static IntPtr HookId { get; private set; } = IntPtr.Zero;
+
+        public static void SetHook( User32.HookProc proc )
+        {
+            _hookProc = proc;
+            HookId = User32.SetWindowsHookEx( WH_MOUSE_LL, _hookProc, Kernel32.GetModuleHandle( null ), 0 );
+        }
+
+        public static void UnHook()
+        {
+            User32.UnhookWindowsHookEx( HookId );
+        }
+
+        [StructLayout( LayoutKind.Sequential )]
+        public struct MSLLHOOKSTRUCT
+        {
+            public POINT   pt;
+            public int     mouseData; // be careful, this must be ints, not uints.
+            public int     flags;
+            public int     time;
+            public UIntPtr dwExtraInfo;
+        }
+    }
 }

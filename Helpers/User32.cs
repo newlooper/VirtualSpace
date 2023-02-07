@@ -62,6 +62,9 @@ namespace VirtualSpace.Helpers
         public const uint AW_SLIDE          = 0x40000;
         public const uint AW_BLEND          = 0x80000;
 
+        [DllImport( "user32.dll", SetLastError = true )]
+        public static extern IntPtr FindWindow( string lpClassName, string lpWindowName );
+
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
         public static extern int GetWindowLong( IntPtr hWnd, int nIndex );
 

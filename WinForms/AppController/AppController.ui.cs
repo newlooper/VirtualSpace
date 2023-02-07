@@ -15,7 +15,7 @@ namespace VirtualSpace
 {
     public partial class AppController
     {
-        private void ReadUiConfig()
+        private void InitUiConfig()
         {
             var ui = ConfigManager.CurrentProfile.UI;
 

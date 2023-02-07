@@ -69,9 +69,13 @@ namespace VirtualSpace
                 }
             }
 
-            var hookProc = new User32.HookProc( KeyboardHookCallback );
+            var keyboardHookProc = new User32.HookProc( KeyboardHookCallback );
             Logger.Info( "Set Windows LowLevelKeyboardProc Hook" );
-            LowLevelKeyboardHook.SetHook( hookProc );
+            LowLevelKeyboardHook.SetHook( keyboardHookProc );
+
+            var mouseHookProc = new User32.HookProc( MouseHookCallback );
+            Logger.Info( "Set Windows LowLevelMouseProc Hook" );
+            LowLevelMouseHook.SetHook( mouseHookProc );
         }
 
         private IntPtr KeyboardHookCallback( int nCode, IntPtr wParam, IntPtr lParam )
@@ -135,10 +139,50 @@ namespace VirtualSpace
             return User32.CallNextHookEx( LowLevelKeyboardHook.HookId, nCode, wParam, lParam );
         }
 
+        private IntPtr MouseHookCallback( int nCode, IntPtr wParam, IntPtr lParam )
+        {
+            if ( nCode >= 0 && Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar )
+            {
+                var info = (LowLevelMouseHook.MSLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LowLevelMouseHook.MSLLHOOKSTRUCT ) );
+                var msg  = (int)wParam;
+                if ( msg == LowLevelMouseHook.WM_MOUSEWHEEL )
+                {
+                    var hTaskbar = User32.FindWindow( "Shell_TrayWnd", "" );
+
+                    if ( hTaskbar != IntPtr.Zero )
+                    {
+                        var rect = new RECT();
+                        _ = User32.GetWindowRect( hTaskbar, ref rect );
+                        if ( info.pt.X >= rect.Left && info.pt.Y > rect.Top )
+                        {
+                            uint dir;
+                            if ( User32.GetAsyncKeyState( (int)Keys.ShiftKey ) < 0 )
+                            {
+                                dir = (uint)( info.mouseData >> 16 > 0 ? Keys.Up : Keys.Down );
+                            }
+                            else
+                            {
+                                dir = (uint)( info.mouseData >> 16 > 0 ? Keys.Left : Keys.Right );
+                            }
+
+                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, dir );
+                            return LowLevelHooks.Handled;
+                        }
+                    }
+                }
+            }
+
+            return User32.CallNextHookEx( LowLevelMouseHook.HookId, nCode, wParam, lParam );
+        }
+
         private void Window_Closing( object sender, CancelEventArgs e )
         {
             Logger.Info( "Unset Windows LowLevelKeyboardProc Hook" );
             LowLevelKeyboardHook.UnHook();
+
+            Logger.Info( "Unset Windows LowLevelMouseProc Hook" );
+            LowLevelMouseHook.UnHook();
+
             Logger.Info( "Unregister Global HotKeys" );
             GlobalHotKey.UnRegAllHotKey();
         }

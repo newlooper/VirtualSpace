@@ -601,7 +601,7 @@
     <value>True</value>
   </data>
   <data name="lb_dummy_Placeholder.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 961</value>
+    <value>867, 1143</value>
   </data>
   <data name="lb_dummy_Placeholder.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -745,7 +745,7 @@
     <value>3</value>
   </data>
   <data name="gb_Cluster.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 885</value>
+    <value>11, 978</value>
   </data>
   <data name="gb_Cluster.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -772,6 +772,93 @@
     <value>panel_General</value>
   </data>
   <data name="&gt;&gt;gb_Cluster.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>160, 304</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>413, 17</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.Text" xml:space="preserve">
+    <value>Scroll Down =&gt; Go Right                 SHIFT+Scroll Down =&gt; Go Down</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.Name" xml:space="preserve">
+    <value>lb_MouseOnTaskbarSwitchDesktop2</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.Parent" xml:space="preserve">
+    <value>gb_Mouse</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>160, 281</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>387, 17</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.Text" xml:space="preserve">
+    <value>Scroll UP =&gt; Go Left                         SHIFT+Scroll Up =&gt; Go Up</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.Name" xml:space="preserve">
+    <value>lb_MouseOnTaskbarSwitchDesktop1</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.Parent" xml:space="preserve">
+    <value>gb_Mouse</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>22, 259</value>
+  </data>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>498, 20</value>
+  </data>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.Text" xml:space="preserve">
+    <value>When mouse on Taskbar, Use wheel swith virtual desktop.</value>
+  </data>
+  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.Name" xml:space="preserve">
+    <value>chb_MouseOnTaskbarSwitchDesktop</value>
+  </data>
+  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.Parent" xml:space="preserve">
+    <value>gb_Mouse</value>
+  </data>
+  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
   <data name="btn_mouse_save.Location" type="System.Drawing.Point, System.Drawing">
@@ -916,7 +1003,7 @@
     <value>gb_Mouse</value>
   </data>
   <data name="&gt;&gt;tc_Mouse.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>3</value>
   </data>
   <data name="tv_mouse.Location" type="System.Drawing.Point, System.Drawing">
     <value>22, 26</value>
@@ -986,7 +1073,7 @@
     <value>gb_Mouse</value>
   </data>
   <data name="&gt;&gt;tv_mouse.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>4</value>
   </data>
   <data name="gb_Mouse.Location" type="System.Drawing.Point, System.Drawing">
     <value>11, 630</value>
@@ -998,7 +1085,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="gb_Mouse.Size" type="System.Drawing.Size, System.Drawing">
-    <value>778, 246</value>
+    <value>778, 338</value>
   </data>
   <data name="gb_Mouse.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>

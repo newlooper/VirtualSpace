@@ -12,10 +12,11 @@ namespace VirtualSpace.Config.Entity
 {
     public class Mouse
     {
-        private int _dragSizeFactor;
-        public  int LeftClickOnCanvas   { get; set; }
-        public  int RightClickOnCanvas  { get; set; }
-        public  int MiddleClickOnCanvas { get; set; }
+        private int  _dragSizeFactor;
+        public  int  LeftClickOnCanvas                  { get; set; }
+        public  int  RightClickOnCanvas                 { get; set; }
+        public  int  MiddleClickOnCanvas                { get; set; }
+        public  bool UseWheelSwitchDesktopWhenOnTaskbar { get; set; }
 
         public int DragSizeFactor
         {

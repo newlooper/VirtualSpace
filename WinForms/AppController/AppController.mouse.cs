@@ -19,6 +19,18 @@ namespace VirtualSpace
 {
     public partial class AppController
     {
+        private void InitMouseConfig()
+        {
+            chb_MouseOnTaskbarSwitchDesktop.Checked = Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar;
+            chb_MouseOnTaskbarSwitchDesktop.CheckedChanged += chb_MouseOnTaskbarSwitchDesktop_CheckedChanged;
+        }
+
+        private void chb_MouseOnTaskbarSwitchDesktop_CheckedChanged( object? sender, EventArgs e )
+        {
+            Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar = chb_MouseOnTaskbarSwitchDesktop.Checked;
+            Manager.Save();
+        }
+
         private void tv_mouse_AfterSelect( object sender, TreeViewEventArgs e )
         {
             tc_Mouse.Visible = false;
