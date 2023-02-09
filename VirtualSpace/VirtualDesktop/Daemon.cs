@@ -30,8 +30,7 @@ namespace VirtualSpace.VirtualDesktop
     {
         private static          int               _runlevel      = 1;
         private static readonly ManualResetEvent  CanRun         = new( false );
-        private static readonly StringBuilder     SbWinText      = new( Const.WindowTitleMaxLength );
-        private static readonly StringBuilder     SbCName        = new( Const.WindowClassMaxLength );
+        private static readonly StringBuilder     SbWinInfo      = new( Const.WindowTitleMaxLength );
         private static readonly Channel<Behavior> ActionChannel  = Channels.ActionChannel;
         private static readonly Channel<Window>   VisibleWindows = Conditions.VisibleWindows;
 
@@ -152,25 +151,26 @@ namespace VirtualSpace.VirtualDesktop
 
         private static bool WindowHandleFilter( IntPtr hWnd, int lParam )
         {
-            _ = User32.GetWindowText( hWnd, SbWinText, SbWinText.Capacity );
-            var title = SbWinText.ToString();
+            if ( Conditions.WndHandleIgnoreListByRule.Contains( hWnd ) ||
+                 Filters.WndHandleIgnoreListByError.Contains( hWnd ) ||
+                 !User32.IsWindowVisible( hWnd ) ||
+                 Filters.IsCloaked( hWnd ) )
+                return true;
 
-            _ = User32.GetClassName( hWnd, SbCName, SbCName.Capacity );
-            var classname = SbCName.ToString();
+            _ = User32.GetWindowText( hWnd, SbWinInfo, SbWinInfo.Capacity );
+            var title = SbWinInfo.ToString();
+            if ( string.IsNullOrEmpty( title ) ||
+                 Filters.WndTitleIgnoreList.Contains( title ) )
+                return true;
 
-            if ( User32.IsWindowVisible( hWnd ) &&
-                 !string.IsNullOrEmpty( title ) &&
-                 !Filters.WndClsIgnoreList.Contains( classname ) &&
-                 !Filters.WndTitleIgnoreList.Contains( title ) &&
-                 !Filters.WndHandleIgnoreListByError.Contains( hWnd ) &&
-                 !Conditions.WndHandleIgnoreListByRule.Contains( hWnd ) &&
-                 !Filters.IsCloaked( hWnd )
-               )
+            _ = User32.GetClassName( hWnd, SbWinInfo, SbWinInfo.Capacity );
+            var classname = SbWinInfo.ToString();
+            if ( Filters.WndClsIgnoreList.Contains( classname ) )
+                return true;
+
+            if ( classname != Const.WindowsUiCoreWindow )
             {
-                if ( classname != Const.WindowsUiCoreWindow )
-                {
-                    AddToSnapshot( hWnd, title, classname );
-                }
+                AddToSnapshot( hWnd, title, classname );
             }
 
             return true;

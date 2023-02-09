@@ -195,6 +195,7 @@ namespace VirtualSpace.VirtualDesktop
                 }
             }
 
+            var sb = new StringBuilder( Const.WindowTitleMaxLength );
             foreach ( var handle in Filters.WndHandleIgnoreListByManual )
             {
                 if ( !User32.IsWindow( handle ) ) continue;
@@ -205,7 +206,6 @@ namespace VirtualSpace.VirtualDesktop
                 _ = User32.GetWindowThreadProcessId( handle, out var pId );
                 var process = Process.GetProcessById( pId );
 
-                var sb = new StringBuilder( Const.WindowTitleMaxLength );
                 _ = User32.GetWindowText( handle, sb, sb.Capacity );
                 var title = sb.ToString();
 

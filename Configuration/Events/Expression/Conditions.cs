@@ -26,6 +26,7 @@ using LinqExpressionBuilder;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Config.Events.Entity;
+using VirtualSpace.Helpers;
 using Process = System.Diagnostics.Process;
 
 namespace VirtualSpace.Config.Events.Expression
@@ -90,7 +91,7 @@ namespace VirtualSpace.Config.Events.Expression
 
             await Task.Run( () =>
             {
-                _ = GetWindowThreadProcessId( win.Handle, out var pId );
+                _ = User32.GetWindowThreadProcessId( win.Handle, out var pId );
                 using var pInfo = Process.GetProcessById( pId );
 
                 win.ProcessName = pInfo.ProcessName;
@@ -117,7 +118,7 @@ namespace VirtualSpace.Config.Events.Expression
 
                 win.WinInScreen = screenIndex.ToString();
 
-                if ( !IsWindow( win.Handle ) ) return;
+                if ( !User32.IsWindow( win.Handle ) ) return;
 
                 var hasMatchedRule = false;
 
@@ -222,23 +223,6 @@ namespace VirtualSpace.Config.Events.Expression
 
             Logger.Info( $"Rules.{Manager.Configs.CurrentProfileName} Saved." );
         }
-
-        #region WinApi
-
-        [DllImport( "user32.dll" )]
-        [return: MarshalAs( UnmanagedType.Bool )]
-        private static extern bool IsWindow( IntPtr hWnd );
-
-        [DllImport( "user32.dll" )]
-        private static extern int GetWindowText( IntPtr hWnd, StringBuilder buf, int nMaxCount );
-
-        [DllImport( "user32.dll", SetLastError = true, CharSet = CharSet.Auto )]
-        private static extern int GetClassName( IntPtr hWnd, StringBuilder lpClassName, int nMaxCount );
-
-        [DllImport( "user32.dll" )]
-        private static extern int GetWindowThreadProcessId( IntPtr hWnd, out int processId );
-
-        #endregion
     }
 
 #if NETCOREAPP3_1 || NET5_0
