@@ -16,6 +16,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace VirtualSpace.Helpers
 {
@@ -35,6 +36,26 @@ namespace VirtualSpace.Helpers
         {
             using var g = Graphics.FromHwnd( IntPtr.Zero );
             return ( g.DpiX / DefaultDpi, g.DpiY / DefaultDpi );
+        }
+
+        public static Version OSVersion
+        {
+            get
+            {
+                var winVer = Environment.OSVersion.Version;
+                if ( winVer.Revision == 0 )
+                {
+                    using var registryKey = Registry.LocalMachine.OpenSubKey( @"SOFTWARE\Microsoft\Windows NT\CurrentVersion" );
+                    var       ubr         = registryKey?.GetValue( "UBR" );
+                    if ( ubr != null )
+                    {
+                        var buildNumber = int.Parse( ubr.ToString() );
+                        winVer = new Version( winVer.Major, winVer.Minor, winVer.Build, buildNumber );
+                    }
+                }
+
+                return winVer;
+            }
         }
     }
 

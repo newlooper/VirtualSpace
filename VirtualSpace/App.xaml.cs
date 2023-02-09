@@ -9,7 +9,6 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -128,7 +127,7 @@ namespace VirtualSpace
         {
             var screen = Screen.FromPoint( new Point() );
             Logger.Info( $"Application Start Successfully: {ConfigManager.AppPath}" );
-            Logger.Info( $"System Version: {Environment.OSVersion}" );
+            Logger.Info( $"System Version: {SysInfo.OSVersion}" );
             Logger.Info( $"Total Screens: {Screen.AllScreens.Length}" );
             Logger.Info( $"Total VirtualDesktops: {DesktopWrapper.Count}" );
             Logger.Info( $"Start Screen: {screen.DeviceName} ({screen.DeviceFriendlyName()})" );
