@@ -568,7 +568,7 @@
     <value>2</value>
   </data>
   <data name="gb_general.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 14</value>
+    <value>10, 10</value>
   </data>
   <data name="gb_general.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -592,39 +592,156 @@
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;gb_general.Parent" xml:space="preserve">
-    <value>panel_General</value>
+    <value>tabPage_Genernal_Main</value>
   </data>
   <data name="&gt;&gt;gb_general.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="lb_dummy_Placeholder.AutoSize" type="System.Boolean, mscorlib">
+  <data name="lb_nav_circle_h_type.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="lb_dummy_Placeholder.Location" type="System.Drawing.Point, System.Drawing">
-    <value>867, 1143</value>
+  <data name="lb_nav_circle_h_type.Location" type="System.Drawing.Point, System.Drawing">
+    <value>241, 37</value>
   </data>
-  <data name="lb_dummy_Placeholder.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="lb_nav_circle_h_type.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
   </data>
-  <data name="lb_dummy_Placeholder.Size" type="System.Drawing.Size, System.Drawing">
-    <value>16, 17</value>
+  <data name="lb_nav_circle_h_type.Size" type="System.Drawing.Size, System.Drawing">
+    <value>220, 17</value>
   </data>
-  <data name="lb_dummy_Placeholder.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+  <data name="lb_nav_circle_h_type.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="lb_dummy_Placeholder.Text" xml:space="preserve">
-    <value>  </value>
+  <data name="lb_nav_circle_h_type.Text" xml:space="preserve">
+    <value>Right end of row joins to left end of:</value>
   </data>
-  <data name="&gt;&gt;lb_dummy_Placeholder.Name" xml:space="preserve">
-    <value>lb_dummy_Placeholder</value>
+  <data name="&gt;&gt;lb_nav_circle_h_type.Name" xml:space="preserve">
+    <value>lb_nav_circle_h_type</value>
   </data>
-  <data name="&gt;&gt;lb_dummy_Placeholder.Type" xml:space="preserve">
+  <data name="&gt;&gt;lb_nav_circle_h_type.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lb_dummy_Placeholder.Parent" xml:space="preserve">
-    <value>panel_General</value>
+  <data name="&gt;&gt;lb_nav_circle_h_type.Parent" xml:space="preserve">
+    <value>gb_nav</value>
   </data>
-  <data name="&gt;&gt;lb_dummy_Placeholder.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;lb_nav_circle_h_type.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cb_nav_circle_h_type.Location" type="System.Drawing.Point, System.Drawing">
+    <value>472, 34</value>
+  </data>
+  <data name="cb_nav_circle_h_type.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_nav_circle_h_type.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 25</value>
+  </data>
+  <data name="cb_nav_circle_h_type.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_h_type.Name" xml:space="preserve">
+    <value>cb_nav_circle_h_type</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_h_type.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_h_type.Parent" xml:space="preserve">
+    <value>gb_nav</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_h_type.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cb_nav_circle_v.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cb_nav_circle_v.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cb_nav_circle_v.Location" type="System.Drawing.Point, System.Drawing">
+    <value>22, 70</value>
+  </data>
+  <data name="cb_nav_circle_v.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_nav_circle_v.Size" type="System.Drawing.Size, System.Drawing">
+    <value>226, 21</value>
+  </data>
+  <data name="cb_nav_circle_v.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="cb_nav_circle_v.Text" xml:space="preserve">
+    <value>Circulate vertically. (same col only)</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_v.Name" xml:space="preserve">
+    <value>cb_nav_circle_v</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_v.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_v.Parent" xml:space="preserve">
+    <value>gb_nav</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_v.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="cb_nav_circle_h.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cb_nav_circle_h.Location" type="System.Drawing.Point, System.Drawing">
+    <value>22, 36</value>
+  </data>
+  <data name="cb_nav_circle_h.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_nav_circle_h.Size" type="System.Drawing.Size, System.Drawing">
+    <value>132, 21</value>
+  </data>
+  <data name="cb_nav_circle_h.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="cb_nav_circle_h.Text" xml:space="preserve">
+    <value>Enable circulation.</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_h.Name" xml:space="preserve">
+    <value>cb_nav_circle_h</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_h.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_h.Parent" xml:space="preserve">
+    <value>gb_nav</value>
+  </data>
+  <data name="&gt;&gt;cb_nav_circle_h.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="gb_nav.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 119</value>
+  </data>
+  <data name="gb_nav.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="gb_nav.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="gb_nav.Size" type="System.Drawing.Size, System.Drawing">
+    <value>778, 114</value>
+  </data>
+  <data name="gb_nav.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="gb_nav.Text" xml:space="preserve">
+    <value>Navigation</value>
+  </data>
+  <data name="&gt;&gt;gb_nav.Name" xml:space="preserve">
+    <value>gb_nav</value>
+  </data>
+  <data name="&gt;&gt;gb_nav.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gb_nav.Parent" xml:space="preserve">
+    <value>tabPage_Genernal_Main</value>
+  </data>
+  <data name="&gt;&gt;gb_nav.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="chb_HideOnStart.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -745,7 +862,7 @@
     <value>3</value>
   </data>
   <data name="gb_Cluster.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 978</value>
+    <value>10, 247</value>
   </data>
   <data name="gb_Cluster.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -754,7 +871,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="gb_Cluster.Size" type="System.Drawing.Size, System.Drawing">
-    <value>778, 153</value>
+    <value>778, 144</value>
   </data>
   <data name="gb_Cluster.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -769,341 +886,37 @@
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;gb_Cluster.Parent" xml:space="preserve">
-    <value>panel_General</value>
+    <value>tabPage_Genernal_Main</value>
   </data>
   <data name="&gt;&gt;gb_Cluster.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>160, 304</value>
-  </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>413, 17</value>
-  </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop2.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop2.Text" xml:space="preserve">
-    <value>Scroll Down =&gt; Go Right                 SHIFT+Scroll Down =&gt; Go Down</value>
-  </data>
-  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.Name" xml:space="preserve">
-    <value>lb_MouseOnTaskbarSwitchDesktop2</value>
-  </data>
-  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.Parent" xml:space="preserve">
-    <value>gb_Mouse</value>
-  </data>
-  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>160, 281</value>
-  </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>387, 17</value>
-  </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop1.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="lb_MouseOnTaskbarSwitchDesktop1.Text" xml:space="preserve">
-    <value>Scroll UP =&gt; Go Left                         SHIFT+Scroll Up =&gt; Go Up</value>
-  </data>
-  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.Name" xml:space="preserve">
-    <value>lb_MouseOnTaskbarSwitchDesktop1</value>
-  </data>
-  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.Parent" xml:space="preserve">
-    <value>gb_Mouse</value>
-  </data>
-  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="chb_MouseOnTaskbarSwitchDesktop.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="chb_MouseOnTaskbarSwitchDesktop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 259</value>
-  </data>
-  <data name="chb_MouseOnTaskbarSwitchDesktop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="chb_MouseOnTaskbarSwitchDesktop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>498, 20</value>
-  </data>
-  <data name="chb_MouseOnTaskbarSwitchDesktop.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="chb_MouseOnTaskbarSwitchDesktop.Text" xml:space="preserve">
-    <value>When mouse on Taskbar, Use wheel switch virtual desktop.</value>
-  </data>
-  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.Name" xml:space="preserve">
-    <value>chb_MouseOnTaskbarSwitchDesktop</value>
-  </data>
-  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.Parent" xml:space="preserve">
-    <value>gb_Mouse</value>
-  </data>
-  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="btn_mouse_save.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 81</value>
-  </data>
-  <data name="btn_mouse_save.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="btn_mouse_save.Size" type="System.Drawing.Size, System.Drawing">
-    <value>463, 35</value>
-  </data>
-  <data name="btn_mouse_save.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="btn_mouse_save.Text" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="&gt;&gt;btn_mouse_save.Name" xml:space="preserve">
-    <value>btn_mouse_save</value>
-  </data>
-  <data name="&gt;&gt;btn_mouse_save.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;btn_mouse_save.Parent" xml:space="preserve">
-    <value>tp_mouse_action</value>
-  </data>
-  <data name="&gt;&gt;btn_mouse_save.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="lb_mouse_action.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lb_mouse_action.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
-  </data>
-  <data name="lb_mouse_action.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="lb_mouse_action.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 18</value>
-  </data>
-  <data name="lb_mouse_action.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="lb_mouse_action.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 17</value>
-  </data>
-  <data name="lb_mouse_action.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="lb_mouse_action.Text" xml:space="preserve">
-    <value>LB_MOUSE_ACTION</value>
-  </data>
-  <data name="&gt;&gt;lb_mouse_action.Name" xml:space="preserve">
-    <value>lb_mouse_action</value>
-  </data>
-  <data name="&gt;&gt;lb_mouse_action.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lb_mouse_action.Parent" xml:space="preserve">
-    <value>tp_mouse_action</value>
-  </data>
-  <data name="&gt;&gt;lb_mouse_action.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="cb_mouse_func.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 46</value>
-  </data>
-  <data name="cb_mouse_func.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cb_mouse_func.Size" type="System.Drawing.Size, System.Drawing">
-    <value>464, 25</value>
-  </data>
-  <data name="cb_mouse_func.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;cb_mouse_func.Name" xml:space="preserve">
-    <value>cb_mouse_func</value>
-  </data>
-  <data name="&gt;&gt;cb_mouse_func.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cb_mouse_func.Parent" xml:space="preserve">
-    <value>tp_mouse_action</value>
-  </data>
-  <data name="&gt;&gt;cb_mouse_func.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tp_mouse_action.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tabPage_Genernal_Main.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
   </data>
-  <data name="tp_mouse_action.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+  <data name="tabPage_Genernal_Main.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
-  <data name="tp_mouse_action.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+  <data name="tabPage_Genernal_Main.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1145, 663</value>
   </data>
-  <data name="tp_mouse_action.Size" type="System.Drawing.Size, System.Drawing">
-    <value>486, 174</value>
-  </data>
-  <data name="tp_mouse_action.TabIndex" type="System.Int32, mscorlib">
+  <data name="tabPage_Genernal_Main.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="tp_mouse_action.Text" xml:space="preserve">
-    <value>Action</value>
+  <data name="tabPage_Genernal_Main.Text" xml:space="preserve">
+    <value>Main</value>
   </data>
-  <data name="&gt;&gt;tp_mouse_action.Name" xml:space="preserve">
-    <value>tp_mouse_action</value>
+  <data name="&gt;&gt;tabPage_Genernal_Main.Name" xml:space="preserve">
+    <value>tabPage_Genernal_Main</value>
   </data>
-  <data name="&gt;&gt;tp_mouse_action.Type" xml:space="preserve">
+  <data name="&gt;&gt;tabPage_Genernal_Main.Type" xml:space="preserve">
     <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tp_mouse_action.Parent" xml:space="preserve">
-    <value>tc_Mouse</value>
+  <data name="&gt;&gt;tabPage_Genernal_Main.Parent" xml:space="preserve">
+    <value>tab_General</value>
   </data>
-  <data name="&gt;&gt;tp_mouse_action.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tabPage_Genernal_Main.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="tc_Mouse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 26</value>
-  </data>
-  <data name="tc_Mouse.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tc_Mouse.Size" type="System.Drawing.Size, System.Drawing">
-    <value>494, 204</value>
-  </data>
-  <data name="tc_Mouse.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tc_Mouse.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;tc_Mouse.Name" xml:space="preserve">
-    <value>tc_Mouse</value>
-  </data>
-  <data name="&gt;&gt;tc_Mouse.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tc_Mouse.Parent" xml:space="preserve">
-    <value>gb_Mouse</value>
-  </data>
-  <data name="&gt;&gt;tc_Mouse.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tv_mouse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 26</value>
-  </data>
-  <data name="tv_mouse.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tv_mouse.Nodes" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAEZTeXN0ZW0uV2luZG93cy5Gb3JtcywgQ3VsdHVyZT1uZXV0cmFs
-        LCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMu
-        VHJlZU5vZGULAAAABFRleHQLVG9vbFRpcFRleHQETmFtZQlJc0NoZWNrZWQKSW1hZ2VJbmRleAhJbWFn
-        ZUtleRJTZWxlY3RlZEltYWdlSW5kZXgQU2VsZWN0ZWRJbWFnZUtleQpDaGlsZENvdW50CWNoaWxkcmVu
-        MAljaGlsZHJlbjEBAQEAAAEAAQAEBAEICAgdU3lzdGVtLldpbmRvd3MuRm9ybXMuVHJlZU5vZGUCAAAA
-        HVN5c3RlbS5XaW5kb3dzLkZvcm1zLlRyZWVOb2RlAgAAAAIAAAAGAwAAAAhNYWluVmlldwYEAAAAAAYF
-        AAAAE21vdXNlX3Jvb3RfbWFpbnZpZXcA/////wkEAAAA/////wkEAAAAAgAAAAkHAAAACQgAAAAFBwAA
-        AB1TeXN0ZW0uV2luZG93cy5Gb3Jtcy5UcmVlTm9kZQwAAAAEVGV4dAtUb29sVGlwVGV4dAROYW1lCUlz
-        Q2hlY2tlZApJbWFnZUluZGV4CEltYWdlS2V5ElNlbGVjdGVkSW1hZ2VJbmRleBBTZWxlY3RlZEltYWdl
-        S2V5CkNoaWxkQ291bnQJY2hpbGRyZW4wCWNoaWxkcmVuMQljaGlsZHJlbjIBAQEAAAEAAQAEBAQBCAgI
-        HVN5c3RlbS5XaW5kb3dzLkZvcm1zLlRyZWVOb2RlAgAAAB1TeXN0ZW0uV2luZG93cy5Gb3Jtcy5UcmVl
-        Tm9kZQIAAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMuVHJlZU5vZGUCAAAAAgAAAAYJAAAAB0Rlc2t0b3AJ
-        BAAAAAYLAAAAFG1vdXNlX3BhcmVudF9kZXNrdG9wAP////8JBAAAAP////8JBAAAAAMAAAAJDQAAAAkO
-        AAAACQ8AAAAFCAAAAB1TeXN0ZW0uV2luZG93cy5Gb3Jtcy5UcmVlTm9kZQwAAAAEVGV4dAtUb29sVGlw
-        VGV4dAROYW1lCUlzQ2hlY2tlZApJbWFnZUluZGV4CEltYWdlS2V5ElNlbGVjdGVkSW1hZ2VJbmRleBBT
-        ZWxlY3RlZEltYWdlS2V5CkNoaWxkQ291bnQJY2hpbGRyZW4wCWNoaWxkcmVuMQljaGlsZHJlbjIBAQEA
-        AAEAAQAEBAQBCAgIHVN5c3RlbS5XaW5kb3dzLkZvcm1zLlRyZWVOb2RlAgAAAB1TeXN0ZW0uV2luZG93
-        cy5Gb3Jtcy5UcmVlTm9kZQIAAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMuVHJlZU5vZGUCAAAAAgAAAAYQ
-        AAAABldpbmRvdwkEAAAABhIAAAATbW91c2VfcGFyZW50X3dpbmRvdwD/////CQQAAAD/////CQQAAAAD
-        AAAACRQAAAAJFQAAAAkWAAAABQ0AAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMuVHJlZU5vZGUJAAAABFRl
-        eHQLVG9vbFRpcFRleHQETmFtZQlJc0NoZWNrZWQKSW1hZ2VJbmRleAhJbWFnZUtleRJTZWxlY3RlZElt
-        YWdlSW5kZXgQU2VsZWN0ZWRJbWFnZUtleQpDaGlsZENvdW50AQEBAAABAAEAAQgICAIAAAAGFwAAAAlM
-        ZWZ0Q2xpY2sJBAAAAAYZAAAADm1vdXNlX25vZGVfZF9sAP////8JBAAAAP////8JBAAAAAAAAAAFDgAA
-        AB1TeXN0ZW0uV2luZG93cy5Gb3Jtcy5UcmVlTm9kZQkAAAAEVGV4dAtUb29sVGlwVGV4dAROYW1lCUlz
-        Q2hlY2tlZApJbWFnZUluZGV4CEltYWdlS2V5ElNlbGVjdGVkSW1hZ2VJbmRleBBTZWxlY3RlZEltYWdl
-        S2V5CkNoaWxkQ291bnQBAQEAAAEAAQABCAgIAgAAAAYbAAAAC01pZGRsZUNsaWNrCQQAAAAGHQAAAA5t
-        b3VzZV9ub2RlX2RfbQD/////CQQAAAD/////CQQAAAAAAAAABQ8AAAAdU3lzdGVtLldpbmRvd3MuRm9y
-        bXMuVHJlZU5vZGUJAAAABFRleHQLVG9vbFRpcFRleHQETmFtZQlJc0NoZWNrZWQKSW1hZ2VJbmRleAhJ
-        bWFnZUtleRJTZWxlY3RlZEltYWdlSW5kZXgQU2VsZWN0ZWRJbWFnZUtleQpDaGlsZENvdW50AQEBAAAB
-        AAEAAQgICAIAAAAGHwAAAApSaWdodENsaWNrCQQAAAAGIQAAAA5tb3VzZV9ub2RlX2RfcgD/////CQQA
-        AAD/////CQQAAAAAAAAABRQAAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMuVHJlZU5vZGUJAAAABFRleHQL
-        VG9vbFRpcFRleHQETmFtZQlJc0NoZWNrZWQKSW1hZ2VJbmRleAhJbWFnZUtleRJTZWxlY3RlZEltYWdl
-        SW5kZXgQU2VsZWN0ZWRJbWFnZUtleQpDaGlsZENvdW50AQEBAAABAAEAAQgICAIAAAAGIwAAAAlMZWZ0
-        Q2xpY2sJBAAAAAYlAAAADm1vdXNlX25vZGVfd19sAP////8JBAAAAP////8JBAAAAAAAAAAFFQAAAB1T
-        eXN0ZW0uV2luZG93cy5Gb3Jtcy5UcmVlTm9kZQkAAAAEVGV4dAtUb29sVGlwVGV4dAROYW1lCUlzQ2hl
-        Y2tlZApJbWFnZUluZGV4CEltYWdlS2V5ElNlbGVjdGVkSW1hZ2VJbmRleBBTZWxlY3RlZEltYWdlS2V5
-        CkNoaWxkQ291bnQBAQEAAAEAAQABCAgIAgAAAAYnAAAAC01pZGRsZUNsaWNrCQQAAAAGKQAAAA5tb3Vz
-        ZV9ub2RlX3dfbQD/////CQQAAAD/////CQQAAAAAAAAABRYAAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMu
-        VHJlZU5vZGUJAAAABFRleHQLVG9vbFRpcFRleHQETmFtZQlJc0NoZWNrZWQKSW1hZ2VJbmRleAhJbWFn
-        ZUtleRJTZWxlY3RlZEltYWdlSW5kZXgQU2VsZWN0ZWRJbWFnZUtleQpDaGlsZENvdW50AQEBAAABAAEA
-        AQgICAIAAAAGKwAAAApSaWdodENsaWNrCQQAAAAGLQAAAA5tb3VzZV9ub2RlX3dfcgD/////CQQAAAD/
-        ////CQQAAAAAAAAACw==
-</value>
-  </data>
-  <data name="tv_mouse.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 205</value>
-  </data>
-  <data name="tv_mouse.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tv_mouse.Name" xml:space="preserve">
-    <value>tv_mouse</value>
-  </data>
-  <data name="&gt;&gt;tv_mouse.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tv_mouse.Parent" xml:space="preserve">
-    <value>gb_Mouse</value>
-  </data>
-  <data name="&gt;&gt;tv_mouse.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="gb_Mouse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 630</value>
-  </data>
-  <data name="gb_Mouse.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="gb_Mouse.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="gb_Mouse.Size" type="System.Drawing.Size, System.Drawing">
-    <value>778, 338</value>
-  </data>
-  <data name="gb_Mouse.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="gb_Mouse.Text" xml:space="preserve">
-    <value>Mouse</value>
-  </data>
-  <data name="&gt;&gt;gb_Mouse.Name" xml:space="preserve">
-    <value>gb_Mouse</value>
-  </data>
-  <data name="&gt;&gt;gb_Mouse.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gb_Mouse.Parent" xml:space="preserve">
-    <value>panel_General</value>
-  </data>
-  <data name="&gt;&gt;gb_Mouse.ZOrder" xml:space="preserve">
-    <value>3</value>
   </data>
   <data name="btn_hk_ClearAndSave.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1589,7 +1402,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="tp_hk_main.Size" type="System.Drawing.Size, System.Drawing">
-    <value>322, 307</value>
+    <value>326, 461</value>
   </data>
   <data name="tp_hk_main.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1649,7 +1462,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="tp_hk_extra.Size" type="System.Drawing.Size, System.Drawing">
-    <value>322, 307</value>
+    <value>326, 461</value>
   </data>
   <data name="tp_hk_extra.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1670,13 +1483,13 @@
     <value>1</value>
   </data>
   <data name="tc_Keyboard.Location" type="System.Drawing.Point, System.Drawing">
-    <value>265, 26</value>
+    <value>246, 15</value>
   </data>
   <data name="tc_Keyboard.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="tc_Keyboard.Size" type="System.Drawing.Size, System.Drawing">
-    <value>330, 337</value>
+    <value>334, 491</value>
   </data>
   <data name="tc_Keyboard.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1691,13 +1504,13 @@
     <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tc_Keyboard.Parent" xml:space="preserve">
-    <value>gb_Hotkey</value>
+    <value>tabPage_Genernal_Keyboard</value>
   </data>
   <data name="&gt;&gt;tc_Keyboard.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="tv_keyboard.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 26</value>
+    <value>10, 15</value>
   </data>
   <data name="tv_keyboard.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -1800,7 +1613,7 @@
 </value>
   </data>
   <data name="tv_keyboard.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 338</value>
+    <value>232, 491</value>
   </data>
   <data name="tv_keyboard.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1812,187 +1625,383 @@
     <value>System.Windows.Forms.TreeView, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tv_keyboard.Parent" xml:space="preserve">
-    <value>gb_Hotkey</value>
+    <value>tabPage_Genernal_Keyboard</value>
   </data>
   <data name="&gt;&gt;tv_keyboard.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="gb_Hotkey.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 242</value>
+  <data name="tabPage_Genernal_Keyboard.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
   </data>
-  <data name="gb_Hotkey.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+  <data name="tabPage_Genernal_Keyboard.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
-  <data name="gb_Hotkey.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>19, 7, 2, 14</value>
+  <data name="tabPage_Genernal_Keyboard.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1145, 663</value>
   </data>
-  <data name="gb_Hotkey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>778, 379</value>
-  </data>
-  <data name="gb_Hotkey.TabIndex" type="System.Int32, mscorlib">
+  <data name="tabPage_Genernal_Keyboard.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="gb_Hotkey.Text" xml:space="preserve">
+  <data name="tabPage_Genernal_Keyboard.Text" xml:space="preserve">
     <value>Keyboard</value>
   </data>
-  <data name="&gt;&gt;gb_Hotkey.Name" xml:space="preserve">
-    <value>gb_Hotkey</value>
+  <data name="&gt;&gt;tabPage_Genernal_Keyboard.Name" xml:space="preserve">
+    <value>tabPage_Genernal_Keyboard</value>
   </data>
-  <data name="&gt;&gt;gb_Hotkey.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;tabPage_Genernal_Keyboard.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gb_Hotkey.Parent" xml:space="preserve">
-    <value>panel_General</value>
+  <data name="&gt;&gt;tabPage_Genernal_Keyboard.Parent" xml:space="preserve">
+    <value>tab_General</value>
   </data>
-  <data name="&gt;&gt;gb_Hotkey.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="lb_nav_circle_h_type.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lb_nav_circle_h_type.Location" type="System.Drawing.Point, System.Drawing">
-    <value>241, 37</value>
-  </data>
-  <data name="lb_nav_circle_h_type.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="lb_nav_circle_h_type.Size" type="System.Drawing.Size, System.Drawing">
-    <value>220, 17</value>
-  </data>
-  <data name="lb_nav_circle_h_type.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="lb_nav_circle_h_type.Text" xml:space="preserve">
-    <value>Right end of row joins to left end of:</value>
-  </data>
-  <data name="&gt;&gt;lb_nav_circle_h_type.Name" xml:space="preserve">
-    <value>lb_nav_circle_h_type</value>
-  </data>
-  <data name="&gt;&gt;lb_nav_circle_h_type.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lb_nav_circle_h_type.Parent" xml:space="preserve">
-    <value>gb_nav</value>
-  </data>
-  <data name="&gt;&gt;lb_nav_circle_h_type.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="cb_nav_circle_h_type.Location" type="System.Drawing.Point, System.Drawing">
-    <value>472, 34</value>
-  </data>
-  <data name="cb_nav_circle_h_type.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cb_nav_circle_h_type.Size" type="System.Drawing.Size, System.Drawing">
-    <value>120, 25</value>
-  </data>
-  <data name="cb_nav_circle_h_type.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;cb_nav_circle_h_type.Name" xml:space="preserve">
-    <value>cb_nav_circle_h_type</value>
-  </data>
-  <data name="&gt;&gt;cb_nav_circle_h_type.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cb_nav_circle_h_type.Parent" xml:space="preserve">
-    <value>gb_nav</value>
-  </data>
-  <data name="&gt;&gt;cb_nav_circle_h_type.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tabPage_Genernal_Keyboard.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="cb_nav_circle_v.AutoSize" type="System.Boolean, mscorlib">
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cb_nav_circle_v.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cb_nav_circle_v.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 70</value>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>121, 457</value>
   </data>
-  <data name="cb_nav_circle_v.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>413, 17</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop2.Text" xml:space="preserve">
+    <value>Scroll Down =&gt; Go Right                 SHIFT+Scroll Down =&gt; Go Down</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.Name" xml:space="preserve">
+    <value>lb_MouseOnTaskbarSwitchDesktop2</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.Parent" xml:space="preserve">
+    <value>tabPage_Genernal_Mouse</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tv_mouse.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 15</value>
+  </data>
+  <data name="tv_mouse.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <data name="cb_nav_circle_v.Size" type="System.Drawing.Size, System.Drawing">
-    <value>226, 21</value>
+  <data name="tv_mouse.Nodes" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAEZTeXN0ZW0uV2luZG93cy5Gb3JtcywgQ3VsdHVyZT1uZXV0cmFs
+        LCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMu
+        VHJlZU5vZGULAAAABFRleHQLVG9vbFRpcFRleHQETmFtZQlJc0NoZWNrZWQKSW1hZ2VJbmRleAhJbWFn
+        ZUtleRJTZWxlY3RlZEltYWdlSW5kZXgQU2VsZWN0ZWRJbWFnZUtleQpDaGlsZENvdW50CWNoaWxkcmVu
+        MAljaGlsZHJlbjEBAQEAAAEAAQAEBAEICAgdU3lzdGVtLldpbmRvd3MuRm9ybXMuVHJlZU5vZGUCAAAA
+        HVN5c3RlbS5XaW5kb3dzLkZvcm1zLlRyZWVOb2RlAgAAAAIAAAAGAwAAAAhNYWluVmlldwYEAAAAAAYF
+        AAAAE21vdXNlX3Jvb3RfbWFpbnZpZXcA/////wkEAAAA/////wkEAAAAAgAAAAkHAAAACQgAAAAFBwAA
+        AB1TeXN0ZW0uV2luZG93cy5Gb3Jtcy5UcmVlTm9kZQwAAAAEVGV4dAtUb29sVGlwVGV4dAROYW1lCUlz
+        Q2hlY2tlZApJbWFnZUluZGV4CEltYWdlS2V5ElNlbGVjdGVkSW1hZ2VJbmRleBBTZWxlY3RlZEltYWdl
+        S2V5CkNoaWxkQ291bnQJY2hpbGRyZW4wCWNoaWxkcmVuMQljaGlsZHJlbjIBAQEAAAEAAQAEBAQBCAgI
+        HVN5c3RlbS5XaW5kb3dzLkZvcm1zLlRyZWVOb2RlAgAAAB1TeXN0ZW0uV2luZG93cy5Gb3Jtcy5UcmVl
+        Tm9kZQIAAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMuVHJlZU5vZGUCAAAAAgAAAAYJAAAAB0Rlc2t0b3AJ
+        BAAAAAYLAAAAFG1vdXNlX3BhcmVudF9kZXNrdG9wAP////8JBAAAAP////8JBAAAAAMAAAAJDQAAAAkO
+        AAAACQ8AAAAFCAAAAB1TeXN0ZW0uV2luZG93cy5Gb3Jtcy5UcmVlTm9kZQwAAAAEVGV4dAtUb29sVGlw
+        VGV4dAROYW1lCUlzQ2hlY2tlZApJbWFnZUluZGV4CEltYWdlS2V5ElNlbGVjdGVkSW1hZ2VJbmRleBBT
+        ZWxlY3RlZEltYWdlS2V5CkNoaWxkQ291bnQJY2hpbGRyZW4wCWNoaWxkcmVuMQljaGlsZHJlbjIBAQEA
+        AAEAAQAEBAQBCAgIHVN5c3RlbS5XaW5kb3dzLkZvcm1zLlRyZWVOb2RlAgAAAB1TeXN0ZW0uV2luZG93
+        cy5Gb3Jtcy5UcmVlTm9kZQIAAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMuVHJlZU5vZGUCAAAAAgAAAAYQ
+        AAAABldpbmRvdwkEAAAABhIAAAATbW91c2VfcGFyZW50X3dpbmRvdwD/////CQQAAAD/////CQQAAAAD
+        AAAACRQAAAAJFQAAAAkWAAAABQ0AAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMuVHJlZU5vZGUJAAAABFRl
+        eHQLVG9vbFRpcFRleHQETmFtZQlJc0NoZWNrZWQKSW1hZ2VJbmRleAhJbWFnZUtleRJTZWxlY3RlZElt
+        YWdlSW5kZXgQU2VsZWN0ZWRJbWFnZUtleQpDaGlsZENvdW50AQEBAAABAAEAAQgICAIAAAAGFwAAAAlM
+        ZWZ0Q2xpY2sJBAAAAAYZAAAADm1vdXNlX25vZGVfZF9sAP////8JBAAAAP////8JBAAAAAAAAAAFDgAA
+        AB1TeXN0ZW0uV2luZG93cy5Gb3Jtcy5UcmVlTm9kZQkAAAAEVGV4dAtUb29sVGlwVGV4dAROYW1lCUlz
+        Q2hlY2tlZApJbWFnZUluZGV4CEltYWdlS2V5ElNlbGVjdGVkSW1hZ2VJbmRleBBTZWxlY3RlZEltYWdl
+        S2V5CkNoaWxkQ291bnQBAQEAAAEAAQABCAgIAgAAAAYbAAAAC01pZGRsZUNsaWNrCQQAAAAGHQAAAA5t
+        b3VzZV9ub2RlX2RfbQD/////CQQAAAD/////CQQAAAAAAAAABQ8AAAAdU3lzdGVtLldpbmRvd3MuRm9y
+        bXMuVHJlZU5vZGUJAAAABFRleHQLVG9vbFRpcFRleHQETmFtZQlJc0NoZWNrZWQKSW1hZ2VJbmRleAhJ
+        bWFnZUtleRJTZWxlY3RlZEltYWdlSW5kZXgQU2VsZWN0ZWRJbWFnZUtleQpDaGlsZENvdW50AQEBAAAB
+        AAEAAQgICAIAAAAGHwAAAApSaWdodENsaWNrCQQAAAAGIQAAAA5tb3VzZV9ub2RlX2RfcgD/////CQQA
+        AAD/////CQQAAAAAAAAABRQAAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMuVHJlZU5vZGUJAAAABFRleHQL
+        VG9vbFRpcFRleHQETmFtZQlJc0NoZWNrZWQKSW1hZ2VJbmRleAhJbWFnZUtleRJTZWxlY3RlZEltYWdl
+        SW5kZXgQU2VsZWN0ZWRJbWFnZUtleQpDaGlsZENvdW50AQEBAAABAAEAAQgICAIAAAAGIwAAAAlMZWZ0
+        Q2xpY2sJBAAAAAYlAAAADm1vdXNlX25vZGVfd19sAP////8JBAAAAP////8JBAAAAAAAAAAFFQAAAB1T
+        eXN0ZW0uV2luZG93cy5Gb3Jtcy5UcmVlTm9kZQkAAAAEVGV4dAtUb29sVGlwVGV4dAROYW1lCUlzQ2hl
+        Y2tlZApJbWFnZUluZGV4CEltYWdlS2V5ElNlbGVjdGVkSW1hZ2VJbmRleBBTZWxlY3RlZEltYWdlS2V5
+        CkNoaWxkQ291bnQBAQEAAAEAAQABCAgIAgAAAAYnAAAAC01pZGRsZUNsaWNrCQQAAAAGKQAAAA5tb3Vz
+        ZV9ub2RlX3dfbQD/////CQQAAAD/////CQQAAAAAAAAABRYAAAAdU3lzdGVtLldpbmRvd3MuRm9ybXMu
+        VHJlZU5vZGUJAAAABFRleHQLVG9vbFRpcFRleHQETmFtZQlJc0NoZWNrZWQKSW1hZ2VJbmRleAhJbWFn
+        ZUtleRJTZWxlY3RlZEltYWdlSW5kZXgQU2VsZWN0ZWRJbWFnZUtleQpDaGlsZENvdW50AQEBAAABAAEA
+        AQgICAIAAAAGKwAAAApSaWdodENsaWNrCQQAAAAGLQAAAA5tb3VzZV9ub2RlX3dfcgD/////CQQAAAD/
+        ////CQQAAAAAAAAACw==
+</value>
   </data>
-  <data name="cb_nav_circle_v.TabIndex" type="System.Int32, mscorlib">
+  <data name="tv_mouse.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 380</value>
+  </data>
+  <data name="tv_mouse.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tv_mouse.Name" xml:space="preserve">
+    <value>tv_mouse</value>
+  </data>
+  <data name="&gt;&gt;tv_mouse.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tv_mouse.Parent" xml:space="preserve">
+    <value>tabPage_Genernal_Mouse</value>
+  </data>
+  <data name="&gt;&gt;tv_mouse.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="cb_nav_circle_v.Text" xml:space="preserve">
-    <value>Circulate vertically. (same col only)</value>
-  </data>
-  <data name="&gt;&gt;cb_nav_circle_v.Name" xml:space="preserve">
-    <value>cb_nav_circle_v</value>
-  </data>
-  <data name="&gt;&gt;cb_nav_circle_v.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cb_nav_circle_v.Parent" xml:space="preserve">
-    <value>gb_nav</value>
-  </data>
-  <data name="&gt;&gt;cb_nav_circle_v.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="cb_nav_circle_h.AutoSize" type="System.Boolean, mscorlib">
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cb_nav_circle_h.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 36</value>
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>121, 440</value>
   </data>
-  <data name="cb_nav_circle_h.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>387, 17</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lb_MouseOnTaskbarSwitchDesktop1.Text" xml:space="preserve">
+    <value>Scroll UP =&gt; Go Left                         SHIFT+Scroll Up =&gt; Go Up</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.Name" xml:space="preserve">
+    <value>lb_MouseOnTaskbarSwitchDesktop1</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.Parent" xml:space="preserve">
+    <value>tabPage_Genernal_Mouse</value>
+  </data>
+  <data name="&gt;&gt;lb_MouseOnTaskbarSwitchDesktop1.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="btn_mouse_save.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 81</value>
+  </data>
+  <data name="btn_mouse_save.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <data name="cb_nav_circle_h.Size" type="System.Drawing.Size, System.Drawing">
-    <value>132, 21</value>
+  <data name="btn_mouse_save.Size" type="System.Drawing.Size, System.Drawing">
+    <value>463, 35</value>
   </data>
-  <data name="cb_nav_circle_h.TabIndex" type="System.Int32, mscorlib">
+  <data name="btn_mouse_save.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="btn_mouse_save.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="&gt;&gt;btn_mouse_save.Name" xml:space="preserve">
+    <value>btn_mouse_save</value>
+  </data>
+  <data name="&gt;&gt;btn_mouse_save.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btn_mouse_save.Parent" xml:space="preserve">
+    <value>tp_mouse_action</value>
+  </data>
+  <data name="&gt;&gt;btn_mouse_save.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="cb_nav_circle_h.Text" xml:space="preserve">
-    <value>Enable circulation.</value>
+  <data name="lb_mouse_action.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="&gt;&gt;cb_nav_circle_h.Name" xml:space="preserve">
-    <value>cb_nav_circle_h</value>
+  <data name="lb_mouse_action.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
   </data>
-  <data name="&gt;&gt;cb_nav_circle_h.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="lb_mouse_action.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="&gt;&gt;cb_nav_circle_h.Parent" xml:space="preserve">
-    <value>gb_nav</value>
+  <data name="lb_mouse_action.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 18</value>
   </data>
-  <data name="&gt;&gt;cb_nav_circle_h.ZOrder" xml:space="preserve">
+  <data name="lb_mouse_action.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="lb_mouse_action.Size" type="System.Drawing.Size, System.Drawing">
+    <value>127, 17</value>
+  </data>
+  <data name="lb_mouse_action.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="lb_mouse_action.Text" xml:space="preserve">
+    <value>LB_MOUSE_ACTION</value>
+  </data>
+  <data name="&gt;&gt;lb_mouse_action.Name" xml:space="preserve">
+    <value>lb_mouse_action</value>
+  </data>
+  <data name="&gt;&gt;lb_mouse_action.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lb_mouse_action.Parent" xml:space="preserve">
+    <value>tp_mouse_action</value>
+  </data>
+  <data name="&gt;&gt;lb_mouse_action.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cb_mouse_func.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 46</value>
+  </data>
+  <data name="cb_mouse_func.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_mouse_func.Size" type="System.Drawing.Size, System.Drawing">
+    <value>464, 25</value>
+  </data>
+  <data name="cb_mouse_func.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;cb_mouse_func.Name" xml:space="preserve">
+    <value>cb_mouse_func</value>
+  </data>
+  <data name="&gt;&gt;cb_mouse_func.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cb_mouse_func.Parent" xml:space="preserve">
+    <value>tp_mouse_action</value>
+  </data>
+  <data name="&gt;&gt;cb_mouse_func.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tp_mouse_action.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tp_mouse_action.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="tp_mouse_action.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="tp_mouse_action.Size" type="System.Drawing.Size, System.Drawing">
+    <value>486, 350</value>
+  </data>
+  <data name="tp_mouse_action.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tp_mouse_action.Text" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="&gt;&gt;tp_mouse_action.Name" xml:space="preserve">
+    <value>tp_mouse_action</value>
+  </data>
+  <data name="&gt;&gt;tp_mouse_action.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tp_mouse_action.Parent" xml:space="preserve">
+    <value>tc_Mouse</value>
+  </data>
+  <data name="&gt;&gt;tp_mouse_action.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tc_Mouse.Location" type="System.Drawing.Point, System.Drawing">
+    <value>246, 15</value>
+  </data>
+  <data name="tc_Mouse.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="tc_Mouse.Size" type="System.Drawing.Size, System.Drawing">
+    <value>494, 380</value>
+  </data>
+  <data name="tc_Mouse.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tc_Mouse.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;tc_Mouse.Name" xml:space="preserve">
+    <value>tc_Mouse</value>
+  </data>
+  <data name="&gt;&gt;tc_Mouse.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tc_Mouse.Parent" xml:space="preserve">
+    <value>tabPage_Genernal_Mouse</value>
+  </data>
+  <data name="&gt;&gt;tc_Mouse.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="gb_nav.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 118</value>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="gb_nav.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="chb_MouseOnTaskbarSwitchDesktop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 418</value>
+  </data>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <data name="gb_nav.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>498, 20</value>
   </data>
-  <data name="gb_nav.Size" type="System.Drawing.Size, System.Drawing">
-    <value>778, 114</value>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="gb_nav.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="chb_MouseOnTaskbarSwitchDesktop.Text" xml:space="preserve">
+    <value>When mouse on Taskbar, Use wheel switch virtual desktop.</value>
   </data>
-  <data name="gb_nav.Text" xml:space="preserve">
-    <value>Navigation</value>
+  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.Name" xml:space="preserve">
+    <value>chb_MouseOnTaskbarSwitchDesktop</value>
   </data>
-  <data name="&gt;&gt;gb_nav.Name" xml:space="preserve">
-    <value>gb_nav</value>
+  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gb_nav.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.Parent" xml:space="preserve">
+    <value>tabPage_Genernal_Mouse</value>
   </data>
-  <data name="&gt;&gt;gb_nav.Parent" xml:space="preserve">
+  <data name="&gt;&gt;chb_MouseOnTaskbarSwitchDesktop.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="tabPage_Genernal_Mouse.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tabPage_Genernal_Mouse.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1145, 663</value>
+  </data>
+  <data name="tabPage_Genernal_Mouse.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tabPage_Genernal_Mouse.Text" xml:space="preserve">
+    <value>Mouse</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Genernal_Mouse.Name" xml:space="preserve">
+    <value>tabPage_Genernal_Mouse</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Genernal_Mouse.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Genernal_Mouse.Parent" xml:space="preserve">
+    <value>tab_General</value>
+  </data>
+  <data name="&gt;&gt;tabPage_Genernal_Mouse.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tab_General.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 14</value>
+  </data>
+  <data name="tab_General.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1153, 693</value>
+  </data>
+  <data name="tab_General.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;tab_General.Name" xml:space="preserve">
+    <value>tab_General</value>
+  </data>
+  <data name="&gt;&gt;tab_General.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tab_General.Parent" xml:space="preserve">
     <value>panel_General</value>
   </data>
-  <data name="&gt;&gt;gb_nav.ZOrder" xml:space="preserve">
-    <value>5</value>
+  <data name="&gt;&gt;tab_General.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="panel_General.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

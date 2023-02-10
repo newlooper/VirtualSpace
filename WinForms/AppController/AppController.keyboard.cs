@@ -189,8 +189,7 @@ namespace VirtualSpace
 
         private void KeyboardTopNodeExpand()
         {
-            tv_keyboard.Nodes[0].Expand();
-            tv_keyboard.Nodes[1].Expand();
+            tv_keyboard.ExpandAll();
         }
     }
 }

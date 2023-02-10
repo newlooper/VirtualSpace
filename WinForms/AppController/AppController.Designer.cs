@@ -65,27 +65,23 @@ namespace VirtualSpace
             this.tbError = new System.Windows.Forms.TextBox();
             this.MT_General = new System.Windows.Forms.TabPage();
             this.panel_General = new System.Windows.Forms.Panel();
+            this.tab_General = new System.Windows.Forms.TabControl();
+            this.tabPage_Genernal_Main = new System.Windows.Forms.TabPage();
             this.gb_general = new System.Windows.Forms.GroupBox();
             this.llb_TaskScheduler = new System.Windows.Forms.LinkLabel();
             this.lb_RunOnStartup = new System.Windows.Forms.Label();
             this.chb_RunOnStartup = new System.Windows.Forms.CheckBox();
-            this.lb_dummy_Placeholder = new System.Windows.Forms.Label();
+            this.gb_nav = new System.Windows.Forms.GroupBox();
+            this.lb_nav_circle_h_type = new System.Windows.Forms.Label();
+            this.cb_nav_circle_h_type = new System.Windows.Forms.ComboBox();
+            this.cb_nav_circle_v = new System.Windows.Forms.CheckBox();
+            this.cb_nav_circle_h = new System.Windows.Forms.CheckBox();
             this.gb_Cluster = new System.Windows.Forms.GroupBox();
             this.chb_HideOnStart = new System.Windows.Forms.CheckBox();
             this.chb_showVDIndexOnTrayIcon = new System.Windows.Forms.CheckBox();
             this.chb_notify_vd_changed = new System.Windows.Forms.CheckBox();
             this.chb_HideMainViewIfItsShown = new System.Windows.Forms.CheckBox();
-            this.gb_Mouse = new System.Windows.Forms.GroupBox();
-            this.lb_MouseOnTaskbarSwitchDesktop2 = new System.Windows.Forms.Label();
-            this.lb_MouseOnTaskbarSwitchDesktop1 = new System.Windows.Forms.Label();
-            this.chb_MouseOnTaskbarSwitchDesktop = new System.Windows.Forms.CheckBox();
-            this.tc_Mouse = new System.Windows.Forms.TabControl();
-            this.tp_mouse_action = new System.Windows.Forms.TabPage();
-            this.btn_mouse_save = new System.Windows.Forms.Button();
-            this.lb_mouse_action = new System.Windows.Forms.Label();
-            this.cb_mouse_func = new System.Windows.Forms.ComboBox();
-            this.tv_mouse = new System.Windows.Forms.TreeView();
-            this.gb_Hotkey = new System.Windows.Forms.GroupBox();
+            this.tabPage_Genernal_Keyboard = new System.Windows.Forms.TabPage();
             this.tc_Keyboard = new System.Windows.Forms.TabControl();
             this.tp_hk_main = new System.Windows.Forms.TabPage();
             this.btn_hk_ClearAndSave = new System.Windows.Forms.Button();
@@ -100,11 +96,16 @@ namespace VirtualSpace
             this.tp_hk_extra = new System.Windows.Forms.TabPage();
             this.lb_hk_extra = new System.Windows.Forms.Label();
             this.tv_keyboard = new System.Windows.Forms.TreeView();
-            this.gb_nav = new System.Windows.Forms.GroupBox();
-            this.lb_nav_circle_h_type = new System.Windows.Forms.Label();
-            this.cb_nav_circle_h_type = new System.Windows.Forms.ComboBox();
-            this.cb_nav_circle_v = new System.Windows.Forms.CheckBox();
-            this.cb_nav_circle_h = new System.Windows.Forms.CheckBox();
+            this.tabPage_Genernal_Mouse = new System.Windows.Forms.TabPage();
+            this.lb_MouseOnTaskbarSwitchDesktop2 = new System.Windows.Forms.Label();
+            this.tv_mouse = new System.Windows.Forms.TreeView();
+            this.lb_MouseOnTaskbarSwitchDesktop1 = new System.Windows.Forms.Label();
+            this.tc_Mouse = new System.Windows.Forms.TabControl();
+            this.tp_mouse_action = new System.Windows.Forms.TabPage();
+            this.btn_mouse_save = new System.Windows.Forms.Button();
+            this.lb_mouse_action = new System.Windows.Forms.Label();
+            this.cb_mouse_func = new System.Windows.Forms.ComboBox();
+            this.chb_MouseOnTaskbarSwitchDesktop = new System.Windows.Forms.CheckBox();
             this.mainTabs = new System.Windows.Forms.TabControl();
             this.MT_UI = new System.Windows.Forms.TabPage();
             this.panel_UI = new System.Windows.Forms.Panel();
@@ -181,16 +182,18 @@ namespace VirtualSpace
             this.logTabError.SuspendLayout();
             this.MT_General.SuspendLayout();
             this.panel_General.SuspendLayout();
+            this.tab_General.SuspendLayout();
+            this.tabPage_Genernal_Main.SuspendLayout();
             this.gb_general.SuspendLayout();
+            this.gb_nav.SuspendLayout();
             this.gb_Cluster.SuspendLayout();
-            this.gb_Mouse.SuspendLayout();
-            this.tc_Mouse.SuspendLayout();
-            this.tp_mouse_action.SuspendLayout();
-            this.gb_Hotkey.SuspendLayout();
+            this.tabPage_Genernal_Keyboard.SuspendLayout();
             this.tc_Keyboard.SuspendLayout();
             this.tp_hk_main.SuspendLayout();
             this.tp_hk_extra.SuspendLayout();
-            this.gb_nav.SuspendLayout();
+            this.tabPage_Genernal_Mouse.SuspendLayout();
+            this.tc_Mouse.SuspendLayout();
+            this.tp_mouse_action.SuspendLayout();
             this.mainTabs.SuspendLayout();
             this.MT_UI.SuspendLayout();
             this.panel_UI.SuspendLayout();
@@ -381,13 +384,26 @@ namespace VirtualSpace
             // panel_General
             // 
             resources.ApplyResources(this.panel_General, "panel_General");
-            this.panel_General.Controls.Add(this.gb_general);
-            this.panel_General.Controls.Add(this.lb_dummy_Placeholder);
-            this.panel_General.Controls.Add(this.gb_Cluster);
-            this.panel_General.Controls.Add(this.gb_Mouse);
-            this.panel_General.Controls.Add(this.gb_Hotkey);
-            this.panel_General.Controls.Add(this.gb_nav);
+            this.panel_General.Controls.Add(this.tab_General);
             this.panel_General.Name = "panel_General";
+            // 
+            // tab_General
+            // 
+            this.tab_General.Controls.Add(this.tabPage_Genernal_Main);
+            this.tab_General.Controls.Add(this.tabPage_Genernal_Keyboard);
+            this.tab_General.Controls.Add(this.tabPage_Genernal_Mouse);
+            resources.ApplyResources(this.tab_General, "tab_General");
+            this.tab_General.Name = "tab_General";
+            this.tab_General.SelectedIndex = 0;
+            // 
+            // tabPage_Genernal_Main
+            // 
+            this.tabPage_Genernal_Main.Controls.Add(this.gb_general);
+            this.tabPage_Genernal_Main.Controls.Add(this.gb_nav);
+            this.tabPage_Genernal_Main.Controls.Add(this.gb_Cluster);
+            resources.ApplyResources(this.tabPage_Genernal_Main, "tabPage_Genernal_Main");
+            this.tabPage_Genernal_Main.Name = "tabPage_Genernal_Main";
+            this.tabPage_Genernal_Main.UseVisualStyleBackColor = true;
             // 
             // gb_general
             // 
@@ -418,10 +434,39 @@ namespace VirtualSpace
             this.chb_RunOnStartup.CheckedChanged += new System.EventHandler(this.chb_RunOnStartup_CheckedChanged);
             this.chb_RunOnStartup.VisibleChanged += new System.EventHandler(this.chb_RunOnStartup_VisibleChanged);
             // 
-            // lb_dummy_Placeholder
+            // gb_nav
             // 
-            resources.ApplyResources(this.lb_dummy_Placeholder, "lb_dummy_Placeholder");
-            this.lb_dummy_Placeholder.Name = "lb_dummy_Placeholder";
+            this.gb_nav.Controls.Add(this.lb_nav_circle_h_type);
+            this.gb_nav.Controls.Add(this.cb_nav_circle_h_type);
+            this.gb_nav.Controls.Add(this.cb_nav_circle_v);
+            this.gb_nav.Controls.Add(this.cb_nav_circle_h);
+            resources.ApplyResources(this.gb_nav, "gb_nav");
+            this.gb_nav.Name = "gb_nav";
+            this.gb_nav.TabStop = false;
+            // 
+            // lb_nav_circle_h_type
+            // 
+            resources.ApplyResources(this.lb_nav_circle_h_type, "lb_nav_circle_h_type");
+            this.lb_nav_circle_h_type.Name = "lb_nav_circle_h_type";
+            // 
+            // cb_nav_circle_h_type
+            // 
+            this.cb_nav_circle_h_type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_nav_circle_h_type.FormattingEnabled = true;
+            resources.ApplyResources(this.cb_nav_circle_h_type, "cb_nav_circle_h_type");
+            this.cb_nav_circle_h_type.Name = "cb_nav_circle_h_type";
+            // 
+            // cb_nav_circle_v
+            // 
+            resources.ApplyResources(this.cb_nav_circle_v, "cb_nav_circle_v");
+            this.cb_nav_circle_v.Name = "cb_nav_circle_v";
+            this.cb_nav_circle_v.UseVisualStyleBackColor = true;
+            // 
+            // cb_nav_circle_h
+            // 
+            resources.ApplyResources(this.cb_nav_circle_h, "cb_nav_circle_h");
+            this.cb_nav_circle_h.Name = "cb_nav_circle_h";
+            this.cb_nav_circle_h.UseVisualStyleBackColor = true;
             // 
             // gb_Cluster
             // 
@@ -457,83 +502,13 @@ namespace VirtualSpace
             this.chb_HideMainViewIfItsShown.Name = "chb_HideMainViewIfItsShown";
             this.chb_HideMainViewIfItsShown.UseVisualStyleBackColor = true;
             // 
-            // gb_Mouse
+            // tabPage_Genernal_Keyboard
             // 
-            this.gb_Mouse.Controls.Add(this.lb_MouseOnTaskbarSwitchDesktop2);
-            this.gb_Mouse.Controls.Add(this.lb_MouseOnTaskbarSwitchDesktop1);
-            this.gb_Mouse.Controls.Add(this.chb_MouseOnTaskbarSwitchDesktop);
-            this.gb_Mouse.Controls.Add(this.tc_Mouse);
-            this.gb_Mouse.Controls.Add(this.tv_mouse);
-            resources.ApplyResources(this.gb_Mouse, "gb_Mouse");
-            this.gb_Mouse.Name = "gb_Mouse";
-            this.gb_Mouse.TabStop = false;
-            // 
-            // lb_MouseOnTaskbarSwitchDesktop2
-            // 
-            resources.ApplyResources(this.lb_MouseOnTaskbarSwitchDesktop2, "lb_MouseOnTaskbarSwitchDesktop2");
-            this.lb_MouseOnTaskbarSwitchDesktop2.Name = "lb_MouseOnTaskbarSwitchDesktop2";
-            // 
-            // lb_MouseOnTaskbarSwitchDesktop1
-            // 
-            resources.ApplyResources(this.lb_MouseOnTaskbarSwitchDesktop1, "lb_MouseOnTaskbarSwitchDesktop1");
-            this.lb_MouseOnTaskbarSwitchDesktop1.Name = "lb_MouseOnTaskbarSwitchDesktop1";
-            // 
-            // chb_MouseOnTaskbarSwitchDesktop
-            // 
-            resources.ApplyResources(this.chb_MouseOnTaskbarSwitchDesktop, "chb_MouseOnTaskbarSwitchDesktop");
-            this.chb_MouseOnTaskbarSwitchDesktop.Name = "chb_MouseOnTaskbarSwitchDesktop";
-            this.chb_MouseOnTaskbarSwitchDesktop.UseVisualStyleBackColor = true;
-            // 
-            // tc_Mouse
-            // 
-            this.tc_Mouse.Controls.Add(this.tp_mouse_action);
-            resources.ApplyResources(this.tc_Mouse, "tc_Mouse");
-            this.tc_Mouse.Name = "tc_Mouse";
-            this.tc_Mouse.SelectedIndex = 0;
-            // 
-            // tp_mouse_action
-            // 
-            this.tp_mouse_action.Controls.Add(this.btn_mouse_save);
-            this.tp_mouse_action.Controls.Add(this.lb_mouse_action);
-            this.tp_mouse_action.Controls.Add(this.cb_mouse_func);
-            resources.ApplyResources(this.tp_mouse_action, "tp_mouse_action");
-            this.tp_mouse_action.Name = "tp_mouse_action";
-            this.tp_mouse_action.UseVisualStyleBackColor = true;
-            // 
-            // btn_mouse_save
-            // 
-            resources.ApplyResources(this.btn_mouse_save, "btn_mouse_save");
-            this.btn_mouse_save.Name = "btn_mouse_save";
-            this.btn_mouse_save.UseVisualStyleBackColor = true;
-            this.btn_mouse_save.Click += new System.EventHandler(this.btn_mouse_save_Click);
-            // 
-            // lb_mouse_action
-            // 
-            resources.ApplyResources(this.lb_mouse_action, "lb_mouse_action");
-            this.lb_mouse_action.Name = "lb_mouse_action";
-            // 
-            // cb_mouse_func
-            // 
-            this.cb_mouse_func.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_mouse_func.FormattingEnabled = true;
-            resources.ApplyResources(this.cb_mouse_func, "cb_mouse_func");
-            this.cb_mouse_func.Name = "cb_mouse_func";
-            // 
-            // tv_mouse
-            // 
-            resources.ApplyResources(this.tv_mouse, "tv_mouse");
-            this.tv_mouse.Name = "tv_mouse";
-            this.tv_mouse.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            ((System.Windows.Forms.TreeNode)(resources.GetObject("tv_mouse.Nodes")))});
-            this.tv_mouse.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_mouse_AfterSelect);
-            // 
-            // gb_Hotkey
-            // 
-            this.gb_Hotkey.Controls.Add(this.tc_Keyboard);
-            this.gb_Hotkey.Controls.Add(this.tv_keyboard);
-            resources.ApplyResources(this.gb_Hotkey, "gb_Hotkey");
-            this.gb_Hotkey.Name = "gb_Hotkey";
-            this.gb_Hotkey.TabStop = false;
+            this.tabPage_Genernal_Keyboard.Controls.Add(this.tc_Keyboard);
+            this.tabPage_Genernal_Keyboard.Controls.Add(this.tv_keyboard);
+            resources.ApplyResources(this.tabPage_Genernal_Keyboard, "tabPage_Genernal_Keyboard");
+            this.tabPage_Genernal_Keyboard.Name = "tabPage_Genernal_Keyboard";
+            this.tabPage_Genernal_Keyboard.UseVisualStyleBackColor = true;
             // 
             // tc_Keyboard
             // 
@@ -708,39 +683,75 @@ namespace VirtualSpace
             ((System.Windows.Forms.TreeNode)(resources.GetObject("tv_keyboard.Nodes1")))});
             this.tv_keyboard.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_keyboard_AfterSelect);
             // 
-            // gb_nav
+            // tabPage_Genernal_Mouse
             // 
-            this.gb_nav.Controls.Add(this.lb_nav_circle_h_type);
-            this.gb_nav.Controls.Add(this.cb_nav_circle_h_type);
-            this.gb_nav.Controls.Add(this.cb_nav_circle_v);
-            this.gb_nav.Controls.Add(this.cb_nav_circle_h);
-            resources.ApplyResources(this.gb_nav, "gb_nav");
-            this.gb_nav.Name = "gb_nav";
-            this.gb_nav.TabStop = false;
+            this.tabPage_Genernal_Mouse.Controls.Add(this.lb_MouseOnTaskbarSwitchDesktop2);
+            this.tabPage_Genernal_Mouse.Controls.Add(this.tv_mouse);
+            this.tabPage_Genernal_Mouse.Controls.Add(this.lb_MouseOnTaskbarSwitchDesktop1);
+            this.tabPage_Genernal_Mouse.Controls.Add(this.tc_Mouse);
+            this.tabPage_Genernal_Mouse.Controls.Add(this.chb_MouseOnTaskbarSwitchDesktop);
+            resources.ApplyResources(this.tabPage_Genernal_Mouse, "tabPage_Genernal_Mouse");
+            this.tabPage_Genernal_Mouse.Name = "tabPage_Genernal_Mouse";
+            this.tabPage_Genernal_Mouse.UseVisualStyleBackColor = true;
             // 
-            // lb_nav_circle_h_type
+            // lb_MouseOnTaskbarSwitchDesktop2
             // 
-            resources.ApplyResources(this.lb_nav_circle_h_type, "lb_nav_circle_h_type");
-            this.lb_nav_circle_h_type.Name = "lb_nav_circle_h_type";
+            resources.ApplyResources(this.lb_MouseOnTaskbarSwitchDesktop2, "lb_MouseOnTaskbarSwitchDesktop2");
+            this.lb_MouseOnTaskbarSwitchDesktop2.Name = "lb_MouseOnTaskbarSwitchDesktop2";
             // 
-            // cb_nav_circle_h_type
+            // tv_mouse
             // 
-            this.cb_nav_circle_h_type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_nav_circle_h_type.FormattingEnabled = true;
-            resources.ApplyResources(this.cb_nav_circle_h_type, "cb_nav_circle_h_type");
-            this.cb_nav_circle_h_type.Name = "cb_nav_circle_h_type";
+            resources.ApplyResources(this.tv_mouse, "tv_mouse");
+            this.tv_mouse.Name = "tv_mouse";
+            this.tv_mouse.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            ((System.Windows.Forms.TreeNode)(resources.GetObject("tv_mouse.Nodes")))});
+            this.tv_mouse.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_mouse_AfterSelect);
             // 
-            // cb_nav_circle_v
+            // lb_MouseOnTaskbarSwitchDesktop1
             // 
-            resources.ApplyResources(this.cb_nav_circle_v, "cb_nav_circle_v");
-            this.cb_nav_circle_v.Name = "cb_nav_circle_v";
-            this.cb_nav_circle_v.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.lb_MouseOnTaskbarSwitchDesktop1, "lb_MouseOnTaskbarSwitchDesktop1");
+            this.lb_MouseOnTaskbarSwitchDesktop1.Name = "lb_MouseOnTaskbarSwitchDesktop1";
             // 
-            // cb_nav_circle_h
+            // tc_Mouse
             // 
-            resources.ApplyResources(this.cb_nav_circle_h, "cb_nav_circle_h");
-            this.cb_nav_circle_h.Name = "cb_nav_circle_h";
-            this.cb_nav_circle_h.UseVisualStyleBackColor = true;
+            this.tc_Mouse.Controls.Add(this.tp_mouse_action);
+            resources.ApplyResources(this.tc_Mouse, "tc_Mouse");
+            this.tc_Mouse.Name = "tc_Mouse";
+            this.tc_Mouse.SelectedIndex = 0;
+            // 
+            // tp_mouse_action
+            // 
+            this.tp_mouse_action.Controls.Add(this.btn_mouse_save);
+            this.tp_mouse_action.Controls.Add(this.lb_mouse_action);
+            this.tp_mouse_action.Controls.Add(this.cb_mouse_func);
+            resources.ApplyResources(this.tp_mouse_action, "tp_mouse_action");
+            this.tp_mouse_action.Name = "tp_mouse_action";
+            this.tp_mouse_action.UseVisualStyleBackColor = true;
+            // 
+            // btn_mouse_save
+            // 
+            resources.ApplyResources(this.btn_mouse_save, "btn_mouse_save");
+            this.btn_mouse_save.Name = "btn_mouse_save";
+            this.btn_mouse_save.UseVisualStyleBackColor = true;
+            this.btn_mouse_save.Click += new System.EventHandler(this.btn_mouse_save_Click);
+            // 
+            // lb_mouse_action
+            // 
+            resources.ApplyResources(this.lb_mouse_action, "lb_mouse_action");
+            this.lb_mouse_action.Name = "lb_mouse_action";
+            // 
+            // cb_mouse_func
+            // 
+            this.cb_mouse_func.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_mouse_func.FormattingEnabled = true;
+            resources.ApplyResources(this.cb_mouse_func, "cb_mouse_func");
+            this.cb_mouse_func.Name = "cb_mouse_func";
+            // 
+            // chb_MouseOnTaskbarSwitchDesktop
+            // 
+            resources.ApplyResources(this.chb_MouseOnTaskbarSwitchDesktop, "chb_MouseOnTaskbarSwitchDesktop");
+            this.chb_MouseOnTaskbarSwitchDesktop.Name = "chb_MouseOnTaskbarSwitchDesktop";
+            this.chb_MouseOnTaskbarSwitchDesktop.UseVisualStyleBackColor = true;
             // 
             // mainTabs
             // 
@@ -1270,22 +1281,23 @@ namespace VirtualSpace
             this.logTabError.PerformLayout();
             this.MT_General.ResumeLayout(false);
             this.panel_General.ResumeLayout(false);
-            this.panel_General.PerformLayout();
+            this.tab_General.ResumeLayout(false);
+            this.tabPage_Genernal_Main.ResumeLayout(false);
             this.gb_general.ResumeLayout(false);
             this.gb_general.PerformLayout();
+            this.gb_nav.ResumeLayout(false);
+            this.gb_nav.PerformLayout();
             this.gb_Cluster.ResumeLayout(false);
-            this.gb_Mouse.ResumeLayout(false);
-            this.gb_Mouse.PerformLayout();
-            this.tc_Mouse.ResumeLayout(false);
-            this.tp_mouse_action.ResumeLayout(false);
-            this.tp_mouse_action.PerformLayout();
-            this.gb_Hotkey.ResumeLayout(false);
+            this.tabPage_Genernal_Keyboard.ResumeLayout(false);
             this.tc_Keyboard.ResumeLayout(false);
             this.tp_hk_main.ResumeLayout(false);
             this.tp_hk_main.PerformLayout();
             this.tp_hk_extra.ResumeLayout(false);
-            this.gb_nav.ResumeLayout(false);
-            this.gb_nav.PerformLayout();
+            this.tabPage_Genernal_Mouse.ResumeLayout(false);
+            this.tabPage_Genernal_Mouse.PerformLayout();
+            this.tc_Mouse.ResumeLayout(false);
+            this.tp_mouse_action.ResumeLayout(false);
+            this.tp_mouse_action.PerformLayout();
             this.mainTabs.ResumeLayout(false);
             this.MT_UI.ResumeLayout(false);
             this.panel_UI.ResumeLayout(false);
@@ -1404,8 +1416,6 @@ namespace VirtualSpace
         private System.Windows.Forms.Button btn_m0;
         private System.Windows.Forms.Panel panel_General;
         private System.Windows.Forms.GroupBox gb_Cluster;
-        private System.Windows.Forms.GroupBox gb_Mouse;
-        private System.Windows.Forms.GroupBox gb_Hotkey;
         private System.Windows.Forms.TreeView tv_keyboard;
         private System.Windows.Forms.TabControl tc_Keyboard;
         private System.Windows.Forms.TabPage tp_hk_main;
@@ -1419,7 +1429,6 @@ namespace VirtualSpace
         private System.Windows.Forms.Label lb_hk_func;
         private System.Windows.Forms.Label lb_hk_extra;
         private System.Windows.Forms.ToolStripMenuItem closeThisWindowToolStripMenuItem;
-        private System.Windows.Forms.Label lb_dummy_Placeholder;
         private System.Windows.Forms.TreeView tv_mouse;
         private System.Windows.Forms.TabControl tc_Mouse;
         private System.Windows.Forms.TabPage tp_mouse_action;
@@ -1447,5 +1456,9 @@ namespace VirtualSpace
         private System.Windows.Forms.CheckBox chb_MouseOnTaskbarSwitchDesktop;
         private System.Windows.Forms.Label lb_MouseOnTaskbarSwitchDesktop2;
         private System.Windows.Forms.Label lb_MouseOnTaskbarSwitchDesktop1;
+        private System.Windows.Forms.TabControl tab_General;
+        private System.Windows.Forms.TabPage tabPage_Genernal_Main;
+        private System.Windows.Forms.TabPage tabPage_Genernal_Keyboard;
+        private System.Windows.Forms.TabPage tabPage_Genernal_Mouse;
     }
 }

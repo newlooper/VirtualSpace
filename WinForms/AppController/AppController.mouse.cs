@@ -98,7 +98,7 @@ namespace VirtualSpace
 
         private void MouseTopNodeExpand()
         {
-            tv_mouse.Nodes[0].Expand();
+            tv_mouse.ExpandAll();
         }
     }
 }
