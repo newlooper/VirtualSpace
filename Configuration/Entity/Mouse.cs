@@ -12,7 +12,8 @@ namespace VirtualSpace.Config.Entity
 {
     public class Mouse
     {
-        private int  _dragSizeFactor;
+        private int  _dragSizeFactor             = 10;
+        private int  _taskbarVisibilityThreshold = 100;
         public  int  LeftClickOnCanvas                  { get; set; }
         public  int  RightClickOnCanvas                 { get; set; }
         public  int  MiddleClickOnCanvas                { get; set; }
@@ -22,6 +23,12 @@ namespace VirtualSpace.Config.Entity
         {
             get => _dragSizeFactor;
             set => _dragSizeFactor = value is < 1 or > 100 ? 10 : value;
+        }
+
+        public int TaskbarVisibilityThreshold
+        {
+            get => _taskbarVisibilityThreshold;
+            set => _taskbarVisibilityThreshold = value is < 100 or > 1000 ? 100 : value;
         }
     }
 }

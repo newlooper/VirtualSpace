@@ -159,13 +159,13 @@ namespace VirtualSpace
             var hTaskbar = User32.FindWindow( "Shell_TrayWnd", "" );
             if ( hTaskbar == IntPtr.Zero ) goto NEXT;
 
-            var exStyle = User32.GetWindowLong( hTaskbar, (int)GetWindowLongFields.GWL_EXSTYLE );
-            if ( User32.WS_EX_TOPMOST != ( exStyle & User32.WS_EX_TOPMOST ) ) goto NEXT;
-
             var info = (LowLevelMouseHook.MSLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LowLevelMouseHook.MSLLHOOKSTRUCT ) );
             var msg  = (int)wParam;
             if ( msg == LowLevelMouseHook.WM_MOUSEWHEEL )
             {
+                var zOrder = WindowTool.GetZOrderByHandle( hTaskbar );
+                if ( zOrder > Manager.CurrentProfile.Mouse.TaskbarVisibilityThreshold ) goto NEXT;
+
                 var rect = new RECT();
                 _ = User32.GetWindowRect( hTaskbar, ref rect );
                 if ( info.pt.X >= rect.Left && info.pt.Y > rect.Top )

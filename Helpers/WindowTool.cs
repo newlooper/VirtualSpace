@@ -80,5 +80,17 @@ namespace VirtualSpace.Helpers
 
             MoveWindowToScreen( hWnd, allScreens[index] );
         }
+
+        public static int GetZOrderByHandle( IntPtr hWnd )
+        {
+            var index = 0;
+            User32.EnumWindows( ( wnd, param ) =>
+            {
+                index++;
+                return hWnd != wnd;
+            }, 0 );
+
+            return index;
+        }
     }
 }

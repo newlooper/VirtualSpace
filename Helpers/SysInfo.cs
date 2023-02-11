@@ -59,6 +59,9 @@ namespace VirtualSpace.Helpers
         }
     }
 
+    /// <summary>
+    /// https://stackoverflow.com/questions/52875087/getting-device-friendly-name-incorrect-result
+    /// </summary>
     public static class ScreenInterrogatory
     {
         private const int ERROR_SUCCESS = 0;

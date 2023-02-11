@@ -43,7 +43,9 @@ namespace VirtualSpace.Config.Profiles
                 DragSizeFactor = 10,
                 LeftClickOnCanvas = 1,
                 RightClickOnCanvas = 0,
-                MiddleClickOnCanvas = 0
+                MiddleClickOnCanvas = 0,
+                UseWheelSwitchDesktopWhenOnTaskbar = false,
+                TaskbarVisibilityThreshold = 100
             };
             Navigation = new Navigation
             {
