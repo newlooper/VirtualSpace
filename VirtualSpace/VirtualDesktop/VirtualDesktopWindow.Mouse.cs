@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -33,18 +34,15 @@ namespace VirtualSpace.VirtualDesktop
             _dragBounds = new Rectangle(
                 new Point( _startPoint.X - dragSize.Width / 2, _startPoint.Y - dragSize.Height / 2 ),
                 dragSize );
-            foreach ( var window in _visibleWindows )
+            foreach ( var window in _visibleWindows.Where( window => window.Rect.Contains( e.Location ) ) )
             {
-                if ( window.Rect.Contains( e.Location ) )
-                {
-                    Logger.Debug( "SELECT.Win " + window.Title );
-                    _selectedWindow = window;
-                    break;
-                }
+                Logger.Debug( "SELECT.Win " + window.Title );
+                _selectedWindow = window;
+                break;
             }
         }
 
-        private bool IsOutBounds( Point location )
+        private static bool IsOutBounds( Point location )
         {
             return _dragBounds != Rectangle.Empty && !_dragBounds.Contains( location );
         }
@@ -56,44 +54,43 @@ namespace VirtualSpace.VirtualDesktop
                 _dragging = true;
             }
 
-            if ( _dragging )
+            if ( !_dragging ) return;
+
+            HoverOnDesktop( sender, e );
+
+            if ( _selectedWindow != null )
             {
-                HoverOnDesktop( sender, e );
-
-                if ( _selectedWindow != null )
+                if ( _dw == null )
                 {
-                    if ( _dw == null )
+                    _dw = DragWindow.CreateAndShow( _selectedWindow.Rect.Width, _selectedWindow.Rect.Height );
+
+                    var i = DwmApi.DwmRegisterThumbnail( _dw.Handle, _selectedWindow.Handle, out var thumb );
+                    if ( i == 0 )
                     {
-                        _dw = DragWindow.CreateAndShow( _selectedWindow.Rect.Width, _selectedWindow.Rect.Height );
-
-                        var i = DwmApi.DwmRegisterThumbnail( _dw.Handle, _selectedWindow.Handle, out var thumb );
-                        if ( i == 0 )
+                        var props = new DWM_THUMBNAIL_PROPERTIES
                         {
-                            var props = new DWM_THUMBNAIL_PROPERTIES
-                            {
-                                fVisible = true,
-                                dwFlags = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
-                                opacity = 255,
-                                rcDestination = new RECT( 0, 0, _dw.Width, _dw.Height )
-                            };
-                            _dw.Thumb = thumb;
-                            UpdateThumbnail( _dw.Thumb, props );
-                        }
-
-                        var dtp = _selectedWindow.DTP;
-                        dtp.opacity = VirtualDesktopManager.Ui.ThumbDragSourceOpacity;
-                        DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
+                            fVisible = true,
+                            dwFlags = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
+                            opacity = 255,
+                            rcDestination = new RECT( 0, 0, _dw.Width, _dw.Height )
+                        };
+                        _dw.Thumb = thumb;
+                        UpdateThumbnail( _dw.Thumb, props );
                     }
 
-                    _dw.Left = Cursor.Position.X - _dw.Width / 2;
-                    _dw.Top = Cursor.Position.Y - _dw.Height / 2;
+                    var dtp = _selectedWindow.DTP;
+                    dtp.opacity = VirtualDesktopManager.Ui.ThumbDragSourceOpacity;
+                    DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
                 }
-                else
-                {
-                    var vdw = sender as Form;
-                    vdw.Left = e.X + vdw.Left - _startPoint.X;
-                    vdw.Top = e.Y + vdw.Top - _startPoint.Y;
-                }
+
+                _dw.Left = Cursor.Position.X - _dw.Width / 2;
+                _dw.Top = Cursor.Position.Y - _dw.Height / 2;
+            }
+            else
+            {
+                var vdw = sender as Form;
+                vdw.Left = e.X + vdw.Left - _startPoint.X;
+                vdw.Top = e.Y + vdw.Top - _startPoint.Y;
             }
         }
 
@@ -113,8 +110,7 @@ namespace VirtualSpace.VirtualDesktop
 
                         if ( _hoverVdIndex == VdIndex ||
                              DesktopWrapper.IsWindowPinned( _selectedWindow.Handle ) ||
-                             DesktopWrapper.IsApplicationPinned( _selectedWindow.Handle )
-                           )
+                             DesktopWrapper.IsApplicationPinned( _selectedWindow.Handle ) )
                         {
                             //////////////////////////
                             // goes here means no need to move the dragged window
@@ -133,11 +129,6 @@ namespace VirtualSpace.VirtualDesktop
 
                             var sysIndex = DesktopWrapper.IndexFromGuid( _virtualDesktops[_hoverVdIndex].VdId );
                             DesktopWrapper.MoveWindowToDesktop( _selectedWindow.Handle, sysIndex );
-                            // if ( _selectedWindow.CoreUiWindowHandle != default )
-                            // {
-                            //     DesktopWrapper.MoveWindowToDesktop( _selectedWindow.CoreUiWindowHandle, sysIndex );
-                            //     User32.SetParent( _selectedWindow.CoreUiWindowHandle, _selectedWindow.Handle );
-                            // }
 
                             var relevantVirtualDesktops = new List<VirtualDesktopWindow>
                             {

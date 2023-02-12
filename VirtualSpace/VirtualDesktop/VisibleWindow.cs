@@ -17,12 +17,11 @@ namespace VirtualSpace.VirtualDesktop
 {
     public class VisibleWindow
     {
-        public VisibleWindow( string title, string classname, IntPtr handle, IntPtr coreUiWindowHandle = default )
+        public VisibleWindow( string title, string classname, IntPtr handle )
         {
             Title = title;
             Classname = classname;
             Handle = handle;
-            // CoreUiWindowHandle = coreUiWindowHandle;
         }
 
         public string Title { get; set; }
@@ -30,8 +29,6 @@ namespace VirtualSpace.VirtualDesktop
         public string Classname { get; set; }
 
         public IntPtr Handle { get; set; }
-
-        // public IntPtr CoreUiWindowHandle { get; set; }
 
         public Rectangle Rect { get; set; }
 

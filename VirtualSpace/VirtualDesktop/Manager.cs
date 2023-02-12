@@ -55,7 +55,6 @@ namespace VirtualSpace.VirtualDesktop
             var commonSize = new Size( (int)vdwWidth, (int)vdwHeight );
 
             var survivalDesktops = new List<VirtualDesktopWindow>();
-            var cachePath        = ConfigManager.GetCachePath();
             for ( var index = 0; index < vdCount; index++ ) // build new list for current desktops
             {
                 var guid = DesktopManagerWrapper.GetIdByIndex( index );
@@ -70,7 +69,7 @@ namespace VirtualSpace.VirtualDesktop
                             guid,
                             survival.Width,
                             survival.Height,
-                            cachePath ) );
+                            ConfigManager.GetCachePath() ) );
                     } );
                 }
                 else

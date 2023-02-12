@@ -271,7 +271,7 @@ namespace VirtualSpace
             }
         }
 
-        private void quitToolStripMenuItem_Click( object sender, EventArgs e )
+        private void tsmiMainMenuQuit_Click( object sender, EventArgs e )
         {
             User32.PostMessage( _mainWindowHandle, WinMsg.WM_CLOSE, 0, 0 );
         }
@@ -292,7 +292,7 @@ namespace VirtualSpace
         {
             ts_PageNavButton_Click( sender, e );
 
-            UpdateDesktopArrangementButtons( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
+            RenderDesktopArrangementButtons( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
 
             mainTabs.SelectTab( 1 );
         }
@@ -328,16 +328,6 @@ namespace VirtualSpace
                 var button = item as ToolStripButton;
                 button.Checked = sender == item;
             }
-        }
-
-        private void AppController_Load( object sender, EventArgs e )
-        {
-            Logger.Info( "Current Language: " + CultureInfo.CurrentUICulture.DisplayName );
-        }
-
-        private void exitToolStripMenuItem_Click( object sender, EventArgs e )
-        {
-            User32.PostMessage( _mainWindowHandle, WinMsg.WM_CLOSE, 0, 0 );
         }
 
         private void settingsToolStripMenuItem_Click( object sender, EventArgs e )

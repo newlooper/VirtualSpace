@@ -135,7 +135,7 @@ namespace VirtualSpace
             Logger.Info( $"Start Position: [{Screen.PrimaryScreen.Bounds.Location.X}, {Screen.PrimaryScreen.Bounds.Location.Y}]" );
             Logger.Info( $"Start Size: {Screen.PrimaryScreen.Bounds.Width}*{Screen.PrimaryScreen.Bounds.Height}" );
             Logger.Info( $"Is Running As Administrator: {SysInfo.IsAdministrator()}" );
-            Logger.Info( $"Language Setting In Profile: {ConfigManager.CurrentProfile.UI.Language}" );
+            Logger.Info( $"Language Config: {ConfigManager.CurrentProfile.UI.Language}" );
         }
     }
 }

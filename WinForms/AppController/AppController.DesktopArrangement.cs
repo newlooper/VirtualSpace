@@ -30,7 +30,7 @@ namespace VirtualSpace
             User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.DesktopArrangement, 0 );
         }
 
-        public static void UpdateDesktopArrangementButtons( string selectedDa )
+        public static void RenderDesktopArrangementButtons( string selectedDa )
         {
             foreach ( var c in _instance.tlp_DesktopArrangement.Controls )
             {
