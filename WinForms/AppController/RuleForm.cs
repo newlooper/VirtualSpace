@@ -54,6 +54,7 @@ namespace VirtualSpace
             OperatorList( cbb_Title );
             OperatorList( cbb_ProcessName );
             OperatorList( cbb_ProcessPath );
+            OperatorList( cbb_CommandLine );
             OperatorList( cbb_WndClass );
 
             //////////////////////////
@@ -144,6 +145,12 @@ namespace VirtualSpace
                         tb_ProcessPath.Text = valueNode.V;
                         _editIds[RuleFields.ProcessPath] = id;
                         break;
+                    case RuleFields.CommandLine:
+                        cb_CommandLine.Checked = true;
+                        cbb_CommandLine.SelectedValue = @operator;
+                        tb_CommandLine.Text = valueNode.V;
+                        _editIds[RuleFields.CommandLine] = id;
+                        break;
                     case RuleFields.WndClass:
                         cb_WndClass.Checked = true;
                         cbb_WndClass.SelectedValue = @operator;
@@ -200,6 +207,17 @@ namespace VirtualSpace
                 tb_ProcessPath.Text = ex.Message;
             }
 
+            try
+            {
+                tb_CommandLine.Text = process.GetCommandLineArgs();
+            }
+            catch ( Exception ex )
+            {
+                cb_CommandLine.Checked = false;
+                cb_CommandLine.Enabled = false;
+                tb_CommandLine.Text = ex.Message;
+            }
+
             var sbCName = new StringBuilder( Const.WindowClassMaxLength );
             User32.GetClassName( handle, sbCName, sbCName.Capacity );
             tb_WndClass.Text = sbCName.ToString();
@@ -230,6 +248,7 @@ namespace VirtualSpace
             if ( ( cb_Title.Checked ||
                    cb_ProcessName.Checked ||
                    cb_ProcessPath.Checked ||
+                   cb_CommandLine.Checked ||
                    cb_WndClass.Checked ||
                    cb_WinInScreen.Checked ) == false )
             {
@@ -257,6 +276,7 @@ namespace VirtualSpace
                 BuildRule( cb_Title, cbb_Title, tb_Title, exp );
                 BuildRule( cb_ProcessName, cbb_ProcessName, tb_ProcessName, exp );
                 BuildRule( cb_ProcessPath, cbb_ProcessPath, tb_ProcessPath, exp );
+                BuildRule( cb_CommandLine, cbb_CommandLine, tb_CommandLine, exp );
                 BuildRule( cb_WndClass, cbb_WndClass, tb_WndClass, exp );
                 BuildRule( cb_WinInScreen, cbb_WinInScreen, null, exp );
             }
@@ -393,6 +413,17 @@ namespace VirtualSpace
             {
                 cbb_ProcessPath.Enabled = false;
                 tb_ProcessPath.Enabled = false;
+            }
+
+            if ( cb_CommandLine.Checked )
+            {
+                cbb_CommandLine.Enabled = true;
+                tb_CommandLine.Enabled = true;
+            }
+            else
+            {
+                cbb_CommandLine.Enabled = false;
+                tb_CommandLine.Enabled = false;
             }
 
             if ( cb_WndClass.Checked )

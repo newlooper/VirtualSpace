@@ -14,8 +14,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -98,6 +96,7 @@ namespace VirtualSpace.Config.Events.Expression
                 try
                 {
                     win.ProcessPath = pInfo.MainModule?.FileName;
+                    win.CommandLine = pInfo.GetCommandLineArgs();
                 }
                 catch ( Exception ex )
                 {

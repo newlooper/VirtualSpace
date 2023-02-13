@@ -11,12 +11,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using System.Management;
 
 namespace VirtualSpace.Helpers
 {
@@ -371,5 +373,30 @@ namespace VirtualSpace.Helpers
         public static extern int DisplayConfigGetDeviceInfo( ref DISPLAYCONFIG_TARGET_DEVICE_NAME deviceName );
 
         #endregion
+    }
+
+    public static class ProcessTools
+    {
+        public static string GetCommandLineArgs( this Process process )
+        {
+            if ( process is null ) throw new ArgumentNullException( nameof( process ) );
+
+            try
+            {
+                return GetCommandLineArgsCore();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+
+            string GetCommandLineArgsCore()
+            {
+                using var searcher = new ManagementObjectSearcher( $"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {process.Id.ToString()}" );
+                using var objects  = searcher.Get();
+                var       obj      = objects.Cast<ManagementBaseObject>().SingleOrDefault();
+                return obj?["CommandLine"]?.ToString() ?? "";
+            }
+        }
     }
 }

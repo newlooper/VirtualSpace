@@ -8,10 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Management" Version="6.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Bridge\Bridge.csproj" />
         <ProjectReference Include="..\Helpers\Helpers.csproj" />
         <ProjectReference Include="..\LinqExpressionBuilder\LinqExpressionBuilder.csproj" />

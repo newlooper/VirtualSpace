@@ -23,6 +23,7 @@ namespace VirtualSpace.Config.Events.Entity
         public int?    ProcessId   { get; set; }
         public string? ProcessName { get; set; }
         public string? ProcessPath { get; set; }
+        public string? CommandLine { get; set; }
 
         public static Window Create(
             IntPtr handle,

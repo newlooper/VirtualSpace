@@ -40,11 +40,14 @@ namespace VirtualSpace
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RuleForm));
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gb_Basic = new System.Windows.Forms.GroupBox();
             this.cb_Enabled = new System.Windows.Forms.CheckBox();
             this.tb_Name = new System.Windows.Forms.TextBox();
             this.lb_Name = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.gb_Rules = new System.Windows.Forms.GroupBox();
+            this.tb_CommandLine = new System.Windows.Forms.TextBox();
+            this.cbb_CommandLine = new System.Windows.Forms.ComboBox();
+            this.cb_CommandLine = new System.Windows.Forms.CheckBox();
             this.cbb_WinInScreen = new System.Windows.Forms.ComboBox();
             this.cb_WinInScreen = new System.Windows.Forms.CheckBox();
             this.tb_WndClass = new System.Windows.Forms.TextBox();
@@ -59,7 +62,7 @@ namespace VirtualSpace
             this.tb_Title = new System.Windows.Forms.TextBox();
             this.cbb_Title = new System.Windows.Forms.ComboBox();
             this.cb_Title = new System.Windows.Forms.CheckBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.gb_Actions = new System.Windows.Forms.GroupBox();
             this.cbb_MoveToScreen = new System.Windows.Forms.ComboBox();
             this.cb_MoveToScreen = new System.Windows.Forms.CheckBox();
             this.cb_HideFromView = new System.Windows.Forms.CheckBox();
@@ -72,26 +75,26 @@ namespace VirtualSpace
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.gb_Info = new System.Windows.Forms.GroupBox();
             this.lbUpdated = new System.Windows.Forms.Label();
             this.lbCreated = new System.Windows.Forms.Label();
             this.lb_Updated = new System.Windows.Forms.Label();
             this.lb_Created = new System.Windows.Forms.Label();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.gb_Basic.SuspendLayout();
+            this.gb_Rules.SuspendLayout();
+            this.gb_Actions.SuspendLayout();
             this.statusBar.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.gb_Info.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // gb_Basic
             // 
-            resources.ApplyResources(this.groupBox1, "groupBox1");
-            this.groupBox1.Controls.Add(this.cb_Enabled);
-            this.groupBox1.Controls.Add(this.tb_Name);
-            this.groupBox1.Controls.Add(this.lb_Name);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.TabStop = false;
+            resources.ApplyResources(this.gb_Basic, "gb_Basic");
+            this.gb_Basic.Controls.Add(this.cb_Enabled);
+            this.gb_Basic.Controls.Add(this.tb_Name);
+            this.gb_Basic.Controls.Add(this.lb_Name);
+            this.gb_Basic.Name = "gb_Basic";
+            this.gb_Basic.TabStop = false;
             // 
             // cb_Enabled
             // 
@@ -112,25 +115,47 @@ namespace VirtualSpace
             resources.ApplyResources(this.lb_Name, "lb_Name");
             this.lb_Name.Name = "lb_Name";
             // 
-            // groupBox2
+            // gb_Rules
             // 
-            resources.ApplyResources(this.groupBox2, "groupBox2");
-            this.groupBox2.Controls.Add(this.cbb_WinInScreen);
-            this.groupBox2.Controls.Add(this.cb_WinInScreen);
-            this.groupBox2.Controls.Add(this.tb_WndClass);
-            this.groupBox2.Controls.Add(this.cbb_WndClass);
-            this.groupBox2.Controls.Add(this.cb_WndClass);
-            this.groupBox2.Controls.Add(this.tb_ProcessPath);
-            this.groupBox2.Controls.Add(this.cbb_ProcessPath);
-            this.groupBox2.Controls.Add(this.cb_ProcessPath);
-            this.groupBox2.Controls.Add(this.tb_ProcessName);
-            this.groupBox2.Controls.Add(this.cbb_ProcessName);
-            this.groupBox2.Controls.Add(this.cb_ProcessName);
-            this.groupBox2.Controls.Add(this.tb_Title);
-            this.groupBox2.Controls.Add(this.cbb_Title);
-            this.groupBox2.Controls.Add(this.cb_Title);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.TabStop = false;
+            resources.ApplyResources(this.gb_Rules, "gb_Rules");
+            this.gb_Rules.Controls.Add(this.tb_CommandLine);
+            this.gb_Rules.Controls.Add(this.cbb_CommandLine);
+            this.gb_Rules.Controls.Add(this.cb_CommandLine);
+            this.gb_Rules.Controls.Add(this.cbb_WinInScreen);
+            this.gb_Rules.Controls.Add(this.cb_WinInScreen);
+            this.gb_Rules.Controls.Add(this.tb_WndClass);
+            this.gb_Rules.Controls.Add(this.cbb_WndClass);
+            this.gb_Rules.Controls.Add(this.cb_WndClass);
+            this.gb_Rules.Controls.Add(this.tb_ProcessPath);
+            this.gb_Rules.Controls.Add(this.cbb_ProcessPath);
+            this.gb_Rules.Controls.Add(this.cb_ProcessPath);
+            this.gb_Rules.Controls.Add(this.tb_ProcessName);
+            this.gb_Rules.Controls.Add(this.cbb_ProcessName);
+            this.gb_Rules.Controls.Add(this.cb_ProcessName);
+            this.gb_Rules.Controls.Add(this.tb_Title);
+            this.gb_Rules.Controls.Add(this.cbb_Title);
+            this.gb_Rules.Controls.Add(this.cb_Title);
+            this.gb_Rules.Name = "gb_Rules";
+            this.gb_Rules.TabStop = false;
+            // 
+            // tb_CommandLine
+            // 
+            resources.ApplyResources(this.tb_CommandLine, "tb_CommandLine");
+            this.tb_CommandLine.Name = "tb_CommandLine";
+            // 
+            // cbb_CommandLine
+            // 
+            resources.ApplyResources(this.cbb_CommandLine, "cbb_CommandLine");
+            this.cbb_CommandLine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbb_CommandLine.FormattingEnabled = true;
+            this.cbb_CommandLine.Name = "cbb_CommandLine";
+            // 
+            // cb_CommandLine
+            // 
+            resources.ApplyResources(this.cb_CommandLine, "cb_CommandLine");
+            this.cb_CommandLine.Name = "cb_CommandLine";
+            this.cb_CommandLine.UseVisualStyleBackColor = true;
+            this.cb_CommandLine.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
             // 
             // cbb_WinInScreen
             // 
@@ -222,19 +247,19 @@ namespace VirtualSpace
             this.cb_Title.UseVisualStyleBackColor = true;
             this.cb_Title.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
             // 
-            // groupBox3
+            // gb_Actions
             // 
-            resources.ApplyResources(this.groupBox3, "groupBox3");
-            this.groupBox3.Controls.Add(this.cbb_MoveToScreen);
-            this.groupBox3.Controls.Add(this.cb_MoveToScreen);
-            this.groupBox3.Controls.Add(this.cb_HideFromView);
-            this.groupBox3.Controls.Add(this.cb_PinApp);
-            this.groupBox3.Controls.Add(this.cb_PinWindow);
-            this.groupBox3.Controls.Add(this.cb_FollowWindow);
-            this.groupBox3.Controls.Add(this.cbb_MoveToDesktop);
-            this.groupBox3.Controls.Add(this.cb_MoveToDesktop);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.TabStop = false;
+            resources.ApplyResources(this.gb_Actions, "gb_Actions");
+            this.gb_Actions.Controls.Add(this.cbb_MoveToScreen);
+            this.gb_Actions.Controls.Add(this.cb_MoveToScreen);
+            this.gb_Actions.Controls.Add(this.cb_HideFromView);
+            this.gb_Actions.Controls.Add(this.cb_PinApp);
+            this.gb_Actions.Controls.Add(this.cb_PinWindow);
+            this.gb_Actions.Controls.Add(this.cb_FollowWindow);
+            this.gb_Actions.Controls.Add(this.cbb_MoveToDesktop);
+            this.gb_Actions.Controls.Add(this.cb_MoveToDesktop);
+            this.gb_Actions.Name = "gb_Actions";
+            this.gb_Actions.TabStop = false;
             // 
             // cbb_MoveToScreen
             // 
@@ -317,15 +342,15 @@ namespace VirtualSpace
             resources.ApplyResources(this.toolStripStatusLabel2, "toolStripStatusLabel2");
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             // 
-            // groupBox4
+            // gb_Info
             // 
-            resources.ApplyResources(this.groupBox4, "groupBox4");
-            this.groupBox4.Controls.Add(this.lbUpdated);
-            this.groupBox4.Controls.Add(this.lbCreated);
-            this.groupBox4.Controls.Add(this.lb_Updated);
-            this.groupBox4.Controls.Add(this.lb_Created);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.TabStop = false;
+            resources.ApplyResources(this.gb_Info, "gb_Info");
+            this.gb_Info.Controls.Add(this.lbUpdated);
+            this.gb_Info.Controls.Add(this.lbCreated);
+            this.gb_Info.Controls.Add(this.lb_Updated);
+            this.gb_Info.Controls.Add(this.lb_Created);
+            this.gb_Info.Name = "gb_Info";
+            this.gb_Info.TabStop = false;
             // 
             // lbUpdated
             // 
@@ -351,26 +376,26 @@ namespace VirtualSpace
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.gb_Info);
             this.Controls.Add(this.statusBar);
             this.Controls.Add(this.btn_RuleSave);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.gb_Actions);
+            this.Controls.Add(this.gb_Rules);
+            this.Controls.Add(this.gb_Basic);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "RuleForm";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
+            this.gb_Basic.ResumeLayout(false);
+            this.gb_Basic.PerformLayout();
+            this.gb_Rules.ResumeLayout(false);
+            this.gb_Rules.PerformLayout();
+            this.gb_Actions.ResumeLayout(false);
+            this.gb_Actions.PerformLayout();
             this.statusBar.ResumeLayout(false);
             this.statusBar.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
+            this.gb_Info.ResumeLayout(false);
+            this.gb_Info.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -378,11 +403,11 @@ namespace VirtualSpace
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gb_Basic;
         private System.Windows.Forms.CheckBox cb_Enabled;
         private System.Windows.Forms.TextBox tb_Name;
         private System.Windows.Forms.Label lb_Name;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox gb_Rules;
         private System.Windows.Forms.ComboBox cbb_Title;
         private System.Windows.Forms.CheckBox cb_Title;
         private System.Windows.Forms.TextBox tb_Title;
@@ -395,7 +420,7 @@ namespace VirtualSpace
         private System.Windows.Forms.TextBox tb_ProcessName;
         private System.Windows.Forms.ComboBox cbb_ProcessName;
         private System.Windows.Forms.CheckBox cb_ProcessName;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox gb_Actions;
         private System.Windows.Forms.CheckBox cb_PinApp;
         private System.Windows.Forms.CheckBox cb_PinWindow;
         private System.Windows.Forms.CheckBox cb_FollowWindow;
@@ -405,7 +430,7 @@ namespace VirtualSpace
         private System.Windows.Forms.StatusStrip statusBar;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox gb_Info;
         private System.Windows.Forms.Label lb_Updated;
         private System.Windows.Forms.Label lb_Created;
         private System.Windows.Forms.Label lbUpdated;
@@ -415,5 +440,8 @@ namespace VirtualSpace
         private System.Windows.Forms.CheckBox cb_WinInScreen;
         private System.Windows.Forms.ComboBox cbb_MoveToScreen;
         private System.Windows.Forms.CheckBox cb_MoveToScreen;
+        private System.Windows.Forms.TextBox tb_CommandLine;
+        private System.Windows.Forms.ComboBox cbb_CommandLine;
+        private System.Windows.Forms.CheckBox cb_CommandLine;
     }
 }
