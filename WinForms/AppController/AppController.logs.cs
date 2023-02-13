@@ -25,8 +25,6 @@ namespace VirtualSpace
 
         private async void PickLogAndWrite()
         {
-            Logger.ShowLogsInGui = ConfigManager.Configs.LogConfig.ShowLogsInGui;
-
             showLogsInGuiToolStripMenuItem.Checked = ConfigManager.Configs.LogConfig.ShowLogsInGui;
             showLogsInGuiToolStripMenuItem.CheckedChanged += showLogsInGuiToolStripMenuItem_CheckedChanged;
 

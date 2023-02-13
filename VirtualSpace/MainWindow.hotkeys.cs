@@ -16,7 +16,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Input;
 using VirtualSpace.AppLogs;
-using VirtualSpace.Commons;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using GHK = VirtualSpace.Helpers.GlobalHotKey;
@@ -29,8 +28,6 @@ namespace VirtualSpace
 
         private void RegisterHotKey( IntPtr hWnd )
         {
-            IpcPipeServer.MainWindowHandle = hWnd;
-
             foreach ( var kv in Manager.Configs.KeyBindings )
             {
                 var func = Const.Hotkey.Info[kv.Key].Item1;

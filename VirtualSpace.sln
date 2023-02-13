@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppController", "WinForms\A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginHost", "Plugin\PluginHost\PluginHost.csproj", "{8789C787-2125-413E-BB38-C9065C405D42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "Launcher\Launcher.csproj", "{C1C8DDA6-FE46-4B0D-AB5E-00EC3D2CA821}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Launcher", "Launcher\Launcher.csproj", "{C1C8DDA6-FE46-4B0D-AB5E-00EC3D2CA821}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

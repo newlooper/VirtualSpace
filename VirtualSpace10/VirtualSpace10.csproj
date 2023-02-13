@@ -51,6 +51,7 @@
         <Compile Include="..\VirtualSpace\MainWindow.hotkeys.cs" Link="MainWindow.hotkeys.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.layout.cs" Link="MainWindow.layout.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.main.cs" Link="MainWindow.main.cs" />
+        <Compile Include="..\VirtualSpace\MainWindow.message.cs" Link="MainWindow.message.cs" />
         <Compile Include="..\VirtualSpace\MainWindow.style.cs" Link="MainWindow.style.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Api\DesktopManagerWrapper.cs" Link="VirtualDesktop\Api\DesktopManagerWrapper.cs" />
         <Compile Include="..\VirtualSpace\VirtualDesktop\Api\DesktopWrapper.cs" Link="VirtualDesktop\Api\DesktopWrapper.cs" />

@@ -77,7 +77,7 @@ namespace VirtualSpace.VirtualDesktop.Api
                             if ( !VirtualDesktopManager.IsBatchCreate )
                             {
                                 if ( MainWindow.IsShowing() )
-                                    VirtualDesktopManager.ResetLayout();
+                                    VirtualDesktopManager.UpdateMainView();
                                 else
                                     VirtualDesktopManager.FixLayout();
                             }
@@ -86,7 +86,7 @@ namespace VirtualSpace.VirtualDesktop.Api
                         case VirtualDesktopNotificationType.DELETED:
                             if ( MainWindow.IsShowing() )
                             {
-                                VirtualDesktopManager.ResetLayout( vdn );
+                                VirtualDesktopManager.UpdateMainView( vdn );
                             }
 
                             break;

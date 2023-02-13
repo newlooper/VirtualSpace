@@ -49,6 +49,9 @@ namespace VirtualSpace
 
                 var mw = CreateCanvas( e );
                 Current.MainWindow = mw;
+
+                IpcPipeServer.MainWindowHandle = mw.Handle;
+
                 if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
                 {
                     mw.Left = Const.FakeHideX;
@@ -114,6 +117,8 @@ namespace VirtualSpace
 
         private static void Bootstrap()
         {
+            Logger.ShowLogsInGui = ConfigManager.Configs.LogConfig.ShowLogsInGui;
+
             BootInfo();
             // ProcessWatcher.Start();
             // WindowWatcher.Start();

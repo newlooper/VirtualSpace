@@ -98,11 +98,21 @@ namespace VirtualSpace.VirtualDesktop
 
         public static int GetMatrixIndexByVdIndex( int vdIndex )
         {
+            if ( _vdToMatrixMap == null )
+            {
+                RebuildMatrixMap( (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) ) );
+            }
+
             return _vdToMatrixMap[vdIndex];
         }
 
         public static int GetVdIndexByMatrixIndex( int matrixIndex )
         {
+            if ( _matrixToVdMap == null )
+            {
+                RebuildMatrixMap( (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) ) );
+            }
+
             return _matrixToVdMap[matrixIndex];
         }
     }

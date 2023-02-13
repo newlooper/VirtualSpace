@@ -190,7 +190,7 @@ namespace VirtualSpace.VirtualDesktop
             SaveOrder();
         }
 
-        public static void ResetLayout( VirtualDesktopNotification? vdn = null )
+        public static void UpdateMainView( VirtualDesktopNotification? vdn = null )
         {
             FixLayout();
             ShowAllVirtualDesktops();
