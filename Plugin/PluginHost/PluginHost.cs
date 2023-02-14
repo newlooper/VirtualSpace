@@ -92,7 +92,7 @@ namespace VirtualSpace.Plugin
                 Task.Run( () =>
                 {
                     Thread.Sleep( PluginConst.RestartDelay );
-                    StartExe( exe );
+                    Process.Start( exe );
                     Logger.Info( $"Plugin ({pluginInfo.Display}) Restarted." );
                 } );
             }

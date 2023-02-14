@@ -66,7 +66,7 @@ namespace VirtualSpace.Helpers
             return null;
         }
 
-        public static Tuple<string, string, string> Md5Hash( string input )
+        public static ValueTuple<string, string, string> Md5Hash( string input )
         {
             var md5        = MD5.Create();
             var inputBytes = Encoding.ASCII.GetBytes( input );
@@ -80,7 +80,7 @@ namespace VirtualSpace.Helpers
 
             var md5Str = sb.ToString();
 
-            return new Tuple<string, string, string>(
+            return new ValueTuple<string, string, string>(
                 md5Str,
                 md5Str.Substring( 0, 1 ),
                 md5Str.Substring( 1, 1 )

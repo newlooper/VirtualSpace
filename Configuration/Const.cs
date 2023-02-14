@@ -80,23 +80,23 @@ namespace VirtualSpace.Config
             // tuple.Item1 => friendly name
             // tuple.Item2 => UserMessageId
             // tuple.Item3 => alternate hotkey, 由程序保留，只能在源码中修改
-            public static Dictionary<string, Tuple<string, int, string>> Info = new()
+            public static Dictionary<string, ValueTuple<string, int, string>> Info = new()
             {
-                {RISE_VIEW, new Tuple<string, int, string>( "Rise MainView", UserMessage.RiseView, "LWin+Tab" )},
-                {SHOW_APP_CONTROLLER, new Tuple<string, int, string>( "Open AppController", UserMessage.ShowAppController, "" )},
-                {SVD1, new Tuple<string, int, string>( "Switch To Desktop 1", UserMessage.SVD1, "" )},
-                {SVD2, new Tuple<string, int, string>( "Switch To Desktop 2", UserMessage.SVD2, "" )},
-                {SVD3, new Tuple<string, int, string>( "Switch To Desktop 3", UserMessage.SVD3, "" )},
-                {SVD4, new Tuple<string, int, string>( "Switch To Desktop 4", UserMessage.SVD4, "" )},
-                {SVD5, new Tuple<string, int, string>( "Switch To Desktop 5", UserMessage.SVD5, "" )},
-                {SVD6, new Tuple<string, int, string>( "Switch To Desktop 6", UserMessage.SVD6, "" )},
-                {SVD7, new Tuple<string, int, string>( "Switch To Desktop 7", UserMessage.SVD7, "" )},
-                {SVD8, new Tuple<string, int, string>( "Switch To Desktop 8", UserMessage.SVD8, "" )},
-                {SVD9, new Tuple<string, int, string>( "Switch To Desktop 9", UserMessage.SVD9, "" )},
-                {NAV_LEFT, new Tuple<string, int, string>( "Left", UserMessage.NavLeft, "LWin+Ctrl+Left" )},
-                {NAV_RIGHT, new Tuple<string, int, string>( "Right", UserMessage.NavRight, "LWin+Ctrl+Right" )},
-                {NAV_UP, new Tuple<string, int, string>( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" )},
-                {NAV_DOWN, new Tuple<string, int, string>( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" )}
+                {RISE_VIEW, new ValueTuple<string, int, string>( "Rise MainView", UserMessage.RiseView, "LWin+Tab" )},
+                {SHOW_APP_CONTROLLER, new ValueTuple<string, int, string>( "Open AppController", UserMessage.ShowAppController, "" )},
+                {SVD1, new ValueTuple<string, int, string>( "Switch To Desktop 1", UserMessage.SVD1, "" )},
+                {SVD2, new ValueTuple<string, int, string>( "Switch To Desktop 2", UserMessage.SVD2, "" )},
+                {SVD3, new ValueTuple<string, int, string>( "Switch To Desktop 3", UserMessage.SVD3, "" )},
+                {SVD4, new ValueTuple<string, int, string>( "Switch To Desktop 4", UserMessage.SVD4, "" )},
+                {SVD5, new ValueTuple<string, int, string>( "Switch To Desktop 5", UserMessage.SVD5, "" )},
+                {SVD6, new ValueTuple<string, int, string>( "Switch To Desktop 6", UserMessage.SVD6, "" )},
+                {SVD7, new ValueTuple<string, int, string>( "Switch To Desktop 7", UserMessage.SVD7, "" )},
+                {SVD8, new ValueTuple<string, int, string>( "Switch To Desktop 8", UserMessage.SVD8, "" )},
+                {SVD9, new ValueTuple<string, int, string>( "Switch To Desktop 9", UserMessage.SVD9, "" )},
+                {NAV_LEFT, new ValueTuple<string, int, string>( "Left", UserMessage.NavLeft, "LWin+Ctrl+Left" )},
+                {NAV_RIGHT, new ValueTuple<string, int, string>( "Right", UserMessage.NavRight, "LWin+Ctrl+Right" )},
+                {NAV_UP, new ValueTuple<string, int, string>( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" )},
+                {NAV_DOWN, new ValueTuple<string, int, string>( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" )}
             };
         }
 
@@ -124,14 +124,14 @@ namespace VirtualSpace.Config
 
             ////////////////////////////////////////////////////////////////
             // 鼠标动作表，信息包含友好名称和默认行为
-            public static Dictionary<string, Tuple<string, Action>> Info = new()
+            public static Dictionary<string, ValueTuple<string, Action>> Info = new()
             {
-                {DESKTOP_LEFT_CLICK, new Tuple<string, Action>( "Mouse LeftClick on VirtualDesktop", Action.DesktopVisibleAndCloseView )},
-                {DESKTOP_MIDDLE_CLICK, new Tuple<string, Action>( "Mouse MiddleClick on VirtualDesktop", Action.DesktopVisibleOnly )},
-                {DESKTOP_RIGHT_CLICK, new Tuple<string, Action>( "Mouse RightClick on VirtualDesktop", Action.ContextMenu )},
-                {WINDOW_LEFT_CLICK, new Tuple<string, Action>( "Mouse LeftClick on Window Thumbnail", Action.WindowActiveDesktopVisibleAndCloseView )},
-                {WINDOW_MIDDLE_CLICK, new Tuple<string, Action>( "Mouse MiddleClick on Window Thumbnail", Action.WindowActiveDesktopVisibleOnly )},
-                {WINDOW_RIGHT_CLICK, new Tuple<string, Action>( "Mouse RightClick on Window Thumbnail", Action.ContextMenu )}
+                {DESKTOP_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse LeftClick on VirtualDesktop", Action.DesktopVisibleAndCloseView )},
+                {DESKTOP_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse MiddleClick on VirtualDesktop", Action.DesktopVisibleOnly )},
+                {DESKTOP_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse RightClick on VirtualDesktop", Action.ContextMenu )},
+                {WINDOW_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse LeftClick on Window Thumbnail", Action.WindowActiveDesktopVisibleAndCloseView )},
+                {WINDOW_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse MiddleClick on Window Thumbnail", Action.WindowActiveDesktopVisibleOnly )},
+                {WINDOW_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse RightClick on Window Thumbnail", Action.ContextMenu )}
             };
         }
     }
