@@ -313,6 +313,7 @@ namespace VirtualSpace
             {
                 rule.Created = time;
                 ruleList.Add( rule );
+                Conditions.SaveRules( Manager.GetRulesPath(), ruleList );
             }
             else
             {
