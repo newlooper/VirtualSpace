@@ -17,13 +17,13 @@ namespace VirtualSpace.VirtualDesktop
 {
     public static class Filters
     {
-        public static readonly List<string> WndClsIgnoreList = new()
+        public static readonly string[] WndClsIgnoreList =
         {
             "Progman",
             "RainmeterMeterWindow"
         };
 
-        public static readonly List<string> WndTitleIgnoreList = new()
+        public static readonly string[] WndTitleIgnoreList =
         {
             "__VirtualDesktopFrame!",
             "__VirtualDesktopWindow!",

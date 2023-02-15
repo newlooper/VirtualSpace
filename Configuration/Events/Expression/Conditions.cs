@@ -35,7 +35,7 @@ namespace VirtualSpace.Config.Events.Expression
         private static readonly Channel<Behavior>                 ActionChannel             = Channels.ActionChannel;
         private static          List<RuleTemplate>                _rules                    = InitRules();
         public static readonly  Channel<Window>                   VisibleWindows            = Channel.CreateUnbounded<Window>();
-        public static readonly  List<IntPtr>                      WndHandleIgnoreListByRule = new();
+        public static readonly  ConcurrentBag<IntPtr>             WndHandleIgnoreListByRule = new();
         private static readonly ConcurrentDictionary<IntPtr, int> WindowCheckTimes          = new();
 
         static Conditions()

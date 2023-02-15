@@ -28,12 +28,12 @@ namespace VirtualSpace.VirtualDesktop
     internal static partial class VirtualDesktopManager
     {
         private static readonly List<VisibleWindow>    VisibleWindows  = new();
-        private static readonly User32.EnumWindowsProc EnumWindowsProc = WindowFilter;
+        private static readonly User32.EnumWindowsProc EnumWindowsProc = VisibleWindowFilter;
         private static readonly StringBuilder          SbWinInfo       = new( Const.WindowTitleMaxLength );
 
         private static List<VirtualDesktopWindow> _virtualDesktops = new();
 
-        private static Color         _defaultBackColor;
+        private static Color         _vdwDefaultBackColor;
         public static  bool          NeedRepaintThumbs;
         public static  UserInterface Ui            => ConfigManager.CurrentProfile.UI;
         public static  bool          IsBatchCreate { get; set; }
@@ -62,7 +62,7 @@ namespace VirtualSpace.VirtualDesktop
                 var survival = _virtualDesktops.Find( v => v.VdId == guid );
                 if ( survival == null )
                 {
-                    survival = VirtualDesktopWindow.Create( index, guid, _defaultBackColor, commonSize, Ui.VDWPadding );
+                    survival = VirtualDesktopWindow.Create( index, guid, _vdwDefaultBackColor, commonSize, Ui.VDWPadding );
                     Task.Run( () =>
                     {
                         survival.SetBackground( WinRegistry.GetWallpaperByDesktopGuid(
@@ -106,7 +106,7 @@ namespace VirtualSpace.VirtualDesktop
             ReOrder();
         }
 
-        public static async void InitLayout()
+        public static async Task InitLayout()
         {
             MainWindow.ResetMainGrid();
 
@@ -124,7 +124,7 @@ namespace VirtualSpace.VirtualDesktop
                 tasks.Add( Task.Run( () =>
                 {
                     var guid = DesktopManagerWrapper.GetIdByIndex( index );
-                    var vdw  = VirtualDesktopWindow.Create( index, guid, _defaultBackColor, commonSize, Ui.VDWPadding );
+                    var vdw  = VirtualDesktopWindow.Create( index, guid, _vdwDefaultBackColor, commonSize, Ui.VDWPadding );
 
                     vdw.SetBackground( WinRegistry.GetWallpaperByDesktopGuid( guid, vdw.Width, vdw.Height, ConfigManager.GetCachePath() ) );
                     lock ( _virtualDesktops ) // thread safe
@@ -145,9 +145,6 @@ namespace VirtualSpace.VirtualDesktop
             }
 
             ReOrder( true );
-
-            ShowAllVirtualDesktops();
-            ShowVisibleWindowsForDesktops();
         }
 
         private static void ReOrder( bool needSort = false )
@@ -216,7 +213,7 @@ namespace VirtualSpace.VirtualDesktop
             }
         }
 
-        private static bool WindowFilter( IntPtr hWnd, int lParam )
+        private static bool VisibleWindowFilter( IntPtr hWnd, int lParam )
         {
             if ( Filters.WndHandleIgnoreListByError.Contains( hWnd ) ||
                  Filters.WndHandleIgnoreListByManual.Contains( hWnd ) ||
@@ -326,7 +323,7 @@ namespace VirtualSpace.VirtualDesktop
 
         public static void Bootstrap()
         {
-            _defaultBackColor = Color.FromArgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B );
+            _vdwDefaultBackColor = Color.FromArgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B );
         }
 
         public static List<VirtualDesktopWindow> GetAllVirtualDesktops()

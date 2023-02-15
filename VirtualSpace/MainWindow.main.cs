@@ -51,10 +51,11 @@ namespace VirtualSpace
             return _instance;
         }
 
-        public static MainWindow Create()
+        public static MainWindow Create( IAppController ac )
         {
             var mw = new MainWindow
             {
+                _acForm = ac,
                 Background = new SolidColorBrush(
                     Color.FromArgb(
                         Ui.CanvasOpacity,
@@ -82,23 +83,27 @@ namespace VirtualSpace
             Handle = new WindowInteropHelper( this ).EnsureHandle();
             var source = HwndSource.FromHwnd( Handle );
             source?.AddHook( WndProc );
+
+            Bootstrap();
         }
 
-        private void Window_Loaded( object sender, RoutedEventArgs e )
+        private async void Window_Loaded( object sender, RoutedEventArgs e )
         {
-            Bootstrap();
+            VirtualDesktopManager.Bootstrap();
 
             if ( ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon )
                 UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
 
-            VirtualDesktopManager.Bootstrap();
-
-            if ( !( ConfigManager.Configs.Cluster.HideOnStart ||
-                    ( (App)Application.Current ).HideOnStart ) )
-                VirtualDesktopManager.InitLayout();
+            await VirtualDesktopManager.InitLayout();
 
             DesktopManagerWrapper.ListenVirtualDesktopEvents();
             DesktopManagerWrapper.RegisterVirtualDesktopEvents();
+
+            if ( ConfigManager.Configs.Cluster.HideOnStart ||
+                 ( (App)Application.Current ).HideOnStart ) return;
+
+            VirtualDesktopManager.ShowAllVirtualDesktops();
+            VirtualDesktopManager.ShowVisibleWindowsForDesktops();
         }
 
         private void Bootstrap()
@@ -108,11 +113,6 @@ namespace VirtualSpace
             FixStyle();
             EnableBlur();
             RegisterSystemMessages();
-        }
-
-        public void SetAppController( IAppController ac )
-        {
-            _acForm = ac;
         }
 
         public void FakeHide()

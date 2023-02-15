@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Channels;

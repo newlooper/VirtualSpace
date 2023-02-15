@@ -78,8 +78,8 @@ namespace VirtualSpace.VirtualDesktop.Api
                             {
                                 if ( MainWindow.IsShowing() )
                                     VirtualDesktopManager.UpdateMainView();
-                                else
-                                    VirtualDesktopManager.FixLayout();
+                                // else
+                                //     VirtualDesktopManager.FixLayout();
                             }
 
                             break;

@@ -303,7 +303,7 @@ namespace VirtualSpace.VirtualDesktop
             RefreshWallpaper();
         }
 
-        public void RefreshWallpaper()
+        private void RefreshWallpaper()
         {
             pbWallpaper.Refresh();
         }
