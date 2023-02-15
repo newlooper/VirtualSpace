@@ -51,6 +51,8 @@ namespace VirtualSpace
             this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogsInGuiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openLogFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MT_Logs = new System.Windows.Forms.TabPage();
             this.logTabs = new System.Windows.Forms.TabControl();
             this.logTabInfo = new System.Windows.Forms.TabPage();
@@ -220,7 +222,8 @@ namespace VirtualSpace
             this.mainMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.optionsToolStripMenuItem});
+            this.optionsToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.mainMenu.Name = "mainMenu";
             // 
             // fileToolStripMenuItem
@@ -289,6 +292,19 @@ namespace VirtualSpace
             resources.ApplyResources(this.openLogFolderToolStripMenuItem, "openLogFolderToolStripMenuItem");
             this.openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
             this.openLogFolderToolStripMenuItem.Click += new System.EventHandler(this.openLogFolderToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            resources.ApplyResources(this.helpToolStripMenuItem, "helpToolStripMenuItem");
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            resources.ApplyResources(this.aboutToolStripMenuItem, "aboutToolStripMenuItem");
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // MT_Logs
             // 
@@ -1459,5 +1475,7 @@ namespace VirtualSpace
         private System.Windows.Forms.TabPage tabPage_Genernal_Main;
         private System.Windows.Forms.TabPage tabPage_Genernal_Keyboard;
         private System.Windows.Forms.TabPage tabPage_Genernal_Mouse;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     }
 }

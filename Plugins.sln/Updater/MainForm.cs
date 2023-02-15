@@ -46,12 +46,19 @@ namespace Updater
                 Handle = Handle.ToInt32()
             };
 
-            IpcPipeClient.PluginCheckIn<HostInfo>(
-                pipeMessage,
-                () => { MessageBox.Show( Langs.GetString( "Error.CheckHost" ) ); },
-                Application.Exit,
-                CheckUpdate
-            );
+            try
+            {
+                IpcPipeClient.PluginCheckIn<HostInfo>(
+                    pipeMessage,
+                    () => { MessageBox.Show( Langs.GetString( "Error.CheckHost" ) ); },
+                    Application.Exit,
+                    CheckUpdate
+                );
+            }
+            catch
+            {
+                Application.Exit();
+            }
 
             // IpcPipeClient.CheckAlive( pipeMessage.Name, pipeMessage.Handle, pipeMessage.ProcessId, 5, Application.Exit );
         }

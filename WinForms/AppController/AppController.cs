@@ -404,5 +404,10 @@ namespace VirtualSpace
         {
             User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RunAsAdministrator, 0 );
         }
+
+        private void aboutToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            mainTabs.SelectTab( 5 );
+        }
     }
 }
