@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>
             netcoreapp3.1;
-            net6.0-windows10.0.19041.0;net6.0-windows10.0.22000.0;
+            net6.0-windows10.0.20348.0;net6.0-windows10.0.22000.0;
         </TargetFrameworks>
     </PropertyGroup>
 

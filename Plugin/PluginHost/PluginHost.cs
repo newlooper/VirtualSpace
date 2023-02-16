@@ -48,10 +48,11 @@ namespace VirtualSpace.Plugin
 
                 pluginInfo.Folder = path;
 
+                Plugins.Add( pluginInfo );
+                Logger.Info( $"[PLUGIN] {pluginInfo.Display} Registered." );
+
                 if ( pluginInfo.AutoStart )
                     StartPlugin( pluginInfo );
-
-                Plugins.Add( pluginInfo );
             }
         }
 
@@ -68,14 +69,14 @@ namespace VirtualSpace.Plugin
         public static void StartPlugin( PluginInfo pluginInfo )
         {
             if ( !PluginManager.CheckRequirements( pluginInfo.Requirements ) ) return;
-            Logger.Info( $"Start Plugin: {pluginInfo.Display}" );
+            Logger.Info( $"[PLUGIN.Start] {pluginInfo.Display}" );
             StartExe( Path.Combine( pluginInfo.Folder, pluginInfo.Entry ) );
         }
 
         public static void ClosePlugin( PluginInfo pluginInfo )
         {
             if ( !string.IsNullOrEmpty( pluginInfo.Display ) )
-                Logger.Info( $"Close Plugin ({pluginInfo.Display})." );
+                Logger.Info( $"[PLUGIN.Close] {pluginInfo.Display}" );
             WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_SYSCOMMAND, WinApi.SC_CLOSE, 0 );
             // WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_CLOSE, 0, 0 );
             // WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_QUIT, 0, 0 );
@@ -93,7 +94,7 @@ namespace VirtualSpace.Plugin
                 {
                     Thread.Sleep( PluginConst.RestartDelay );
                     Process.Start( exe );
-                    Logger.Info( $"Plugin ({pluginInfo.Display}) Restarted." );
+                    Logger.Info( $"[PLUGIN] {pluginInfo.Display} Restarted." );
                 } );
             }
             catch

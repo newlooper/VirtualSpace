@@ -89,11 +89,10 @@ namespace VirtualSpace
 
         private async void Window_Loaded( object sender, RoutedEventArgs e )
         {
-            VirtualDesktopManager.Bootstrap();
-
             if ( ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon )
                 UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
 
+            VirtualDesktopManager.Bootstrap();
             await VirtualDesktopManager.InitLayout();
 
             DesktopManagerWrapper.ListenVirtualDesktopEvents();

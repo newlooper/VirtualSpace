@@ -141,14 +141,21 @@ namespace ScreenCapture
 
             _captureSession = _captureFramePool.CreateCaptureSession( _captureItem );
 
-            if ( PropertyInfoIsBorderRequired != null )
-            {
-                PropertyInfoIsBorderRequired.SetValue( _captureSession, false );
-            }
-
             if ( PropertyInfoIsCursorCaptureEnabled != null )
             {
                 PropertyInfoIsCursorCaptureEnabled.SetValue( _captureSession, false );
+            }
+
+            if ( PropertyInfoIsBorderRequired != null )
+            {
+                try
+                {
+                    PropertyInfoIsBorderRequired.SetValue( _captureSession, false );
+                }
+                catch
+                {
+                    // ignored
+                }
             }
 
             _captureSession.StartCapture();

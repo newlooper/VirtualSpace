@@ -220,7 +220,7 @@ namespace VirtualSpace.Config.Events.Expression
             await File.WriteAllBytesAsync( path, JsonSerializer.SerializeToUtf8Bytes(
                 ruleList, GetJsonSerializerOptions() ) );
 
-            Logger.Info( $"Rules.{Manager.Configs.CurrentProfileName} Saved." );
+            Logger.Info( $"[RULE]Rules.{Manager.Configs.CurrentProfileName} Saved." );
         }
     }
 

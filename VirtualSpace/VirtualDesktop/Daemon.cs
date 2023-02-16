@@ -62,7 +62,7 @@ namespace VirtualSpace.VirtualDesktop
                     }
                     catch
                     {
-                        Logger.Error( $"[RULE]PIN.Win {action.Handle.ToString( "X2" )} Failed" );
+                        Logger.Error( $"[RULE]PIN.App {action.Handle.ToString( "X2" )} Failed" );
                     }
 
                     continue; // <- if PinApp, then PinWindow & MoveToDesktop is invalid
@@ -100,7 +100,7 @@ namespace VirtualSpace.VirtualDesktop
                     {
                         CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
                         Logger.Error(
-                            $"[RULE]ERROR.MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]",
+                            $"[RULE]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]",
                             new NotifyObject
                             {
                                 Title = Agent.Langs.GetString( "Error.Title" ),

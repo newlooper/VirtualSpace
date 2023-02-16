@@ -57,7 +57,7 @@ namespace VirtualSpace.Commons
                                 // 同时若插件名相同，则后启动的覆盖先启动的
                                 foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
                                 {
-                                    Logger.Info( $"Virtual Desktop Switch Observer Plugin ({p.Display}) Registered." );
+                                    Logger.Info( $"[PLUGIN\\Virtual Desktop Switch Observer] {p.Display} Started." );
                                     p.Handle = (IntPtr)msg.Handle;
                                     p.ProcessId = msg.ProcessId;
                                     p.Type = PluginType.VD_SWITCH_OBSERVER;
@@ -93,7 +93,7 @@ namespace VirtualSpace.Commons
 
                                 foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
                                 {
-                                    Logger.Info( $"Updater Plugin ({p.Display}) Registered." );
+                                    Logger.Info( $"[PLUGIN\\App Updater] {p.Display} Started." );
                                     p.Handle = (IntPtr)msg.Handle;
                                     p.ProcessId = msg.ProcessId;
                                     p.Type = PluginType.UPDATER;
