@@ -319,6 +319,8 @@ namespace VirtualSpace.VirtualDesktop
         {
             Menus.CloseContextMenu();
             foreach ( var vdw in _virtualDesktops ) vdw.Hide();
+
+            Parallel.ForEach( _virtualDesktops, ( vdw, loopState ) => { vdw.ClearWindows(); } );
         }
 
         public static void Bootstrap()
