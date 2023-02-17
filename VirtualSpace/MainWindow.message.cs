@@ -134,7 +134,7 @@ namespace VirtualSpace
             {
                 case WinMsg.WM_SYSCOMMAND:
                     var wP = wParam.ToInt32();
-                    if ( wP == WinMsg.SC_RESTORE || wP == WinMsg.SC_MINIMIZE || wP == WinMsg.SC_MAXIMIZE )
+                    if ( wP is WinMsg.SC_RESTORE or WinMsg.SC_MINIMIZE or WinMsg.SC_MAXIMIZE )
                         handled = true;
                     break;
                 case WinMsg.WM_HOTKEY:

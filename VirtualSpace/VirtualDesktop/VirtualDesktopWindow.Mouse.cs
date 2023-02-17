@@ -9,6 +9,7 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -173,8 +174,10 @@ namespace VirtualSpace.VirtualDesktop
                         User32.SwitchToThisWindow( _selectedWindow.Handle, true );
                     }
 
-                    void WindowAction( Const.MouseAction.Action action )
+                    void WindowAction( string actionId )
                     {
+                        var action = Manager.Configs.GetMouseActionById( actionId );
+
                         switch ( action )
                         {
                             case Const.MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
@@ -196,6 +199,31 @@ namespace VirtualSpace.VirtualDesktop
                                     Self = this
                                 } );
                                 break;
+                            case Const.MouseAction.Action.WindowHideFromView:
+                                Filters.WndHandleIgnoreListByManual.Add( _selectedWindow.Handle );
+                                if ( DesktopWrapper.IsWindowPinned( _selectedWindow.Handle ) ||
+                                     DesktopWrapper.IsApplicationPinned( _selectedWindow.Handle ) )
+                                {
+                                    VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+                                }
+                                else
+                                {
+                                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this} );
+                                }
+
+                                break;
+                            case Const.MouseAction.Action.WindowShowForSelectedProcessOnly:
+                                try
+                                {
+                                    _ = User32.GetWindowThreadProcessId( _selectedWindow.Handle, out var pId );
+                                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( null, pId );
+                                }
+                                catch ( Exception ex )
+                                {
+                                    Logger.Warning( "show windows from selected process: " + ex.Message );
+                                }
+
+                                break;
                             case Const.MouseAction.Action.DoNothing:
                                 break;
                             default:
@@ -208,20 +236,66 @@ namespace VirtualSpace.VirtualDesktop
                     switch ( e.Button )
                     {
                         case MouseButtons.Left:
-                            WindowAction( ConfigManager.Configs.MouseActions[Const.MouseAction.WINDOW_LEFT_CLICK] );
+                            switch ( ModifierKeys )
+                            {
+                                case Keys.Shift:
+                                    WindowAction( Const.MouseAction.WINDOW_SHIFT_LEFT_CLICK );
+                                    break;
+                                case Keys.Control:
+                                    WindowAction( Const.MouseAction.WINDOW_CTRL_LEFT_CLICK );
+                                    break;
+                                case Keys.Alt:
+                                    WindowAction( Const.MouseAction.WINDOW_ALT_LEFT_CLICK );
+                                    break;
+                                default:
+                                    WindowAction( Const.MouseAction.WINDOW_LEFT_CLICK );
+                                    break;
+                            }
+
                             break;
                         case MouseButtons.Middle:
-                            WindowAction( ConfigManager.Configs.MouseActions[Const.MouseAction.WINDOW_MIDDLE_CLICK] );
+                            switch ( ModifierKeys )
+                            {
+                                case Keys.Shift:
+                                    WindowAction( Const.MouseAction.WINDOW_SHIFT_MIDDLE_CLICK );
+                                    break;
+                                case Keys.Control:
+                                    WindowAction( Const.MouseAction.WINDOW_CTRL_MIDDLE_CLICK );
+                                    break;
+                                case Keys.Alt:
+                                    WindowAction( Const.MouseAction.WINDOW_ALT_MIDDLE_CLICK );
+                                    break;
+                                default:
+                                    WindowAction( Const.MouseAction.WINDOW_MIDDLE_CLICK );
+                                    break;
+                            }
+
                             break;
                         case MouseButtons.Right:
-                            WindowAction( ConfigManager.Configs.MouseActions[Const.MouseAction.WINDOW_RIGHT_CLICK] );
+                            switch ( ModifierKeys )
+                            {
+                                case Keys.Shift:
+                                    WindowAction( Const.MouseAction.WINDOW_SHIFT_RIGHT_CLICK );
+                                    break;
+                                case Keys.Control:
+                                    WindowAction( Const.MouseAction.WINDOW_CTRL_RIGHT_CLICK );
+                                    break;
+                                case Keys.Alt:
+                                    WindowAction( Const.MouseAction.WINDOW_ALT_RIGHT_CLICK );
+                                    break;
+                                default:
+                                    WindowAction( Const.MouseAction.WINDOW_RIGHT_CLICK );
+                                    break;
+                            }
+
                             break;
                     }
                 }
                 else // click on a virtual desktop
                 {
-                    void DesktopAction( Const.MouseAction.Action action )
+                    void DesktopAction( string actionId )
                     {
+                        var action = Manager.Configs.GetMouseActionById( actionId );
                         switch ( action )
                         {
                             case Const.MouseAction.Action.DesktopVisibleAndCloseView:
@@ -253,13 +327,13 @@ namespace VirtualSpace.VirtualDesktop
                     switch ( e.Button )
                     {
                         case MouseButtons.Left:
-                            DesktopAction( ConfigManager.Configs.MouseActions[Const.MouseAction.DESKTOP_LEFT_CLICK] );
+                            DesktopAction( Const.MouseAction.DESKTOP_LEFT_CLICK );
                             break;
                         case MouseButtons.Middle:
-                            DesktopAction( ConfigManager.Configs.MouseActions[Const.MouseAction.DESKTOP_MIDDLE_CLICK] );
+                            DesktopAction( Const.MouseAction.DESKTOP_MIDDLE_CLICK );
                             break;
                         case MouseButtons.Right:
-                            DesktopAction( ConfigManager.Configs.MouseActions[Const.MouseAction.DESKTOP_RIGHT_CLICK] );
+                            DesktopAction( Const.MouseAction.DESKTOP_RIGHT_CLICK );
                             break;
                     }
                 }

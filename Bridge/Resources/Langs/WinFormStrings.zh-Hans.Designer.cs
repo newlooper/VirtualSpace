@@ -100,7 +100,8 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 当前权限级别无法访问计划任务，请确保当前账户是此计算机的管理员并且“以管理员身份运行”运行此程序。.
+        ///   Looks up a localized string similar to 当前权限级别无法访问计划任务，
+        ///请确保当前账户是此计算机的管理员并且“以管理员身份运行”运行此程序。.
         /// </summary>
         internal static string General_RunOnStartup_Error_Permission {
             get {
@@ -213,6 +214,15 @@ namespace VirtualSpace.Resources.Langs {
         internal static string Mouse_Action_WindowClose {
             get {
                 return ResourceManager.GetString("Mouse.Action.WindowClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 仅显示此程序的窗口.
+        /// </summary>
+        internal static string Mouse_Action_WindowShowForSelectedProcessOnly {
+            get {
+                return ResourceManager.GetString("Mouse.Action.WindowShowForSelectedProcessOnly", resourceCulture);
             }
         }
         
@@ -409,7 +419,9 @@ namespace VirtualSpace.Resources.Langs {
         ///VirtualSpace10	Windows 10	20H2(19042)
         ///VirtualSpace10	Windows 10	21H1(19043)
         ///VirtualSpace10	Windows 10	21H2(19044)
+        ///VirtualSpace10	Windows 10	22H2(19045)
         ///VirtualSpace(11)	Windows 11	21H2(22000)
+        ///VirtualSpace(11)	Windows 11	22H2(22621)
         ///====================================.
         /// </summary>
         internal static string VersionCheckFail {

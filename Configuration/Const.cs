@@ -80,7 +80,7 @@ namespace VirtualSpace.Config
             // tuple.Item1 => friendly name
             // tuple.Item2 => UserMessageId
             // tuple.Item3 => alternate hotkey, 由程序保留，只能在源码中修改
-            public static Dictionary<string, ValueTuple<string, int, string>> Info = new()
+            public static readonly Dictionary<string, ValueTuple<string, int, string>> Info = new()
             {
                 {RISE_VIEW, new ValueTuple<string, int, string>( "Rise MainView", UserMessage.RiseView, "LWin+Tab" )},
                 {SHOW_APP_CONTROLLER, new ValueTuple<string, int, string>( "Open AppController", UserMessage.ShowAppController, "" )},
@@ -110,28 +110,53 @@ namespace VirtualSpace.Config
                 DesktopVisibleOnly,
                 WindowActiveDesktopVisibleAndCloseView,
                 WindowActiveDesktopVisibleOnly,
-                WindowClose
+                WindowClose,
+                WindowHideFromView,
+                WindowShowForSelectedProcessOnly
             }
 
             ///////////////////////////////////////////////////
-            // 值与控件名称一一对应，若控件名被修改，则此处也须对应改变
-            public const string DESKTOP_LEFT_CLICK   = "mouse_node_d_l";
-            public const string DESKTOP_MIDDLE_CLICK = "mouse_node_d_m";
-            public const string DESKTOP_RIGHT_CLICK  = "mouse_node_d_r";
-            public const string WINDOW_LEFT_CLICK    = "mouse_node_w_l";
-            public const string WINDOW_MIDDLE_CLICK  = "mouse_node_w_m";
-            public const string WINDOW_RIGHT_CLICK   = "mouse_node_w_r";
+            // 鼠标支持的触发器，将作为 Action 的键保存在配置文件中
+            // 值与控件名称一一对应，若控件名被修改，则此处也须对应改变 
+            public const string DESKTOP_LEFT_CLICK        = "mouse_node_d_l";
+            public const string DESKTOP_MIDDLE_CLICK      = "mouse_node_d_m";
+            public const string DESKTOP_RIGHT_CLICK       = "mouse_node_d_r";
+            public const string WINDOW_LEFT_CLICK         = "mouse_node_w_l";
+            public const string WINDOW_MIDDLE_CLICK       = "mouse_node_w_m";
+            public const string WINDOW_RIGHT_CLICK        = "mouse_node_w_r";
+            public const string WINDOW_CTRL_LEFT_CLICK    = "mouse_node_w_cl";
+            public const string WINDOW_CTRL_MIDDLE_CLICK  = "mouse_node_w_cm";
+            public const string WINDOW_CTRL_RIGHT_CLICK   = "mouse_node_w_cr";
+            public const string WINDOW_ALT_LEFT_CLICK     = "mouse_node_w_al";
+            public const string WINDOW_ALT_MIDDLE_CLICK   = "mouse_node_w_am";
+            public const string WINDOW_ALT_RIGHT_CLICK    = "mouse_node_w_ar";
+            public const string WINDOW_SHIFT_LEFT_CLICK   = "mouse_node_w_sl";
+            public const string WINDOW_SHIFT_MIDDLE_CLICK = "mouse_node_w_sm";
+            public const string WINDOW_SHIFT_RIGHT_CLICK  = "mouse_node_w_sr";
 
             ////////////////////////////////////////////////////////////////
             // 鼠标动作表，信息包含友好名称和默认行为
-            public static Dictionary<string, ValueTuple<string, Action>> Info = new()
+            public static readonly Dictionary<string, ValueTuple<string, Action>> Info = new()
             {
                 {DESKTOP_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse LeftClick on VirtualDesktop", Action.DesktopVisibleAndCloseView )},
                 {DESKTOP_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse MiddleClick on VirtualDesktop", Action.DesktopVisibleOnly )},
                 {DESKTOP_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse RightClick on VirtualDesktop", Action.ContextMenu )},
+
                 {WINDOW_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse LeftClick on Window Thumbnail", Action.WindowActiveDesktopVisibleAndCloseView )},
                 {WINDOW_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse MiddleClick on Window Thumbnail", Action.WindowActiveDesktopVisibleOnly )},
-                {WINDOW_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse RightClick on Window Thumbnail", Action.ContextMenu )}
+                {WINDOW_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse RightClick on Window Thumbnail", Action.ContextMenu )},
+
+                {WINDOW_CTRL_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse Ctrl+LeftClick on Window Thumbnail", Action.DoNothing )},
+                {WINDOW_CTRL_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse Ctrl+MiddleClick on Window Thumbnail", Action.DoNothing )},
+                {WINDOW_CTRL_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse Ctrl+RightClick on Window Thumbnail", Action.DoNothing )},
+
+                {WINDOW_ALT_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse Alt+LeftClick on Window Thumbnail", Action.DoNothing )},
+                {WINDOW_ALT_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse Alt+MiddleClick on Window Thumbnail", Action.DoNothing )},
+                {WINDOW_ALT_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse Alt+RightClick on Window Thumbnail", Action.DoNothing )},
+
+                {WINDOW_SHIFT_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse Shift+LeftClick on Window Thumbnail", Action.DoNothing )},
+                {WINDOW_SHIFT_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse Shift+MiddleClick on Window Thumbnail", Action.DoNothing )},
+                {WINDOW_SHIFT_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse Shift+RightClick on Window Thumbnail", Action.DoNothing )}
             };
         }
     }

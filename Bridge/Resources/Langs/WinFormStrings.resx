@@ -250,4 +250,7 @@ possible reason:
   <data name="General.RunOnStartup.Error.Permission" xml:space="preserve">
     <value>Cannot access task with your current permissions level. You need to run this application 'as administrator' even if you are using an administrator account.</value>
   </data>
+  <data name="Mouse.Action.WindowShowForSelectedProcessOnly" xml:space="preserve">
+    <value>Show Windows Only From Selected App</value>
+  </data>
 </root>

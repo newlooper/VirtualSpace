@@ -247,7 +247,7 @@ namespace VirtualSpace.VirtualDesktop
             return VisibleWindows;
         }
 
-        public static void ShowVisibleWindowsForDesktops( List<VirtualDesktopWindow>? vdwList = null )
+        public static void ShowVisibleWindowsForDesktops( List<VirtualDesktopWindow>? vdwList = null, int processId = 0 )
         {
             var visibleWindows = GetVisibleWindows();
             Logger.Debug( $"VisibleWindows/ApplicationViews: {visibleWindows.Count.ToString()}/{DesktopManagerWrapper.GetViewCount().ToString()}" );
@@ -260,6 +260,12 @@ namespace VirtualSpace.VirtualDesktop
             {
                 try
                 {
+                    if ( processId != 0 )
+                    {
+                        _ = User32.GetWindowThreadProcessId( win.Handle, out var pId );
+                        if ( processId != pId ) continue;
+                    }
+
                     if ( DesktopWrapper.IsWindowPinned( win.Handle ) ||
                          DesktopWrapper.IsApplicationPinned( win.Handle ) )
                     {

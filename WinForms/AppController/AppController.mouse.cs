@@ -80,7 +80,9 @@ namespace VirtualSpace
                         Text = Agent.Langs.GetString( "Mouse.Action.WindowActiveDesktopVisibleOnly" )
                     },
                     new {Value = Const.MouseAction.Action.ContextMenu, Text = Agent.Langs.GetString( "Mouse.Action.ContextMenu" )},
+                    new {Value = Const.MouseAction.Action.WindowHideFromView, Text = Agent.Langs.GetString( "VDW.CTM.Window.HideFromView" )},
                     new {Value = Const.MouseAction.Action.WindowClose, Text = Agent.Langs.GetString( "Mouse.Action.WindowClose" )},
+                    new {Value = Const.MouseAction.Action.WindowShowForSelectedProcessOnly, Text = Agent.Langs.GetString( "Mouse.Action.WindowShowForSelectedProcessOnly" )},
                     new {Value = Const.MouseAction.Action.DoNothing, Text = Agent.Langs.GetString( "Mouse.Action.DoNothing" )}
                 };
                 WinForms.SetComboBoxDataSource( cb_mouse_func, items );
