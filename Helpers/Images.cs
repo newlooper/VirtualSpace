@@ -90,6 +90,7 @@ namespace VirtualSpace.Helpers
         public void Release()
         {
             Image?.Dispose();
+            Image = null;
             if ( string.IsNullOrEmpty( Fullpath ) ) return;
             try
             {

@@ -171,7 +171,7 @@ namespace VirtualSpace.VirtualDesktop
                         Logger.Debug( $"ACTIVE.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )})" );
                         Logger.Debug( $"CHANGE CURRENT DESKTOP TO Desktop[{_hoverVdIndex.ToString()}]" );
                         DesktopWrapper.MakeVisibleByGuid( ConfigManager.CurrentProfile.DesktopOrder[_hoverVdIndex] );
-                        User32.SwitchToThisWindow( _selectedWindow.Handle, true );
+                        WindowTool.ActiveWindow( _selectedWindow.Handle );
                     }
 
                     void WindowAction( string actionId )

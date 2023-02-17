@@ -92,5 +92,15 @@ namespace VirtualSpace.Helpers
 
             return index;
         }
+
+        public static void ActiveWindow( IntPtr hWnd )
+        {
+            if ( User32.IsIconic( hWnd ) )
+            {
+                _ = User32.ShowWindow( hWnd, (short)ShowState.SW_RESTORE );
+            }
+
+            User32.SetForegroundWindow( hWnd );
+        }
     }
 }

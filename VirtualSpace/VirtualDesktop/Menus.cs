@@ -154,26 +154,30 @@ namespace VirtualSpace.VirtualDesktop
         {
             _ctm ??= new ContextMenuStrip();
             _ctm.Items.Clear();
+
+            //////////////////////////////////////////////////////////////
+            // show & edit desktop's name
             var sysIndex    = DesktopWrapper.IndexFromGuid( mi.Self.VdId );
             var currentName = DesktopWrapper.DesktopNameFromIndex( sysIndex );
             var desktopName = new ToolStripTextBox {Text = currentName, AutoSize = false, Width = 200};
             desktopName.KeyPress += ( s, evt ) =>
             {
-                if ( evt.KeyChar == (char)Keys.Enter )
+                if ( evt.KeyChar != (char)Keys.Enter ) return;
+                if ( currentName != desktopName.Text )
                 {
-                    if ( currentName != desktopName.Text )
-                    {
-                        DesktopWrapper.SetNameByIndex( sysIndex, desktopName.Text );
-                        mi.Self.UpdateDesktopName( desktopName.Text );
-                    }
-
-                    evt.Handled = true;
-                    _ctm.Close();
+                    DesktopWrapper.SetNameByIndex( sysIndex, desktopName.Text );
+                    mi.Self.UpdateDesktopName( desktopName.Text );
                 }
+
+                evt.Handled = true;
+                _ctm.Close();
             };
             _ctm.Items.Add( desktopName );
+
             _ctm.Items.Add( "-" );
 
+            //////////////////////////////////////////////////////////////
+            // UnHideWindow
             var unHideWindow = new ToolStripMenuItem( Agent.Langs.GetString( "VDW.CTM.Desktop.UnHideWindow" ) );
 
             void OnUnHideWindow( object? s, EventArgs evt )
@@ -216,8 +220,11 @@ namespace VirtualSpace.VirtualDesktop
 
             unHideWindow.Enabled = unHideWindow.DropDownItems.Count > 0;
             _ctm.Items.Add( unHideWindow );
+
             _ctm.Items.Add( "-" );
 
+            //////////////////////////////////////////////////////////////
+            // delete virtual desktop
             var delVirtualDesktop = new ToolStripMenuItem( Agent.Langs.GetString( "VDW.CTM.Desktop.Remove" ) );
             delVirtualDesktop.Click += ( s, evt ) =>
             {
@@ -230,9 +237,11 @@ namespace VirtualSpace.VirtualDesktop
             };
             _ctm.Items.Add( delVirtualDesktop );
 
-            var addVirtualDesktop = new ToolStripMenuItem( Agent.Langs.GetString( "VDW.CTM.Desktop.Create" ) );
+            //////////////////////////////////////////////////////////////
+            // create virtual desktop
+            var createVirtualDesktop = new ToolStripMenuItem( Agent.Langs.GetString( "VDW.CTM.Desktop.Create" ) );
 
-            void BatchAdd( object? s, EventArgs evt )
+            void BatchCreate( object? s, EventArgs evt )
             {
                 var item  = s as ToolStripMenuItem;
                 var count = int.Parse( item.Text );
@@ -263,11 +272,11 @@ namespace VirtualSpace.VirtualDesktop
             for ( var i = 1; i <= 10; i++ )
             {
                 var count = new ToolStripMenuItem( i.ToString() );
-                count.Click += BatchAdd;
-                addVirtualDesktop.DropDownItems.Add( count );
+                count.Click += BatchCreate;
+                createVirtualDesktop.DropDownItems.Add( count );
             }
 
-            _ctm.Items.Add( addVirtualDesktop );
+            _ctm.Items.Add( createVirtualDesktop );
 
             ///////////////////////////////////
             // Show Virtual Desktop ContextMenu 

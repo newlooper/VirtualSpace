@@ -254,7 +254,7 @@ namespace VirtualSpace.VirtualDesktop
 
             vdwList ??= _virtualDesktops;
 
-            Parallel.ForEach( vdwList, ( vdw, loopState ) => { vdw.ClearWindows(); } );
+            Parallel.ForEach( vdwList, ( vdw, loopState ) => { vdw.ClearVisibleWindows(); } );
 
             foreach ( var win in visibleWindows )
             {
@@ -326,7 +326,7 @@ namespace VirtualSpace.VirtualDesktop
             Menus.CloseContextMenu();
             foreach ( var vdw in _virtualDesktops ) vdw.Hide();
 
-            Parallel.ForEach( _virtualDesktops, ( vdw, loopState ) => { vdw.ClearWindows(); } );
+            Parallel.ForEach( _virtualDesktops, ( vdw, loopState ) => { vdw.ClearVisibleWindows(); } );
         }
 
         public static void Bootstrap()

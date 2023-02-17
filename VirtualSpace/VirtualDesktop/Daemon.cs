@@ -93,7 +93,7 @@ namespace VirtualSpace.VirtualDesktop
                         {
                             Logger.Debug( $"[RULE]CHANGE CURRENT DESKTOP TO Desktop[{action.MoveToDesktop.ToString()}]" );
                             DesktopWrapper.MakeVisibleByIndex( action.MoveToDesktop );
-                            User32.SwitchToThisWindow( action.Handle, true );
+                            WindowTool.ActiveWindow( action.Handle );
                         }
                     }
                     catch

@@ -74,9 +74,6 @@ namespace VirtualSpace.Helpers
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
         public static extern bool SendMessage( IntPtr hWnd, int msg, ulong wParam, ulong lParam );
 
-        [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-        public static extern int SetWindowLong( IntPtr hWnd, int nIndex, int newLong );
-
         public static IntPtr SetWindowLongPtr( HandleRef hWnd, int nIndex, int dwNewLong )
         {
             if ( IntPtr.Size == 8 )
@@ -108,14 +105,18 @@ namespace VirtualSpace.Helpers
         public static extern bool IsWindow( IntPtr hWnd );
 
         [DllImport( "user32.dll" )]
+        public static extern bool IsIconic( IntPtr hWnd );
+
+        [DllImport( "user32.dll" )]
         public static extern int EnumWindows( EnumWindowsProc func, int lParam );
 
         [DllImport( "user32.dll" )]
         [return: MarshalAs( UnmanagedType.Bool )]
         public static extern bool EnumChildWindows( IntPtr hWndParent, EnumChildWindowsProc lpEnumFunc, int lParam );
 
-        [DllImport( "user32.dll", SetLastError = true )]
-        public static extern void SwitchToThisWindow( IntPtr hWnd, bool turnOn );
+        [DllImport( "user32.dll" )]
+        [return: MarshalAs( UnmanagedType.Bool )]
+        public static extern bool SetForegroundWindow( IntPtr hWnd );
 
         [DllImport( "user32.dll", SetLastError = true )]
         public static extern IntPtr SetParent( IntPtr hWndChild, IntPtr hWndNewParent );

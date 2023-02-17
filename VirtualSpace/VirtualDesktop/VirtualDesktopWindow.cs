@@ -120,7 +120,7 @@ namespace VirtualSpace.VirtualDesktop
             _visibleWindows.Add( wnd );
         }
 
-        public void ClearWindows()
+        public void ClearVisibleWindows()
         {
             ReleaseThumbnails();
             _visibleWindows.Clear();
@@ -254,7 +254,7 @@ namespace VirtualSpace.VirtualDesktop
         public void RealClose()
         {
             FormClosing -= VirtualDesktopWindow_Closing;
-            ClearWindows();
+            ClearVisibleWindows();
             Close();
         }
 
