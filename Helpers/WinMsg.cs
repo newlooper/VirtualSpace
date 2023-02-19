@@ -29,15 +29,16 @@ namespace VirtualSpace.Helpers
 
     public static class UserMessage
     {
-        public const int RiseView           = 1000;
-        public const int ShowAppController  = 1001;
-        public const int CloseView          = 1002;
-        public const int SwitchDesktop      = 1003;
-        public const int DesktopArrangement = 1004;
-        public const int RunAsAdministrator = 1005;
-        public const int RestartApp         = 1006;
-        public const int EnableMouseHook    = 1007;
-        public const int DisableMouseHook   = 1008;
+        public const int RiseView             = 1000;
+        public const int ShowAppController    = 1001;
+        public const int CloseView            = 1002;
+        public const int SwitchDesktop        = 1003;
+        public const int DesktopArrangement   = 1004;
+        public const int RunAsAdministrator   = 1005;
+        public const int RestartApp           = 1006;
+        public const int EnableMouseHook      = 1007;
+        public const int DisableMouseHook     = 1008;
+        public const int RiseViewForActiveApp = 1009;
 
         public const int SVD1 = 1101;
         public const int SVD2 = 1102;

@@ -120,7 +120,7 @@ namespace VirtualSpace
             Hide();
         }
 
-        private static void BringToTop()
+        private static void BringToTop( int processId = 0 )
         {
             CheckScreenArea();
 
@@ -130,7 +130,15 @@ namespace VirtualSpace
 
             VirtualDesktopManager.FixLayout();
             VirtualDesktopManager.ShowAllVirtualDesktops();
-            VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+
+            if ( processId > 0 )
+            {
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops( null, processId );
+            }
+            else
+            {
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+            }
         }
 
         private static void CheckScreenArea()

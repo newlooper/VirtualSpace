@@ -152,6 +152,20 @@ namespace VirtualSpace
                             }
 
                             break;
+                        case UserMessage.RiseViewForActiveApp:
+                            var hFWin = User32.GetForegroundWindow();
+                            User32.GetWindowThreadProcessId( hFWin, out var processId );
+                            if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
+                            {
+                                HideAll();
+                            }
+                            else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                            {
+                                BringToTop( processId );
+                                RiseViewTimer.Restart();
+                            }
+
+                            break;
                         case UserMessage.ShowAppController:
                             _acForm.BringToTop();
                             break;

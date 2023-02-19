@@ -115,6 +115,9 @@ namespace VirtualSpace.Helpers
         public static extern bool EnumChildWindows( IntPtr hWndParent, EnumChildWindowsProc lpEnumFunc, int lParam );
 
         [DllImport( "user32.dll" )]
+        public static extern IntPtr GetForegroundWindow();
+
+        [DllImport( "user32.dll" )]
         [return: MarshalAs( UnmanagedType.Bool )]
         public static extern bool SetForegroundWindow( IntPtr hWnd );
 

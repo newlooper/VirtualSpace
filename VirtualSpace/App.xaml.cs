@@ -45,6 +45,8 @@ namespace VirtualSpace
                  SingleInstanceCheck() &&
                  ConfigManager.Init() )
             {
+                Bootstrap();
+
                 if ( e.Args.Contains( Const.Args.HIDE_ON_START ) ) HideOnStart = true;
 
                 var mw = CreateCanvas( e );
@@ -58,7 +60,6 @@ namespace VirtualSpace
                     mw.Top = Const.FakeHideY;
                 }
 
-                Bootstrap();
                 mw.Show();
 
                 if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )

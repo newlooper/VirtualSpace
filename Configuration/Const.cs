@@ -59,21 +59,22 @@ namespace VirtualSpace.Config
 
             ///////////////////////////////////////////////////
             // 值与控件名称一一对应，若控件名被修改，则此处也须对应改变
-            public const string RISE_VIEW           = "hk_node_rise_mainview";
-            public const string SHOW_APP_CONTROLLER = "hk_node_open_app_controller";
-            public const string SVD1                = "hk_node_svd_1";
-            public const string SVD2                = "hk_node_svd_2";
-            public const string SVD3                = "hk_node_svd_3";
-            public const string SVD4                = "hk_node_svd_4";
-            public const string SVD5                = "hk_node_svd_5";
-            public const string SVD6                = "hk_node_svd_6";
-            public const string SVD7                = "hk_node_svd_7";
-            public const string SVD8                = "hk_node_svd_8";
-            public const string SVD9                = "hk_node_svd_9";
-            public const string NAV_LEFT            = "hk_node_nav_left";
-            public const string NAV_RIGHT           = "hk_node_nav_right";
-            public const string NAV_UP              = "hk_node_nav_up";
-            public const string NAV_DOWN            = "hk_node_nav_down";
+            public const string RISE_VIEW                = "hk_node_rise_mainview";
+            public const string RISE_VIEW_FOR_ACTIVE_APP = "hk_node_rise_mainview_for_active_app";
+            public const string SHOW_APP_CONTROLLER      = "hk_node_open_app_controller";
+            public const string SVD1                     = "hk_node_svd_1";
+            public const string SVD2                     = "hk_node_svd_2";
+            public const string SVD3                     = "hk_node_svd_3";
+            public const string SVD4                     = "hk_node_svd_4";
+            public const string SVD5                     = "hk_node_svd_5";
+            public const string SVD6                     = "hk_node_svd_6";
+            public const string SVD7                     = "hk_node_svd_7";
+            public const string SVD8                     = "hk_node_svd_8";
+            public const string SVD9                     = "hk_node_svd_9";
+            public const string NAV_LEFT                 = "hk_node_nav_left";
+            public const string NAV_RIGHT                = "hk_node_nav_right";
+            public const string NAV_UP                   = "hk_node_nav_up";
+            public const string NAV_DOWN                 = "hk_node_nav_down";
 
             ////////////////////////////////////////////////////////////////
             // 可由热键调用的程序功能表
@@ -83,6 +84,7 @@ namespace VirtualSpace.Config
             public static readonly Dictionary<string, ValueTuple<string, int, string>> Info = new()
             {
                 {RISE_VIEW, new ValueTuple<string, int, string>( "Rise MainView", UserMessage.RiseView, "LWin+Tab" )},
+                {RISE_VIEW_FOR_ACTIVE_APP, new ValueTuple<string, int, string>( "Rise MainView For Active App", UserMessage.RiseViewForActiveApp, "" )},
                 {SHOW_APP_CONTROLLER, new ValueTuple<string, int, string>( "Open AppController", UserMessage.ShowAppController, "" )},
                 {SVD1, new ValueTuple<string, int, string>( "Switch To Desktop 1", UserMessage.SVD1, "" )},
                 {SVD2, new ValueTuple<string, int, string>( "Switch To Desktop 2", UserMessage.SVD2, "" )},
