@@ -24,7 +24,7 @@ namespace VirtualSpace.Config
         public Dictionary<string, KeyBinding>? KeyBindings { get; set; } = new()
         {
             {Const.Hotkey.RISE_VIEW, new KeyBinding {GhkCode = "_+Ctrl+_+Shift+Tab", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW].Item2}},
-            {Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP, new KeyBinding {GhkCode = "_+Ctrl+Alt+Shift+Tab", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP].Item2}},
+            {Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP].Item2}},
             {Const.Hotkey.SHOW_APP_CONTROLLER, new KeyBinding {GhkCode = "_+Ctrl+Alt+_+F12", MessageId = Const.Hotkey.Info[Const.Hotkey.SHOW_APP_CONTROLLER].Item2}},
             {Const.Hotkey.SVD1, new KeyBinding {GhkCode = "_+Ctrl+Alt+_+NumPad1", MessageId = Const.Hotkey.Info[Const.Hotkey.SVD1].Item2}},
             {Const.Hotkey.SVD2, new KeyBinding {GhkCode = "_+Ctrl+Alt+_+NumPad2", MessageId = Const.Hotkey.Info[Const.Hotkey.SVD2].Item2}},
