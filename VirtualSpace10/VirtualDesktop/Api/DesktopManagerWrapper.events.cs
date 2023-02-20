@@ -79,7 +79,7 @@ namespace VirtualSpace.VirtualDesktop.Api
                             break;
                         case VirtualDesktopNotificationType.CURRENT_CHANGED:
                             if ( MainWindow.IsShowing() )
-                                VirtualDesktopManager.ResetAllBackground();
+                                VirtualDesktopManager.UpdateVdwBackground();
 
                             if ( ConfigManager.Configs.Cluster.NotificationOnVdChanged )
                             {

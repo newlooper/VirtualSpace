@@ -36,7 +36,43 @@ namespace VirtualSpace.Helpers
             HookId = User32.SetWindowsHookEx( WH_KEYBOARD_LL, _hookProc, Kernel32.GetModuleHandle( null ), 0 );
         }
 
+        public static void MultipleKeyDown( List<int> keys )
+        {
+            SendKeys( keys, 0 );
+        }
+
+        public static void MultipleKeyUp( List<int> keys )
+        {
+            SendKeys( keys, 2 );
+        }
+
         public static void MultipleKeyPress( List<int> keys )
+        {
+            SendKeysCombine( keys, 2 );
+        }
+
+        private static void SendKeys( List<int> keys, int flags )
+        {
+            var inputs = new INPUT[keys.Count];
+            for ( var pos = 0; pos < keys.Count; pos++ )
+            {
+                inputs[pos].Type = 1;
+                inputs[pos].Data.Keyboard = new KEYBDINPUT
+                {
+                    Vk = (ushort)keys[pos],
+                    Scan = 0,
+                    Flags = Convert.ToUInt32( flags ),
+                    Time = 0,
+                    ExtraInfo = IntPtr.Zero
+                };
+            }
+
+            var result = User32.SendInput( Convert.ToUInt32( inputs.Length ), inputs, Marshal.SizeOf( typeof( INPUT ) ) );
+            if ( result == 0 )
+                throw new Exception();
+        }
+
+        private static void SendKeysCombine( List<int> keys, int flags )
         {
             var inputs = new INPUT[keys.Count * 2];
             for ( var i = 0; i < keys.Count; i++ )
@@ -55,28 +91,7 @@ namespace VirtualSpace.Helpers
                 {
                     Vk = (ushort)keys[i],
                     Scan = 0,
-                    Flags = Convert.ToUInt32( 1 ),
-                    Time = 0,
-                    ExtraInfo = IntPtr.Zero
-                };
-            }
-
-            var result = User32.SendInput( Convert.ToUInt32( inputs.Length ), inputs, Marshal.SizeOf( typeof( INPUT ) ) );
-            if ( result == 0 )
-                throw new Exception();
-        }
-
-        public static void MultipleKeyUp( List<int> keys )
-        {
-            var inputs = new INPUT[keys.Count];
-            for ( var positive = 0; positive < keys.Count; positive++ )
-            {
-                inputs[positive].Type = 1;
-                inputs[positive].Data.Keyboard = new KEYBDINPUT
-                {
-                    Vk = (ushort)keys[positive],
-                    Scan = 0,
-                    Flags = Convert.ToUInt32( 1 ),
+                    Flags = Convert.ToUInt32( flags ),
                     Time = 0,
                     ExtraInfo = IntPtr.Zero
                 };

@@ -24,8 +24,6 @@ namespace VirtualSpace
 {
     public partial class MainWindow
     {
-        private static bool _inRising;
-
         private void RegisterHotKey( IntPtr hWnd )
         {
             foreach ( var kv in Manager.Configs.KeyBindings )
@@ -104,9 +102,7 @@ namespace VirtualSpace
                    )
                 {
                     LowLevelKeyboardHook.MultipleKeyPress( new List<int> {LowLevelKeyboardHook.DUMMY_KEY} );
-                    LowLevelKeyboardHook.MultipleKeyUp( new List<int> {(int)Keys.LWin} );
                     User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
-                    _inRising = true;
                     return LowLevelHooks.Handled;
                 }
 
@@ -134,16 +130,6 @@ namespace VirtualSpace
                 {
                     HideAll();
                 }
-            }
-
-            /////////////////////////////////////////////////////////////////////////////////
-            // when MainView rising, send dummy_key to avoid other apps which listen LWin key trigger their actions
-            if ( msg == LowLevelKeyboardHook.WM_KEYUP
-                 && info.vkCode == (int)Keys.LWin
-                 && _inRising )
-            {
-                LowLevelKeyboardHook.MultipleKeyPress( new List<int> {LowLevelKeyboardHook.DUMMY_KEY} );
-                _inRising = false;
             }
 
             return User32.CallNextHookEx( LowLevelKeyboardHook.HookId, nCode, wParam, lParam );

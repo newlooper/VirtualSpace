@@ -254,7 +254,10 @@ namespace VirtualSpace.VirtualDesktop
 
             vdwList ??= _virtualDesktops;
 
-            Parallel.ForEach( vdwList, ( vdw, loopState ) => { vdw.ClearVisibleWindows(); } );
+            foreach ( var virtualDesktopWindow in vdwList )
+            {
+                virtualDesktopWindow.ClearVisibleWindows();
+            }
 
             foreach ( var win in visibleWindows )
             {
@@ -313,20 +316,22 @@ namespace VirtualSpace.VirtualDesktop
                 vdw.ShowByVdIndex();
             }
 
-            ResetAllBackground();
+            UpdateVdwBackground();
         }
 
-        public static void ResetAllBackground()
+        public static void UpdateVdwBackground()
         {
-            MainWindow.ResetAllBorder();
+            MainWindow.RenderCellBorder();
         }
 
         public static void HideAllVirtualDesktops()
         {
             Menus.CloseContextMenu();
-            foreach ( var vdw in _virtualDesktops ) vdw.Hide();
-
-            Parallel.ForEach( _virtualDesktops, ( vdw, loopState ) => { vdw.ClearVisibleWindows(); } );
+            foreach ( var vdw in _virtualDesktops )
+            {
+                vdw.Hide();
+                vdw.ClearVisibleWindows();
+            }
         }
 
         public static void Bootstrap()

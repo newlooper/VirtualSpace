@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFrameworks>netcoreapp3.1;net6.0-windows</TargetFrameworks>
+        <TargetFrameworks>net6.0-windows</TargetFrameworks>
         <UseWPF>true</UseWPF>
         <StartupObject>VirtualSpace.App</StartupObject>
         <ApplicationIcon>Resources\TrayIcon.ico</ApplicationIcon>

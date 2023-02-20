@@ -339,7 +339,8 @@ namespace VirtualSpace.VirtualDesktop
                 }
             }
 
-            VirtualDesktopManager.ResetAllBackground();
+            VirtualDesktopManager.UpdateVdwBackground();
+
             if ( _dw != null )
             {
                 DwmApi.DwmUnregisterThumbnail( _dw.Thumb );

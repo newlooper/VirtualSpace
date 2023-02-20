@@ -49,7 +49,7 @@ namespace VirtualSpace
             }
         }
 
-        public static void ResetAllBorder()
+        public static void RenderCellBorder()
         {
             var currentMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( VirtualDesktopManager.CurrentDesktopIndex() );
 

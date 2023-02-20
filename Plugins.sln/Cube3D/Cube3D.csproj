@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFrameworks>netcoreapp3.1;net6.0-windows10.0.20348.0;net6.0-windows10.0.22000.0;</TargetFrameworks>
+        <TargetFrameworks>net6.0-windows10.0.20348.0;net6.0-windows10.0.22000.0;</TargetFrameworks>
         <LangVersion>9</LangVersion>
         <UseWPF>true</UseWPF>
         <CsWinRTEnabled>false</CsWinRTEnabled>
