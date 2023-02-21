@@ -116,7 +116,6 @@ namespace VirtualSpace
 
         public void FakeHide()
         {
-            ResetMainGrid();
             Hide();
         }
 

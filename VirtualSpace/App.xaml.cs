@@ -131,11 +131,13 @@ namespace VirtualSpace
         private static void BootInfo()
         {
             var screen = Screen.FromPoint( new Point() );
+            var ar     = SysInfo.GetAspectRadioOfScreen();
             Logger.Info( $"Application Start Successfully: {ConfigManager.AppPath}" );
             Logger.Info( $"System Version: {SysInfo.OSVersion}" );
             Logger.Info( $"Total Screens: {Screen.AllScreens.Length}" );
             Logger.Info( $"Total VirtualDesktops: {DesktopWrapper.Count}" );
             Logger.Info( $"Start Screen: {screen.DeviceName} ({screen.DeviceFriendlyName()})" );
+            Logger.Info( $"Start Screen Aspect Ratio: [{ar.Item1}:{ar.Item2}]" );
             Logger.Info( $"Start VirtualDesktop: Desktop[{DesktopWrapper.CurrentIndex}]" );
             Logger.Info( $"Start Position: [{Screen.PrimaryScreen.Bounds.Location.X}, {Screen.PrimaryScreen.Bounds.Location.Y}]" );
             Logger.Info( $"Start Size: {Screen.PrimaryScreen.Bounds.Width}*{Screen.PrimaryScreen.Bounds.Height}" );

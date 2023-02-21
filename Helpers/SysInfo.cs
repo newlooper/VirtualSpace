@@ -59,6 +59,23 @@ namespace VirtualSpace.Helpers
                 return winVer;
             }
         }
+
+        public static ValueTuple<int, int> GetAspectRadioOfScreen()
+        {
+            var nGCD = GetGreatestCommonDivisor( Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height );
+            return new ValueTuple<int, int>( Screen.PrimaryScreen.Bounds.Width / nGCD, Screen.PrimaryScreen.Bounds.Height / nGCD );
+        }
+
+        private static int GetGreatestCommonDivisor( int a, int b )
+        {
+            while ( true )
+            {
+                if ( b == 0 ) return a;
+                var a1 = a;
+                a = b;
+                b = a1 % b;
+            }
+        }
     }
 
     /// <summary>

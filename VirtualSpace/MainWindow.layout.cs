@@ -91,7 +91,11 @@ namespace VirtualSpace
             if ( vdCount == _desktopCount ) return;
             var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
 
-            _instance.MainGrid.Children.Clear();
+            var mainGrid = _instance.MainGrid;
+
+            mainGrid.Children.Clear();
+            mainGrid.RowDefinitions.Clear();
+            mainGrid.ColumnDefinitions.Clear();
 
             if ( RowsCols != rowsCols )
             {
@@ -103,17 +107,24 @@ namespace VirtualSpace
                 {Color = Color.FromRgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
             var borderShadowDefault = _instance.Resources["VdwShadowDefault"] as DropShadowEffect;
 
-            for ( var i = 0; i < Math.Pow( rowsCols, 2 ); i++ )
+            for ( var r = 0; r < rowsCols; r++ )
             {
-                var border = new Border
+                mainGrid.RowDefinitions.Add( new RowDefinition() );
+                mainGrid.ColumnDefinitions.Add( new ColumnDefinition() );
+                for ( var c = 0; c < rowsCols; c++ )
                 {
-                    Margin = new Thickness( Ui.VDWMargin ),
-                    BorderThickness = new Thickness( Ui.VDWBorderSize ),
-                    BorderBrush = borderBrushDefault,
-                    Effect = borderShadowDefault,
-                    Background = Brushes.Transparent
-                };
-                _instance.MainGrid.Children.Add( border );
+                    var border = new Border
+                    {
+                        Margin = new Thickness( Ui.VDWMargin ),
+                        BorderThickness = new Thickness( Ui.VDWBorderSize ),
+                        BorderBrush = borderBrushDefault,
+                        Effect = borderShadowDefault,
+                        Background = Brushes.Transparent
+                    };
+                    Grid.SetRow( border, r );
+                    Grid.SetColumn( border, c );
+                    mainGrid.Children.Add( border );
+                }
             }
 
             _desktopCount = vdCount; // remember last count

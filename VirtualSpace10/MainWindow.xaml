@@ -12,7 +12,7 @@
         Title="__VirtualDesktopFrame!" Width="1280" Height="720" Left="0" Top="0" WindowStyle="None"
         Loaded="Window_Loaded"
         Closing="Window_Closing" ShowInTaskbar="False">
-    <UniformGrid x:Name="MainGrid" />
+    <Grid x:Name="MainGrid" />
     <Window.Resources>
         <ResourceDictionary>
             <DropShadowEffect x:Key="VdwShadowDefault" Opacity="1" ShadowDepth="1" Color="Black" BlurRadius="10"></DropShadowEffect>
