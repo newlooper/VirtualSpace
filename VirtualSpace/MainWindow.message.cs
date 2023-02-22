@@ -130,6 +130,28 @@ namespace VirtualSpace
                     DesktopWrapper.MakeVisibleByGuid( Manager.CurrentProfile.DesktopOrder[index] );
             }
 
+            void MoveForegroundWindowToDesktop( int vdIndex, bool follow = false )
+            {
+                if ( vdIndex >= DesktopWrapper.Count ) return;
+
+                var fw = User32.GetForegroundWindow();
+                if ( fw == IntPtr.Zero ) return;
+
+                try
+                {
+                    DesktopWrapper.MoveWindowToDesktop( fw, vdIndex );
+
+                    if ( !follow ) return;
+
+                    DesktopWrapper.MakeVisibleByIndex( vdIndex );
+                    WindowTool.ActiveWindow( fw );
+                }
+                catch ( Exception ex )
+                {
+                    Logger.Error( $"Move Window To Desktop[{vdIndex}] ∵ " + ex.Message );
+                }
+            }
+
             switch ( msg )
             {
                 case WinMsg.WM_SYSCOMMAND:
@@ -138,8 +160,19 @@ namespace VirtualSpace
                         handled = true;
                     break;
                 case WinMsg.WM_HOTKEY:
-                    switch ( wParam.ToInt32() )
+
+                    var um = wParam.ToInt32();
+                    switch ( um )
                     {
+                        case > UserMessage.Meta.SVD_START and <= UserMessage.Meta.SVD_END:
+                            SwitchByIndex( um % UserMessage.Meta.SVD_START - 1 );
+                            break;
+                        case > UserMessage.Meta.MW_START and <= UserMessage.Meta.MW_END:
+                            MoveForegroundWindowToDesktop( um % UserMessage.Meta.MW_START - 1 );
+                            break;
+                        case > UserMessage.Meta.MWF_START and <= UserMessage.Meta.MWF_END:
+                            MoveForegroundWindowToDesktop( um % UserMessage.Meta.MWF_START - 1, true );
+                            break;
                         case UserMessage.RiseView:
                             if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
                             {
@@ -250,33 +283,6 @@ namespace VirtualSpace
                         case UserMessage.DisableMouseHook:
                             DisableMouseHook();
                             goto RETURN;
-                        case UserMessage.SVD1:
-                            SwitchByIndex( 0 );
-                            break;
-                        case UserMessage.SVD2:
-                            SwitchByIndex( 1 );
-                            break;
-                        case UserMessage.SVD3:
-                            SwitchByIndex( 2 );
-                            break;
-                        case UserMessage.SVD4:
-                            SwitchByIndex( 3 );
-                            break;
-                        case UserMessage.SVD5:
-                            SwitchByIndex( 4 );
-                            break;
-                        case UserMessage.SVD6:
-                            SwitchByIndex( 5 );
-                            break;
-                        case UserMessage.SVD7:
-                            SwitchByIndex( 6 );
-                            break;
-                        case UserMessage.SVD8:
-                            SwitchByIndex( 7 );
-                            break;
-                        case UserMessage.SVD9:
-                            SwitchByIndex( 8 );
-                            break;
                         case UserMessage.NavLeft:
                             User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)Keys.Left );
                             break;

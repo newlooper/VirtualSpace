@@ -28,7 +28,7 @@ namespace VirtualSpace
         {
             foreach ( var kv in Manager.Configs.KeyBindings )
             {
-                var func = Const.Hotkey.Info[kv.Key].Item1;
+                var func = Const.Hotkey.GetFuncDesc( kv.Key );
                 var kb   = kv.Value;
 
                 var ghkCode = kb.GhkCode;

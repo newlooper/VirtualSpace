@@ -74,8 +74,8 @@ namespace VirtualSpace
 
             ReadRules();
             ReadNavConfig();
-            KeyboardTopNodeExpand();
-            MouseTopNodeExpand();
+            InitKeyboardNodes();
+            InitMouseNodes();
 
             Show();
         }
@@ -122,16 +122,17 @@ namespace VirtualSpace
                 _instance.tv_keyboard.Nodes.AddRange( new[]
                 {
                     (TreeNode)Resources.GetObject( "tv_keyboard.Nodes" ),
-                    (TreeNode)Resources.GetObject( "tv_keyboard.Nodes1" )
+                    (TreeNode)Resources.GetObject( "tv_keyboard.Nodes1" ),
+                    (TreeNode)Resources.GetObject( "tv_keyboard.Nodes2" )
                 } );
-                _instance.KeyboardTopNodeExpand();
+                _instance.InitKeyboardNodes();
 
                 _instance.tv_mouse.Nodes.Clear();
                 _instance.tv_mouse.Nodes.AddRange( new[]
                 {
                     (TreeNode)Resources.GetObject( "tv_mouse.Nodes" )
                 } );
-                _instance.MouseTopNodeExpand();
+                _instance.InitMouseNodes();
 
                 SetControlLang( _instance, lang );
             }

@@ -98,8 +98,9 @@ namespace VirtualSpace
             Manager.Save();
         }
 
-        private void MouseTopNodeExpand()
+        private void InitMouseNodes()
         {
+            tc_Mouse.Visible = false;
             tv_mouse.ExpandAll();
         }
     }

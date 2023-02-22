@@ -127,6 +127,24 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move To Desktop .
+        /// </summary>
+        internal static string KB_Hotkey_MW {
+            get {
+                return ResourceManager.GetString("KB.Hotkey.MW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move and Follow To Desktop.
+        /// </summary>
+        internal static string KB_Hotkey_MWF {
+            get {
+                return ResourceManager.GetString("KB.Hotkey.MWF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Register new Hotkey Failed..
         /// </summary>
         internal static string KB_Hotkey_Reg_Fail {
@@ -150,6 +168,15 @@ namespace Bridge.Resources.Langs {
         internal static string KB_Hotkey_SettingsSaved {
             get {
                 return ResourceManager.GetString("KB.Hotkey.SettingsSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch To Desktop .
+        /// </summary>
+        internal static string KB_Hotkey_SVD {
+            get {
+                return ResourceManager.GetString("KB.Hotkey.SVD", resourceCulture);
             }
         }
         

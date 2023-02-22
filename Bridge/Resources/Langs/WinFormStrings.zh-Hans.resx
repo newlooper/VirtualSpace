@@ -254,4 +254,13 @@ VirtualSpace(11)	Windows 11	22H2(22621)
   <data name="Mouse.Action.WindowShowForSelectedProcessOnly" xml:space="preserve">
     <value>仅显示此程序的窗口</value>
   </data>
+  <data name="KB.Hotkey.SVD" xml:space="preserve">
+    <value>切换到桌面 </value>
+  </data>
+  <data name="KB.Hotkey.MW" xml:space="preserve">
+    <value>移动到桌面 </value>
+  </data>
+  <data name="KB.Hotkey.MWF" xml:space="preserve">
+    <value>移动并跟随到桌面 </value>
+  </data>
 </root>

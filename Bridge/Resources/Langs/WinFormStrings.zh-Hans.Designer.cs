@@ -128,6 +128,24 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 移动到桌面 .
+        /// </summary>
+        internal static string KB_Hotkey_MW {
+            get {
+                return ResourceManager.GetString("KB.Hotkey.MW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 移动并跟随到桌面 .
+        /// </summary>
+        internal static string KB_Hotkey_MWF {
+            get {
+                return ResourceManager.GetString("KB.Hotkey.MWF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 热键注册失败。.
         /// </summary>
         internal static string KB_Hotkey_Reg_Fail {
@@ -151,6 +169,15 @@ namespace VirtualSpace.Resources.Langs {
         internal static string KB_Hotkey_SettingsSaved {
             get {
                 return ResourceManager.GetString("KB.Hotkey.SettingsSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 切换到桌面 .
+        /// </summary>
+        internal static string KB_Hotkey_SVD {
+            get {
+                return ResourceManager.GetString("KB.Hotkey.SVD", resourceCulture);
             }
         }
         

@@ -696,7 +696,8 @@ namespace VirtualSpace
             this.tv_keyboard.Name = "tv_keyboard";
             this.tv_keyboard.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             ((System.Windows.Forms.TreeNode)(resources.GetObject("tv_keyboard.Nodes"))),
-            ((System.Windows.Forms.TreeNode)(resources.GetObject("tv_keyboard.Nodes1")))});
+            ((System.Windows.Forms.TreeNode)(resources.GetObject("tv_keyboard.Nodes1"))),
+            ((System.Windows.Forms.TreeNode)(resources.GetObject("tv_keyboard.Nodes2")))});
             this.tv_keyboard.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_keyboard_AfterSelect);
             // 
             // tabPage_Genernal_Mouse
@@ -958,7 +959,6 @@ namespace VirtualSpace
             this.lvc_Updated});
             this.lv_Rules.FullRowSelect = true;
             this.lv_Rules.GridLines = true;
-            this.lv_Rules.HideSelection = false;
             this.lv_Rules.MultiSelect = false;
             this.lv_Rules.Name = "lv_Rules";
             this.lv_Rules.UseCompatibleStateImageBehavior = false;
@@ -1047,7 +1047,6 @@ namespace VirtualSpace
             this.lvc_PluginEmail});
             this.lv_Plugins.FullRowSelect = true;
             this.lv_Plugins.GridLines = true;
-            this.lv_Plugins.HideSelection = false;
             this.lv_Plugins.MultiSelect = false;
             this.lv_Plugins.Name = "lv_Plugins";
             this.lv_Plugins.UseCompatibleStateImageBehavior = false;

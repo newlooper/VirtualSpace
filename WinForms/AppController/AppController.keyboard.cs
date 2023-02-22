@@ -14,7 +14,6 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
-using KeyBinding = VirtualSpace.Config.Entity.KeyBinding;
 
 namespace VirtualSpace
 {
@@ -32,26 +31,21 @@ namespace VirtualSpace
 
             tc_Keyboard.Visible = false;
 
-            var kb       = Manager.Configs.KeyBindings;
+            var kbs      = Manager.Configs.KeyBindings;
             var hotkeyId = e.Node.Name;
 
-            if ( !kb.ContainsKey( hotkeyId ) )
+            if ( !kbs.ContainsKey( hotkeyId ) )
             {
-                if ( Const.Hotkey.Info.ContainsKey( hotkeyId ) )
-                {
-                    kb[hotkeyId] = new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[hotkeyId].Item2};
-                }
-                else
-                {
-                    return;
-                }
+                var kb = Const.Hotkey.GetKeyBinding( hotkeyId );
+                if ( kb.MessageId == 0 ) return;
+                kbs[hotkeyId] = kb;
             }
 
             lb_hk_func.Text = e.Node.FullPath;
             tc_Keyboard.Visible = true;
-            lb_hk_extra.Text = Const.Hotkey.Info[hotkeyId].Item3;
+            lb_hk_extra.Text = Const.Hotkey.GetHotkeyExtra( hotkeyId );
 
-            var keyBinding = kb[hotkeyId];
+            var keyBinding = kbs[hotkeyId];
             if ( keyBinding.GhkCode == "" ) return;
 
             var arr = keyBinding.GhkCode.Split( Const.Hotkey.SPLITTER );
@@ -187,8 +181,23 @@ namespace VirtualSpace
             tb_hk_tip.Clear();
         }
 
-        private void KeyboardTopNodeExpand()
+        private void InitKeyboardNodes()
         {
+            var nodeSvd = tv_keyboard.Nodes["hk_root_desktop"].Nodes["hk_parent_svd"];
+            var nodeMw  = tv_keyboard.Nodes["hk_root_window"].Nodes["hk_parent_win_move"];
+            var nodeMwf = tv_keyboard.Nodes["hk_root_window"].Nodes["hk_parent_win_move_follow"];
+            nodeSvd.Nodes.Clear();
+            nodeMw.Nodes.Clear();
+            nodeMwf.Nodes.Clear();
+
+            for ( var i = 1; i <= _vdi.GetDesktopCount(); i++ )
+            {
+                nodeSvd.Nodes.Add( Const.Hotkey.SVD_TREE_NODE_PREFIX + i, Agent.Langs.GetString( "KB.Hotkey.SVD" ) + i );
+                nodeMw.Nodes.Add( Const.Hotkey.MW_TREE_NODE_PREFIX + i, Agent.Langs.GetString( "KB.Hotkey.MW" ) + i );
+                nodeMwf.Nodes.Add( Const.Hotkey.MWF_TREE_NODE_PREFIX + i, Agent.Langs.GetString( "KB.Hotkey.MWF" ) + i );
+            }
+
+            tc_Keyboard.Visible = false;
             tv_keyboard.ExpandAll();
         }
     }

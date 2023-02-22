@@ -253,4 +253,13 @@ possible reason:
   <data name="Mouse.Action.WindowShowForSelectedProcessOnly" xml:space="preserve">
     <value>Show Windows Only From Selected App</value>
   </data>
+  <data name="KB.Hotkey.SVD" xml:space="preserve">
+    <value>Switch To Desktop </value>
+  </data>
+  <data name="KB.Hotkey.MW" xml:space="preserve">
+    <value>Move To Desktop </value>
+  </data>
+  <data name="KB.Hotkey.MWF" xml:space="preserve">
+    <value>Move and Follow To Desktop</value>
+  </data>
 </root>

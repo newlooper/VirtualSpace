@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Generic;
+using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
 
 namespace VirtualSpace.Config
@@ -58,20 +59,18 @@ namespace VirtualSpace.Config
             public const string ALT   = "Alt";
             public const string SHIFT = "Shift";
 
+            public const  string SVD_TREE_NODE_PREFIX = "hk_node_svd_";
+            private const string SVD_FUNC_DESC_PREFIX = "Switch To Desktop ";
+            public const  string MW_TREE_NODE_PREFIX  = "hk_node_mw_";
+            private const string MW_FUNC_DESC_PREFIX  = "Move To Desktop ";
+            public const  string MWF_TREE_NODE_PREFIX = "hk_node_mwf_";
+            private const string MWF_FUNC_DESC_PREFIX = "Move and Follow To Desktop ";
+
             ///////////////////////////////////////////////////
             // 值与控件名称一一对应，若控件名被修改，则此处也须对应改变
             public const string RISE_VIEW                = "hk_node_rise_mainview";
             public const string RISE_VIEW_FOR_ACTIVE_APP = "hk_node_rise_mainview_for_active_app";
             public const string SHOW_APP_CONTROLLER      = "hk_node_open_app_controller";
-            public const string SVD1                     = "hk_node_svd_1";
-            public const string SVD2                     = "hk_node_svd_2";
-            public const string SVD3                     = "hk_node_svd_3";
-            public const string SVD4                     = "hk_node_svd_4";
-            public const string SVD5                     = "hk_node_svd_5";
-            public const string SVD6                     = "hk_node_svd_6";
-            public const string SVD7                     = "hk_node_svd_7";
-            public const string SVD8                     = "hk_node_svd_8";
-            public const string SVD9                     = "hk_node_svd_9";
             public const string NAV_LEFT                 = "hk_node_nav_left";
             public const string NAV_RIGHT                = "hk_node_nav_right";
             public const string NAV_UP                   = "hk_node_nav_up";
@@ -87,20 +86,68 @@ namespace VirtualSpace.Config
                 {RISE_VIEW, new ValueTuple<string, int, string>( "Rise MainView", UserMessage.RiseView, "LWin+Tab" )},
                 {RISE_VIEW_FOR_ACTIVE_APP, new ValueTuple<string, int, string>( "Rise MainView For Active App", UserMessage.RiseViewForActiveApp, "" )},
                 {SHOW_APP_CONTROLLER, new ValueTuple<string, int, string>( "Open AppController", UserMessage.ShowAppController, "" )},
-                {SVD1, new ValueTuple<string, int, string>( "Switch To Desktop 1", UserMessage.SVD1, "" )},
-                {SVD2, new ValueTuple<string, int, string>( "Switch To Desktop 2", UserMessage.SVD2, "" )},
-                {SVD3, new ValueTuple<string, int, string>( "Switch To Desktop 3", UserMessage.SVD3, "" )},
-                {SVD4, new ValueTuple<string, int, string>( "Switch To Desktop 4", UserMessage.SVD4, "" )},
-                {SVD5, new ValueTuple<string, int, string>( "Switch To Desktop 5", UserMessage.SVD5, "" )},
-                {SVD6, new ValueTuple<string, int, string>( "Switch To Desktop 6", UserMessage.SVD6, "" )},
-                {SVD7, new ValueTuple<string, int, string>( "Switch To Desktop 7", UserMessage.SVD7, "" )},
-                {SVD8, new ValueTuple<string, int, string>( "Switch To Desktop 8", UserMessage.SVD8, "" )},
-                {SVD9, new ValueTuple<string, int, string>( "Switch To Desktop 9", UserMessage.SVD9, "" )},
                 {NAV_LEFT, new ValueTuple<string, int, string>( "Left", UserMessage.NavLeft, "LWin+Ctrl+Left" )},
                 {NAV_RIGHT, new ValueTuple<string, int, string>( "Right", UserMessage.NavRight, "LWin+Ctrl+Right" )},
                 {NAV_UP, new ValueTuple<string, int, string>( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" )},
                 {NAV_DOWN, new ValueTuple<string, int, string>( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" )}
             };
+
+            public static string GetFuncDesc( string key )
+            {
+                var func = "";
+                if ( Info.ContainsKey( key ) )
+                {
+                    func = Info[key].Item1;
+                }
+                else if ( key.StartsWith( SVD_TREE_NODE_PREFIX ) )
+                {
+                    func = SVD_FUNC_DESC_PREFIX + key.Replace( SVD_TREE_NODE_PREFIX, "" );
+                }
+                else if ( key.StartsWith( MW_TREE_NODE_PREFIX ) )
+                {
+                    func = MW_FUNC_DESC_PREFIX + key.Replace( MW_TREE_NODE_PREFIX, "" );
+                }
+                else if ( key.StartsWith( MWF_TREE_NODE_PREFIX ) )
+                {
+                    func = MWF_FUNC_DESC_PREFIX + key.Replace( MWF_TREE_NODE_PREFIX, "" );
+                }
+
+                return func;
+            }
+
+            public static string GetHotkeyExtra( string key )
+            {
+                var extra = "";
+                if ( Info.ContainsKey( key ) )
+                {
+                    extra = Info[key].Item3;
+                }
+
+                return extra;
+            }
+
+            public static KeyBinding GetKeyBinding( string key )
+            {
+                var kb = new KeyBinding();
+                if ( Info.ContainsKey( key ) )
+                {
+                    kb.MessageId = Info[key].Item2;
+                }
+                else if ( key.StartsWith( SVD_TREE_NODE_PREFIX ) )
+                {
+                    kb.MessageId = UserMessage.Meta.SVD_START + int.Parse( key.Replace( SVD_TREE_NODE_PREFIX, "" ) );
+                }
+                else if ( key.StartsWith( MW_TREE_NODE_PREFIX ) )
+                {
+                    kb.MessageId = UserMessage.Meta.MW_START + int.Parse( key.Replace( MW_TREE_NODE_PREFIX, "" ) );
+                }
+                else if ( key.StartsWith( MWF_TREE_NODE_PREFIX ) )
+                {
+                    kb.MessageId = UserMessage.Meta.MWF_START + int.Parse( key.Replace( MWF_TREE_NODE_PREFIX, "" ) );
+                }
+
+                return kb;
+            }
         }
 
         public static class MouseAction
