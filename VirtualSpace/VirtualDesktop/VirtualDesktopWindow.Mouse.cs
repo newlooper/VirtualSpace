@@ -168,9 +168,10 @@ namespace VirtualSpace.VirtualDesktop
                 {
                     void ActiveWindow()
                     {
-                        Logger.Debug( $"ACTIVE.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )})" );
                         Logger.Debug( $"CHANGE CURRENT DESKTOP TO Desktop[{_hoverVdIndex.ToString()}]" );
                         DesktopWrapper.MakeVisibleByGuid( ConfigManager.CurrentProfile.DesktopOrder[_hoverVdIndex] );
+
+                        Logger.Debug( $"ACTIVE.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )})" );
                         WindowTool.ActiveWindow( _selectedWindow.Handle );
                     }
 
@@ -299,11 +300,11 @@ namespace VirtualSpace.VirtualDesktop
                         switch ( action )
                         {
                             case Const.MouseAction.Action.DesktopVisibleAndCloseView:
-                                SwitchDesktop();
+                                MakeVisible();
                                 MainWindow.HideAll();
                                 break;
                             case Const.MouseAction.Action.DesktopVisibleOnly:
-                                SwitchDesktop();
+                                MakeVisible();
                                 break;
                             case Const.MouseAction.Action.ContextMenu:
                                 Menus.VdCtm( new MenuInfo
@@ -318,7 +319,7 @@ namespace VirtualSpace.VirtualDesktop
                             case Const.MouseAction.Action.DoNothing:
                                 break;
                             default:
-                                SwitchDesktop();
+                                MakeVisible();
                                 MainWindow.HideAll();
                                 break;
                         }
@@ -387,7 +388,7 @@ namespace VirtualSpace.VirtualDesktop
             return _hoverVdIndex;
         }
 
-        private void SwitchDesktop()
+        private void MakeVisible()
         {
             Logger.Debug( $"SWITCH TO DESKTOP Desktop[{_hoverVdIndex.ToString()}]" );
             DesktopWrapper.MakeVisibleByGuid( VdId );

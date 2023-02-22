@@ -19,6 +19,7 @@ using System.Security.Principal;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Management;
+using System.Windows;
 
 namespace VirtualSpace.Helpers
 {
@@ -75,6 +76,11 @@ namespace VirtualSpace.Helpers
                 a = b;
                 b = a1 % b;
             }
+        }
+
+        public static bool IsTaskbarVisible()
+        {
+            return Math.Abs( SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height ) > 0;
         }
     }
 

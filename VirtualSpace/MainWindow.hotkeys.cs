@@ -139,7 +139,7 @@ namespace VirtualSpace
         {
             if ( nCode < 0 ) goto NEXT;
 
-            var hTaskbar = User32.FindWindow( "Shell_TrayWnd", "" );
+            var hTaskbar = User32.FindWindow( Const.TaskbarWndClass, "" );
             if ( hTaskbar == IntPtr.Zero ) goto NEXT;
 
             var info = (LowLevelMouseHook.MSLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LowLevelMouseHook.MSLLHOOKSTRUCT ) );
