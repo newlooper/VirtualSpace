@@ -13,9 +13,10 @@ namespace VirtualSpace.Config.Entity
 {
     public class Cluster
     {
-        public bool HideMainViewIfItsShown  { get; set; }
-        public bool NotificationOnVdChanged { get; set; }
-        public bool ShowVDIndexOnTrayIcon   { get; set; }
-        public bool HideOnStart           { get; set; }
+        public bool HideMainViewIfItsShown     { get; set; }
+        public bool NotificationOnVdChanged    { get; set; }
+        public bool ShowVDIndexOnTrayIcon      { get; set; }
+        public bool HideOnStart                { get; set; }
+        public bool ForceFocusForegroundWindow { get; set; } = true;
     }
 }

@@ -169,7 +169,7 @@ namespace VirtualSpace.VirtualDesktop
                     void ActiveWindow()
                     {
                         Logger.Debug( $"CHANGE CURRENT DESKTOP TO Desktop[{_hoverVdIndex.ToString()}]" );
-                        DesktopWrapper.MakeVisibleByGuid( ConfigManager.CurrentProfile.DesktopOrder[_hoverVdIndex] );
+                        DesktopWrapper.MakeVisibleByGuid( ConfigManager.CurrentProfile.DesktopOrder[_hoverVdIndex], false );
 
                         Logger.Debug( $"ACTIVE.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )})" );
                         WindowTool.ActiveWindow( _selectedWindow.Handle );

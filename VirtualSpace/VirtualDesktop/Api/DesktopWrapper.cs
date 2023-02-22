@@ -11,6 +11,8 @@
 using System;
 using VirtualDesktop;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Config;
+using VirtualSpace.Helpers;
 
 namespace VirtualSpace.VirtualDesktop.Api
 {
@@ -122,10 +124,18 @@ namespace VirtualSpace.VirtualDesktop.Api
             desktop.MakeVisible();
         }
 
-        public static void MakeVisibleByGuid( Guid guid )
+        public static void MakeVisibleByGuid( Guid guid, bool? forceFocusForegroundWindow = null )
         {
             var desktop = DesktopFromId( guid );
             desktop.MakeVisible();
+
+            forceFocusForegroundWindow ??= Manager.Configs.Cluster.ForceFocusForegroundWindow;
+
+            if ( !(bool)forceFocusForegroundWindow ) return;
+
+            var hTaskBar = User32.FindWindow( Const.TaskbarWndClass, "" );
+            if ( hTaskBar == IntPtr.Zero || !SysInfo.IsTaskbarVisible() ) return;
+            User32.ShowWindow( hTaskBar, (short)ShowState.SW_FORCEMINIMIZE );
         }
 
         public static void SetNameByIndex( int vdIndex, string name )
