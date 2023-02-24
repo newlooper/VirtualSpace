@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Channels;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
@@ -20,40 +21,52 @@ namespace VirtualSpace
 {
     public partial class AppController
     {
-        private static readonly Channel<LogMessage> LogChannel = Logger.LogChannel;
-        private                 Point               _logTabCursorPos;
+        private static readonly Channel<LogMessage>     LogChannel               = Logger.LogChannel;
+        private readonly        CancellationTokenSource _cancelTokenSourceForLog = new();
+        private                 Point                   _logTabCursorPos;
 
-        private async void PickLogAndWrite()
+        private async void PickLogAndWrite( CancellationToken stoppingToken )
         {
             showLogsInGuiToolStripMenuItem.Checked = ConfigManager.Configs.LogConfig.ShowLogsInGui;
             showLogsInGuiToolStripMenuItem.CheckedChanged += showLogsInGuiToolStripMenuItem_CheckedChanged;
 
-            while ( await LogChannel.Reader.WaitToReadAsync() )
+            try
             {
-                if ( LogChannel.Reader.TryRead( out var message ) )
+                while ( await LogChannel.Reader.WaitToReadAsync( stoppingToken ) )
                 {
-                    switch ( message.Type )
+                    if ( LogChannel.Reader.TryRead( out var message ) )
                     {
-                        case "DEBUG":
-                            AppendLog( tbDebug, message );
-                            break;
-                        case "EVENT":
-                            AppendLog( tbEvent, message );
-                            break;
-                        case "INFO":
-                            AppendLog( tbInfo, message );
-                            break;
-                        case "WARNING":
-                            AppendLog( tbWarning, message );
-                            break;
-                        case "ERROR":
-                            AppendLog( tbError, message );
-                            break;
-                        default:
-                            AppendLog( tbError, message );
-                            break;
+                        switch ( message.Type )
+                        {
+                            case "DEBUG":
+                                AppendLog( tbDebug, message );
+                                break;
+                            case "EVENT":
+                                AppendLog( tbEvent, message );
+                                break;
+                            case "INFO":
+                                AppendLog( tbInfo, message );
+                                break;
+                            case "WARNING":
+                                AppendLog( tbWarning, message );
+                                break;
+                            case "ERROR":
+                                AppendLog( tbError, message );
+                                break;
+                            default:
+                                AppendLog( tbError, message );
+                                break;
+                        }
                     }
                 }
+            }
+            catch
+            {
+                // ignored
+            }
+            finally
+            {
+                _cancelTokenSourceForLog.Dispose();
             }
         }
 

@@ -17,5 +17,6 @@ namespace VirtualSpace
         public void BringToTop();
         public void SetMainWindowHandle( IntPtr     handle );
         public void UpdateVDIndexOnTrayIcon( string index );
+        public void Quit();
     }
 }

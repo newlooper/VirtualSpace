@@ -22,6 +22,7 @@ namespace VirtualSpace.Helpers
         public const int EnableMouseHook      = 1007;
         public const int DisableMouseHook     = 1008;
         public const int RiseViewForActiveApp = 1009;
+        public const int RestartAppController = 1010;
 
         public const int NavLeft  = 1201;
         public const int NavRight = 1202;

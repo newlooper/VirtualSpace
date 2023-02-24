@@ -19,6 +19,7 @@ using VirtualDesktop;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Config;
+using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
 using VirtualSpace.VirtualDesktop;
@@ -201,6 +202,14 @@ namespace VirtualSpace
                             break;
                         case UserMessage.ShowAppController:
                             _acForm.BringToTop();
+                            break;
+                        case UserMessage.RestartAppController:
+                            _acForm.Quit();
+                            _acForm = AppControllerFactory.Create( "WinForm" );
+                            _acForm.SetMainWindowHandle( Handle );
+                            _acForm.BringToTop();
+                            if ( Manager.Configs.Cluster.ShowVDIndexOnTrayIcon )
+                                UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
                             break;
                         case UserMessage.SwitchDesktop:
                             if ( SwitchDesktopTimer.ElapsedMilliseconds > Const.SwitchDesktopInterval )

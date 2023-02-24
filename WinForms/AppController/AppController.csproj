@@ -41,6 +41,9 @@
       <Compile Update="AppController.cluster.cs">
         <SubType>Form</SubType>
       </Compile>
+      <Compile Update="AppController.lang.cs">
+        <SubType>Form</SubType>
+      </Compile>
     </ItemGroup>
 
 </Project>
