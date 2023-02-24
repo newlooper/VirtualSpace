@@ -170,7 +170,7 @@ namespace VirtualDesktop
         // COM Interface "B2F925B9-5A0F-4D2E-9F4D-2B1507593C10"
         // for windows 11 22H2 (>22489) COM Interface require this func.
         // for windows 11 21H2 (22000.xxx) this func must be commented
-#if WIN22H2
+#if !WIN21H2
         IObjectArray GetAllCurrentDesktops();
 #endif
         void         GetDesktops( IntPtr hWndOrMon, out IObjectArray desktops );

@@ -11,8 +11,8 @@
     <PropertyGroup>
         <!-- 
         // before build
-        // for windows 11 22H2 (>22489): set <DefineConstants>WIN22H2</DefineConstants>.
-        // for windows 11 21H2 (22000.xxx): set <DefineConstants></DefineConstants>.
+        // for windows 11 21H2 (22000.xxx): set <DefineConstants>WIN21H2</DefineConstants>.
+        // for windows 11 22H2 (>22489): set <DefineConstants></DefineConstants>.
         -->
     </PropertyGroup>
 
