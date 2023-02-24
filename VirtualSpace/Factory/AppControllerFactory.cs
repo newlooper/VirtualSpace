@@ -12,7 +12,7 @@ namespace VirtualSpace.Factory
 {
     public static class AppControllerFactory
     {
-        public static IAppController Create( string name )
+        public static IAppController Create( string name = "WinForm")
         {
             switch ( name )
             {

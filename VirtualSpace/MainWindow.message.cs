@@ -205,7 +205,7 @@ namespace VirtualSpace
                             break;
                         case UserMessage.RestartAppController:
                             _acForm.Quit();
-                            _acForm = AppControllerFactory.Create( "WinForm" );
+                            _acForm = AppControllerFactory.Create();
                             _acForm.SetMainWindowHandle( Handle );
                             _acForm.BringToTop();
                             if ( Manager.Configs.Cluster.ShowVDIndexOnTrayIcon )

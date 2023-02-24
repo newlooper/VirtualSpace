@@ -111,7 +111,7 @@ namespace VirtualSpace
 
         private static MainWindow CreateCanvas( StartupEventArgs args )
         {
-            var canvas = VirtualSpace.MainWindow.Create( AppControllerFactory.Create( "WinForm" ) );
+            var canvas = VirtualSpace.MainWindow.Create( AppControllerFactory.Create() );
             return canvas;
         }
 

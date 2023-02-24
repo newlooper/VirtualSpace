@@ -184,16 +184,15 @@ namespace VirtualSpace
             lv_Rules.ItemCheck += lv_Rules_ItemCheck;
         }
 
-        private ExpressionTemplate RefreshRuleId( ExpressionTemplate expressionTemplate )
+        private static ExpressionTemplate RefreshRuleId( ExpressionTemplate expressionTemplate )
         {
             expressionTemplate.id = Guid.NewGuid();
-            if ( expressionTemplate.rules != null )
+            if ( expressionTemplate.rules == null ) return expressionTemplate;
+
+            foreach ( var rule in expressionTemplate.rules )
             {
-                foreach ( var rule in expressionTemplate.rules )
-                {
-                    rule.id = Guid.NewGuid();
-                    if ( rule.rules != null ) RefreshRuleId( rule );
-                }
+                rule.id = Guid.NewGuid();
+                if ( rule.rules != null ) RefreshRuleId( rule );
             }
 
             return expressionTemplate;
