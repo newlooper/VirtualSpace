@@ -16,11 +16,11 @@ namespace VirtualSpace.VirtualDesktop.Api
 {
     public static partial class DesktopManagerWrapper
     {
-        public static Guid GetIdByIndex( int vdIndex )
+        public static Guid GetIdByIndex( int index )
         {
             try
             {
-                var desktop = DesktopManager.GetDesktop( vdIndex );
+                var desktop = DesktopManager.GetDesktop( index );
                 return desktop.GetId();
             }
             catch
