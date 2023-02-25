@@ -37,13 +37,13 @@ namespace VirtualSpace
         {
             tc_Mouse.Visible = false;
 
-            var ma            = Manager.Configs.MouseActions;
+            var ma            = Manager.Configs.MouseAction;
             var mouseActionId = e.Node.Name;
             if ( !ma.ContainsKey( mouseActionId ) )
             {
                 if ( Const.MouseAction.Info.ContainsKey( mouseActionId ) )
                 {
-                    ma[mouseActionId] = Const.MouseAction.Info[mouseActionId].Item2;
+                    ma[mouseActionId] = Const.MouseAction.Info[mouseActionId];
                 }
                 else
                 {
@@ -54,18 +54,19 @@ namespace VirtualSpace
             lb_mouse_action.Text = e.Node.FullPath;
             tc_Mouse.Visible = true;
 
-            if ( mouseActionId.StartsWith( "mouse_node_d" ) )
+            if ( mouseActionId.StartsWith( Const.MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) )
             {
                 var items = new List<object>
                 {
                     new {Value = Const.MouseAction.Action.DesktopVisibleAndCloseView, Text = Agent.Langs.GetString( "Mouse.Action.DesktopVisibleAndCloseView" )},
                     new {Value = Const.MouseAction.Action.DesktopVisibleOnly, Text = Agent.Langs.GetString( "Mouse.Action.DesktopVisibleOnly" )},
                     new {Value = Const.MouseAction.Action.ContextMenu, Text = Agent.Langs.GetString( "Mouse.Action.ContextMenu" )},
+                    new {Value = Const.MouseAction.Action.DesktopShowForSelectedDesktop, Text = Agent.Langs.GetString( "Mouse.Action.DesktopShowForSelectedDesktop" )},
                     new {Value = Const.MouseAction.Action.DoNothing, Text = Agent.Langs.GetString( "Mouse.Action.DoNothing" )}
                 };
                 WinForms.SetComboBoxDataSource( cb_mouse_func, items );
             }
-            else if ( mouseActionId.StartsWith( "mouse_node_w" ) )
+            else if ( mouseActionId.StartsWith( Const.MouseAction.MOUSE_NODE_WINDOW_PREFIX ) )
             {
                 var items = new List<object>
                 {
@@ -83,6 +84,11 @@ namespace VirtualSpace
                     new {Value = Const.MouseAction.Action.WindowHideFromView, Text = Agent.Langs.GetString( "VDW.CTM.Window.HideFromView" )},
                     new {Value = Const.MouseAction.Action.WindowClose, Text = Agent.Langs.GetString( "Mouse.Action.WindowClose" )},
                     new {Value = Const.MouseAction.Action.WindowShowForSelectedProcessOnly, Text = Agent.Langs.GetString( "Mouse.Action.WindowShowForSelectedProcessOnly" )},
+                    new
+                    {
+                        Value = Const.MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop,
+                        Text = Agent.Langs.GetString( "Mouse.Action.WindowShowForSelectedProcessInSelectedDesktop" )
+                    },
                     new {Value = Const.MouseAction.Action.DoNothing, Text = Agent.Langs.GetString( "Mouse.Action.DoNothing" )}
                 };
                 WinForms.SetComboBoxDataSource( cb_mouse_func, items );
@@ -94,12 +100,38 @@ namespace VirtualSpace
         private void btn_mouse_save_Click( object sender, EventArgs e )
         {
             var maId = tv_mouse.SelectedNode.Name;
-            Manager.Configs.MouseActions[maId] = (Const.MouseAction.Action)cb_mouse_func.SelectedValue;
+            Manager.Configs.MouseAction[maId] = (Const.MouseAction.Action)cb_mouse_func.SelectedValue;
             Manager.Save();
         }
 
         private void InitMouseNodes()
         {
+            var nodeDesktop = tv_mouse.Nodes["mouse_root_mainview"].Nodes["mouse_parent_desktop"];
+            var nodeWindow  = tv_mouse.Nodes["mouse_root_mainview"].Nodes["mouse_parent_window"];
+            nodeDesktop.Nodes.Clear();
+            nodeWindow.Nodes.Clear();
+
+            string GetLocaleText( string text )
+            {
+                text = text
+                    .Replace( "Left", Agent.Langs.GetString( "Keys.Left" ) )
+                    .Replace( "Middle", Agent.Langs.GetString( "Keys.Middle" ) )
+                    .Replace( "Right", Agent.Langs.GetString( "Keys.Right" ) );
+                return text;
+            }
+
+            foreach ( var kv in Const.MouseAction.Info )
+            {
+                if ( kv.Key.StartsWith( Const.MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) )
+                {
+                    nodeDesktop.Nodes.Add( kv.Key, GetLocaleText( kv.Key.Replace( Const.MouseAction.MOUSE_NODE_DESKTOP_PREFIX, "" ) ) );
+                }
+                else if ( kv.Key.StartsWith( Const.MouseAction.MOUSE_NODE_WINDOW_PREFIX ) )
+                {
+                    nodeWindow.Nodes.Add( kv.Key, GetLocaleText( kv.Key.Replace( Const.MouseAction.MOUSE_NODE_WINDOW_PREFIX, "" ) ) );
+                }
+            }
+
             tc_Mouse.Visible = false;
             tv_mouse.ExpandAll();
         }

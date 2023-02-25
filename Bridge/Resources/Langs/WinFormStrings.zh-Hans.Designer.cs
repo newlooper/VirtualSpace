@@ -182,11 +182,47 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 左键.
+        /// </summary>
+        internal static string Keys_Left {
+            get {
+                return ResourceManager.GetString("Keys.Left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 中键.
+        /// </summary>
+        internal static string Keys_Middle {
+            get {
+                return ResourceManager.GetString("Keys.Middle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 右键.
+        /// </summary>
+        internal static string Keys_Right {
+            get {
+                return ResourceManager.GetString("Keys.Right", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 显示上下文菜单.
         /// </summary>
         internal static string Mouse_Action_ContextMenu {
             get {
                 return ResourceManager.GetString("Mouse.Action.ContextMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 仅显示所选桌面.
+        /// </summary>
+        internal static string Mouse_Action_DesktopShowForSelectedDesktop {
+            get {
+                return ResourceManager.GetString("Mouse.Action.DesktopShowForSelectedDesktop", resourceCulture);
             }
         }
         
@@ -241,6 +277,15 @@ namespace VirtualSpace.Resources.Langs {
         internal static string Mouse_Action_WindowClose {
             get {
                 return ResourceManager.GetString("Mouse.Action.WindowClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 仅显示所选桌面中的活动程序窗口.
+        /// </summary>
+        internal static string Mouse_Action_WindowShowForSelectedProcessInSelectedDesktop {
+            get {
+                return ResourceManager.GetString("Mouse.Action.WindowShowForSelectedProcessInSelectedDesktop", resourceCulture);
             }
         }
         

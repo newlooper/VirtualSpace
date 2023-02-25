@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
 
@@ -18,17 +19,9 @@ namespace VirtualSpace.Config
 {
     public static class Const
     {
-        public const string RuleFileExt            = ".rules";
-        public const string ProfilesFolder         = "Profiles";
-        public const string CacheFolder            = "Cache";
-        public const string PluginsFolder          = "Plugins";
-        public const string SettingsFile           = "settings.json";
-        public const string DefaultVersion         = "1.0";
-        public const string DefaultLogLevel        = "EVENT";
         public const int    WindowTitleMaxLength   = 2048;
         public const int    WindowClassMaxLength   = 512;
         public const int    WindowCheckTimesLimit  = 10;
-        public const int    WindowCheckInterval    = 200;
         public const int    WindowCloseTimeout     = 60 * 1000;
         public const int    RiseViewInterval       = 500;
         public const int    SwitchDesktopInterval  = 100;
@@ -38,11 +31,26 @@ namespace VirtualSpace.Config
         public const string WindowsUiCoreWindow    = "Windows.UI.Core.CoreWindow";
         public const string TaskbarCreated         = "TaskbarCreated";
         public const string TaskbarWndClass        = "Shell_TrayWnd";
-        public const int    NavHTypeNextRow        = 0;
-        public const int    NavHTypeSameRow        = 1;
         public const string WindowsCRLF            = "\r\n";
         public const string AppName                = "VirtualSpace";
         public const string HideWindowSplitter     = "🔙🔜";
+
+        public static class VirtualDesktop
+        {
+            public const int NavHTypeNextRow = 0;
+            public const int NavHTypeSameRow = 1;
+        }
+
+        public static class Settings
+        {
+            public const string RuleFileExt     = ".rules";
+            public const string ProfilesFolder  = "Profiles";
+            public const string CacheFolder     = "Cache";
+            public const string PluginsFolder   = "Plugins";
+            public const string SettingsFile    = "settings.json";
+            public const string DefaultVersion  = "1.0";
+            public const string DefaultLogLevel = "EVENT";
+        }
 
         public static class Args
         {
@@ -162,52 +170,85 @@ namespace VirtualSpace.Config
                 WindowActiveDesktopVisibleOnly,
                 WindowClose,
                 WindowHideFromView,
-                WindowShowForSelectedProcessOnly
+                WindowShowForSelectedProcessOnly,
+                WindowShowForSelectedProcessInSelectedDesktop,
+                DesktopShowForSelectedDesktop
             }
 
-            ///////////////////////////////////////////////////
-            // 鼠标支持的触发器，将作为 Action 的键保存在配置文件中
-            // 值与控件名称一一对应，若控件名被修改，则此处也须对应改变 
-            public const string DESKTOP_LEFT_CLICK        = "mouse_node_d_l";
-            public const string DESKTOP_MIDDLE_CLICK      = "mouse_node_d_m";
-            public const string DESKTOP_RIGHT_CLICK       = "mouse_node_d_r";
-            public const string WINDOW_LEFT_CLICK         = "mouse_node_w_l";
-            public const string WINDOW_MIDDLE_CLICK       = "mouse_node_w_m";
-            public const string WINDOW_RIGHT_CLICK        = "mouse_node_w_r";
-            public const string WINDOW_CTRL_LEFT_CLICK    = "mouse_node_w_cl";
-            public const string WINDOW_CTRL_MIDDLE_CLICK  = "mouse_node_w_cm";
-            public const string WINDOW_CTRL_RIGHT_CLICK   = "mouse_node_w_cr";
-            public const string WINDOW_ALT_LEFT_CLICK     = "mouse_node_w_al";
-            public const string WINDOW_ALT_MIDDLE_CLICK   = "mouse_node_w_am";
-            public const string WINDOW_ALT_RIGHT_CLICK    = "mouse_node_w_ar";
-            public const string WINDOW_SHIFT_LEFT_CLICK   = "mouse_node_w_sl";
-            public const string WINDOW_SHIFT_MIDDLE_CLICK = "mouse_node_w_sm";
-            public const string WINDOW_SHIFT_RIGHT_CLICK  = "mouse_node_w_sr";
+            public const  string MOUSE_NODE_DESKTOP_PREFIX = "mouse_node_d_";
+            public const  string MOUSE_NODE_WINDOW_PREFIX  = "mouse_node_w_";
+            private const string KEY_SPLITTER              = "+";
+
+            private static readonly Dictionary<MouseButtons, string> MouseButtonsName;
+            private static readonly Dictionary<Keys, string>         KeysName;
 
             ////////////////////////////////////////////////////////////////
-            // 鼠标动作表，信息包含友好名称和默认行为
-            public static readonly Dictionary<string, ValueTuple<string, Action>> Info = new()
+            // 鼠标动作表，信息包含默认行为
+            public static readonly Dictionary<string, Action> Info;
+
+            static MouseAction()
             {
-                {DESKTOP_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse LeftClick on VirtualDesktop", Action.DesktopVisibleAndCloseView )},
-                {DESKTOP_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse MiddleClick on VirtualDesktop", Action.DesktopVisibleOnly )},
-                {DESKTOP_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse RightClick on VirtualDesktop", Action.ContextMenu )},
+                MouseButtonsName = new Dictionary<MouseButtons, string>
+                {
+                    {MouseButtons.Left, "Left"},
+                    {MouseButtons.Middle, "Middle"},
+                    {MouseButtons.Right, "Right"}
+                };
 
-                {WINDOW_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse LeftClick on Window Thumbnail", Action.WindowActiveDesktopVisibleAndCloseView )},
-                {WINDOW_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse MiddleClick on Window Thumbnail", Action.WindowActiveDesktopVisibleOnly )},
-                {WINDOW_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse RightClick on Window Thumbnail", Action.ContextMenu )},
+                KeysName = new Dictionary<Keys, string>
+                {
+                    {Keys.Control, "Ctrl"},
+                    {Keys.Alt, "Alt"},
+                    {Keys.Shift, "Shift"}
+                };
 
-                {WINDOW_CTRL_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse Ctrl+LeftClick on Window Thumbnail", Action.DoNothing )},
-                {WINDOW_CTRL_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse Ctrl+MiddleClick on Window Thumbnail", Action.DoNothing )},
-                {WINDOW_CTRL_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse Ctrl+RightClick on Window Thumbnail", Action.DoNothing )},
+                Info = new Dictionary<string, Action>
+                {
+                    {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView},
+                    {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly},
+                    {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
+                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
+                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
+                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
 
-                {WINDOW_ALT_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse Alt+LeftClick on Window Thumbnail", Action.DoNothing )},
-                {WINDOW_ALT_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse Alt+MiddleClick on Window Thumbnail", Action.DoNothing )},
-                {WINDOW_ALT_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse Alt+RightClick on Window Thumbnail", Action.DoNothing )},
+                    {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView},
+                    {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly},
+                    {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
+                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
+                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
+                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing}
+                };
+            }
 
-                {WINDOW_SHIFT_LEFT_CLICK, new ValueTuple<string, Action>( "Mouse Shift+LeftClick on Window Thumbnail", Action.DoNothing )},
-                {WINDOW_SHIFT_MIDDLE_CLICK, new ValueTuple<string, Action>( "Mouse Shift+MiddleClick on Window Thumbnail", Action.DoNothing )},
-                {WINDOW_SHIFT_RIGHT_CLICK, new ValueTuple<string, Action>( "Mouse Shift+RightClick on Window Thumbnail", Action.DoNothing )}
-            };
+            public static string GetActionId( MouseButtons mb, Keys key, string prefix )
+            {
+                var actionId = "";
+                switch ( key )
+                {
+                    case Keys.None:
+                        actionId = prefix + MouseButtonsName[mb];
+                        break;
+                    case Keys.Control:
+                    case Keys.Alt:
+                    case Keys.Shift:
+                        actionId = prefix + KeysName[key] + KEY_SPLITTER + MouseButtonsName[mb];
+                        break;
+                }
+
+                return actionId;
+            }
         }
     }
 }

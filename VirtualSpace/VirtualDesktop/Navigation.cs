@@ -36,10 +36,10 @@ namespace VirtualSpace.VirtualDesktop
                         {
                             switch ( nav.CirculationHType )
                             {
-                                case Const.NavHTypeNextRow: // 跨行循环
+                                case Const.VirtualDesktop.NavHTypeNextRow: // 跨行循环
                                     targetIndex = fromIndex == 0 ? maxIndex : fromIndex - 1;
                                     break;
-                                case Const.NavHTypeSameRow: // 行内循环
+                                case Const.VirtualDesktop.NavHTypeSameRow: // 行内循环
                                     targetIndex = fromIndex + cols - 1;
                                     targetIndex = targetIndex > maxIndex ? maxIndex : targetIndex;
                                     break;
@@ -63,10 +63,10 @@ namespace VirtualSpace.VirtualDesktop
                         {
                             switch ( nav.CirculationHType )
                             {
-                                case Const.NavHTypeNextRow:
+                                case Const.VirtualDesktop.NavHTypeNextRow:
                                     targetIndex = fromIndex == maxIndex ? 0 : fromIndex + 1;
                                     break;
-                                case Const.NavHTypeSameRow:
+                                case Const.VirtualDesktop.NavHTypeSameRow:
                                     targetIndex = fromIndex / cols * cols; // ( fromIndex / cols ) 取整得到所在行号(0基)，行号与列数的积为行首索引
                                     break;
                             }

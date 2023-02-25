@@ -32,7 +32,7 @@ namespace VirtualSpace.Config
             {Const.Hotkey.NAV_DOWN, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_DOWN].Item2}}
         };
 
-        public Dictionary<string, Const.MouseAction.Action>? MouseActions { get; set; } = DefaultMouseActions();
+        public Dictionary<string, Const.MouseAction.Action>? MouseAction { get; set; } = DefaultMouseActions();
 
         public Cluster Cluster { get; set; } = new()
         {
@@ -44,40 +44,19 @@ namespace VirtualSpace.Config
 
         public Const.MouseAction.Action GetMouseActionById( string id )
         {
-            if ( MouseActions == null || MouseActions.Count == 0 )
+            if ( MouseAction == null || MouseAction.Count == 0 )
             {
-                MouseActions = DefaultMouseActions();
+                MouseAction = DefaultMouseActions();
             }
 
-            return MouseActions.ContainsKey( id )
-                ? MouseActions[id]
+            return MouseAction.ContainsKey( id )
+                ? MouseAction[id]
                 : Const.MouseAction.Action.DoNothing;
         }
 
         private static Dictionary<string, Const.MouseAction.Action> DefaultMouseActions()
         {
-            return new Dictionary<string, Const.MouseAction.Action>
-            {
-                {Const.MouseAction.DESKTOP_LEFT_CLICK, Const.MouseAction.Action.DesktopVisibleAndCloseView},
-                {Const.MouseAction.DESKTOP_MIDDLE_CLICK, Const.MouseAction.Action.DesktopVisibleOnly},
-                {Const.MouseAction.DESKTOP_RIGHT_CLICK, Const.MouseAction.Action.ContextMenu},
-
-                {Const.MouseAction.WINDOW_LEFT_CLICK, Const.MouseAction.Action.WindowActiveDesktopVisibleAndCloseView},
-                {Const.MouseAction.WINDOW_MIDDLE_CLICK, Const.MouseAction.Action.WindowActiveDesktopVisibleOnly},
-                {Const.MouseAction.WINDOW_RIGHT_CLICK, Const.MouseAction.Action.ContextMenu},
-
-                {Const.MouseAction.WINDOW_CTRL_LEFT_CLICK, Const.MouseAction.Action.DoNothing},
-                {Const.MouseAction.WINDOW_CTRL_MIDDLE_CLICK, Const.MouseAction.Action.DoNothing},
-                {Const.MouseAction.WINDOW_CTRL_RIGHT_CLICK, Const.MouseAction.Action.DoNothing},
-
-                {Const.MouseAction.WINDOW_ALT_LEFT_CLICK, Const.MouseAction.Action.DoNothing},
-                {Const.MouseAction.WINDOW_ALT_MIDDLE_CLICK, Const.MouseAction.Action.DoNothing},
-                {Const.MouseAction.WINDOW_ALT_RIGHT_CLICK, Const.MouseAction.Action.DoNothing},
-
-                {Const.MouseAction.WINDOW_SHIFT_LEFT_CLICK, Const.MouseAction.Action.DoNothing},
-                {Const.MouseAction.WINDOW_SHIFT_MIDDLE_CLICK, Const.MouseAction.Action.DoNothing},
-                {Const.MouseAction.WINDOW_SHIFT_RIGHT_CLICK, Const.MouseAction.Action.DoNothing}
-            };
+            return Const.MouseAction.Info;
         }
     }
 }

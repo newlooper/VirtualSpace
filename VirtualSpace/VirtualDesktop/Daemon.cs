@@ -140,6 +140,7 @@ namespace VirtualSpace.VirtualDesktop
         {
             Task.Factory.StartNew( () =>
             {
+                Thread.Sleep( 500 );
                 while ( true )
                 {
                     CanRun.WaitOne();

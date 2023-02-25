@@ -262,4 +262,19 @@ possible reason:
   <data name="KB.Hotkey.MWF" xml:space="preserve">
     <value>Move and Follow To Desktop</value>
   </data>
+  <data name="Mouse.Action.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
+    <value>Show Windows Only From Selected App in Selected Desktop</value>
+  </data>
+  <data name="Keys.Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="Keys.Middle" xml:space="preserve">
+    <value>Middle</value>
+  </data>
+  <data name="Keys.Right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="Mouse.Action.DesktopShowForSelectedDesktop" xml:space="preserve">
+    <value>Show Only Selected Desktop in MainView</value>
+  </data>
 </root>

@@ -45,7 +45,7 @@ namespace VirtualSpace.VirtualDesktop
             // 
             // pbWallpaper
             // 
-            this.pbWallpaper.BackColor = System.Drawing.Color.Transparent;
+            this.pbWallpaper.BackColor = System.Drawing.Color.Black;
             this.pbWallpaper.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pbWallpaper.Enabled = false;
             this.pbWallpaper.Location = new System.Drawing.Point(0, 0);

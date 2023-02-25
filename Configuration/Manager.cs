@@ -18,6 +18,7 @@ using System.Windows;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Config.Profiles;
+using Settings = VirtualSpace.Config.Const.Settings;
 
 namespace VirtualSpace.Config
 {
@@ -39,7 +40,7 @@ namespace VirtualSpace.Config
             {
                 AppPath = Process.GetCurrentProcess().MainModule.FileName;
                 AppFolder = Directory.GetParent( AppPath ).FullName;
-                ConfigFilePath = Path.Combine( AppFolder, Const.SettingsFile );
+                ConfigFilePath = Path.Combine( AppFolder, Settings.SettingsFile );
 
                 CheckFolders();
 
@@ -74,8 +75,8 @@ namespace VirtualSpace.Config
                 Configs = new ConfigTemplate
                 {
                     CurrentProfileName = nameof( Default ),
-                    Version = Const.DefaultVersion,
-                    LogConfig = new LogConfig {LogLevel = Const.DefaultLogLevel},
+                    Version = Settings.DefaultVersion,
+                    LogConfig = new LogConfig {LogLevel = Settings.DefaultLogLevel},
                     Profiles = new Dictionary<string, Profile>
                     {
                         {nameof( Default ), new Default()}
@@ -104,13 +105,13 @@ namespace VirtualSpace.Config
 
         private static void CheckFolders()
         {
-            ProfileFolder = Path.Combine( AppFolder, Const.ProfilesFolder );
+            ProfileFolder = Path.Combine( AppFolder, Settings.ProfilesFolder );
             Directory.CreateDirectory( ProfileFolder );
 
-            CacheFolder = Path.Combine( AppFolder, Const.CacheFolder );
+            CacheFolder = Path.Combine( AppFolder, Settings.CacheFolder );
             Directory.CreateDirectory( CacheFolder );
 
-            PluginsFolder = Path.Combine( AppFolder, Const.PluginsFolder );
+            PluginsFolder = Path.Combine( AppFolder, Settings.PluginsFolder );
             Directory.CreateDirectory( PluginsFolder );
         }
 
@@ -118,8 +119,8 @@ namespace VirtualSpace.Config
         {
             CheckFolders();
             return string.IsNullOrEmpty( path )
-                ? Path.Combine( ProfileFolder, Configs.CurrentProfileName + Const.RuleFileExt )
-                : Path.Combine( ProfileFolder, path + Const.RuleFileExt );
+                ? Path.Combine( ProfileFolder, Configs.CurrentProfileName + Settings.RuleFileExt )
+                : Path.Combine( ProfileFolder, path + Settings.RuleFileExt );
         }
 
         public static string GetCachePath()

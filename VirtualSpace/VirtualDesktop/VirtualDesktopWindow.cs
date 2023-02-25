@@ -40,9 +40,10 @@ namespace VirtualSpace.VirtualDesktop
         public           Guid                        VdId;
         public           int                         VdIndex;
 
-        public VirtualDesktopWindow()
+        private VirtualDesktopWindow()
         {
             InitializeComponent();
+            base.DoubleBuffered = ConfigManager.Configs.Cluster.EnableDoubleBufferedForVDW;
         }
 
         protected override CreateParams CreateParams
@@ -59,7 +60,7 @@ namespace VirtualSpace.VirtualDesktop
 
         protected override bool ShowWithoutActivation => true;
 
-        public static VirtualDesktopWindow Create( int index, Guid guid, Color defaultBackColor, Size commonSize, int VDWPadding )
+        public static VirtualDesktopWindow Create( int index, Guid guid, Size initSize, Color defaultBackColor, int vdwPadding )
         {
             var vdw = new VirtualDesktopWindow
             {
@@ -70,11 +71,12 @@ namespace VirtualSpace.VirtualDesktop
                 Name = "vdw_" + index,
                 VdId = guid,
                 VdIndex = index,
+                Size = initSize,
                 BackColor = defaultBackColor,
-                Size = commonSize,
-                Padding = new Padding( VDWPadding )
+                Padding = new Padding( vdwPadding )
             };
             vdw.SetOwner( MainWindow.GetMainWindow() );
+            // vdw.ListenSizeChangeEvent();
             return vdw;
         }
 
@@ -141,8 +143,8 @@ namespace VirtualSpace.VirtualDesktop
 
             //////////////////////////////////////
             // thumb container size
-            var thumbWidth  = ( pbWallpaper.Width - ( cols + 1 ) * marginH ) / cols;
-            var thumbHeight = ( pbWallpaper.Height - ( rows + 1 ) * marginV ) / rows;
+            var thumbWidth  = ( Width - ( cols + 1 ) * marginH ) / cols;
+            var thumbHeight = ( Height - ( rows + 1 ) * marginV ) / rows;
 
             //////////////////////////////////////
             // show thumbnails
@@ -260,16 +262,55 @@ namespace VirtualSpace.VirtualDesktop
 
         public void ShowByVdIndex()
         {
-            var ui       = VirtualDesktopManager.Ui;
-            var dpi      = SysInfo.Dpi;
-            var location = MainWindow.GetCellLocation( VirtualDesktopManager.GetMatrixIndexByVdIndex( VdIndex ) );
-            var point    = new Point( (int)( ( location.X + ui.VDWBorderSize ) * dpi.ScaleX ), (int)( ( location.Y + ui.VDWBorderSize ) * dpi.ScaleY ) );
+            var ui  = VirtualDesktopManager.Ui;
+            var dpi = SysInfo.Dpi;
+
+            var matrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( VdIndex );
+            var location    = MainWindow.GetCellLocationByMatrixIndex( matrixIndex );
+            var point       = new Point( (int)( ( location.X + ui.VDWBorderSize ) * dpi.ScaleX ), (int)( ( location.Y + ui.VDWBorderSize ) * dpi.ScaleY ) );
             Location = point;
             _fixedPosition = point;
-            _desktopName = DesktopWrapper.DesktopNameFromGuid( VdId );
-            RefreshWallpaper();
-            Show();
+
+            var       size      = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
+            var       vdwWidth  = ( size.Width - 2 * ui.VDWBorderSize ) * dpi.ScaleX + 1;
+            var       vdwHeight = ( size.Height - 2 * ui.VDWBorderSize ) * dpi.ScaleY + 1;
+            const int floor     = 100; // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面尺寸强制归零
+            if ( vdwWidth < floor || vdwHeight < floor )
+            {
+                Size = Size.Empty; // 强制归零，从而避免接收到鼠标事件
+            }
+            else
+            {
+                Size = new Size( (int)vdwWidth, (int)vdwHeight );
+                var vdName = DesktopWrapper.DesktopNameFromGuid( VdId );
+                if ( vdName != _desktopName )
+                {
+                    UpdateDesktopName( vdName );
+                }
+
+                Show();
+            }
         }
+
+        // private void ListenSizeChangeEvent()
+        // {
+        //     SizeChanged += OnSizeChanged;
+        // }
+        //
+        // private void OnSizeChanged( object? sender, EventArgs e )
+        // {
+        //     if ( pbWallpaper.Image is null ) return;
+        //
+        //     if ( Size.Width <= pbWallpaper.Image.Width &&
+        //          Size.Height <= pbWallpaper.Image.Height )
+        //     {
+        //         return;
+        //     }
+        //
+        //     if ( !_isTheOnlyOneInMainView ) return;
+        //
+        //     SetBackground( WinRegistry.GetWallpaperByDesktopGuid( VdId, Width, Height, ConfigManager.GetCachePath() ) );
+        // }
 
         private void pbWallpaper_Paint( object sender, PaintEventArgs e )
         {
@@ -300,11 +341,6 @@ namespace VirtualSpace.VirtualDesktop
         public void UpdateDesktopName( string name )
         {
             _desktopName = name;
-            RefreshWallpaper();
-        }
-
-        private void RefreshWallpaper()
-        {
             pbWallpaper.Refresh();
         }
     }

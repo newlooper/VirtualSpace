@@ -181,11 +181,47 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Left.
+        /// </summary>
+        internal static string Keys_Left {
+            get {
+                return ResourceManager.GetString("Keys.Left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Middle.
+        /// </summary>
+        internal static string Keys_Middle {
+            get {
+                return ResourceManager.GetString("Keys.Middle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right.
+        /// </summary>
+        internal static string Keys_Right {
+            get {
+                return ResourceManager.GetString("Keys.Right", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Context Menu.
         /// </summary>
         internal static string Mouse_Action_ContextMenu {
             get {
                 return ResourceManager.GetString("Mouse.Action.ContextMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Only Selected Desktop in MainView.
+        /// </summary>
+        internal static string Mouse_Action_DesktopShowForSelectedDesktop {
+            get {
+                return ResourceManager.GetString("Mouse.Action.DesktopShowForSelectedDesktop", resourceCulture);
             }
         }
         
@@ -240,6 +276,15 @@ namespace Bridge.Resources.Langs {
         internal static string Mouse_Action_WindowClose {
             get {
                 return ResourceManager.GetString("Mouse.Action.WindowClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Windows Only From Selected App in Selected Desktop.
+        /// </summary>
+        internal static string Mouse_Action_WindowShowForSelectedProcessInSelectedDesktop {
+            get {
+                return ResourceManager.GetString("Mouse.Action.WindowShowForSelectedProcessInSelectedDesktop", resourceCulture);
             }
         }
         
@@ -448,7 +493,7 @@ namespace Bridge.Resources.Langs {
         ///VirtualSpace10	Windows 10	22H2(19045)
         ///VirtualSpace(11)	Windows 11	21H2(22000)
         ///VirtualSpace(11)	Windows 11	22H2(22621)
-        ///===== [rest of string was truncated]&quot;;.
+        ///==================== [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VersionCheckFail {
             get {

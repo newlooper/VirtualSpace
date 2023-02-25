@@ -128,7 +128,7 @@ namespace VirtualSpace
                 // hook Esc to hide MainView
                 if ( msg == LowLevelKeyboardHook.WM_KEYDOWN && info.vkCode == (int)Keys.Escape )
                 {
-                    HideAll();
+                    if ( IsShowing() ) HideAll();
                 }
             }
 

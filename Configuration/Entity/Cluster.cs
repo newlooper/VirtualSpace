@@ -18,5 +18,6 @@ namespace VirtualSpace.Config.Entity
         public bool ShowVDIndexOnTrayIcon      { get; set; }
         public bool HideOnStart                { get; set; }
         public bool ForceFocusForegroundWindow { get; set; } = true;
+        public bool EnableDoubleBufferedForVDW { get; set; } = true;
     }
 }

@@ -27,6 +27,13 @@ namespace VirtualSpace.VirtualDesktop
 {
     public partial class VirtualDesktopWindow
     {
+        private bool _isTheOnlyOneInMainView;
+
+        public void ResetOnlyOneStatus()
+        {
+            _isTheOnlyOneInMainView = false;
+        }
+
         private void VirtualDesktopWindow_MouseDown( object sender, MouseEventArgs e )
         {
             _virtualDesktops = VirtualDesktopManager.GetAllVirtualDesktops();
@@ -175,166 +182,104 @@ namespace VirtualSpace.VirtualDesktop
                         WindowTool.ActiveWindow( _selectedWindow.Handle );
                     }
 
-                    void WindowAction( string actionId )
+                    var action = Manager.Configs.GetMouseActionById( Const.MouseAction.GetActionId( e.Button, ModifierKeys, Const.MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
+                    switch ( action )
                     {
-                        var action = Manager.Configs.GetMouseActionById( actionId );
-
-                        switch ( action )
-                        {
-                            case Const.MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
-                                ActiveWindow();
-                                MainWindow.HideAll();
-                                break;
-                            case Const.MouseAction.Action.WindowActiveDesktopVisibleOnly:
-                                ActiveWindow();
-                                break;
-                            case Const.MouseAction.Action.WindowClose:
-                                CloseSelectedWindow( _selectedWindow );
-                                break;
-                            case Const.MouseAction.Action.ContextMenu:
-                                Menus.ThumbCtm( new MenuInfo
-                                {
-                                    Vw = _selectedWindow,
-                                    Sender = sender,
-                                    Location = e.Location,
-                                    Self = this
-                                } );
-                                break;
-                            case Const.MouseAction.Action.WindowHideFromView:
-                                Filters.WndHandleIgnoreListByManual.Add( _selectedWindow.Handle );
-                                if ( DesktopWrapper.IsWindowPinned( _selectedWindow.Handle ) ||
-                                     DesktopWrapper.IsApplicationPinned( _selectedWindow.Handle ) )
-                                {
-                                    VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-                                }
-                                else
-                                {
-                                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this} );
-                                }
-
-                                break;
-                            case Const.MouseAction.Action.WindowShowForSelectedProcessOnly:
-                                try
-                                {
-                                    _ = User32.GetWindowThreadProcessId( _selectedWindow.Handle, out var pId );
-                                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( null, pId );
-                                }
-                                catch ( Exception ex )
-                                {
-                                    Logger.Warning( "show windows from selected process: " + ex.Message );
-                                }
-
-                                break;
-                            case Const.MouseAction.Action.DoNothing:
-                                break;
-                            default:
-                                ActiveWindow();
-                                MainWindow.HideAll();
-                                break;
-                        }
-                    }
-
-                    switch ( e.Button )
-                    {
-                        case MouseButtons.Left:
-                            switch ( ModifierKeys )
+                        case Const.MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
+                            ActiveWindow();
+                            MainWindow.HideAll();
+                            break;
+                        case Const.MouseAction.Action.WindowActiveDesktopVisibleOnly:
+                            ActiveWindow();
+                            break;
+                        case Const.MouseAction.Action.WindowClose:
+                            CloseSelectedWindow( _selectedWindow );
+                            break;
+                        case Const.MouseAction.Action.ContextMenu:
+                            Menus.ThumbCtm( new MenuInfo
                             {
-                                case Keys.Shift:
-                                    WindowAction( Const.MouseAction.WINDOW_SHIFT_LEFT_CLICK );
-                                    break;
-                                case Keys.Control:
-                                    WindowAction( Const.MouseAction.WINDOW_CTRL_LEFT_CLICK );
-                                    break;
-                                case Keys.Alt:
-                                    WindowAction( Const.MouseAction.WINDOW_ALT_LEFT_CLICK );
-                                    break;
-                                default:
-                                    WindowAction( Const.MouseAction.WINDOW_LEFT_CLICK );
-                                    break;
+                                Vw = _selectedWindow,
+                                Sender = sender,
+                                Location = e.Location,
+                                Self = this
+                            } );
+                            break;
+                        case Const.MouseAction.Action.WindowHideFromView:
+                            Filters.WndHandleIgnoreListByManual.Add( _selectedWindow.Handle );
+                            if ( DesktopWrapper.IsWindowPinned( _selectedWindow.Handle ) ||
+                                 DesktopWrapper.IsApplicationPinned( _selectedWindow.Handle ) )
+                            {
+                                VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+                            }
+                            else
+                            {
+                                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this} );
                             }
 
                             break;
-                        case MouseButtons.Middle:
-                            switch ( ModifierKeys )
+                        case Const.MouseAction.Action.WindowShowForSelectedProcessOnly:
+                            try
                             {
-                                case Keys.Shift:
-                                    WindowAction( Const.MouseAction.WINDOW_SHIFT_MIDDLE_CLICK );
-                                    break;
-                                case Keys.Control:
-                                    WindowAction( Const.MouseAction.WINDOW_CTRL_MIDDLE_CLICK );
-                                    break;
-                                case Keys.Alt:
-                                    WindowAction( Const.MouseAction.WINDOW_ALT_MIDDLE_CLICK );
-                                    break;
-                                default:
-                                    WindowAction( Const.MouseAction.WINDOW_MIDDLE_CLICK );
-                                    break;
+                                _ = User32.GetWindowThreadProcessId( _selectedWindow.Handle, out var pId );
+                                VirtualDesktopManager.ShowVisibleWindowsForDesktops( null, pId );
+                            }
+                            catch ( Exception ex )
+                            {
+                                Logger.Warning( "show windows from selected process: " + ex.Message );
                             }
 
                             break;
-                        case MouseButtons.Right:
-                            switch ( ModifierKeys )
+                        case Const.MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop:
+                            try
                             {
-                                case Keys.Shift:
-                                    WindowAction( Const.MouseAction.WINDOW_SHIFT_RIGHT_CLICK );
-                                    break;
-                                case Keys.Control:
-                                    WindowAction( Const.MouseAction.WINDOW_CTRL_RIGHT_CLICK );
-                                    break;
-                                case Keys.Alt:
-                                    WindowAction( Const.MouseAction.WINDOW_ALT_RIGHT_CLICK );
-                                    break;
-                                default:
-                                    WindowAction( Const.MouseAction.WINDOW_RIGHT_CLICK );
-                                    break;
+                                _ = User32.GetWindowThreadProcessId( _selectedWindow.Handle, out var pId );
+                                MakeTheOnlyOne( pId );
+                            }
+                            catch ( Exception ex )
+                            {
+                                Logger.Warning( "show windows from selected process: " + ex.Message );
                             }
 
+                            break;
+                        case Const.MouseAction.Action.DoNothing:
+                            break;
+                        default:
+                            ActiveWindow();
+                            MainWindow.HideAll();
                             break;
                     }
                 }
                 else // click on a virtual desktop
                 {
-                    void DesktopAction( string actionId )
+                    var action = Manager.Configs.GetMouseActionById( Const.MouseAction.GetActionId( e.Button, ModifierKeys, Const.MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) );
+                    switch ( action )
                     {
-                        var action = Manager.Configs.GetMouseActionById( actionId );
-                        switch ( action )
-                        {
-                            case Const.MouseAction.Action.DesktopVisibleAndCloseView:
-                                MakeVisible();
-                                MainWindow.HideAll();
-                                break;
-                            case Const.MouseAction.Action.DesktopVisibleOnly:
-                                MakeVisible();
-                                break;
-                            case Const.MouseAction.Action.ContextMenu:
-                                Menus.VdCtm( new MenuInfo
-                                    {
-                                        Sender = sender,
-                                        Location = e.Location,
-                                        Self = this,
-                                        Vdws = _virtualDesktops
-                                    }
-                                );
-                                break;
-                            case Const.MouseAction.Action.DoNothing:
-                                break;
-                            default:
-                                MakeVisible();
-                                MainWindow.HideAll();
-                                break;
-                        }
-                    }
+                        case Const.MouseAction.Action.DesktopVisibleAndCloseView:
+                            MakeVisible();
+                            MainWindow.HideAll();
+                            break;
+                        case Const.MouseAction.Action.DesktopVisibleOnly:
+                            MakeVisible();
+                            break;
+                        case Const.MouseAction.Action.ContextMenu:
+                            Menus.VdCtm( new MenuInfo
+                                {
+                                    Sender = sender,
+                                    Location = e.Location,
+                                    Self = this,
+                                    Vdws = _virtualDesktops
+                                }
+                            );
+                            break;
+                        case Const.MouseAction.Action.DesktopShowForSelectedDesktop:
+                            MakeTheOnlyOne();
 
-                    switch ( e.Button )
-                    {
-                        case MouseButtons.Left:
-                            DesktopAction( Const.MouseAction.DESKTOP_LEFT_CLICK );
                             break;
-                        case MouseButtons.Middle:
-                            DesktopAction( Const.MouseAction.DESKTOP_MIDDLE_CLICK );
+                        case Const.MouseAction.Action.DoNothing:
                             break;
-                        case MouseButtons.Right:
-                            DesktopAction( Const.MouseAction.DESKTOP_RIGHT_CLICK );
+                        default:
+                            MakeVisible();
+                            MainWindow.HideAll();
                             break;
                     }
                 }
@@ -434,6 +379,25 @@ namespace VirtualSpace.VirtualDesktop
 
                 RefreshVDs( isWindowPinned );
             } );
+        }
+
+        private void MakeTheOnlyOne( int pId = 0 )
+        {
+            if ( _isTheOnlyOneInMainView )
+            {
+                MainWindow.ResetMainGrid();
+                VirtualDesktopManager.HideAllVirtualDesktops();
+                VirtualDesktopManager.ShowAllVirtualDesktops();
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+            }
+            else
+            {
+                MainWindow.ResetMainGridForSingleDesktop( VdIndex );
+                VirtualDesktopManager.HideAllVirtualDesktops();
+                _isTheOnlyOneInMainView = true;
+                VirtualDesktopManager.ShowAllVirtualDesktops();
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this}, pId );
+            }
         }
     }
 }

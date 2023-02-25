@@ -188,7 +188,7 @@ namespace VirtualSpace
                             break;
                         case UserMessage.RiseViewForActiveApp:
                             var hFWin = User32.GetForegroundWindow();
-                            User32.GetWindowThreadProcessId( hFWin, out var processId );
+                            _ = User32.GetWindowThreadProcessId( hFWin, out var processId );
                             if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
                             {
                                 HideAll();

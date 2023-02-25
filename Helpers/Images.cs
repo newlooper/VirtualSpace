@@ -20,11 +20,16 @@ using VirtualSpace.AppLogs;
 
 namespace VirtualSpace.Helpers
 {
+    internal static class PathInfo
+    {
+        public const string WIDTH_HEIGHT_SPLITTER = "x";
+    }
+
     internal static class Images
     {
         public static Bitmap GetScaledBitmap( int width, int height, string path, ref Wallpaper wp, string cachePath )
         {
-            var cached = Wallpaper.CachedWallPaper( path, cachePath );
+            var cached = Wallpaper.CachedWallPaper( path, cachePath, width, height );
 
             if ( cached != null ) return cached;
             using ( var src = new Bitmap( path ) )
@@ -36,14 +41,36 @@ namespace VirtualSpace.Helpers
                 }
 
                 var md5Path = Wallpaper.Md5Hash( path );
-                var file = Path.Combine( cachePath, md5Path.Item2, md5Path.Item3,
+                var file = Path.Combine( cachePath, md5Path.Item2, md5Path.Item3, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
                     md5Path.Item1 + "_" + Environment.CurrentManagedThreadId );
                 dest.Save( file, ImageFormat.Jpeg );
+
+                // var jpgEncoder        = GetEncoder( ImageFormat.Jpeg );
+                // var encoder           = System.Drawing.Imaging.Encoder.Quality;
+                // var encoderParameters = new EncoderParameters( 1 );
+                // var encoderParameter  = new EncoderParameter( encoder, 50L );
+                // encoderParameters.Param[0] = encoderParameter;
+                // dest.Save( file, jpgEncoder, encoderParameters );
+
                 wp.Fullpath = file;
 
                 return dest;
             }
         }
+
+        // private static ImageCodecInfo GetEncoder( ImageFormat format )
+        // {
+        //     var codecs = ImageCodecInfo.GetImageEncoders();
+        //     foreach ( var codec in codecs )
+        //     {
+        //         if ( codec.FormatID == format.Guid )
+        //         {
+        //             return codec;
+        //         }
+        //     }
+        //
+        //     return null;
+        // }
     }
 
     public class Wallpaper
@@ -52,10 +79,10 @@ namespace VirtualSpace.Helpers
         public Color   Color    { get; set; }
         public string? Fullpath { get; set; }
 
-        public static Bitmap? CachedWallPaper( string path, string cachePath )
+        public static Bitmap? CachedWallPaper( string path, string cachePath, int width, int height )
         {
             var md5Path    = Md5Hash( path );
-            var targetPath = Path.Combine( cachePath, md5Path.Item2, md5Path.Item3 );
+            var targetPath = Path.Combine( cachePath, md5Path.Item2, md5Path.Item3, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height );
             Directory.CreateDirectory( targetPath );
             var file = Path.Combine( targetPath, md5Path.Item1 );
             if ( File.Exists( file ) )
