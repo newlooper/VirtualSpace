@@ -39,12 +39,7 @@ namespace VirtualSpace.VirtualDesktop.Api
                         _lastColor = color;
                         Parallel.ForEach( VirtualDesktopManager.GetAllVirtualDesktops(), ( vdw, _ ) =>
                         {
-                            var wp = WinRegistry.GetWallpaperByDesktopGuid(
-                                vdw.VdId,
-                                vdw.Width,
-                                vdw.Height,
-                                cachePath );
-                            vdw.SetBackground( wp );
+                            vdw.UpdateWallpaper();
                         } );
                     }
 

@@ -56,14 +56,6 @@ namespace VirtualSpace.VirtualDesktop
                 if ( survival == null )
                 {
                     survival = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
-                    Task.Run( () =>
-                    {
-                        survival.SetBackground( WinRegistry.GetWallpaperByDesktopGuid(
-                            guid,
-                            survival.Width,
-                            survival.Height,
-                            ConfigManager.GetCachePath() ) );
-                    } );
                 }
                 else
                 {
@@ -114,7 +106,6 @@ namespace VirtualSpace.VirtualDesktop
                     var guid = DesktopManagerWrapper.GetIdByIndex( index );
                     var vdw  = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
 
-                    vdw.SetBackground( WinRegistry.GetWallpaperByDesktopGuid( guid, vdw.Width, vdw.Height, ConfigManager.GetCachePath() ) );
                     lock ( _virtualDesktops ) // thread safe
                     {
                         _virtualDesktops.Add( vdw ); // added in random order, need call "ReOrder( true )" afterwards

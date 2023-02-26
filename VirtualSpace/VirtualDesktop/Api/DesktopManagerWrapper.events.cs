@@ -61,7 +61,7 @@ namespace VirtualSpace.VirtualDesktop.Api
 
                 var vd = ( from vdw in vdwList where vdw.VdId == guid select vdw ).FirstOrDefault();
                 if ( vd is null ) return;
-                vd.SetBackground( WinRegistry.GetWallpaperByDesktopGuid( guid, vd.Width, vd.Height, ConfigManager.GetCachePath() ) );
+                vd.UpdateWallpaper();
                 Logger.Event( $"Desktop[{vd.VdIndex.ToString()}] Wallpaper Changed: {e.Path}" );
             };
         }

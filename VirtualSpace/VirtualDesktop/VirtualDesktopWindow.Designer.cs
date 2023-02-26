@@ -39,29 +39,14 @@ namespace VirtualSpace.VirtualDesktop
         /// </summary>
         private void InitializeComponent()
         {
-            this.pbWallpaper = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pbWallpaper)).BeginInit();
+            
             this.SuspendLayout();
-            // 
-            // pbWallpaper
-            // 
-            this.pbWallpaper.BackColor = System.Drawing.Color.Black;
-            this.pbWallpaper.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbWallpaper.Enabled = false;
-            this.pbWallpaper.Location = new System.Drawing.Point(0, 0);
-            this.pbWallpaper.Name = "pbWallpaper";
-            this.pbWallpaper.Size = new System.Drawing.Size(978, 600);
-            this.pbWallpaper.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbWallpaper.TabIndex = 0;
-            this.pbWallpaper.TabStop = false;
-            this.pbWallpaper.Paint += new System.Windows.Forms.PaintEventHandler(this.pbWallpaper_Paint);
             // 
             // VirtualDesktopWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(978, 600);
-            this.Controls.Add(this.pbWallpaper);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "VirtualDesktopWindow";
             this.ShowIcon = false;
@@ -71,13 +56,12 @@ namespace VirtualSpace.VirtualDesktop
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VirtualDesktopWindow_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.VirtualDesktopWindow_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.VirtualDesktopWindow_MouseUp);
-            ((System.ComponentModel.ISupportInitialize)(this.pbWallpaper)).EndInit();
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.pbWallpaper_Paint);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pbWallpaper;
     }
 }

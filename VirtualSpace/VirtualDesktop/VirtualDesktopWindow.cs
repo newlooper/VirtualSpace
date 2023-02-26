@@ -73,10 +73,10 @@ namespace VirtualSpace.VirtualDesktop
                 VdIndex = index,
                 Size = initSize,
                 BackColor = defaultBackColor,
-                Padding = new Padding( vdwPadding )
+                Padding = new Padding( vdwPadding ),
+                ResizeRedraw = true
             };
             vdw.SetOwner( MainWindow.GetMainWindow() );
-            // vdw.ListenSizeChangeEvent();
             return vdw;
         }
 
@@ -101,19 +101,15 @@ namespace VirtualSpace.VirtualDesktop
             }
         }
 
-        public void SetBackground( Wallpaper wp )
+        public void UpdateWallpaper()
         {
-            pbWallpaper.Image?.Dispose();
-            pbWallpaper.Image = null;
-            if ( wp.Image != null )
+            if ( InvokeRequired )
             {
-                var cloneImage = new Bitmap( wp.Image );
-                pbWallpaper.Image = cloneImage;
-                wp.Release();
+                Invoke( (MethodInvoker)Refresh );
             }
             else
             {
-                pbWallpaper.BackColor = wp.Color;
+                Refresh();
             }
         }
 
@@ -281,39 +277,32 @@ namespace VirtualSpace.VirtualDesktop
             }
             else
             {
-                Size = new Size( (int)vdwWidth, (int)vdwHeight );
                 var vdName = DesktopWrapper.DesktopNameFromGuid( VdId );
                 if ( vdName != _desktopName )
                 {
                     UpdateDesktopName( vdName );
                 }
 
-                Show();
+                Size = new Size( (int)vdwWidth, (int)vdwHeight );
+
+                if ( !Visible )
+                    Show();
             }
         }
 
-        // private void ListenSizeChangeEvent()
-        // {
-        //     SizeChanged += OnSizeChanged;
-        // }
-        //
-        // private void OnSizeChanged( object? sender, EventArgs e )
-        // {
-        //     if ( pbWallpaper.Image is null ) return;
-        //
-        //     if ( Size.Width <= pbWallpaper.Image.Width &&
-        //          Size.Height <= pbWallpaper.Image.Height )
-        //     {
-        //         return;
-        //     }
-        //
-        //     if ( !_isTheOnlyOneInMainView ) return;
-        //
-        //     SetBackground( WinRegistry.GetWallpaperByDesktopGuid( VdId, Width, Height, ConfigManager.GetCachePath() ) );
-        // }
-
         private void pbWallpaper_Paint( object sender, PaintEventArgs e )
         {
+            var wp = WinRegistry.GetWallpaperByDesktopGuid( VdId, Size.Width, Size.Height, ConfigManager.GetCachePath() );
+            if ( wp.Image != null )
+            {
+                e.Graphics.DrawImage( wp.Image, 0, 0 );
+                wp.Release();
+            }
+            else
+            {
+                BackColor = wp.Color;
+            }
+
             var ui  = ConfigManager.CurrentProfile.UI;
             var str = "";
 
@@ -341,7 +330,7 @@ namespace VirtualSpace.VirtualDesktop
         public void UpdateDesktopName( string name )
         {
             _desktopName = name;
-            pbWallpaper.Refresh();
+            Refresh();
         }
     }
 }
