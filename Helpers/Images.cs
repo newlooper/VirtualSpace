@@ -41,8 +41,8 @@ namespace VirtualSpace.Helpers
                 }
 
                 var md5Path = Wallpaper.Md5Hash( path );
-                var file = Path.Combine( cachePath, md5Path.Item2, md5Path.Item3, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
-                    md5Path.Item1 + "_" + Environment.CurrentManagedThreadId );
+                var file = Path.Combine( cachePath, md5Path.Str0, md5Path.Str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
+                    md5Path.FullString + "_" + Environment.CurrentManagedThreadId );
 
                 // dest.Save( file, ImageFormat.Jpeg );
 
@@ -82,19 +82,21 @@ namespace VirtualSpace.Helpers
 
         public static Bitmap? CachedWallPaper( string path, string cachePath, int width, int height )
         {
-            var md5Path    = Md5Hash( path );
-            var targetPath = Path.Combine( cachePath, md5Path.Item2, md5Path.Item3, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height );
-            Directory.CreateDirectory( targetPath );
-            var file = Path.Combine( targetPath, md5Path.Item1 );
-            if ( File.Exists( file ) )
-            {
-                return new Bitmap( file );
-            }
-
-            return null;
+            var cached = CachedWallPaperInfo( path, cachePath, width, height );
+            return cached.Exists ? new Bitmap( cached.Path ) : null;
         }
 
-        public static ValueTuple<string, string, string> Md5Hash( string input )
+        public static (bool Exists, string Path) CachedWallPaperInfo( string path, string cachePath, int width, int height )
+        {
+            var md5Path    = Md5Hash( path );
+            var targetPath = Path.Combine( cachePath, md5Path.Str0, md5Path.Str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height );
+            Directory.CreateDirectory( targetPath );
+            var filepath = Path.Combine( targetPath, md5Path.FullString );
+
+            return new ValueTuple<bool, string>( File.Exists( filepath ), filepath );
+        }
+
+        public static (string FullString, string Str0, string Str1) Md5Hash( string input )
         {
             var md5        = MD5.Create();
             var inputBytes = Encoding.ASCII.GetBytes( input );
@@ -123,6 +125,7 @@ namespace VirtualSpace.Helpers
             try
             {
                 var file = Regex.Replace( Fullpath, @"(.*?)_\d+$", "$1" );
+                if ( file == Fullpath ) return;
                 File.Move( Fullpath, file );
             }
             catch ( Exception ex )

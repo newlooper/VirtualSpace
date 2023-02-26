@@ -13,9 +13,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
+using VirtualSpace.AppLogs;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
@@ -37,6 +39,7 @@ namespace VirtualSpace.VirtualDesktop
         private readonly List<VisibleWindow>         _visibleWindows = new();
         private          string                      _desktopName;
         private          Point                       _fixedPosition;
+        private          Size                        _initSize = Size.Empty;
         public           Guid                        VdId;
         public           int                         VdIndex;
 
@@ -292,20 +295,85 @@ namespace VirtualSpace.VirtualDesktop
 
         private void pbWallpaper_Paint( object sender, PaintEventArgs e )
         {
-            var wp = WinRegistry.GetWallpaperByDesktopGuid( VdId,
-                Size.Width,
-                Size.Height,
-                ConfigManager.GetCachePath(),
-                ConfigManager.Configs.Cluster.VdwWallpaperQuality );
-
-            if ( wp.Image != null )
+            if ( _initSize == Size.Empty )
             {
-                e.Graphics.DrawImage( wp.Image, 0, 0 );
-                wp.Release();
+                Logger.Event( $"Init Desktop[{VdIndex}] background." );
+                var wp = WinRegistry.GetWallpaperByDesktopGuid( VdId,
+                    Width,
+                    Height,
+                    ConfigManager.GetCachePath(),
+                    ConfigManager.Configs.Cluster.VdwWallpaperQuality );
+                if ( wp.Image != null )
+                {
+                    e.Graphics.DrawImage( wp.Image, 0, 0 );
+                    wp.Release();
+                }
+                else
+                {
+                    BackColor = wp.Color;
+                }
+
+                _initSize.Width = Width;
+                _initSize.Height = Height;
             }
             else
             {
-                BackColor = wp.Color;
+                var wpPath = WinRegistry.GetWallPaperPathByGuid( VdId );
+                if ( wpPath is null )
+                {
+                    BackColor = WinRegistry.GetBackColor();
+                }
+                else
+                {
+                    var wpInfo = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), Width, Height );
+                    if ( wpInfo.Exists )
+                    {
+                        var wp = WinRegistry.GetWallpaperByDesktopGuid( VdId,
+                            Width,
+                            Height,
+                            ConfigManager.GetCachePath(),
+                            ConfigManager.Configs.Cluster.VdwWallpaperQuality );
+
+                        if ( wp.Image != null )
+                        {
+                            e.Graphics.DrawImage( wp.Image, 0, 0 );
+                            wp.Release();
+                        }
+                        else
+                        {
+                            BackColor = wp.Color;
+                        }
+                    }
+                    else
+                    {
+                        var wp = WinRegistry.GetWallpaperByDesktopGuid( VdId,
+                            _initSize.Width,
+                            _initSize.Height,
+                            ConfigManager.GetCachePath(),
+                            ConfigManager.Configs.Cluster.VdwWallpaperQuality );
+
+                        if ( wp.Image != null )
+                        {
+                            e.Graphics.DrawImage( wp.Image, 0, 0, Width, Height );
+                            wp.Release();
+                        }
+                        else
+                        {
+                            BackColor = wp.Color;
+                        }
+
+                        Logger.Event( $"Create cache image for Desktop[{VdIndex}]" );
+                        Task.Run( () =>
+                        {
+                            WinRegistry.GetWallpaperByDesktopGuid( VdId,
+                                    Width,
+                                    Height,
+                                    ConfigManager.GetCachePath(),
+                                    ConfigManager.Configs.Cluster.VdwWallpaperQuality )
+                                .Release();
+                        } );
+                    }
+                }
             }
 
             var ui  = ConfigManager.CurrentProfile.UI;

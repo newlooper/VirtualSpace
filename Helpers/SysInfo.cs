@@ -38,7 +38,7 @@ namespace VirtualSpace.Helpers
         private static (float ScaleX, float ScaleY) GetDpi()
         {
             using var g = Graphics.FromHwnd( IntPtr.Zero );
-            return ( g.DpiX / DefaultDpi, g.DpiY / DefaultDpi );
+            return new ValueTuple<float, float>( g.DpiX / DefaultDpi, g.DpiY / DefaultDpi );
         }
 
         public static Version OSVersion

@@ -25,16 +25,11 @@ namespace VirtualSpace.Helpers
         {
             var wallpaper = new Wallpaper();
 
-            var path = Registry.GetValue( VD_WALLPAPER_REGISTRY_PREFIX + "{" + guid + "}", "Wallpaper", "" )?.ToString();
-
-            if ( string.IsNullOrEmpty( path ) )
-                path = GetDefaultWallpaperPath();
+            var path = GetWallPaperPathByGuid( guid );
 
             if ( string.IsNullOrEmpty( path ) )
             {
-                var color    = Registry.GetValue( COLOR_REGISTRY_PREFIX, "Background", "" ).ToString();
-                var strColor = color.Split( ' ' );
-                wallpaper.Color = Color.FromArgb( int.Parse( strColor[0] ), int.Parse( strColor[1] ), int.Parse( strColor[2] ) );
+                wallpaper.Color = GetBackColor();
             }
             else
             {
@@ -47,6 +42,23 @@ namespace VirtualSpace.Helpers
         public static string? GetDefaultWallpaperPath()
         {
             return Registry.GetValue( WALLPAPER_REGISTRY_PREFIX, "Wallpaper", "" ).ToString();
+        }
+
+        public static string? GetWallPaperPathByGuid( Guid guid )
+        {
+            var path = Registry.GetValue( VD_WALLPAPER_REGISTRY_PREFIX + "{" + guid + "}", "Wallpaper", "" )?.ToString();
+
+            if ( string.IsNullOrEmpty( path ) )
+                path = GetDefaultWallpaperPath();
+
+            return string.IsNullOrEmpty( path ) ? null : path;
+        }
+
+        public static Color GetBackColor()
+        {
+            var color    = Registry.GetValue( COLOR_REGISTRY_PREFIX, "Background", "" ).ToString();
+            var strColor = color.Split( ' ' );
+            return Color.FromArgb( int.Parse( strColor[0] ), int.Parse( strColor[1] ), int.Parse( strColor[2] ) );
         }
     }
 }
