@@ -13,11 +13,18 @@ namespace VirtualSpace.Config.Entity
 {
     public class Cluster
     {
-        public bool HideMainViewIfItsShown     { get; set; }
-        public bool NotificationOnVdChanged    { get; set; }
-        public bool ShowVDIndexOnTrayIcon      { get; set; }
-        public bool HideOnStart                { get; set; }
-        public bool ForceFocusForegroundWindow { get; set; } = true;
-        public bool EnableDoubleBufferedForVDW { get; set; } = true;
+        private long _vdwWallpaperQuality = 50L;
+        public  bool HideMainViewIfItsShown     { get; set; }
+        public  bool NotificationOnVdChanged    { get; set; }
+        public  bool ShowVDIndexOnTrayIcon      { get; set; }
+        public  bool HideOnStart                { get; set; }
+        public  bool ForceFocusForegroundWindow { get; set; } = true;
+        public  bool EnableDoubleBufferedForVDW { get; set; } = true;
+
+        public long VdwWallpaperQuality
+        {
+            get => _vdwWallpaperQuality;
+            set => _vdwWallpaperQuality = value is >= 0 and <= 100 ? value : 50L;
+        }
     }
 }

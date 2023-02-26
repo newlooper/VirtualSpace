@@ -292,7 +292,12 @@ namespace VirtualSpace.VirtualDesktop
 
         private void pbWallpaper_Paint( object sender, PaintEventArgs e )
         {
-            var wp = WinRegistry.GetWallpaperByDesktopGuid( VdId, Size.Width, Size.Height, ConfigManager.GetCachePath() );
+            var wp = WinRegistry.GetWallpaperByDesktopGuid( VdId,
+                Size.Width,
+                Size.Height,
+                ConfigManager.GetCachePath(),
+                ConfigManager.Configs.Cluster.VdwWallpaperQuality );
+
             if ( wp.Image != null )
             {
                 e.Graphics.DrawImage( wp.Image, 0, 0 );

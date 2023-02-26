@@ -27,7 +27,7 @@ namespace VirtualSpace.Helpers
 
     internal static class Images
     {
-        public static Bitmap GetScaledBitmap( int width, int height, string path, ref Wallpaper wp, string cachePath )
+        public static Bitmap GetScaledBitmap( int width, int height, string path, ref Wallpaper wp, string cachePath, long quality )
         {
             var cached = Wallpaper.CachedWallPaper( path, cachePath, width, height );
 
@@ -43,14 +43,15 @@ namespace VirtualSpace.Helpers
                 var md5Path = Wallpaper.Md5Hash( path );
                 var file = Path.Combine( cachePath, md5Path.Item2, md5Path.Item3, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
                     md5Path.Item1 + "_" + Environment.CurrentManagedThreadId );
-                dest.Save( file, ImageFormat.Jpeg );
 
-                // var jpgEncoder        = GetEncoder( ImageFormat.Jpeg );
-                // var encoder           = System.Drawing.Imaging.Encoder.Quality;
-                // var encoderParameters = new EncoderParameters( 1 );
-                // var encoderParameter  = new EncoderParameter( encoder, 50L );
-                // encoderParameters.Param[0] = encoderParameter;
-                // dest.Save( file, jpgEncoder, encoderParameters );
+                // dest.Save( file, ImageFormat.Jpeg );
+
+                var jpgEncoder        = GetEncoder( ImageFormat.Jpeg );
+                var encoder           = System.Drawing.Imaging.Encoder.Quality;
+                var encoderParameters = new EncoderParameters( 1 );
+                var encoderParameter  = new EncoderParameter( encoder, quality );
+                encoderParameters.Param[0] = encoderParameter;
+                dest.Save( file, jpgEncoder, encoderParameters );
 
                 wp.Fullpath = file;
 
@@ -58,19 +59,19 @@ namespace VirtualSpace.Helpers
             }
         }
 
-        // private static ImageCodecInfo GetEncoder( ImageFormat format )
-        // {
-        //     var codecs = ImageCodecInfo.GetImageEncoders();
-        //     foreach ( var codec in codecs )
-        //     {
-        //         if ( codec.FormatID == format.Guid )
-        //         {
-        //             return codec;
-        //         }
-        //     }
-        //
-        //     return null;
-        // }
+        private static ImageCodecInfo GetEncoder( ImageFormat format )
+        {
+            var codecs = ImageCodecInfo.GetImageEncoders();
+            foreach ( var codec in codecs )
+            {
+                if ( codec.FormatID == format.Guid )
+                {
+                    return codec;
+                }
+            }
+
+            return null;
+        }
     }
 
     public class Wallpaper

@@ -21,7 +21,7 @@ namespace VirtualSpace.Helpers
         private const string WALLPAPER_REGISTRY_PREFIX    = @"HKEY_CURRENT_USER\Control Panel\Desktop\";
         private const string COLOR_REGISTRY_PREFIX        = @"HKEY_CURRENT_USER\Control Panel\Colors\";
 
-        public static Wallpaper GetWallpaperByDesktopGuid( Guid guid, int width, int height, string cachePath )
+        public static Wallpaper GetWallpaperByDesktopGuid( Guid guid, int width, int height, string cachePath, long quality )
         {
             var wallpaper = new Wallpaper();
 
@@ -38,7 +38,7 @@ namespace VirtualSpace.Helpers
             }
             else
             {
-                wallpaper.Image = Images.GetScaledBitmap( width, height, path, ref wallpaper, cachePath );
+                wallpaper.Image = Images.GetScaledBitmap( width, height, path, ref wallpaper, cachePath, quality );
             }
 
             return wallpaper;
