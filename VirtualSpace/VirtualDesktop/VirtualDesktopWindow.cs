@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -58,6 +59,15 @@ namespace VirtualSpace.VirtualDesktop
                 cp.ExStyle |= 0x08000000; // WS_EX_NOACTIVATE
                 cp.Style = unchecked(cp.Style | (int)0x80000000); // WS_POPUP
                 return cp;
+            }
+        }
+
+        protected override void WndProc( ref Message m )
+        {
+            base.WndProc( ref m );
+            if ( m.Msg == UserMessage.RefreshVdw )
+            {
+                Refresh();
             }
         }
 
@@ -293,87 +303,130 @@ namespace VirtualSpace.VirtualDesktop
             }
         }
 
-        private void pbWallpaper_Paint( object sender, PaintEventArgs e )
+        private (bool isCached, string path, Color? color) CachedWallpaperInfo()
         {
-            if ( _initSize == Size.Empty )
+            var wpPath = WinRegistry.GetWallPaperPathByGuid( VdId );
+            if ( wpPath is null )
             {
-                Logger.Event( $"Init Desktop[{VdIndex}] background." );
-                var wp = WinRegistry.GetWallpaperByDesktopGuid( VdId,
-                    Width,
-                    Height,
-                    ConfigManager.GetCachePath(),
-                    ConfigManager.Configs.Cluster.VdwWallpaperQuality );
-                if ( wp.Image != null )
-                {
-                    e.Graphics.DrawImage( wp.Image, 0, 0 );
-                    wp.Release();
-                }
-                else
-                {
-                    BackColor = wp.Color;
-                }
+                return new ValueTuple<bool, string, Color>( false, "", WinRegistry.GetBackColor() );
+            }
 
-                _initSize.Width = Width;
-                _initSize.Height = Height;
+            var wpInfo = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), Width, Height );
+            return new ValueTuple<bool, string, Color?>( wpInfo.Exists, wpPath, null );
+        }
+
+        private static void DrawImage( PaintEventArgs e, Wallpaper wp, int width = 0, int height = 0 )
+        {
+            if ( width > 0 && height > 0 )
+            {
+                e.Graphics.DrawImage( wp.Image, 0, 0, width, height );
             }
             else
             {
-                var wpPath = WinRegistry.GetWallPaperPathByGuid( VdId );
-                if ( wpPath is null )
+                e.Graphics.DrawImage( wp.Image, 0, 0 );
+            }
+
+            wp.Release();
+        }
+
+        private void InitPaint( (bool isCached, string path, Color? color) wpInfo, PaintEventArgs e )
+        {
+            Logger.Event( $"Init Desktop[{VdIndex}] background." );
+
+            _initSize.Width = Width;
+            _initSize.Height = Height;
+
+            if ( wpInfo.color != null )
+            {
+                BackColor = (Color)wpInfo.color;
+                return;
+            }
+
+            if ( wpInfo.isCached )
+            {
+                DrawImage( e, WinRegistry.GetWallpaperByPath( wpInfo.path,
+                    Width,
+                    Height,
+                    ConfigManager.GetCachePath(),
+                    ConfigManager.Configs.Cluster.VdwWallpaperQuality ) );
+            }
+            else
+            {
+                if ( VirtualDesktopManager.IsBatchCreate )
                 {
-                    BackColor = WinRegistry.GetBackColor();
+                    DrawImage( e, WinRegistry.GetWallpaperByPath( wpInfo.path,
+                        Width,
+                        Height,
+                        ConfigManager.GetCachePath(),
+                        ConfigManager.Configs.Cluster.VdwWallpaperQuality ) );
                 }
                 else
                 {
-                    var wpInfo = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), Width, Height );
-                    if ( wpInfo.Exists )
+                    var hWnd = Handle;
+                    Task.Run( () =>
                     {
-                        var wp = WinRegistry.GetWallpaperByDesktopGuid( VdId,
+                        WinRegistry.GetWallpaperByPath( wpInfo.path,
                             Width,
                             Height,
                             ConfigManager.GetCachePath(),
-                            ConfigManager.Configs.Cluster.VdwWallpaperQuality );
-
-                        if ( wp.Image != null )
-                        {
-                            e.Graphics.DrawImage( wp.Image, 0, 0 );
-                            wp.Release();
-                        }
-                        else
-                        {
-                            BackColor = wp.Color;
-                        }
-                    }
-                    else
-                    {
-                        var wp = WinRegistry.GetWallpaperByDesktopGuid( VdId,
-                            _initSize.Width,
-                            _initSize.Height,
-                            ConfigManager.GetCachePath(),
-                            ConfigManager.Configs.Cluster.VdwWallpaperQuality );
-
-                        if ( wp.Image != null )
-                        {
-                            e.Graphics.DrawImage( wp.Image, 0, 0, Width, Height );
-                            wp.Release();
-                        }
-                        else
-                        {
-                            BackColor = wp.Color;
-                        }
-
-                        Logger.Event( $"Create cache image for Desktop[{VdIndex}]" );
-                        Task.Run( () =>
-                        {
-                            WinRegistry.GetWallpaperByDesktopGuid( VdId,
-                                    Width,
-                                    Height,
-                                    ConfigManager.GetCachePath(),
-                                    ConfigManager.Configs.Cluster.VdwWallpaperQuality )
-                                .Release();
-                        } );
-                    }
+                            ConfigManager.Configs.Cluster.VdwWallpaperQuality ).Release();
+                        User32.PostMessage( hWnd, UserMessage.RefreshVdw, 0, 0 );
+                    } );
                 }
+            }
+        }
+
+        private void NormalPaint( (bool isCached, string path, Color? color) wpInfo, PaintEventArgs e )
+        {
+            if ( wpInfo.color != null )
+            {
+                BackColor = (Color)wpInfo.color;
+                return;
+            }
+
+            if ( wpInfo.isCached )
+            {
+                DrawImage( e, WinRegistry.GetWallpaperByPath( wpInfo.path,
+                    Width,
+                    Height,
+                    ConfigManager.GetCachePath(),
+                    ConfigManager.Configs.Cluster.VdwWallpaperQuality ) );
+            }
+            else
+            {
+                Logger.Event( $"Create cache image({Width}*{Height}) for Desktop[{VdIndex}]" );
+                Task.Run( () =>
+                {
+                    // only once for path with current Width*Height
+                    WinRegistry.GetWallpaperByPath( wpInfo.path,
+                            Width,
+                            Height,
+                            ConfigManager.GetCachePath(),
+                            ConfigManager.Configs.Cluster.VdwWallpaperQuality )
+                        .Release();
+                } );
+
+                ////////////////////////////////////////////////////////////////////////////////////
+                // use init size, so we can create cache image async
+                e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor; // faster
+                DrawImage( e, WinRegistry.GetWallpaperByPath( wpInfo.path,
+                    _initSize.Width,
+                    _initSize.Height,
+                    ConfigManager.GetCachePath(),
+                    ConfigManager.Configs.Cluster.VdwWallpaperQuality ), Width, Height );
+            }
+        }
+
+        private void pbWallpaper_Paint( object sender, PaintEventArgs e )
+        {
+            var wpInfo = CachedWallpaperInfo();
+            if ( _initSize == Size.Empty )
+            {
+                InitPaint( wpInfo, e );
+            }
+            else
+            {
+                NormalPaint( wpInfo, e );
             }
 
             var ui  = ConfigManager.CurrentProfile.UI;

@@ -125,13 +125,16 @@ namespace VirtualSpace.Helpers
             try
             {
                 var file = Regex.Replace( Fullpath, @"(.*?)_\d+$", "$1" );
-                if ( file == Fullpath ) return;
-                File.Move( Fullpath, file );
+                if ( !File.Exists( file ) )
+                    File.Move( Fullpath, file );
             }
             catch ( Exception ex )
             {
-                File.Delete( Fullpath );
                 Logger.Warning( "Delete cache file: " + ex.Message );
+            }
+            finally
+            {
+                File.Delete( Fullpath );
             }
         }
     }

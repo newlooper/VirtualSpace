@@ -39,6 +39,13 @@ namespace VirtualSpace.Helpers
             return wallpaper;
         }
 
+        public static Wallpaper GetWallpaperByPath( string path, int width, int height, string cachePath, long quality )
+        {
+            var wallpaper = new Wallpaper();
+            wallpaper.Image = Images.GetScaledBitmap( width, height, path, ref wallpaper, cachePath, quality );
+            return wallpaper;
+        }
+
         public static string? GetDefaultWallpaperPath()
         {
             return Registry.GetValue( WALLPAPER_REGISTRY_PREFIX, "Wallpaper", "" ).ToString();
