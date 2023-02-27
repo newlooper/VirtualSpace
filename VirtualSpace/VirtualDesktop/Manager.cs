@@ -335,6 +335,11 @@ namespace VirtualSpace.VirtualDesktop
             return _virtualDesktops;
         }
 
+        public static VirtualDesktopWindow GetCurrentVdw()
+        {
+            return _virtualDesktops.Single( v => v.VdId == DesktopWrapper.CurrentGuid );
+        }
+
         public static void SaveOrder( List<Guid>? newOrder = null )
         {
             if ( newOrder != null )

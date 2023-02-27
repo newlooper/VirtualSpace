@@ -76,13 +76,15 @@ namespace VirtualSpace.Config
 
             ///////////////////////////////////////////////////
             // 值与控件名称一一对应，若控件名被修改，则此处也须对应改变
-            public const string RISE_VIEW                = "hk_node_rise_mainview";
-            public const string RISE_VIEW_FOR_ACTIVE_APP = "hk_node_rise_mainview_for_active_app";
-            public const string SHOW_APP_CONTROLLER      = "hk_node_open_app_controller";
-            public const string NAV_LEFT                 = "hk_node_nav_left";
-            public const string NAV_RIGHT                = "hk_node_nav_right";
-            public const string NAV_UP                   = "hk_node_nav_up";
-            public const string NAV_DOWN                 = "hk_node_nav_down";
+            public const string RISE_VIEW                              = "hk_node_rise_mainview";
+            public const string RISE_VIEW_FOR_ACTIVE_APP               = "hk_node_rise_mainview_for_active_app";
+            public const string RISE_VIEW_FOR_CURRENT_VD               = "hk_node_rise_mainview_for_current_vd";
+            public const string RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD = "hk_node_rise_mainview_for_active_app_in_current_vd";
+            public const string SHOW_APP_CONTROLLER                    = "hk_node_open_app_controller";
+            public const string NAV_LEFT                               = "hk_node_nav_left";
+            public const string NAV_RIGHT                              = "hk_node_nav_right";
+            public const string NAV_UP                                 = "hk_node_nav_up";
+            public const string NAV_DOWN                               = "hk_node_nav_down";
 
             ////////////////////////////////////////////////////////////////
             // 可由热键调用的程序功能表
@@ -93,6 +95,11 @@ namespace VirtualSpace.Config
             {
                 {RISE_VIEW, new ValueTuple<string, int, string>( "Rise MainView", UserMessage.RiseView, "LWin+Tab" )},
                 {RISE_VIEW_FOR_ACTIVE_APP, new ValueTuple<string, int, string>( "Rise MainView For Active App", UserMessage.RiseViewForActiveApp, "" )},
+                {RISE_VIEW_FOR_CURRENT_VD, new ValueTuple<string, int, string>( "Rise MainView For Current Desktop", UserMessage.RiseViewForCurrentVD, "" )},
+                {
+                    RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD,
+                    new ValueTuple<string, int, string>( "Rise MainView For Active App In Current Virtual Desktop", UserMessage.RiseViewForActiveAppInCurrentVD, "" )
+                },
                 {SHOW_APP_CONTROLLER, new ValueTuple<string, int, string>( "Open AppController", UserMessage.ShowAppController, "" )},
                 {NAV_LEFT, new ValueTuple<string, int, string>( "Left", UserMessage.NavLeft, "LWin+Ctrl+Left" )},
                 {NAV_RIGHT, new ValueTuple<string, int, string>( "Right", UserMessage.NavRight, "LWin+Ctrl+Right" )},

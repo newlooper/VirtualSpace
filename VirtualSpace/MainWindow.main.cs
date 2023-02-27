@@ -140,6 +140,18 @@ namespace VirtualSpace
             }
         }
 
+        private static void BringToTopForCurrentVd( int processId = 0 )
+        {
+            CheckScreenArea();
+
+            _instance.Left = 0;
+            _instance.Top = 0;
+            _instance.Show();
+
+            var cvd = VirtualDesktopManager.GetCurrentVdw();
+            cvd.MakeTheOnlyOne( processId );
+        }
+
         private static void CheckScreenArea()
         {
             if ( (int)_instance.Width == (int)SystemParameters.PrimaryScreenWidth &&

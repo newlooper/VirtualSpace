@@ -381,7 +381,7 @@ namespace VirtualSpace.VirtualDesktop
             } );
         }
 
-        private void MakeTheOnlyOne( int pId = 0 )
+        public void MakeTheOnlyOne( int pId = 0 )
         {
             if ( _isTheOnlyOneInMainView )
             {

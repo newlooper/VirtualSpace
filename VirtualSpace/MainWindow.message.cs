@@ -187,8 +187,7 @@ namespace VirtualSpace
 
                             break;
                         case UserMessage.RiseViewForActiveApp:
-                            var hFWin = User32.GetForegroundWindow();
-                            _ = User32.GetWindowThreadProcessId( hFWin, out var processId );
+                            _ = User32.GetWindowThreadProcessId( User32.GetForegroundWindow(), out var processId );
                             if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
                             {
                                 HideAll();
@@ -196,6 +195,31 @@ namespace VirtualSpace
                             else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
                             {
                                 BringToTop( processId );
+                                RiseViewTimer.Restart();
+                            }
+
+                            break;
+                        case UserMessage.RiseViewForCurrentVD:
+                            if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
+                            {
+                                HideAll();
+                            }
+                            else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                            {
+                                BringToTopForCurrentVd();
+                                RiseViewTimer.Restart();
+                            }
+
+                            break;
+                        case UserMessage.RiseViewForActiveAppInCurrentVD:
+                            _ = User32.GetWindowThreadProcessId( User32.GetForegroundWindow(), out var pId );
+                            if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
+                            {
+                                HideAll();
+                            }
+                            else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                            {
+                                BringToTopForCurrentVd( pId );
                                 RiseViewTimer.Restart();
                             }
 

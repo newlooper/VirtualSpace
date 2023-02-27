@@ -74,7 +74,8 @@ namespace VirtualSpace
         private void btn_hk_ClearAndSave_Click( object sender, EventArgs e )
         {
             tb_hk_tip.Clear();
-            GlobalHotKey.UnregisterHotKey( _mainWindowHandle, Manager.Configs.KeyBindings[tv_keyboard.SelectedNode.Name].MessageId );
+            var msgId = Const.Hotkey.GetKeyBinding( tv_keyboard.SelectedNode.Name ).MessageId;
+            GlobalHotKey.UnregisterHotKey( _mainWindowHandle, msgId );
             ClearHotkey();
             SaveHotkey( GetGhk() );
         }
@@ -117,7 +118,9 @@ namespace VirtualSpace
         private void SaveHotkey( ValueTuple<string, GlobalHotKey.KeyModifiers> ghk )
         {
             var hotkeyId = tv_keyboard.SelectedNode.Name;
-            Manager.Configs.KeyBindings[hotkeyId].GhkCode = ghk.Item1;
+            var kb       = Const.Hotkey.GetKeyBinding( hotkeyId );
+            kb.GhkCode = ghk.Item1;
+            Manager.Configs.KeyBindings[hotkeyId] = kb;
             Manager.Save();
             tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.SettingsSaved" ) + Const.WindowsCRLF;
         }
@@ -125,7 +128,8 @@ namespace VirtualSpace
         private void RegHotkey( ValueTuple<string, GlobalHotKey.KeyModifiers> ghk )
         {
             var hotkeyId = tv_keyboard.SelectedNode.Name;
-            GlobalHotKey.UnregisterHotKey( _mainWindowHandle, Manager.Configs.KeyBindings[hotkeyId].MessageId );
+            var msgId    = Const.Hotkey.GetKeyBinding( hotkeyId ).MessageId;
+            GlobalHotKey.UnregisterHotKey( _mainWindowHandle, msgId );
 
             if ( cb_hk_key.SelectedIndex == 0 )
             {
@@ -134,7 +138,7 @@ namespace VirtualSpace
             }
 
             if ( GlobalHotKey.RegHotKey( _mainWindowHandle,
-                    Manager.Configs.KeyBindings[hotkeyId].MessageId,
+                    msgId,
                     ghk.Item2,
                     KeyInterop.VirtualKeyFromKey( Enum.Parse<Key>( cb_hk_key.SelectedItem.ToString() ) ) ) )
             {

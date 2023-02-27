@@ -28,13 +28,14 @@ namespace VirtualSpace
         {
             foreach ( var kv in Manager.Configs.KeyBindings )
             {
-                var func = Const.Hotkey.GetFuncDesc( kv.Key );
-                var kb   = kv.Value;
+                var kbInProfile = kv.Value;
 
-                var ghkCode = kb.GhkCode;
+                var ghkCode = kbInProfile.GhkCode;
                 if ( ghkCode == "" ) continue;
 
-                var hotkey = ghkCode.Replace( Const.Hotkey.NONE + Const.Hotkey.SPLITTER, "" );
+                var func      = Const.Hotkey.GetFuncDesc( kv.Key );
+                var messageId = Const.Hotkey.GetKeyBinding( kv.Key ).MessageId;
+                var hotkeyStr = ghkCode.Replace( Const.Hotkey.NONE + Const.Hotkey.SPLITTER, "" );
 
                 var arr = ghkCode.Split( Const.Hotkey.SPLITTER );
                 if ( arr.Length == 5 )
@@ -48,16 +49,16 @@ namespace VirtualSpace
                     {
                         var key = Enum.Parse<Key>( arr[4] );
                         Logger.Info( string.Format( "Register Global HotKey [{0}] For \"{1}\", {2}",
-                            hotkey,
+                            hotkeyStr,
                             func,
-                            GHK.RegHotKey( hWnd, kb.MessageId, km, KeyInterop.VirtualKeyFromKey( key ) )
+                            GHK.RegHotKey( hWnd, messageId, km, KeyInterop.VirtualKeyFromKey( key ) )
                                 ? "Success"
                                 : "Fail" ) );
                     }
                     catch ( Exception ex )
                     {
                         Logger.Error( string.Format( "Register Global HotKey [{0}] For \"{1}\" Error: {2}",
-                            hotkey,
+                            hotkeyStr,
                             func,
                             ex.Message ) );
                     }
