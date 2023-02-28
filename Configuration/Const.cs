@@ -85,6 +85,7 @@ namespace VirtualSpace.Config
             public const string NAV_RIGHT                              = "hk_node_nav_right";
             public const string NAV_UP                                 = "hk_node_nav_up";
             public const string NAV_DOWN                               = "hk_node_nav_down";
+            public const string SWITCH_BACK_LAST                       = "hk_node_svd_back_last";
 
             ////////////////////////////////////////////////////////////////
             // 可由热键调用的程序功能表
@@ -104,7 +105,8 @@ namespace VirtualSpace.Config
                 {NAV_LEFT, new ValueTuple<string, int, string>( "Left", UserMessage.NavLeft, "LWin+Ctrl+Left" )},
                 {NAV_RIGHT, new ValueTuple<string, int, string>( "Right", UserMessage.NavRight, "LWin+Ctrl+Right" )},
                 {NAV_UP, new ValueTuple<string, int, string>( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" )},
-                {NAV_DOWN, new ValueTuple<string, int, string>( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" )}
+                {NAV_DOWN, new ValueTuple<string, int, string>( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" )},
+                {SWITCH_BACK_LAST, new ValueTuple<string, int, string>( "Switch Back To Last Desktop", UserMessage.SwitchBackToLastDesktop, "" )},
             };
 
             public static string GetFuncDesc( string key )

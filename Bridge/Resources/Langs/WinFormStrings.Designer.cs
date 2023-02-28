@@ -181,6 +181,15 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch Back To Last Desktop.
+        /// </summary>
+        internal static string KB_Hotkey_SVD_BACK_LAST {
+            get {
+                return ResourceManager.GetString("KB.Hotkey.SVD_BACK_LAST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Left.
         /// </summary>
         internal static string Keys_Left {

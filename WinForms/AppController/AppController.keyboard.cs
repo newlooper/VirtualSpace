@@ -201,6 +201,8 @@ namespace VirtualSpace
                 nodeMwf.Nodes.Add( Const.Hotkey.MWF_TREE_NODE_PREFIX + i, Agent.Langs.GetString( "KB.Hotkey.MWF" ) + i );
             }
 
+            nodeSvd.Nodes.Add( Const.Hotkey.SWITCH_BACK_LAST, Agent.Langs.GetString( "KB.Hotkey.SVD_BACK_LAST" ) );
+
             tc_Keyboard.Visible = false;
             tv_keyboard.ExpandAll();
         }

@@ -90,6 +90,7 @@ namespace VirtualSpace.VirtualDesktop.Api
 
                             break;
                         case VirtualDesktopNotificationType.CURRENT_CHANGED:
+                            VirtualDesktopManager.LastDesktopId = vdn.OldId;
                             if ( MainWindow.IsShowing() )
                                 VirtualDesktopManager.UpdateVdwBackground();
 

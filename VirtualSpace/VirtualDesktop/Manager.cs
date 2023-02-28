@@ -37,6 +37,7 @@ namespace VirtualSpace.VirtualDesktop
         public static  bool          NeedRepaintThumbs;
         public static  UserInterface Ui            => ConfigManager.CurrentProfile.UI;
         public static  bool          IsBatchCreate { get; set; }
+        public static  Guid          LastDesktopId = Guid.Empty;
 
         public static int GetVdIndexByGuid( Guid guid )
         {

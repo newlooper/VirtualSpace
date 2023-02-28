@@ -236,61 +236,10 @@ namespace VirtualSpace
                                 UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
                             break;
                         case UserMessage.SwitchDesktop:
-                            if ( SwitchDesktopTimer.ElapsedMilliseconds > Const.SwitchDesktopInterval )
-                            {
-                                var desktopOrder = Manager.CurrentProfile.DesktopOrder;
-                                var currentDesktopMatrixIndex =
-                                    VirtualDesktopManager.GetMatrixIndexByVdIndex( desktopOrder.IndexOf( DesktopWrapper.CurrentGuid ) );
-
-                                var dir = lParam.ToInt32();
-                                var targetIndex = Navigation.CalculateTargetIndex(
-                                    DesktopWrapper.Count,
-                                    currentDesktopMatrixIndex,
-                                    (Keys)dir,
-                                    Manager.CurrentProfile.Navigation );
-
-                                var vDsi = new VirtualDesktopSwitchInfo
-                                {
-                                    hostHandle = Handle,
-                                    vdCount = DesktopWrapper.Count,
-                                    fromIndex = currentDesktopMatrixIndex,
-                                    dir = dir,
-                                    targetIndex = targetIndex
-                                };
-                                var vDsiSize = Marshal.SizeOf( typeof( VirtualDesktopSwitchInfo ) );
-                                var pVDsi    = Marshal.AllocHGlobal( vDsiSize );
-                                Marshal.StructureToPtr( vDsi, pVDsi, true );
-
-                                var cds = new COPYDATASTRUCT
-                                {
-                                    dwData = (IntPtr)WinApi.UM_SWITCHDESKTOP,
-                                    cbData = vDsiSize,
-                                    lpData = pVDsi
-                                };
-                                var pCds = Marshal.AllocHGlobal( Marshal.SizeOf( typeof( COPYDATASTRUCT ) ) );
-                                Marshal.StructureToPtr( cds, pCds, true );
-
-                                foreach ( var pluginInfo in PluginHost.Plugins.Where(
-                                             p => p.Type == PluginType.VD_SWITCH_OBSERVER && User32.IsWindow( p.Handle ) ) )
-                                {
-                                    User32.SendMessage( pluginInfo.Handle, WinApi.WM_COPYDATA, 0, (ulong)pCds );
-                                }
-
-                                ////////////////////////////////////////////////////////////////////////////////////
-                                // if none of plugins send back message after 100 ms, host will force switch desktop
-                                Interlocked.Increment( ref _forceSwitchOnTimeout );
-                                Task.Run( () =>
-                                {
-                                    Thread.Sleep( 100 );
-                                    if ( _forceSwitchOnTimeout == 0 ) return;
-                                    DesktopWrapper.MakeVisibleByGuid( desktopOrder[VirtualDesktopManager.GetVdIndexByMatrixIndex( targetIndex )] );
-                                } );
-
-                                Marshal.FreeHGlobal( pVDsi );
-                                Marshal.FreeHGlobal( pCds );
-                                SwitchDesktopTimer.Restart();
-                            }
-
+                            SwitchDesktopByDirection( lParam );
+                            break;
+                        case UserMessage.SwitchBackToLastDesktop:
+                            SwitchToDesktopById( VirtualDesktopManager.LastDesktopId );
                             break;
                         case UserMessage.DesktopArrangement:
 
@@ -348,6 +297,71 @@ namespace VirtualSpace
 
             RETURN:
             return IntPtr.Zero;
+        }
+
+        private static void SwitchToDesktopById( Guid guid )
+        {
+            if ( guid == Guid.Empty ) return;
+            if ( SwitchDesktopTimer.ElapsedMilliseconds <= Const.SwitchDesktopInterval ) return;
+
+            DesktopWrapper.MakeVisibleByGuid( guid );
+            SwitchDesktopTimer.Restart();
+        }
+
+        private void SwitchDesktopByDirection( IntPtr lParam )
+        {
+            if ( SwitchDesktopTimer.ElapsedMilliseconds <= Const.SwitchDesktopInterval ) return;
+
+            var desktopOrder              = Manager.CurrentProfile.DesktopOrder;
+            var currentDesktopMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( desktopOrder.IndexOf( DesktopWrapper.CurrentGuid ) );
+
+            var dir = lParam.ToInt32();
+            var targetIndex = Navigation.CalculateTargetIndex(
+                DesktopWrapper.Count,
+                currentDesktopMatrixIndex,
+                (Keys)dir,
+                Manager.CurrentProfile.Navigation );
+
+            var vDsi = new VirtualDesktopSwitchInfo
+            {
+                hostHandle = Handle,
+                vdCount = DesktopWrapper.Count,
+                fromIndex = currentDesktopMatrixIndex,
+                dir = dir,
+                targetIndex = targetIndex
+            };
+            var vDsiSize = Marshal.SizeOf( typeof( VirtualDesktopSwitchInfo ) );
+            var pVDsi    = Marshal.AllocHGlobal( vDsiSize );
+            Marshal.StructureToPtr( vDsi, pVDsi, true );
+
+            var cds = new COPYDATASTRUCT
+            {
+                dwData = (IntPtr)WinApi.UM_SWITCHDESKTOP,
+                cbData = vDsiSize,
+                lpData = pVDsi
+            };
+            var pCds = Marshal.AllocHGlobal( Marshal.SizeOf( typeof( COPYDATASTRUCT ) ) );
+            Marshal.StructureToPtr( cds, pCds, true );
+
+            foreach ( var pluginInfo in PluginHost.Plugins.Where(
+                         p => p.Type == PluginType.VD_SWITCH_OBSERVER && User32.IsWindow( p.Handle ) ) )
+            {
+                User32.SendMessage( pluginInfo.Handle, WinApi.WM_COPYDATA, 0, (ulong)pCds );
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            // if none of plugins send back message after 100 ms, host will force switch desktop
+            Interlocked.Increment( ref _forceSwitchOnTimeout );
+            Task.Run( () =>
+            {
+                Thread.Sleep( 100 );
+                if ( _forceSwitchOnTimeout == 0 ) return;
+                DesktopWrapper.MakeVisibleByGuid( desktopOrder[VirtualDesktopManager.GetVdIndexByMatrixIndex( targetIndex )] );
+            } );
+
+            Marshal.FreeHGlobal( pVDsi );
+            Marshal.FreeHGlobal( pCds );
+            SwitchDesktopTimer.Restart();
         }
     }
 }

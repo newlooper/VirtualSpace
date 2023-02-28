@@ -127,6 +127,7 @@ namespace VirtualSpace.VirtualDesktop.Api
         public static void MakeVisibleByGuid( Guid guid, bool? forceFocusForegroundWindow = null )
         {
             var desktop = DesktopFromId( guid );
+            if ( desktop is null ) return;
             desktop.MakeVisible();
 
             forceFocusForegroundWindow ??= Manager.Configs.Cluster.ForceFocusForegroundWindow;

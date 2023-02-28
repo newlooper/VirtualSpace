@@ -277,4 +277,7 @@ possible reason:
   <data name="Mouse.Action.DesktopShowForSelectedDesktop" xml:space="preserve">
     <value>Show Only Selected Desktop in MainView</value>
   </data>
+  <data name="KB.Hotkey.SVD_BACK_LAST" xml:space="preserve">
+    <value>Switch Back To Last Desktop</value>
+  </data>
 </root>

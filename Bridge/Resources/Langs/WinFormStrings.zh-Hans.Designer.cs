@@ -182,6 +182,15 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 切换回上一个桌面.
+        /// </summary>
+        internal static string KB_Hotkey_SVD_BACK_LAST {
+            get {
+                return ResourceManager.GetString("KB.Hotkey.SVD_BACK_LAST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 左键.
         /// </summary>
         internal static string Keys_Left {

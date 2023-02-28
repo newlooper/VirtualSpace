@@ -26,6 +26,7 @@ namespace VirtualSpace.Helpers
         public const int RiseViewForCurrentVD            = 1011;
         public const int RiseViewForActiveAppInCurrentVD = 1012;
         public const int RefreshVdw                      = 1013;
+        public const int SwitchBackToLastDesktop         = 1014;
 
         public const int NavLeft  = 1201;
         public const int NavRight = 1202;
