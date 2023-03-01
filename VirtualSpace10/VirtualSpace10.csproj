@@ -15,10 +15,24 @@
 
     <PropertyGroup>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <TransformOnBuild>true</TransformOnBuild>
         <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
-        <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
     </PropertyGroup>
+
+    <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild" Condition="'$(Configuration)'=='Release'">
+        <Message Text="======TextTemplateTransform begin======" Importance="High" />
+        <Exec WorkingDirectory="$(ProjectDir)"
+              Command="&quot;$(DevEnvDir)TextTransform.exe&quot; -out &quot;$(ProjectDir)AutoVersion.cs&quot; &quot;$(ProjectDir)..\VirtualSpace\AutoVersion.tt&quot;">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
+        </Exec>
+        <Message Text="======TextTemplateTransform end======" Importance="High" />
+    </Target>
+
+    <ItemGroup>
+        <Compile Update="AutoVersion.cs">
+            <DesignTime>True</DesignTime>
+            <DependentUpon>AutoVersion.tt</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
         <NoWarn>1701;1702;CA1416;CS8618</NoWarn>
@@ -96,21 +110,6 @@
             <Generator>MSBuild:Compile</Generator>
         </Page>
     </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="AutoVersion.cs">
-            <DesignTime>True</DesignTime>
-        </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-        <TextTemplate Include="..\VirtualSpace\**\*.tt" />
-        <Generated Include="**\*.cs" />
-    </ItemGroup>
-
-    <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">
-        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet t4 %(TextTemplate.Identity) -o %(TextTemplate.Filename).cs" />
-    </Target>
 
     <ItemGroup>
         <Folder Include="Factory\" />
