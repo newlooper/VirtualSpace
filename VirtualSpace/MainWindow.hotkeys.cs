@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -19,11 +20,14 @@ using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using GHK = VirtualSpace.Helpers.GlobalHotKey;
+using LLKH = VirtualSpace.Helpers.LowLevelKeyboardHook;
 
 namespace VirtualSpace
 {
     public partial class MainWindow
     {
+        private static Stopwatch RiseTaskViewTimer = Stopwatch.StartNew();
+
         private void RegisterHotKey( IntPtr hWnd )
         {
             foreach ( var kv in Manager.Configs.KeyBindings )
@@ -67,7 +71,7 @@ namespace VirtualSpace
 
             var keyboardHookProc = new User32.HookProc( KeyboardHookCallback );
             Logger.Info( "Set Windows LowLevelKeyboardProc Hook" );
-            LowLevelKeyboardHook.SetHook( keyboardHookProc );
+            LLKH.SetHook( keyboardHookProc );
 
             if ( Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar )
             {
@@ -89,29 +93,54 @@ namespace VirtualSpace
 
         private IntPtr KeyboardHookCallback( int nCode, IntPtr wParam, IntPtr lParam )
         {
-            var info = (LowLevelKeyboardHook.KBDLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LowLevelKeyboardHook.KBDLLHOOKSTRUCT ) );
-            var msg  = (int)wParam;
             if ( nCode >= 0 )
             {
+                var info = (LLKH.KBDLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LLKH.KBDLLHOOKSTRUCT ) );
+                if ( (int)wParam != LLKH.WM_KEYDOWN ) goto NEXT;
+
                 /////////////////////////////////////////////////////////////////////////////////
-                // hook LWin+Tab to replace TaskView 
-                if ( msg == LowLevelKeyboardHook.WM_KEYDOWN
-                     && info.vkCode == (int)Keys.Tab
-                     && User32.GetAsyncKeyState( (int)Keys.LWin ) < 0
-                     && User32.GetAsyncKeyState( (int)Keys.ControlKey ) >= 0
-                     && User32.GetAsyncKeyState( (int)Keys.ShiftKey ) >= 0
-                   )
+                // hook [LWin+Tab] to replace TaskView 
+                if ( info.vkCode == (int)Keys.Tab
+                     && LLKH.IsKeyHold( Keys.LWin )
+                     && !( LLKH.IsKeyHold( Keys.ControlKey ) || LLKH.IsKeyHold( Keys.ShiftKey ) ) )
                 {
-                    LowLevelKeyboardHook.MultipleKeyPress( new List<int> {LowLevelKeyboardHook.DUMMY_KEY} );
-                    User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
+                    if ( ( info.flags & LLKH.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED ) == 0 ) // not come from fake input
+                    {
+                        LLKH.MultipleKeyPress( new List<Keys> {(Keys)LLKH.DUMMY_KEY} );
+                        User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
+                        return LowLevelHooks.Handled;
+                    }
+
+                    goto NEXT;
+                }
+
+                /////////////////////////////////////////////////////////////////////////////////
+                // since we hook default [LWin+Tab],
+                // we should use a alternative way to rise the TaskView in case user want it.
+                // here choose [Ctrl+LWin+Shift+Tab] to try to avoid conflicts
+                if ( info.vkCode == (int)Keys.Tab
+                     && LLKH.IsKeyHold( Keys.LWin )
+                     && LLKH.IsKeyHold( Keys.ControlKey )
+                     && LLKH.IsKeyHold( Keys.ShiftKey ) )
+                {
+                    if ( ( info.flags & LLKH.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED ) == 0 // not come from fake input
+                         && RiseTaskViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                    {
+                        LLKH.MultipleKeyPress( new List<Keys> {(Keys)LLKH.DUMMY_KEY} );
+                        LLKH.MultipleKeyUp( new List<Keys> {Keys.ControlKey, Keys.LWin, Keys.ShiftKey, Keys.Tab} );
+                        LLKH.MultipleKeyPress( new List<Keys> {Keys.LWin, Keys.Tab} );
+                        LLKH.MultipleKeyDown( new List<Keys> {Keys.ControlKey, Keys.LWin, Keys.ShiftKey} );
+                        RiseTaskViewTimer.Restart();
+                    }
+
                     return LowLevelHooks.Handled;
                 }
 
                 /////////////////////////////////////////////////////////////////////////////////
-                // hook LWin+LCtrl+<DirKey> for switch virtual desktop
-                if ( msg == LowLevelKeyboardHook.WM_KEYDOWN
-                     && User32.GetAsyncKeyState( (int)Keys.LWin ) < 0
-                     && User32.GetAsyncKeyState( (int)Keys.LControlKey ) < 0 )
+                // hook [LWin+LCtrl+<DirKey>] for switch virtual desktop
+                if ( LLKH.IsKeyHold( Keys.LWin )
+                     && LLKH.IsKeyHold( Keys.LControlKey )
+                     && !( LLKH.IsKeyHold( Keys.ShiftKey ) || LLKH.IsKeyHold( Keys.Menu ) ) )
                 {
                     var key = (Keys)info.vkCode;
                     switch ( key )
@@ -123,17 +152,20 @@ namespace VirtualSpace
                             User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)info.vkCode );
                             return LowLevelHooks.Handled;
                     }
+
+                    goto NEXT;
                 }
 
                 /////////////////////////////////////////////////////////////////////////////////
-                // hook Esc to hide MainView
-                if ( msg == LowLevelKeyboardHook.WM_KEYDOWN && info.vkCode == (int)Keys.Escape )
+                // hook [Esc] to hide MainView
+                if ( info.vkCode == (int)Keys.Escape )
                 {
                     if ( IsShowing() ) HideAll();
                 }
             }
 
-            return User32.CallNextHookEx( LowLevelKeyboardHook.HookId, nCode, wParam, lParam );
+            NEXT:
+            return User32.CallNextHookEx( LLKH.HookId, nCode, wParam, lParam );
         }
 
         private IntPtr MouseHookCallback( int nCode, IntPtr wParam, IntPtr lParam )
@@ -155,7 +187,7 @@ namespace VirtualSpace
                 if ( info.pt.X >= rect.Left && info.pt.Y > rect.Top )
                 {
                     uint dir;
-                    if ( User32.GetAsyncKeyState( (int)Keys.ShiftKey ) < 0 )
+                    if ( LLKH.IsKeyHold( Keys.ShiftKey ) )
                     {
                         dir = (uint)( info.mouseData >> 16 > 0 ? Keys.Up : Keys.Down );
                     }
@@ -176,12 +208,12 @@ namespace VirtualSpace
         private void Window_Closing( object sender, CancelEventArgs e )
         {
             Logger.Info( "Unset Windows LowLevelKeyboardProc Hook" );
-            LowLevelKeyboardHook.UnHook();
+            LLKH.UnHook();
 
             DisableMouseHook();
 
             Logger.Info( "Unregister Global HotKeys" );
-            GlobalHotKey.UnRegAllHotKey();
+            GHK.UnRegAllHotKey();
         }
     }
 }

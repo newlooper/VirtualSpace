@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace VirtualSpace.Helpers
 {
@@ -36,22 +37,22 @@ namespace VirtualSpace.Helpers
             HookId = User32.SetWindowsHookEx( WH_KEYBOARD_LL, _hookProc, Kernel32.GetModuleHandle( null ), 0 );
         }
 
-        public static void MultipleKeyDown( List<int> keys )
+        public static void MultipleKeyDown( List<Keys> keys )
         {
             SendKeys( keys, 0 );
         }
 
-        public static void MultipleKeyUp( List<int> keys )
+        public static void MultipleKeyUp( List<Keys> keys )
         {
             SendKeys( keys, 2 );
         }
 
-        public static void MultipleKeyPress( List<int> keys )
+        public static void MultipleKeyPress( List<Keys> keys )
         {
             SendKeysCombine( keys, 2 );
         }
 
-        private static void SendKeys( List<int> keys, int flags )
+        private static void SendKeys( List<Keys> keys, int flags )
         {
             var inputs = new INPUT[keys.Count];
             for ( var pos = 0; pos < keys.Count; pos++ )
@@ -72,7 +73,7 @@ namespace VirtualSpace.Helpers
                 throw new Exception();
         }
 
-        private static void SendKeysCombine( List<int> keys, int flags )
+        private static void SendKeysCombine( List<Keys> keys, int flags )
         {
             var inputs = new INPUT[keys.Count * 2];
             for ( var i = 0; i < keys.Count; i++ )
@@ -102,6 +103,11 @@ namespace VirtualSpace.Helpers
                 throw new Exception();
         }
 
+        public static bool IsKeyHold( Keys key )
+        {
+            return User32.GetAsyncKeyState( (int)key ) < 0;
+        }
+
         public static void UnHook()
         {
             User32.UnhookWindowsHookEx( HookId );
@@ -109,11 +115,20 @@ namespace VirtualSpace.Helpers
 
         public struct KBDLLHOOKSTRUCT
         {
-            public  int vkCode;
-            private int scanCode;
-            public  int flags;
-            private int time;
-            private int dwExtraInfo;
+            public  int                  vkCode;
+            private int                  scanCode;
+            public  KBDLLHOOKSTRUCTFlags flags;
+            private int                  time;
+            private int                  dwExtraInfo;
+        }
+
+        [Flags]
+        public enum KBDLLHOOKSTRUCTFlags : uint
+        {
+            LLKHF_EXTENDED = 0x01,
+            LLKHF_INJECTED = 0x10,
+            LLKHF_ALTDOWN  = 0x20,
+            LLKHF_UP       = 0x80,
         }
     }
 
