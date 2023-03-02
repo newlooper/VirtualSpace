@@ -183,7 +183,6 @@ namespace VirtualSpace.VirtualDesktop
             if ( NeedRepaintThumbs )
             {
                 ShowVisibleWindowsForDesktops();
-                NeedRepaintThumbs = false;
             }
             else
             {
@@ -298,16 +297,17 @@ namespace VirtualSpace.VirtualDesktop
             {
                 vdw.ShowThumbnails();
             }
+
+            NeedRepaintThumbs = false;
         }
 
         public static void ShowAllVirtualDesktops()
         {
+            UpdateVdwBackground();
             foreach ( var vdw in _virtualDesktops )
             {
-                vdw.ShowByVdIndex();
+                User32.SendMessage( vdw.Handle, UserMessage.ShowVdw, 0, 0 );
             }
-
-            UpdateVdwBackground();
         }
 
         public static void UpdateVdwBackground()

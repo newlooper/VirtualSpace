@@ -257,7 +257,6 @@ namespace VirtualSpace.VirtualDesktop
                     if ( VirtualDesktopManager.NeedRepaintThumbs )
                     {
                         VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-                        VirtualDesktopManager.NeedRepaintThumbs = false;
                     }
 
                     VirtualDesktopManager.IsBatchCreate = false;

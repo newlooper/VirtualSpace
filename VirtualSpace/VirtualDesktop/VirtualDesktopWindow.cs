@@ -64,11 +64,17 @@ namespace VirtualSpace.VirtualDesktop
 
         protected override void WndProc( ref Message m )
         {
-            base.WndProc( ref m );
-            if ( m.Msg == UserMessage.RefreshVdw )
+            switch ( m.Msg )
             {
-                Refresh();
+                case UserMessage.ShowVdw:
+                    ShowByVdIndex();
+                    return;
+                case UserMessage.RefreshVdw:
+                    Refresh();
+                    return;
             }
+
+            base.WndProc( ref m );
         }
 
         protected override bool ShowWithoutActivation => true;
@@ -269,7 +275,7 @@ namespace VirtualSpace.VirtualDesktop
             Close();
         }
 
-        public void ShowByVdIndex()
+        private void ShowByVdIndex()
         {
             var ui  = VirtualDesktopManager.Ui;
             var dpi = SysInfo.Dpi;
