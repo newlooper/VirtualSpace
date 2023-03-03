@@ -205,7 +205,7 @@ namespace VirtualSpace.VirtualDesktop
                             } );
                             break;
                         case Const.MouseAction.Action.WindowHideFromView:
-                            Filters.WndHandleIgnoreListByManual.Add( _selectedWindow.Handle );
+                            Filters.WndHandleIgnoreListByManual.TryAdd( _selectedWindow.Handle, 0 );
                             if ( DesktopWrapper.IsWindowPinned( _selectedWindow.Handle ) ||
                                  DesktopWrapper.IsApplicationPinned( _selectedWindow.Handle ) )
                             {

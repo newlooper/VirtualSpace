@@ -44,7 +44,6 @@ namespace VirtualSpace
 
             if ( RowsCols != rowsCols )
             {
-                VirtualDesktopManager.NeedRepaintThumbs = true;
                 _instance.Dispatcher.Invoke( new Action( () => { } ), DispatcherPriority.ContextIdle, null );
             }
 
@@ -97,7 +96,6 @@ namespace VirtualSpace
             mainGrid.RowDefinitions.Clear();
             mainGrid.ColumnDefinitions.Clear();
 
-            VirtualDesktopManager.NeedRepaintThumbs = true;
             _instance.Dispatcher.Invoke( new Action( () => { } ), DispatcherPriority.ContextIdle, null );
 
             var borderBrushDefault = new SolidColorBrush

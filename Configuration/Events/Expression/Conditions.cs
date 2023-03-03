@@ -32,11 +32,11 @@ namespace VirtualSpace.Config.Events.Expression
     public static partial class Conditions
     {
         private static readonly JsonParser                        Jp                        = new();
-        private static readonly Channel<Behavior>                 ActionChannel             = Channels.ActionChannel;
         private static          List<RuleTemplate>                _rules                    = InitRules();
-        public static readonly  Channel<Window>                   VisibleWindows            = Channel.CreateUnbounded<Window>();
-        public static readonly  ConcurrentBag<IntPtr>             WndHandleIgnoreListByRule = new();
+        private static readonly Channel<Behavior>                 ActionProducer            = Channels.ActionChannel;
+        private static readonly Channel<Window>                   VisibleWindowsConsumer    = Channels.VisibleWindowsChannel;
         private static readonly ConcurrentDictionary<IntPtr, int> WindowCheckTimes          = new();
+        public static readonly  ConcurrentBag<IntPtr>             WndHandleIgnoreListByRule = new();
 
         static Conditions()
         {
@@ -45,9 +45,9 @@ namespace VirtualSpace.Config.Events.Expression
 
         private static async void RuleChecker()
         {
-            while ( await VisibleWindows.Reader.WaitToReadAsync() )
+            while ( await VisibleWindowsConsumer.Reader.WaitToReadAsync() )
             {
-                if ( VisibleWindows.Reader.TryRead( out var win ) )
+                if ( VisibleWindowsConsumer.Reader.TryRead( out var win ) )
                 {
                     CheckRulesForWindow( win );
                 }
@@ -132,7 +132,7 @@ namespace VirtualSpace.Config.Events.Expression
                         r.Action.Handle = win.Handle;
                         r.Action.RuleName = r.Name;
                         r.Action.WindowTitle = win.Title;
-                        ActionChannel.Writer.TryWrite( r.Action );
+                        ActionProducer.Writer.TryWrite( r.Action );
 
                         ////////////////////////////////////////////////////////////////
                         // 某个窗口可能与多条规则匹配，继续循环就表示所有相应的动作都会按顺序执行

@@ -249,7 +249,6 @@ namespace VirtualSpace
                             if ( IsShowing() )
                             {
                                 VirtualDesktopManager.ShowAllVirtualDesktops();
-                                VirtualDesktopManager.ShowVisibleWindowsForDesktops();
                             }
 
                             break;

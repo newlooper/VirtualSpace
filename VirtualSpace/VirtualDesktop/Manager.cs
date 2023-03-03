@@ -34,7 +34,6 @@ namespace VirtualSpace.VirtualDesktop
         private static List<VirtualDesktopWindow> _virtualDesktops = new();
 
         private static Color         _vdwDefaultBackColor;
-        public static  bool          NeedRepaintThumbs;
         public static  UserInterface Ui            => ConfigManager.CurrentProfile.UI;
         public static  bool          IsBatchCreate { get; set; }
         public static  Guid          LastDesktopId = Guid.Empty;
@@ -180,31 +179,24 @@ namespace VirtualSpace.VirtualDesktop
         {
             FixLayout();
             ShowAllVirtualDesktops();
-            if ( NeedRepaintThumbs )
-            {
-                ShowVisibleWindowsForDesktops();
-            }
-            else
-            {
-                if ( vdn is null ) return;
 
-                var vdwList = GetAllVirtualDesktops();
-                try
-                {
-                    var fallback = vdwList[GetVdIndexByGuid( vdn.NewId )];
-                    ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {fallback} );
-                }
-                catch ( Exception e )
-                {
-                    Logger.Warning( e.StackTrace );
-                }
+            if ( vdn is null ) return;
+
+            try
+            {
+                var fallback = _virtualDesktops[GetVdIndexByGuid( vdn.NewId )];
+                ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {fallback} );
+            }
+            catch ( Exception e )
+            {
+                Logger.Warning( e.StackTrace );
             }
         }
 
         private static bool VisibleWindowFilter( IntPtr hWnd, int lParam )
         {
             if ( Filters.WndHandleIgnoreListByError.Contains( hWnd ) ||
-                 Filters.WndHandleIgnoreListByManual.Contains( hWnd ) ||
+                 Filters.WndHandleIgnoreListByManual.TryGetValue( hWnd, out _ ) ||
                  !User32.IsWindowVisible( hWnd ) ||
                  Filters.IsCloaked( hWnd ) )
                 return true;
@@ -297,8 +289,6 @@ namespace VirtualSpace.VirtualDesktop
             {
                 vdw.ShowThumbnails();
             }
-
-            NeedRepaintThumbs = false;
         }
 
         public static void ShowAllVirtualDesktops()

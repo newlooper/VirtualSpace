@@ -29,22 +29,22 @@ namespace VirtualSpace.VirtualDesktop
 {
     internal static class Daemon
     {
-        private static          int               _runlevel      = 1;
-        private static readonly ManualResetEvent  CanRun         = new( false );
-        private static readonly StringBuilder     SbWinInfo      = new( Const.WindowTitleMaxLength );
-        private static readonly Channel<Behavior> ActionChannel  = Channels.ActionChannel;
-        private static readonly Channel<Window>   VisibleWindows = Conditions.VisibleWindows;
+        private static          int               _runlevel              = 1;
+        private static readonly ManualResetEvent  CanRun                 = new( false );
+        private static readonly StringBuilder     SbWinInfo              = new( Const.WindowTitleMaxLength );
+        private static readonly Channel<Behavior> ActionConsumer         = Channels.ActionChannel;
+        private static readonly Channel<Window>   VisibleWindowsProducer = Channels.VisibleWindowsChannel;
 
         private static async void WaitForAction()
         {
-            while ( await ActionChannel.Reader.WaitToReadAsync() )
+            while ( await ActionConsumer.Reader.WaitToReadAsync() )
             {
-                if ( !ActionChannel.Reader.TryRead( out var action ) ) continue;
+                if ( !ActionConsumer.Reader.TryRead( out var action ) ) continue;
 
                 if ( action.HideFromView )
                 {
                     Logger.Debug( $"[RULE]HIDE.Win {action.Handle.ToString( "X2" )}" );
-                    Filters.WndHandleIgnoreListByManual.Add( action.Handle );
+                    Filters.WndHandleIgnoreListByManual.TryAdd( action.Handle, 0 );
                 }
 
                 if ( action.MoveToScreen >= 0 )
@@ -172,15 +172,15 @@ namespace VirtualSpace.VirtualDesktop
 
             if ( classname != Const.WindowsUiCoreWindow )
             {
-                AddToSnapshot( hWnd, title, classname );
+                SendToCheckingRule( hWnd, title, classname );
             }
 
             return true;
         }
 
-        private static void AddToSnapshot( IntPtr hWnd, string title, string classname )
+        private static void SendToCheckingRule( IntPtr hWnd, string title, string classname )
         {
-            VisibleWindows.Writer.TryWrite( new Window {Title = title, WndClass = classname, Handle = hWnd} );
+            VisibleWindowsProducer.Writer.TryWrite( new Window {Title = title, WndClass = classname, Handle = hWnd} );
         }
     }
 }

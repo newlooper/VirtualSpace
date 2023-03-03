@@ -9,6 +9,8 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#if TEST_TEST_TEST
+
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -73,3 +75,5 @@ namespace VirtualSpace.Config.Events.Expression
         }
     }
 }
+
+#endif

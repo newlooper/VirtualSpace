@@ -19,6 +19,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
@@ -71,6 +72,9 @@ namespace VirtualSpace.VirtualDesktop
                     return;
                 case UserMessage.RefreshVdw:
                     Refresh();
+                    return;
+                case UserMessage.ShowThumbsOfVdw:
+                    ShowThumbnails();
                     return;
             }
 
@@ -132,137 +136,6 @@ namespace VirtualSpace.VirtualDesktop
             }
         }
 
-        public void AddWindow( VisibleWindow wnd )
-        {
-            _visibleWindows.Add( wnd );
-        }
-
-        public void ClearVisibleWindows()
-        {
-            ReleaseThumbnails();
-            _visibleWindows.Clear();
-        }
-
-        public void ShowThumbnails()
-        {
-            var wndCount = _visibleWindows.Count;
-            if ( wndCount < 1 ) return;
-
-            _visibleWindows.Sort( ( x, y ) => x.Title.CompareTo( y.Title ) );
-
-            var rows = Math.Floor( Math.Sqrt( wndCount ) );
-            var cols = Math.Ceiling( wndCount / rows );
-
-            var marginH = VirtualDesktopManager.Ui.ThumbMargin.Left;
-            var marginV = VirtualDesktopManager.Ui.ThumbMargin.Top;
-
-            //////////////////////////////////////
-            // thumb container size
-            var thumbWidth  = ( Width - ( cols + 1 ) * marginH ) / cols;
-            var thumbHeight = ( Height - ( rows + 1 ) * marginV ) / rows;
-
-            //////////////////////////////////////
-            // show thumbnails
-            for ( int index = 0, row = 0; row < rows; row++ )
-            {
-                var topLeftY = Padding.Top + ( row + 1 ) * marginV + row * thumbHeight;
-
-                for ( var col = 0; col < cols; col++ )
-                {
-                    if ( index >= wndCount ) break;
-                    var topLeftX = Padding.Left + ( col + 1 ) * marginH + col * thumbWidth;
-
-                    var i     = -1;
-                    var thumb = IntPtr.Zero;
-                    if ( InvokeRequired )
-                    {
-                        var idx = index;
-
-                        void Invoker()
-                        {
-                            i = DwmApi.DwmRegisterThumbnail( Handle, _visibleWindows[idx].Handle, out thumb );
-                        }
-
-                        Invoke( (MethodInvoker)Invoker );
-                    }
-                    else
-                    {
-                        i = DwmApi.DwmRegisterThumbnail( Handle, _visibleWindows[index].Handle, out thumb );
-                    }
-
-                    if ( i == 0 )
-                    {
-                        _visibleWindows[index].Thumb = thumb;
-
-                        var props = ScaleCenter(
-                            thumb,
-                            new RECT(
-                                (int)topLeftX,
-                                (int)topLeftY,
-                                (int)( topLeftX + thumbWidth ),
-                                (int)( topLeftY + thumbHeight )
-                            )
-                        );
-
-                        _visibleWindows[index].SetValidArea( props );
-                        UpdateThumbnail( thumb, props );
-                    }
-
-                    index++;
-                }
-            }
-        }
-
-        private DWM_THUMBNAIL_PROPERTIES ScaleCenter( IntPtr thumb, RECT rect )
-        {
-            var props = new DWM_THUMBNAIL_PROPERTIES
-            {
-                fVisible = true,
-                dwFlags = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
-                opacity = 255,
-                rcDestination = rect
-            };
-
-            if ( thumb != IntPtr.Zero )
-            {
-                DwmApi.DwmQueryThumbnailSourceSize( thumb, out var srcSize );
-
-                var cellWidth       = rect.Right - rect.Left;
-                var cellHeight      = rect.Bottom - rect.Top;
-                var cellAspectRatio = cellWidth / (double)cellHeight;
-                var srcAspectRatio  = srcSize.cx / (double)srcSize.cy;
-
-                if ( cellAspectRatio > srcAspectRatio )
-                {
-                    var scaleFactor = cellHeight / (double)srcSize.cy;
-                    var scaledX     = (int)( srcSize.cx * scaleFactor );
-                    var xOffset     = ( cellWidth - scaledX ) / 2;
-                    props.rcDestination.Left += xOffset;
-                    props.rcDestination.Right -= xOffset;
-                }
-                else
-                {
-                    var scaleFactor = cellWidth / (double)srcSize.cx;
-                    var scaledY     = (int)( srcSize.cy * scaleFactor );
-                    var yOffset     = ( cellHeight - scaledY ) / 2;
-                    props.rcDestination.Top += yOffset;
-                    props.rcDestination.Bottom -= yOffset;
-                }
-            }
-
-            return props;
-        }
-
-        private void UpdateThumbnail( IntPtr thumb, DWM_THUMBNAIL_PROPERTIES props )
-        {
-            DwmApi.DwmUpdateThumbnailProperties( thumb, ref props );
-        }
-
-        private void ReleaseThumbnails()
-        {
-            foreach ( var window in _visibleWindows ) DwmApi.DwmUnregisterThumbnail( window.Thumb );
-        }
-
         private void VirtualDesktopWindow_Closing( object? sender, FormClosingEventArgs e )
         {
             e.Cancel = true;
@@ -286,11 +159,13 @@ namespace VirtualSpace.VirtualDesktop
             Location = point;
             _fixedPosition = point;
 
-            var       size      = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
-            var       vdwWidth  = ( size.Width - 2 * ui.VDWBorderSize ) * dpi.ScaleX + 1;
-            var       vdwHeight = ( size.Height - 2 * ui.VDWBorderSize ) * dpi.ScaleY + 1;
-            const int floor     = 100; // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面尺寸强制归零
-            if ( vdwWidth < floor || vdwHeight < floor )
+            var size      = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
+            var vdwWidth  = ( size.Width - 2 * ui.VDWBorderSize ) * dpi.ScaleX + 1;
+            var vdwHeight = ( size.Height - 2 * ui.VDWBorderSize ) * dpi.ScaleY + 1;
+
+            ////////////////////////////////////////////////////////////////
+            // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面尺寸强制归零
+            if ( vdwWidth < Const.VirtualDesktop.VdwSizeFloor || vdwHeight < Const.VirtualDesktop.VdwSizeFloor )
             {
                 Size = Size.Empty; // 强制归零，从而避免接收到鼠标事件
             }
@@ -423,11 +298,19 @@ namespace VirtualSpace.VirtualDesktop
             }
         }
 
+        private void RefreshThumbs( object? o, EventArgs e )
+        {
+            Logger.Event( "Repaint Thumbs due to size changed." );
+            ReleaseThumbnails();
+            ShowThumbnails();
+        }
+
         private void pbWallpaper_Paint( object sender, PaintEventArgs e )
         {
             var wpInfo = CachedWallpaperInfo();
             if ( _initSize == Size.Empty )
             {
+                Resize += RefreshThumbs;
                 InitPaint( wpInfo, e );
             }
             else

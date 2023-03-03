@@ -69,7 +69,7 @@ namespace VirtualSpace.VirtualDesktop
 
             void OnIgnoreWindowClick( object? s, EventArgs evt )
             {
-                Filters.WndHandleIgnoreListByManual.Add( mi.Vw.Handle );
+                Filters.WndHandleIgnoreListByManual.TryAdd( mi.Vw.Handle, 0 );
                 if ( DesktopWrapper.IsWindowPinned( mi.Vw.Handle ) ||
                      DesktopWrapper.IsApplicationPinned( mi.Vw.Handle ) )
                 {
@@ -187,7 +187,7 @@ namespace VirtualSpace.VirtualDesktop
 
                 var h = (IntPtr)int.Parse( m.Groups[1].Value );
 
-                Filters.WndHandleIgnoreListByManual.Remove( h );
+                Filters.WndHandleIgnoreListByManual.TryRemove( h, out _ );
                 if ( DesktopWrapper.IsWindowPinned( h ) ||
                      DesktopWrapper.IsApplicationPinned( h ) )
                 {
@@ -200,7 +200,7 @@ namespace VirtualSpace.VirtualDesktop
             }
 
             var sb = new StringBuilder( Const.WindowTitleMaxLength );
-            foreach ( var handle in Filters.WndHandleIgnoreListByManual )
+            foreach ( var handle in Filters.WndHandleIgnoreListByManual.Keys )
             {
                 if ( !User32.IsWindow( handle ) ) continue;
                 if ( !DesktopWrapper.IsWindowPinned( handle ) &&
@@ -254,10 +254,6 @@ namespace VirtualSpace.VirtualDesktop
 
                     VirtualDesktopManager.FixLayout();
                     VirtualDesktopManager.ShowAllVirtualDesktops();
-                    if ( VirtualDesktopManager.NeedRepaintThumbs )
-                    {
-                        VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-                    }
 
                     VirtualDesktopManager.IsBatchCreate = false;
                 }

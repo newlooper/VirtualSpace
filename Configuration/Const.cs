@@ -39,6 +39,7 @@ namespace VirtualSpace.Config
         {
             public const int NavHTypeNextRow = 0;
             public const int NavHTypeSameRow = 1;
+            public const int VdwSizeFloor    = 100;
         }
 
         public static class Settings

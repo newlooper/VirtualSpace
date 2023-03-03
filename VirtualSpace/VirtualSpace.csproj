@@ -21,8 +21,7 @@
 
     <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild" Condition="'$(Configuration)'=='Release'">
         <Message Text="======TextTemplateTransform begin======" Importance="High" />
-        <Exec WorkingDirectory="$(ProjectDir)"
-              Command="&quot;$(DevEnvDir)TextTransform.exe&quot; -out &quot;$(ProjectDir)AutoVersion.cs&quot; &quot;$(ProjectDir)AutoVersion.tt&quot;">
+        <Exec WorkingDirectory="$(ProjectDir)" Command="&quot;$(DevEnvDir)TextTransform.exe&quot; -out &quot;$(ProjectDir)AutoVersion.cs&quot; &quot;$(ProjectDir)AutoVersion.tt&quot;">
             <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
         </Exec>
         <Message Text="======TextTemplateTransform end======" Importance="High" />
