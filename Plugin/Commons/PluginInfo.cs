@@ -15,20 +15,21 @@ namespace VirtualSpace.Plugin
 {
     public class PluginInfo
     {
-        public string        Folder;
-        public IntPtr        Handle;
-        public int           ProcessId;
-        public PluginType    Type;
-        public string        Name          { get; set; }
-        public string        Display       { get; set; }
-        public string        Version       { get; set; }
-        public string        Author        { get; set; }
-        public string        Email         { get; set; }
-        public string        Entry         { get; set; }
-        public bool          AutoStart     { get; set; }
-        public Policy?       RestartPolicy { get; set; }
-        public Policy?       ClosePolicy   { get; set; }
-        public Requirements? Requirements  { get; set; }
+        public string          Folder;
+        public IntPtr          Handle;
+        public int             ProcessId;
+        public PluginType      Type;
+        public string          Name            { get; set; }
+        public string          Display         { get; set; }
+        public string          Version         { get; set; }
+        public string          Author          { get; set; }
+        public string          Email           { get; set; }
+        public string          Entry           { get; set; }
+        public bool            AutoStart       { get; set; }
+        public AutoStartTiming AutoStartTiming { get; set; } = AutoStartTiming.MainWindowLoaded;
+        public Policy?         RestartPolicy   { get; set; }
+        public Policy?         ClosePolicy     { get; set; }
+        public Requirements?   Requirements    { get; set; }
     }
 
     public class Policy
@@ -52,7 +53,8 @@ namespace VirtualSpace.Plugin
 
     public class Requirements
     {
-        public WinVer WinVer { get; set; }
+        public WinVer   WinVer      { get; set; }
+        public Version? HostVersion { get; set; }
     }
 
     public class WinVer
@@ -65,5 +67,11 @@ namespace VirtualSpace.Plugin
     {
         public int Major { get; set; }
         public int Build { get; set; }
+    }
+
+    public enum AutoStartTiming
+    {
+        AppStart,
+        MainWindowLoaded
     }
 }

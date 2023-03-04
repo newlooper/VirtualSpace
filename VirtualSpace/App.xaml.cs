@@ -66,6 +66,8 @@ namespace VirtualSpace
                 {
                     mw.FakeHide();
                 }
+
+                PluginHost.AutoStartAfterMainWindowLoaded();
             }
             else
             {

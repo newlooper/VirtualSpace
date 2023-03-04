@@ -48,8 +48,11 @@ namespace Cube3D
             Width = SystemParameters.PrimaryScreenWidth;
             Height = SystemParameters.PrimaryScreenHeight;
 
-            if ( SettingsManager.Settings.ForceOnTop )
-                Activate();
+            //////////////////////////////////////////////////
+            // since HostProgram's MainWindow as Cube3D's Owner
+            // this is no need do to.
+            // if ( SettingsManager.Settings.ForceOnTop )
+            //     Activate();
         }
 
         private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )

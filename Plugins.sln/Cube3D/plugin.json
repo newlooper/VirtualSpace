@@ -6,6 +6,7 @@
   "Email": "newlooper@hotmail.com",
   "Entry": "Cube3D.exe",
   "AutoStart": true,
+  "AutoStartTiming": 1,
   "RestartPolicy": {
     "Trigger": 0,
     "Values": [
@@ -26,6 +27,7 @@
         "Major": 10,
         "Build": 19041
       }
-    }
+    },
+    "HostVersion": "0.1.454"
   }
 }

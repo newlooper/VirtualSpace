@@ -36,6 +36,7 @@ namespace Cube3D
             Width = SystemParameters.PrimaryScreenWidth;
             Height = SystemParameters.PrimaryScreenHeight;
             Topmost = true;
+            ShowActivated = false;
         }
 
         protected override void OnSourceInitialized( EventArgs e )
@@ -61,10 +62,19 @@ namespace Cube3D
                 Application.Current.Shutdown();
             }
 
-            IpcPipeClient.PluginCheckIn(
+            void SetOwner( HostInfo hostInfo )
+            {
+                User32.SetWindowLongPtr( new HandleRef( this, _handle ),
+                    (int)GetWindowLongFields.GWL_HWNDPARENT,
+                    hostInfo.MainWindowHandle
+                );
+            }
+
+            IpcPipeClient.PluginCheckIn<HostInfo>(
                 pipeMessage,
                 () => { MessageBox.Show( "This Program require VirtualSpace running first." ); },
-                Exit
+                Exit,
+                SetOwner
             );
 
             IpcPipeClient.CheckAlive( pipeMessage.Name, pipeMessage.Handle, pipeMessage.ProcessId, SettingsManager.Settings.CheckAliveInterval, Exit );

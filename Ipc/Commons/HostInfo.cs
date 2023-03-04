@@ -16,10 +16,11 @@ namespace VirtualSpace.Commons
 {
     public class HostInfo
     {
-        public Version Version     { get; set; }
-        public string  Product     { get; set; }
-        public string  InfoVersion { get; set; }
-        public string  AppPath     { get; set; }
+        public Version Version          { get; set; }
+        public string  Product          { get; set; }
+        public string  InfoVersion      { get; set; }
+        public string  AppPath          { get; set; }
+        public int     MainWindowHandle { get; set; }
     }
 
     public static class HostInfoHelper

@@ -6,6 +6,7 @@
   "Email": "newlooper@hotmail.com",
   "Entry": "Updater.exe",
   "AutoStart": true,
+  "AutoStartTiming": 0,
   "RestartPolicy": {
     "Trigger": 0,
     "Values": [],
@@ -22,6 +23,7 @@
         "Major": 10,
         "Build": 19041
       }
-    }
+    },
+    "HostVersion": "0.1.454"
   }
 }

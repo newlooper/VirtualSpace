@@ -8,9 +8,12 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
@@ -38,21 +41,50 @@ namespace VirtualSpace.Plugin
             foreach ( var path in pluginFolders )
             {
                 var infoFile = Path.Combine( path, PluginManager.PluginInfoFile );
-                if ( !File.Exists( infoFile ) ) continue;
+                if ( !File.Exists( infoFile ) )
+                {
+                    Logger.Warning( $"[PLUGIN] missing {PluginManager.PluginInfoFile} in {path}" );
+                    continue;
+                }
 
                 var pluginInfo = PluginManager.LoadFromJson<PluginInfo>( infoFile );
-                if ( pluginInfo == null ) continue;
+                if ( pluginInfo == null )
+                {
+                    Logger.Warning( $"[PLUGIN] invalid {PluginManager.PluginInfoFile}" );
+                    continue;
+                }
 
-                var loaded = Plugins.Find( p => p.Name == pluginInfo.Name );
-                if ( loaded != null ) continue;
+                var alreadyLoaded = Plugins.Find( p => p.Name == pluginInfo.Name );
+                if ( alreadyLoaded != null ) continue;
+
+                if ( pluginInfo.Requirements is null )
+                {
+                    Logger.Warning( $"[PLUGIN] {pluginInfo.Display} has no 'Requirements' info" );
+                    continue;
+                }
+
+                if ( pluginInfo.Requirements.HostVersion == null ||
+                     pluginInfo.Requirements.HostVersion > GetHostVersion() )
+                {
+                    Logger.Warning( $"[PLUGIN] {pluginInfo.Display} not satisfy the host version" );
+                    continue;
+                }
 
                 pluginInfo.Folder = path;
 
                 Plugins.Add( pluginInfo );
                 Logger.Info( $"[PLUGIN] {pluginInfo.Display} Registered." );
 
-                if ( pluginInfo.AutoStart )
+                if ( pluginInfo is {AutoStart: true, AutoStartTiming: AutoStartTiming.AppStart} )
                     StartPlugin( pluginInfo );
+            }
+        }
+
+        public static void AutoStartAfterMainWindowLoaded()
+        {
+            foreach ( var pi in Plugins.Where( pi => pi is {AutoStart: true, AutoStartTiming: AutoStartTiming.MainWindowLoaded} ) )
+            {
+                StartPlugin( pi );
             }
         }
 
@@ -101,6 +133,15 @@ namespace VirtualSpace.Plugin
             {
                 Logger.Warning( "Failed Restart Plugin, Abort Operation." );
             }
+        }
+
+        private static Version GetHostVersion()
+        {
+            var fileVersion = ( (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(
+                Assembly.GetEntryAssembly(),
+                typeof( AssemblyFileVersionAttribute ),
+                false ) ).Version;
+            return new Version( fileVersion );
         }
     }
 }

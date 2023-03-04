@@ -52,6 +52,13 @@ namespace VirtualSpace.Commons
 
                             case PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER:
                             {
+                                if ( !server.CanWrite ) break;
+                                using var writer   = new StreamWriter( server );
+                                var       hostInfo = HostInfoHelper.GetHostInfo();
+                                hostInfo.MainWindowHandle = MainWindowHandle.ToInt32();
+                                writer.WriteLine( JsonSerializer.Serialize( hostInfo ) );
+                                writer.Flush();
+
                                 /////////////////////////////////
                                 // 只接受已注册成功的插件
                                 // 同时若插件名相同，则后启动的覆盖先启动的
@@ -87,6 +94,7 @@ namespace VirtualSpace.Commons
 
                             case PipeMessageType.PLUGIN_UPDATER:
                             {
+                                if ( !server.CanWrite ) break;
                                 using var writer = new StreamWriter( server );
                                 writer.WriteLine( JsonSerializer.Serialize( HostInfoHelper.GetHostInfo() ) );
                                 writer.Flush();
