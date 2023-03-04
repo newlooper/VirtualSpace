@@ -128,15 +128,20 @@ namespace VirtualSpace.VirtualDesktop.Api
         {
             var desktop = DesktopFromId( guid );
             if ( desktop is null ) return;
-            desktop.MakeVisible();
 
             forceFocusForegroundWindow ??= Manager.Configs.Cluster.ForceFocusForegroundWindow;
+            if ( (bool)forceFocusForegroundWindow )
+            {
+                var hTaskBar = User32.FindWindow( Const.TaskbarWndClass, "" );
+                if ( hTaskBar == IntPtr.Zero || !SysInfo.IsTaskbarVisible() ) return;
 
-            if ( !(bool)forceFocusForegroundWindow ) return;
+                User32.SetForegroundWindow( hTaskBar );
+                desktop.MakeVisible();
+                _ = User32.ShowWindow( hTaskBar, (short)ShowState.SW_FORCEMINIMIZE );
+                return;
+            }
 
-            var hTaskBar = User32.FindWindow( Const.TaskbarWndClass, "" );
-            if ( hTaskBar == IntPtr.Zero || !SysInfo.IsTaskbarVisible() ) return;
-            User32.ShowWindow( hTaskBar, (short)ShowState.SW_FORCEMINIMIZE );
+            desktop.MakeVisible();
         }
 
         public static void SetNameByIndex( int vdIndex, string name )

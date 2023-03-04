@@ -360,7 +360,7 @@ namespace VirtualSpace.VirtualDesktop
                 }
             }
 
-            _ = User32.ShowWindow( vw.Handle, 0 );
+            // _ = User32.ShowWindow( vw.Handle, 0 );
 
             User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
 
