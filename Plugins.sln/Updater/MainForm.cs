@@ -59,8 +59,6 @@ namespace Updater
             {
                 Application.Exit();
             }
-
-            // IpcPipeClient.CheckAlive( pipeMessage.Name, pipeMessage.Handle, pipeMessage.ProcessId, 5, Application.Exit );
         }
 
         private async void CheckUpdate( HostInfo hostInfo )

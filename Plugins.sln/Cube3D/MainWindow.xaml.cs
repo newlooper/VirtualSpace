@@ -37,19 +37,20 @@ namespace Cube3D
             Height = SystemParameters.PrimaryScreenHeight;
             Topmost = true;
             ShowActivated = false;
+
+            new WindowInteropHelper( this ).EnsureHandle();
         }
 
         protected override void OnSourceInitialized( EventArgs e )
         {
             base.OnSourceInitialized( e );
-            var source = PresentationSource.FromVisual( this ) as HwndSource;
+            _handle = new WindowInteropHelper( this ).EnsureHandle();
+            var source = HwndSource.FromHwnd( _handle );
             source?.AddHook( WndProc );
         }
 
         private void Bootstrap()
         {
-            _handle = new WindowInteropHelper( this ).Handle;
-
             var pipeMessage = new PipeMessage
             {
                 Type = PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER,
@@ -64,6 +65,15 @@ namespace Cube3D
 
             void SetOwner( HostInfo hostInfo )
             {
+                var pluginInfo = PluginManager.PluginInfo;
+                if ( pluginInfo.Requirements.HostVersion == null ||
+                     pluginInfo.Requirements.HostVersion > hostInfo.Version )
+                {
+                    MessageBox.Show( "Plugin Error.\nThe host does not meet the Requirements." );
+                    Exit();
+                    return;
+                }
+
                 User32.SetWindowLongPtr( new HandleRef( this, _handle ),
                     (int)GetWindowLongFields.GWL_HWNDPARENT,
                     hostInfo.MainWindowHandle
