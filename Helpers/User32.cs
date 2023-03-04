@@ -122,6 +122,9 @@ namespace VirtualSpace.Helpers
         public static extern bool SetForegroundWindow( IntPtr hWnd );
 
         [DllImport( "user32.dll", SetLastError = true )]
+        public static extern bool BringWindowToTop( IntPtr hWnd );
+
+        [DllImport( "user32.dll", SetLastError = true )]
         public static extern IntPtr SetParent( IntPtr hWndChild, IntPtr hWndNewParent );
 
         [DllImport( "user32.dll" )]

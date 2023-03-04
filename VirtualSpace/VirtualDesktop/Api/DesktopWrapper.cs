@@ -146,13 +146,12 @@ namespace VirtualSpace.VirtualDesktop.Api
                 if ( SysInfo.IsTaskbarVisible() )
                 {
                     User32.SetForegroundWindow( hTaskBar );
-                    await Task.Delay( 60 );
                     desktop.MakeVisible();
                     await Task.Delay( 60 );
 
                     if ( User32.GetForegroundWindow() != hTaskBar )
                     {
-                        Logger.Verbose( $"taskbar not active, switch desktop only." );
+                        Logger.Verbose( "Taskbar not active, switch desktop only." );
                         return;
                     }
 
@@ -166,16 +165,17 @@ namespace VirtualSpace.VirtualDesktop.Api
                         Logger.Verbose( "Force minimize taskbar." );
                         _ = User32.ShowWindow( hTaskBar, (short)ShowState.SW_FORCEMINIMIZE );
                     }
-
-                    return;
                 }
-
-                Logger.Verbose( "Taskbar is hiding, switch desktop only." );
-                desktop.MakeVisible();
-                return;
+                else
+                {
+                    Logger.Verbose( "Taskbar is hiding, switch desktop only." );
+                    desktop.MakeVisible();
+                }
             }
-
-            desktop.MakeVisible();
+            else
+            {
+                desktop.MakeVisible();
+            }
         }
 
         public static void SetNameByIndex( int vdIndex, string name )

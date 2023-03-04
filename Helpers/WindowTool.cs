@@ -101,6 +101,7 @@ namespace VirtualSpace.Helpers
             }
 
             User32.SetForegroundWindow( hWnd );
+            User32.BringWindowToTop( hWnd );
         }
     }
 }
