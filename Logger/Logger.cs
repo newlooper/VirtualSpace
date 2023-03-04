@@ -25,16 +25,22 @@ namespace VirtualSpace.AppLogs
         public static readonly Channel<LogMessage> LogChannel = Channel.CreateUnbounded<LogMessage>();
         public static          bool                ShowLogsInGui { get; set; } = false;
 
+        public static void Verbose( string str )
+        {
+            LogToGui( "VERBOSE", str );
+            LogManager.RootLogger.Verbose( str );
+        }
+
         public static void Debug( string str )
         {
             LogToGui( "DEBUG", str );
-            LogManager.RootLogger.Verbose( str );
+            LogManager.RootLogger.Debug( str );
         }
 
         public static void Event( string str )
         {
             LogToGui( "EVENT", str );
-            LogManager.RootLogger.Debug( str );
+            LogManager.RootLogger.Write( LogManager.LOG_LEVEL_EVENT, str );
         }
 
         public static void Info( string str )

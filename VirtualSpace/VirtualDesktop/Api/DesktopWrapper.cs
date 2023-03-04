@@ -9,6 +9,9 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using VirtualDesktop;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
@@ -124,7 +127,7 @@ namespace VirtualSpace.VirtualDesktop.Api
             desktop.MakeVisible();
         }
 
-        public static void MakeVisibleByGuid( Guid guid, bool? forceFocusForegroundWindow = null )
+        public static async void MakeVisibleByGuid( Guid guid, bool? forceFocusForegroundWindow = null )
         {
             var desktop = DesktopFromId( guid );
             if ( desktop is null ) return;
@@ -133,11 +136,42 @@ namespace VirtualSpace.VirtualDesktop.Api
             if ( (bool)forceFocusForegroundWindow )
             {
                 var hTaskBar = User32.FindWindow( Const.TaskbarWndClass, "" );
-                if ( hTaskBar == IntPtr.Zero || !SysInfo.IsTaskbarVisible() ) return;
+                if ( hTaskBar == IntPtr.Zero )
+                {
+                    Logger.Verbose( "Taskbar not found, switch desktop only." );
+                    desktop.MakeVisible();
+                    return;
+                }
 
-                User32.SetForegroundWindow( hTaskBar );
+                if ( SysInfo.IsTaskbarVisible() )
+                {
+                    User32.SetForegroundWindow( hTaskBar );
+                    await Task.Delay( 60 );
+                    desktop.MakeVisible();
+                    await Task.Delay( 60 );
+
+                    if ( User32.GetForegroundWindow() != hTaskBar )
+                    {
+                        Logger.Verbose( $"taskbar not active, switch desktop only." );
+                        return;
+                    }
+
+                    if ( SysInfo.IsAdministrator() )
+                    {
+                        Logger.Verbose( "Send [Alt+Esc]." );
+                        LowLevelKeyboardHook.MultipleKeyPress( new List<Keys> {Keys.Menu, Keys.Escape} );
+                    }
+                    else
+                    {
+                        Logger.Verbose( "Force minimize taskbar." );
+                        _ = User32.ShowWindow( hTaskBar, (short)ShowState.SW_FORCEMINIMIZE );
+                    }
+
+                    return;
+                }
+
+                Logger.Verbose( "Taskbar is hiding, switch desktop only." );
                 desktop.MakeVisible();
-                _ = User32.ShowWindow( hTaskBar, (short)ShowState.SW_FORCEMINIMIZE );
                 return;
             }
 

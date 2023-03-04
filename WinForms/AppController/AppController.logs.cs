@@ -38,6 +38,9 @@ namespace VirtualSpace
                     {
                         switch ( message.Type )
                         {
+                            case "VERBOSE":
+                                AppendLog( tbVerbose, message );
+                                break;
                             case "DEBUG":
                                 AppendLog( tbDebug, message );
                                 break;
