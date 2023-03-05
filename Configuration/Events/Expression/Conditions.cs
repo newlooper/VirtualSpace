@@ -85,7 +85,7 @@ namespace VirtualSpace.Config.Events.Expression
             var rules = new List<RuleTemplate>( _rules );
             BuildRuleExp( rules );
 
-            Logger.Debug( $"Checking rules for {win.Title}, current rules profile: {Manager.Configs.CurrentProfileName}" );
+            Logger.Debug( $"Checking rules for {win.Title}, current profile: {Manager.Configs.CurrentProfileName}" );
 
             await Task.Run( () =>
             {
@@ -100,7 +100,7 @@ namespace VirtualSpace.Config.Events.Expression
                 }
                 catch ( Exception ex )
                 {
-                    Logger.Warning( ex.Message );
+                    Logger.Warning( "Get Process Info: " + ex.Message );
                 }
 
                 var screen      = Screen.FromHandle( win.Handle );

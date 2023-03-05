@@ -31,12 +31,6 @@ namespace VirtualSpace.VirtualDesktop
     public partial class VirtualDesktopWindow : Form
     {
         private static   List<VirtualDesktopWindow>? _virtualDesktops;
-        private static   int                         _hoverVdIndex;
-        private static   Point                       _startPoint;
-        private static   bool                        _dragging;
-        private static   Rectangle                   _dragBounds = Rectangle.Empty;
-        private static   VisibleWindow?              _selectedWindow;
-        private static   DragWindow?                 _dw;
         private static   WindowInteropHelper         _windowInteropHelper;
         private readonly List<VisibleWindow>         _visibleWindows = new();
         private          string                      _desktopName;
@@ -300,7 +294,7 @@ namespace VirtualSpace.VirtualDesktop
 
         private void RefreshThumbs( object? o, EventArgs e )
         {
-            Logger.Event( "Repaint Thumbs due to size changed." );
+            Logger.Event( $"Repaint thumbs in Desktop[{VdIndex}] due to size changed." );
             ReleaseThumbnails();
             ShowThumbnails();
         }

@@ -43,26 +43,26 @@ namespace VirtualSpace.VirtualDesktop
 
                 if ( action.HideFromView )
                 {
-                    Logger.Debug( $"[RULE]HIDE.Win {action.Handle.ToString( "X2" )}" );
+                    Logger.Debug( $"[RULE.Action]HIDE.Win {action.Handle.ToString( "X2" )}" );
                     Filters.WndHandleIgnoreListByManual.TryAdd( action.Handle, 0 );
                 }
 
                 if ( action.MoveToScreen >= 0 )
                 {
-                    Logger.Debug( $"[RULE]MOVE_TO_SCREEN.Win {action.Handle.ToString( "X2" )} TO Screen[{action.MoveToScreen.ToString()}]" );
+                    Logger.Debug( $"[RULE.Action]MOVE_TO_SCREEN.Win {action.Handle.ToString( "X2" )} TO Screen[{action.MoveToScreen.ToString()}]" );
                     WindowTool.MoveWindowToScreen( action.Handle, action.MoveToScreen );
                 }
 
                 if ( action.PinApp )
                 {
-                    Logger.Debug( $"[RULE]PIN.App of {action.Handle.ToString( "X2" )} TO All Desktops" );
+                    Logger.Debug( $"[RULE.Action]PIN.App of {action.Handle.ToString( "X2" )} TO All Desktops" );
                     try
                     {
                         DesktopWrapper.PinApp( action.Handle, false );
                     }
                     catch
                     {
-                        Logger.Error( $"[RULE]PIN.App {action.Handle.ToString( "X2" )} Failed" );
+                        Logger.Error( $"[RULE.Action]PIN.App {action.Handle.ToString( "X2" )} Failed" );
                     }
 
                     continue; // <- if PinApp, then PinWindow & MoveToDesktop is invalid
@@ -70,14 +70,14 @@ namespace VirtualSpace.VirtualDesktop
 
                 if ( action.PinWindow )
                 {
-                    Logger.Debug( $"[RULE]PIN.Win {action.Handle.ToString( "X2" )} TO All Desktops" );
+                    Logger.Debug( $"[RULE.Action]PIN.Win {action.Handle.ToString( "X2" )} TO All Desktops" );
                     try
                     {
                         DesktopWrapper.PinWindow( action.Handle, false );
                     }
                     catch
                     {
-                        Logger.Error( $"[RULE]PIN.Win {action.Handle.ToString( "X2" )} Failed" );
+                        Logger.Error( $"[RULE.Action]PIN.Win {action.Handle.ToString( "X2" )} Failed" );
                     }
 
                     continue; // <- if PinWindow, then MoveToDesktop is invalid
@@ -88,10 +88,10 @@ namespace VirtualSpace.VirtualDesktop
                     try
                     {
                         DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
-                        Logger.Debug( $"[RULE]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]" );
+                        Logger.Debug( $"[RULE.Action]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]" );
                         if ( action.FollowWindow )
                         {
-                            Logger.Debug( $"[RULE]CHANGE CURRENT DESKTOP TO Desktop[{action.MoveToDesktop.ToString()}]" );
+                            Logger.Debug( $"[RULE.Action]CHANGE CURRENT DESKTOP TO Desktop[{action.MoveToDesktop.ToString()}]" );
                             DesktopWrapper.MakeVisibleByIndex( action.MoveToDesktop );
                             WindowTool.ActiveWindow( action.Handle );
                         }
@@ -100,7 +100,7 @@ namespace VirtualSpace.VirtualDesktop
                     {
                         CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
                         Logger.Error(
-                            $"[RULE]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]",
+                            $"[RULE.Action]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]",
                             new NotifyObject
                             {
                                 Title = Agent.Langs.GetString( "Error.Title" ),

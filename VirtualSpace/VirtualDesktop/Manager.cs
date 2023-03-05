@@ -119,7 +119,7 @@ namespace VirtualSpace.VirtualDesktop
             }
             catch ( Exception ex )
             {
-                Logger.Error( ex.Message );
+                Logger.Error( "Init Layout: " + ex.Message );
                 return;
             }
 
@@ -189,7 +189,7 @@ namespace VirtualSpace.VirtualDesktop
             }
             catch ( Exception e )
             {
-                Logger.Warning( e.StackTrace );
+                Logger.Warning( "Update MainView: " + e.StackTrace );
             }
         }
 
@@ -252,7 +252,7 @@ namespace VirtualSpace.VirtualDesktop
                     if ( DesktopWrapper.IsWindowPinned( win.Handle ) ||
                          DesktopWrapper.IsApplicationPinned( win.Handle ) )
                     {
-                        Logger.Debug( $"{win.Title} IS PIN TO ALL DESKTOPS" );
+                        Logger.Debug( $"{win.Title} IS PINNED" );
                         foreach ( var vdw in _virtualDesktops )
                             vdw.AddWindow( new VisibleWindow( win.Title, win.Classname, win.Handle ) );
                         continue;

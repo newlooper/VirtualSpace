@@ -149,7 +149,7 @@ namespace VirtualSpace
                 }
                 catch ( Exception ex )
                 {
-                    Logger.Error( $"Move Window To Desktop[{vdIndex}] ∵ " + ex.Message );
+                    Logger.Error( $"Move Foreground Window To Desktop[{vdIndex}] ∵ " + ex.Message );
                 }
             }
 

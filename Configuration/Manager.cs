@@ -97,8 +97,6 @@ namespace VirtualSpace.Config
             }
             catch ( Exception ex )
             {
-                // MessageBox.Show( "Failed to save Settings: " + ex.Message );
-                // throw;
                 Logger.Error( "Failed to save Settings: " + ex.Message );
             }
         }

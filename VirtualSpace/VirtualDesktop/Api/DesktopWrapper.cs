@@ -36,7 +36,7 @@ namespace VirtualSpace.VirtualDesktop.Api
             }
             catch ( Exception e )
             {
-                Logger.Error( e.Message );
+                Logger.Error( "Remove Desktop: " + e.Message );
                 return false;
             }
         }
@@ -52,7 +52,7 @@ namespace VirtualSpace.VirtualDesktop.Api
             }
             catch ( Exception e )
             {
-                Logger.Error( e.Message );
+                Logger.Error( "Remove Desktop: " + e.Message );
                 return false;
             }
         }

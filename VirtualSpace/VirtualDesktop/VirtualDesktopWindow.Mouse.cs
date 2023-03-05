@@ -27,7 +27,13 @@ namespace VirtualSpace.VirtualDesktop
 {
     public partial class VirtualDesktopWindow
     {
-        private bool _isTheOnlyOneInMainView;
+        private static int            _hoverVdIndex;
+        private static Point          _startPoint;
+        private static int            _dragState;
+        private static Rectangle      _dragBounds = Rectangle.Empty;
+        private static VisibleWindow? _selectedWindow;
+        private static DragWindow?    _dw;
+        private        bool           _isTheOnlyOneInMainView;
 
         public void ResetOnlyOneStatus()
         {
@@ -44,7 +50,7 @@ namespace VirtualSpace.VirtualDesktop
                 dragSize );
             foreach ( var window in _visibleWindows.Where( window => window.Rect.Contains( e.Location ) ) )
             {
-                Logger.Debug( "SELECT.Win " + window.Title );
+                Logger.Verbose( "SELECT.Win " + window.Title );
                 _selectedWindow = window;
                 break;
             }
@@ -57,12 +63,12 @@ namespace VirtualSpace.VirtualDesktop
 
         private void VirtualDesktopWindow_MouseMove( object sender, MouseEventArgs e )
         {
-            if ( !_dragging && e.Button == MouseButtons.Left && IsOutBounds( e.Location ) )
+            if ( _dragState == 0 && e.Button == MouseButtons.Left && IsOutBounds( e.Location ) )
             {
-                _dragging = true;
+                _dragState = 1;
             }
 
-            if ( !_dragging ) return;
+            if ( _dragState == 0 ) return;
 
             HoverOnDesktop( sender, e );
 
@@ -108,7 +114,7 @@ namespace VirtualSpace.VirtualDesktop
 
             _hoverVdIndex = HoverOnDesktop( sender, e );
 
-            if ( _dragging )
+            if ( _dragState > 0 )
             {
                 if ( _selectedWindow != null ) // if we drag a thumbnail in a virtual desktop
                 {
@@ -133,7 +139,7 @@ namespace VirtualSpace.VirtualDesktop
                             ///////////////////////////
                             // goes here means the thumbnail window we dragged is drop in another virtual desktop
                             // we need to move it.
-                            Logger.Debug( $"DROP.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )}) IN Desktop[{_hoverVdIndex.ToString()}]" );
+                            Logger.Verbose( $"DROP.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )}) IN Desktop[{_hoverVdIndex.ToString()}]" );
 
                             var sysIndex = DesktopWrapper.IndexFromGuid( _virtualDesktops[_hoverVdIndex].VdId );
                             DesktopWrapper.MoveWindowToDesktop( _selectedWindow.Handle, sysIndex );
@@ -161,7 +167,7 @@ namespace VirtualSpace.VirtualDesktop
 
                         VirtualDesktopManager.SaveOrder();
 
-                        Logger.Debug( $"SWAP.Desktop Desktop[{VdIndex.ToString()}] WITH Desktop[{_hoverVdIndex.ToString()}]" );
+                        Logger.Verbose( $"SWAP.Desktop Desktop[{VdIndex.ToString()}] WITH Desktop[{_hoverVdIndex.ToString()}]" );
                         VirtualDesktopManager.FixLayout();
                         VirtualDesktopManager.ShowAllVirtualDesktops();
                     }
@@ -175,10 +181,10 @@ namespace VirtualSpace.VirtualDesktop
                 {
                     void ActiveWindow()
                     {
-                        Logger.Debug( $"CHANGE CURRENT DESKTOP TO Desktop[{_hoverVdIndex.ToString()}]" );
+                        Logger.Verbose( $"CHANGE CURRENT DESKTOP TO Desktop[{_hoverVdIndex.ToString()}]" );
                         DesktopWrapper.MakeVisibleByGuid( ConfigManager.CurrentProfile.DesktopOrder[_hoverVdIndex], false );
 
-                        Logger.Debug( $"ACTIVE.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )})" );
+                        Logger.Verbose( $"ACTIVE.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )})" );
                         WindowTool.ActiveWindow( _selectedWindow.Handle );
                     }
 
@@ -294,7 +300,7 @@ namespace VirtualSpace.VirtualDesktop
                 _dw = null;
             }
 
-            _dragging = false;
+            _dragState = 0;
             _selectedWindow = null;
             _dragBounds = Rectangle.Empty;
         }
@@ -315,12 +321,21 @@ namespace VirtualSpace.VirtualDesktop
                         _hoverVdIndex = vdw.VdIndex;
                         if ( _selectedWindow != null )
                         {
-                            Logger.Debug( $"DRAGGING.Win {_selectedWindow.Title} IN Desktop[{vdw.VdIndex.ToString()}]" );
+                            if ( _dragState == 1 )
+                            {
+                                Logger.Verbose( $"DRAGGING.Win {_selectedWindow.Title} IN Desktop[{vdw.VdIndex.ToString()}]" );
+                                _dragState++;
+                            }
+
                             vdw.Opacity = VirtualDesktopManager.Ui.VDWDragTargetOpacity;
                         }
                         else
                         {
-                            Logger.Debug( $"DRAGGING.Desk Desktop[{VdIndex.ToString()}]) ON Desktop[{vdw.VdIndex.ToString()}])" );
+                            if ( _dragState == 1 )
+                            {
+                                Logger.Verbose( $"DRAGGING.Desk Desktop[{VdIndex.ToString()}]) ON Desktop[{vdw.VdIndex.ToString()}])" );
+                                _dragState++;
+                            }
                         }
                     }
                 }
@@ -335,7 +350,7 @@ namespace VirtualSpace.VirtualDesktop
 
         private void MakeVisible()
         {
-            Logger.Debug( $"SWITCH TO DESKTOP Desktop[{_hoverVdIndex.ToString()}]" );
+            Logger.Verbose( $"SWITCH TO DESKTOP Desktop[{_hoverVdIndex.ToString()}]" );
             DesktopWrapper.MakeVisibleByGuid( VdId );
         }
 
