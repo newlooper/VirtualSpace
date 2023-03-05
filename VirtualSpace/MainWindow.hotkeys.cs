@@ -158,9 +158,10 @@ namespace VirtualSpace
 
                 /////////////////////////////////////////////////////////////////////////////////
                 // hook [Esc] to hide MainView
-                if ( info.vkCode == (int)Keys.Escape )
+                if ( info.vkCode == (int)Keys.Escape && IsShowing() )
                 {
-                    if ( IsShowing() ) HideAll();
+                    HideAll();
+                    return LowLevelHooks.Handled;
                 }
             }
 

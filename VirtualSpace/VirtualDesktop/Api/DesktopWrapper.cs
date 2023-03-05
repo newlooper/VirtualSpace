@@ -132,6 +132,12 @@ namespace VirtualSpace.VirtualDesktop.Api
             var desktop = DesktopFromId( guid );
             if ( desktop is null ) return;
 
+            if ( MainWindow.IsShowing() )
+            {
+                desktop.MakeVisible();
+                return;
+            }
+
             forceFocusForegroundWindow ??= Manager.Configs.Cluster.ForceFocusForegroundWindow;
             if ( (bool)forceFocusForegroundWindow )
             {
@@ -147,7 +153,6 @@ namespace VirtualSpace.VirtualDesktop.Api
                 {
                     User32.SetForegroundWindow( hTaskBar );
                     desktop.MakeVisible();
-                    await Task.Delay( 60 );
 
                     if ( User32.GetForegroundWindow() != hTaskBar )
                     {

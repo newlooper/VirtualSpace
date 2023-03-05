@@ -10,6 +10,7 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -140,12 +141,18 @@ namespace VirtualSpace.VirtualDesktop
         {
             Task.Factory.StartNew( () =>
             {
+                var sw = Stopwatch.StartNew();
                 while ( true )
                 {
                     CanRun.WaitOne();
                     _ = User32.EnumWindows( WindowHandleFilter, 0 );
-                    Logger.Debug( "Daemon one turn done." );
-                    Thread.Sleep( _runlevel * 1000 );
+                    if ( sw.ElapsedMilliseconds >= Const.OneMinute )
+                    {
+                        Logger.Debug( "Daemon running normally in last minute." );
+                        sw.Restart();
+                    }
+
+                    Thread.Sleep( _runlevel * Const.OneSecond );
                 }
             }, TaskCreationOptions.LongRunning );
         }

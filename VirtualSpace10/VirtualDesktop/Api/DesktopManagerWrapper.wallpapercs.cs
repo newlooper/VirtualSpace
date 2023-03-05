@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Win32;
+using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using ConfigManager = VirtualSpace.Config.Manager;
 
@@ -43,7 +44,7 @@ namespace VirtualSpace.VirtualDesktop.Api
                         } );
                     }
 
-                    Thread.Sleep( 1000 );
+                    Thread.Sleep( Const.OneSecond );
                 }
             }, TaskCreationOptions.LongRunning );
         }

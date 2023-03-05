@@ -121,11 +121,7 @@ namespace VirtualSpace
 
         private static void BringToTop( int processId = 0 )
         {
-            CheckScreenArea();
-
-            _instance.Left = 0;
-            _instance.Top = 0;
-            _instance.Show();
+            TopShow();
 
             VirtualDesktopManager.FixLayout();
             VirtualDesktopManager.ShowAllVirtualDesktops();
@@ -142,14 +138,19 @@ namespace VirtualSpace
 
         private static void BringToTopForCurrentVd( int processId = 0 )
         {
+            TopShow();
+
+            var cvd = VirtualDesktopManager.GetCurrentVdw();
+            cvd.MakeTheOnlyOne( processId );
+        }
+
+        private static void TopShow()
+        {
             CheckScreenArea();
 
             _instance.Left = 0;
             _instance.Top = 0;
             _instance.Show();
-
-            var cvd = VirtualDesktopManager.GetCurrentVdw();
-            cvd.MakeTheOnlyOne( processId );
         }
 
         private static void CheckScreenArea()

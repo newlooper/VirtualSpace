@@ -10,8 +10,10 @@ You should have received a copy of the GNU General Public License along with Cub
 */
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Cube3D.Config;
@@ -25,14 +27,14 @@ namespace Cube3D
 {
     public partial class MainWindow
     {
+        private static readonly StringBuilder SbWinInfo = new( 1024 );
+        private static          bool          _isTopmost;
+
         private void FakeHide( bool recreateCapture = false )
         {
             Left = Const.FakeHideX;
             Top = Const.FakeHideY;
-            // Width = SystemParameters.PrimaryScreenWidth / 10;
-            // Height = SystemParameters.PrimaryScreenHeight / 10;
-            // Width = 0;
-            // Height = 0;
+
             if ( recreateCapture ) RecreateCapture();
         }
 
@@ -41,18 +43,41 @@ namespace Cube3D
             _capture?.StopCaptureSession();
         }
 
+        private static bool WindowFilter( IntPtr hWnd, int lParam )
+        {
+            if ( !User32.IsWindowVisible( hWnd ) )
+                return true;
+
+            SbWinInfo.Clear();
+            _ = User32.GetWindowText( hWnd, SbWinInfo, SbWinInfo.Capacity );
+            if ( SbWinInfo.Length == 0 )
+                return true;
+
+            _isTopmost = _handle == hWnd; // if the first visible non-empty title window is Cube3D, then Cube3D is on the top.
+
+            return false;
+        }
+
         private void RealShow()
         {
+            _ = User32.EnumWindows( WindowFilter, 0 );
+            if ( !_isTopmost )
+            {
+                User32.SetWindowPos( _handle, User32.SpecialWindowHandles.HWND_TOP, 0, 0, 0, 0,
+                    User32.SetWindowPosFlags.SWP_NOSIZE |
+                    User32.SetWindowPosFlags.SWP_NOMOVE |
+                    User32.SetWindowPosFlags.SWP_NOACTIVATE |
+                    User32.SetWindowPosFlags.SWP_NOREDRAW |
+                    User32.SetWindowPosFlags.SWP_NOCOPYBITS |
+                    User32.SetWindowPosFlags.SWP_DEFERERASE |
+                    User32.SetWindowPosFlags.SWP_NOSENDCHANGING
+                );
+            }
+
             Left = 0;
             Top = 0;
             Width = SystemParameters.PrimaryScreenWidth;
             Height = SystemParameters.PrimaryScreenHeight;
-
-            //////////////////////////////////////////////////
-            // since HostProgram's MainWindow as Cube3D's Owner
-            // this is no need do to.
-            // if ( SettingsManager.Settings.ForceOnTop )
-            //     Activate();
         }
 
         private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )

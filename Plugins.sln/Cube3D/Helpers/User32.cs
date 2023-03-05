@@ -6,32 +6,8 @@ namespace VirtualSpace.Helpers
 {
     public static class User32
     {
-        public delegate bool EnumChildWindowsProc( IntPtr hWnd, int lParam );
-
         public delegate bool EnumWindowsProc( IntPtr hWnd, int lParam );
 
-        public delegate IntPtr LowLevelKeyboardProc( int nCode, IntPtr wParam, IntPtr lParam );
-
-        public const int  WS_EX_TOPMOST     = 0x8;
-        public const int  WS_EX_TOOLWINDOW  = 0x80;
-        public const int  WS_EX_LAYERED     = 0x80000;
-        public const int  WS_EX_TRANSPARENT = 0x20;
-        public const int  WS_EX_NOACTIVATE  = 0x08000000;
-        public const int  SW_SHOWNOACTIVATE = 4;
-        public const int  SW_HIDE           = 0;
-        public const uint WS_POPUP          = 0x80000000;
-        public const uint AW_HOR_POSITIVE   = 0x1;
-        public const uint AW_HOR_NEGATIVE   = 0x2;
-        public const uint AW_VER_POSITIVE   = 0x4;
-        public const uint AW_VER_NEGATIVE   = 0x8;
-        public const uint AW_CENTER         = 0x10;
-        public const uint AW_HIDE           = 0x10000;
-        public const uint AW_ACTIVATE       = 0x20000;
-        public const uint AW_SLIDE          = 0x40000;
-        public const uint AW_BLEND          = 0x80000;
-
-        public const uint WDA_NONE               = 0;
-        public const uint WDA_MONITOR            = 1;
         public const uint WDA_EXCLUDEFROMCAPTURE = 0x00000011;
 
         [DllImport( "user32.dll" )]
@@ -39,15 +15,6 @@ namespace VirtualSpace.Helpers
 
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
         public static extern int GetWindowLong( IntPtr hWnd, int nIndex );
-
-        [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-        public static extern bool PostMessage( IntPtr hWnd, int msg, uint wParam, uint lParam );
-
-        [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-        public static extern bool SendMessage( IntPtr hWnd, int msg, uint wParam, uint lParam );
-
-        [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-        public static extern int SetWindowLong( IntPtr hWnd, int nIndex, int newLong );
 
         public static IntPtr SetWindowLongPtr( HandleRef hWnd, int nIndex, int dwNewLong )
         {
@@ -63,58 +30,125 @@ namespace VirtualSpace.Helpers
         [DllImport( "user32.dll", EntryPoint = "SetWindowLongPtr" )]
         private static extern IntPtr SetWindowLongPtr64( HandleRef hWnd, int nIndex, IntPtr dwNewLong );
 
-        [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-        public static extern int ShowWindow( IntPtr hWnd, short cmdShow );
-
-        [DllImport( "user32.dll" )]
-        public static extern int GetWindowText( IntPtr hWnd, StringBuilder buf, int nMaxCount );
-
-        [DllImport( "user32.dll", SetLastError = true, CharSet = CharSet.Auto )]
-        public static extern int GetClassName( IntPtr hWnd, StringBuilder lpClassName, int nMaxCount );
+        [DllImport( "user32.dll", SetLastError = true )]
+        public static extern bool SetWindowPos( IntPtr hWnd, SpecialWindowHandles hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags );
 
         [DllImport( "user32.dll" )]
         public static extern bool IsWindowVisible( IntPtr hWnd );
 
         [DllImport( "user32.dll" )]
-        [return: MarshalAs( UnmanagedType.Bool )]
-        public static extern bool IsWindow( IntPtr hWnd );
-
-        [DllImport( "user32.dll" )]
         public static extern int EnumWindows( EnumWindowsProc func, int lParam );
 
         [DllImport( "user32.dll" )]
-        [return: MarshalAs( UnmanagedType.Bool )]
-        public static extern bool EnumChildWindows( IntPtr hWndParent, EnumChildWindowsProc lpEnumFunc, int lParam );
+        public static extern int GetWindowText( IntPtr hWnd, StringBuilder buf, int nMaxCount );
 
-        [DllImport( "user32.dll", SetLastError = true )]
-        public static extern void SwitchToThisWindow( IntPtr hWnd, bool turnOn );
+        /// <summary>
+        ///     Special window handles
+        /// </summary>
+        public enum SpecialWindowHandles
+        {
+            // ReSharper disable InconsistentNaming
+            /// <summary>
+            ///     Places the window at the top of the Z order.
+            /// </summary>
+            HWND_TOP = 0,
 
-        [DllImport( "user32.dll", SetLastError = true )]
-        public static extern IntPtr SetParent( IntPtr hWndChild, IntPtr hWndNewParent );
+            /// <summary>
+            ///     Places the window at the bottom of the Z order. If the hWnd parameter identifies a topmost window, the window loses its topmost status and is placed at the bottom of all other windows.
+            /// </summary>
+            HWND_BOTTOM = 1,
 
-        [DllImport( "user32.dll" )]
-        public static extern int GetWindowThreadProcessId( IntPtr hWnd, out int processId );
+            /// <summary>
+            ///     Places the window above all non-topmost windows. The window maintains its topmost position even when it is deactivated.
+            /// </summary>
+            HWND_TOPMOST = -1,
 
-        [DllImport( "user32.dll", CharSet = CharSet.Auto, SetLastError = true )]
-        public static extern IntPtr SetWindowsHookEx( int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId );
+            /// <summary>
+            ///     Places the window above all non-topmost windows (that is, behind all topmost windows). This flag has no effect if the window is already a non-topmost window.
+            /// </summary>
+            HWND_NOTOPMOST = -2
+            // ReSharper restore InconsistentNaming
+        }
 
-        [DllImport( "user32.dll", CharSet = CharSet.Auto, SetLastError = true )]
-        [return: MarshalAs( UnmanagedType.Bool )]
-        public static extern bool UnhookWindowsHookEx( IntPtr hhk );
+        [Flags]
+        public enum SetWindowPosFlags : uint
+        {
+            // ReSharper disable InconsistentNaming
 
-        [DllImport( "user32.dll", CharSet = CharSet.Auto, SetLastError = true )]
-        public static extern IntPtr CallNextHookEx( IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam );
+            /// <summary>
+            ///     If the calling thread and the thread that owns the window are attached to different input queues, the system posts the request to the thread that owns the window. This prevents the calling thread from blocking its execution while other threads process the request.
+            /// </summary>
+            SWP_ASYNCWINDOWPOS = 0x4000,
 
-        [DllImport( "user32.dll" )]
-        public static extern short GetAsyncKeyState( int vKey );
+            /// <summary>
+            ///     Prevents generation of the WM_SYNCPAINT message.
+            /// </summary>
+            SWP_DEFERERASE = 0x2000,
 
-        [DllImport( "user32.dll" )]
-        public static extern short GetKeyState( int vKey );
+            /// <summary>
+            ///     Draws a frame (defined in the window's class description) around the window.
+            /// </summary>
+            SWP_DRAWFRAME = 0x0020,
 
-        [DllImport( "user32.dll", SetLastError = true )]
-        public static extern uint SendInput( uint numberOfInputs, INPUT[] inputs, int sizeOfInputStructure );
+            /// <summary>
+            ///     Applies new frame styles set using the SetWindowLong function. Sends a WM_NCCALCSIZE message to the window, even if the window's size is not being changed. If this flag is not specified, WM_NCCALCSIZE is sent only when the window's size is being changed.
+            /// </summary>
+            SWP_FRAMECHANGED = 0x0020,
 
-        [DllImport( "user32.dll", CharSet = CharSet.Unicode )]
-        public static extern uint RegisterWindowMessage( string lpProcName );
+            /// <summary>
+            ///     Hides the window.
+            /// </summary>
+            SWP_HIDEWINDOW = 0x0080,
+
+            /// <summary>
+            ///     Does not activate the window. If this flag is not set, the window is activated and moved to the top of either the topmost or non-topmost group (depending on the setting of the hWndInsertAfter parameter).
+            /// </summary>
+            SWP_NOACTIVATE = 0x0010,
+
+            /// <summary>
+            ///     Discards the entire contents of the client area. If this flag is not specified, the valid contents of the client area are saved and copied back into the client area after the window is sized or repositioned.
+            /// </summary>
+            SWP_NOCOPYBITS = 0x0100,
+
+            /// <summary>
+            ///     Retains the current position (ignores X and Y parameters).
+            /// </summary>
+            SWP_NOMOVE = 0x0002,
+
+            /// <summary>
+            ///     Does not change the owner window's position in the Z order.
+            /// </summary>
+            SWP_NOOWNERZORDER = 0x0200,
+
+            /// <summary>
+            ///     Does not redraw changes. If this flag is set, no repainting of any kind occurs. This applies to the client area, the nonclient area (including the title bar and scroll bars), and any part of the parent window uncovered as a result of the window being moved. When this flag is set, the application must explicitly invalidate or redraw any parts of the window and parent window that need redrawing.
+            /// </summary>
+            SWP_NOREDRAW = 0x0008,
+
+            /// <summary>
+            ///     Same as the SWP_NOOWNERZORDER flag.
+            /// </summary>
+            SWP_NOREPOSITION = 0x0200,
+
+            /// <summary>
+            ///     Prevents the window from receiving the WM_WINDOWPOSCHANGING message.
+            /// </summary>
+            SWP_NOSENDCHANGING = 0x0400,
+
+            /// <summary>
+            ///     Retains the current size (ignores the cx and cy parameters).
+            /// </summary>
+            SWP_NOSIZE = 0x0001,
+
+            /// <summary>
+            ///     Retains the current Z order (ignores the hWndInsertAfter parameter).
+            /// </summary>
+            SWP_NOZORDER = 0x0004,
+
+            /// <summary>
+            ///     Displays the window.
+            /// </summary>
+            SWP_SHOWWINDOW = 0x0040,
+        }
     }
 }

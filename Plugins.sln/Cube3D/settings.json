@@ -2,5 +2,5 @@
   "SelectedEffect": 0,
   "AnimationDuration": 500,
   "CheckAliveInterval": 30,
-  "ForceOnTop": false
+  "ForceOnTop": true
 }
