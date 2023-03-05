@@ -23,7 +23,15 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Margin="10,10,0,0" Width="180">Transaction Type:</Label>
                             <ComboBox Width="120" Margin="10,10,0,0" x:Name="ComboBoxEffects" SelectionChanged="ComboBoxEffects_SelectionChanged" />
-                            <TextBlock Margin="10,15,0,0" Text="(Restart Required)" />
+                            <Button Width="120" Margin="10, 10,0,0" Click="ApplyEffect_OnClick">Apply</Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Margin="10,10,0,0" Width="180">Ease Type:</Label>
+                            <ComboBox Width="120" Margin="10,10,0,0" x:Name="ComboBoxEase" SelectionChanged="ComboBoxEase_OnSelectionChanged" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Margin="10,10,0,0" Width="180">Ease Mode:</Label>
+                            <ComboBox Width="120" Margin="10,10,0,0" x:Name="ComboBoxEaseMode" SelectionChanged="ComboBoxEaseMode_OnSelectionChanged" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
@@ -42,7 +50,7 @@
                 </GroupBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button Padding="5" Click="ButtonBase_OnClick">Apply &amp; Restart</Button>
+                <Button Padding="5" Click="Close_OnClick">Close</Button>
             </StackPanel>
         </StackPanel>
     </Grid>

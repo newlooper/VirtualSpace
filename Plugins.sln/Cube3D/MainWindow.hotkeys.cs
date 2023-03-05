@@ -10,7 +10,6 @@ You should have received a copy of the GNU General Public License along with Cub
 */
 
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -27,8 +26,9 @@ namespace Cube3D
 {
     public partial class MainWindow
     {
-        private static readonly StringBuilder SbWinInfo = new( 1024 );
-        private static          bool          _isTopmost;
+        private static readonly StringBuilder  SbWinInfo = new( 1024 );
+        private static          bool           _isTopmost;
+        private static          SettingsWindow sw;
 
         private void FakeHide( bool recreateCapture = false )
         {
@@ -114,16 +114,19 @@ namespace Cube3D
                                         _capture?.StartCaptureSession();
                                         NotificationGridLayout( vdCount );
 
+                                        var em = EaseFactory.GetEaseModeByName( SettingsManager.Settings.EaseMode );
+                                        var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, em );
+
                                         _frameProcessor.SetAction( () =>
                                         {
                                             //////////////////////////////////////////////////////
                                             // trigger action only after first frame be proceeded
                                             // see FrameToD3DImage.Proceed() for detail.
                                             RealShow();
-                                            NotificationGridAnimation( fromIndex, targetIndex, vdCount );
+                                            NotificationGridAnimation( fromIndex, targetIndex, vdCount, ef );
                                             if ( targetIndex != fromIndex )
                                             {
-                                                _effect.AnimationInDirection( (KeyCode)dir, MainModel3DGroup );
+                                                _effect.AnimationInDirection( (KeyCode)dir, MainModel3DGroup, ef );
                                                 WinApi.PostMessage( vdSwitchInfo.hostHandle, WinApi.UM_SWITCHDESKTOP, (uint)targetIndex, 0 );
                                             }
                                         } );
@@ -137,8 +140,17 @@ namespace Cube3D
                     break;
 
                 case WinApi.UM_PLUGINSETTINGS:
-                    var sw = new SettingsWindow();
-                    sw.ShowDialog();
+                    if ( sw is null || PresentationSource.FromVisual( sw ) == null )
+                    {
+                        sw = new SettingsWindow();
+                        sw.SetMainWindow( this );
+                        sw.ShowDialog();
+                    }
+                    else
+                    {
+                        sw.Activate();
+                    }
+
                     break;
 
                 case WinMsg.WM_DISPLAYCHANGE:

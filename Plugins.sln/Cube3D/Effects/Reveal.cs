@@ -90,14 +90,18 @@ namespace Cube3D.Effects
             _face.Children.Add( _face2 );
             _face.Children.Add( _face1 ); // _face1 above _face2
 
+            model3DGroup.Children.Clear();
             model3DGroup.Children.Add( _face );
+            model3DGroup.Children.Add( CommonLight );
         }
 
-        public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup )
+        public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null )
         {
             var offsetProperty = TranslateTransform3D.OffsetXProperty;
             var animation      = (DoubleAnimation)Animation;
             animation.Duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
+            animation.EasingFunction = ef;
+
             switch ( dir )
             {
                 case KeyCode.Left:
@@ -131,7 +135,6 @@ namespace Cube3D.Effects
 
             _face1.Transform = TransGroup;
 
-            // animation.EasingFunction = new CircleEase();
             var transform = (TranslateTransform3D)Transform3D;
             transform.BeginAnimation( offsetProperty, animation );
             Interlocked.Increment( ref MainWindow.RunningAnimationCount );

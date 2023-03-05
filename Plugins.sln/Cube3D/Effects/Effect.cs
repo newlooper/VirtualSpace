@@ -10,6 +10,7 @@
 
 using System;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
 
@@ -22,6 +23,7 @@ namespace Cube3D.Effects
         protected readonly        Transform3DGroup TransGroup = new();
         protected                 Timeline         Animation;
         protected                 Transform3D      Transform3D;
+        protected static readonly AmbientLight     CommonLight = new AmbientLight {Color = Colors.White};
 
         protected static void AddTriangleIndices( MeshGeometry3D meshGeometry3D )
         {
@@ -43,7 +45,7 @@ namespace Cube3D.Effects
 
         public abstract void Build( Model3DGroup model3DGroup );
 
-        public abstract void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup );
+        public abstract void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null );
 
         public void AddAnimationCompletedListener( EventHandler handler )
         {
@@ -67,5 +69,62 @@ namespace Cube3D.Effects
         Up    = 0x26,
         Right = 0x27,
         Down  = 0x28
+    }
+
+    public enum EaseType
+    {
+        None,
+        BounceEase,
+        CircleEase,
+        CubicEase,
+        ExponentialEase,
+        PowerEase,
+        QuadraticEase,
+        QuarticEase,
+        QuinticEase,
+        SineEase
+    }
+
+    public enum EaseMode
+    {
+        EaseIn,
+        EaseOut,
+        EaseInOut
+    }
+
+    public static class EaseFactory
+    {
+        public static IEasingFunction GetEaseByName( EaseType et, EasingMode em )
+        {
+            IEasingFunction ef = et switch
+            {
+                EaseType.BounceEase => new BounceEase {EasingMode = em},
+                EaseType.CircleEase => new CircleEase {EasingMode = em},
+                EaseType.CubicEase => new CubicEase {EasingMode = em},
+                EaseType.ExponentialEase => new ExponentialEase {EasingMode = em},
+                EaseType.PowerEase => new PowerEase {EasingMode = em},
+                EaseType.QuadraticEase => new QuadraticEase {EasingMode = em},
+                EaseType.QuarticEase => new QuarticEase {EasingMode = em},
+                EaseType.QuinticEase => new QuinticEase {EasingMode = em},
+                EaseType.SineEase => new SineEase {EasingMode = em},
+                EaseType.None => null,
+                _ => null
+            };
+
+            return ef;
+        }
+
+        public static EasingMode GetEaseModeByName( EaseMode em )
+        {
+            var eMode = em switch
+            {
+                EaseMode.EaseIn => EasingMode.EaseIn,
+                EaseMode.EaseOut => EasingMode.EaseOut,
+                EaseMode.EaseInOut => EasingMode.EaseInOut,
+                _ => EasingMode.EaseOut
+            };
+
+            return eMode;
+        }
     }
 }

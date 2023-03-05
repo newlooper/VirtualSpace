@@ -39,9 +39,7 @@
             </Viewport3D.Camera>
             <ModelVisual3D x:Name="Mv3D">
                 <ModelVisual3D.Content>
-                    <Model3DGroup x:Name="MainModel3DGroup">
-                        <AmbientLight Color="White" />
-                    </Model3DGroup>
+                    <Model3DGroup x:Name="MainModel3DGroup" />
                 </ModelVisual3D.Content>
             </ModelVisual3D>
             <!--

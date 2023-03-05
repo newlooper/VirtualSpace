@@ -20,6 +20,8 @@ namespace Cube3D
 {
     public partial class SettingsWindow : Window
     {
+        private MainWindow _mainWindow;
+
         public SettingsWindow()
         {
             DataContext = this;
@@ -46,6 +48,20 @@ namespace Cube3D
             }
 
             ComboBoxEffects.SelectedItem = SettingsManager.Settings.SelectedEffect;
+
+            foreach ( EaseType ease in Enum.GetValues( typeof( EaseType ) ) )
+            {
+                ComboBoxEase.Items.Add( ease );
+            }
+
+            ComboBoxEase.SelectedItem = SettingsManager.Settings.EaseType;
+
+            foreach ( EaseMode easeMode in Enum.GetValues( typeof( EaseMode ) ) )
+            {
+                ComboBoxEaseMode.Items.Add( easeMode );
+            }
+
+            ComboBoxEaseMode.SelectedItem = SettingsManager.Settings.EaseMode;
         }
 
         private void ComboBoxEffects_SelectionChanged( object sender, SelectionChangedEventArgs e )
@@ -54,13 +70,35 @@ namespace Cube3D
             SettingsManager.SaveJson();
         }
 
-        private void ButtonBase_OnClick( object sender, RoutedEventArgs e )
+        private void ComboBoxEase_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
         {
+            SettingsManager.Settings.EaseType = (EaseType)ComboBoxEase.SelectedItem;
             SettingsManager.SaveJson();
-            Restart();
         }
 
-        public static void Restart()
+        private void ComboBoxEaseMode_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
+        {
+            SettingsManager.Settings.EaseMode = (EaseMode)ComboBoxEaseMode.SelectedItem;
+            SettingsManager.SaveJson();
+        }
+
+        public void SetMainWindow( MainWindow mw )
+        {
+            _mainWindow = mw;
+        }
+
+        private void ApplyEffect_OnClick( object sender, RoutedEventArgs e )
+        {
+            _mainWindow.Build3D();
+        }
+
+        private void Close_OnClick( object sender, RoutedEventArgs e )
+        {
+            SettingsManager.SaveJson();
+            Close();
+        }
+
+        private static void Restart()
         {
             Process.Start( PluginManager.GetAppPath() );
             Application.Current.Shutdown();

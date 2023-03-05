@@ -50,6 +50,7 @@ namespace Cube3D.Config
         }
 
         public EffectType SelectedEffect { get; set; }
-        public bool       ForceOnTop     { get; set; }
+        public EaseType   EaseType       { get; set; } = EaseType.None;
+        public EaseMode   EaseMode       { get; set; } = EaseMode.EaseOut;
     }
 }

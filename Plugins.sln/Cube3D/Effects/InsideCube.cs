@@ -181,10 +181,12 @@ namespace Cube3D.Effects
             _cube.Children.Add( _cubeTop );
             _cube.Children.Add( _cubeBottom );
 
+            model3DGroup.Children.Clear();
             model3DGroup.Children.Add( _cube );
+            model3DGroup.Children.Add( CommonLight );
         }
 
-        public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup )
+        public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null )
         {
             switch ( dir )
             {
@@ -215,7 +217,7 @@ namespace Cube3D.Effects
 
             var animation = (DoubleAnimation)Animation;
             animation.Duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
-            // animation.EasingFunction = new CircleEase();
+            animation.EasingFunction = ef;
             var transform = (RotateTransform3D)Transform3D;
             transform.Rotation.BeginAnimation( AxisAngleRotation3D.AngleProperty, animation );
             Interlocked.Increment( ref MainWindow.RunningAnimationCount );

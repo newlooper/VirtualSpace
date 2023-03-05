@@ -35,7 +35,7 @@ namespace Cube3D
                 FakeHide( true );
         }
 
-        private void NotificationGridAnimation( int fromIndex, int toIndex, int vdCount )
+        private void NotificationGridAnimation( int fromIndex, int toIndex, int vdCount, IEasingFunction ef = null )
         {
             var oneCell = (Button)NotifyGrid.Children[fromIndex]; // 用 0 也行，UniformGrid 的 cell 尺寸一样
 
@@ -73,7 +73,7 @@ namespace Cube3D
             _animationNotifyGrid.From = CurrentIndicator.Margin;
             _animationNotifyGrid.To = targetCellMargin;
             _animationNotifyGrid.Duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
-            // _animationNotifyGrid.EasingFunction = new CircleEase();
+            _animationNotifyGrid.EasingFunction = ef;
             CurrentIndicator.BeginAnimation( MarginProperty, _animationNotifyGrid );
             Interlocked.Increment( ref RunningAnimationCount );
         }

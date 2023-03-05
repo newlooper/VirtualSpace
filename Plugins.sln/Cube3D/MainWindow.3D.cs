@@ -40,7 +40,7 @@ namespace Cube3D
             Vp3D.Camera = MainCamera;
         }
 
-        private void Build3D()
+        public void Build3D()
         {
             var settings = SettingsManager.Settings;
             switch ( settings.SelectedEffect )

@@ -84,14 +84,18 @@ namespace Cube3D.Effects
             _face.Children.Add( _face2 );
             _face.Children.Add( _face1 ); // _face1 above _face2
 
+            model3DGroup.Children.Clear();
             model3DGroup.Children.Add( _face );
+            model3DGroup.Children.Add( CommonLight );
         }
 
-        public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup )
+        public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null )
         {
             var animationOfFace1 = (DoubleAnimation)Animation;
             animationOfFace1.Duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
+            animationOfFace1.EasingFunction = ef;
             _animationOfFace2.Duration = animationOfFace1.Duration;
+            _animationOfFace2.EasingFunction = ef;
 
             _frontD3DImage.BeginAnimation( Brush.OpacityProperty, animationOfFace1 );
             _othersD3DImage.BeginAnimation( Brush.OpacityProperty, _animationOfFace2 );
