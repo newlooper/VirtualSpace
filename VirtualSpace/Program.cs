@@ -36,6 +36,9 @@ namespace VirtualSpace
             var programName       = Assembly.GetExecutingAssembly().GetName().Name;
             var shortAssemblyName = new AssemblyName( eventArgs.Name ).Name;
 
+            if ( shortAssemblyName.EndsWith( ".resources" ) )
+                return null;
+
             switch ( shortAssemblyName )
             {
                 case "VirtualDesktop10":

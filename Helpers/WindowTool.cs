@@ -84,7 +84,7 @@ namespace VirtualSpace.Helpers
         public static int GetZOrderByHandle( IntPtr hWnd )
         {
             var index = 0;
-            User32.EnumWindows( ( wnd, param ) =>
+            _ = User32.EnumWindows( ( wnd, param ) =>
             {
                 index++;
                 return hWnd != wnd;
@@ -102,6 +102,18 @@ namespace VirtualSpace.Helpers
 
             User32.SetForegroundWindow( hWnd );
             User32.BringWindowToTop( hWnd );
+        }
+
+        public static bool IsModalWindow( IntPtr hWnd )
+        {
+            // child windows cannot have owners
+            var style = User32.GetWindowLong( hWnd, (int)GetWindowLongFields.GWL_STYLE );
+            if ( ( style & (int)WindowStyles.WS_CHILD ) > 0 ) return false;
+
+            var hWndOwner = User32.GetWindow( hWnd, GetWindowType.GW_OWNER );
+            if ( hWndOwner == IntPtr.Zero ) return false; // not an owned window
+            if ( User32.IsWindowEnabled( hWndOwner ) ) return false; // owner is enabled
+            return true; // an owned window whose owner is disabled
         }
     }
 }

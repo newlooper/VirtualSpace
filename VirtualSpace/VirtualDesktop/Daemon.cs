@@ -175,6 +175,8 @@ namespace VirtualSpace.VirtualDesktop
             var classname = SbWinInfo.ToString();
             if ( Filters.WndClsIgnoreList.Contains( classname ) )
                 return true;
+            if ( classname == "#32770" && WindowTool.IsModalWindow( hWnd ) )
+                return true;
 
             if ( classname != Const.WindowsUiCoreWindow )
             {

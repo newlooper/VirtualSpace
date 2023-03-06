@@ -68,6 +68,13 @@ namespace VirtualSpace.Helpers
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
         public static extern int GetWindowLong( IntPtr hWnd, int nIndex );
 
+        [DllImport( "user32.dll", SetLastError = true )]
+        public static extern IntPtr GetWindow( IntPtr hWnd, GetWindowType uCmd );
+
+        [DllImport( "user32.dll" )]
+        [return: MarshalAs( UnmanagedType.Bool )]
+        public static extern bool IsWindowEnabled( IntPtr hWnd );
+
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
         public static extern bool PostMessage( IntPtr hWnd, int msg, ulong wParam, ulong lParam );
 
