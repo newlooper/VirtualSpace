@@ -92,21 +92,21 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="..\VirtualDesktop10\bin\Release\net6.0-windows\VirtualDesktop10.dll" Link="Resources\VirtualDesktop10.dll" />
-        <EmbeddedResource Include="..\VirtualDesktop11\bin\Release\net6.0-windows\VirtualDesktop11.dll" Link="Resources\VirtualDesktop11.dll" />
-        <EmbeddedResource Include="..\VirtualDesktop11_21H2\bin\Release\net6.0-windows\VirtualDesktop11_21H2.dll" Link="Resources\VirtualDesktop11_21H2.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop10\bin\Release\net6.0-windows\VirtualDesktop10.dll" Link="Resources\VirtualDesktop10.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11\bin\Release\net6.0-windows\VirtualDesktop11.dll" Link="Resources\VirtualDesktop11.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11_21H2\bin\Release\net6.0-windows\VirtualDesktop11_21H2.dll" Link="Resources\VirtualDesktop11_21H2.dll" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\VirtualDesktop10\VirtualDesktop10.csproj">
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop10\VirtualDesktop10.csproj">
             <Aliases>VirtualDesktop10</Aliases>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ProjectReference>
-        <ProjectReference Include="..\VirtualDesktop11\VirtualDesktop11.csproj">
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop11\VirtualDesktop11.csproj">
             <Aliases>VirtualDesktop11</Aliases>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ProjectReference>
-        <ProjectReference Include="..\VirtualDesktop11_21H2\VirtualDesktop11_21H2.csproj">
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop11_21H2\VirtualDesktop11_21H2.csproj">
             <Aliases>VirtualDesktop11_21H2</Aliases>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ProjectReference>
