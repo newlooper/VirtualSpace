@@ -14,36 +14,14 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using VirtualSpace;
 #if NET5_0_OR_GREATER
 using WinRT;
 #endif
 
 namespace VirtualDesktop
 {
-    #region COM API
-
-    /*
-    IVirtualDesktop2 not used now (available since Win 10 2004), instead reading names out of registry for compatibility reasons
-    Excample code:
-    IVirtualDesktop2 ivd2;
-    string desktopName;
-    ivd2.GetName(out desktopName);
-    Console.WriteLine("Name of desktop: " + desktopName);
-
-        [ComImport]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [Guid("31EBDE3F-6EC3-4CBD-B9FB-0EF6D09B41F4")]
-        internal interface IVirtualDesktop2
-        {
-            bool IsViewVisible(IApplicationView view);
-            Guid GetId();
-            void GetName([MarshalAs(UnmanagedType.HString)] out string name);
-        }
-    */
-
-    #endregion
-
-    public class Desktop
+    public class Desktop : IDesktop
     {
         private readonly IVirtualDesktop _ivd;
 
@@ -139,7 +117,7 @@ namespace VirtualDesktop
             return new Desktop( DesktopManager.VirtualDesktopManagerInternal.FindDesktop( ref id ) );
         }
 
-        public static int FromDesktop( Desktop desktop )
+        public static int SysIndexFromDesktop( Desktop desktop )
         {
             // return index of desktop object or -1 if not found
             if ( desktop == null ) return -1;
@@ -408,7 +386,7 @@ namespace VirtualDesktop
             }
         }
 
-        public static Desktop? GetDesktopById( Guid guid )
+        public static Desktop? FromId( Guid guid )
         {
             try
             {

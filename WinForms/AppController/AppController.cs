@@ -18,9 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
-using VirtualSpace.AppLogs;
 using VirtualSpace.Helpers;
 using ConfigManager = VirtualSpace.Config.Manager;
 
@@ -94,7 +92,7 @@ namespace VirtualSpace
 
         private void CheckAdmin()
         {
-            if ( SysInfo.IsAdministrator() )
+            if ( SysInfo.IsAdministrator )
             {
                 runAsAdministratorToolStripMenuItem.Visible = false;
                 return;

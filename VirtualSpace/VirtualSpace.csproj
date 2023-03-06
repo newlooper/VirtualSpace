@@ -5,7 +5,7 @@
         <TargetFrameworks>net6.0-windows</TargetFrameworks>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
-        <StartupObject>VirtualSpace.App</StartupObject>
+        <StartupObject>VirtualSpace.Program</StartupObject>
         <UseWindowsForms>True</UseWindowsForms>
         <ApplicationIcon>Resources\TrayIcon.ico</ApplicationIcon>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -26,6 +26,11 @@
         </Exec>
         <Message Text="======TextTemplateTransform end======" Importance="High" />
     </Target>
+
+    <ItemGroup>
+        <ApplicationDefinition Remove="App.xaml" />
+        <Page Include="App.xaml" />
+    </ItemGroup>
 
     <ItemGroup>
         <Compile Update="AutoVersion.cs">
@@ -87,7 +92,24 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\VirtualDesktop11\VirtualDesktop11.csproj" />
+        <EmbeddedResource Include="..\VirtualDesktop10\bin\Release\net6.0-windows\VirtualDesktop10.dll" Link="Resources\VirtualDesktop10.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop11\bin\Release\net6.0-windows\VirtualDesktop11.dll" Link="Resources\VirtualDesktop11.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop11_21H2\bin\Release\net6.0-windows\VirtualDesktop11_21H2.dll" Link="Resources\VirtualDesktop11_21H2.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\VirtualDesktop10\VirtualDesktop10.csproj">
+            <Aliases>VirtualDesktop10</Aliases>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ProjectReference>
+        <ProjectReference Include="..\VirtualDesktop11\VirtualDesktop11.csproj">
+            <Aliases>VirtualDesktop11</Aliases>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ProjectReference>
+        <ProjectReference Include="..\VirtualDesktop11_21H2\VirtualDesktop11_21H2.csproj">
+            <Aliases>VirtualDesktop11_21H2</Aliases>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ProjectReference>
         <ProjectReference Include="..\WinForms\AppController\AppController.csproj" />
     </ItemGroup>
 

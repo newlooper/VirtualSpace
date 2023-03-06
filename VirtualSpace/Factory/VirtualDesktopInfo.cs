@@ -8,7 +8,9 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-using VirtualDesktop;
+extern alias VirtualDesktop10;
+extern alias VirtualDesktop11;
+using VirtualSpace.Helpers;
 
 namespace VirtualSpace.Factory
 {
@@ -16,12 +18,22 @@ namespace VirtualSpace.Factory
     {
         public int GetDesktopCount()
         {
-            return Desktop.Count;
+            if ( SysInfo.IsWin10 )
+            {
+                return VirtualDesktop10::VirtualDesktop.Desktop.Count;
+            }
+
+            return VirtualDesktop11::VirtualDesktop.Desktop.Count;
         }
 
         public string DesktopNameFromIndex( int index )
         {
-            return Desktop.DesktopNameFromIndex( index );
+            if ( SysInfo.IsWin10 )
+            {
+                return VirtualDesktop10::VirtualDesktop.Desktop.DesktopNameFromIndex( index );
+            }
+
+            return VirtualDesktop11::VirtualDesktop.Desktop.DesktopNameFromIndex( index );
         }
     }
 }

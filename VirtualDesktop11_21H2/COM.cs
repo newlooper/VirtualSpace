@@ -165,8 +165,7 @@ namespace VirtualDesktop
         void            MoveViewToDesktop( IApplicationView   view, IVirtualDesktop desktop );
         bool            CanViewMoveDesktops( IApplicationView view );
         IVirtualDesktop GetCurrentDesktop( IntPtr             hWndOrMon );
-        IObjectArray    GetAllCurrentDesktops();
-        void            GetDesktops( IntPtr hWndOrMon, out IObjectArray desktops );
+        void            GetDesktops( IntPtr                   hWndOrMon, out IObjectArray desktops );
 
         [PreserveSig]
         int GetAdjacentDesktop( IVirtualDesktop from, int direction, out IVirtualDesktop desktop );

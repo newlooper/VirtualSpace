@@ -25,14 +25,17 @@ namespace VirtualSpace.Helpers
 {
     public static class SysInfo
     {
-        private const int                          DefaultDpi = 96;
-        public static (float ScaleX, float ScaleY) Dpi => GetDpi();
+        private const          int                          DefaultDpi = 96;
+        public static          (float ScaleX, float ScaleY) Dpi => GetDpi();
+        public static readonly bool                         IsWin10;
+        public static readonly bool                         IsAdministrator;
 
-        public static bool IsAdministrator()
+        static SysInfo()
         {
+            IsWin10 = Environment.OSVersion.Version is {Major: 10, Build: < 22000};
             var current          = WindowsIdentity.GetCurrent();
             var windowsPrincipal = new WindowsPrincipal( current );
-            return windowsPrincipal.IsInRole( WindowsBuiltInRole.Administrator );
+            IsAdministrator = windowsPrincipal.IsInRole( WindowsBuiltInRole.Administrator );
         }
 
         private static (float ScaleX, float ScaleY) GetDpi()

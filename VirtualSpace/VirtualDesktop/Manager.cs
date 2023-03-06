@@ -258,7 +258,7 @@ namespace VirtualSpace.VirtualDesktop
                         continue;
                     }
 
-                    var ownerId = DesktopWrapper.FromWindow( win.Handle ).Guid;
+                    var ownerId = DesktopWrapper.GuidFromWindow( win.Handle );
                     if ( vdwList.Count == _virtualDesktops.Count ) // show for all VDs
                     {
                         var owner = vdwList.Find( v => v.VdId == ownerId );

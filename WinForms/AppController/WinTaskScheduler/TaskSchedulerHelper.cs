@@ -21,7 +21,7 @@ namespace AppController.WinTaskScheduler
     {
         public static bool CreateTask()
         {
-            if ( !SysInfo.IsAdministrator() )
+            if ( !SysInfo.IsAdministrator )
             {
                 MessageBox.Show( Agent.Langs.GetString( "General.RunOnStartup.Error.Permission" ) );
                 return false;
@@ -47,7 +47,7 @@ namespace AppController.WinTaskScheduler
 
         public static bool DeleteTaskByName( string taskName )
         {
-            if ( !SysInfo.IsAdministrator() )
+            if ( !SysInfo.IsAdministrator )
             {
                 MessageBox.Show( Agent.Langs.GetString( "General.RunOnStartup.Error.Permission" ) );
                 return false;

@@ -9,8 +9,10 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+extern alias VirtualDesktop10;
+extern alias VirtualDesktop11;
 using System;
-using VirtualDesktop;
+using VirtualSpace.Helpers;
 
 namespace VirtualSpace.VirtualDesktop.Api
 {
@@ -20,8 +22,12 @@ namespace VirtualSpace.VirtualDesktop.Api
         {
             try
             {
-                var desktop = DesktopManager.GetDesktop( index );
-                return desktop.GetId();
+                if ( SysInfo.IsWin10 )
+                {
+                    return VirtualDesktop10::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
+                }
+
+                return VirtualDesktop11::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
             }
             catch
             {
@@ -31,7 +37,12 @@ namespace VirtualSpace.VirtualDesktop.Api
 
         public static int GetViewCount()
         {
-            return DesktopManager.GetViewCount();
+            if ( SysInfo.IsWin10 )
+            {
+                return VirtualDesktop10::VirtualDesktop.DesktopManager.GetViewCount();
+            }
+
+            return VirtualDesktop11::VirtualDesktop.DesktopManager.GetViewCount();
         }
     }
 }

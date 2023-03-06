@@ -165,7 +165,7 @@ namespace VirtualSpace.VirtualDesktop
                 if ( evt.KeyChar != (char)Keys.Enter ) return;
                 if ( currentName != desktopName.Text )
                 {
-                    DesktopWrapper.SetNameByIndex( sysIndex, desktopName.Text );
+                    DesktopWrapper.SetNameByGuid( mi.Self.VdId, desktopName.Text );
                     mi.Self.UpdateDesktopName( desktopName.Text );
                 }
 
@@ -205,7 +205,7 @@ namespace VirtualSpace.VirtualDesktop
                 if ( !User32.IsWindow( handle ) ) continue;
                 if ( !DesktopWrapper.IsWindowPinned( handle ) &&
                      !DesktopWrapper.IsApplicationPinned( handle ) &&
-                     DesktopWrapper.FromWindow( handle ).Guid != mi.Self.VdId ) continue;
+                     DesktopWrapper.GuidFromWindow( handle ) != mi.Self.VdId ) continue;
 
                 _ = User32.GetWindowThreadProcessId( handle, out var pId );
                 var process = Process.GetProcessById( pId );
@@ -250,7 +250,7 @@ namespace VirtualSpace.VirtualDesktop
                     VirtualDesktopManager.IsBatchCreate = true;
 
                     for ( var i = 0; i < count; i++ )
-                        _ = DesktopWrapper.Create();
+                        DesktopWrapper.Create();
 
                     VirtualDesktopManager.FixLayout();
                     VirtualDesktopManager.ShowAllVirtualDesktops();
@@ -260,7 +260,7 @@ namespace VirtualSpace.VirtualDesktop
                 else
                 {
                     VirtualDesktopManager.IsBatchCreate = false;
-                    _ = DesktopWrapper.Create();
+                    DesktopWrapper.Create();
                 }
             }
 

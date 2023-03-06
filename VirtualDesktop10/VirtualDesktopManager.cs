@@ -30,7 +30,8 @@ namespace VirtualDesktop
 
         static DesktopManager()
         {
-            Init();
+            if ( Environment.OSVersion.Version is {Major: 10, Build: < 22000} )
+                Init();
         }
 
         public static void ResetDesktopManager()

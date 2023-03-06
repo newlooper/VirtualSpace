@@ -8,6 +8,8 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
+extern alias VirtualDesktop10;
+extern alias VirtualDesktop11;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -15,7 +17,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
-using VirtualDesktop;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Config;
@@ -92,7 +93,15 @@ namespace VirtualSpace
             if ( msg == _taskbarCreatedMessage )
             {
                 Logger.Warning( "explorer.exe restarted, reset DesktopManager and restart all Plugins." );
-                DesktopManager.ResetDesktopManager();
+                if ( SysInfo.IsWin10 )
+                {
+                    VirtualDesktop10::VirtualDesktop.DesktopManager.ResetDesktopManager();
+                }
+                else
+                {
+                    VirtualDesktop11::VirtualDesktop.DesktopManager.ResetDesktopManager();
+                }
+
                 foreach ( var plugin in PluginHost.Plugins )
                 {
                     PluginHost.RestartPlugin( plugin );
@@ -131,25 +140,25 @@ namespace VirtualSpace
                     DesktopWrapper.MakeVisibleByGuid( Manager.CurrentProfile.DesktopOrder[index] );
             }
 
-            void MoveForegroundWindowToDesktop( int vdIndex, bool follow = false )
+            void MoveForegroundWindowToDesktop( int sysIndex, bool follow = false )
             {
-                if ( vdIndex >= DesktopWrapper.Count ) return;
+                if ( sysIndex >= DesktopWrapper.Count ) return;
 
                 var fw = User32.GetForegroundWindow();
                 if ( fw == IntPtr.Zero ) return;
 
                 try
                 {
-                    DesktopWrapper.MoveWindowToDesktop( fw, vdIndex );
+                    DesktopWrapper.MoveWindowToDesktop( fw, sysIndex );
 
                     if ( !follow ) return;
 
-                    DesktopWrapper.MakeVisibleByIndex( vdIndex );
+                    DesktopWrapper.MakeVisibleByIndex( sysIndex );
                     WindowTool.ActiveWindow( fw );
                 }
                 catch ( Exception ex )
                 {
-                    Logger.Error( $"Move Foreground Window To Desktop[{vdIndex}] ∵ " + ex.Message );
+                    Logger.Error( $"Move Foreground Window To Desktop[{sysIndex}] ∵ " + ex.Message );
                 }
             }
 

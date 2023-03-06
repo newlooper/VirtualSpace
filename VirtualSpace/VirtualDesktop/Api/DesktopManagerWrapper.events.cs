@@ -9,16 +9,20 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+extern alias VirtualDesktop10;
+extern alias VirtualDesktop11;
 using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Channels;
 using System.Windows.Media;
 using Notification.Wpf;
-using VirtualDesktop;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
+using VirtualSpace.Helpers;
 using ConfigManager = VirtualSpace.Config.Manager;
+using VD10 = VirtualDesktop10::VirtualDesktop;
+using VD11 = VirtualDesktop11::VirtualDesktop;
 
 namespace VirtualSpace.VirtualDesktop.Api
 {
@@ -28,12 +32,24 @@ namespace VirtualSpace.VirtualDesktop.Api
 
         public static void RegisterVirtualDesktopEvents()
         {
-            DesktopManager.Created += ( _, e ) =>
+            if ( SysInfo.IsWin10 )
+            {
+                RegisterVirtualDesktopEvents10();
+            }
+            else
+            {
+                RegisterVirtualDesktopEvents11();
+            }
+        }
+
+        private static void RegisterVirtualDesktopEvents10()
+        {
+            VD10.DesktopManager.Created += ( _, e ) =>
             {
                 VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification {Type = VirtualDesktopNotificationType.CREATED} );
             };
 
-            DesktopManager.Destroyed += ( _, e ) =>
+            VD10.DesktopManager.Destroyed += ( _, e ) =>
             {
                 VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
                 {
@@ -42,7 +58,7 @@ namespace VirtualSpace.VirtualDesktop.Api
                 } );
             };
 
-            DesktopManager.CurrentChanged += ( _, e ) =>
+            VD10.DesktopManager.CurrentChanged += ( _, e ) =>
             {
                 VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
                 {
@@ -52,7 +68,36 @@ namespace VirtualSpace.VirtualDesktop.Api
                 } );
             };
 
-            DesktopManager.WallpaperChanged += ( _, e ) =>
+            WatchWallpaperEvents();
+        }
+
+        private static void RegisterVirtualDesktopEvents11()
+        {
+            VD11.DesktopManager.Created += ( _, e ) =>
+            {
+                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification {Type = VirtualDesktopNotificationType.CREATED} );
+            };
+
+            VD11.DesktopManager.Destroyed += ( _, e ) =>
+            {
+                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
+                {
+                    Type = VirtualDesktopNotificationType.DELETED,
+                    NewId = e.Fallback.GetId()
+                } );
+            };
+
+            VD11.DesktopManager.CurrentChanged += ( _, e ) =>
+            {
+                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
+                {
+                    Type = VirtualDesktopNotificationType.CURRENT_CHANGED,
+                    NewId = e.NewDesktop.GetId(),
+                    OldId = e.OldDesktop.GetId()
+                } );
+            };
+
+            VD11.DesktopManager.WallpaperChanged += ( _, e ) =>
             {
                 if ( string.IsNullOrEmpty( e.Path ) ) return;
                 var guid    = e.Desktop.GetId();
