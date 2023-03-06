@@ -14,7 +14,7 @@ cn: https://newlooper.com/post/original/cs/os/windows/virtualdesktop/
 
 ## 2. Download & Installation
 
-according to your [Windows version](https://support.microsoft.com/en-us/windows/which-version-of-windows-operating-system-am-i-running-628bec99-476a-2c13-5296-9dd081cdd808), download the &#x1F4D7;corresponding version from [Releases](https://github.com/newlooper/VirtualSpace/releases) page.
+Download from [Releases](https://github.com/newlooper/VirtualSpace/releases) page.
 
 VirtualSpace is green software, All used files are in its own directory, just unzip to a local dir (eg. `your desktop`\VirtualSpace) and run.
 
@@ -26,20 +26,18 @@ or build the program yourself (see below).
 
 ### 3.1 main program
 
-- build VirtualSpace —— for Windows 11
-  - &#x1F534;see comment in the VirtualDesktop11.csproj before build. [Link](https://github.com/newlooper/VirtualSpace/blob/Build-0.1.449/VirtualDesktop11/VirtualDesktop11.csproj#L11-L17) 
-- build VirtualSpace10 —— for Windows 10 19041+
+- build VirtualSpace
 
 > Note
 > 
-> WPF\ControlPanel is currently not used by VirtualSpace(10), you may unload it in your IDE
+> WPF\ControlPanel is currently not used by VirtualSpace, you may unload it in your IDE
 
 ### 3.2 plugins
 
 - Cube3D —— plugin for virtual desktop switch effects
   - build Cube3D project
   - put `all generated files` into main program's plugins Folder eg: `plugins\Cube3D`
-  - Run Cube3D.exe after VirtualSpace(10) started
+  - Run Cube3D.exe after VirtualSpace started
 
 ## 4. HowTo
 
