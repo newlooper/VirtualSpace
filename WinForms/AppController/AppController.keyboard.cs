@@ -42,13 +42,12 @@ namespace VirtualSpace
             }
 
             lb_hk_func.Text = e.Node.FullPath;
-            tc_Keyboard.Visible = true;
             lb_hk_extra.Text = Const.Hotkey.GetHotkeyExtra( hotkeyId );
+            tc_Keyboard.Visible = true;
 
-            var keyBinding = kbs[hotkeyId];
-            if ( keyBinding.GhkCode == "" ) return;
+            if ( kbs[hotkeyId].GhkCode == "" ) return;
 
-            var arr = keyBinding.GhkCode.Split( Const.Hotkey.SPLITTER );
+            var arr = kbs[hotkeyId].GhkCode.Split( Const.Hotkey.SPLITTER );
             if ( arr.Length == 5 )
             {
                 cb_hk_win.Checked = arr[0] != Const.Hotkey.NONE;

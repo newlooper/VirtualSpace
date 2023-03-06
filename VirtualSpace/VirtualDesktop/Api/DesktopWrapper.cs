@@ -127,7 +127,7 @@ namespace VirtualSpace.VirtualDesktop.Api
             desktop.MakeVisible();
         }
 
-        public static async void MakeVisibleByGuid( Guid guid, bool? forceFocusForegroundWindow = null )
+        public static void MakeVisibleByGuid( Guid guid, bool? forceFocusForegroundWindow = null )
         {
             var desktop = DesktopFromId( guid );
             if ( desktop is null ) return;

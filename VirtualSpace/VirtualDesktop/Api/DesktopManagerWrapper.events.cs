@@ -18,7 +18,6 @@ using Notification.Wpf;
 using VirtualDesktop;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
-using VirtualSpace.Helpers;
 using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace.VirtualDesktop.Api
