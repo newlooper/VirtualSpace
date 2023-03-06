@@ -84,14 +84,12 @@ namespace Updater
                     MessageBoxIcon.Information );
                 if ( !dialogResult.Equals( DialogResult.Yes ) && !dialogResult.Equals( DialogResult.OK ) ) break;
 
-                var versionPostfix = Regex.Replace( hostInfo.InfoVersion, Const.PatternVersion, "" );
-
-                var mc     = Regex.Matches( jsonReleaseInfo, Const.PatternDownloadUrl );
+                var mcUrls = Regex.Matches( jsonReleaseInfo, Const.PatternDownloadUrl );
                 var zipUrl = "";
-                foreach ( Match m in mc )
+                foreach ( Match mUrl in mcUrls )
                 {
-                    var url = m.Groups[1].Value;
-                    if ( url.Contains( versionPostfix ) && url.Contains( "noplugin" ) )
+                    var url = mUrl.Groups[1].Value;
+                    if ( url.Contains( "noplugin" ) )
                     {
                         zipUrl = url;
                         break;
