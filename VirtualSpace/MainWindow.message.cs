@@ -153,8 +153,7 @@ namespace VirtualSpace
 
                     if ( !follow ) return;
 
-                    DesktopWrapper.MakeVisibleByIndex( sysIndex );
-                    WindowTool.ActiveWindow( fw );
+                    WindowTool.ActiveWindow( fw, sysIndex );
                 }
                 catch ( Exception ex )
                 {

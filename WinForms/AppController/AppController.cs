@@ -98,12 +98,12 @@ namespace VirtualSpace
                 return;
             }
 
-            var iconResult = new User32.SHSTOCKICONINFO();
+            var iconResult = new SHSTOCKICONINFO();
             iconResult.cbSize = (uint)Marshal.SizeOf( iconResult );
 
             _ = User32.SHGetStockIconInfo(
-                User32.SHSTOCKICONID.SIID_SHIELD,
-                User32.SHGSI.SHGSI_ICON | User32.SHGSI.SHGSI_SMALLICON,
+                SHSTOCKICONID.SIID_SHIELD,
+                SHGSI.SHGSI_ICON | SHGSI.SHGSI_SMALLICON,
                 ref iconResult );
             runAsAdministratorToolStripMenuItem.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
             var icon = Bitmap.FromHicon( iconResult.hIcon );

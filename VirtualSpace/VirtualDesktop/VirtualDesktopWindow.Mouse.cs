@@ -181,11 +181,8 @@ namespace VirtualSpace.VirtualDesktop
                 {
                     void ActiveWindow()
                     {
-                        Logger.Verbose( $"CHANGE CURRENT DESKTOP TO Desktop[{_hoverVdIndex.ToString()}]" );
-                        DesktopWrapper.MakeVisibleByGuid( ConfigManager.CurrentProfile.DesktopOrder[_hoverVdIndex], false );
-
                         Logger.Verbose( $"ACTIVE.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )})" );
-                        WindowTool.ActiveWindow( _selectedWindow.Handle );
+                        WindowTool.ActiveWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder[_hoverVdIndex] );
                     }
 
                     var action = Manager.Configs.GetMouseActionById( Const.MouseAction.GetActionId( e.Button, ModifierKeys, Const.MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );

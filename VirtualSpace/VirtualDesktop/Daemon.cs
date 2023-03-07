@@ -88,13 +88,11 @@ namespace VirtualSpace.VirtualDesktop
                 {
                     try
                     {
-                        DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
                         Logger.Debug( $"[RULE.Action]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]" );
+                        DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
                         if ( action.FollowWindow )
                         {
-                            Logger.Debug( $"[RULE.Action]CHANGE CURRENT DESKTOP TO Desktop[{action.MoveToDesktop.ToString()}]" );
-                            DesktopWrapper.MakeVisibleByIndex( action.MoveToDesktop );
-                            WindowTool.ActiveWindow( action.Handle );
+                            WindowTool.ActiveWindow( action.Handle, action.MoveToDesktop );
                         }
                     }
                     catch

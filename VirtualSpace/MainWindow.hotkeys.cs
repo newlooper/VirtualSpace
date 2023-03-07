@@ -19,6 +19,7 @@ using System.Windows.Input;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
+using VirtualSpace.VirtualDesktop.Api;
 using GHK = VirtualSpace.Helpers.GlobalHotKey;
 using LLKH = VirtualSpace.Helpers.LowLevelKeyboardHook;
 

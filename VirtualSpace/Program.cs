@@ -18,8 +18,6 @@ namespace VirtualSpace
     public static class Program
     {
         [STAThread]
-        [System.Diagnostics.DebuggerNonUserCodeAttribute]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute( "PresentationBuildTasks", "7.0.3.0" )]
         public static void Main()
         {
             AppDomain.CurrentDomain.AssemblyResolve += AutoResolver;

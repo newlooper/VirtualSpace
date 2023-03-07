@@ -11,8 +11,10 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using VirtualSpace.AppLogs;
+using VirtualSpace.Helpers;
 
-namespace VirtualSpace.Helpers
+namespace VirtualSpace.VirtualDesktop.Api
 {
     public static class WindowTool
     {
@@ -93,15 +95,58 @@ namespace VirtualSpace.Helpers
             return index;
         }
 
-        public static void ActiveWindow( IntPtr hWnd )
+        public static void ActiveWindow( IntPtr hWnd, int desktopIndex )
+        {
+            if ( DesktopWrapper.CurrentIndex != desktopIndex )
+            {
+                Logger.Verbose( $"CHANGE CURRENT DESKTOP TO Desktop[{desktopIndex.ToString()}]" );
+                DesktopWrapper.MakeVisibleByIndex( desktopIndex );
+            }
+
+            try
+            {
+                Logger.Verbose( "Try SwitchToThisWindow" );
+                User32.SwitchToThisWindow( hWnd, true );
+                Logger.Verbose( "SwitchToThisWindow success." );
+            }
+            catch
+            {
+                ActiveWindowReserve( hWnd );
+            }
+        }
+
+        public static void ActiveWindow( IntPtr hWnd, Guid guid )
+        {
+            if ( DesktopWrapper.CurrentGuid != guid )
+            {
+                var sysIndex = DesktopWrapper.IndexFromGuid( guid );
+                Logger.Verbose( $"CHANGE CURRENT DESKTOP TO Desktop[{sysIndex.ToString()}]" );
+                DesktopWrapper.MakeVisibleByGuid( guid, false );
+            }
+
+            try
+            {
+                Logger.Verbose( "Try SwitchToThisWindow" );
+                User32.SwitchToThisWindow( hWnd, true );
+                Logger.Verbose( "SwitchToThisWindow success." );
+            }
+            catch
+            {
+                ActiveWindowReserve( hWnd );
+            }
+        }
+
+        private static void ActiveWindowReserve( IntPtr hWnd )
         {
             if ( User32.IsIconic( hWnd ) )
             {
                 _ = User32.ShowWindow( hWnd, (short)ShowState.SW_RESTORE );
             }
-
-            User32.SetForegroundWindow( hWnd );
-            User32.BringWindowToTop( hWnd );
+            else
+            {
+                User32.SetForegroundWindow( hWnd );
+                User32.BringWindowToTop( hWnd );
+            }
         }
 
         public static bool IsModalWindow( IntPtr hWnd )
