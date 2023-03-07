@@ -85,7 +85,15 @@ namespace VirtualSpace.Config.Events.Expression
             var rules = new List<RuleTemplate>( _rules );
             BuildRuleExp( rules );
 
-            Logger.Debug( $"Checking rules for {win.Title}, current profile: {Manager.Configs.CurrentProfileName}" );
+            if ( !WindowCheckTimes.ContainsKey( win.Handle ) )
+                WindowCheckTimes[win.Handle] = 0;
+
+            var isOnePeriod = WindowCheckTimes[win.Handle] % Const.WindowCheckTimesLimit == 0;
+
+            if ( isOnePeriod )
+            {
+                Logger.Debug( $"Checking rules for {win.Title}, current profile: {Manager.Configs.CurrentProfileName}" );
+            }
 
             await Task.Run( () =>
             {
@@ -150,20 +158,21 @@ namespace VirtualSpace.Config.Events.Expression
                     return;
                 }
 
+                if ( isOnePeriod )
+                {
+                    Logger.Debug( $"Window [{win.Title}] has no matched rules." );
+                }
+
                 if ( Manager.CurrentProfile.IgnoreWindowOnRuleCheckTimeout )
                 {
-                    if ( !WindowCheckTimes.ContainsKey( win.Handle ) )
-                        WindowCheckTimes[win.Handle] = 0;
-
-                    if ( WindowCheckTimes[win.Handle]++ >= Const.WindowCheckTimesLimit )
+                    if ( WindowCheckTimes[win.Handle] >= Const.WindowCheckTimesLimit )
                     {
                         Logger.Debug( $"Try find rules for [{win.Title}] too many times, ignore the window." );
                         WndHandleIgnoreListByRule.Add( win.Handle );
-                        return;
                     }
                 }
 
-                Logger.Debug( $"Window [{win.Title}] has no matched rules." );
+                WindowCheckTimes[win.Handle]++;
             } );
         }
 

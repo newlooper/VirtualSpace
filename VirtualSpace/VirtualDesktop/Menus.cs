@@ -70,15 +70,7 @@ namespace VirtualSpace.VirtualDesktop
             void OnIgnoreWindowClick( object? s, EventArgs evt )
             {
                 Filters.WndHandleIgnoreListByManual.TryAdd( mi.Vw.Handle, 0 );
-                if ( DesktopWrapper.IsWindowPinned( mi.Vw.Handle ) ||
-                     DesktopWrapper.IsApplicationPinned( mi.Vw.Handle ) )
-                {
-                    VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-                }
-                else
-                {
-                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
-                }
+                VirtualDesktopManager.RefreshThumbs( mi.Vw.Handle, mi.Self );
             }
 
             hideWindow.Click += OnIgnoreWindowClick;
@@ -188,15 +180,7 @@ namespace VirtualSpace.VirtualDesktop
                 var h = (IntPtr)int.Parse( m.Groups[1].Value );
 
                 Filters.WndHandleIgnoreListByManual.TryRemove( h, out _ );
-                if ( DesktopWrapper.IsWindowPinned( h ) ||
-                     DesktopWrapper.IsApplicationPinned( h ) )
-                {
-                    VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-                }
-                else
-                {
-                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {mi.Self} );
-                }
+                VirtualDesktopManager.RefreshThumbs( h, mi.Self );
             }
 
             var sb = new StringBuilder( Const.WindowTitleMaxLength );
