@@ -29,6 +29,11 @@
         <Compile Update="AppController.rules.cs">
             <SubType>Form</SubType>
         </Compile>
+        <Compile Update="Properties\Resources.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
         <Compile Update="RuleForm.cs">
             <SubType>Form</SubType>
         </Compile>
@@ -44,6 +49,13 @@
         <Compile Update="AppController.lang.cs">
             <SubType>Form</SubType>
         </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Properties\Resources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <PropertyGroup>

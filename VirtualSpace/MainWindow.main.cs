@@ -31,7 +31,7 @@ namespace VirtualSpace
         private static          int            _forceSwitchOnTimeout;
         private                 IAppController _acForm;
 
-        public MainWindow()
+        private MainWindow()
         {
             InitializeComponent();
             DataContext = this;

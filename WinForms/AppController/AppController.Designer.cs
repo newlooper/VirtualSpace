@@ -82,6 +82,9 @@ namespace VirtualSpace
             cb_nav_circle_v = new System.Windows.Forms.CheckBox();
             cb_nav_circle_h = new System.Windows.Forms.CheckBox();
             gb_Cluster = new System.Windows.Forms.GroupBox();
+            rb_vdi_on_tray_style_2 = new System.Windows.Forms.RadioButton();
+            rb_vdi_on_tray_style_1 = new System.Windows.Forms.RadioButton();
+            rb_vdi_on_tray_style_0 = new System.Windows.Forms.RadioButton();
             chb_HideOnStart = new System.Windows.Forms.CheckBox();
             chb_showVDIndexOnTrayIcon = new System.Windows.Forms.CheckBox();
             chb_notify_vd_changed = new System.Windows.Forms.CheckBox();
@@ -493,12 +496,36 @@ namespace VirtualSpace
             // gb_Cluster
             // 
             resources.ApplyResources(gb_Cluster, "gb_Cluster");
+            gb_Cluster.Controls.Add(rb_vdi_on_tray_style_2);
+            gb_Cluster.Controls.Add(rb_vdi_on_tray_style_1);
+            gb_Cluster.Controls.Add(rb_vdi_on_tray_style_0);
             gb_Cluster.Controls.Add(chb_HideOnStart);
             gb_Cluster.Controls.Add(chb_showVDIndexOnTrayIcon);
             gb_Cluster.Controls.Add(chb_notify_vd_changed);
             gb_Cluster.Controls.Add(chb_HideMainViewIfItsShown);
             gb_Cluster.Name = "gb_Cluster";
             gb_Cluster.TabStop = false;
+            // 
+            // rb_vdi_on_tray_style_2
+            // 
+            resources.ApplyResources(rb_vdi_on_tray_style_2, "rb_vdi_on_tray_style_2");
+            rb_vdi_on_tray_style_2.Name = "rb_vdi_on_tray_style_2";
+            rb_vdi_on_tray_style_2.TabStop = true;
+            rb_vdi_on_tray_style_2.UseVisualStyleBackColor = true;
+            // 
+            // rb_vdi_on_tray_style_1
+            // 
+            resources.ApplyResources(rb_vdi_on_tray_style_1, "rb_vdi_on_tray_style_1");
+            rb_vdi_on_tray_style_1.Name = "rb_vdi_on_tray_style_1";
+            rb_vdi_on_tray_style_1.TabStop = true;
+            rb_vdi_on_tray_style_1.UseVisualStyleBackColor = true;
+            // 
+            // rb_vdi_on_tray_style_0
+            // 
+            resources.ApplyResources(rb_vdi_on_tray_style_0, "rb_vdi_on_tray_style_0");
+            rb_vdi_on_tray_style_0.Name = "rb_vdi_on_tray_style_0";
+            rb_vdi_on_tray_style_0.TabStop = true;
+            rb_vdi_on_tray_style_0.UseVisualStyleBackColor = true;
             // 
             // chb_HideOnStart
             // 
@@ -1053,6 +1080,7 @@ namespace VirtualSpace
             // pb_AboutLogo
             // 
             resources.ApplyResources(pb_AboutLogo, "pb_AboutLogo");
+            pb_AboutLogo.Image = global::AppController.Properties.Resources.AboutLogo_2;
             pb_AboutLogo.Name = "pb_AboutLogo";
             pb_AboutLogo.TabStop = false;
             // 
@@ -1221,6 +1249,7 @@ namespace VirtualSpace
             gb_nav.ResumeLayout(false);
             gb_nav.PerformLayout();
             gb_Cluster.ResumeLayout(false);
+            gb_Cluster.PerformLayout();
             tabPage_Genernal_Keyboard.ResumeLayout(false);
             tc_Keyboard.ResumeLayout(false);
             tp_hk_main.ResumeLayout(false);
@@ -1396,5 +1425,8 @@ namespace VirtualSpace
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.TabPage logTabVerbose;
         private System.Windows.Forms.TextBox tbVerbose;
+        private System.Windows.Forms.RadioButton rb_vdi_on_tray_style_2;
+        private System.Windows.Forms.RadioButton rb_vdi_on_tray_style_1;
+        private System.Windows.Forms.RadioButton rb_vdi_on_tray_style_0;
     }
 }

@@ -17,6 +17,7 @@ namespace VirtualSpace.Config.Entity
         public  bool HideMainViewIfItsShown     { get; set; }
         public  bool NotificationOnVdChanged    { get; set; }
         public  bool ShowVDIndexOnTrayIcon      { get; set; }
+        public  int  StyleOfVDIndexOnTrayIcon   { get; set; } = 0;
         public  bool HideOnStart                { get; set; }
         public  bool ForceFocusForegroundWindow { get; set; } = true;
         public  bool EnableDoubleBufferedForVDW { get; set; } = true;

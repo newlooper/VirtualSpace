@@ -22,21 +22,86 @@ namespace VirtualSpace
 {
     public partial class AppController
     {
+        private readonly System.Resources.ResourceManager _rm = new( typeof( global::AppController.Properties.Resources ) );
+
         public void UpdateVDIndexOnTrayIcon( string index )
         {
-            var bitmap = (Bitmap)Resources.GetObject( "pb_AboutLogo.Image" );
-            var rectF  = new RectangleF( 0, 0, bitmap.Width, bitmap.Height );
+            if ( ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon == 0 || index.Length > 2 )
+            {
+                PaintVdIndexWithLogo( index );
+                return;
+            }
+
+            var backColor   = "TrayIconBack_White";
+            var numberColor = "Black";
+            switch ( ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon )
+            {
+                case 1:
+                    backColor = "TrayIconBack_White";
+                    numberColor = "Black";
+                    break;
+                case 2:
+                    backColor = "TrayIconBack_Black";
+                    numberColor = "White";
+                    break;
+            }
+
+            using var bitmap = (Bitmap)_rm.GetObject( $@"{backColor}" );
+            if ( index.Length == 1 )
+            {
+                using var number = (Bitmap)_rm.GetObject( $@"Big{index}{numberColor}" );
+                using var gBack  = Graphics.FromImage( bitmap );
+                gBack.CompositingMode = CompositingMode.SourceOver;
+                number.MakeTransparent();
+                gBack.DrawImage( number, new Point( 0, 0 ) );
+            }
+            else
+            {
+                using var number1 = (Bitmap)_rm.GetObject( $@"Small{index[0]}{numberColor}" );
+                using var number2 = (Bitmap)_rm.GetObject( $@"Small{index[1]}{numberColor}" );
+                number1.MakeTransparent();
+                number2.MakeTransparent();
+                using var gBack = Graphics.FromImage( bitmap );
+                gBack.CompositingMode = CompositingMode.SourceOver;
+                gBack.DrawImage( number1, new Point( 0, 0 ) );
+                gBack.DrawImage( number2, new Point( bitmap.Width / 2, 0 ) );
+            }
+
+            niTray.Icon = Icon.FromHandle( bitmap.GetHicon() );
+        }
+
+        private void PaintVdIndexWithLogo( string index )
+        {
+            using var bitmap = (Bitmap)_rm.GetObject( "TrayIconBack_Default" );
+            var       rectF  = new RectangleF( 0, 0, bitmap.Width, bitmap.Height );
             var textFormat = new StringFormat
             {
                 Alignment = StringAlignment.Center,
                 LineAlignment = StringAlignment.Center
             };
 
-            var fontSize = index.Length == 1 ? 180 : 150;
+            var fontSize   = 210;
+            var borderSize = 10;
+
+            switch ( index.Length )
+            {
+                case 1:
+                    fontSize = 210;
+                    borderSize = 20;
+                    break;
+                case 2:
+                    fontSize = 160;
+                    borderSize = 30;
+                    break;
+                case 3:
+                    fontSize = 110;
+                    borderSize = 30;
+                    break;
+            } // fontSize and borderSize based on TrayIconBack_Default's size is 256x256
 
             using var textFont  = new Font( "Comic Sans MS", fontSize, FontStyle.Bold, GraphicsUnit.Pixel );
             using var textBrush = new SolidBrush( ColorTranslator.FromHtml( "#FFFFFF" ) );
-            using var borderPen = new Pen( ColorTranslator.FromHtml( "#FF0000" ), 40 );
+            using var borderPen = new Pen( ColorTranslator.FromHtml( "#FF0000" ), borderSize );
             borderPen.LineJoin = LineJoin.Round; // prevent "spikes" at the path
 
             using var gp = new GraphicsPath();
@@ -67,6 +132,44 @@ namespace VirtualSpace
             chb_notify_vd_changed.CheckedChanged += chb_notify_vd_changed_CheckedChanged;
             chb_showVDIndexOnTrayIcon.CheckedChanged += chb_showVDIndexOnTrayIcon_CheckedChanged;
             chb_HideOnStart.CheckedChanged += chb_HideOnStart_CheckedChanged;
+
+            switch ( ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon )
+            {
+                case 0:
+                    rb_vdi_on_tray_style_0.Checked = true;
+                    break;
+                case 1:
+                    rb_vdi_on_tray_style_1.Checked = true;
+                    break;
+                case 2:
+                    rb_vdi_on_tray_style_2.Checked = true;
+                    break;
+                default:
+                    rb_vdi_on_tray_style_0.Checked = true;
+                    break;
+            }
+
+            rb_vdi_on_tray_style_0.CheckedChanged += rb_vdi_on_tray_style_0_CheckedChanged;
+            rb_vdi_on_tray_style_1.CheckedChanged += rb_vdi_on_tray_style_0_CheckedChanged;
+            rb_vdi_on_tray_style_2.CheckedChanged += rb_vdi_on_tray_style_0_CheckedChanged;
+        }
+
+        private void rb_vdi_on_tray_style_0_CheckedChanged( object? sender, EventArgs e )
+        {
+            if ( rb_vdi_on_tray_style_0.Checked )
+            {
+                ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon = 0;
+            }
+            else if ( rb_vdi_on_tray_style_1.Checked )
+            {
+                ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon = 1;
+            }
+            else if ( rb_vdi_on_tray_style_2.Checked )
+            {
+                ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon = 2;
+            }
+
+            ConfigManager.Save();
         }
 
         private void chb_HideMainViewIfItsShown_CheckedChanged( object? sender, EventArgs e )
@@ -85,7 +188,7 @@ namespace VirtualSpace
         {
             if ( !chb_showVDIndexOnTrayIcon.Checked )
             {
-                var bitmap = (Bitmap)Resources.GetObject( "pb_AboutLogo.Image" );
+                var bitmap = (Bitmap)_rm.GetObject( "AboutLogo_2" );
                 niTray.Icon = Icon.FromHandle( bitmap.GetHicon() );
             }
 

@@ -121,16 +121,12 @@ namespace VirtualSpace.VirtualDesktop.Api
                         case VirtualDesktopNotificationType.CREATED:
                             if ( !VirtualDesktopManager.IsBatchCreate )
                             {
-                                if ( MainWindow.IsShowing() )
-                                    VirtualDesktopManager.UpdateMainView();
+                                VirtualDesktopManager.UpdateMainView();
                             }
 
                             break;
                         case VirtualDesktopNotificationType.DELETED:
-                            if ( MainWindow.IsShowing() )
-                            {
-                                VirtualDesktopManager.UpdateMainView( vdn );
-                            }
+                            VirtualDesktopManager.UpdateMainView( vdn: vdn );
 
                             break;
                         case VirtualDesktopNotificationType.CURRENT_CHANGED:

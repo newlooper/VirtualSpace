@@ -7,7 +7,7 @@
         <UseWPF>true</UseWPF>
         <StartupObject>VirtualSpace.Program</StartupObject>
         <UseWindowsForms>True</UseWindowsForms>
-        <ApplicationIcon>Resources\TrayIcon.ico</ApplicationIcon>
+        <ApplicationIcon>Resources\Logo_2.ico</ApplicationIcon>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <Platforms>AnyCPU;x64;x86</Platforms>
         <LangVersion>9</LangVersion>
@@ -88,7 +88,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="Resources\TrayIcon.ico" />
+        <Content Include="Resources\Logo_2.ico" />
     </ItemGroup>
 
     <ItemGroup>
