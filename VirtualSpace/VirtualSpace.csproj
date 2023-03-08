@@ -121,4 +121,8 @@
         <Message Text="Deleted files: '@(FileToDelete)'" Importance="high" />
     </Target>
 
+    <PropertyGroup>
+        <SatelliteResourceLanguages>en-US,zh-Hans</SatelliteResourceLanguages>
+    </PropertyGroup>
+
 </Project>

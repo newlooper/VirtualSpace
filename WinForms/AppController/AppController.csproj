@@ -8,42 +8,46 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="TaskScheduler" Version="2.10.1" />
+        <PackageReference Include="TaskScheduler" Version="2.10.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Configuration\Configuration.csproj" />
-      <ProjectReference Include="..\..\Ipc\IpcServer\IpcServer.csproj" />
+        <ProjectReference Include="..\..\Configuration\Configuration.csproj" />
+        <ProjectReference Include="..\..\Ipc\IpcServer\IpcServer.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="AppController.keyboard.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="AppController.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="AppController.logs.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="AppController.rules.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="RuleForm.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="AppController.mouse.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="AppController.ui.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="AppController.cluster.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="AppController.lang.cs">
-        <SubType>Form</SubType>
-      </Compile>
+        <Compile Update="AppController.keyboard.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Update="AppController.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Update="AppController.logs.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Update="AppController.rules.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Update="RuleForm.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Update="AppController.mouse.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Update="AppController.ui.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Update="AppController.cluster.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Update="AppController.lang.cs">
+            <SubType>Form</SubType>
+        </Compile>
     </ItemGroup>
+
+    <PropertyGroup>
+        <SatelliteResourceLanguages>en-US,zh-Hans</SatelliteResourceLanguages>
+    </PropertyGroup>
 
 </Project>
