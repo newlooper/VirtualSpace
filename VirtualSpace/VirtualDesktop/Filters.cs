@@ -21,7 +21,8 @@ namespace VirtualSpace.VirtualDesktop
         public static readonly string[] WndClsIgnoreList =
         {
             "Progman",
-            "RainmeterMeterWindow"
+            "RainmeterMeterWindow",
+            "SysDragImage"
         };
 
         public static readonly string[] WndTitleIgnoreList =
