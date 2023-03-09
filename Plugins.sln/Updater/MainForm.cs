@@ -63,26 +63,26 @@ namespace Updater
 
         private async void CheckUpdate( HostInfo hostInfo )
         {
-            while ( true )
+            try
             {
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Add( Const.HttpHeaderUserAgent, Const.HttpUserAgent );
 
                 var jsonReleaseInfo = await httpClient.GetStringAsync( Const.GitHubApiLatestRelease );
                 var mTag            = Regex.Match( jsonReleaseInfo, Const.PatternTag );
-                if ( !mTag.Success ) break;
+                if ( !mTag.Success ) throw new Exception( "release info not found." );
 
                 var mVer = Regex.Match( mTag.Groups[1].Value, Const.PatternVersion );
-                if ( !mVer.Success ) break;
+                if ( !mVer.Success ) throw new Exception( "version info not found." );
 
                 var latestVersion = new Version( mVer.Groups[0].Value );
-                if ( latestVersion <= hostInfo.Version ) break;
+                if ( latestVersion <= hostInfo.Version ) throw new Exception( "no update." );
 
                 var dialogResult = MessageBox.Show( string.Format( Langs.GetString( "Updater.Confirm" ), hostInfo.Product, latestVersion, hostInfo.Version ),
                     Langs.GetString( "Updater.Confirm.Title" ),
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Information );
-                if ( !dialogResult.Equals( DialogResult.Yes ) && !dialogResult.Equals( DialogResult.OK ) ) break;
+                if ( !dialogResult.Equals( DialogResult.Yes ) && !dialogResult.Equals( DialogResult.OK ) ) throw new Exception( "user canceled." );
 
                 var mcUrls = Regex.Matches( jsonReleaseInfo, Const.PatternDownloadUrl );
                 var zipUrl = "";
@@ -96,15 +96,17 @@ namespace Updater
                     }
                 }
 
-                if ( string.IsNullOrEmpty( zipUrl ) ) break;
+                if ( string.IsNullOrEmpty( zipUrl ) ) throw new Exception( "file url not found." );
+
+                Visible = true;
 
                 var downloadZip = Path.Combine( PluginManager.GetAppFolder(), Const.DownloadZip );
-                if ( File.Exists( downloadZip ) ) File.Delete( downloadZip );
 
                 var progress = new Progress<float>();
                 progress.ProgressChanged += ( s, progressValue ) => { progbarDownload.Value = (int)progressValue; };
 
-                Visible = true;
+                lb_progress.Text = Langs.GetString( "Progress.Downloading" );
+                if ( File.Exists( downloadZip ) ) File.Delete( downloadZip );
 
                 await using var file = new FileStream( downloadZip, FileMode.Create, FileAccess.Write, FileShare.None );
                 await httpClient.DownloadDataAsync( zipUrl, file, progress );
@@ -115,12 +117,16 @@ namespace Updater
                     await Task.Delay( Const.WaitInterval );
                 }
 
-                Visible = false;
+                lb_progress.Text = Langs.GetString( "Progress.Clean" );
+                await Task.Delay( Const.WaitInterval );
 
                 var exeInZip = hostInfo.Product + ".exe";
                 var backup   = hostInfo.AppPath + ".bak";
 
                 if ( File.Exists( backup ) ) File.Delete( backup );
+
+                lb_progress.Text = Langs.GetString( "Progress.Extract" );
+                await Task.Delay( Const.WaitInterval );
 
                 using var zip = ZipFile.Open( downloadZip, ZipArchiveMode.Read );
                 foreach ( var entry in zip.Entries )
@@ -129,15 +135,23 @@ namespace Updater
                     File.Move( hostInfo.AppPath, backup );
                     entry.ExtractToFile( hostInfo.AppPath );
 
+                    lb_progress.Text = Langs.GetString( "Progress.NotifyHostRestart" );
+                    await Task.Delay( Const.WaitInterval );
                     IpcPipeClient.NotifyHostRestart();
 
                     break;
                 }
 
-                break;
+                Visible = false;
             }
-
-            Application.Exit();
+            catch
+            {
+                // ignored
+            }
+            finally
+            {
+                Application.Exit();
+            }
         }
     }
 }

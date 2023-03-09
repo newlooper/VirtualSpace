@@ -127,4 +127,16 @@
   <data name="Updater.Confirm.Title" xml:space="preserve">
     <value>有更新可用</value>
   </data>
+  <data name="Progress.Downloading" xml:space="preserve">
+    <value>下载中...</value>
+  </data>
+  <data name="Progress.Clean" xml:space="preserve">
+    <value>清理旧文件...</value>
+  </data>
+  <data name="Progress.Extract" xml:space="preserve">
+    <value>解压中...</value>
+  </data>
+  <data name="Progress.NotifyHostRestart" xml:space="preserve">
+    <value>通知主程序重启</value>
+  </data>
 </root>

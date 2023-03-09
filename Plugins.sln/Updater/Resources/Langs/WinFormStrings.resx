@@ -127,4 +127,16 @@ Do you want to update now?</value>
   <data name="Updater.Confirm.Title" xml:space="preserve">
     <value>Update Available</value>
   </data>
+  <data name="Progress.Downloading" xml:space="preserve">
+    <value>Downloading...</value>
+  </data>
+  <data name="Progress.Clean" xml:space="preserve">
+    <value>Clean Old Files...</value>
+  </data>
+  <data name="Progress.Extract" xml:space="preserve">
+    <value>Extract Files...</value>
+  </data>
+  <data name="Progress.NotifyHostRestart" xml:space="preserve">
+    <value>Notify Host Restart.</value>
+  </data>
 </root>
