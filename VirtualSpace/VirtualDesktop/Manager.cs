@@ -146,7 +146,7 @@ namespace VirtualSpace.VirtualDesktop
             UpdateVdwBackground();
             foreach ( var vdw in _virtualDesktops )
             {
-                User32.SendMessage( vdw.Handle, UserMessage.ShowVdw, 0, 0 );
+                User32.SendMessage( vdw.Handle, WinMsg.WM_HOTKEY, UserMessage.ShowVdw, 0 );
             }
         }
 

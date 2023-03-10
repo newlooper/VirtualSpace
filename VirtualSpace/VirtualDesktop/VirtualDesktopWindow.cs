@@ -59,17 +59,20 @@ namespace VirtualSpace.VirtualDesktop
 
         protected override void WndProc( ref Message m )
         {
-            switch ( m.Msg )
+            if ( m.Msg == WinMsg.WM_HOTKEY )
             {
-                case UserMessage.ShowVdw:
-                    ShowByVdIndex();
-                    return;
-                case UserMessage.RefreshVdw:
-                    Refresh();
-                    return;
-                case UserMessage.ShowThumbsOfVdw:
-                    ShowThumbnails();
-                    return;
+                switch ( m.WParam.ToInt32() )
+                {
+                    case UserMessage.ShowVdw:
+                        ShowByVdIndex();
+                        return;
+                    case UserMessage.RefreshVdw:
+                        Refresh();
+                        return;
+                    case UserMessage.ShowThumbsOfVdw:
+                        ShowThumbnails();
+                        return;
+                }
             }
 
             base.WndProc( ref m );
@@ -245,7 +248,7 @@ namespace VirtualSpace.VirtualDesktop
                             Height,
                             ConfigManager.GetCachePath(),
                             ConfigManager.Configs.Cluster.VdwWallpaperQuality ).Release();
-                        User32.PostMessage( hWnd, UserMessage.RefreshVdw, 0, 0 );
+                        User32.PostMessage( hWnd, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
                     } );
                 }
             }

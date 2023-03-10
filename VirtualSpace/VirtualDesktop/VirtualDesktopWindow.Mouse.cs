@@ -170,8 +170,8 @@ namespace VirtualSpace.VirtualDesktop
                         Logger.Verbose( $"SWAP.Desktop Desktop[{VdIndex.ToString()}] WITH Desktop[{_hoverVdIndex.ToString()}]" );
                         VirtualDesktopManager.FixLayout();
                         VirtualDesktopManager.ShowAllVirtualDesktops();
-                        User32.PostMessage( Handle, UserMessage.RefreshVdw, 0, 0 );
-                        User32.PostMessage( _virtualDesktops[_hoverVdIndex].Handle, UserMessage.RefreshVdw, 0, 0 );
+                        User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
+                        User32.PostMessage( _virtualDesktops[_hoverVdIndex].Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
                     }
                 }
             }

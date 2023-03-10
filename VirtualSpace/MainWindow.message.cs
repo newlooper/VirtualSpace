@@ -250,15 +250,15 @@ namespace VirtualSpace
                             SwitchToDesktopById( VirtualDesktopManager.LastDesktopId );
                             break;
                         case UserMessage.DesktopArrangement:
-
-                            // VirtualDesktopManager.FixLayout();
                             VirtualDesktopManager.RebuildMatrixMap( RowsCols );
-
                             if ( IsShowing() )
                             {
                                 VirtualDesktopManager.ShowAllVirtualDesktops();
                             }
 
+                            break;
+                        case UserMessage.RefreshTrayIcon:
+                            UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
                             break;
                         case UserMessage.RunAsAdministrator:
                             TryRunAsAdmin();

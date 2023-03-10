@@ -16,6 +16,7 @@ using System.Drawing.Text;
 using System.Windows.Forms;
 using AppController.WinTaskScheduler;
 using VirtualSpace.Config;
+using VirtualSpace.Helpers;
 using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace
@@ -170,6 +171,7 @@ namespace VirtualSpace
                 ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon = 2;
             }
 
+            User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RefreshTrayIcon, 0 );
             ConfigManager.Save( reason: ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon );
         }
 
@@ -187,7 +189,11 @@ namespace VirtualSpace
 
         private void chb_showVDIndexOnTrayIcon_CheckedChanged( object? sender, EventArgs e )
         {
-            if ( !chb_showVDIndexOnTrayIcon.Checked )
+            if ( chb_showVDIndexOnTrayIcon.Checked )
+            {
+                User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RefreshTrayIcon, 0 );
+            }
+            else
             {
                 var bitmap = (Bitmap)_rm.GetObject( "AboutLogo_2" );
                 niTray.Icon = Icon.FromHandle( bitmap.GetHicon() );
