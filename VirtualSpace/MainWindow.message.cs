@@ -251,7 +251,7 @@ namespace VirtualSpace
                             break;
                         case UserMessage.DesktopArrangement:
 
-                            VirtualDesktopManager.FixLayout();
+                            // VirtualDesktopManager.FixLayout();
                             VirtualDesktopManager.RebuildMatrixMap( RowsCols );
 
                             if ( IsShowing() )

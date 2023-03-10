@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Windows;
 using VirtualSpace.AppLogs;
@@ -82,18 +83,18 @@ namespace VirtualSpace.Config
                         {nameof( Default ), new Default()}
                     }
                 };
-                Save( filePath );
+                Save( filePath, "init", "Setting File" );
             }
         }
 
-        public static async void Save( string? filePath = null )
+        public static async void Save( string? filePath = null, object? reason = null, [CallerArgumentExpression( "reason" )] string reasonName = "" )
         {
             filePath ??= ConfigFilePath;
             try
             {
                 var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, new JsonSerializerOptions {WriteIndented = true} );
                 await File.WriteAllBytesAsync( filePath, contents );
-                Logger.Info( "Settings Saved." );
+                Logger.Info( $"Settings Saved [{reasonName}: {reason}]." );
             }
             catch ( Exception ex )
             {

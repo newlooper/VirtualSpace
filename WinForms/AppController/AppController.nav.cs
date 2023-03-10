@@ -37,19 +37,19 @@ namespace VirtualSpace
         private void cb_nav_circle_h_CheckedChanged( object? sender, EventArgs e )
         {
             ConfigManager.CurrentProfile.Navigation.CirculationH = cb_nav_circle_h.Checked;
-            ConfigManager.Save();
+            ConfigManager.Save( reason: ConfigManager.CurrentProfile.Navigation.CirculationH );
         }
 
         private void cb_nav_circle_v_CheckedChanged( object? sender, EventArgs e )
         {
             ConfigManager.CurrentProfile.Navigation.CirculationV = cb_nav_circle_v.Checked;
-            ConfigManager.Save();
+            ConfigManager.Save( reason: ConfigManager.CurrentProfile.Navigation.CirculationV );
         }
 
         private void cb_nav_circle_h_type_SelectedIndexChanged( object? sender, EventArgs e )
         {
             ConfigManager.CurrentProfile.Navigation.CirculationHType = cb_nav_circle_h_type.SelectedIndex;
-            ConfigManager.Save();
+            ConfigManager.Save( reason: ConfigManager.CurrentProfile.Navigation.CirculationHType );
         }
     }
 }

@@ -25,7 +25,7 @@ namespace VirtualSpace
             var selectedDa = btn.Name[^1..];
 
             Manager.CurrentProfile.UI.DesktopArrangement = int.Parse( selectedDa );
-            Manager.Save();
+            Manager.Save( reason: Manager.CurrentProfile.UI.DesktopArrangement );
 
             User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.DesktopArrangement, 0 );
         }

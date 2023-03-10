@@ -192,7 +192,7 @@ namespace VirtualSpace.VirtualDesktop
                 ConfigManager.CurrentProfile.DesktopOrder = newOrder;
             }
 
-            ConfigManager.Save();
+            ConfigManager.Save( reason: "sync&save", reasonName: "ConfigManager.CurrentProfile.DesktopOrder" );
         }
 
         public static int GetVdIndexByGuid( Guid guid )

@@ -39,7 +39,7 @@ namespace VirtualSpace.VirtualDesktop
             if ( Math.Pow( rowsCols, 2 ) != DesktopWrapper.Count )
             {
                 ConfigManager.CurrentProfile.UI.DesktopArrangement = 0;
-                ConfigManager.Save();
+                ConfigManager.Save( reason: "reset", reasonName: "ConfigManager.CurrentProfile.UI.DesktopArrangement" );
             }
 
             AppController.RenderDesktopArrangementButtons( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );

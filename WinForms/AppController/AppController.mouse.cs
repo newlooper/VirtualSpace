@@ -30,7 +30,7 @@ namespace VirtualSpace
             Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar = chb_MouseOnTaskbarSwitchDesktop.Checked;
             var msg = Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar ? UserMessage.EnableMouseHook : UserMessage.DisableMouseHook;
             User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, (ulong)msg, 0 );
-            Manager.Save();
+            Manager.Save( reason: Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar );
         }
 
         private void tv_mouse_AfterSelect( object sender, TreeViewEventArgs e )
@@ -101,7 +101,7 @@ namespace VirtualSpace
         {
             var maId = tv_mouse.SelectedNode.Name;
             Manager.Configs.MouseAction[maId] = (Const.MouseAction.Action)cb_mouse_func.SelectedValue;
-            Manager.Save();
+            Manager.Save( reason: Manager.Configs.MouseAction[maId], reasonName: maId );
         }
 
         private void InitMouseNodes()

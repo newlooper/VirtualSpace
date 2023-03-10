@@ -156,6 +156,7 @@ namespace VirtualSpace
 
         private void rb_vdi_on_tray_style_0_CheckedChanged( object? sender, EventArgs e )
         {
+            if ( !( (RadioButton)sender ).Checked ) return;
             if ( rb_vdi_on_tray_style_0.Checked )
             {
                 ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon = 0;
@@ -169,19 +170,19 @@ namespace VirtualSpace
                 ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon = 2;
             }
 
-            ConfigManager.Save();
+            ConfigManager.Save( reason: ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon );
         }
 
         private void chb_HideMainViewIfItsShown_CheckedChanged( object? sender, EventArgs e )
         {
             ConfigManager.Configs.Cluster.HideMainViewIfItsShown = chb_HideMainViewIfItsShown.Checked;
-            ConfigManager.Save();
+            ConfigManager.Save( reason: ConfigManager.Configs.Cluster.HideMainViewIfItsShown );
         }
 
         private void chb_notify_vd_changed_CheckedChanged( object? sender, EventArgs e )
         {
             ConfigManager.Configs.Cluster.NotificationOnVdChanged = chb_notify_vd_changed.Checked;
-            ConfigManager.Save();
+            ConfigManager.Save( reason: ConfigManager.Configs.Cluster.NotificationOnVdChanged );
         }
 
         private void chb_showVDIndexOnTrayIcon_CheckedChanged( object? sender, EventArgs e )
@@ -193,13 +194,13 @@ namespace VirtualSpace
             }
 
             ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon = chb_showVDIndexOnTrayIcon.Checked;
-            ConfigManager.Save();
+            ConfigManager.Save( reason: ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon );
         }
 
         private void chb_HideOnStart_CheckedChanged( object? sender, EventArgs e )
         {
             ConfigManager.Configs.Cluster.HideOnStart = chb_HideOnStart.Checked;
-            ConfigManager.Save();
+            ConfigManager.Save( reason: ConfigManager.Configs.Cluster.HideOnStart );
         }
 
         private void chb_RunOnStartup_CheckedChanged( object sender, EventArgs e )

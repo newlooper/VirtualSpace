@@ -165,14 +165,14 @@ namespace VirtualSpace
                 {
                     _cancelTokenSourceForLog.Cancel();
                     ConfigManager.CurrentProfile.UI.Language = l.Name;
-                    ConfigManager.Save();
+                    ConfigManager.Save( reason: ConfigManager.CurrentProfile.UI.Language );
                     User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RestartAppController, 0 );
                     return;
                 }
 
                 SetAllLang( l.Name );
                 ConfigManager.CurrentProfile.UI.Language = l.Name;
-                ConfigManager.Save();
+                ConfigManager.Save( reason: ConfigManager.CurrentProfile.UI.Language );
 
                 foreach ( ToolStripMenuItem lang in langToolStripMenuItem.DropDownItems )
                 {

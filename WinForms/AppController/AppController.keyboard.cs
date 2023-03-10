@@ -120,7 +120,7 @@ namespace VirtualSpace
             var kb       = Const.Hotkey.GetKeyBinding( hotkeyId );
             kb.GhkCode = ghk.Item1;
             Manager.Configs.KeyBindings[hotkeyId] = kb;
-            Manager.Save();
+            Manager.Save( reason: kb.GhkCode.Replace( Const.Hotkey.NONE + Const.Hotkey.SPLITTER, "" ), reasonName: hotkeyId );
             tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.SettingsSaved" ) + Const.WindowsCRLF;
         }
 

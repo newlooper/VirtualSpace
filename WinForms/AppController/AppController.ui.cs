@@ -39,23 +39,20 @@ namespace VirtualSpace
 
         private void chb_show_vd_name_CheckedChanged( object? sender, EventArgs e )
         {
-            var ui = ConfigManager.CurrentProfile.UI;
-            ui.ShowVdName = chb_show_vd_name.Checked;
-            ConfigManager.Save();
+            ConfigManager.CurrentProfile.UI.ShowVdName = chb_show_vd_name.Checked;
+            ConfigManager.Save( reason: ConfigManager.CurrentProfile.UI.ShowVdName );
         }
 
         private void chb_show_vd_index_CheckedChanged( object? sender, EventArgs e )
         {
-            var ui = ConfigManager.CurrentProfile.UI;
-            ui.ShowVdIndex = chb_show_vd_index.Checked;
-            ConfigManager.Save();
+            ConfigManager.CurrentProfile.UI.ShowVdIndex = chb_show_vd_index.Checked;
+            ConfigManager.Save( reason: ConfigManager.CurrentProfile.UI.ShowVdIndex );
         }
 
         private void rb_vd_index_0_CheckedChanged( object? sender, EventArgs e )
         {
-            var ui = ConfigManager.CurrentProfile.UI;
-            ui.ShowVdIndexType = (byte)( rb_vd_index_0.Checked ? 0 : 1 );
-            ConfigManager.Save();
+            ConfigManager.CurrentProfile.UI.ShowVdIndexType = (byte)( rb_vd_index_0.Checked ? 0 : 1 );
+            ConfigManager.Save( reason: ConfigManager.CurrentProfile.UI.ShowVdIndexType );
         }
     }
 }
