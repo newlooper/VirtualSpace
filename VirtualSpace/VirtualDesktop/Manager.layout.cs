@@ -94,6 +94,7 @@ namespace VirtualSpace.VirtualDesktop
             for ( var idx = 0; idx < profile.DesktopOrder.Count; idx++ )
             {
                 var vdw = _virtualDesktops.Find( vdw => vdw.VdId == profile.DesktopOrder[idx] );
+                if ( vdw is null ) continue;
                 vdw.VdIndex = idx; // reposition
                 reOrdered.Add( vdw );
                 _virtualDesktops.Remove( vdw );
