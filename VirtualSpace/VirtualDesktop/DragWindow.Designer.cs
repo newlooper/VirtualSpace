@@ -48,7 +48,6 @@ namespace VirtualSpace.VirtualDesktop
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "DragWindow";
-            this.Text = "__VirtualDesktopDragWindow!";
             this.TransparencyKey = System.Drawing.Color.Black;
             this.ResumeLayout(false);
 

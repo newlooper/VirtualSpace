@@ -9,7 +9,7 @@
         AllowsTransparency="True"
         MouseDown="Window_MouseDown"
         ResizeMode="NoResize"
-        Title="__VirtualDesktopFrame!" Width="1280" Height="720" Left="0" Top="0" WindowStyle="None"
+        Width="1280" Height="720" Left="0" Top="0" WindowStyle="None"
         Loaded="Window_Loaded"
         Closing="Window_Closing" ShowInTaskbar="False">
     <Grid x:Name="MainGrid" />

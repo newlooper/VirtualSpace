@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
@@ -42,6 +43,7 @@ namespace VirtualSpace
             Width = SystemParameters.PrimaryScreenWidth;
             Height = SystemParameters.PrimaryScreenHeight;
             Topmost = true;
+            Title = Const.Window.VD_FRAME_TITLE;
         }
 
         public IntPtr Handle { get; private set; }

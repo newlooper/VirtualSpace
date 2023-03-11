@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 
 namespace VirtualSpace.VirtualDesktop
@@ -27,10 +28,10 @@ namespace VirtualSpace.VirtualDesktop
 
         public static readonly string[] WndTitleIgnoreList =
         {
-            "__VirtualDesktopFrame!",
-            "__VirtualDesktopWindow!",
-            "__VirtualDesktopDragWindow!",
-            "[Virtual Space Controller]",
+            Const.Window.VD_FRAME_TITLE,
+            Const.Window.VD_CONTAINER_TITLE,
+            Const.Window.VD_DRAG_TITLE,
+            Const.Window.VS_CONTROLLER_TITLE,
             "WinFormsDesigner"
         };
 

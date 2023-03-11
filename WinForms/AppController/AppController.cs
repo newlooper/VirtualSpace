@@ -19,6 +19,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using ConfigManager = VirtualSpace.Config.Manager;
 
@@ -44,6 +45,8 @@ namespace VirtualSpace
             _instance = this;
 
             InitializeComponent();
+
+            base.Text = Const.Window.VS_CONTROLLER_TITLE;
 
             InitRuleListView();
             InitPluginListView();

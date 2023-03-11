@@ -94,7 +94,8 @@ namespace VirtualSpace.VirtualDesktop
                 Size = initSize,
                 BackColor = defaultBackColor,
                 Padding = new Padding( vdwPadding ),
-                ResizeRedraw = true
+                ResizeRedraw = true,
+                Text = Const.Window.VD_CONTAINER_TITLE
             };
             vdw.SetOwner( MainWindow.GetMainWindow() );
             return vdw;

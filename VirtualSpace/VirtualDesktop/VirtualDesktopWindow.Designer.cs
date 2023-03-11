@@ -51,7 +51,6 @@ namespace VirtualSpace.VirtualDesktop
             this.Name = "VirtualDesktopWindow";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "__VirtualDesktopWindow!";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.VirtualDesktopWindow_Closing);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VirtualDesktopWindow_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.VirtualDesktopWindow_MouseMove);

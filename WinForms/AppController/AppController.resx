@@ -4824,9 +4824,6 @@
   <data name="btn_m6.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>[Virtual Space Controller]</value>
-  </data>
   <data name="cb_nav_circle_h_type.Location" type="System.Drawing.Point, System.Drawing">
     <value>472, 34</value>
   </data>

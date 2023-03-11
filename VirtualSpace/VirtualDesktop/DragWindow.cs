@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Windows.Forms;
+using VirtualSpace.Config;
 
 namespace VirtualSpace.VirtualDesktop
 {
@@ -31,6 +32,7 @@ namespace VirtualSpace.VirtualDesktop
             dw.ShowInTaskbar = false;
             dw.Width = width;
             dw.Height = height;
+            dw.Text = Const.Window.VD_DRAG_TITLE;
             dw.Show();
             return dw;
         }

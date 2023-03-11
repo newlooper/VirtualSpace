@@ -37,6 +37,14 @@ namespace VirtualSpace.Config
         public const string AppName                = "VirtualSpace";
         public const string HideWindowSplitter     = "🔙🔜";
 
+        public static class Window
+        {
+            public const string VD_FRAME_TITLE      = "VirtualSpace__VirtualDesktopFrame!";
+            public const string VD_CONTAINER_TITLE  = "VirtualSpace__VirtualDesktopWindow!";
+            public const string VD_DRAG_TITLE       = "VirtualSpace__VirtualDesktopDragWindow!";
+            public const string VS_CONTROLLER_TITLE = "[Virtual Space Controller]";
+        }
+
         public static class VirtualDesktop
         {
             public const int NavHTypeNextRow = 0;
