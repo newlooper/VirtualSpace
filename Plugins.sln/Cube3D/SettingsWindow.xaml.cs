@@ -9,12 +9,10 @@
 // You should have received a copy of the GNU General Public License along with Cube3D. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using Cube3D.Config;
 using Cube3D.Effects;
-using VirtualSpace.Plugin;
 
 namespace Cube3D
 {
@@ -96,12 +94,6 @@ namespace Cube3D
         {
             SettingsManager.SaveJson();
             Close();
-        }
-
-        private static void Restart()
-        {
-            Process.Start( PluginManager.GetAppPath() );
-            Application.Current.Shutdown();
         }
     }
 }

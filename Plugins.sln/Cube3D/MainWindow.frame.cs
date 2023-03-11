@@ -32,7 +32,17 @@ namespace Cube3D
         private async Task StartMonitorCapture( MonitorInfo mi )
         {
             _frameProcessor = new FrameToD3DImage( D3DImages.D3DImages.D3DImageDict );
-            _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
+            try
+            {
+                _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
+            }
+            catch
+            {
+                await Task.Delay( 1000 );
+                App.Restart();
+                return;
+            }
+
             if ( _capture != null )
             {
                 _capture.StartCaptureSession();

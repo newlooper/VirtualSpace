@@ -154,7 +154,15 @@ namespace Cube3D
                     break;
 
                 case WinMsg.WM_DISPLAYCHANGE:
-                    _capture?.UpdateCapturePrimaryMonitor();
+                    try
+                    {
+                        _capture?.UpdateCapturePrimaryMonitor();
+                    }
+                    catch
+                    {
+                        App.Restart();
+                    }
+
                     break;
 
                 case WinMsg.WM_MOUSEACTIVATE:
