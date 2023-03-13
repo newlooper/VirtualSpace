@@ -132,8 +132,15 @@ namespace VirtualSpace.Helpers
     [StructLayout( LayoutKind.Sequential )]
     public struct INPUT
     {
-        public uint                    Type;
+        public InputType               Type;
         public MOUSEKEYBDHARDWAREINPUT Data;
+    }
+
+    public enum InputType : uint
+    {
+        INPUT_MOUSE,
+        INPUT_KEYBOARD,
+        INPUT_HARDWARE
     }
 
     [StructLayout( LayoutKind.Explicit )]
@@ -155,11 +162,20 @@ namespace VirtualSpace.Helpers
     [StructLayout( LayoutKind.Sequential )]
     public struct KEYBDINPUT
     {
-        public ushort Vk;
-        public ushort Scan;
-        public uint   Flags;
-        public uint   Time;
-        public IntPtr ExtraInfo;
+        public ushort    Vk;
+        public ushort    Scan;
+        public KEYEVENTF Flags;
+        public uint      Time;
+        public IntPtr    ExtraInfo;
+    }
+
+    [Flags]
+    public enum KEYEVENTF : uint
+    {
+        EXTENDEDKEY = 0x0001,
+        KEYUP       = 0x0002,
+        SCANCODE    = 0x0008,
+        UNICODE     = 0x0004
     }
 
     [StructLayout( LayoutKind.Sequential )]

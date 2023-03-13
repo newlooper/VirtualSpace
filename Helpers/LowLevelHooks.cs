@@ -44,25 +44,25 @@ namespace VirtualSpace.Helpers
 
         public static void MultipleKeyUp( List<Keys> keys )
         {
-            SendKeys( keys, 2 );
+            SendKeys( keys, KEYEVENTF.KEYUP );
         }
 
         public static void MultipleKeyPress( List<Keys> keys )
         {
-            SendKeysCombine( keys, 2 );
+            SendKeysCombine( keys );
         }
 
-        private static void SendKeys( List<Keys> keys, int flags )
+        private static void SendKeys( List<Keys> keys, KEYEVENTF flags )
         {
             var inputs = new INPUT[keys.Count];
             for ( var pos = 0; pos < keys.Count; pos++ )
             {
-                inputs[pos].Type = 1;
+                inputs[pos].Type = InputType.INPUT_KEYBOARD;
                 inputs[pos].Data.Keyboard = new KEYBDINPUT
                 {
                     Vk = (ushort)keys[pos],
                     Scan = 0,
-                    Flags = Convert.ToUInt32( flags ),
+                    Flags = flags,
                     Time = 0,
                     ExtraInfo = IntPtr.Zero
                 };
@@ -73,26 +73,26 @@ namespace VirtualSpace.Helpers
                 throw new Exception();
         }
 
-        private static void SendKeysCombine( List<Keys> keys, int flags )
+        private static void SendKeysCombine( List<Keys> keys )
         {
             var inputs = new INPUT[keys.Count * 2];
             for ( var i = 0; i < keys.Count; i++ )
             {
-                inputs[i].Type = 1;
+                inputs[i].Type = InputType.INPUT_KEYBOARD;
                 inputs[i].Data.Keyboard = new KEYBDINPUT
                 {
                     Vk = (ushort)keys[i],
                     Scan = 0,
-                    Flags = Convert.ToUInt32( 0 ),
+                    Flags = 0,
                     Time = 0,
                     ExtraInfo = IntPtr.Zero
                 };
-                inputs[inputs.Length - i - 1].Type = 1;
+                inputs[inputs.Length - i - 1].Type = InputType.INPUT_KEYBOARD;
                 inputs[inputs.Length - i - 1].Data.Keyboard = new KEYBDINPUT
                 {
                     Vk = (ushort)keys[i],
                     Scan = 0,
-                    Flags = Convert.ToUInt32( flags ),
+                    Flags = KEYEVENTF.KEYUP,
                     Time = 0,
                     ExtraInfo = IntPtr.Zero
                 };
