@@ -15,9 +15,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Interop;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
@@ -31,13 +29,12 @@ namespace VirtualSpace.VirtualDesktop
     public partial class VirtualDesktopWindow : Form
     {
         private static   List<VirtualDesktopWindow>? _virtualDesktops;
-        private static   WindowInteropHelper         _windowInteropHelper;
         private readonly List<VisibleWindow>         _visibleWindows = new();
         private          string                      _desktopName;
         private          Point                       _fixedPosition;
         private          Size                        _initSize = Size.Empty;
         public           Guid                        VdId;
-        public           int                         VdIndex;
+        public           int                         VdIndex { get; set; }
 
         private VirtualDesktopWindow()
         {
@@ -101,24 +98,23 @@ namespace VirtualSpace.VirtualDesktop
             return vdw;
         }
 
-        private void SetOwner( Window owner )
+        private void SetOwner( MainWindow owner )
         {
-            _windowInteropHelper ??= new WindowInteropHelper( owner );
-            if ( owner.Dispatcher.CheckAccess() )
+            void DoSetOwner()
             {
                 User32.SetWindowLongPtr( new HandleRef( this, Handle ),
                     (int)GetWindowLongFields.GWL_HWNDPARENT,
-                    _windowInteropHelper.Handle.ToInt32()
+                    owner.Handle.ToInt32()
                 );
+            }
+
+            if ( owner.Dispatcher.CheckAccess() )
+            {
+                DoSetOwner();
             }
             else
             {
-                owner.Dispatcher.Invoke( () =>
-                    User32.SetWindowLongPtr( new HandleRef( this, Handle ),
-                        (int)GetWindowLongFields.GWL_HWNDPARENT,
-                        _windowInteropHelper.Handle.ToInt32()
-                    )
-                );
+                owner.Dispatcher.Invoke( DoSetOwner );
             }
         }
 
