@@ -61,7 +61,7 @@ namespace VirtualSpace
             }
         }
 
-        public static void SetControlLang( Control control, string lang )
+        private static void SetControlLang( Control control, string lang )
         {
             var ci = new CultureInfo( lang );
 
@@ -183,13 +183,13 @@ namespace VirtualSpace
             }
 
             langToolStripMenuItem.DropDownItems.Clear();
-            foreach ( var langKV in Agent.ValidLangs )
+            foreach ( var (key, value) in Agent.ValidLangs )
             {
                 var langItem = new ToolStripMenuItem
                 {
-                    Checked = CultureInfo.CurrentUICulture.Name == langKV.Key,
-                    Name = langKV.Key,
-                    Text = langKV.Value
+                    Checked = CultureInfo.CurrentUICulture.Name == key,
+                    Name = key,
+                    Text = value
                 };
                 langItem.Click += UpdateCheckState;
                 langToolStripMenuItem.DropDownItems.Add( langItem );

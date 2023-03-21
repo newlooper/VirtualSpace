@@ -35,7 +35,7 @@ namespace VirtualSpace
         private void RegisterSystemMessages()
         {
             _taskbarCreatedMessage = User32.RegisterWindowMessage( Const.TaskbarCreated );
-            foreach ( var strMsg in PluginHost.CareAboutMessages.Keys.ToList() )
+            foreach ( var strMsg in PluginHost.CareAboutMessages.Keys )
             {
                 PluginHost.CareAboutMessages[strMsg] = User32.RegisterWindowMessage( strMsg );
             }
@@ -110,7 +110,7 @@ namespace VirtualSpace
                 goto RETURN;
             }
 
-            if ( PluginHost.CareAboutMessages.Values.Contains( (uint)msg ) )
+            if ( PluginHost.CareAboutMessages.ContainsValue( (uint)msg ) )
             {
                 var (key, _) = PluginHost.CareAboutMessages.First( m => m.Value == msg );
                 foreach ( var plugin in PluginHost.Plugins.Where( plugin =>

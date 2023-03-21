@@ -31,15 +31,13 @@ namespace VirtualSpace
 
         private void RegisterHotKey( IntPtr hWnd )
         {
-            foreach ( var kv in Manager.Configs.KeyBindings )
+            foreach ( var (k, kbInProfile) in Manager.Configs.KeyBindings )
             {
-                var kbInProfile = kv.Value;
-
                 var ghkCode = kbInProfile.GhkCode;
                 if ( ghkCode == "" ) continue;
 
-                var func      = Const.Hotkey.GetFuncDesc( kv.Key );
-                var messageId = Const.Hotkey.GetKeyBinding( kv.Key ).MessageId;
+                var func      = Const.Hotkey.GetFuncDesc( k );
+                var messageId = Const.Hotkey.GetKeyBinding( k ).MessageId;
                 var hotkeyStr = ghkCode.Replace( Const.Hotkey.NONE + Const.Hotkey.SPLITTER, "" );
 
                 var arr = ghkCode.Split( Const.Hotkey.SPLITTER );

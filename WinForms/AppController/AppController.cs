@@ -36,7 +36,7 @@ namespace VirtualSpace
             Application.EnableVisualStyles();
 
             var lang = ConfigManager.CurrentProfile.UI.Language;
-            if ( Agent.ValidLangs.Keys.ToList().Contains( lang ) )
+            if ( Agent.ValidLangs.ContainsKey( lang ) )
             {
                 CultureInfo.CurrentCulture = new CultureInfo( lang );
                 CultureInfo.CurrentUICulture = new CultureInfo( lang );
