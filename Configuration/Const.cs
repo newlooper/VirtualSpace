@@ -9,7 +9,6 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using VirtualSpace.Config.Entity;
@@ -103,21 +102,21 @@ namespace VirtualSpace.Config
             // tuple.Item1 => friendly name
             // tuple.Item2 => UserMessageId
             // tuple.Item3 => alternate hotkey, 由程序保留，只能在源码中修改
-            public static readonly Dictionary<string, ValueTuple<string, int, string>> Info = new()
+            public static readonly Dictionary<string, (string FuncDesc, int MessageId, string AltHotKey)> Info = new()
             {
-                {RISE_VIEW, new ValueTuple<string, int, string>( "Rise MainView", UserMessage.RiseView, "LWin+Tab" )},
-                {RISE_VIEW_FOR_ACTIVE_APP, new ValueTuple<string, int, string>( "Rise MainView For Active App", UserMessage.RiseViewForActiveApp, "" )},
-                {RISE_VIEW_FOR_CURRENT_VD, new ValueTuple<string, int, string>( "Rise MainView For Current Desktop", UserMessage.RiseViewForCurrentVD, "" )},
+                {RISE_VIEW, ( "Rise MainView", UserMessage.RiseView, "LWin+Tab" )},
+                {RISE_VIEW_FOR_ACTIVE_APP, ( "Rise MainView For Active App", UserMessage.RiseViewForActiveApp, "" )},
+                {RISE_VIEW_FOR_CURRENT_VD, ( "Rise MainView For Current Desktop", UserMessage.RiseViewForCurrentVD, "" )},
                 {
                     RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD,
-                    new ValueTuple<string, int, string>( "Rise MainView For Active App In Current Virtual Desktop", UserMessage.RiseViewForActiveAppInCurrentVD, "" )
+                    ( "Rise MainView For Active App In Current Virtual Desktop", UserMessage.RiseViewForActiveAppInCurrentVD, "" )
                 },
-                {SHOW_APP_CONTROLLER, new ValueTuple<string, int, string>( "Open AppController", UserMessage.ShowAppController, "" )},
-                {NAV_LEFT, new ValueTuple<string, int, string>( "Left", UserMessage.NavLeft, "LWin+Ctrl+Left" )},
-                {NAV_RIGHT, new ValueTuple<string, int, string>( "Right", UserMessage.NavRight, "LWin+Ctrl+Right" )},
-                {NAV_UP, new ValueTuple<string, int, string>( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" )},
-                {NAV_DOWN, new ValueTuple<string, int, string>( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" )},
-                {SWITCH_BACK_LAST, new ValueTuple<string, int, string>( "Switch Back To Last Desktop", UserMessage.SwitchBackToLastDesktop, "" )},
+                {SHOW_APP_CONTROLLER, ( "Open AppController", UserMessage.ShowAppController, "" )},
+                {NAV_LEFT, ( "Left", UserMessage.NavLeft, "LWin+Ctrl+Left" )},
+                {NAV_RIGHT, ( "Right", UserMessage.NavRight, "LWin+Ctrl+Right" )},
+                {NAV_UP, ( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" )},
+                {NAV_DOWN, ( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" )},
+                {SWITCH_BACK_LAST, ( "Switch Back To Last Desktop", UserMessage.SwitchBackToLastDesktop, "" )},
             };
 
             public static string GetFuncDesc( string key )
@@ -125,7 +124,7 @@ namespace VirtualSpace.Config
                 var func = "";
                 if ( Info.ContainsKey( key ) )
                 {
-                    func = Info[key].Item1;
+                    func = Info[key].FuncDesc;
                 }
                 else if ( key.StartsWith( SVD_TREE_NODE_PREFIX ) )
                 {
@@ -143,23 +142,12 @@ namespace VirtualSpace.Config
                 return func;
             }
 
-            public static string GetHotkeyExtra( string key )
-            {
-                var extra = "";
-                if ( Info.ContainsKey( key ) )
-                {
-                    extra = Info[key].Item3;
-                }
-
-                return extra;
-            }
-
             public static KeyBinding GetKeyBinding( string key )
             {
                 var kb = new KeyBinding();
                 if ( Info.ContainsKey( key ) )
                 {
-                    kb.MessageId = Info[key].Item2;
+                    kb.MessageId = Info[key].MessageId;
                 }
                 else if ( key.StartsWith( SVD_TREE_NODE_PREFIX ) )
                 {
@@ -175,6 +163,17 @@ namespace VirtualSpace.Config
                 }
 
                 return kb;
+            }
+
+            public static string GetHotkeyExtra( string key )
+            {
+                var extra = "";
+                if ( Info.ContainsKey( key ) )
+                {
+                    extra = Info[key].AltHotKey;
+                }
+
+                return extra;
             }
         }
 

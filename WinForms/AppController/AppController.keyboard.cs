@@ -87,7 +87,7 @@ namespace VirtualSpace
             return false;
         }
 
-        private ValueTuple<string, GlobalHotKey.KeyModifiers> GetGhk()
+        private (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) GetGhk()
         {
             var ghkCode = "";
             var km      = GlobalHotKey.KeyModifiers.None;
@@ -114,17 +114,17 @@ namespace VirtualSpace
             return new ValueTuple<string, GlobalHotKey.KeyModifiers>( ghkCode, km );
         }
 
-        private void SaveHotkey( ValueTuple<string, GlobalHotKey.KeyModifiers> ghk )
+        private void SaveHotkey( (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) ghk )
         {
             var hotkeyId = tv_keyboard.SelectedNode.Name;
             var kb       = Const.Hotkey.GetKeyBinding( hotkeyId );
-            kb.GhkCode = ghk.Item1;
+            kb.GhkCode = ghk.keyCode;
             Manager.Configs.KeyBindings[hotkeyId] = kb;
             Manager.Save( reason: kb.GhkCode.Replace( Const.Hotkey.NONE + Const.Hotkey.SPLITTER, "" ), reasonName: hotkeyId );
             tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.SettingsSaved" ) + Const.WindowsCRLF;
         }
 
-        private void RegHotkey( ValueTuple<string, GlobalHotKey.KeyModifiers> ghk )
+        private void RegHotkey( (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) ghk )
         {
             var hotkeyId = tv_keyboard.SelectedNode.Name;
             var msgId    = Const.Hotkey.GetKeyBinding( hotkeyId ).MessageId;
@@ -138,7 +138,7 @@ namespace VirtualSpace
 
             if ( GlobalHotKey.RegHotKey( _mainWindowHandle,
                     msgId,
-                    ghk.Item2,
+                    ghk.keyModifiers,
                     KeyInterop.VirtualKeyFromKey( Enum.Parse<Key>( cb_hk_key.SelectedItem.ToString() ) ) ) )
             {
                 tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.Reg.Success" ) + Const.WindowsCRLF;

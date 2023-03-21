@@ -33,8 +33,7 @@ namespace VirtualSpace.Helpers
         static SysInfo()
         {
             IsWin10 = Environment.OSVersion.Version is {Major: 10, Build: < 22000};
-            var current          = WindowsIdentity.GetCurrent();
-            var windowsPrincipal = new WindowsPrincipal( current );
+            var windowsPrincipal = new WindowsPrincipal( WindowsIdentity.GetCurrent() );
             IsAdministrator = windowsPrincipal.IsInRole( WindowsBuiltInRole.Administrator );
         }
 
@@ -64,7 +63,7 @@ namespace VirtualSpace.Helpers
             }
         }
 
-        public static ValueTuple<int, int> GetAspectRadioOfScreen()
+        public static (int W, int H) GetAspectRadioOfScreen()
         {
             var nGCD = GetGreatestCommonDivisor( Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height );
             return new ValueTuple<int, int>( Screen.PrimaryScreen.Bounds.Width / nGCD, Screen.PrimaryScreen.Bounds.Height / nGCD );
