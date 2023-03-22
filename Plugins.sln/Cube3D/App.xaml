@@ -8,6 +8,13 @@
         <ResourceDictionary>
             <interop:D3DImage x:Key="Front" />
             <interop:D3DImage x:Key="Others" />
+            <LinearGradientBrush x:Key="BackgroundLgb" StartPoint='0.5,0' EndPoint='0.5,1'>
+                <GradientStop Color='Black' Offset='0' />
+                <GradientStop Color='#FF323334' Offset='1' />
+            </LinearGradientBrush>
+            <Brush x:Key="BackgroundTrans">
+                Transparent
+            </Brush>
         </ResourceDictionary>
     </Application.Resources>
 

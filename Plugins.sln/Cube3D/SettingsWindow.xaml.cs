@@ -19,6 +19,7 @@ namespace Cube3D
     public partial class SettingsWindow : Window
     {
         private MainWindow _mainWindow;
+        private bool       _isLoaded = false;
 
         public SettingsWindow()
         {
@@ -60,23 +61,43 @@ namespace Cube3D
             }
 
             ComboBoxEaseMode.SelectedItem = SettingsManager.Settings.EaseMode;
+
+            foreach ( TransitionType tt in Enum.GetValues( typeof( TransitionType ) ) )
+            {
+                ComboBoxTransitionType.Items.Add( tt );
+            }
+
+            ComboBoxTransitionType.SelectedItem = SettingsManager.Settings.TransitionType;
+
+            _isLoaded = true;
         }
 
         private void ComboBoxEffects_SelectionChanged( object sender, SelectionChangedEventArgs e )
         {
+            if ( !_isLoaded ) return;
             SettingsManager.Settings.SelectedEffect = (EffectType)ComboBoxEffects.SelectedItem;
             SettingsManager.SaveJson();
         }
 
         private void ComboBoxEase_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
         {
+            if ( !_isLoaded ) return;
             SettingsManager.Settings.EaseType = (EaseType)ComboBoxEase.SelectedItem;
             SettingsManager.SaveJson();
         }
 
         private void ComboBoxEaseMode_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
         {
+            if ( !_isLoaded ) return;
             SettingsManager.Settings.EaseMode = (EaseMode)ComboBoxEaseMode.SelectedItem;
+            SettingsManager.SaveJson();
+        }
+
+        private void ComboBoxTransitionType_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
+        {
+            if ( !_isLoaded ) return;
+            SettingsManager.Settings.TransitionType = (TransitionType)ComboBoxTransitionType.SelectedItem;
+            _mainWindow.SetTransitionType();
             SettingsManager.SaveJson();
         }
 

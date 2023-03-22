@@ -22,7 +22,7 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
-// base on https://github.com/microsoft/Windows.UI.Composition-Win32-Samples/blob/master/dotnet/WPF/ScreenCapture/CaptureSampleCore/BasicCapture.cs 
+// based on https://github.com/microsoft/Windows.UI.Composition-Win32-Samples/blob/master/dotnet/WPF/ScreenCapture/CaptureSampleCore/BasicCapture.cs 
 
 using System;
 using System.Collections.Generic;
@@ -85,7 +85,7 @@ namespace ScreenCapture
 
             _fp = null;
 
-            foreach ( var key in _renderTargetPool.Keys.ToList() )
+            foreach ( var key in _renderTargetPool.Keys )
             {
                 _renderTargetPool[key].Dispose();
                 _renderTargetPool[key] = null;
@@ -93,7 +93,7 @@ namespace ScreenCapture
 
             _renderTargetPool.Clear();
 
-            foreach ( var key in _frameCopyPool.Keys.ToList() )
+            foreach ( var key in _frameCopyPool.Keys )
             {
                 _frameCopyPool[key].Dispose();
                 _frameCopyPool[key] = null;

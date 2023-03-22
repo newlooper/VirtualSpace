@@ -24,12 +24,10 @@
             </ControlTemplate>
         </ResourceDictionary>
     </Window.Resources>
-    <Window.Background>
-        <LinearGradientBrush StartPoint='0.5,0' EndPoint='0.5,1'>
-            <GradientStop Color='Black' Offset='0' />
-            <GradientStop Color='#FF323334' Offset='1' />
-        </LinearGradientBrush>
-    </Window.Background>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome x:Name="WinChrome" />
+    </WindowChrome.WindowChrome>
 
     <Grid>
         <Viewport3D x:Name="Vp3D" ClipToBounds="False" IsHitTestVisible="False"

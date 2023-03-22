@@ -49,8 +49,16 @@ namespace Cube3D.Config
             }
         }
 
-        public EffectType SelectedEffect { get; set; }
-        public EaseType   EaseType       { get; set; } = EaseType.None;
-        public EaseMode   EaseMode       { get; set; } = EaseMode.EaseOut;
+        public EffectType     SelectedEffect { get; set; }
+        public EaseType       EaseType       { get; set; } = EaseType.None;
+        public EaseMode       EaseMode       { get; set; } = EaseMode.EaseOut;
+        public TransitionType TransitionType { get; set; } = TransitionType.AnimationAndNotificationGrid;
+    }
+
+    public enum TransitionType
+    {
+        AnimationOnly,
+        NotificationGridOnly,
+        AnimationAndNotificationGrid
     }
 }

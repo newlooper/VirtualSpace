@@ -13,6 +13,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Media;
 using Cube3D.Config;
 using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
@@ -114,9 +115,29 @@ namespace Cube3D
 
             Build3D();
 
+            SetTransitionType();
+
             await StartPrimaryMonitorCapture();
 
             FakeHide();
+        }
+
+        public void SetTransitionType()
+        {
+            if ( SettingsManager.Settings.TransitionType == TransitionType.NotificationGridOnly )
+            {
+                Background = (Brush)Application.Current.Resources["BackgroundTrans"];
+                WinChrome.GlassFrameThickness = new Thickness( -1 );
+                Vp3D.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                Background = (Brush)Application.Current.Resources["BackgroundLgb"];
+                WinChrome.GlassFrameThickness = new Thickness( 0 );
+                Vp3D.Visibility = Visibility.Visible;
+            }
+
+            NotifyContainer.Visibility = SettingsManager.Settings.TransitionType > 0 ? Visibility.Visible : Visibility.Hidden;
         }
     }
 }

@@ -26,7 +26,6 @@ namespace Cube3D
             var centerY = screenH * 5 / 16;
             NotifyContainer.Width = screenW / 6;
             NotifyContainer.Height = NotifyContainer.Width * 3 / 4;
-            NotifyContainer.Visibility = Visibility.Visible;
             NotifyContainer.Margin = new Thickness
             {
                 Top = centerY + NotifyContainer.Height

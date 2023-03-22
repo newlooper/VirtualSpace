@@ -21,17 +21,21 @@
                             <TextBlock Margin="5,16,0,0" Text="{Binding ElementName=SliderAnimationDuration, Path=Value}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="180">Transaction Type:</Label>
+                            <Label Margin="10,10,0,0" Width="180">Animation Type:</Label>
                             <ComboBox Width="120" Margin="10,10,0,0" x:Name="ComboBoxEffects" SelectionChanged="ComboBoxEffects_SelectionChanged" />
                             <Button Width="120" Margin="10, 10,0,0" Click="ApplyEffect_OnClick">Apply</Button>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="180">Ease Type:</Label>
+                            <Label Margin="10,10,0,0" Width="180" xml:space="preserve">        Ease Type:</Label>
                             <ComboBox Width="120" Margin="10,10,0,0" x:Name="ComboBoxEase" SelectionChanged="ComboBoxEase_OnSelectionChanged" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="180">Ease Mode:</Label>
+                            <Label Margin="10,10,0,0" Width="180" xml:space="preserve">        Ease Mode:</Label>
                             <ComboBox Width="120" Margin="10,10,0,0" x:Name="ComboBoxEaseMode" SelectionChanged="ComboBoxEaseMode_OnSelectionChanged" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Margin="10,10,0,0" Width="180">Transition Type:</Label>
+                            <ComboBox Width="300" Margin="10,10,0,0" x:Name="ComboBoxTransitionType" SelectionChanged="ComboBoxTransitionType_OnSelectionChanged" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

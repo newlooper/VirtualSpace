@@ -112,7 +112,8 @@ namespace Cube3D
                                             select m ).First();
                                         _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
                                         _capture?.StartCaptureSession();
-                                        NotificationGridLayout( vdCount );
+                                        if ( SettingsManager.Settings.TransitionType > 0 )
+                                            NotificationGridLayout( vdCount );
 
                                         var em = EaseFactory.GetEaseModeByName( SettingsManager.Settings.EaseMode );
                                         var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, em );
@@ -123,10 +124,13 @@ namespace Cube3D
                                             // trigger action only after first frame be proceeded
                                             // see FrameToD3DImage.Proceed() for detail.
                                             RealShow();
-                                            NotificationGridAnimation( fromIndex, targetIndex, vdCount, ef );
+
+                                            if ( SettingsManager.Settings.TransitionType > 0 )
+                                                NotificationGridAnimation( fromIndex, targetIndex, vdCount, ef );
                                             if ( targetIndex != fromIndex )
                                             {
-                                                _effect.AnimationInDirection( (KeyCode)dir, MainModel3DGroup, ef );
+                                                if ( SettingsManager.Settings.TransitionType != TransitionType.NotificationGridOnly )
+                                                    _effect.AnimationInDirection( (KeyCode)dir, MainModel3DGroup, ef );
                                                 WinApi.PostMessage( vdSwitchInfo.hostHandle, WinApi.UM_SWITCHDESKTOP, (uint)targetIndex, 0 );
                                             }
                                         } );
