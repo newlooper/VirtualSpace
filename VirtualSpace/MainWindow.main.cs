@@ -219,6 +219,7 @@ namespace VirtualSpace
         public static void Quit()
         {
             _instance.Close();
+            Application.Current.Shutdown();
         }
     }
 }

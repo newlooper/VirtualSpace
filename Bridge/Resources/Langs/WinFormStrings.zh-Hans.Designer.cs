@@ -110,6 +110,150 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 桌面.
+        /// </summary>
+        internal static string K_D {
+            get {
+                return ResourceManager.GetString("K.D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 导航.
+        /// </summary>
+        internal static string K_D_N {
+            get {
+                return ResourceManager.GetString("K.D.N", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 向左.
+        /// </summary>
+        internal static string K_D_N_D {
+            get {
+                return ResourceManager.GetString("K.D.N.D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 向右.
+        /// </summary>
+        internal static string K_D_N_L {
+            get {
+                return ResourceManager.GetString("K.D.N.L", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 向上.
+        /// </summary>
+        internal static string K_D_N_R {
+            get {
+                return ResourceManager.GetString("K.D.N.R", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 向下.
+        /// </summary>
+        internal static string K_D_N_U {
+            get {
+                return ResourceManager.GetString("K.D.N.U", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 切换桌面.
+        /// </summary>
+        internal static string K_D_S {
+            get {
+                return ResourceManager.GetString("K.D.S", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 通用.
+        /// </summary>
+        internal static string K_G {
+            get {
+                return ResourceManager.GetString("K.G", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 打开程序控制.
+        /// </summary>
+        internal static string K_G_oac {
+            get {
+                return ResourceManager.GetString("K.G.oac", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 唤起主视图.
+        /// </summary>
+        internal static string K_G_rmv {
+            get {
+                return ResourceManager.GetString("K.G.rmv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 为当前活动程序唤起主视图.
+        /// </summary>
+        internal static string K_G_rmvfaa {
+            get {
+                return ResourceManager.GetString("K.G.rmvfaa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 为当前桌面中的活动程序唤起主视图.
+        /// </summary>
+        internal static string K_G_rmvfaaicvd {
+            get {
+                return ResourceManager.GetString("K.G.rmvfaaicvd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 为当前桌面唤起主视图.
+        /// </summary>
+        internal static string K_G_rmvfcd {
+            get {
+                return ResourceManager.GetString("K.G.rmvfcd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 窗口.
+        /// </summary>
+        internal static string K_W {
+            get {
+                return ResourceManager.GetString("K.W", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 移动.
+        /// </summary>
+        internal static string K_W_M {
+            get {
+                return ResourceManager.GetString("K.W.M", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 移动并跟随.
+        /// </summary>
+        internal static string K_W_MF {
+            get {
+                return ResourceManager.GetString("K.W.MF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 热键已清除。.
         /// </summary>
         internal static string KB_Hotkey_Cleared {

@@ -41,9 +41,9 @@ namespace VirtualSpace
             var mouseActionId = e.Node.Name;
             if ( !ma.ContainsKey( mouseActionId ) )
             {
-                if ( Const.MouseAction.Info.ContainsKey( mouseActionId ) )
+                if ( MouseAction.Info.ContainsKey( mouseActionId ) )
                 {
-                    ma[mouseActionId] = Const.MouseAction.Info[mouseActionId];
+                    ma[mouseActionId] = MouseAction.Info[mouseActionId];
                 }
                 else
                 {
@@ -54,42 +54,42 @@ namespace VirtualSpace
             lb_mouse_action.Text = e.Node.FullPath;
             tc_Mouse.Visible = true;
 
-            if ( mouseActionId.StartsWith( Const.MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) )
+            if ( mouseActionId.StartsWith( MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) )
             {
                 var items = new List<object>
                 {
-                    new {Value = Const.MouseAction.Action.DesktopVisibleAndCloseView, Text = Agent.Langs.GetString( "Mouse.Action.DesktopVisibleAndCloseView" )},
-                    new {Value = Const.MouseAction.Action.DesktopVisibleOnly, Text = Agent.Langs.GetString( "Mouse.Action.DesktopVisibleOnly" )},
-                    new {Value = Const.MouseAction.Action.ContextMenu, Text = Agent.Langs.GetString( "Mouse.Action.ContextMenu" )},
-                    new {Value = Const.MouseAction.Action.DesktopShowForSelectedDesktop, Text = Agent.Langs.GetString( "Mouse.Action.DesktopShowForSelectedDesktop" )},
-                    new {Value = Const.MouseAction.Action.DoNothing, Text = Agent.Langs.GetString( "Mouse.Action.DoNothing" )}
+                    new {Value = MouseAction.Action.DesktopVisibleAndCloseView, Text = Agent.Langs.GetString( "Mouse.Action.DesktopVisibleAndCloseView" )},
+                    new {Value = MouseAction.Action.DesktopVisibleOnly, Text = Agent.Langs.GetString( "Mouse.Action.DesktopVisibleOnly" )},
+                    new {Value = MouseAction.Action.ContextMenu, Text = Agent.Langs.GetString( "Mouse.Action.ContextMenu" )},
+                    new {Value = MouseAction.Action.DesktopShowForSelectedDesktop, Text = Agent.Langs.GetString( "Mouse.Action.DesktopShowForSelectedDesktop" )},
+                    new {Value = MouseAction.Action.DoNothing, Text = Agent.Langs.GetString( "Mouse.Action.DoNothing" )}
                 };
                 WinForms.SetComboBoxDataSource( cb_mouse_func, items );
             }
-            else if ( mouseActionId.StartsWith( Const.MouseAction.MOUSE_NODE_WINDOW_PREFIX ) )
+            else if ( mouseActionId.StartsWith( MouseAction.MOUSE_NODE_WINDOW_PREFIX ) )
             {
                 var items = new List<object>
                 {
                     new
                     {
-                        Value = Const.MouseAction.Action.WindowActiveDesktopVisibleAndCloseView,
+                        Value = MouseAction.Action.WindowActiveDesktopVisibleAndCloseView,
                         Text = Agent.Langs.GetString( "Mouse.Action.WindowActiveDesktopVisibleAndCloseView" )
                     },
                     new
                     {
-                        Value = Const.MouseAction.Action.WindowActiveDesktopVisibleOnly,
+                        Value = MouseAction.Action.WindowActiveDesktopVisibleOnly,
                         Text = Agent.Langs.GetString( "Mouse.Action.WindowActiveDesktopVisibleOnly" )
                     },
-                    new {Value = Const.MouseAction.Action.ContextMenu, Text = Agent.Langs.GetString( "Mouse.Action.ContextMenu" )},
-                    new {Value = Const.MouseAction.Action.WindowHideFromView, Text = Agent.Langs.GetString( "VDW.CTM.Window.HideFromView" )},
-                    new {Value = Const.MouseAction.Action.WindowClose, Text = Agent.Langs.GetString( "Mouse.Action.WindowClose" )},
-                    new {Value = Const.MouseAction.Action.WindowShowForSelectedProcessOnly, Text = Agent.Langs.GetString( "Mouse.Action.WindowShowForSelectedProcessOnly" )},
+                    new {Value = MouseAction.Action.ContextMenu, Text = Agent.Langs.GetString( "Mouse.Action.ContextMenu" )},
+                    new {Value = MouseAction.Action.WindowHideFromView, Text = Agent.Langs.GetString( "VDW.CTM.Window.HideFromView" )},
+                    new {Value = MouseAction.Action.WindowClose, Text = Agent.Langs.GetString( "Mouse.Action.WindowClose" )},
+                    new {Value = MouseAction.Action.WindowShowForSelectedProcessOnly, Text = Agent.Langs.GetString( "Mouse.Action.WindowShowForSelectedProcessOnly" )},
                     new
                     {
-                        Value = Const.MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop,
+                        Value = MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop,
                         Text = Agent.Langs.GetString( "Mouse.Action.WindowShowForSelectedProcessInSelectedDesktop" )
                     },
-                    new {Value = Const.MouseAction.Action.DoNothing, Text = Agent.Langs.GetString( "Mouse.Action.DoNothing" )}
+                    new {Value = MouseAction.Action.DoNothing, Text = Agent.Langs.GetString( "Mouse.Action.DoNothing" )}
                 };
                 WinForms.SetComboBoxDataSource( cb_mouse_func, items );
             }
@@ -100,7 +100,7 @@ namespace VirtualSpace
         private void btn_mouse_save_Click( object sender, EventArgs e )
         {
             var maId = tv_mouse.SelectedNode.Name;
-            Manager.Configs.MouseAction[maId] = (Const.MouseAction.Action)cb_mouse_func.SelectedValue;
+            Manager.Configs.MouseAction[maId] = (MouseAction.Action)cb_mouse_func.SelectedValue;
             Manager.Save( reason: Manager.Configs.MouseAction[maId], reasonName: maId );
         }
 
@@ -120,15 +120,15 @@ namespace VirtualSpace
                 return text;
             }
 
-            foreach ( var kv in Const.MouseAction.Info )
+            foreach ( var kv in MouseAction.Info1 )
             {
-                if ( kv.Key.StartsWith( Const.MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) )
+                if ( kv.Key.StartsWith( MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) )
                 {
-                    nodeDesktop.Nodes.Add( kv.Key, GetLocaleText( kv.Key.Replace( Const.MouseAction.MOUSE_NODE_DESKTOP_PREFIX, "" ) ) );
+                    nodeDesktop.Nodes.Add( kv.Key, GetLocaleText( kv.Key.Replace( MouseAction.MOUSE_NODE_DESKTOP_PREFIX, "" ) ) );
                 }
-                else if ( kv.Key.StartsWith( Const.MouseAction.MOUSE_NODE_WINDOW_PREFIX ) )
+                else if ( kv.Key.StartsWith( MouseAction.MOUSE_NODE_WINDOW_PREFIX ) )
                 {
-                    nodeWindow.Nodes.Add( kv.Key, GetLocaleText( kv.Key.Replace( Const.MouseAction.MOUSE_NODE_WINDOW_PREFIX, "" ) ) );
+                    nodeWindow.Nodes.Add( kv.Key, GetLocaleText( kv.Key.Replace( MouseAction.MOUSE_NODE_WINDOW_PREFIX, "" ) ) );
                 }
             }
 

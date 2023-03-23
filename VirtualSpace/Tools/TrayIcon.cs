@@ -23,10 +23,10 @@ namespace VirtualSpace.Tools
     {
         private static readonly NotifyIcon         Ti                 = new();
         private static readonly ContextMenuStrip   TiMenu             = new();
-        private static readonly ResourceManager    ImageManager       = Agent.Images;
         private static readonly ToolStripMenuItem  TraySettings       = new();
         private static readonly ToolStripSeparator ToolStripSeparator = new();
         private static readonly ToolStripMenuItem  TrayQuit           = new();
+        private static readonly ResourceManager    ImageManager       = Agent.Images;
 
         static TrayIcon()
         {

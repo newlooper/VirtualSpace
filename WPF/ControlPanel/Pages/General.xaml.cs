@@ -9,13 +9,39 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace ControlPanel.Pages
+using System.Windows;
+using ControlPanel.ViewModels;
+using MaterialDesignThemes.Wpf;
+using VirtualSpace.Helpers;
+
+namespace ControlPanel.Pages;
+
+public partial class General
 {
-    public partial class General
+    private static General?         _instance;
+    private static GeneralViewModel _vm;
+
+    public General()
     {
-        public General()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
+
+    private General( string headerKey, PackIconKind iconKind ) : this()
+    {
+        var mdc = (MenuContainerViewModel)MenuContainer.DataContext;
+        mdc.HeaderKey = headerKey;
+        mdc.IconKind = iconKind;
+        _vm = new GeneralViewModel();
+        DataContext = _vm;
+    }
+
+    public static General Create( string headerKey, PackIconKind iconKind )
+    {
+        return _instance ??= new General( headerKey, iconKind );
+    }
+
+    private void OpenTaskScheduler_OnClick( object sender, RoutedEventArgs e )
+    {
+        TaskSchedulerHelper.OpenWinTaskScheduler();
     }
 }

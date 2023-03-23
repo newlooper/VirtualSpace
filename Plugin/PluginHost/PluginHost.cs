@@ -109,8 +109,7 @@ namespace VirtualSpace.Plugin
         {
             if ( !string.IsNullOrEmpty( pluginInfo.Display ) )
                 Logger.Info( $"[PLUGIN.Close] {pluginInfo.Display}" );
-            WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_SYSCOMMAND, WinApi.SC_CLOSE, 0 );
-            // WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_CLOSE, 0, 0 );
+            WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_CLOSE, 0, 0 );
             // WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_QUIT, 0, 0 );
             // WinApi.PostMessage( pluginInfo.Handle, WinApi.WM_DESTROY, 0, 0 );
         }

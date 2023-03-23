@@ -10,11 +10,7 @@
 
 using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
 using System.Windows.Forms;
-using AppController.WinTaskScheduler;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using ConfigManager = VirtualSpace.Config.Manager;
@@ -119,15 +115,29 @@ namespace VirtualSpace
         {
             if ( chb_RunOnStartup.Checked )
             {
-                if ( TaskSchedulerHelper.IsTaskExistsByName( Const.AppName ) ) return;
-                if ( !TaskSchedulerHelper.CreateTask() )
+                if ( TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName ) ) return;
+                try
+                {
+                    TaskSchedulerHelper.CreateAutoRunTask( Const.AppName, Manager.AppPath, Const.AppName );
+                }
+                catch ( Exception ex )
+                {
+                    MessageBox.Show( Agent.Langs.GetString( ex.Message ) );
                     chb_RunOnStartup.Checked = false;
+                }
             }
             else
             {
-                if ( !TaskSchedulerHelper.IsTaskExistsByName( Const.AppName ) ) return;
-                if ( !TaskSchedulerHelper.DeleteTaskByName( Const.AppName ) )
+                if ( !TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName ) ) return;
+                try
+                {
+                    TaskSchedulerHelper.DeleteTaskByName( Const.AppName, Const.AppName );
+                }
+                catch ( Exception ex )
+                {
+                    MessageBox.Show( Agent.Langs.GetString( ex.Message ) );
                     chb_RunOnStartup.Checked = true;
+                }
             }
         }
 

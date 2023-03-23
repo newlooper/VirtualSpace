@@ -11,8 +11,8 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System.Collections.Generic;
 using System.Windows.Forms;
-using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
+using KeyBinding = VirtualSpace.Config.Entity.KeyBinding;
 
 namespace VirtualSpace.Config
 {
@@ -58,8 +58,9 @@ namespace VirtualSpace.Config
             public const string ProfilesFolder  = "Profiles";
             public const string CacheFolder     = "Cache";
             public const string PluginsFolder   = "Plugins";
+            public const string LogsFolder      = "Logs";
             public const string SettingsFile    = "settings.json";
-            public const string DefaultVersion  = "1.0";
+            public const string DefaultVersion  = "2.0";
             public const string DefaultLogLevel = "EVENT";
         }
 
@@ -183,98 +184,111 @@ namespace VirtualSpace.Config
                 return extra;
             }
         }
+    }
 
-        public static class MouseAction
+    public static class MouseAction
+    {
+        public enum Action
         {
-            public enum Action
+            DoNothing,
+            ContextMenu,
+            DesktopVisibleAndCloseView,
+            DesktopVisibleOnly,
+            WindowActiveDesktopVisibleAndCloseView,
+            WindowActiveDesktopVisibleOnly,
+            WindowClose,
+            WindowHideFromView,
+            WindowShowForSelectedProcessOnly,
+            WindowShowForSelectedProcessInSelectedDesktop,
+            DesktopShowForSelectedDesktop
+        }
+
+        public static string MOUSE_NODE_DESKTOP_PREFIX = "mouse_node_d_";
+        public static string MOUSE_NODE_WINDOW_PREFIX  = "mouse_node_w_";
+        public const  string KEY_SPLITTER              = "+";
+
+        private static readonly Dictionary<MouseButtons, string> MouseButtonsName;
+        private static readonly Dictionary<Keys, string>         KeysName;
+
+        ////////////////////////////////////////////////////////////////
+        // 鼠标动作表，信息包含默认行为
+        public static readonly Dictionary<string, Action> Info1; // ver 1.0
+
+        ////////////////////////////////////////////////////////////////
+        // 鼠标动作表，信息包含默认行为
+        public static readonly Dictionary<string, Action> Info; // ver 2.0
+
+        static MouseAction()
+        {
+            MouseButtonsName = new Dictionary<MouseButtons, string>
             {
-                DoNothing,
-                ContextMenu,
-                DesktopVisibleAndCloseView,
-                DesktopVisibleOnly,
-                WindowActiveDesktopVisibleAndCloseView,
-                WindowActiveDesktopVisibleOnly,
-                WindowClose,
-                WindowHideFromView,
-                WindowShowForSelectedProcessOnly,
-                WindowShowForSelectedProcessInSelectedDesktop,
-                DesktopShowForSelectedDesktop
+                {MouseButtons.Left, "Left"},
+                {MouseButtons.Middle, "Middle"},
+                {MouseButtons.Right, "Right"}
+            };
+
+            KeysName = new Dictionary<Keys, string>
+            {
+                {Keys.Control, "Ctrl"},
+                {Keys.Alt, "Alt"},
+                {Keys.Shift, "Shift"}
+            };
+
+            var noneKeyCode = ( (int)Keys.None ).ToString( "X2" );
+
+            Info = new Dictionary<string, Action>
+            {
+                {MOUSE_NODE_DESKTOP_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView},
+                {MOUSE_NODE_DESKTOP_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly},
+                {MOUSE_NODE_DESKTOP_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
+
+                {MOUSE_NODE_WINDOW_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView},
+                {MOUSE_NODE_WINDOW_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly},
+                {MOUSE_NODE_WINDOW_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
+            };
+
+            Info1 = new Dictionary<string, Action>
+            {
+                {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView},
+                {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly},
+                {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
+                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
+                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
+                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
+
+                {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView},
+                {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly},
+                {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
+                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
+                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
+                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
+                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
+                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing}
+            };
+        }
+
+        public static string GetActionId( MouseButtons mb, Keys key, string prefix )
+        {
+            if ( User32.GetKeyState( (int)Keys.LWin ) < 0 )
+            {
+                key |= Keys.LWin;
             }
 
-            public const  string MOUSE_NODE_DESKTOP_PREFIX = "mouse_node_d_";
-            public const  string MOUSE_NODE_WINDOW_PREFIX  = "mouse_node_w_";
-            private const string KEY_SPLITTER              = "+";
+            var keyCode = ( (int)key ).ToString( "X2" );
 
-            private static readonly Dictionary<MouseButtons, string> MouseButtonsName;
-            private static readonly Dictionary<Keys, string>         KeysName;
+            var actionId = prefix + keyCode + KEY_SPLITTER + MouseButtonsName[mb];
 
-            ////////////////////////////////////////////////////////////////
-            // 鼠标动作表，信息包含默认行为
-            public static readonly Dictionary<string, Action> Info;
-
-            static MouseAction()
-            {
-                MouseButtonsName = new Dictionary<MouseButtons, string>
-                {
-                    {MouseButtons.Left, "Left"},
-                    {MouseButtons.Middle, "Middle"},
-                    {MouseButtons.Right, "Right"}
-                };
-
-                KeysName = new Dictionary<Keys, string>
-                {
-                    {Keys.Control, "Ctrl"},
-                    {Keys.Alt, "Alt"},
-                    {Keys.Shift, "Shift"}
-                };
-
-                Info = new Dictionary<string, Action>
-                {
-                    {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView},
-                    {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly},
-                    {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
-                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
-                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
-                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                    {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
-
-                    {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView},
-                    {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly},
-                    {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
-                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
-                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
-                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                    {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing}
-                };
-            }
-
-            public static string GetActionId( MouseButtons mb, Keys key, string prefix )
-            {
-                var actionId = "";
-                switch ( key )
-                {
-                    case Keys.None:
-                        actionId = prefix + MouseButtonsName[mb];
-                        break;
-                    case Keys.Control:
-                    case Keys.Alt:
-                    case Keys.Shift:
-                        actionId = prefix + KeysName[key] + KEY_SPLITTER + MouseButtonsName[mb];
-                        break;
-                }
-
-                return actionId;
-            }
+            return actionId;
         }
     }
 }

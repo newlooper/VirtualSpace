@@ -10,16 +10,17 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System.Collections.Generic;
+using VirtualSpace.Config.DataAnnotations;
 using VirtualSpace.Config.Entity;
 
 namespace VirtualSpace.Config
 {
     public class ConfigTemplate
     {
-        public Dictionary<string, Profile> Profiles           { get; set; }
-        public string                      CurrentProfileName { get; set; }
-        public string                      Version            { get; set; }
-        public LogConfig                   LogConfig          { get; set; }
+        [PropertyProtector] public Dictionary<string, Profile> Profiles           { get; set; }
+        public                     string                      CurrentProfileName { get; set; }
+        public                     string                      Version            { get; set; }
+        public                     LogConfig                   LogConfig          { get; set; }
 
         public Dictionary<string, KeyBinding>? KeyBindings { get; set; } = new()
         {
@@ -34,11 +35,14 @@ namespace VirtualSpace.Config
             {Const.Hotkey.NAV_LEFT, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_LEFT].MessageId}},
             {Const.Hotkey.NAV_RIGHT, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_RIGHT].MessageId}},
             {Const.Hotkey.NAV_UP, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_UP].MessageId}},
-            {Const.Hotkey.NAV_DOWN, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_DOWN].MessageId}}
+            {Const.Hotkey.NAV_DOWN, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_DOWN].MessageId}},
+            {Const.Hotkey.SWITCH_BACK_LAST, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.SWITCH_BACK_LAST].MessageId}}
         };
 
-        public Dictionary<string, Const.MouseAction.Action>? MouseAction { get; set; } = DefaultMouseActions();
+        public Dictionary<string, MouseAction.Action>? MouseAction  { get; set; } = null;
+        public Dictionary<string, MouseAction.Action>? MouseActions { get; set; } = Config.MouseAction.Info;
 
+        [PropertyProtector]
         public Cluster Cluster { get; set; } = new()
         {
             HideMainViewIfItsShown = false,
@@ -47,21 +51,16 @@ namespace VirtualSpace.Config
             HideOnStart = false
         };
 
-        public Const.MouseAction.Action GetMouseActionById( string id )
+        public MouseAction.Action GetMouseActionById( string id )
         {
-            if ( MouseAction == null || MouseAction.Count == 0 )
+            if ( MouseActions == null || MouseActions.Count == 0 )
             {
-                MouseAction = DefaultMouseActions();
+                MouseActions = Config.MouseAction.Info;
             }
 
-            return MouseAction.ContainsKey( id )
-                ? MouseAction[id]
-                : Const.MouseAction.Action.DoNothing;
-        }
-
-        private static Dictionary<string, Const.MouseAction.Action> DefaultMouseActions()
-        {
-            return Const.MouseAction.Info;
+            return MouseActions.ContainsKey( id )
+                ? MouseActions[id]
+                : Config.MouseAction.Action.DoNothing;
         }
     }
 }

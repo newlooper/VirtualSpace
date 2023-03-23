@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="ControlPanel.Pages.Menus.LogsMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.togglebutton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <Separator />
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Margin="21,0,0,0"
+                       Text="{lex:Loc Page.Logs.IsPrintLogs}"
+                       VerticalAlignment="Center" />
+            <ToggleButton
+                Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                Width="50" Margin="5,5"
+                IsChecked="{Binding IsPrintLogs, Mode=TwoWay}" />
+        </StackPanel>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="32"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Content="{lex:Loc Menus.Logs.ClearAll}" Grid.Column="1" Click="clearAll_OnClick" />
+            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc Menus.Logs.OpenLogsDir}" Click="openLogsDir_OnClick" />
+        </Grid>
+    </StackPanel>
+
+</UserControl>

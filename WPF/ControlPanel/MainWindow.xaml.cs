@@ -9,59 +9,121 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
+using ControlPanel.Factories;
 using ControlPanel.Pages;
-using ModernWpf;
-using ModernWpf.Controls;
+using VirtualSpace;
+using VirtualSpace.Config;
 using WPFLocalizeExtension.Engine;
-using WPFLocalizeExtension.Extensions;
 
-namespace ControlPanel
+namespace ControlPanel;
+
+/// <summary>
+///     Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window, IAppController
 {
-    /// <summary>
-    ///     Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    private static MainWindow _instance;
+
+    private IntPtr _mainWindowHandle;
+
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-            LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
-            LocalizeDictionary.Instance.Culture = new CultureInfo( "zh-Hans" );
-        }
+        InitializeComponent();
 
-        private void ThemeButton_OnClick( object sender, RoutedEventArgs e )
-        {
-            DispatcherHelper.RunOnMainThread( () =>
-            {
-                ThemeManager.Current.ApplicationTheme = ThemeManager.Current.ActualApplicationTheme == ApplicationTheme.Dark
-                    ? ApplicationTheme.Light
-                    : ApplicationTheme.Dark;
-            } );
-        }
+        _instance = this;
 
-        private void NavigationView_SelectionChanged( NavigationView sender, NavigationViewSelectionChangedEventArgs args )
-        {
-            if ( args.IsSettingsSelected )
-            {
-                ContentFrame.Navigate( typeof( GlobalSettings ) );
-            }
-            else
-            {
-                var selectedItem    = (NavigationViewItem)args.SelectedItem;
-                var selectedItemTag = (string)selectedItem.Tag;
-                sender.Header = "> " + LocExtension.GetLocalizedValue<string>( "TopBar." + selectedItemTag );
-                var pageName = "ControlPanel.Pages." + selectedItemTag;
-                var pageType = typeof( Logs ).Assembly.GetType( pageName );
-                ContentFrame.Navigate( pageType, null, args.RecommendedNavigationTransitionInfo );
-            }
-        }
+        Title = Const.Window.VS_CONTROLLER_TITLE;
+        Topmost = true;
 
-        private void SettingsButton_OnClick( object sender, RoutedEventArgs e )
+        LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
+        LocalizeDictionary.Instance.Culture = new CultureInfo( Manager.CurrentProfile.UI.Language );
+        NavBarItem.InitNavBar( NavBar );
+    }
+
+    public static IntPtr MainWindowHandle => _instance._mainWindowHandle;
+
+    public void BringToTop()
+    {
+        Show();
+    }
+
+    public void SetMainWindowHandle( IntPtr handle )
+    {
+        _mainWindowHandle = handle;
+    }
+
+    public void Quit()
+    {
+        Closing -= MainWindow_OnClosing;
+        Close();
+    }
+
+    public void RenderDesktopArrangementButtons( string selectedDa )
+    {
+        // throw new NotImplementedException();
+    }
+
+    private void MainWindow_OnLoaded( object sender, RoutedEventArgs e )
+    {
+        InitTheme();
+        PickLogAndWrite( _cancelTokenSourceForLog.Token );
+    }
+
+    private void MainWindow_OnClosing( object? sender, CancelEventArgs e )
+    {
+        if ( Application.Current is App ) return;
+        e.Cancel = true;
+        Hide();
+    }
+
+    public static void TryClose()
+    {
+        _instance.Close();
+    }
+
+    public static void TryQuit()
+    {
+        _instance.Quit();
+    }
+
+    public static void RestartApp( bool runas = false )
+    {
+        var psi = new ProcessStartInfo
         {
-            TopNav.Header = "> " + LocExtension.GetLocalizedValue<string>( "TopBar.Setting" );
-            ContentFrame.Navigate( typeof( GlobalSettings ) );
+            FileName = Process.GetCurrentProcess().MainModule.FileName,
+            UseShellExecute = true
+        };
+
+        if ( runas ) psi.Verb = "runas";
+
+        try
+        {
+            Process.Start( psi );
+            Application.Current.Shutdown();
         }
+        catch
+        {
+            //
+        }
+    }
+
+    private void NavBar_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
+    {
+        var tab = (TabControl)sender;
+        if ( tab.SelectedIndex == -1 ) return;
+        var selectedTab = (TabItem)tab.SelectedItem;
+        ContentFrame.Content = PageFactory.GetPage( NavBarItem.NavBarItemsInfo[selectedTab.Tag.ToString()] );
+    }
+
+    private void SettingsButton_OnClick( object sender, RoutedEventArgs e )
+    {
+        NavBar.SelectedIndex = -1;
+        ContentFrame.Content = Settings.Create();
     }
 }

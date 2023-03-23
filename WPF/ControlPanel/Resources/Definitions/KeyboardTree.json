@@ -1,0 +1,76 @@
+﻿{
+  "Nodes": [
+    {
+      "Name": "K_G",
+      "Header": "K_G",
+      "Nodes": [
+        {
+          "Name": "hk_node_rise_mainview",
+          "Header": "hk_node_rise_mainview"
+        },
+        {
+          "Name": "hk_node_open_app_controller",
+          "Header": "hk_node_open_app_controller"
+        },
+        {
+          "Name": "hk_node_rise_mainview_for_active_app",
+          "Header": "hk_node_rise_mainview_for_active_app"
+        },
+        {
+          "Name": "hk_node_rise_mainview_for_current_vd",
+          "Header": "hk_node_rise_mainview_for_current_vd"
+        },
+        {
+          "Name": "hk_node_rise_mainview_for_active_app_in_current_vd",
+          "Header": "hk_node_rise_mainview_for_active_app_in_current_vd"
+        }
+      ]
+    },
+    {
+      "Name": "K_D",
+      "Header": "K_D",
+      "Nodes": [
+        {
+          "Name": "K_D_S",
+          "Header": "K_D_S"
+        },
+        {
+          "Name": "K_D_N",
+          "Header": "K_D_N",
+          "Nodes": [
+            {
+              "Name": "hk_node_nav_left",
+              "Header": "hk_node_nav_left"
+            },
+            {
+              "Name": "hk_node_nav_right",
+              "Header": "hk_node_nav_right"
+            },
+            {
+              "Name": "hk_node_nav_up",
+              "Header": "hk_node_nav_up"
+            },
+            {
+              "Name": "hk_node_nav_down",
+              "Header": "hk_node_nav_down"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "K_W",
+      "Header": "K_W",
+      "Nodes": [
+        {
+          "Name": "K_W_M",
+          "Header": "K_W_M"
+        },
+        {
+          "Name": "K_W_MF",
+          "Header": "K_W_MF"
+        }
+      ]
+    }
+  ]
+}

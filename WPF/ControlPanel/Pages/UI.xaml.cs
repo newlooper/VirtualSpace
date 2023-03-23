@@ -9,13 +9,47 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace ControlPanel.Pages
+using System.Windows;
+using System.Windows.Controls;
+using ControlPanel.ViewModels;
+using MaterialDesignThemes.Wpf;
+using VirtualSpace.Helpers;
+
+namespace ControlPanel.Pages;
+
+public partial class UI
 {
-    public partial class UI
+    private static UI?         _instance;
+    private static UIViewModel _vm;
+
+    public UI()
     {
-        public UI()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
+
+    private UI( string headerKey, PackIconKind iconKind ) : this()
+    {
+        var mdc = (MenuContainerViewModel)MenuContainer.DataContext;
+        mdc.HeaderKey = headerKey;
+        mdc.IconKind = iconKind;
+        _vm = new UIViewModel();
+        DataContext = _vm;
+        ButtonsContainer.AddHandler( Button.ClickEvent, new RoutedEventHandler( OnVdArrangementButtonClicked ) );
+    }
+
+    private static void OnVdArrangementButtonClicked( object sender, RoutedEventArgs e )
+    {
+        var btn = (Button)e.OriginalSource;
+
+        _vm.VdArrangement = int.Parse( btn.Tag.ToString() );
+
+        User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.DesktopArrangement, 0 );
+
+        e.Handled = true;
+    }
+
+    public static UI Create( string headerKey, PackIconKind iconKind )
+    {
+        return _instance ??= new UI( headerKey, iconKind );
     }
 }

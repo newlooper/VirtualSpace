@@ -224,10 +224,10 @@ Windows 11	22H2(22621)
     <value>什么都不做</value>
   </data>
   <data name="Mouse.Action.DesktopVisibleOnly" xml:space="preserve">
-    <value>仅切换虚拟桌面</value>
+    <value>仅切换桌面</value>
   </data>
   <data name="Mouse.Action.DesktopVisibleAndCloseView" xml:space="preserve">
-    <value>切换虚拟桌面并关闭视图</value>
+    <value>切换桌面并关闭视图</value>
   </data>
   <data name="Mouse.Action.ContextMenu" xml:space="preserve">
     <value>显示上下文菜单</value>
@@ -282,7 +282,8 @@ Windows 11	22H2(22621)
     <value>切换回上一个桌面</value>
   </data>
   <data name="Profile.Warning.LastProfileProtect" xml:space="preserve">
-    <value>不能重命名或删除最后一个配置文件。</value>
+    <value>不能重命名或删除最后一个配置文件。
+复制一个新的配置文件后即可操作。</value>
   </data>
   <data name="Profile.Confirm.Delete" xml:space="preserve">
     <value>确定要删除这个配置文件吗？
@@ -302,5 +303,101 @@ Windows 11	22H2(22621)
   </data>
   <data name="Tray.Menu.Quit" xml:space="preserve">
     <value>退出</value>
+  </data>
+  <data name="K_G" xml:space="preserve">
+    <value>通用</value>
+  </data>
+  <data name="hk_node_open_app_controller" xml:space="preserve">
+    <value>打开程序控制</value>
+  </data>
+  <data name="hk_node_rise_mainview" xml:space="preserve">
+    <value>唤起主视图</value>
+  </data>
+  <data name="hk_node_rise_mainview_for_active_app" xml:space="preserve">
+    <value>为当前活动程序唤起主视图</value>
+  </data>
+  <data name="hk_node_rise_mainview_for_current_vd" xml:space="preserve">
+    <value>为当前桌面唤起主视图</value>
+  </data>
+  <data name="hk_node_rise_mainview_for_active_app_in_current_vd" xml:space="preserve">
+    <value>为当前桌面中的活动程序唤起主视图</value>
+  </data>
+  <data name="K_D" xml:space="preserve">
+    <value>桌面</value>
+  </data>
+  <data name="K_D_N" xml:space="preserve">
+    <value>导航</value>
+  </data>
+  <data name="K_D_S" xml:space="preserve">
+    <value>切换桌面</value>
+  </data>
+  <data name="K_W" xml:space="preserve">
+    <value>窗口</value>
+  </data>
+  <data name="K_W_M" xml:space="preserve">
+    <value>移动</value>
+  </data>
+  <data name="K_W_MF" xml:space="preserve">
+    <value>移动并跟随</value>
+  </data>
+  <data name="hk_node_nav_left" xml:space="preserve">
+    <value>向左</value>
+  </data>
+  <data name="hk_node_nav_right" xml:space="preserve">
+    <value>向右</value>
+  </data>
+  <data name="hk_node_nav_up" xml:space="preserve">
+    <value>向上</value>
+  </data>
+  <data name="hk_node_nav_down" xml:space="preserve">
+    <value>向下</value>
+  </data>
+  <data name="KB.Hotkey.MKeyCheck" xml:space="preserve">
+    <value>至少需要一个修改类键。</value>
+  </data>
+  <data name="M.D" xml:space="preserve">
+    <value>桌面</value>
+  </data>
+  <data name="M.W" xml:space="preserve">
+    <value>窗口</value>
+  </data>
+  <data name="M.ROOT" xml:space="preserve">
+    <value>主视图</value>
+  </data>
+  <data name="M.D.DesktopVisibleAndCloseView" xml:space="preserve">
+    <value>切换桌面并关闭视图</value>
+  </data>
+  <data name="M.D.DesktopVisibleOnly" xml:space="preserve">
+    <value>仅切换桌面</value>
+  </data>
+  <data name="M.D.DesktopShowForSelectedDesktop" xml:space="preserve">
+    <value>仅显示所选桌面</value>
+  </data>
+  <data name="M.ContextMenu" xml:space="preserve">
+    <value>显示上下文菜单</value>
+  </data>
+  <data name="M.W.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
+    <value>激活窗口，切换桌面并关闭视图</value>
+  </data>
+  <data name="M.W.WindowActiveDesktopVisibleOnly" xml:space="preserve">
+    <value>激活窗口，切换桌面</value>
+  </data>
+  <data name="M.W.WindowHideFromView" xml:space="preserve">
+    <value>从视图中隐藏</value>
+  </data>
+  <data name="M.W.WindowClose" xml:space="preserve">
+    <value>关闭窗口</value>
+  </data>
+  <data name="M.W.WindowShowForSelectedProcessOnly" xml:space="preserve">
+    <value>仅显示此程序的窗口</value>
+  </data>
+  <data name="M.W.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
+    <value>仅显示所选桌面中的活动程序窗口</value>
+  </data>
+  <data name="Validation.Mouse.Button.Required" xml:space="preserve">
+    <value>必须选择鼠标键</value>
+  </data>
+  <data name="Mouse.Tips.Exists" xml:space="preserve">
+    <value>相同的鼠标动作已存在，尝试换一种组合或鼠标键</value>
   </data>
 </root>

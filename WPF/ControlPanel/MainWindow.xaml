@@ -3,47 +3,61 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:lex="http://wpflocalizeextension.codeplex.com"
-        lex:LocalizeDictionary.DesignCulture="zh-Hans"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         lex:LocalizeDictionary.OutputMissingKeys="True"
         lex:ResxLocalizationProvider.DefaultAssembly="ControlPanel"
         lex:ResxLocalizationProvider.DefaultDictionary="Langs"
-        ui:WindowHelper.UseModernWindowStyle="True"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280">
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="14"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="Segoe UI,Segoe UI Emoji,Segoe UI Symbol,Microsoft YaHei UI,Microsoft YaHei"
+        Height="800" Width="1280" WindowStartupLocation="CenterScreen"
+        Loaded="MainWindow_OnLoaded" Closing="MainWindow_OnClosing">
 
-    <Grid x:Name="LayoutRoot">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ControlPanel;component/ControlPanel.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="71" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
 
-        <ui:NavigationView x:Name="TopNav"
-                           PaneDisplayMode="Top"
-                           Header=""
-                           IsTabStop="False"
-                           IsBackButtonVisible="Collapsed"
-                           IsSettingsVisible="False"
-                           SelectionChanged="NavigationView_SelectionChanged">
-            <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="{lex:Loc TopBar.General}" Icon="Home" Tag="General" />
-                <ui:NavigationViewItem Content="{lex:Loc TopBar.UI}" Icon="ViewAll" Tag="UI" />
-                <ui:NavigationViewItem Content="{lex:Loc TopBar.Rules}" Icon="Sort" Tag="Rules" />
-                <ui:NavigationViewItem Content="{lex:Loc TopBar.Logs}" Icon="TwoPage" Tag="Logs" />
-            </ui:NavigationView.MenuItems>
-            <ui:NavigationView.PaneFooter>
-                <StackPanel Orientation="Horizontal">
-                    <ui:AppBarButton ToolTip="{lex:Loc TopBar.Theme}" Width="40" x:Name="ThemeButton" Click="ThemeButton_OnClick" Label="">
-                        <ui:AppBarButton.Icon>
-                            <ui:FontIcon
-                                Glyph="&#xE771;"
-                                Margin="0,0,0,0" />
-                        </ui:AppBarButton.Icon>
-                    </ui:AppBarButton>
-                    <ui:AppBarButton ToolTip="{lex:Loc TopBar.Setting}" Width="40" Icon="Setting" x:Name="SettingsButton" Click="SettingsButton_OnClick"
-                                     Label="" />
-                </StackPanel>
-            </ui:NavigationView.PaneFooter>
-            <ui:Frame x:Name="ContentFrame" />
-        </ui:NavigationView>
+        <materialDesign:Card materialDesign:ElevationAssist.Elevation="Dp8">
+            <DockPanel Background="{Binding Background, ElementName=NavBar}">
+                <TabControl DockPanel.Dock="Top" x:Name="NavBar"
+                            Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+                            SelectionChanged="NavBar_OnSelectionChanged">
+                    <materialDesign:NavigationRailAssist.FloatingContent>
+                        <StaticResource ResourceKey="Logo" />
+                    </materialDesign:NavigationRailAssist.FloatingContent>
+                </TabControl>
 
+                <TabControl DockPanel.Dock="Bottom"
+                            materialDesign:ColorZoneAssist.Mode="Standard"
+                            VerticalAlignment="Bottom"
+                            Style="{StaticResource MaterialDesignNavigationRailTabControl}">
+                    <materialDesign:NavigationRailAssist.FloatingContent>
+                        <Button
+                            Margin="16"
+                            Content="{materialDesign:PackIcon Kind=Gear}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                            Click="SettingsButton_OnClick" />
+                    </materialDesign:NavigationRailAssist.FloatingContent>
+                </TabControl>
+            </DockPanel>
+        </materialDesign:Card>
+
+        <materialDesign:Card Grid.Column="1" x:Name="ContentFrame" />
     </Grid>
 
 </Window>

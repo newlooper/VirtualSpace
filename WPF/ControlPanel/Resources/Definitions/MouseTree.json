@@ -1,0 +1,77 @@
+﻿{
+  "Nodes": [
+    {
+      "Header": "M.ROOT",
+      "Tag": "ROOT",
+      "Nodes": [
+        {
+          "Header": "M.D",
+          "Tag": "Desktop",
+          "Nodes": [
+            {
+              "Name": "DesktopVisibleAndCloseView",
+              "Header": "M.D.DesktopVisibleAndCloseView",
+              "Tag": "mouse_node_d_"
+            },
+            {
+              "Name": "DesktopVisibleOnly",
+              "Header": "M.D.DesktopVisibleOnly",
+              "Tag": "mouse_node_d_"
+            },
+            {
+              "Name": "ContextMenu",
+              "Header": "M.ContextMenu",
+              "Tag": "mouse_node_d_"
+            },
+            {
+              "Name": "DesktopShowForSelectedDesktop",
+              "Header": "M.D.DesktopShowForSelectedDesktop",
+              "Tag": "mouse_node_d_"
+            }
+          ]
+        },
+        {
+          "Header": "M.W",
+          "Tag": "Window",
+          "Nodes": [
+            {
+              "Name": "WindowActiveDesktopVisibleAndCloseView",
+              "Header": "M.W.WindowActiveDesktopVisibleAndCloseView",
+              "Tag": "mouse_node_w_"
+            },
+            {
+              "Name": "WindowActiveDesktopVisibleOnly",
+              "Header": "M.W.WindowActiveDesktopVisibleOnly",
+              "Tag": "mouse_node_w_"
+            },
+            {
+              "Name": "ContextMenu",
+              "Header": "M.ContextMenu",
+              "Tag": "mouse_node_w_"
+            },
+            {
+              "Name": "WindowHideFromView",
+              "Header": "M.W.WindowHideFromView",
+              "Tag": "mouse_node_w_"
+            },
+            {
+              "Name": "WindowClose",
+              "Header": "M.W.WindowClose",
+              "Tag": "mouse_node_w_"
+            },
+            {
+              "Name": "WindowShowForSelectedProcessOnly",
+              "Header": "M.W.WindowShowForSelectedProcessOnly",
+              "Tag": "mouse_node_w_"
+            },
+            {
+              "Name": "WindowShowForSelectedProcessInSelectedDesktop",
+              "Header": "M.W.WindowShowForSelectedProcessInSelectedDesktop",
+              "Tag": "mouse_node_w_"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

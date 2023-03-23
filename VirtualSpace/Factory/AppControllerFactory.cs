@@ -12,13 +12,14 @@ namespace VirtualSpace.Factory
 {
     public static class AppControllerFactory
     {
-        public static IAppController Create( string name = "WinForm")
+        public static IAppController Create( string name = "WinForm" )
         {
             switch ( name )
             {
                 case "WinForm":
-                    var ac = new AppController();
-                    return ac;
+                    return new AppController();
+                case "WPF":
+                    return new ControlPanel.MainWindow();
                 default:
                     return null;
             }

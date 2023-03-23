@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualDesktop11", "Virtual
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualDesktop11_21H2", "VirtualDesktop\VirtualDesktop11_21H2\VirtualDesktop11_21H2.csproj", "{F63B2561-6C6C-4010-A63A-AAB03F8C3E30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualDesktopWrapper", "VirtualDesktopWrapper\VirtualDesktopWrapper.csproj", "{1E662F33-8F91-48EB-A659-594E7039C65A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualDesktopWrapper", "VirtualDesktopWrapper\VirtualDesktopWrapper.csproj", "{1E662F33-8F91-48EB-A659-594E7039C65A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlPanel", "WPF\ControlPanel\ControlPanel.csproj", "{FAC71622-8310-4139-944B-F1FBF6588843}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -237,6 +239,18 @@ Global
 		{1E662F33-8F91-48EB-A659-594E7039C65A}.Release|x64.Build.0 = Release|Any CPU
 		{1E662F33-8F91-48EB-A659-594E7039C65A}.Release|x86.ActiveCfg = Release|Any CPU
 		{1E662F33-8F91-48EB-A659-594E7039C65A}.Release|x86.Build.0 = Release|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Debug|x64.Build.0 = Debug|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Debug|x86.Build.0 = Debug|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Release|x64.ActiveCfg = Release|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Release|x64.Build.0 = Release|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Release|x86.ActiveCfg = Release|Any CPU
+		{FAC71622-8310-4139-944B-F1FBF6588843}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

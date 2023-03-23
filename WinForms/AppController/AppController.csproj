@@ -8,10 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="TaskScheduler" Version="2.10.1" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\..\Configuration\Configuration.csproj" />
         <ProjectReference Include="..\..\Ipc\IpcServer\IpcServer.csproj" />
         <ProjectReference Include="..\..\VirtualDesktopWrapper\VirtualDesktopWrapper.csproj" />

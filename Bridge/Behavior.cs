@@ -24,5 +24,21 @@ namespace VirtualSpace.Config.Events.Entity
         public bool   PinApp        { get; set; }
         public int    MoveToScreen  { get; set; } = -1;
         public bool   HideFromView  { get; set; }
+        
+        public Behavior Clone()
+        {
+            return new Behavior
+            {
+                Handle = Handle,
+                RuleName = RuleName,
+                WindowTitle = WindowTitle,
+                MoveToDesktop = MoveToDesktop,
+                FollowWindow = FollowWindow,
+                PinWindow = PinWindow,
+                PinApp = PinApp,
+                MoveToScreen = MoveToScreen,
+                HideFromView = HideFromView
+            };
+        }
     }
 }

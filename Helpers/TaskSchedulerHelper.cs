@@ -9,26 +9,22 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
-using System.Windows.Forms;
+using System.Diagnostics;
 using Microsoft.Win32.TaskScheduler;
-using VirtualSpace;
-using VirtualSpace.Config;
-using VirtualSpace.Helpers;
 
-namespace AppController.WinTaskScheduler
+namespace VirtualSpace.Helpers
 {
-    internal class TaskSchedulerHelper
+    public static class TaskSchedulerHelper
     {
-        public static bool CreateTask()
+        public static void CreateAutoRunTask( string taskName, string fullAppPath, string taskFolder = "" )
         {
             if ( !SysInfo.IsAdministrator )
             {
-                MessageBox.Show( Agent.Langs.GetString( "General.RunOnStartup.Error.Permission" ) );
-                return false;
+                throw new Exception( "General.RunOnStartup.Error.Permission" );
             }
 
             var td = TaskService.Instance.NewTask();
-            td.RegistrationInfo.Description = "autorun " + Const.AppName + " at system startup.";
+            td.RegistrationInfo.Description = "autorun " + taskName + " at system startup.";
             td.Principal.RunLevel = TaskRunLevel.Highest;
             td.Principal.LogonType = TaskLogonType.InteractiveToken;
             td.Settings.ExecutionTimeLimit = TimeSpan.FromSeconds( 0 );
@@ -37,33 +33,43 @@ namespace AppController.WinTaskScheduler
             lt.Delay = TimeSpan.FromSeconds( 5 );
             td.Triggers.Add( lt );
 
-            var ea = new ExecAction( Manager.AppPath, "" );
+            var ea = new ExecAction( fullAppPath, "" );
             td.Actions.Add( ea );
 
-            TaskService.Instance.RootFolder.RegisterTaskDefinition( Const.AppName, td );
-
-            return true;
+            TaskService.Instance.RootFolder.RegisterTaskDefinition( GetTaskPath( taskName, taskFolder ), td );
         }
 
-        public static bool DeleteTaskByName( string taskName )
+        public static void DeleteTaskByName( string taskName, string taskFolder = "" )
         {
             if ( !SysInfo.IsAdministrator )
             {
-                MessageBox.Show( Agent.Langs.GetString( "General.RunOnStartup.Error.Permission" ) );
-                return false;
+                throw new Exception( "General.RunOnStartup.Error.Permission" );
             }
 
             using var ts = new TaskService();
-            ts.RootFolder.DeleteTask( taskName );
-
-            return true;
+            ts.RootFolder.DeleteTask( GetTaskPath( taskName, taskFolder ) );
         }
 
-        public static bool IsTaskExistsByName( string taskName )
+        public static bool IsTaskExistsByName( string taskName, string taskFolder = "" )
         {
-            using var ts = new TaskService();
-            var       t  = ts.GetTask( taskName );
+            using var ts       = new TaskService();
+            var       t        = ts.GetTask( GetTaskPath( taskName, taskFolder ) );
             return t != null;
+        }
+
+        private static string GetTaskPath( string taskName, string taskFolder )
+        {
+            return string.IsNullOrEmpty( taskFolder ) ? taskName : taskFolder + @"\" + taskName;
+        }
+
+        public static void OpenWinTaskScheduler()
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = "taskschd.msc",
+                UseShellExecute = true
+            };
+            Process.Start( psi );
         }
     }
 }

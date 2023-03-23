@@ -178,7 +178,7 @@ namespace VirtualSpace
             ConfigManager.Configs.Profiles.Remove( delProfile );
             ConfigManager.Configs.CurrentProfileName = ConfigManager.Configs.Profiles.Keys.Last();
             ConfigManager.Save( reason: "Delete", reasonName: "Profile" );
-            ConfigManager.DeleteProfiles( delProfile );
+            ConfigManager.DeleteFilesOfProfile( delProfile );
         }
 
         private void CreateProfile( string profileName )

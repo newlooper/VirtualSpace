@@ -9,23 +9,20 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using VirtualSpace.Config.DataAnnotations;
+
 namespace VirtualSpace.Config.Entity
 {
     public class Cluster
     {
-        private long _vdwWallpaperQuality = 50L;
-        public  bool HideMainViewIfItsShown     { get; set; }
-        public  bool NotificationOnVdChanged    { get; set; }
-        public  bool ShowVDIndexOnTrayIcon      { get; set; }
-        public  int  StyleOfVDIndexOnTrayIcon   { get; set; } = 0;
-        public  bool HideOnStart                { get; set; }
-        public  bool ForceFocusForegroundWindow { get; set; } = true;
-        public  bool EnableDoubleBufferedForVDW { get; set; } = true;
+        public bool HideMainViewIfItsShown     { get; set; }
+        public bool NotificationOnVdChanged    { get; set; }
+        public bool ShowVDIndexOnTrayIcon      { get; set; }
+        public int  StyleOfVDIndexOnTrayIcon   { get; set; } = 0;
+        public bool HideOnStart                { get; set; }
+        public bool ForceFocusForegroundWindow { get; set; } = true;
+        public bool EnableDoubleBufferedForVDW { get; set; } = true;
 
-        public long VdwWallpaperQuality
-        {
-            get => _vdwWallpaperQuality;
-            set => _vdwWallpaperQuality = value is >= 0 and <= 100 ? value : 50L;
-        }
+        [PropertyProtector( 50L, 0L, 100L )] public long VdwWallpaperQuality { get; set; }
     }
 }

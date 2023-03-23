@@ -21,23 +21,28 @@ namespace VirtualSpace.AppLogs
 
         public const LogEventLevel LOG_LEVEL_EVENT = (LogEventLevel)0xFF;
 
-        public static readonly Serilog.Core.Logger RootLogger = new LoggerConfiguration()
-            .MinimumLevel.ControlledBy( LevelSwitch )
-            .WriteTo.Logger( c =>
-                c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Verbose ).WriteTo.File( "Logs/verbose.txt", LogEventLevel.Verbose ) )
-            .WriteTo.Logger( c =>
-                c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Debug ).WriteTo.File( "Logs/debug.txt", LogEventLevel.Debug ) )
-            .WriteTo.Logger( c =>
-                c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Information ).WriteTo.File( "Logs/info.txt", LogEventLevel.Information ) )
-            .WriteTo.Logger( c =>
-                c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Warning ).WriteTo.File( "Logs/warning.txt", LogEventLevel.Warning ) )
-            .WriteTo.Logger( c =>
-                c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Error ).WriteTo.File( "Logs/error.txt", LogEventLevel.Error ) )
-            .WriteTo.Logger( c =>
-                c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Fatal ).WriteTo.File( "Logs/fatal.txt", LogEventLevel.Fatal ) )
-            .WriteTo.Logger( c =>
-                c.Filter.ByIncludingOnly( evt => evt.Level == LOG_LEVEL_EVENT ).WriteTo.File( "Logs/event.txt", LOG_LEVEL_EVENT ) )
-            .CreateLogger();
+        public static Serilog.Core.Logger RootLogger;
+
+        public static void InitLogger( string folder )
+        {
+            RootLogger = new LoggerConfiguration()
+                .MinimumLevel.ControlledBy( LevelSwitch )
+                .WriteTo.Logger( c =>
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Verbose ).WriteTo.File( $"{folder}/verbose.txt", LogEventLevel.Verbose ) )
+                .WriteTo.Logger( c =>
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Debug ).WriteTo.File( $"{folder}/debug.txt", LogEventLevel.Debug ) )
+                .WriteTo.Logger( c =>
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Information ).WriteTo.File( $"{folder}/info.txt", LogEventLevel.Information ) )
+                .WriteTo.Logger( c =>
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Warning ).WriteTo.File( $"{folder}/warning.txt", LogEventLevel.Warning ) )
+                .WriteTo.Logger( c =>
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Error ).WriteTo.File( $"{folder}/error.txt", LogEventLevel.Error ) )
+                .WriteTo.Logger( c =>
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Fatal ).WriteTo.File( $"{folder}/fatal.txt", LogEventLevel.Fatal ) )
+                .WriteTo.Logger( c =>
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LOG_LEVEL_EVENT ).WriteTo.File( $"{folder}/event.txt", LOG_LEVEL_EVENT ) )
+                .CreateLogger();
+        }
 
         public static void GorgeousDividingLine()
         {

@@ -8,27 +8,17 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
+using VirtualSpace.Config.DataAnnotations;
+
 namespace VirtualSpace.Config.Entity
 {
     public class Mouse
     {
-        private int  _dragSizeFactor             = 10;
-        private int  _taskbarVisibilityThreshold = 100;
-        public  int  LeftClickOnCanvas                  { get; set; }
-        public  int  RightClickOnCanvas                 { get; set; }
-        public  int  MiddleClickOnCanvas                { get; set; }
-        public  bool UseWheelSwitchDesktopWhenOnTaskbar { get; set; }
-
-        public int DragSizeFactor
-        {
-            get => _dragSizeFactor;
-            set => _dragSizeFactor = value is < 1 or > 100 ? 10 : value;
-        }
-
-        public int TaskbarVisibilityThreshold
-        {
-            get => _taskbarVisibilityThreshold;
-            set => _taskbarVisibilityThreshold = value is < 100 or > 1000 ? 100 : value;
-        }
+        public                                       int  LeftClickOnCanvas                  { get; set; }
+        public                                       int  RightClickOnCanvas                 { get; set; }
+        public                                       int  MiddleClickOnCanvas                { get; set; }
+        public                                       bool UseWheelSwitchDesktopWhenOnTaskbar { get; set; }
+        [PropertyProtector( 10, 1, 100 )]     public int  DragSizeFactor                     { get; set; }
+        [PropertyProtector( 100, 100, 1000 )] public int  TaskbarVisibilityThreshold         { get; set; }
     }
 }

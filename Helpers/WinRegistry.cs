@@ -11,15 +11,19 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Drawing;
+using System.Management;
+using System.Security.Principal;
 using Microsoft.Win32;
+using VirtualSpace.AppLogs;
 
 namespace VirtualSpace.Helpers
 {
     public static class WinRegistry
     {
-        private const string VD_WALLPAPER_REGISTRY_PREFIX = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops\Desktops\";
-        private const string WALLPAPER_REGISTRY_PREFIX    = @"HKEY_CURRENT_USER\Control Panel\Desktop\";
-        private const string COLOR_REGISTRY_PREFIX        = @"HKEY_CURRENT_USER\Control Panel\Colors\";
+        private const string PATH_VD_WALLPAPER_REGISTRY = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops\Desktops\";
+        private const string PATH_WALLPAPER_REGISTRY    = @"HKEY_CURRENT_USER\Control Panel\Desktop\";
+        private const string PATH_COLOR_REGISTRY        = @"HKEY_CURRENT_USER\Control Panel\Colors\";
+        private const string PATH_APP_USE_LIGHT_THEME   = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\";
 
         public static Wallpaper GetWallpaperByDesktopGuid( Guid guid, int width, int height, string cachePath, long quality )
         {
@@ -48,12 +52,12 @@ namespace VirtualSpace.Helpers
 
         public static string? GetDefaultWallpaperPath()
         {
-            return Registry.GetValue( WALLPAPER_REGISTRY_PREFIX, "Wallpaper", "" ).ToString();
+            return Registry.GetValue( PATH_WALLPAPER_REGISTRY, "Wallpaper", "" ).ToString();
         }
 
         public static string? GetWallPaperPathByGuid( Guid guid )
         {
-            var path = Registry.GetValue( VD_WALLPAPER_REGISTRY_PREFIX + "{" + guid + "}", "Wallpaper", "" )?.ToString();
+            var path = Registry.GetValue( PATH_VD_WALLPAPER_REGISTRY + "{" + guid + "}", "Wallpaper", "" )?.ToString();
 
             if ( string.IsNullOrEmpty( path ) )
                 path = GetDefaultWallpaperPath();
@@ -63,9 +67,65 @@ namespace VirtualSpace.Helpers
 
         public static Color GetBackColor()
         {
-            var color    = Registry.GetValue( COLOR_REGISTRY_PREFIX, "Background", "" ).ToString();
+            var color    = Registry.GetValue( PATH_COLOR_REGISTRY, "Background", "" ).ToString();
             var strColor = color.Split( ' ' );
             return Color.FromArgb( int.Parse( strColor[0] ), int.Parse( strColor[1] ), int.Parse( strColor[2] ) );
+        }
+
+        public static bool AppThemeIsLight()
+        {
+            return Registry.GetValue( PATH_APP_USE_LIGHT_THEME, "AppsUseLightTheme", "1" ).ToString() == "1";
+        }
+    }
+
+    public class RegValueMonitor : IDisposable
+    {
+        private readonly ManagementEventWatcher? _watcher;
+
+        public RegValueMonitor( string hive, string keyPath, string valueName )
+        {
+            var currentUser = WindowsIdentity.GetCurrent();
+            var sid         = currentUser.User.Value;
+            var q = $"SELECT * FROM RegistryValueChangeEvent WHERE Hive='{hive}' " +
+                    @$"AND KeyPath='{sid}\\{keyPath}' AND ValueName='{valueName}'";
+
+            var query = new WqlEventQuery( q );
+            try
+            {
+                _watcher = new ManagementEventWatcher( query );
+                _watcher.EventArrived += HandleEvent;
+                _watcher.Start();
+            }
+            catch ( ManagementException managementException )
+            {
+                Logger.Error( "[Registry]: " + managementException.Message );
+            }
+        }
+
+        private static void HandleEvent( object sender, EventArrivedEventArgs e )
+        {
+            var keyPath   = e.NewEvent.Properties["Hive"].Value + @"\" + e.NewEvent.Properties["KeyPath"].Value;
+            var valueName = e.NewEvent.Properties["ValueName"].Value.ToString();
+
+            var v = Registry.GetValue( keyPath, valueName, "" );
+            OnRegValueChanged?.Invoke( null, new RegValueChangedEventArgs( v.ToString() ) );
+        }
+
+        public void Dispose()
+        {
+            _watcher?.Stop();
+        }
+
+        public static event EventHandler<RegValueChangedEventArgs>? OnRegValueChanged;
+
+        public class RegValueChangedEventArgs : EventArgs
+        {
+            public string Value { get; set; }
+
+            public RegValueChangedEventArgs( string value )
+            {
+                Value = value;
+            }
         }
     }
 }

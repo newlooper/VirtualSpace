@@ -189,20 +189,20 @@ namespace VirtualSpace.VirtualDesktop
                         WindowTool.ActiveWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder[_hoverVdIndex] );
                     }
 
-                    var action = Manager.Configs.GetMouseActionById( Const.MouseAction.GetActionId( e.Button, ModifierKeys, Const.MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
+                    var action = Manager.Configs.GetMouseActionById( MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
                     switch ( action )
                     {
-                        case Const.MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
+                        case MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
                             ActiveWindow();
                             MainWindow.HideAll();
                             break;
-                        case Const.MouseAction.Action.WindowActiveDesktopVisibleOnly:
+                        case MouseAction.Action.WindowActiveDesktopVisibleOnly:
                             ActiveWindow();
                             break;
-                        case Const.MouseAction.Action.WindowClose:
+                        case MouseAction.Action.WindowClose:
                             CloseSelectedWindow( _selectedWindow );
                             break;
-                        case Const.MouseAction.Action.ContextMenu:
+                        case MouseAction.Action.ContextMenu:
                             Menus.ThumbCtm( new MenuInfo
                             {
                                 Vw = _selectedWindow,
@@ -211,12 +211,12 @@ namespace VirtualSpace.VirtualDesktop
                                 Self = this
                             } );
                             break;
-                        case Const.MouseAction.Action.WindowHideFromView:
+                        case MouseAction.Action.WindowHideFromView:
                             Filters.WndHandleIgnoreListByManual.TryAdd( _selectedWindow.Handle, 0 );
                             VirtualDesktopManager.RefreshThumbs( _selectedWindow.Handle, this );
 
                             break;
-                        case Const.MouseAction.Action.WindowShowForSelectedProcessOnly:
+                        case MouseAction.Action.WindowShowForSelectedProcessOnly:
                             try
                             {
                                 _ = User32.GetWindowThreadProcessId( _selectedWindow.Handle, out var pId );
@@ -228,7 +228,7 @@ namespace VirtualSpace.VirtualDesktop
                             }
 
                             break;
-                        case Const.MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop:
+                        case MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop:
                             try
                             {
                                 _ = User32.GetWindowThreadProcessId( _selectedWindow.Handle, out var pId );
@@ -240,7 +240,7 @@ namespace VirtualSpace.VirtualDesktop
                             }
 
                             break;
-                        case Const.MouseAction.Action.DoNothing:
+                        case MouseAction.Action.DoNothing:
                             break;
                         default:
                             ActiveWindow();
@@ -250,17 +250,17 @@ namespace VirtualSpace.VirtualDesktop
                 }
                 else // click on a virtual desktop
                 {
-                    var action = Manager.Configs.GetMouseActionById( Const.MouseAction.GetActionId( e.Button, ModifierKeys, Const.MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) );
+                    var action = Manager.Configs.GetMouseActionById( MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) );
                     switch ( action )
                     {
-                        case Const.MouseAction.Action.DesktopVisibleAndCloseView:
+                        case MouseAction.Action.DesktopVisibleAndCloseView:
                             MakeVisible();
                             MainWindow.HideAll();
                             break;
-                        case Const.MouseAction.Action.DesktopVisibleOnly:
+                        case MouseAction.Action.DesktopVisibleOnly:
                             MakeVisible();
                             break;
-                        case Const.MouseAction.Action.ContextMenu:
+                        case MouseAction.Action.ContextMenu:
                             Menus.VdCtm( new MenuInfo
                                 {
                                     Sender = sender,
@@ -270,11 +270,11 @@ namespace VirtualSpace.VirtualDesktop
                                 }
                             );
                             break;
-                        case Const.MouseAction.Action.DesktopShowForSelectedDesktop:
+                        case MouseAction.Action.DesktopShowForSelectedDesktop:
                             MakeTheOnlyOne();
 
                             break;
-                        case Const.MouseAction.Action.DoNothing:
+                        case MouseAction.Action.DoNothing:
                             break;
                         default:
                             MakeVisible();

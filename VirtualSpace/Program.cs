@@ -11,7 +11,9 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Windows;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Config;
 
 namespace VirtualSpace
 {
@@ -20,8 +22,12 @@ namespace VirtualSpace
         [STAThread]
         public static void Main()
         {
+            LogManager.InitLogger( Const.Settings.LogsFolder );
             AppDomain.CurrentDomain.AssemblyResolve += AutoResolver;
-            var app = new App();
+            var app = new App
+            {
+                ShutdownMode = ShutdownMode.OnMainWindowClose
+            };
             app.Run();
         }
 

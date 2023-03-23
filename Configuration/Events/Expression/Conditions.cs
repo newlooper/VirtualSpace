@@ -64,7 +64,7 @@ namespace VirtualSpace.Config.Events.Expression
             var rules = new List<RuleTemplate>();
             if ( !File.Exists( path ) ) return rules;
 
-            rules = FetchRuleList( path );
+            rules = ReadRuleFromFile( path );
 
             return rules;
         }
@@ -183,7 +183,7 @@ namespace VirtualSpace.Config.Events.Expression
             } ).ConfigureAwait( false );
         }
 
-        private static List<RuleTemplate> FetchRuleList( string path )
+        private static List<RuleTemplate> ReadRuleFromFile( string path )
         {
             using var fs     = new FileStream( path, FileMode.Open, FileAccess.Read );
             var       buffer = new byte[fs.Length];

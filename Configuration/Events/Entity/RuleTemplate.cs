@@ -11,19 +11,21 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Text.Json;
+using PropertyChanged;
 
 namespace VirtualSpace.Config.Events.Entity
 {
-    public class RuleTemplate
+    [AddINotifyPropertyChangedInterface]
+    public partial class RuleTemplate
     {
-        public Func<Window, bool>? Exp;
-        public Guid                Id         { get; set; } = Guid.NewGuid();
-        public string?             Name       { get; set; }
-        public JsonDocument?       Expression { get; set; }
-        public Behavior?           Action     { get; set; }
-        public bool                Enabled    { get; set; }
-        public DateTime?           Created    { get; set; }
-        public DateTime?           Updated    { get; set; }
+        [DoNotNotify] public Guid                Id      { get; set; } = Guid.NewGuid();
+        public               string?             Name    { get; set; }
+        public               bool                Enabled { get; set; }
+        [DoNotNotify] public Func<Window, bool>? Exp;
+        [DoNotNotify] public JsonDocument?       Expression { get; set; }
+        public               Behavior?           Action     { get; set; }
+        [DoNotNotify] public DateTime?           Created    { get; set; }
+        public               DateTime?           Updated    { get; set; }
     }
 
     public static class RuleFields

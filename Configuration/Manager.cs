@@ -15,9 +15,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Config.DataAnnotations;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Config.Events.Expression;
 using VirtualSpace.Config.Profiles;
@@ -78,6 +80,8 @@ namespace VirtualSpace.Config
                     Configs.Cluster = cluster;
                 }
 
+                PropertyProtector.Walk( Configs );
+
                 Logger.Info( $"Settings File Loaded, Version: {Configs.Version}, Current Profile: {Configs.CurrentProfileName}" );
             }
             else
@@ -107,7 +111,7 @@ namespace VirtualSpace.Config
                 await File.WriteAllBytesAsync( filePath, contents ).ConfigureAwait( false );
                 Logger.Info( $"Settings Saved [{reasonName}: {reason}]." );
 
-                if ( reasonName.Contains( ".Configs.Cluster." ) )
+                if ( reasonName.Contains( ".Configs.Cluster" ) )
                     SaveCluster( Configs.Cluster );
             }
             catch ( Exception ex )
@@ -137,7 +141,11 @@ namespace VirtualSpace.Config
             {
                 Logger.Error( "Failed to save Settings: " + ex.Message );
             }
+            
+            ProfileChanged?.Invoke( null, null );
         }
+        
+        public static event EventHandler<EventArgs>? ProfileChanged;
 
         public static void SaveCluster( Cluster cluster )
         {
@@ -183,21 +191,23 @@ namespace VirtualSpace.Config
             }
         }
 
-        public static void DeleteProfiles( string profileName )
+        public static async void DeleteFilesOfProfile( string profileName )
         {
             var dir = new DirectoryInfo( ProfileFolder );
-
-            try
+            await Task.Run( () =>
             {
-                foreach ( var file in dir.EnumerateFiles( profileName + ".*" ) ) // such violent
+                try
                 {
-                    file.Delete();
+                    foreach ( var file in dir.EnumerateFiles( profileName + ".*" ) ) // such violent
+                    {
+                        file.Delete();
+                    }
                 }
-            }
-            catch ( Exception ex )
-            {
-                Logger.Error( $"Failed to delete related files of profile {profileName}: {ex.Message}" );
-            }
+                catch ( Exception ex )
+                {
+                    Logger.Error( $"Failed to delete related files of profile {profileName}: {ex.Message}" );
+                }
+            } );
         }
 
         public static void SetConfigRoot( string path )

@@ -32,23 +32,23 @@ namespace VirtualSpace
 
             tc_Keyboard.Visible = false;
 
-            var kbs      = Manager.Configs.KeyBindings;
-            var hotkeyId = e.Node.Name;
+            var kbInConfig = Manager.Configs.KeyBindings;
+            var hotkeyId   = e.Node.Name;
 
-            if ( !kbs.ContainsKey( hotkeyId ) )
+            if ( !kbInConfig.ContainsKey( hotkeyId ) )
             {
                 var kb = Const.Hotkey.GetKeyBinding( hotkeyId );
                 if ( kb.MessageId == 0 ) return;
-                kbs[hotkeyId] = kb;
+                kbInConfig[hotkeyId] = kb;
             }
 
             lb_hk_func.Text = e.Node.FullPath;
             lb_hk_extra.Text = Const.Hotkey.GetHotkeyExtra( hotkeyId );
             tc_Keyboard.Visible = true;
 
-            if ( kbs[hotkeyId].GhkCode == "" ) return;
+            if ( kbInConfig[hotkeyId].GhkCode == "" ) return;
 
-            var arr = kbs[hotkeyId].GhkCode.Split( Const.Hotkey.SPLITTER );
+            var arr = kbInConfig[hotkeyId].GhkCode.Split( Const.Hotkey.SPLITTER );
             if ( arr.Length == 5 )
             {
                 cb_hk_win.Checked = arr[0] != Const.Hotkey.NONE;

@@ -19,7 +19,10 @@ using System.Security.Principal;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Management;
+using System.Runtime.CompilerServices;
 using System.Windows;
+
+[assembly: InternalsVisibleTo( "ControlPanel" )]
 
 namespace VirtualSpace.Helpers
 {
@@ -83,6 +86,33 @@ namespace VirtualSpace.Helpers
         public static bool IsTaskbarVisible()
         {
             return Math.Abs( SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height ) > 0;
+        }
+
+        public enum WinAppsTheme
+        {
+            LIGHT,
+            DARK
+        }
+
+        public static WinAppsTheme GetAppsTheme()
+        {
+            return WinRegistry.AppThemeIsLight() ? WinAppsTheme.LIGHT : WinAppsTheme.DARK;
+        }
+
+        private static RegValueMonitor _rkm = new( "HKEY_USERS",
+            @"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+            "AppsUseLightTheme" );
+
+        public static List<object> GetAllScreens()
+        {
+            var screens    = new List<object>();
+            var allScreens = Screen.AllScreens;
+            for ( var i = 0; i < allScreens.Length; i++ )
+            {
+                screens.Add( new {Value = i, Text = $"{allScreens[i].DeviceName}  ({allScreens[i].DeviceFriendlyName()})"} );
+            }
+
+            return screens;
         }
     }
 

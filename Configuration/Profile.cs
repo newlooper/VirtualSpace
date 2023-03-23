@@ -12,17 +12,18 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using VirtualSpace.Config.DataAnnotations;
 using VirtualSpace.Config.Entity;
 
 namespace VirtualSpace.Config
 {
     public class Profile
     {
-        public UserInterface UI                             { get; set; }
-        public bool          DaemonAutoStart                { get; set; }
-        public List<Guid>?   DesktopOrder                   { get; set; }
-        public Mouse         Mouse                          { get; set; }
-        public bool          IgnoreWindowOnRuleCheckTimeout { get; set; } = true;
+        [PropertyProtector] public UserInterface UI                             { get; set; }
+        public                     bool          DaemonAutoStart                { get; set; }
+        public                     List<Guid>?   DesktopOrder                   { get; set; }
+        [PropertyProtector] public Mouse         Mouse                          { get; set; }
+        public                     bool          IgnoreWindowOnRuleCheckTimeout { get; set; } = true;
 
         public Navigation Navigation { get; set; } = new()
         {

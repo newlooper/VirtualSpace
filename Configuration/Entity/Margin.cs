@@ -9,22 +9,12 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using VirtualSpace.Config.DataAnnotations;
+
 namespace VirtualSpace.Config.Entity
 {
     public class Margin
     {
-        private const int MIN     = 0;
-        private const int MAX     = 50;
-        private const int DEFAULT = 10;
-
-        private int _bottom;
-
-        private int _left;
-
-        private int _right;
-
-        private int _top;
-
         public Margin()
         {
         }
@@ -37,52 +27,9 @@ namespace VirtualSpace.Config.Entity
             Left = all;
         }
 
-        public int Top
-        {
-            get => _top;
-            set
-            {
-                if ( value >= MIN && value <= MAX )
-                    _top = value;
-                else
-                    _top = DEFAULT;
-            }
-        }
-
-        public int Right
-        {
-            get => _right;
-            set
-            {
-                if ( value >= MIN && value <= MAX )
-                    _right = value;
-                else
-                    _right = DEFAULT;
-            }
-        }
-
-        public int Bottom
-        {
-            get => _bottom;
-            set
-            {
-                if ( value >= MIN && value <= MAX )
-                    _bottom = value;
-                else
-                    _bottom = DEFAULT;
-            }
-        }
-
-        public int Left
-        {
-            get => _left;
-            set
-            {
-                if ( value >= MIN && value <= MAX )
-                    _left = value;
-                else
-                    _left = DEFAULT;
-            }
-        }
+        [PropertyProtector( 10, 0, 50 )] public int Top    { get; set; }
+        [PropertyProtector( 10, 0, 50 )] public int Right  { get; set; }
+        [PropertyProtector( 10, 0, 50 )] public int Bottom { get; set; }
+        [PropertyProtector( 10, 0, 50 )] public int Left   { get; set; }
     }
 }

@@ -90,6 +90,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\WinForms\AppController\AppController.csproj" />
+        <ProjectReference Include="..\WPF\ControlPanel\ControlPanel.csproj" />
     </ItemGroup>
 
     <Target Name="DeletePdb" AfterTargets="Publish">

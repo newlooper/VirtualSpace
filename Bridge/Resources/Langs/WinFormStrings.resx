@@ -224,10 +224,10 @@ possible reason:
     <value>Do Nothing</value>
   </data>
   <data name="Mouse.Action.DesktopVisibleAndCloseView" xml:space="preserve">
-    <value>Switch Virtual Desktop And Close View</value>
+    <value>Switch Desktop And Close View</value>
   </data>
   <data name="Mouse.Action.DesktopVisibleOnly" xml:space="preserve">
-    <value>Switch Virtual Desktop Only</value>
+    <value>Switch Desktop Only</value>
   </data>
   <data name="Mouse.Action.ContextMenu" xml:space="preserve">
     <value>Show Context Menu</value>
@@ -248,7 +248,8 @@ possible reason:
     <value>Last Desktop: </value>
   </data>
   <data name="General.RunOnStartup.Error.Permission" xml:space="preserve">
-    <value>Cannot access task with your current permissions level. You need to run this application 'as administrator' even if you are using an administrator account.</value>
+    <value>Cannot access task with your current permissions level.
+You need to run this application 'as administrator' even if you are using an administrator account.</value>
   </data>
   <data name="Mouse.Action.WindowShowForSelectedProcessOnly" xml:space="preserve">
     <value>Show Windows Only From Selected App</value>
@@ -260,7 +261,7 @@ possible reason:
     <value>Move To Desktop </value>
   </data>
   <data name="KB.Hotkey.MWF" xml:space="preserve">
-    <value>Move and Follow To Desktop</value>
+    <value>Move and Follow To Desktop </value>
   </data>
   <data name="Mouse.Action.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
     <value>Show Windows Only From Selected App in Selected Desktop</value>
@@ -282,10 +283,11 @@ possible reason:
   </data>
   <data name="Profile.Confirm.Delete" xml:space="preserve">
     <value>Are you sure to delete this profile?
-all files related with this profile will be deleted too.</value>
+All files related with this profile will be deleted too.</value>
   </data>
   <data name="Profile.Warning.LastProfileProtect" xml:space="preserve">
-    <value>You can't rename or delete the last profile.</value>
+    <value>Can not rename or delete the last profile.
+Duplicate one and edit it.</value>
   </data>
   <data name="Profile.Warning.InvalidProfileName" xml:space="preserve">
     <value>Invalid profile name, or profile name already exists.</value>
@@ -301,5 +303,101 @@ all files related with this profile will be deleted too.</value>
   </data>
   <data name="Tray.Menu.Quit" xml:space="preserve">
     <value>Quit</value>
+  </data>
+  <data name="K_G" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="hk_node_rise_mainview" xml:space="preserve">
+    <value>Rise MainView</value>
+  </data>
+  <data name="hk_node_open_app_controller" xml:space="preserve">
+    <value>Open AppController</value>
+  </data>
+  <data name="hk_node_rise_mainview_for_active_app" xml:space="preserve">
+    <value>Rise MainView For Active App</value>
+  </data>
+  <data name="hk_node_rise_mainview_for_current_vd" xml:space="preserve">
+    <value>Rise MainView For Current Desktop</value>
+  </data>
+  <data name="hk_node_rise_mainview_for_active_app_in_current_vd" xml:space="preserve">
+    <value>Rise MainView For Active App In Current Desktop</value>
+  </data>
+  <data name="K_D" xml:space="preserve">
+    <value>Desktop</value>
+  </data>
+  <data name="K_D_S" xml:space="preserve">
+    <value>Switch</value>
+  </data>
+  <data name="K_D_N" xml:space="preserve">
+    <value>Navigation</value>
+  </data>
+  <data name="K_W" xml:space="preserve">
+    <value>Window</value>
+  </data>
+  <data name="K_W_M" xml:space="preserve">
+    <value>Move</value>
+  </data>
+  <data name="K_W_MF" xml:space="preserve">
+    <value>Move and Follow</value>
+  </data>
+  <data name="hk_node_nav_right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="hk_node_nav_up" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="hk_node_nav_down" xml:space="preserve">
+    <value>Down</value>
+  </data>
+  <data name="hk_node_nav_left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="KB.Hotkey.MKeyCheck" xml:space="preserve">
+    <value>At least one modifier Key.</value>
+  </data>
+  <data name="M.D" xml:space="preserve">
+    <value>Desktop</value>
+  </data>
+  <data name="M.W" xml:space="preserve">
+    <value>Window</value>
+  </data>
+  <data name="M.ROOT" xml:space="preserve">
+    <value>MainView</value>
+  </data>
+  <data name="M.D.DesktopVisibleAndCloseView" xml:space="preserve">
+    <value>Switch Desktop and Close View</value>
+  </data>
+  <data name="M.D.DesktopVisibleOnly" xml:space="preserve">
+    <value>Switch Desktop Only</value>
+  </data>
+  <data name="M.ContextMenu" xml:space="preserve">
+    <value>Show ContextMenu</value>
+  </data>
+  <data name="M.D.DesktopShowForSelectedDesktop" xml:space="preserve">
+    <value>Show Only Selected Desktop in View</value>
+  </data>
+  <data name="M.W.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
+    <value>Active Window, Switch Desktop and Close View</value>
+  </data>
+  <data name="M.W.WindowActiveDesktopVisibleOnly" xml:space="preserve">
+    <value>Active Window, Switch Desktop Only</value>
+  </data>
+  <data name="M.W.WindowHideFromView" xml:space="preserve">
+    <value>Hide From View</value>
+  </data>
+  <data name="M.W.WindowClose" xml:space="preserve">
+    <value>Close Window</value>
+  </data>
+  <data name="M.W.WindowShowForSelectedProcessOnly" xml:space="preserve">
+    <value>Show Windows Only From Selected App</value>
+  </data>
+  <data name="M.W.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
+    <value>Show Windows Only From Selected App in Selected Desktop</value>
+  </data>
+  <data name="Validation.Mouse.Button.Required" xml:space="preserve">
+    <value>Mouse Button Required</value>
+  </data>
+  <data name="Mouse.Tips.Exists" xml:space="preserve">
+    <value>MouseAction Exists, try another combine or Mousebutton</value>
   </data>
 </root>

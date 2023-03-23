@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <Image x:Key="Logo" Margin="10" Width="50" Height="50" Source="pack://application:,,,/ControlPanel;component/Resources/AboutLogo_2.png" />
+    <Image x:Key="M0" Source="pack://application:,,,/ControlPanel;component/Resources/Images/m0.png" />
+    <Image x:Key="M1" Source="pack://application:,,,/ControlPanel;component/Resources/Images/m1.png" />
+    <Image x:Key="M2" Source="pack://application:,,,/ControlPanel;component/Resources/Images/m2.png" />
+    <Image x:Key="M3" Source="pack://application:,,,/ControlPanel;component/Resources/Images/m3.png" />
+    <Image x:Key="M4" Source="pack://application:,,,/ControlPanel;component/Resources/Images/m4.png" />
+    <Image x:Key="M5" Source="pack://application:,,,/ControlPanel;component/Resources/Images/m5.png" />
+    <Image x:Key="M6" Source="pack://application:,,,/ControlPanel;component/Resources/Images/m6.png" />
+    <Image x:Key="M7" Source="pack://application:,,,/ControlPanel;component/Resources/Images/m7.png" />
+</ResourceDictionary>
