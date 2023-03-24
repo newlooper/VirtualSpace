@@ -4,19 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        BorderThickness="0"
-        Background="#01000000"
-        AllowsTransparency="True"
+        BorderThickness="0" Background="#01000000"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStyle="None"
+        Left="0" Top="0" Width="1280" Height="720"
         MouseDown="Window_MouseDown"
-        ResizeMode="NoResize"
-        Width="1280" Height="720" Left="0" Top="0" WindowStyle="None"
         Loaded="Window_Loaded"
-        Closing="Window_Closing" ShowInTaskbar="False">
-    <Grid x:Name="MainGrid" />
+        Closing="Window_Closing">
     <Window.Resources>
         <ResourceDictionary>
             <DropShadowEffect x:Key="VdwShadowDefault" Opacity="1" ShadowDepth="1" Color="Black" BlurRadius="10"></DropShadowEffect>
             <DropShadowEffect x:Key="VdwShadowCurrent" Opacity="1" ShadowDepth="1" Color="White" BlurRadius="10"></DropShadowEffect>
         </ResourceDictionary>
     </Window.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="-1" CaptionHeight="0" />
+    </WindowChrome.WindowChrome>
+    <Grid x:Name="MainGrid" />
 </Window>

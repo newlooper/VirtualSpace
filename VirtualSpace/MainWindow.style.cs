@@ -17,14 +17,14 @@ namespace VirtualSpace
     public partial class MainWindow
     {
         private uint _blurOpacity;
-        public  uint BlurBackGroundColor { get; set; } = 0x555555;
+        private uint BlurBackgroundColor { get; set; } = 0x555555;
 
-        public double BlurOpacity
+        private uint BlurOpacity
         {
             get => _blurOpacity;
             set
             {
-                _blurOpacity = (uint)value;
+                _blurOpacity = value;
                 EnableBlur();
             }
         }
@@ -46,7 +46,7 @@ namespace VirtualSpace
             var accent = new VisualEffects.AccentPolicy
             {
                 AccentState = VisualEffects.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND,
-                GradientColor = ( _blurOpacity << 24 ) | ( BlurBackGroundColor & 0xFFFFFF )
+                GradientColor = ( BlurOpacity << 24 ) | ( BlurBackgroundColor & 0xFFFFFF )
             };
 
             var accentStructSize = Marshal.SizeOf( accent );
@@ -60,7 +60,7 @@ namespace VirtualSpace
                 Data = accentPtr
             };
 
-            VisualEffects.SetWindowCompositionAttribute( Handle, ref data );
+            _ = VisualEffects.SetWindowCompositionAttribute( Handle, ref data );
 
             Marshal.FreeHGlobal( accentPtr );
         }

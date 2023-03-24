@@ -89,8 +89,8 @@ namespace VirtualSpace
 
         private (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) GetGhk()
         {
-            var ghkCode = "";
-            var km      = GlobalHotKey.KeyModifiers.None;
+            string ghkCode;
+            var    km = GlobalHotKey.KeyModifiers.None;
 
             if ( cb_hk_key.SelectedIndex == 0 || cb_hk_key.SelectedItem is null )
             {

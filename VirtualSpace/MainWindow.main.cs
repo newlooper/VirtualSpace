@@ -66,10 +66,12 @@ namespace VirtualSpace
                         Ui.CanvasBackColor.B )
                 ),
                 BlurOpacity = Ui.CanvasOpacity,
-                BlurBackGroundColor = Ui.CanvasBackColor.GetLongOfColor()
+                BlurBackgroundColor = Ui.CanvasBackColor.GetLongOfColor()
             };
 
             new WindowInteropHelper( mw ).EnsureHandle();
+
+            mw.InitCellBorderShadowEffect();
 
             return mw;
         }

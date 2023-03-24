@@ -27,7 +27,7 @@ namespace VirtualSpace
 {
     public partial class MainWindow
     {
-        private static Stopwatch RiseTaskViewTimer = Stopwatch.StartNew();
+        private static readonly Stopwatch RiseTaskViewTimer = Stopwatch.StartNew();
 
         private void RegisterHotKey( IntPtr hWnd )
         {

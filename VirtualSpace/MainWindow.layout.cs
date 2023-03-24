@@ -25,10 +25,11 @@ namespace VirtualSpace
 {
     public partial class MainWindow
     {
-        private static int           _desktopCount;
-        private static UserInterface Ui => Manager.CurrentProfile.UI;
-
-        private static int RowsCols { get; set; }
+        private static int              _desktopCount;
+        private static UserInterface    Ui       => Manager.CurrentProfile.UI;
+        private static int              RowsCols { get; set; }
+        private static DropShadowEffect _borderShadowDefault;
+        private static DropShadowEffect _borderShadowCurrent;
 
         public static void ResetMainGrid()
         {
@@ -49,7 +50,6 @@ namespace VirtualSpace
 
             var borderBrushDefault = new SolidColorBrush
                 {Color = Color.FromRgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
-            var borderShadowDefault = _instance.Resources["VdwShadowDefault"] as DropShadowEffect;
 
             for ( var r = 0; r < rowsCols; r++ )
             {
@@ -62,7 +62,7 @@ namespace VirtualSpace
                         Margin = new Thickness( Ui.VDWMargin ),
                         BorderThickness = new Thickness( Ui.VDWBorderSize ),
                         BorderBrush = borderBrushDefault,
-                        Effect = borderShadowDefault,
+                        Effect = _borderShadowDefault,
                         Background = Brushes.Transparent
                     };
                     Grid.SetRow( border, r );
@@ -100,7 +100,6 @@ namespace VirtualSpace
 
             var borderBrushDefault = new SolidColorBrush
                 {Color = Color.FromRgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
-            var borderShadowDefault = _instance.Resources["VdwShadowDefault"] as DropShadowEffect;
 
             for ( var r = 0; r < rowsCols; r++ )
             {
@@ -122,7 +121,7 @@ namespace VirtualSpace
                             Margin = new Thickness( Ui.VDWMargin ),
                             BorderThickness = new Thickness( Ui.VDWBorderSize ),
                             BorderBrush = borderBrushDefault,
-                            Effect = borderShadowDefault,
+                            Effect = _borderShadowDefault,
                             Background = Brushes.Transparent
                         };
                     Grid.SetRow( border, r );
@@ -148,10 +147,7 @@ namespace VirtualSpace
             for ( var i = 0; i < _desktopCount; i++ )
             {
                 var border = (Border)_instance.MainGrid.Children[i];
-                if ( i == hover )
-                    border.BorderBrush = borderColorHover;
-                else
-                    border.BorderBrush = borderColorDefault;
+                border.BorderBrush = i == hover ? borderColorHover : borderColorDefault;
             }
         }
 
@@ -166,15 +162,12 @@ namespace VirtualSpace
             var borderBrushCurrent = new SolidColorBrush
                 {Color = Color.FromRgb( Ui.VDWCurrentBackColor.R, Ui.VDWCurrentBackColor.G, Ui.VDWCurrentBackColor.B )};
 
-            var borderShadowDefault = _instance.Resources["VdwShadowDefault"] as DropShadowEffect;
-            var borderShadowCurrent = _instance.Resources["VdwShadowCurrent"] as DropShadowEffect;
-
             for ( var i = 0; i < Math.Pow( RowsCols, 2 ); i++ )
             {
                 var border = (Border)_instance.MainGrid.Children[i];
                 if ( i == currentMatrixIndex )
                 {
-                    border.Effect = borderShadowCurrent;
+                    border.Effect = _borderShadowCurrent;
                     border.BorderBrush = borderBrushCurrent;
                 }
                 else
@@ -184,7 +177,7 @@ namespace VirtualSpace
                     if ( effect?.Color == Colors.White
                          || brush?.Color == borderColorHover )
                     {
-                        border.Effect = borderShadowDefault;
+                        border.Effect = _borderShadowDefault;
                         border.BorderBrush = borderBrushDefault;
                     }
                 }
@@ -225,6 +218,12 @@ namespace VirtualSpace
             }
 
             return index;
+        }
+
+        private void InitCellBorderShadowEffect()
+        {
+            _borderShadowDefault = Resources["VdwShadowDefault"] as DropShadowEffect;
+            _borderShadowCurrent = Resources["VdwShadowCurrent"] as DropShadowEffect;
         }
     }
 }

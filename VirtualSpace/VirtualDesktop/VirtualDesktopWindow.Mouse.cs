@@ -113,6 +113,7 @@ namespace VirtualSpace.VirtualDesktop
             if ( null == sender ) return;
 
             _hoverVdIndex = HoverOnDesktop( sender, e );
+            if ( _hoverVdIndex < 0 ) return;
 
             if ( _dragState > 0 )
             {
@@ -298,6 +299,7 @@ namespace VirtualSpace.VirtualDesktop
 
         private int HoverOnDesktop( object sender, MouseEventArgs e )
         {
+            if ( _virtualDesktops is null ) return -1;
             _hoverVdIndex = VdIndex;
 
             var cellIndex = MainWindow.InCell( new System.Windows.Point( Cursor.Position.X, Cursor.Position.Y ) );
