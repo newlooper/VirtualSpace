@@ -10,28 +10,26 @@ You should have received a copy of the GNU General Public License along with Cub
 */
 
 using System;
-using System.Windows;
 using System.Windows.Media.Media3D;
 using Cube3D.Config;
 using Cube3D.Effects;
+using ScreenCapture;
 
 namespace Cube3D
 {
     public partial class MainWindow
     {
-        private static double _workAreaHeight = SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth;
-        private static double _workAreaWidth  = 1.0;
         private static Effect _effect;
 
-        private void CameraPosition()
+        private void CameraPosition( MonitorInfo mi )
         {
-            var ratio = SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth;
-            _workAreaWidth = 1.0;
-            _workAreaHeight = _workAreaWidth * ratio;
-            var radianFov = MainCamera.FieldOfView * ( Math.PI / 180 );
-            var cameraX   = _workAreaWidth / 2;
-            var cameraY   = _workAreaHeight / 2;
-            var cameraZ   = _workAreaWidth / 2 / Math.Tan( radianFov / 2 );
+            var ratio          = mi.ScreenSize.Y / mi.ScreenSize.X;
+            var workAreaWidth  = 1.0;
+            var workAreaHeight = workAreaWidth * ratio;
+            var radianFov      = MainCamera.FieldOfView * ( Math.PI / 180 );
+            var cameraX        = workAreaWidth / 2;
+            var cameraY        = workAreaHeight / 2;
+            var cameraZ        = workAreaWidth / 2 / Math.Tan( radianFov / 2 );
             MainCamera = new PerspectiveCamera
             {
                 LookDirection = new Vector3D( 0, 0, -1 ),
@@ -43,30 +41,16 @@ namespace Cube3D
         public void Build3D()
         {
             var settings = SettingsManager.Settings;
-            switch ( settings.SelectedEffect )
+            _effect = settings.SelectedEffect switch
             {
-                case EffectType.Cube:
-                    _effect = new Cube();
-                    break;
-                case EffectType.Flip:
-                    _effect = new Flip();
-                    break;
-                case EffectType.Slide:
-                    _effect = new Slide();
-                    break;
-                case EffectType.Reveal:
-                    _effect = new Reveal();
-                    break;
-                case EffectType.Fade:
-                    _effect = new Fade();
-                    break;
-                case EffectType.InsideCube:
-                    _effect = new InsideCube();
-                    break;
-                default:
-                    _effect = new Cube();
-                    break;
-            }
+                EffectType.Cube => new Cube(),
+                EffectType.Flip => new Flip(),
+                EffectType.Slide => new Slide(),
+                EffectType.Reveal => new Reveal(),
+                EffectType.Fade => new Fade(),
+                EffectType.InsideCube => new InsideCube(),
+                _ => new Cube()
+            };
 
             _effect.Build( MainModel3DGroup );
             _effect.AddAnimationCompletedListener( AnimationCompleted );

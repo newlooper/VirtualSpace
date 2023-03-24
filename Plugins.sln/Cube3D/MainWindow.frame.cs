@@ -11,7 +11,6 @@ You should have received a copy of the GNU General Public License along with Cub
 
 using System.Linq;
 using System.Threading.Tasks;
-using Cube3D.Config;
 using ScreenCapture;
 
 namespace Cube3D
@@ -46,9 +45,12 @@ namespace Cube3D
             if ( _capture != null )
             {
                 _capture.StartCaptureSession();
-                await Task.Delay( Const.CaptureInitTimer );
-                RecreateCapture();
+#if DEBUG
+                await Task.Delay( 50 );
+#endif
             }
+
+            StopCapture();
         }
     }
 }

@@ -8,6 +8,7 @@
 // 
 // You should have received a copy of the GNU General Public License along with Cube3D. If not, see <https://www.gnu.org/licenses/>.
 
+using System;
 using Cube3D.Effects;
 
 namespace Cube3D.Config
@@ -49,16 +50,18 @@ namespace Cube3D.Config
             }
         }
 
-        public EffectType     SelectedEffect { get; set; }
-        public EaseType       EaseType       { get; set; } = EaseType.None;
-        public EaseMode       EaseMode       { get; set; } = EaseMode.EaseOut;
-        public TransitionType TransitionType { get; set; } = TransitionType.AnimationAndNotificationGrid;
+        public EffectType     SelectedEffect                   { get; set; }
+        public EaseType       EaseType                         { get; set; } = EaseType.None;
+        public EaseMode       EaseMode                         { get; set; } = EaseMode.EaseOut;
+        public TransitionType TransitionType                   { get; set; } = TransitionType.AnimationAndNotificationGrid;
+        public bool           ShowNotificationGridOnAllScreens { get; set; }
     }
 
+    [Flags]
     public enum TransitionType
     {
-        AnimationOnly,
-        NotificationGridOnly,
-        AnimationAndNotificationGrid
+        AnimationOnly                = 0b0001,
+        NotificationGridOnly         = 0b0010,
+        AnimationAndNotificationGrid = AnimationOnly | NotificationGridOnly
     }
 }

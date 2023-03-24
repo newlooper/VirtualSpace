@@ -26,7 +26,7 @@
     </Window.Resources>
 
     <WindowChrome.WindowChrome>
-        <WindowChrome x:Name="WinChrome" />
+        <WindowChrome x:Name="WinChrome" CaptionHeight="0" />
     </WindowChrome.WindowChrome>
 
     <Grid>
@@ -51,11 +51,11 @@
             </Viewport2DVisual3D>
             -->
         </Viewport3D>
-        <Grid x:Name="NotifyContainer" Visibility="Hidden">
+        <Grid x:Name="NotifyContainer" Visibility="Hidden" Width="0" Height="0">
             <Border x:Name="NotifyBorder" Background="#6C6C6C" CornerRadius="10">
                 <UniformGrid x:Name="NotifyGrid" />
             </Border>
-            <Button x:Name="CurrentIndicator" Template="{DynamicResource NotifyButtonTemplateCurrent}" />
+            <Button x:Name="CurrentIndicator" Template="{StaticResource NotifyButtonTemplateCurrent}" />
         </Grid>
     </Grid>
 </Window>

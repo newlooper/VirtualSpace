@@ -10,14 +10,19 @@ You should have received a copy of the GNU General Public License along with Cub
 */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using Cube3D.Config;
+using ScreenCapture;
 using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
+
+#pragma warning disable CA1416
 
 namespace Cube3D
 {
@@ -26,16 +31,48 @@ namespace Cube3D
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static IntPtr _handle;
+        private IntPtr _handle;
+
+        public static IntPtr MainWindowHandle { get; private set; }
+
+        private readonly MonitorInfo _monitorInfo;
+
+        private static (double ScaleX, double ScaleY) GetDpiForMonitor( IntPtr hMon )
+        {
+            _ = User32.GetDpiForMonitor( hMon, User32.MonitorDpiType.MDT_EFFECTIVE_DPI, out var dpiX, out var dpiY );
+            return new ValueTuple<double, double>( dpiX / 96.0, dpiY / 96.0 );
+        }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Left = Const.FakeHideX;
-            Top = Const.FakeHideY;
-            Width = SystemParameters.PrimaryScreenWidth;
-            Height = SystemParameters.PrimaryScreenHeight;
+            _monitorInfo = ( from m in MonitorEnumerationHelper.GetMonitors() where m.IsPrimary select m ).First();
+
+            var dpi = GetDpiForMonitor( _monitorInfo.Hmon );
+            Left = 0;
+            Top = 0;
+            Width = _monitorInfo.ScreenSize.X / dpi.ScaleX;
+            Height = _monitorInfo.ScreenSize.Y / dpi.ScaleY;
+
+            Topmost = true;
+            ShowActivated = false;
+
+            new WindowInteropHelper( this ).EnsureHandle();
+        }
+
+        private MainWindow( MonitorInfo mi )
+        {
+            InitializeComponent();
+
+            _monitorInfo = mi;
+
+            var dpi = GetDpiForMonitor( _monitorInfo.Hmon );
+            Left = _monitorInfo.WorkArea.Left / dpi.ScaleX;
+            Top = _monitorInfo.WorkArea.Top / dpi.ScaleY;
+            Width = _monitorInfo.ScreenSize.X / dpi.ScaleX;
+            Height = _monitorInfo.ScreenSize.Y / dpi.ScaleY;
+
             Topmost = true;
             ShowActivated = false;
 
@@ -48,10 +85,14 @@ namespace Cube3D
             _handle = new WindowInteropHelper( this ).EnsureHandle();
             var source = HwndSource.FromHwnd( _handle );
             source?.AddHook( WndProc );
+
+            if ( _monitorInfo.IsPrimary ) MainWindowHandle = _handle;
         }
 
-        private void Bootstrap()
+        private void Register()
         {
+            if ( !_monitorInfo.IsPrimary ) return;
+
             var pipeMessage = new PipeMessage
             {
                 Type = PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER,
@@ -87,18 +128,29 @@ namespace Cube3D
                 Exit,
                 SetOwner
             );
+#if DEBUG
+            var interval = 1;
+#else
+            var interval = SettingsManager.Settings.CheckAliveInterval;
+#endif
+            IpcPipeClient.CheckAlive( pipeMessage.Name, pipeMessage.Handle, pipeMessage.ProcessId, interval, Exit );
+        }
 
-            IpcPipeClient.CheckAlive( pipeMessage.Name, pipeMessage.Handle, pipeMessage.ProcessId, SettingsManager.Settings.CheckAliveInterval, Exit );
-
-            _ = User32.SetWindowDisplayAffinity( _handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
+        private void Bootstrap()
+        {
+            Register();
 
             FixStyle();
-            CameraPosition();
+
+            CameraPosition( _monitorInfo );
+
             _animationNotifyGrid.Completed += AnimationCompleted;
         }
 
         private void FixStyle()
         {
+            _ = User32.SetWindowDisplayAffinity( _handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
+
             var style = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_STYLE );
             style = unchecked(style | (int)0x80000000); // WS_POPUP
             User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_STYLE, style );
@@ -111,20 +163,25 @@ namespace Cube3D
 
         private async void Window_Loaded( object sender, RoutedEventArgs e )
         {
-            Bootstrap();
-
-            Build3D();
+            FakeHide();
 
             SetTransitionType();
 
-            await StartPrimaryMonitorCapture();
+            Bootstrap();
 
-            FakeHide();
+            if ( _monitorInfo.IsPrimary )
+            {
+                Build3D();
+
+                await StartPrimaryMonitorCapture();
+
+                CreateOtherScreens();
+            }
         }
 
         public void SetTransitionType()
         {
-            if ( SettingsManager.Settings.TransitionType == TransitionType.NotificationGridOnly )
+            if ( SettingsManager.Settings.TransitionType == TransitionType.NotificationGridOnly || !_monitorInfo.IsPrimary )
             {
                 Background = (Brush)Application.Current.Resources["BackgroundTrans"];
                 WinChrome.GlassFrameThickness = new Thickness( -1 );
@@ -137,7 +194,43 @@ namespace Cube3D
                 Vp3D.Visibility = Visibility.Visible;
             }
 
-            NotifyContainer.Visibility = SettingsManager.Settings.TransitionType > 0 ? Visibility.Visible : Visibility.Hidden;
+            NotifyContainer.Visibility = ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 || !_monitorInfo.IsPrimary
+                ? Visibility.Visible
+                : Visibility.Hidden;
+        }
+
+        private static readonly List<MainWindow> OtherScreens = new();
+
+        private void CreateOtherScreens()
+        {
+            if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) == 0 ||
+                 !SettingsManager.Settings.ShowNotificationGridOnAllScreens ) return;
+
+            ClearOtherScreens();
+            var others = ( from m in MonitorEnumerationHelper.GetMonitors()
+                where !m.IsPrimary
+                select m ).ToList();
+            foreach ( var ow in from mi in others select new MainWindow( mi ) )
+            {
+                OtherScreens.Add( ow );
+                User32.SetWindowLongPtr( new HandleRef( ow, ow._handle ),
+                    (int)GetWindowLongFields.GWL_HWNDPARENT,
+                    _handle.ToInt32()
+                );
+                ow.Show();
+            }
+        }
+
+        private static void ClearOtherScreens()
+        {
+            foreach ( var ow in OtherScreens )
+            {
+                ow.Close();
+            }
+
+            OtherScreens.Clear();
         }
     }
 }
+
+#pragma warning restore CA1416

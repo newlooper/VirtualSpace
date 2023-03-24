@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Cube3D.Config;
 using Cube3D.Effects;
+using VirtualSpace.Plugin;
 
 namespace Cube3D
 {
@@ -69,6 +70,8 @@ namespace Cube3D
 
             ComboBoxTransitionType.SelectedItem = SettingsManager.Settings.TransitionType;
 
+            CbNgOnAllScreens.IsChecked = SettingsManager.Settings.ShowNotificationGridOnAllScreens;
+
             _isLoaded = true;
         }
 
@@ -97,8 +100,10 @@ namespace Cube3D
         {
             if ( !_isLoaded ) return;
             SettingsManager.Settings.TransitionType = (TransitionType)ComboBoxTransitionType.SelectedItem;
-            _mainWindow.SetTransitionType();
+            if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) == 0 )
+                CbNgOnAllScreens.IsChecked = false;
             SettingsManager.SaveJson();
+            _mainWindow.SetTransitionType();
         }
 
         public void SetMainWindow( MainWindow mw )
@@ -115,6 +120,22 @@ namespace Cube3D
         {
             SettingsManager.SaveJson();
             Close();
+        }
+
+        private void CbNgOnAllScreens_OnChecked( object sender, RoutedEventArgs e )
+        {
+            if ( !_isLoaded ) return;
+            SettingsManager.Settings.ShowNotificationGridOnAllScreens = true;
+            SettingsManager.SaveJson();
+            WinApi.PostMessage( MainWindow.MainWindowHandle, WinApi.UM_OTHERSCREENS, 1, 0 );
+        }
+
+        private void CbNgOnAllScreens_OnUnchecked( object sender, RoutedEventArgs e )
+        {
+            if ( !_isLoaded ) return;
+            SettingsManager.Settings.ShowNotificationGridOnAllScreens = false;
+            SettingsManager.SaveJson();
+            WinApi.PostMessage( MainWindow.MainWindowHandle, WinApi.UM_OTHERSCREENS, 0, 0 );
         }
     }
 }

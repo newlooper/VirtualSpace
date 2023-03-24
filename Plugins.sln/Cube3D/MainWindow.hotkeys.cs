@@ -13,6 +13,7 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Cube3D.Config;
@@ -22,35 +23,37 @@ using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
 
+#pragma warning disable CA1416
+
 namespace Cube3D
 {
     public partial class MainWindow
     {
-        private static readonly StringBuilder  SbWinInfo = new( 1024 );
-        private static          bool           _isTopmost;
-        private static          SettingsWindow sw;
+        private readonly StringBuilder  _sbWinInfo = new( 1024 );
+        private          bool           _isTopmost;
+        private static   SettingsWindow _sw;
 
-        private void FakeHide( bool recreateCapture = false )
+        private void FakeHide( bool stopCapture = false )
         {
             Left = Const.FakeHideX;
             Top = Const.FakeHideY;
 
-            if ( recreateCapture ) RecreateCapture();
+            if ( stopCapture ) StopCapture();
         }
 
-        private void RecreateCapture()
+        private void StopCapture()
         {
             _capture?.StopCaptureSession();
         }
 
-        private static bool WindowFilter( IntPtr hWnd, int lParam )
+        private bool WindowFilter( IntPtr hWnd, int lParam )
         {
             if ( !User32.IsWindowVisible( hWnd ) )
                 return true;
 
-            SbWinInfo.Clear();
-            _ = User32.GetWindowText( hWnd, SbWinInfo, SbWinInfo.Capacity );
-            if ( SbWinInfo.Length == 0 )
+            _sbWinInfo.Clear();
+            _ = User32.GetWindowText( hWnd, _sbWinInfo, _sbWinInfo.Capacity );
+            if ( _sbWinInfo.Length == 0 )
                 return true;
 
             _isTopmost = _handle == hWnd; // if the first visible non-empty title window is Cube3D, then Cube3D is on the top.
@@ -58,26 +61,31 @@ namespace Cube3D
             return false;
         }
 
-        private void RealShow()
+        private void RealShow( bool forceTop = false )
         {
-            _ = User32.EnumWindows( WindowFilter, 0 );
-            if ( !_isTopmost )
+            if ( forceTop )
             {
-                User32.SetWindowPos( _handle, User32.SpecialWindowHandles.HWND_TOP, 0, 0, 0, 0,
-                    User32.SetWindowPosFlags.SWP_NOSIZE |
-                    User32.SetWindowPosFlags.SWP_NOMOVE |
-                    User32.SetWindowPosFlags.SWP_NOACTIVATE |
-                    User32.SetWindowPosFlags.SWP_NOREDRAW |
-                    User32.SetWindowPosFlags.SWP_NOCOPYBITS |
-                    User32.SetWindowPosFlags.SWP_DEFERERASE |
-                    User32.SetWindowPosFlags.SWP_NOSENDCHANGING
-                );
+                _ = User32.EnumWindows( WindowFilter, 0 );
+                if ( !_isTopmost )
+                {
+                    User32.SetWindowPos( _handle, User32.SpecialWindowHandles.HWND_TOP, 0, 0, 0, 0,
+                        User32.SetWindowPosFlags.SWP_NOSIZE |
+                        User32.SetWindowPosFlags.SWP_NOMOVE |
+                        User32.SetWindowPosFlags.SWP_NOACTIVATE |
+                        User32.SetWindowPosFlags.SWP_NOREDRAW |
+                        User32.SetWindowPosFlags.SWP_NOCOPYBITS |
+                        User32.SetWindowPosFlags.SWP_DEFERERASE |
+                        User32.SetWindowPosFlags.SWP_NOSENDCHANGING
+                    );
+                }
             }
 
-            Left = 0;
-            Top = 0;
-            Width = SystemParameters.PrimaryScreenWidth;
-            Height = SystemParameters.PrimaryScreenHeight;
+            var dpi = GetDpiForMonitor( _monitorInfo.Hmon );
+
+            Left = _monitorInfo.WorkArea.Left / dpi.ScaleX;
+            Top = _monitorInfo.WorkArea.Top / dpi.ScaleY;
+            Width = _monitorInfo.ScreenSize.X / dpi.ScaleX;
+            Height = _monitorInfo.ScreenSize.Y / dpi.ScaleY;
         }
 
         private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
@@ -86,7 +94,7 @@ namespace Cube3D
             {
                 case WinMsg.WM_SYSCOMMAND:
                     var wP = wParam.ToInt32();
-                    if ( wP == WinMsg.SC_RESTORE || wP == WinMsg.SC_MINIMIZE || wP == WinMsg.SC_MAXIMIZE )
+                    if ( wP is WinMsg.SC_RESTORE or WinMsg.SC_MINIMIZE or WinMsg.SC_MAXIMIZE )
                         handled = true;
                     break;
 
@@ -95,47 +103,16 @@ namespace Cube3D
                     switch ( copyDataStruct.dwData.ToInt32() )
                     {
                         case WinApi.UM_SWITCHDESKTOP:
-                            if ( RunningAnimationCount == 0 )
+                            if ( _mainWindowRunningAnimationCount == 0 )
                             {
                                 var vdSwitchInfo =
                                     (VirtualDesktopSwitchInfo)Marshal.PtrToStructure( copyDataStruct.lpData, typeof( VirtualDesktopSwitchInfo ) );
-                                var vdCount     = vdSwitchInfo.vdCount;
-                                var fromIndex   = vdSwitchInfo.fromIndex;
-                                var dir         = vdSwitchInfo.dir;
-                                var targetIndex = vdSwitchInfo.targetIndex;
-                                Task.Run( () =>
+
+                                Task.Run( () => { Dispatcher.Invoke( () => PerformAnimationPrimary( vdSwitchInfo ) ); } );
+                                foreach ( var other in OtherScreens )
                                 {
-                                    Dispatcher.Invoke( () =>
-                                    {
-                                        var mi = ( from m in MonitorEnumerationHelper.GetMonitors()
-                                            where m.IsPrimary
-                                            select m ).First();
-                                        _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
-                                        _capture?.StartCaptureSession();
-                                        if ( SettingsManager.Settings.TransitionType > 0 )
-                                            NotificationGridLayout( vdCount );
-
-                                        var em = EaseFactory.GetEaseModeByName( SettingsManager.Settings.EaseMode );
-                                        var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, em );
-
-                                        _frameProcessor.SetAction( () =>
-                                        {
-                                            //////////////////////////////////////////////////////
-                                            // trigger action only after first frame be proceeded
-                                            // see FrameToD3DImage.Proceed() for detail.
-                                            RealShow();
-
-                                            if ( SettingsManager.Settings.TransitionType > 0 )
-                                                NotificationGridAnimation( fromIndex, targetIndex, vdCount, ef );
-                                            if ( targetIndex != fromIndex )
-                                            {
-                                                if ( SettingsManager.Settings.TransitionType != TransitionType.NotificationGridOnly )
-                                                    _effect.AnimationInDirection( (KeyCode)dir, MainModel3DGroup, ef );
-                                                WinApi.PostMessage( vdSwitchInfo.hostHandle, WinApi.UM_SWITCHDESKTOP, (uint)targetIndex, 0 );
-                                            }
-                                        } );
-                                    } );
-                                } );
+                                    other.PerformAnimationOthers( vdSwitchInfo );
+                                }
                             }
 
                             break;
@@ -144,15 +121,27 @@ namespace Cube3D
                     break;
 
                 case WinApi.UM_PLUGINSETTINGS:
-                    if ( sw is null || PresentationSource.FromVisual( sw ) == null )
+                    if ( _sw is null || PresentationSource.FromVisual( _sw ) == null )
                     {
-                        sw = new SettingsWindow();
-                        sw.SetMainWindow( this );
-                        sw.ShowDialog();
+                        _sw = new SettingsWindow();
+                        _sw.SetMainWindow( this );
+                        _sw.ShowDialog();
                     }
                     else
                     {
-                        sw.Activate();
+                        _sw.Activate();
+                    }
+
+                    break;
+                case WinApi.UM_OTHERSCREENS:
+                    switch ( wParam.ToInt32() )
+                    {
+                        case 0:
+                            ClearOtherScreens();
+                            break;
+                        case 1:
+                            CreateOtherScreens();
+                            break;
                     }
 
                     break;
@@ -176,5 +165,57 @@ namespace Cube3D
 
             return IntPtr.Zero;
         }
+
+        private void PerformAnimationPrimary( VirtualDesktopSwitchInfo vdSwitchInfo )
+        {
+            var mi = ( from m in MonitorEnumerationHelper.GetMonitors() where m.IsPrimary select m ).First();
+            _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
+            _capture?.StartCaptureSession();
+
+            if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 )
+                NotificationGridLayout( vdSwitchInfo.vdCount );
+
+            var em = EaseFactory.GetEaseModeByName( SettingsManager.Settings.EaseMode );
+            var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, em );
+
+            _frameProcessor.SetAction( () =>
+            {
+                //////////////////////////////////////////////////////
+                // trigger action only after first frame be proceeded
+                // see FrameToD3DImage.Proceed() for detail.
+                RealShow( true );
+
+                if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 )
+                {
+                    NotificationGridAnimation( vdSwitchInfo.fromIndex, vdSwitchInfo.targetIndex, vdSwitchInfo.vdCount, ef );
+                    Interlocked.Increment( ref _mainWindowRunningAnimationCount );
+                }
+
+                if ( vdSwitchInfo.targetIndex != vdSwitchInfo.fromIndex &&
+                     ( SettingsManager.Settings.TransitionType & TransitionType.AnimationOnly ) > 0 )
+                {
+                    _effect.AnimationInDirection( (KeyCode)vdSwitchInfo.dir, MainModel3DGroup, ef );
+                    Interlocked.Increment( ref _mainWindowRunningAnimationCount );
+                }
+
+                WinApi.PostMessage( vdSwitchInfo.hostHandle, WinApi.UM_SWITCHDESKTOP, (uint)vdSwitchInfo.targetIndex, 0 );
+            } );
+        }
+
+        private void PerformAnimationOthers( VirtualDesktopSwitchInfo vdSwitchInfo )
+        {
+            if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) == 0 ) return;
+
+            NotificationGridLayout( vdSwitchInfo.vdCount );
+
+            var em = EaseFactory.GetEaseModeByName( SettingsManager.Settings.EaseMode );
+            var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, em );
+
+            RealShow();
+
+            NotificationGridAnimation( vdSwitchInfo.fromIndex, vdSwitchInfo.targetIndex, vdSwitchInfo.vdCount, ef );
+        }
     }
 }
+
+#pragma warning restore CA1416

@@ -21,7 +21,7 @@ namespace Cube3D
 {
     public partial class MainWindow
     {
-        public static int RunningAnimationCount;
+        private static int _mainWindowRunningAnimationCount;
 
         private readonly ThicknessAnimation _animationNotifyGrid = new()
         {
@@ -30,9 +30,16 @@ namespace Cube3D
 
         private void AnimationCompleted( object sender, EventArgs e )
         {
-            Interlocked.Decrement( ref RunningAnimationCount );
-            if ( RunningAnimationCount <= 0 )
+            if ( _monitorInfo.IsPrimary )
+            {
+                Interlocked.Decrement( ref _mainWindowRunningAnimationCount );
+                if ( _mainWindowRunningAnimationCount == 0 )
+                    FakeHide( true );
+            }
+            else
+            {
                 FakeHide( true );
+            }
         }
 
         private void NotificationGridAnimation( int fromIndex, int toIndex, int vdCount, IEasingFunction ef = null )
@@ -75,7 +82,6 @@ namespace Cube3D
             _animationNotifyGrid.Duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
             _animationNotifyGrid.EasingFunction = ef;
             CurrentIndicator.BeginAnimation( MarginProperty, _animationNotifyGrid );
-            Interlocked.Increment( ref RunningAnimationCount );
         }
 
         private void CameraAnimation()

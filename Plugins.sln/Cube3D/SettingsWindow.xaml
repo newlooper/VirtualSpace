@@ -3,9 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:cvt="clr-namespace:VirtualSpace.Helpers"
         mc:Ignorable="d"
         xmlns:localConfig="clr-namespace:Cube3D.Config"
         Title="Cube3D Settings" Height="450" Width="800" Topmost="True" Loaded="Window_Loaded">
+    <Window.Resources>
+        <cvt:TransitionTypeConverter x:Key="Ttc"></cvt:TransitionTypeConverter>
+    </Window.Resources>
     <Grid>
         <StackPanel>
             <StackPanel>
@@ -36,6 +40,12 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Margin="10,10,0,0" Width="180">Transition Type:</Label>
                             <ComboBox Width="300" Margin="10,10,0,0" x:Name="ComboBoxTransitionType" SelectionChanged="ComboBoxTransitionType_OnSelectionChanged" />
+                            <CheckBox Margin="10,15,0,0" x:Name="CbNgOnAllScreens" Checked="CbNgOnAllScreens_OnChecked" Unchecked="CbNgOnAllScreens_OnUnchecked"
+                                      IsEnabled="{Binding ElementName=ComboBoxTransitionType,
+                                      Path=SelectedItem,
+                                      Converter={StaticResource Ttc} }">
+                                Show NotificationGrid on All Screens
+                            </CheckBox>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

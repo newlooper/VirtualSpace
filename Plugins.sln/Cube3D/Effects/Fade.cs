@@ -99,7 +99,6 @@ namespace Cube3D.Effects
 
             _frontD3DImage.BeginAnimation( Brush.OpacityProperty, animationOfFace1 );
             _othersD3DImage.BeginAnimation( Brush.OpacityProperty, _animationOfFace2 );
-            Interlocked.Increment( ref MainWindow.RunningAnimationCount );
         }
     }
 }

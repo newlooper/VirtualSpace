@@ -220,7 +220,6 @@ namespace Cube3D.Effects
             animation.EasingFunction = ef;
             var transform = (RotateTransform3D)Transform3D;
             transform.Rotation.BeginAnimation( AxisAngleRotation3D.AngleProperty, animation );
-            Interlocked.Increment( ref MainWindow.RunningAnimationCount );
         }
     }
 }

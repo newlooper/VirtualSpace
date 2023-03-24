@@ -194,7 +194,6 @@ namespace Cube3D.Effects
 
             var transform = (TranslateTransform3D)Transform3D;
             transform.BeginAnimation( offsetProperty, animation );
-            Interlocked.Increment( ref MainWindow.RunningAnimationCount );
         }
     }
 }
