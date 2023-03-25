@@ -29,9 +29,9 @@ namespace Cube3D
 {
     public partial class MainWindow
     {
+        private static   SettingsWindow _sw;
         private readonly StringBuilder  _sbWinInfo = new( 1024 );
         private          bool           _isTopmost;
-        private static   SettingsWindow _sw;
 
         private void FakeHide( bool stopCapture = false )
         {
@@ -56,7 +56,7 @@ namespace Cube3D
             if ( _sbWinInfo.Length == 0 )
                 return true;
 
-            _isTopmost = _handle == hWnd; // if the first visible non-empty title window is Cube3D, then Cube3D is on the top.
+            _isTopmost = Handle == hWnd; // if the first visible non-empty title window is Cube3D, then Cube3D is on the top.
 
             return false;
         }
@@ -68,7 +68,7 @@ namespace Cube3D
                 _ = User32.EnumWindows( WindowFilter, 0 );
                 if ( !_isTopmost )
                 {
-                    User32.SetWindowPos( _handle, User32.SpecialWindowHandles.HWND_TOP, 0, 0, 0, 0,
+                    User32.SetWindowPos( Handle, User32.SpecialWindowHandles.HWND_TOP, 0, 0, 0, 0,
                         User32.SetWindowPosFlags.SWP_NOSIZE |
                         User32.SetWindowPosFlags.SWP_NOMOVE |
                         User32.SetWindowPosFlags.SWP_NOACTIVATE |

@@ -20,14 +20,14 @@ namespace Updater
 {
     public partial class MainForm : Form
     {
+        private static readonly ResourceManager Langs = new(
+            Assembly.GetExecutingAssembly().GetName().Name + ".Resources.Langs.WinFormStrings",
+            typeof( MainForm ).Assembly );
+
         public MainForm()
         {
             InitializeComponent();
         }
-
-        private static ResourceManager Langs = new(
-            Assembly.GetExecutingAssembly().GetName().Name + ".Resources.Langs.WinFormStrings",
-            typeof( MainForm ).Assembly );
 
         protected override void OnLoad( EventArgs e )
         {

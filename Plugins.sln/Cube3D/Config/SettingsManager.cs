@@ -16,8 +16,8 @@ namespace Cube3D.Config
 {
     public class SettingsManager
     {
-        public static readonly Settings Settings          = GetSettings();
         private const          string   PluginSettingFile = "settings.json";
+        public static readonly Settings Settings          = GetSettings();
 
         private static Settings GetSettings()
         {

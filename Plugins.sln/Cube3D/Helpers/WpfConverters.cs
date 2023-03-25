@@ -9,6 +9,7 @@
 // You should have received a copy of the GNU General Public License along with Plugins. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
+using System.Globalization;
 using System.Windows.Data;
 using Cube3D.Config;
 
@@ -16,7 +17,7 @@ namespace VirtualSpace.Helpers
 {
     public class TransitionTypeConverter : IValueConverter
     {
-        public object Convert( object value, Type targetType, object parameters, System.Globalization.CultureInfo culture )
+        public object Convert( object value, Type targetType, object parameters, CultureInfo culture )
         {
             if ( value is null ) return null;
 
@@ -25,7 +26,7 @@ namespace VirtualSpace.Helpers
             return ( t & TransitionType.NotificationGridOnly ) > 0;
         }
 
-        public object ConvertBack( object value, Type targetType, object parameters, System.Globalization.CultureInfo culture )
+        public object ConvertBack( object value, Type targetType, object parameters, CultureInfo culture )
         {
             throw new NotImplementedException();
         }

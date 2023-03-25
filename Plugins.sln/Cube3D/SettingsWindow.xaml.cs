@@ -19,8 +19,8 @@ namespace Cube3D
 {
     public partial class SettingsWindow : Window
     {
-        private MainWindow _mainWindow;
         private bool       _isLoaded = false;
+        private MainWindow _mainWindow;
 
         public SettingsWindow()
         {
@@ -127,7 +127,7 @@ namespace Cube3D
             if ( !_isLoaded ) return;
             SettingsManager.Settings.ShowNotificationGridOnAllScreens = true;
             SettingsManager.SaveJson();
-            WinApi.PostMessage( MainWindow.MainWindowHandle, WinApi.UM_OTHERSCREENS, 1, 0 );
+            WinApi.PostMessage( _mainWindow.Handle, WinApi.UM_OTHERSCREENS, 1, 0 );
         }
 
         private void CbNgOnAllScreens_OnUnchecked( object sender, RoutedEventArgs e )
@@ -135,7 +135,7 @@ namespace Cube3D
             if ( !_isLoaded ) return;
             SettingsManager.Settings.ShowNotificationGridOnAllScreens = false;
             SettingsManager.SaveJson();
-            WinApi.PostMessage( MainWindow.MainWindowHandle, WinApi.UM_OTHERSCREENS, 0, 0 );
+            WinApi.PostMessage( _mainWindow.Handle, WinApi.UM_OTHERSCREENS, 0, 0 );
         }
     }
 }

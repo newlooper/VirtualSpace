@@ -36,7 +36,7 @@ namespace ScreenCapture
 {
     public static class CaptureHelper
     {
-        private static readonly Guid GraphicsCaptureItemGuid = new Guid( "79C3F95B-31F7-4EC2-A464-632EF5D30760" );
+        private static readonly Guid GraphicsCaptureItemGuid = new( "79C3F95B-31F7-4EC2-A464-632EF5D30760" );
 
         public static void SetWindow( this GraphicsCapturePicker picker, IntPtr hwnd )
         {
@@ -55,7 +55,7 @@ namespace ScreenCapture
             var temp        = typeof( GraphicsCaptureItem );
             var itemPointer = interop.CreateForWindow( hwnd, GraphicsCaptureItemGuid );
 #if NET5_0_OR_GREATER
-            var item = MarshalInterface<GraphicsCaptureItem>.FromAbi(itemPointer);
+            var item = MarshalInterface<GraphicsCaptureItem>.FromAbi( itemPointer );
 #else
             var item = Marshal.GetObjectForIUnknown( itemPointer ) as GraphicsCaptureItem;
 #endif
@@ -76,7 +76,7 @@ namespace ScreenCapture
             var itemPointer = interop.CreateForMonitor( hmon, GraphicsCaptureItemGuid );
 
 #if NET5_0_OR_GREATER
-            var item = MarshalInterface<GraphicsCaptureItem>.FromAbi(itemPointer);
+            var item = MarshalInterface<GraphicsCaptureItem>.FromAbi( itemPointer );
 #else
             var item = Marshal.GetObjectForIUnknown( itemPointer ) as GraphicsCaptureItem;
 #endif

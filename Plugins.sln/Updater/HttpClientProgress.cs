@@ -22,7 +22,11 @@ public static class HttpClientProgressExtensions
         }
 
         // Such progress and contentLength much reporting!
-        float GetProgressPercentage( float read, float total ) => ( read / total ) * 100f;
+        float GetProgressPercentage( float read, float total )
+        {
+            return read / total * 100f;
+        }
+
         var progressWrapper = new Progress<long>( bytes => progress.Report( GetProgressPercentage( bytes, contentLength.Value ) ) );
         await downloadStream.CopyToAsync( destination, 81920, progressWrapper, cancellationToken );
     }

@@ -18,12 +18,12 @@ namespace Cube3D.Effects
 {
     public abstract class Effect
     {
-        protected static readonly double           MeshHeight = SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth;
-        protected static readonly double           MeshWidth  = 1.0;
-        protected readonly        Transform3DGroup TransGroup = new();
+        protected static readonly double           MeshHeight  = SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth;
+        protected static readonly double           MeshWidth   = 1.0;
+        protected static readonly AmbientLight     CommonLight = new() {Color = Colors.White};
+        protected readonly        Transform3DGroup TransGroup  = new();
         protected                 Timeline         Animation;
         protected                 Transform3D      Transform3D;
-        protected static readonly AmbientLight     CommonLight = new() {Color = Colors.White};
 
         protected static void AddTriangleIndices( MeshGeometry3D meshGeometry3D )
         {

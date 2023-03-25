@@ -31,17 +31,10 @@ namespace Cube3D
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IntPtr _handle;
-
-        public static IntPtr MainWindowHandle { get; private set; }
+        private static readonly List<MainWindow> OtherScreens = new();
 
         private readonly MonitorInfo _monitorInfo;
-
-        private static (double ScaleX, double ScaleY) GetDpiForMonitor( IntPtr hMon )
-        {
-            _ = User32.GetDpiForMonitor( hMon, User32.MonitorDpiType.MDT_EFFECTIVE_DPI, out var dpiX, out var dpiY );
-            return new ValueTuple<double, double>( dpiX / 96.0, dpiY / 96.0 );
-        }
+        public           IntPtr      Handle;
 
         public MainWindow()
         {
@@ -79,14 +72,18 @@ namespace Cube3D
             new WindowInteropHelper( this ).EnsureHandle();
         }
 
+        private static (double ScaleX, double ScaleY) GetDpiForMonitor( IntPtr hMon )
+        {
+            _ = User32.GetDpiForMonitor( hMon, User32.MonitorDpiType.MDT_EFFECTIVE_DPI, out var dpiX, out var dpiY );
+            return new ValueTuple<double, double>( dpiX / 96.0, dpiY / 96.0 );
+        }
+
         protected override void OnSourceInitialized( EventArgs e )
         {
             base.OnSourceInitialized( e );
-            _handle = new WindowInteropHelper( this ).EnsureHandle();
-            var source = HwndSource.FromHwnd( _handle );
+            Handle = new WindowInteropHelper( this ).EnsureHandle();
+            var source = HwndSource.FromHwnd( Handle );
             source?.AddHook( WndProc );
-
-            if ( _monitorInfo.IsPrimary ) MainWindowHandle = _handle;
         }
 
         private void Register()
@@ -97,7 +94,7 @@ namespace Cube3D
             {
                 Type = PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER,
                 Name = PluginManager.PluginInfo.Name,
-                Handle = _handle.ToInt32()
+                Handle = Handle.ToInt32()
             };
 
             void Exit()
@@ -116,7 +113,7 @@ namespace Cube3D
                     return;
                 }
 
-                User32.SetWindowLongPtr( new HandleRef( this, _handle ),
+                User32.SetWindowLongPtr( new HandleRef( this, Handle ),
                     (int)GetWindowLongFields.GWL_HWNDPARENT,
                     hostInfo.MainWindowHandle
                 );
@@ -149,16 +146,16 @@ namespace Cube3D
 
         private void FixStyle()
         {
-            _ = User32.SetWindowDisplayAffinity( _handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
+            _ = User32.SetWindowDisplayAffinity( Handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
 
-            var style = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_STYLE );
+            var style = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_STYLE );
             style = unchecked(style | (int)0x80000000); // WS_POPUP
-            User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_STYLE, style );
+            User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_STYLE, style );
 
-            var exStyle = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_EXSTYLE );
+            var exStyle = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_EXSTYLE );
             exStyle |= 0x08000000; // WS_EX_NOACTIVATE
             exStyle &= ~0x00040000; // WS_EX_APPWINDOW
-            User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
+            User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
         }
 
         private async void Window_Loaded( object sender, RoutedEventArgs e )
@@ -199,8 +196,6 @@ namespace Cube3D
                 : Visibility.Hidden;
         }
 
-        private static readonly List<MainWindow> OtherScreens = new();
-
         private void CreateOtherScreens()
         {
             if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) == 0 ||
@@ -213,9 +208,9 @@ namespace Cube3D
             foreach ( var ow in from mi in others select new MainWindow( mi ) )
             {
                 OtherScreens.Add( ow );
-                User32.SetWindowLongPtr( new HandleRef( ow, ow._handle ),
+                User32.SetWindowLongPtr( new HandleRef( ow, ow.Handle ),
                     (int)GetWindowLongFields.GWL_HWNDPARENT,
-                    _handle.ToInt32()
+                    Handle.ToInt32()
                 );
                 ow.Show();
             }

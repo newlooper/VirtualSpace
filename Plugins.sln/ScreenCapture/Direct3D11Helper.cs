@@ -40,11 +40,11 @@ namespace ScreenCapture
 {
     public static class Direct3D11Helper
     {
-        private static          Guid IInspectable    = new Guid( "AF86E2E0-B12D-4c6a-9C5A-D7AA65101E90" );
-        private static          Guid ID3D11Resource  = new Guid( "dc8e63f3-d12b-4952-b47b-5e45026a862d" );
-        private static          Guid IDXGIAdapter3   = new Guid( "645967A4-1392-4310-A798-8053CE3E93FD" );
-        private static readonly Guid ID3D11Device    = new Guid( "db6f6ddb-ac77-4e88-8253-819df9bbf140" );
-        private static readonly Guid ID3D11Texture2D = new Guid( "6f15aaf2-d208-4e89-9ab4-489535d34f9c" );
+        private static          Guid IInspectable    = new( "AF86E2E0-B12D-4c6a-9C5A-D7AA65101E90" );
+        private static          Guid ID3D11Resource  = new( "dc8e63f3-d12b-4952-b47b-5e45026a862d" );
+        private static          Guid IDXGIAdapter3   = new( "645967A4-1392-4310-A798-8053CE3E93FD" );
+        private static readonly Guid ID3D11Device    = new( "db6f6ddb-ac77-4e88-8253-819df9bbf140" );
+        private static readonly Guid ID3D11Texture2D = new( "6f15aaf2-d208-4e89-9ab4-489535d34f9c" );
 
         [DllImport(
             "d3d11.dll",
@@ -93,7 +93,7 @@ namespace ScreenCapture
                 if ( hr == 0 )
                 {
 #if NET5_0_OR_GREATER
-                    device = MarshalInterface<IDirect3DDevice>.FromAbi(pUnknown);
+                    device = MarshalInterface<IDirect3DDevice>.FromAbi( pUnknown );
 #else
                     device = Marshal.GetObjectForIUnknown( pUnknown ) as IDirect3DDevice;
 #endif
@@ -117,7 +117,7 @@ namespace ScreenCapture
                 if ( hr == 0 )
                 {
 #if NET5_0_OR_GREATER
-                    surface = MarshalInterface<IDirect3DSurface>.FromAbi(pUnknown);
+                    surface = MarshalInterface<IDirect3DSurface>.FromAbi( pUnknown );
 #else
                     surface = Marshal.GetObjectForIUnknown( pUnknown ) as IDirect3DSurface;
 #endif
