@@ -195,7 +195,7 @@ namespace VirtualSpace
             }
             else
             {
-                var bitmap = (Bitmap)_rm.GetObject( "AboutLogo_2" );
+                using var bitmap = (Bitmap)_rm.GetObject( "AboutLogo_2" );
                 niTray.Icon = Icon.FromHandle( bitmap.GetHicon() );
             }
 

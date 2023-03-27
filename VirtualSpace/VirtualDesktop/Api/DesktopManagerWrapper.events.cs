@@ -148,10 +148,7 @@ namespace VirtualSpace.VirtualDesktop.Api
                                 } );
                             }
 
-                            if ( ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon )
-                            {
-                                MainWindow.UpdateVDIndexOnTrayIcon( vdn.NewId );
-                            }
+                            MainWindow.UpdateVDIndexOnTrayIcon( vdn.NewId );
 
                             break;
                         default:

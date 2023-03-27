@@ -148,7 +148,7 @@ namespace VirtualSpace
                         case Keys.Right:
                         case Keys.Up:
                         case Keys.Down:
-                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)info.vkCode );
+                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (ulong)key );
                             return LowLevelHooks.Handled;
                     }
 

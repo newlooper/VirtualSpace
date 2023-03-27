@@ -240,8 +240,8 @@ namespace VirtualSpace
                             _acForm = AppControllerFactory.Create();
                             _acForm.SetMainWindowHandle( Handle );
                             _acForm.BringToTop();
-                            if ( Manager.Configs.Cluster.ShowVDIndexOnTrayIcon )
-                                UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
+
+                            UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
                             break;
                         case UserMessage.SwitchDesktop:
                             SwitchDesktopByDirection( lParam );
@@ -273,16 +273,16 @@ namespace VirtualSpace
                             DisableMouseHook();
                             goto RETURN;
                         case UserMessage.NavLeft:
-                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)Keys.Left );
+                            SwitchDesktopByDirection( (IntPtr)Keys.Left );
                             break;
                         case UserMessage.NavRight:
-                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)Keys.Right );
+                            SwitchDesktopByDirection( (IntPtr)Keys.Right );
                             break;
                         case UserMessage.NavUp:
-                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)Keys.Up );
+                            SwitchDesktopByDirection( (IntPtr)Keys.Up );
                             break;
                         case UserMessage.NavDown:
-                            User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, (uint)Keys.Down );
+                            SwitchDesktopByDirection( (IntPtr)Keys.Down );
                             break;
                     }
 

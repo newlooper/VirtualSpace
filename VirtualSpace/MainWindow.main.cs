@@ -96,8 +96,7 @@ namespace VirtualSpace
             VirtualDesktopManager.Bootstrap();
             await VirtualDesktopManager.InitLayout();
 
-            if ( ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon )
-                UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
+            UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
 
             DesktopManagerWrapper.ListenVirtualDesktopEvents();
             DesktopManagerWrapper.RegisterVirtualDesktopEvents();
@@ -178,6 +177,7 @@ namespace VirtualSpace
 
         public static void UpdateVDIndexOnTrayIcon( Guid guid )
         {
+            if ( !Manager.Configs.Cluster.ShowVDIndexOnTrayIcon ) return;
             var i     = ConfigManager.CurrentProfile.DesktopOrder.IndexOf( guid );
             var index = ConfigManager.CurrentProfile.UI.ShowVdIndexType == 0 ? i : i + 1;
             _instance._acForm.UpdateVDIndexOnTrayIcon( index.ToString() );
