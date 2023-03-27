@@ -122,8 +122,6 @@ namespace VirtualSpace
             Logger.ShowLogsInGui = ConfigManager.Configs.LogConfig.ShowLogsInGui;
 
             BootInfo();
-            // ProcessWatcher.Start();
-            // WindowWatcher.Start();
 
             Daemon.Start();
 
