@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Helpers\Helpers.csproj" />
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop10\VirtualDesktop10.csproj">
+            <Aliases>VirtualDesktop10</Aliases>
+        </ProjectReference>
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop11\VirtualDesktop11.csproj">
+            <Aliases>VirtualDesktop11</Aliases>
+        </ProjectReference>
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop11_21H2\VirtualDesktop11_21H2.csproj">
+            <Aliases>VirtualDesktop11_21H2</Aliases>
+        </ProjectReference>
+    </ItemGroup>
+
+</Project>

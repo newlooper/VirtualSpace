@@ -47,7 +47,7 @@ namespace VirtualSpace.Commons
                         {
                             case PipeMessageType.INSTANCE:
                                 Logger.Info( "Only single instance allowed, just bring to top." );
-                                WinApi.PostMessage( MainWindowHandle, WinApi.WM_HOTKEY, UserMessage.RiseView, 0 );
+                                User32.PostMessage( MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
                                 break;
 
                             case PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER:
@@ -113,7 +113,7 @@ namespace VirtualSpace.Commons
 
                             case PipeMessageType.RESTART:
                             {
-                                WinApi.PostMessage( MainWindowHandle, WinApi.WM_HOTKEY, UserMessage.RestartApp, 0 );
+                                User32.PostMessage( MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RestartApp, 0 );
                                 break;
                             }
 

@@ -111,9 +111,9 @@ namespace VirtualSpace.VirtualDesktop
             SaveOrder();
         }
 
-        public static void UpdateMainView( bool force = false, VirtualDesktopNotification? vdn = null )
+        private static void UpdateMainView( VirtualDesktopNotification? vdn = null )
         {
-            if ( !force && !MainWindow.IsShowing() ) return;
+            if ( !MainWindow.IsShowing() ) return;
 
             FixLayout();
             ShowAllVirtualDesktops();

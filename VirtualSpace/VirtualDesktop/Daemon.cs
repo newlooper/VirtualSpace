@@ -23,6 +23,7 @@ using VirtualSpace.Config;
 using VirtualSpace.Config.Events.Entity;
 using VirtualSpace.Config.Events.Expression;
 using VirtualSpace.Helpers;
+using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
 

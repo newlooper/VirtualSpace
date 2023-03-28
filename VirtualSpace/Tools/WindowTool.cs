@@ -13,8 +13,9 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Helpers;
+using VirtualSpace.VirtualDesktop.Api;
 
-namespace VirtualSpace.VirtualDesktop.Api
+namespace VirtualSpace.Tools
 {
     public static class WindowTool
     {

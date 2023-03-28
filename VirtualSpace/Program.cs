@@ -27,7 +27,7 @@ namespace VirtualSpace
 
         private static Assembly? AutoResolver( object? sender, ResolveEventArgs eventArgs )
         {
-            var          dllName = "";
+            string       dllName;
             const string resName = ".Resources.";
             const string dllExt  = ".dll";
 

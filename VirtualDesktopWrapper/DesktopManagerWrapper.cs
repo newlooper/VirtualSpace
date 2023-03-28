@@ -11,7 +11,6 @@ You should have received a copy of the GNU General Public License along with Vir
 
 extern alias VirtualDesktop10;
 extern alias VirtualDesktop11;
-using System;
 using VirtualSpace.Helpers;
 
 namespace VirtualSpace.VirtualDesktop.Api
@@ -43,6 +42,18 @@ namespace VirtualSpace.VirtualDesktop.Api
             }
 
             return VirtualDesktop11::VirtualDesktop.DesktopManager.GetViewCount();
+        }
+
+        public static void ResetDesktopManager()
+        {
+            if ( SysInfo.IsWin10 )
+            {
+                VirtualDesktop10::VirtualDesktop.DesktopManager.ResetDesktopManager();
+            }
+            else
+            {
+                VirtualDesktop11::VirtualDesktop.DesktopManager.ResetDesktopManager();
+            }
         }
     }
 }

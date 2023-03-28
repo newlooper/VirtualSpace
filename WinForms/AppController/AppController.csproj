@@ -14,6 +14,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\Configuration\Configuration.csproj" />
         <ProjectReference Include="..\..\Ipc\IpcServer\IpcServer.csproj" />
+        <ProjectReference Include="..\..\VirtualDesktopWrapper\VirtualDesktopWrapper.csproj" />
     </ItemGroup>
 
     <ItemGroup>

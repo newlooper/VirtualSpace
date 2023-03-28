@@ -10,11 +10,7 @@
 
 extern alias VirtualDesktop10;
 extern alias VirtualDesktop11;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using VirtualSpace.AppLogs;
-using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VD10 = VirtualDesktop10::VirtualDesktop;
 using VD11 = VirtualDesktop11::VirtualDesktop;
@@ -23,6 +19,8 @@ namespace VirtualSpace.VirtualDesktop.Api
 {
     public static partial class DesktopWrapper
     {
+        public delegate void OnDesktopVisible( IDesktop desktop, bool? forceFocusForegroundWindow = null );
+
         public static int CurrentIndex => SysInfo.IsWin10 ? VD10.Desktop.SysIndexFromDesktop( VD10.Desktop.Current ) : VD11.Desktop.SysIndexFromDesktop( VD11.Desktop.Current );
 
         public static int  Count       => SysInfo.IsWin10 ? VD10.Desktop.Count : VD11.Desktop.Count;
@@ -109,22 +107,12 @@ namespace VirtualSpace.VirtualDesktop.Api
             if ( SysInfo.IsWin10 )
             {
                 var desktop = VD10.Desktop.FromId( guid );
-                if ( desktop == null )
-                {
-                    return "";
-                }
-
-                return VD10.Desktop.DesktopNameFromDesktop( desktop );
+                return desktop == null ? "" : VD10.Desktop.DesktopNameFromDesktop( desktop );
             }
             else
             {
                 var desktop = VD11.Desktop.FromId( guid );
-                if ( desktop == null )
-                {
-                    return "";
-                }
-
-                return VD11.Desktop.DesktopNameFromDesktop( desktop );
+                return desktop == null ? "" : VD11.Desktop.DesktopNameFromDesktop( desktop );
             }
         }
 
@@ -170,70 +158,20 @@ namespace VirtualSpace.VirtualDesktop.Api
 
         public static void MakeVisibleByGuid( Guid guid, bool? forceFocusForegroundWindow = null )
         {
-            IDesktop desktop;
+            IDesktop? desktop;
 
             if ( SysInfo.IsWin10 )
             {
-                var d10 = VD10.Desktop.FromId( guid );
-                if ( d10 is null ) return;
-                desktop = d10;
+                desktop = VD10.Desktop.FromId( guid );
             }
             else
             {
-                var d11 = VD11.Desktop.FromId( guid );
-                if ( d11 is null ) return;
-                desktop = d11;
+                desktop = VD11.Desktop.FromId( guid );
             }
 
-            if ( MainWindow.IsShowing() )
-            {
-                desktop.MakeVisible();
-                return;
-            }
+            if ( desktop is null ) return;
 
-            forceFocusForegroundWindow ??= Manager.Configs.Cluster.ForceFocusForegroundWindow;
-            if ( (bool)forceFocusForegroundWindow )
-            {
-                var hTaskBar = User32.FindWindow( Const.TaskbarWndClass, "" );
-                if ( hTaskBar == IntPtr.Zero )
-                {
-                    Logger.Verbose( "Taskbar not found, switch desktop only." );
-                    desktop.MakeVisible();
-                    return;
-                }
-
-                if ( SysInfo.IsTaskbarVisible() )
-                {
-                    User32.SetForegroundWindow( hTaskBar );
-                    desktop.MakeVisible();
-
-                    if ( User32.GetForegroundWindow() != hTaskBar )
-                    {
-                        Logger.Verbose( "Taskbar not active, switch desktop only." );
-                        return;
-                    }
-
-                    if ( SysInfo.IsAdministrator )
-                    {
-                        Logger.Verbose( "Send [Alt+Esc]." );
-                        LowLevelKeyboardHook.MultipleKeyPress( new List<Keys> {Keys.Menu, Keys.Escape} );
-                    }
-                    else
-                    {
-                        Logger.Verbose( "Force minimize taskbar." );
-                        _ = User32.ShowWindow( hTaskBar, (short)ShowState.SW_FORCEMINIMIZE );
-                    }
-                }
-                else
-                {
-                    Logger.Verbose( "Taskbar is hiding, switch desktop only." );
-                    desktop.MakeVisible();
-                }
-            }
-            else
-            {
-                desktop.MakeVisible();
-            }
+            OnDesktopVisibleEvent( desktop, forceFocusForegroundWindow );
         }
 
         public static void SetNameByGuid( Guid guid, string name )
@@ -257,5 +195,7 @@ namespace VirtualSpace.VirtualDesktop.Api
 
             return VD11.Desktop.FromWindow( handle ).Guid;
         }
+
+        public static event OnDesktopVisible OnDesktopVisibleEvent;
     }
 }

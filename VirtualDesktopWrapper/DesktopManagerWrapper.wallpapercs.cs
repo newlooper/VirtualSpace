@@ -9,41 +9,42 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Win32;
-using VirtualSpace.Config;
-using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace.VirtualDesktop.Api
 {
     public static partial class DesktopManagerWrapper
     {
-        private const  string WALLPAPER_REGISTRY_PREFIX = @"HKEY_CURRENT_USER\Control Panel\Desktop\";
-        private const  string COLOR_REGISTRY_PREFIX     = @"HKEY_CURRENT_USER\Control Panel\Colors\";
-        private static string _lastPath                 = "";
-        private static string _lastColor                = "";
+        public delegate void WallpaperChanged();
 
-        private static void WatchWallpaperEvents()
+        private const  string  WALLPAPER_REGISTRY_PREFIX = @"HKEY_CURRENT_USER\Control Panel\Desktop\";
+        private const  string  COLOR_REGISTRY_PREFIX     = @"HKEY_CURRENT_USER\Control Panel\Colors\";
+        private static string? _lastPath;
+        private static string? _lastColor;
+
+        private static void WatchWallpaperEvents( WallpaperChanged wc )
         {
             Task.Factory.StartNew( () =>
             {
-                var cachePath = ConfigManager.GetCachePath();
                 while ( true )
                 {
                     var path  = Registry.GetValue( WALLPAPER_REGISTRY_PREFIX, "Wallpaper", "" ).ToString();
                     var color = Registry.GetValue( COLOR_REGISTRY_PREFIX, "Background", "" ).ToString();
+
+                    if ( string.IsNullOrEmpty( _lastColor ) )
+                    {
+                        _lastPath = path;
+                        _lastColor = color;
+                    }
+
                     if ( _lastPath != path || _lastColor != color )
                     {
                         _lastPath = path;
                         _lastColor = color;
-                        Parallel.ForEach( VirtualDesktopManager.GetAllVirtualDesktops(), ( vdw, _ ) =>
-                        {
-                            vdw.UpdateWallpaper();
-                        } );
+                        wc();
                     }
 
-                    Thread.Sleep( Const.OneSecond );
+                    Thread.Sleep( 1000 );
                 }
             }, TaskCreationOptions.LongRunning );
         }

@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
+using VirtualSpace.VirtualDesktop.Api;
 
 namespace VirtualSpace
 {
@@ -193,7 +194,7 @@ namespace VirtualSpace
             nodeMw.Nodes.Clear();
             nodeMwf.Nodes.Clear();
 
-            for ( var i = 1; i <= _vdi.GetDesktopCount(); i++ )
+            for ( var i = 1; i <= DesktopWrapper.Count; i++ )
             {
                 nodeSvd.Nodes.Add( Const.Hotkey.SVD_TREE_NODE_PREFIX + i, Agent.Langs.GetString( "KB.Hotkey.SVD" ) + i );
                 nodeMw.Nodes.Add( Const.Hotkey.MW_TREE_NODE_PREFIX + i, Agent.Langs.GetString( "KB.Hotkey.MW" ) + i );

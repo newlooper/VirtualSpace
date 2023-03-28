@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 Dylan Cheng (https://github.com/newlooper)
+﻿// Copyright (C) 2023 Dylan Cheng (https://github.com/newlooper)
 // 
 // This file is part of VirtualSpace.
 // 
@@ -8,11 +8,23 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace
+using System;
+using System.Windows;
+
+namespace VirtualSpace.Tools
 {
-    public interface IVirtualDesktopInfo
+    public static class SystemTool
     {
-        public int    GetDesktopCount();
-        public string DesktopNameFromIndex( int index );
+        public static bool VersionCheck()
+        {
+            var version = Environment.OSVersion.Version;
+            if ( version is {Major: >= 10, Build: >= 17763 and < 25000} )
+            {
+                return true;
+            }
+
+            MessageBox.Show( Agent.Langs.GetString( "VersionCheckFail" ), @"Error" );
+            return false;
+        }
     }
 }

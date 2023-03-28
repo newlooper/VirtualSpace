@@ -8,8 +8,6 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-extern alias VirtualDesktop10;
-extern alias VirtualDesktop11;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -23,6 +21,7 @@ using VirtualSpace.Config;
 using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
+using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
 
@@ -93,14 +92,8 @@ namespace VirtualSpace
             if ( msg == _taskbarCreatedMessage )
             {
                 Logger.Warning( "explorer.exe restarted, reset DesktopManager and restart all Plugins." );
-                if ( SysInfo.IsWin10 )
-                {
-                    VirtualDesktop10::VirtualDesktop.DesktopManager.ResetDesktopManager();
-                }
-                else
-                {
-                    VirtualDesktop11::VirtualDesktop.DesktopManager.ResetDesktopManager();
-                }
+
+                DesktopManagerWrapper.ResetDesktopManager();
 
                 foreach ( var plugin in PluginHost.Plugins )
                 {

@@ -86,6 +86,9 @@
             <Aliases>VirtualDesktop11_21H2</Aliases>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\WinForms\AppController\AppController.csproj" />
     </ItemGroup>
 

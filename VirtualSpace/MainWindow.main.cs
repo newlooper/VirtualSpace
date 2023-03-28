@@ -18,9 +18,7 @@ using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
-using Application = System.Windows.Application;
 using ConfigManager = VirtualSpace.Config.Manager;
-using IpcConfig = VirtualSpace.Commons.Config;
 
 namespace VirtualSpace
 {
@@ -99,7 +97,7 @@ namespace VirtualSpace
             UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
 
             DesktopManagerWrapper.ListenVirtualDesktopEvents();
-            DesktopManagerWrapper.RegisterVirtualDesktopEvents();
+            VirtualDesktopManager.RegisterVirtualDesktopEvents();
 
             if ( ConfigManager.Configs.Cluster.HideOnStart ||
                  ( (App)Application.Current ).HideOnStart ) return;

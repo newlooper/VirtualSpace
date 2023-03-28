@@ -171,7 +171,7 @@ namespace VirtualSpace
                 ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon = 2;
             }
 
-            User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RefreshTrayIcon, 0 );
+            NotifyHostRefreshTrayIcon();
             ConfigManager.Save( reason: ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon );
         }
 
@@ -191,7 +191,7 @@ namespace VirtualSpace
         {
             if ( chb_showVDIndexOnTrayIcon.Checked )
             {
-                User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RefreshTrayIcon, 0 );
+                NotifyHostRefreshTrayIcon();
             }
             else
             {
@@ -238,6 +238,11 @@ namespace VirtualSpace
                 UseShellExecute = true
             };
             Process.Start( psi );
+        }
+
+        private void NotifyHostRefreshTrayIcon()
+        {
+            User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RefreshTrayIcon, 0 );
         }
     }
 }

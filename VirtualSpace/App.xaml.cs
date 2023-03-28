@@ -19,6 +19,7 @@ using VirtualSpace.Config;
 using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
+using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
 using Application = System.Windows.Application;
@@ -41,7 +42,7 @@ namespace VirtualSpace
 
             LogManager.GorgeousDividingLine();
 
-            if ( AssemblyLoader.VersionCheck() &&
+            if ( SystemTool.VersionCheck() &&
                  SingleInstanceCheck() &&
                  ConfigManager.Init() )
             {

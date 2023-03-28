@@ -18,7 +18,6 @@ namespace VirtualSpace.Factory
             {
                 case "WinForm":
                     var ac = new AppController();
-                    ac.SetVirtualDesktopInfo( new VirtualDesktopInfo() );
                     return ac;
                 default:
                     return null;

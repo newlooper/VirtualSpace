@@ -11,16 +11,9 @@ You should have received a copy of the GNU General Public License along with Vir
 
 extern alias VirtualDesktop10;
 extern alias VirtualDesktop11;
-using System;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Channels;
-using System.Windows.Media;
-using Notification.Wpf;
-using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
-using ConfigManager = VirtualSpace.Config.Manager;
 using VD10 = VirtualDesktop10::VirtualDesktop;
 using VD11 = VirtualDesktop11::VirtualDesktop;
 
@@ -30,19 +23,19 @@ namespace VirtualSpace.VirtualDesktop.Api
     {
         private static readonly Channel<VirtualDesktopNotification> VirtualDesktopNotifications = Channels.VirtualDesktopNotifications;
 
-        public static void RegisterVirtualDesktopEvents()
+        public static void RegisterVirtualDesktopEvents( WallpaperChanged wc10, Action<Guid, string> wc11 )
         {
             if ( SysInfo.IsWin10 )
             {
-                RegisterVirtualDesktopEvents10();
+                RegisterVirtualDesktopEvents10( wc10 );
             }
             else
             {
-                RegisterVirtualDesktopEvents11();
+                RegisterVirtualDesktopEvents11( wc11 );
             }
         }
 
-        private static void RegisterVirtualDesktopEvents10()
+        private static void RegisterVirtualDesktopEvents10( WallpaperChanged wc )
         {
             VD10.DesktopManager.Created += ( _, e ) =>
             {
@@ -68,10 +61,10 @@ namespace VirtualSpace.VirtualDesktop.Api
                 } );
             };
 
-            WatchWallpaperEvents();
+            WatchWallpaperEvents( wc );
         }
 
-        private static void RegisterVirtualDesktopEvents11()
+        private static void RegisterVirtualDesktopEvents11( Action<Guid, string> wc11 )
         {
             VD11.DesktopManager.Created += ( _, e ) =>
             {
@@ -100,15 +93,20 @@ namespace VirtualSpace.VirtualDesktop.Api
             VD11.DesktopManager.WallpaperChanged += ( _, e ) =>
             {
                 if ( string.IsNullOrEmpty( e.Path ) ) return;
-                var guid    = e.Desktop.GetId();
-                var vdwList = VirtualDesktopManager.GetAllVirtualDesktops();
-
-                var vd = ( from vdw in vdwList where vdw.VdId == guid select vdw ).FirstOrDefault();
-                if ( vd is null ) return;
-                vd.UpdateWallpaper();
-                Logger.Event( $"Desktop[{vd.VdIndex.ToString()}] Wallpaper Changed: {e.Path}" );
+                wc11( e.Desktop.GetId(), e.Path );
             };
         }
+
+        public delegate void DesktopCreated();
+
+        public delegate void DesktopDeleted( VirtualDesktopNotification vdn );
+
+        public delegate void DesktopChanged( VirtualDesktopNotification vdn );
+
+        public static event DesktopCreated DesktopCreatedEvent;
+        public static event DesktopDeleted DesktopDeletedEvent;
+        public static event DesktopChanged DesktopChangedEvent;
+
 
         public static async void ListenVirtualDesktopEvents()
         {
@@ -119,36 +117,15 @@ namespace VirtualSpace.VirtualDesktop.Api
                     switch ( vdn.Type )
                     {
                         case VirtualDesktopNotificationType.CREATED:
-                            if ( !VirtualDesktopManager.IsBatchCreate )
-                            {
-                                VirtualDesktopManager.UpdateMainView();
-                            }
+                            DesktopCreatedEvent();
 
                             break;
                         case VirtualDesktopNotificationType.DELETED:
-                            VirtualDesktopManager.UpdateMainView( vdn: vdn );
+                            DesktopDeletedEvent( vdn );
 
                             break;
                         case VirtualDesktopNotificationType.CURRENT_CHANGED:
-                            VirtualDesktopManager.LastDesktopId = vdn.OldId;
-                            if ( MainWindow.IsShowing() )
-                                VirtualDesktopManager.UpdateVdwBackground();
-
-                            if ( ConfigManager.Configs.Cluster.NotificationOnVdChanged )
-                            {
-                                CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
-                                Logger.Notify( new NotifyObject
-                                {
-                                    Title = Agent.Langs.GetString( "Cluster.Notification.SVD.Current" ) + DesktopWrapper.DesktopNameFromGuid( vdn.NewId ),
-                                    Message = Agent.Langs.GetString( "Cluster.Notification.SVD.Last" ) + DesktopWrapper.DesktopNameFromGuid( vdn.OldId ),
-                                    Background = new SolidColorBrush( Colors.DarkSlateGray ),
-                                    Foreground = new SolidColorBrush( Colors.White ),
-                                    Type = NotificationType.Notification,
-                                    ExpTime = TimeSpan.FromSeconds( 3 )
-                                } );
-                            }
-
-                            MainWindow.UpdateVDIndexOnTrayIcon( vdn.NewId );
+                            DesktopChangedEvent( vdn );
 
                             break;
                         default:
