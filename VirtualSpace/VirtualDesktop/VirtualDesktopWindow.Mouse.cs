@@ -387,7 +387,7 @@ namespace VirtualSpace.VirtualDesktop
                 }
 
                 RefreshVDs( isWindowPinned );
-            } );
+            } ).ConfigureAwait( false );
         }
 
         public void MakeTheOnlyOne( int pId = 0 )

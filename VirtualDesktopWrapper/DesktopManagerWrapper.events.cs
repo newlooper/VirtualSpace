@@ -107,7 +107,6 @@ namespace VirtualSpace.VirtualDesktop.Api
         public static event DesktopDeleted DesktopDeletedEvent;
         public static event DesktopChanged DesktopChangedEvent;
 
-
         public static async void ListenVirtualDesktopEvents()
         {
             while ( await VirtualDesktopNotifications.Reader.WaitToReadAsync() )

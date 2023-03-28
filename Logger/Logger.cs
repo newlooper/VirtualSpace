@@ -73,8 +73,8 @@ namespace VirtualSpace.AppLogs
             if ( !ShowLogsInGui ) return;
             var logMessage = LogMessage.CreateMessage(
                 type,
-                $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}][{type}] {str} {{ThreadId:{Thread.CurrentThread.ManagedThreadId.ToString()}}}\r\n" );
-            await LogChannel.Writer.WriteAsync( logMessage );
+                $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}][{type}] {str} {{ThreadId:{Environment.CurrentManagedThreadId.ToString()}}}\r\n" );
+            await LogChannel.Writer.WriteAsync( logMessage ).ConfigureAwait( false );
         }
 
         public static void Notify( NotifyObject no )

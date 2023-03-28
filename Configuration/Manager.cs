@@ -93,7 +93,7 @@ namespace VirtualSpace.Config
             try
             {
                 var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, new JsonSerializerOptions {WriteIndented = true} );
-                await File.WriteAllBytesAsync( filePath, contents );
+                await File.WriteAllBytesAsync( filePath, contents ).ConfigureAwait( false );
                 Logger.Info( $"Settings Saved [{reasonName}: {reason}]." );
             }
             catch ( Exception ex )

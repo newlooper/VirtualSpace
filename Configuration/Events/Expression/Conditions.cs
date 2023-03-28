@@ -78,7 +78,7 @@ namespace VirtualSpace.Config.Events.Expression
             return _rules;
         }
 
-        public static async void CheckRulesForWindow( Window win )
+        private static async void CheckRulesForWindow( Window win )
         {
             if ( _rules.Count == 0 ) return;
 
@@ -173,7 +173,7 @@ namespace VirtualSpace.Config.Events.Expression
                 }
 
                 WindowCheckTimes[win.Handle]++;
-            } );
+            } ).ConfigureAwait( false );
         }
 
         private static List<RuleTemplate> FetchRuleList( string path )
