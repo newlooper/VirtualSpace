@@ -12,7 +12,6 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Channels;
 using System.Windows.Media;
 using Notification.Wpf;

@@ -9,8 +9,6 @@ LinqExpressionBuilder is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU General Public License along with LinqExpressionBuilder. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System.Collections.Generic;
-
 namespace LinqExpressionBuilder
 {
     public static class Keywords

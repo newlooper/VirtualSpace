@@ -312,7 +312,6 @@ namespace VirtualSpace
             {
                 rule.Created = time;
                 ruleList.Add( rule );
-                Conditions.SaveRules( Manager.GetRulesPath(), ruleList );
             }
             else
             {
@@ -320,7 +319,7 @@ namespace VirtualSpace
                 ruleList[_editIndex] = rule;
             }
 
-            AppController.UpdateRuleListView( _editIndex, rule );
+            AppController.UpdateRuleListView( _editIndex, rule, ruleList );
 
             Close();
         }

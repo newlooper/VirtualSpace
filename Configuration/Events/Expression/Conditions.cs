@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -31,15 +32,18 @@ namespace VirtualSpace.Config.Events.Expression
 {
     public static partial class Conditions
     {
-        private static readonly JsonParser                        Jp                        = new();
-        private static          List<RuleTemplate>                _rules                    = InitRules();
+        private static readonly JsonParser                        Jp = new();
+        private static          List<RuleTemplate>                _rules;
         private static readonly Channel<Behavior>                 ActionProducer            = Channels.ActionChannel;
         private static readonly Channel<Window>                   VisibleWindowsConsumer    = Channels.VisibleWindowsChannel;
         private static readonly ConcurrentDictionary<IntPtr, int> WindowCheckTimes          = new();
         public static readonly  ConcurrentBag<IntPtr>             WndHandleIgnoreListByRule = new();
+        private static          long                              _updateRuleLock;
 
         static Conditions()
         {
+            _rules = InitRules();
+            BuildRuleExp( _rules );
             RuleChecker();
         }
 
@@ -56,18 +60,18 @@ namespace VirtualSpace.Config.Events.Expression
 
         private static List<RuleTemplate> InitRules()
         {
-            var path = Manager.GetRulesPath();
-            _rules = new List<RuleTemplate>();
-            if ( !File.Exists( path ) ) return _rules;
+            var path  = Manager.GetRulesPath();
+            var rules = new List<RuleTemplate>();
+            if ( !File.Exists( path ) ) return rules;
 
-            _rules = FetchRuleList( path );
+            rules = FetchRuleList( path );
 
-            return _rules;
+            return rules;
         }
 
         private static void BuildRuleExp( List<RuleTemplate> rules )
         {
-            foreach ( var rule in rules )
+            foreach ( var rule in rules.Where( rule => rule.Exp is null ) )
             {
                 rule.Exp = Jp.ExpressionFromJsonDoc<Window>( rule.Expression );
             }
@@ -80,10 +84,9 @@ namespace VirtualSpace.Config.Events.Expression
 
         private static async void CheckRulesForWindow( Window win )
         {
-            if ( _rules.Count == 0 ) return;
+            if ( _rules.Count == 0 || Interlocked.Read( ref _updateRuleLock ) != 0 ) return;
 
             var rules = new List<RuleTemplate>( _rules );
-            BuildRuleExp( rules );
 
             if ( !WindowCheckTimes.ContainsKey( win.Handle ) )
                 WindowCheckTimes[win.Handle] = 0;
@@ -129,10 +132,14 @@ namespace VirtualSpace.Config.Events.Expression
 
                 var hasMatchedRule = false;
 
+                var l = new List<Window>();
+
                 foreach ( var r in rules )
                 {
                     if ( !r.Enabled ) continue;
-                    var match = new List<Window> {win}.Where( r.Exp ).Any();
+                    l.Add( win );
+                    var match = l.Where( r.Exp ).Any();
+                    l.Clear();
                     if ( match )
                     {
                         hasMatchedRule = true;
@@ -225,7 +232,13 @@ namespace VirtualSpace.Config.Events.Expression
 
         public static async void SaveRules( string path, List<RuleTemplate> ruleList )
         {
+            Interlocked.Increment( ref _updateRuleLock );
+
             _rules = ruleList;
+            BuildRuleExp( _rules );
+
+            Interlocked.Decrement( ref _updateRuleLock );
+
             await File.WriteAllBytesAsync( path, JsonSerializer.SerializeToUtf8Bytes(
                 ruleList, GetJsonSerializerOptions() ) );
 

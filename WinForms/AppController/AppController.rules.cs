@@ -10,6 +10,7 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Windows.Forms;
 using VirtualSpace.Config.Events.Entity;
@@ -20,6 +21,8 @@ namespace VirtualSpace
 {
     public partial class AppController
     {
+        private static bool _handleItemCheck = false;
+
         private void InitRuleListView()
         {
             ///////////////////////////////////////
@@ -27,6 +30,8 @@ namespace VirtualSpace
             lvc_Name.Name = nameof( lvc_Name );
             lvc_Created.Name = nameof( lvc_Created );
             lvc_Updated.Name = nameof( lvc_Updated );
+
+            lv_Rules.ItemCheck += lv_Rules_ItemCheck;
         }
 
         private void ReadRules()
@@ -42,7 +47,7 @@ namespace VirtualSpace
 
             var rules = Conditions.FetchRules();
 
-            lv_Rules.ItemCheck -= lv_Rules_ItemCheck;
+            _handleItemCheck = false;
             lv_Rules.Items.Clear();
             foreach ( var rule in rules )
             {
@@ -51,8 +56,9 @@ namespace VirtualSpace
             }
         }
 
-        public static void UpdateRuleListView( int index, RuleTemplate rule )
+        public static void UpdateRuleListView( int index, RuleTemplate rule, List<RuleTemplate> rules )
         {
+            _handleItemCheck = false;
             if ( index == -1 )
             {
                 AddRule( rule );
@@ -61,6 +67,10 @@ namespace VirtualSpace
             {
                 UpdateRule( index, rule );
             }
+
+            _handleItemCheck = true;
+
+            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
         }
 
         private static void AddRule( RuleTemplate rule )
@@ -117,7 +127,10 @@ namespace VirtualSpace
                 Updated = time
             };
             rules.Add( clone );
+            _handleItemCheck = false;
             lv_Rules.Items.Add( LviByRule( clone ) );
+            _handleItemCheck = true;
+            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
         }
 
         private void btn_RuleRemove_Click( object sender, EventArgs e )
@@ -163,6 +176,7 @@ namespace VirtualSpace
 
         private void lv_Rules_ItemCheck( object? sender, ItemCheckEventArgs e )
         {
+            if ( !_handleItemCheck ) return;
             var rules = Conditions.FetchRules();
             if ( rules.Count == 0 ) return;
 
@@ -173,8 +187,8 @@ namespace VirtualSpace
 
         private void lv_Rules_VisibleChanged( object sender, EventArgs e )
         {
-            lv_Rules.ItemCheck -= lv_Rules_ItemCheck;
-            lv_Rules.ItemCheck += lv_Rules_ItemCheck;
+            _handleItemCheck = false;
+            _handleItemCheck = true;
         }
 
         private static ExpressionTemplate RefreshRuleId( ExpressionTemplate expressionTemplate )
