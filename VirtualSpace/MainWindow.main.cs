@@ -27,7 +27,7 @@ namespace VirtualSpace
         private static readonly Stopwatch      RiseViewTimer      = Stopwatch.StartNew();
         private static readonly Stopwatch      SwitchDesktopTimer = Stopwatch.StartNew();
         private static          MainWindow     _instance;
-        private static          int            _forceSwitchOnTimeout;
+        private static          long           _forceSwitchOnTimeout;
         private                 IAppController _acForm;
 
         private MainWindow()

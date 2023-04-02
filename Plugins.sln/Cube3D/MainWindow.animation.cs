@@ -21,7 +21,7 @@ namespace Cube3D
 {
     public partial class MainWindow
     {
-        private static int _mainWindowRunningAnimationCount;
+        private static long _mainWindowRunningAnimationCount;
 
         private readonly ThicknessAnimation _animationNotifyGrid = new()
         {

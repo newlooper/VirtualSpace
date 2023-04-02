@@ -50,8 +50,8 @@ namespace VirtualSpace.VirtualDesktop
                 survivalDesktops.Add( survival );
             }
 
-            var guids = survivalDesktops.Select( v => v.VdId ).ToList();
-            foreach ( var old in _virtualDesktops.Where( old => !guids.Contains( old.VdId ) ) )
+            var sysGuids = survivalDesktops.Select( v => v.VdId ).ToList();
+            foreach ( var old in _virtualDesktops.Where( old => !sysGuids.Contains( old.VdId ) ) )
             {
                 old.RealClose();
             }
@@ -75,39 +75,35 @@ namespace VirtualSpace.VirtualDesktop
             if ( needSort )
                 _virtualDesktops.Sort( ( x, y ) => x.VdIndex.CompareTo( y.VdIndex ) );
 
-            var profile = ConfigManager.CurrentProfile;
-            var guids   = _virtualDesktops.Select( vdw => vdw.VdId ).ToList();
+            var profile  = ConfigManager.CurrentProfile;
+            var sysGuids = _virtualDesktops.Select( vdw => vdw.VdId ).ToList();
 
             if ( profile.DesktopOrder == null || profile.DesktopOrder.Count == 0 ) // no custom order, using system's
             {
-                SaveOrder( guids );
+                SaveOrder( sysGuids );
                 return;
             }
 
-            var diff = profile.DesktopOrder.FindAll( o => !guids.Contains( o ) );
-            foreach ( var d in diff )
-            {
-                profile.DesktopOrder.Remove( d );
-            }
+            profile.DesktopOrder.RemoveAll( g => !sysGuids.Contains( g ) );
 
-            var reOrdered = new List<VirtualDesktopWindow>();
+            var orderedByProfile = new List<VirtualDesktopWindow>();
             for ( var idx = 0; idx < profile.DesktopOrder.Count; idx++ )
             {
                 var vdw = _virtualDesktops.Find( vdw => vdw.VdId == profile.DesktopOrder[idx] );
                 if ( vdw is null ) continue;
                 vdw.VdIndex = idx; // reposition
-                reOrdered.Add( vdw );
+                orderedByProfile.Add( vdw );
                 _virtualDesktops.Remove( vdw );
             }
 
-            foreach ( var unOrdered in _virtualDesktops )
+            foreach ( var restVdw in _virtualDesktops )
             {
-                unOrdered.VdIndex = reOrdered.Count;
-                reOrdered.Add( unOrdered ); // change reOrdered.Count every turn
-                profile.DesktopOrder.Add( unOrdered.VdId ); // append to tail
+                restVdw.VdIndex = orderedByProfile.Count;
+                orderedByProfile.Add( restVdw ); // increase orderedByProfile.Count every turn, so that vdw.VdIndex can be set properly.
+                profile.DesktopOrder.Add( restVdw.VdId ); // append to tail
             }
 
-            _virtualDesktops = reOrdered;
+            _virtualDesktops = orderedByProfile;
             SaveOrder();
         }
 
