@@ -16,6 +16,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Windows;
+using Microsoft.Win32;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Config.Profiles;
@@ -27,10 +28,11 @@ namespace VirtualSpace.Config
     {
         public static ConfigTemplate Configs;
         public static string         AppPath;
-        public static string         AppFolder;
+        public static string         AppRootFolder;
         public static string         ProfileFolder;
         public static string         CacheFolder;
         public static string         PluginsFolder;
+        public static string         ConfigRootFolder;
         public static string         ConfigFilePath;
 
         public static Profile CurrentProfile => Configs.Profiles[Configs.CurrentProfileName];
@@ -40,8 +42,10 @@ namespace VirtualSpace.Config
             try
             {
                 AppPath = Process.GetCurrentProcess().MainModule.FileName;
-                AppFolder = Directory.GetParent( AppPath ).FullName;
-                ConfigFilePath = Path.Combine( AppFolder, Settings.SettingsFile );
+                AppRootFolder = Directory.GetParent( AppPath ).FullName;
+
+                ConfigRootFolder = GetConfigRoot();
+                ConfigFilePath = Path.Combine( ConfigRootFolder, Settings.SettingsFile );
 
                 CheckFolders();
 
@@ -56,6 +60,25 @@ namespace VirtualSpace.Config
             }
 
             return true;
+        }
+
+        public static string GetConfigRoot()
+        {
+            using var vsReg         = Registry.CurrentUser.CreateSubKey( Const.Reg.RegKeyApp );
+            var       configRootReg = vsReg.GetValue( Const.Reg.RegKeyConfigRoot );
+            if ( configRootReg is null || !Directory.Exists( configRootReg.ToString() ) )
+            {
+                return AppRootFolder;
+            }
+
+            return configRootReg.ToString();
+        }
+
+        public static void SetConfigRoot( string path )
+        {
+            using var vsReg = Registry.CurrentUser.CreateSubKey( Const.Reg.RegKeyApp );
+            vsReg.SetValue( Const.Reg.RegKeyConfigRoot, path );
+            ConfigRootFolder = path;
         }
 
         private static void InitConfig( string filePath )
@@ -104,13 +127,13 @@ namespace VirtualSpace.Config
 
         private static void CheckFolders()
         {
-            ProfileFolder = Path.Combine( AppFolder, Settings.ProfilesFolder );
+            ProfileFolder = Path.Combine( ConfigRootFolder, Settings.ProfilesFolder );
             Directory.CreateDirectory( ProfileFolder );
 
-            CacheFolder = Path.Combine( AppFolder, Settings.CacheFolder );
+            CacheFolder = Path.Combine( AppRootFolder, Settings.CacheFolder );
             Directory.CreateDirectory( CacheFolder );
 
-            PluginsFolder = Path.Combine( AppFolder, Settings.PluginsFolder );
+            PluginsFolder = Path.Combine( AppRootFolder, Settings.PluginsFolder );
             Directory.CreateDirectory( PluginsFolder );
         }
 

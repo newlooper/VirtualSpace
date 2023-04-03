@@ -62,6 +62,12 @@ namespace VirtualSpace.Config
             public const string DefaultLogLevel = "EVENT";
         }
 
+        public static class Reg
+        {
+            public const string RegKeyApp        = @"Software\newlooper.com\VirtualSpace";
+            public const string RegKeyConfigRoot = "ConfigRoot";
+        }
+
         public static class Args
         {
             public const string HIDE_ON_START = "--HideOnStart";

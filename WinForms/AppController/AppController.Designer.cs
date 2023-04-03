@@ -46,6 +46,7 @@ namespace VirtualSpace
             closeThisWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             runAsAdministratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            tsmiMainMenuRestart = new System.Windows.Forms.ToolStripMenuItem();
             tsmiMainMenuQuit = new System.Windows.Forms.ToolStripMenuItem();
             optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             langToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,6 +73,11 @@ namespace VirtualSpace
             panel_General = new System.Windows.Forms.Panel();
             tab_General = new System.Windows.Forms.TabControl();
             tabPage_Genernal_Main = new System.Windows.Forms.TabPage();
+            gb_storage = new System.Windows.Forms.GroupBox();
+            lb_configRoot = new System.Windows.Forms.Label();
+            btn_chooseConfigRoot = new System.Windows.Forms.Button();
+            tb_configRoot = new System.Windows.Forms.TextBox();
+            lb_note_configRoot = new System.Windows.Forms.Label();
             gb_general = new System.Windows.Forms.GroupBox();
             llb_TaskScheduler = new System.Windows.Forms.LinkLabel();
             lb_RunOnStartup = new System.Windows.Forms.Label();
@@ -117,7 +123,6 @@ namespace VirtualSpace
             mainTabs = new System.Windows.Forms.TabControl();
             MT_UI = new System.Windows.Forms.TabPage();
             panel_UI = new System.Windows.Forms.Panel();
-            label1 = new System.Windows.Forms.Label();
             lb_ui_vd_view = new System.Windows.Forms.GroupBox();
             rb_vd_index_1 = new System.Windows.Forms.RadioButton();
             rb_vd_index_0 = new System.Windows.Forms.RadioButton();
@@ -178,7 +183,7 @@ namespace VirtualSpace
             niTray = new System.Windows.Forms.NotifyIcon(components);
             trayMenu = new System.Windows.Forms.ContextMenuStrip(components);
             settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             tsmiTrayMenuQuit = new System.Windows.Forms.ToolStripMenuItem();
             mainMenu.SuspendLayout();
             MT_Logs.SuspendLayout();
@@ -193,6 +198,7 @@ namespace VirtualSpace
             panel_General.SuspendLayout();
             tab_General.SuspendLayout();
             tabPage_Genernal_Main.SuspendLayout();
+            gb_storage.SuspendLayout();
             gb_general.SuspendLayout();
             gb_nav.SuspendLayout();
             gb_Cluster.SuspendLayout();
@@ -225,106 +231,112 @@ namespace VirtualSpace
             // 
             // mainMenu
             // 
-            resources.ApplyResources(mainMenu, "mainMenu");
             mainMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItem, optionsToolStripMenuItem, helpToolStripMenuItem });
+            resources.ApplyResources(mainMenu, "mainMenu");
             mainMenu.Name = "mainMenu";
             // 
             // fileToolStripMenuItem
             // 
-            resources.ApplyResources(fileToolStripMenuItem, "fileToolStripMenuItem");
-            fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { closeThisWindowToolStripMenuItem, runAsAdministratorToolStripMenuItem, toolStripSeparator1, tsmiMainMenuQuit });
+            fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { closeThisWindowToolStripMenuItem, runAsAdministratorToolStripMenuItem, toolStripSeparator1, tsmiMainMenuRestart, tsmiMainMenuQuit });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            resources.ApplyResources(fileToolStripMenuItem, "fileToolStripMenuItem");
             // 
             // closeThisWindowToolStripMenuItem
             // 
-            resources.ApplyResources(closeThisWindowToolStripMenuItem, "closeThisWindowToolStripMenuItem");
             closeThisWindowToolStripMenuItem.Name = "closeThisWindowToolStripMenuItem";
+            resources.ApplyResources(closeThisWindowToolStripMenuItem, "closeThisWindowToolStripMenuItem");
             closeThisWindowToolStripMenuItem.Click += closeThisWindowToolStripMenuItem_Click;
             // 
             // runAsAdministratorToolStripMenuItem
             // 
-            resources.ApplyResources(runAsAdministratorToolStripMenuItem, "runAsAdministratorToolStripMenuItem");
             runAsAdministratorToolStripMenuItem.Name = "runAsAdministratorToolStripMenuItem";
+            resources.ApplyResources(runAsAdministratorToolStripMenuItem, "runAsAdministratorToolStripMenuItem");
             runAsAdministratorToolStripMenuItem.Click += runAsAdministratorToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
-            resources.ApplyResources(toolStripSeparator1, "toolStripSeparator1");
             toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // tsmiMainMenuRestart
+            // 
+            tsmiMainMenuRestart.Name = "tsmiMainMenuRestart";
+            resources.ApplyResources(tsmiMainMenuRestart, "tsmiMainMenuRestart");
+            tsmiMainMenuRestart.Click += tsmiMainMenuRestart_Click;
             // 
             // tsmiMainMenuQuit
             // 
-            resources.ApplyResources(tsmiMainMenuQuit, "tsmiMainMenuQuit");
             tsmiMainMenuQuit.Name = "tsmiMainMenuQuit";
+            resources.ApplyResources(tsmiMainMenuQuit, "tsmiMainMenuQuit");
             tsmiMainMenuQuit.Click += tsmiMainMenuQuit_Click;
             // 
             // optionsToolStripMenuItem
             // 
-            resources.ApplyResources(optionsToolStripMenuItem, "optionsToolStripMenuItem");
             optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { langToolStripMenuItem, logsToolStripMenuItem });
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            resources.ApplyResources(optionsToolStripMenuItem, "optionsToolStripMenuItem");
             optionsToolStripMenuItem.DropDownOpening += optionsToolStripMenuItem_DropDownOpening;
             // 
             // langToolStripMenuItem
             // 
-            resources.ApplyResources(langToolStripMenuItem, "langToolStripMenuItem");
             langToolStripMenuItem.Name = "langToolStripMenuItem";
+            resources.ApplyResources(langToolStripMenuItem, "langToolStripMenuItem");
             // 
             // logsToolStripMenuItem
             // 
-            resources.ApplyResources(logsToolStripMenuItem, "logsToolStripMenuItem");
             logsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { showLogsInGuiToolStripMenuItem, openLogFolderToolStripMenuItem });
             logsToolStripMenuItem.Name = "logsToolStripMenuItem";
+            resources.ApplyResources(logsToolStripMenuItem, "logsToolStripMenuItem");
             // 
             // showLogsInGuiToolStripMenuItem
             // 
-            resources.ApplyResources(showLogsInGuiToolStripMenuItem, "showLogsInGuiToolStripMenuItem");
             showLogsInGuiToolStripMenuItem.CheckOnClick = true;
             showLogsInGuiToolStripMenuItem.Name = "showLogsInGuiToolStripMenuItem";
+            resources.ApplyResources(showLogsInGuiToolStripMenuItem, "showLogsInGuiToolStripMenuItem");
             // 
             // openLogFolderToolStripMenuItem
             // 
-            resources.ApplyResources(openLogFolderToolStripMenuItem, "openLogFolderToolStripMenuItem");
             openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
+            resources.ApplyResources(openLogFolderToolStripMenuItem, "openLogFolderToolStripMenuItem");
             openLogFolderToolStripMenuItem.Click += openLogFolderToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
-            resources.ApplyResources(helpToolStripMenuItem, "helpToolStripMenuItem");
             helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { aboutToolStripMenuItem });
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            resources.ApplyResources(helpToolStripMenuItem, "helpToolStripMenuItem");
             // 
             // aboutToolStripMenuItem
             // 
-            resources.ApplyResources(aboutToolStripMenuItem, "aboutToolStripMenuItem");
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            resources.ApplyResources(aboutToolStripMenuItem, "aboutToolStripMenuItem");
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
             // MT_Logs
             // 
-            resources.ApplyResources(MT_Logs, "MT_Logs");
             MT_Logs.Controls.Add(logTabs);
+            resources.ApplyResources(MT_Logs, "MT_Logs");
             MT_Logs.Name = "MT_Logs";
             MT_Logs.UseVisualStyleBackColor = true;
             // 
             // logTabs
             // 
-            resources.ApplyResources(logTabs, "logTabs");
             logTabs.Controls.Add(logTabInfo);
             logTabs.Controls.Add(logTabDebug);
             logTabs.Controls.Add(logTabVerbose);
             logTabs.Controls.Add(logTabEvent);
             logTabs.Controls.Add(logTabWarning);
             logTabs.Controls.Add(logTabError);
+            resources.ApplyResources(logTabs, "logTabs");
             logTabs.Name = "logTabs";
             logTabs.SelectedIndex = 0;
             logTabs.Click += logTabs_Click;
             // 
             // logTabInfo
             // 
-            resources.ApplyResources(logTabInfo, "logTabInfo");
             logTabInfo.Controls.Add(tbInfo);
+            resources.ApplyResources(logTabInfo, "logTabInfo");
             logTabInfo.Name = "logTabInfo";
             logTabInfo.UseVisualStyleBackColor = true;
             // 
@@ -336,8 +348,8 @@ namespace VirtualSpace
             // 
             // logTabDebug
             // 
-            resources.ApplyResources(logTabDebug, "logTabDebug");
             logTabDebug.Controls.Add(tbDebug);
+            resources.ApplyResources(logTabDebug, "logTabDebug");
             logTabDebug.Name = "logTabDebug";
             logTabDebug.UseVisualStyleBackColor = true;
             // 
@@ -349,8 +361,8 @@ namespace VirtualSpace
             // 
             // logTabVerbose
             // 
-            resources.ApplyResources(logTabVerbose, "logTabVerbose");
             logTabVerbose.Controls.Add(tbVerbose);
+            resources.ApplyResources(logTabVerbose, "logTabVerbose");
             logTabVerbose.Name = "logTabVerbose";
             logTabVerbose.UseVisualStyleBackColor = true;
             // 
@@ -362,8 +374,8 @@ namespace VirtualSpace
             // 
             // logTabEvent
             // 
-            resources.ApplyResources(logTabEvent, "logTabEvent");
             logTabEvent.Controls.Add(tbEvent);
+            resources.ApplyResources(logTabEvent, "logTabEvent");
             logTabEvent.Name = "logTabEvent";
             logTabEvent.UseVisualStyleBackColor = true;
             // 
@@ -375,8 +387,8 @@ namespace VirtualSpace
             // 
             // logTabWarning
             // 
-            resources.ApplyResources(logTabWarning, "logTabWarning");
             logTabWarning.Controls.Add(tbWarning);
+            resources.ApplyResources(logTabWarning, "logTabWarning");
             logTabWarning.Name = "logTabWarning";
             logTabWarning.UseVisualStyleBackColor = true;
             // 
@@ -388,8 +400,8 @@ namespace VirtualSpace
             // 
             // logTabError
             // 
-            resources.ApplyResources(logTabError, "logTabError");
             logTabError.Controls.Add(tbError);
+            resources.ApplyResources(logTabError, "logTabError");
             logTabError.Name = "logTabError";
             logTabError.UseVisualStyleBackColor = true;
             // 
@@ -401,8 +413,8 @@ namespace VirtualSpace
             // 
             // MT_General
             // 
-            resources.ApplyResources(MT_General, "MT_General");
             MT_General.Controls.Add(panel_General);
+            resources.ApplyResources(MT_General, "MT_General");
             MT_General.Name = "MT_General";
             MT_General.UseVisualStyleBackColor = true;
             // 
@@ -414,28 +426,62 @@ namespace VirtualSpace
             // 
             // tab_General
             // 
-            resources.ApplyResources(tab_General, "tab_General");
             tab_General.Controls.Add(tabPage_Genernal_Main);
             tab_General.Controls.Add(tabPage_Genernal_Keyboard);
             tab_General.Controls.Add(tabPage_Genernal_Mouse);
+            resources.ApplyResources(tab_General, "tab_General");
             tab_General.Name = "tab_General";
             tab_General.SelectedIndex = 0;
             // 
             // tabPage_Genernal_Main
             // 
-            resources.ApplyResources(tabPage_Genernal_Main, "tabPage_Genernal_Main");
+            tabPage_Genernal_Main.Controls.Add(gb_storage);
             tabPage_Genernal_Main.Controls.Add(gb_general);
             tabPage_Genernal_Main.Controls.Add(gb_nav);
             tabPage_Genernal_Main.Controls.Add(gb_Cluster);
+            resources.ApplyResources(tabPage_Genernal_Main, "tabPage_Genernal_Main");
             tabPage_Genernal_Main.Name = "tabPage_Genernal_Main";
             tabPage_Genernal_Main.UseVisualStyleBackColor = true;
             // 
+            // gb_storage
+            // 
+            gb_storage.Controls.Add(lb_configRoot);
+            gb_storage.Controls.Add(btn_chooseConfigRoot);
+            gb_storage.Controls.Add(tb_configRoot);
+            gb_storage.Controls.Add(lb_note_configRoot);
+            resources.ApplyResources(gb_storage, "gb_storage");
+            gb_storage.Name = "gb_storage";
+            gb_storage.TabStop = false;
+            // 
+            // lb_configRoot
+            // 
+            resources.ApplyResources(lb_configRoot, "lb_configRoot");
+            lb_configRoot.Name = "lb_configRoot";
+            // 
+            // btn_chooseConfigRoot
+            // 
+            resources.ApplyResources(btn_chooseConfigRoot, "btn_chooseConfigRoot");
+            btn_chooseConfigRoot.Name = "btn_chooseConfigRoot";
+            btn_chooseConfigRoot.UseVisualStyleBackColor = true;
+            btn_chooseConfigRoot.Click += btn_chooseConfigRoot_Click;
+            // 
+            // tb_configRoot
+            // 
+            resources.ApplyResources(tb_configRoot, "tb_configRoot");
+            tb_configRoot.Name = "tb_configRoot";
+            tb_configRoot.ReadOnly = true;
+            // 
+            // lb_note_configRoot
+            // 
+            resources.ApplyResources(lb_note_configRoot, "lb_note_configRoot");
+            lb_note_configRoot.Name = "lb_note_configRoot";
+            // 
             // gb_general
             // 
-            resources.ApplyResources(gb_general, "gb_general");
             gb_general.Controls.Add(llb_TaskScheduler);
             gb_general.Controls.Add(lb_RunOnStartup);
             gb_general.Controls.Add(chb_RunOnStartup);
+            resources.ApplyResources(gb_general, "gb_general");
             gb_general.Name = "gb_general";
             gb_general.TabStop = false;
             // 
@@ -461,11 +507,11 @@ namespace VirtualSpace
             // 
             // gb_nav
             // 
-            resources.ApplyResources(gb_nav, "gb_nav");
             gb_nav.Controls.Add(lb_nav_circle_h_type);
             gb_nav.Controls.Add(cb_nav_circle_h_type);
             gb_nav.Controls.Add(cb_nav_circle_v);
             gb_nav.Controls.Add(cb_nav_circle_h);
+            resources.ApplyResources(gb_nav, "gb_nav");
             gb_nav.Name = "gb_nav";
             gb_nav.TabStop = false;
             // 
@@ -476,9 +522,9 @@ namespace VirtualSpace
             // 
             // cb_nav_circle_h_type
             // 
-            resources.ApplyResources(cb_nav_circle_h_type, "cb_nav_circle_h_type");
             cb_nav_circle_h_type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cb_nav_circle_h_type.FormattingEnabled = true;
+            resources.ApplyResources(cb_nav_circle_h_type, "cb_nav_circle_h_type");
             cb_nav_circle_h_type.Name = "cb_nav_circle_h_type";
             // 
             // cb_nav_circle_v
@@ -495,7 +541,6 @@ namespace VirtualSpace
             // 
             // gb_Cluster
             // 
-            resources.ApplyResources(gb_Cluster, "gb_Cluster");
             gb_Cluster.Controls.Add(rb_vdi_on_tray_style_2);
             gb_Cluster.Controls.Add(rb_vdi_on_tray_style_1);
             gb_Cluster.Controls.Add(rb_vdi_on_tray_style_0);
@@ -503,6 +548,7 @@ namespace VirtualSpace
             gb_Cluster.Controls.Add(chb_showVDIndexOnTrayIcon);
             gb_Cluster.Controls.Add(chb_notify_vd_changed);
             gb_Cluster.Controls.Add(chb_HideMainViewIfItsShown);
+            resources.ApplyResources(gb_Cluster, "gb_Cluster");
             gb_Cluster.Name = "gb_Cluster";
             gb_Cluster.TabStop = false;
             // 
@@ -553,23 +599,22 @@ namespace VirtualSpace
             // 
             // tabPage_Genernal_Keyboard
             // 
-            resources.ApplyResources(tabPage_Genernal_Keyboard, "tabPage_Genernal_Keyboard");
             tabPage_Genernal_Keyboard.Controls.Add(tc_Keyboard);
             tabPage_Genernal_Keyboard.Controls.Add(tv_keyboard);
+            resources.ApplyResources(tabPage_Genernal_Keyboard, "tabPage_Genernal_Keyboard");
             tabPage_Genernal_Keyboard.Name = "tabPage_Genernal_Keyboard";
             tabPage_Genernal_Keyboard.UseVisualStyleBackColor = true;
             // 
             // tc_Keyboard
             // 
-            resources.ApplyResources(tc_Keyboard, "tc_Keyboard");
             tc_Keyboard.Controls.Add(tp_hk_main);
             tc_Keyboard.Controls.Add(tp_hk_extra);
+            resources.ApplyResources(tc_Keyboard, "tc_Keyboard");
             tc_Keyboard.Name = "tc_Keyboard";
             tc_Keyboard.SelectedIndex = 0;
             // 
             // tp_hk_main
             // 
-            resources.ApplyResources(tp_hk_main, "tp_hk_main");
             tp_hk_main.Controls.Add(btn_hk_ClearAndSave);
             tp_hk_main.Controls.Add(btn_hk_RegAndSave);
             tp_hk_main.Controls.Add(tb_hk_tip);
@@ -579,6 +624,7 @@ namespace VirtualSpace
             tp_hk_main.Controls.Add(cb_hk_alt);
             tp_hk_main.Controls.Add(cb_hk_ctrl);
             tp_hk_main.Controls.Add(cb_hk_win);
+            resources.ApplyResources(tp_hk_main, "tp_hk_main");
             tp_hk_main.Name = "tp_hk_main";
             tp_hk_main.UseVisualStyleBackColor = true;
             // 
@@ -608,10 +654,10 @@ namespace VirtualSpace
             // 
             // cb_hk_key
             // 
-            resources.ApplyResources(cb_hk_key, "cb_hk_key");
             cb_hk_key.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cb_hk_key.FormattingEnabled = true;
             cb_hk_key.Items.AddRange(new object[] { resources.GetString("cb_hk_key.Items"), resources.GetString("cb_hk_key.Items1"), resources.GetString("cb_hk_key.Items2"), resources.GetString("cb_hk_key.Items3"), resources.GetString("cb_hk_key.Items4"), resources.GetString("cb_hk_key.Items5"), resources.GetString("cb_hk_key.Items6"), resources.GetString("cb_hk_key.Items7"), resources.GetString("cb_hk_key.Items8"), resources.GetString("cb_hk_key.Items9"), resources.GetString("cb_hk_key.Items10"), resources.GetString("cb_hk_key.Items11"), resources.GetString("cb_hk_key.Items12"), resources.GetString("cb_hk_key.Items13"), resources.GetString("cb_hk_key.Items14"), resources.GetString("cb_hk_key.Items15"), resources.GetString("cb_hk_key.Items16"), resources.GetString("cb_hk_key.Items17"), resources.GetString("cb_hk_key.Items18"), resources.GetString("cb_hk_key.Items19"), resources.GetString("cb_hk_key.Items20"), resources.GetString("cb_hk_key.Items21"), resources.GetString("cb_hk_key.Items22"), resources.GetString("cb_hk_key.Items23"), resources.GetString("cb_hk_key.Items24"), resources.GetString("cb_hk_key.Items25"), resources.GetString("cb_hk_key.Items26"), resources.GetString("cb_hk_key.Items27"), resources.GetString("cb_hk_key.Items28"), resources.GetString("cb_hk_key.Items29"), resources.GetString("cb_hk_key.Items30"), resources.GetString("cb_hk_key.Items31"), resources.GetString("cb_hk_key.Items32"), resources.GetString("cb_hk_key.Items33"), resources.GetString("cb_hk_key.Items34"), resources.GetString("cb_hk_key.Items35"), resources.GetString("cb_hk_key.Items36"), resources.GetString("cb_hk_key.Items37"), resources.GetString("cb_hk_key.Items38"), resources.GetString("cb_hk_key.Items39"), resources.GetString("cb_hk_key.Items40"), resources.GetString("cb_hk_key.Items41"), resources.GetString("cb_hk_key.Items42"), resources.GetString("cb_hk_key.Items43"), resources.GetString("cb_hk_key.Items44"), resources.GetString("cb_hk_key.Items45"), resources.GetString("cb_hk_key.Items46"), resources.GetString("cb_hk_key.Items47"), resources.GetString("cb_hk_key.Items48"), resources.GetString("cb_hk_key.Items49"), resources.GetString("cb_hk_key.Items50"), resources.GetString("cb_hk_key.Items51"), resources.GetString("cb_hk_key.Items52"), resources.GetString("cb_hk_key.Items53"), resources.GetString("cb_hk_key.Items54"), resources.GetString("cb_hk_key.Items55"), resources.GetString("cb_hk_key.Items56"), resources.GetString("cb_hk_key.Items57"), resources.GetString("cb_hk_key.Items58"), resources.GetString("cb_hk_key.Items59"), resources.GetString("cb_hk_key.Items60"), resources.GetString("cb_hk_key.Items61"), resources.GetString("cb_hk_key.Items62"), resources.GetString("cb_hk_key.Items63"), resources.GetString("cb_hk_key.Items64"), resources.GetString("cb_hk_key.Items65"), resources.GetString("cb_hk_key.Items66"), resources.GetString("cb_hk_key.Items67") });
+            resources.ApplyResources(cb_hk_key, "cb_hk_key");
             cb_hk_key.Name = "cb_hk_key";
             cb_hk_key.SelectedIndexChanged += cb_hk_key_SelectedIndexChanged;
             // 
@@ -645,8 +691,8 @@ namespace VirtualSpace
             // 
             // tp_hk_extra
             // 
-            resources.ApplyResources(tp_hk_extra, "tp_hk_extra");
             tp_hk_extra.Controls.Add(lb_hk_extra);
+            resources.ApplyResources(tp_hk_extra, "tp_hk_extra");
             tp_hk_extra.Name = "tp_hk_extra";
             tp_hk_extra.UseVisualStyleBackColor = true;
             // 
@@ -664,12 +710,12 @@ namespace VirtualSpace
             // 
             // tabPage_Genernal_Mouse
             // 
-            resources.ApplyResources(tabPage_Genernal_Mouse, "tabPage_Genernal_Mouse");
             tabPage_Genernal_Mouse.Controls.Add(lb_MouseOnTaskbarSwitchDesktop2);
             tabPage_Genernal_Mouse.Controls.Add(tv_mouse);
             tabPage_Genernal_Mouse.Controls.Add(lb_MouseOnTaskbarSwitchDesktop1);
             tabPage_Genernal_Mouse.Controls.Add(tc_Mouse);
             tabPage_Genernal_Mouse.Controls.Add(chb_MouseOnTaskbarSwitchDesktop);
+            resources.ApplyResources(tabPage_Genernal_Mouse, "tabPage_Genernal_Mouse");
             tabPage_Genernal_Mouse.Name = "tabPage_Genernal_Mouse";
             tabPage_Genernal_Mouse.UseVisualStyleBackColor = true;
             // 
@@ -692,17 +738,17 @@ namespace VirtualSpace
             // 
             // tc_Mouse
             // 
-            resources.ApplyResources(tc_Mouse, "tc_Mouse");
             tc_Mouse.Controls.Add(tp_mouse_action);
+            resources.ApplyResources(tc_Mouse, "tc_Mouse");
             tc_Mouse.Name = "tc_Mouse";
             tc_Mouse.SelectedIndex = 0;
             // 
             // tp_mouse_action
             // 
-            resources.ApplyResources(tp_mouse_action, "tp_mouse_action");
             tp_mouse_action.Controls.Add(btn_mouse_save);
             tp_mouse_action.Controls.Add(lb_mouse_action);
             tp_mouse_action.Controls.Add(cb_mouse_func);
+            resources.ApplyResources(tp_mouse_action, "tp_mouse_action");
             tp_mouse_action.Name = "tp_mouse_action";
             tp_mouse_action.UseVisualStyleBackColor = true;
             // 
@@ -720,9 +766,9 @@ namespace VirtualSpace
             // 
             // cb_mouse_func
             // 
-            resources.ApplyResources(cb_mouse_func, "cb_mouse_func");
             cb_mouse_func.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cb_mouse_func.FormattingEnabled = true;
+            resources.ApplyResources(cb_mouse_func, "cb_mouse_func");
             cb_mouse_func.Name = "cb_mouse_func";
             // 
             // chb_MouseOnTaskbarSwitchDesktop
@@ -733,44 +779,38 @@ namespace VirtualSpace
             // 
             // mainTabs
             // 
-            resources.ApplyResources(mainTabs, "mainTabs");
             mainTabs.Controls.Add(MT_General);
             mainTabs.Controls.Add(MT_UI);
             mainTabs.Controls.Add(MT_Rules);
             mainTabs.Controls.Add(MT_Plugins);
             mainTabs.Controls.Add(MT_Logs);
             mainTabs.Controls.Add(MT_About);
+            resources.ApplyResources(mainTabs, "mainTabs");
             mainTabs.Name = "mainTabs";
             mainTabs.SelectedIndex = 0;
             mainTabs.SelectedIndexChanged += mainTabs_SelectedIndexChanged;
             // 
             // MT_UI
             // 
-            resources.ApplyResources(MT_UI, "MT_UI");
             MT_UI.Controls.Add(panel_UI);
+            resources.ApplyResources(MT_UI, "MT_UI");
             MT_UI.Name = "MT_UI";
             MT_UI.UseVisualStyleBackColor = true;
             // 
             // panel_UI
             // 
             resources.ApplyResources(panel_UI, "panel_UI");
-            panel_UI.Controls.Add(label1);
             panel_UI.Controls.Add(lb_ui_vd_view);
             panel_UI.Controls.Add(gb_DesktopArrangement);
             panel_UI.Name = "panel_UI";
             // 
-            // label1
-            // 
-            resources.ApplyResources(label1, "label1");
-            label1.Name = "label1";
-            // 
             // lb_ui_vd_view
             // 
-            resources.ApplyResources(lb_ui_vd_view, "lb_ui_vd_view");
             lb_ui_vd_view.Controls.Add(rb_vd_index_1);
             lb_ui_vd_view.Controls.Add(rb_vd_index_0);
             lb_ui_vd_view.Controls.Add(chb_show_vd_index);
             lb_ui_vd_view.Controls.Add(chb_show_vd_name);
+            resources.ApplyResources(lb_ui_vd_view, "lb_ui_vd_view");
             lb_ui_vd_view.Name = "lb_ui_vd_view";
             lb_ui_vd_view.TabStop = false;
             // 
@@ -823,64 +863,64 @@ namespace VirtualSpace
             // 
             // btn_m7
             // 
-            resources.ApplyResources(btn_m7, "btn_m7");
             btn_m7.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(btn_m7, "btn_m7");
             btn_m7.Name = "btn_m7";
             btn_m7.UseVisualStyleBackColor = false;
             btn_m7.Click += tlp_DesktopArrangement_SubControlClicked;
             // 
             // btn_m6
             // 
-            resources.ApplyResources(btn_m6, "btn_m6");
             btn_m6.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(btn_m6, "btn_m6");
             btn_m6.Name = "btn_m6";
             btn_m6.UseVisualStyleBackColor = false;
             btn_m6.Click += tlp_DesktopArrangement_SubControlClicked;
             // 
             // btn_m5
             // 
-            resources.ApplyResources(btn_m5, "btn_m5");
             btn_m5.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(btn_m5, "btn_m5");
             btn_m5.Name = "btn_m5";
             btn_m5.UseVisualStyleBackColor = false;
             btn_m5.Click += tlp_DesktopArrangement_SubControlClicked;
             // 
             // btn_m4
             // 
-            resources.ApplyResources(btn_m4, "btn_m4");
             btn_m4.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(btn_m4, "btn_m4");
             btn_m4.Name = "btn_m4";
             btn_m4.UseVisualStyleBackColor = false;
             btn_m4.Click += tlp_DesktopArrangement_SubControlClicked;
             // 
             // btn_m3
             // 
-            resources.ApplyResources(btn_m3, "btn_m3");
             btn_m3.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(btn_m3, "btn_m3");
             btn_m3.Name = "btn_m3";
             btn_m3.UseVisualStyleBackColor = false;
             btn_m3.Click += tlp_DesktopArrangement_SubControlClicked;
             // 
             // btn_m2
             // 
-            resources.ApplyResources(btn_m2, "btn_m2");
             btn_m2.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(btn_m2, "btn_m2");
             btn_m2.Name = "btn_m2";
             btn_m2.UseVisualStyleBackColor = false;
             btn_m2.Click += tlp_DesktopArrangement_SubControlClicked;
             // 
             // btn_m1
             // 
-            resources.ApplyResources(btn_m1, "btn_m1");
             btn_m1.BackColor = System.Drawing.Color.Gainsboro;
+            resources.ApplyResources(btn_m1, "btn_m1");
             btn_m1.Name = "btn_m1";
             btn_m1.UseVisualStyleBackColor = false;
             btn_m1.Click += tlp_DesktopArrangement_SubControlClicked;
             // 
             // btn_m0
             // 
-            resources.ApplyResources(btn_m0, "btn_m0");
             btn_m0.BackColor = System.Drawing.Color.MistyRose;
+            resources.ApplyResources(btn_m0, "btn_m0");
             btn_m0.Name = "btn_m0";
             btn_m0.UseVisualStyleBackColor = false;
             btn_m0.Click += tlp_DesktopArrangement_SubControlClicked;
@@ -893,30 +933,30 @@ namespace VirtualSpace
             // 
             // MT_Rules
             // 
-            resources.ApplyResources(MT_Rules, "MT_Rules");
             MT_Rules.Controls.Add(gb_Rules);
             MT_Rules.Controls.Add(gb_CurrentProfile);
+            resources.ApplyResources(MT_Rules, "MT_Rules");
             MT_Rules.Name = "MT_Rules";
             MT_Rules.UseVisualStyleBackColor = true;
             // 
             // gb_Rules
             // 
-            resources.ApplyResources(gb_Rules, "gb_Rules");
             gb_Rules.Controls.Add(lv_Rules);
             gb_Rules.Controls.Add(btn_RuleEdit);
             gb_Rules.Controls.Add(btn_RuleClone);
             gb_Rules.Controls.Add(btn_RuleNew);
             gb_Rules.Controls.Add(btn_RuleRemove);
+            resources.ApplyResources(gb_Rules, "gb_Rules");
             gb_Rules.Name = "gb_Rules";
             gb_Rules.TabStop = false;
             // 
             // lv_Rules
             // 
-            resources.ApplyResources(lv_Rules, "lv_Rules");
             lv_Rules.CheckBoxes = true;
             lv_Rules.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { lvc_Name, lvc_Created, lvc_Updated });
             lv_Rules.FullRowSelect = true;
             lv_Rules.GridLines = true;
+            resources.ApplyResources(lv_Rules, "lv_Rules");
             lv_Rules.MultiSelect = false;
             lv_Rules.Name = "lv_Rules";
             lv_Rules.UseCompatibleStateImageBehavior = false;
@@ -967,40 +1007,40 @@ namespace VirtualSpace
             // 
             // gb_CurrentProfile
             // 
-            resources.ApplyResources(gb_CurrentProfile, "gb_CurrentProfile");
             gb_CurrentProfile.Controls.Add(cb_RuleProfiles);
+            resources.ApplyResources(gb_CurrentProfile, "gb_CurrentProfile");
             gb_CurrentProfile.Name = "gb_CurrentProfile";
             gb_CurrentProfile.TabStop = false;
             // 
             // cb_RuleProfiles
             // 
-            resources.ApplyResources(cb_RuleProfiles, "cb_RuleProfiles");
             cb_RuleProfiles.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             cb_RuleProfiles.FormattingEnabled = true;
+            resources.ApplyResources(cb_RuleProfiles, "cb_RuleProfiles");
             cb_RuleProfiles.Name = "cb_RuleProfiles";
             // 
             // MT_Plugins
             // 
-            resources.ApplyResources(MT_Plugins, "MT_Plugins");
             MT_Plugins.Controls.Add(gb_Plugins);
+            resources.ApplyResources(MT_Plugins, "MT_Plugins");
             MT_Plugins.Name = "MT_Plugins";
             MT_Plugins.UseVisualStyleBackColor = true;
             // 
             // gb_Plugins
             // 
-            resources.ApplyResources(gb_Plugins, "gb_Plugins");
             gb_Plugins.Controls.Add(lv_Plugins);
             gb_Plugins.Controls.Add(btn_PluginSettings);
+            resources.ApplyResources(gb_Plugins, "gb_Plugins");
             gb_Plugins.Name = "gb_Plugins";
             gb_Plugins.TabStop = false;
             // 
             // lv_Plugins
             // 
-            resources.ApplyResources(lv_Plugins, "lv_Plugins");
             lv_Plugins.CheckBoxes = true;
             lv_Plugins.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { lvc_PluginName, lvc_PluginVersion, lvc_PluginAuthor, lvc_PluginEmail });
             lv_Plugins.FullRowSelect = true;
             lv_Plugins.GridLines = true;
+            resources.ApplyResources(lv_Plugins, "lv_Plugins");
             lv_Plugins.MultiSelect = false;
             lv_Plugins.Name = "lv_Plugins";
             lv_Plugins.UseCompatibleStateImageBehavior = false;
@@ -1032,7 +1072,6 @@ namespace VirtualSpace
             // 
             // MT_About
             // 
-            resources.ApplyResources(MT_About, "MT_About");
             MT_About.Controls.Add(lb_AppName);
             MT_About.Controls.Add(llb_Company);
             MT_About.Controls.Add(lbox_Env);
@@ -1040,6 +1079,7 @@ namespace VirtualSpace
             MT_About.Controls.Add(lb_Version);
             MT_About.Controls.Add(lbVersion);
             MT_About.Controls.Add(pb_AboutLogo);
+            resources.ApplyResources(MT_About, "MT_About");
             MT_About.Name = "MT_About";
             MT_About.UseVisualStyleBackColor = true;
             MT_About.Paint += MT_About_Paint;
@@ -1058,8 +1098,8 @@ namespace VirtualSpace
             // 
             // lbox_Env
             // 
-            resources.ApplyResources(lbox_Env, "lbox_Env");
             lbox_Env.FormattingEnabled = true;
+            resources.ApplyResources(lbox_Env, "lbox_Env");
             lbox_Env.Name = "lbox_Env";
             // 
             // lb_Copyright
@@ -1079,34 +1119,34 @@ namespace VirtualSpace
             // 
             // pb_AboutLogo
             // 
-            resources.ApplyResources(pb_AboutLogo, "pb_AboutLogo");
             pb_AboutLogo.Image = global::AppController.Properties.Resources.AboutLogo_2;
+            resources.ApplyResources(pb_AboutLogo, "pb_AboutLogo");
             pb_AboutLogo.Name = "pb_AboutLogo";
             pb_AboutLogo.TabStop = false;
             // 
             // logCMS
             // 
-            resources.ApplyResources(logCMS, "logCMS");
             logCMS.ImageScalingSize = new System.Drawing.Size(24, 24);
             logCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { clearToolStripMenuItem });
             logCMS.Name = "logCMS";
+            resources.ApplyResources(logCMS, "logCMS");
             // 
             // clearToolStripMenuItem
             // 
-            resources.ApplyResources(clearToolStripMenuItem, "clearToolStripMenuItem");
             clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            resources.ApplyResources(clearToolStripMenuItem, "clearToolStripMenuItem");
             clearToolStripMenuItem.Click += clearToolStripMenuItem_Click;
             // 
             // panel_Pages
             // 
-            resources.ApplyResources(panel_Pages, "panel_Pages");
             panel_Pages.Controls.Add(mainTabs);
+            resources.ApplyResources(panel_Pages, "panel_Pages");
             panel_Pages.Name = "panel_Pages";
             // 
             // ts_PageNav
             // 
-            resources.ApplyResources(ts_PageNav, "ts_PageNav");
             ts_PageNav.BackColor = System.Drawing.Color.White;
+            resources.ApplyResources(ts_PageNav, "ts_PageNav");
             ts_PageNav.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             ts_PageNav.ImageScalingSize = new System.Drawing.Size(24, 24);
             ts_PageNav.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { tsb_general, tsb_ui, tsb_rules, tsb_plugins, tsb_logs, tsb_about });
@@ -1163,8 +1203,8 @@ namespace VirtualSpace
             // 
             // panel_PageNav
             // 
-            resources.ApplyResources(panel_PageNav, "panel_PageNav");
             panel_PageNav.Controls.Add(ts_PageNav);
+            resources.ApplyResources(panel_PageNav, "panel_PageNav");
             panel_PageNav.Name = "panel_PageNav";
             // 
             // panel_mask
@@ -1174,38 +1214,38 @@ namespace VirtualSpace
             // 
             // mainStatusStrip
             // 
-            resources.ApplyResources(mainStatusStrip, "mainStatusStrip");
             mainStatusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+            resources.ApplyResources(mainStatusStrip, "mainStatusStrip");
             mainStatusStrip.Name = "mainStatusStrip";
             mainStatusStrip.SizingGrip = false;
             // 
             // niTray
             // 
-            resources.ApplyResources(niTray, "niTray");
             niTray.ContextMenuStrip = trayMenu;
+            resources.ApplyResources(niTray, "niTray");
             // 
             // trayMenu
             // 
-            resources.ApplyResources(trayMenu, "trayMenu");
             trayMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
-            trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { settingsToolStripMenuItem, toolStripMenuItem1, tsmiTrayMenuQuit });
+            trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { settingsToolStripMenuItem, toolStripSeparator2, tsmiTrayMenuQuit });
             trayMenu.Name = "trayMenu";
+            resources.ApplyResources(trayMenu, "trayMenu");
             // 
             // settingsToolStripMenuItem
             // 
-            resources.ApplyResources(settingsToolStripMenuItem, "settingsToolStripMenuItem");
             settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            resources.ApplyResources(settingsToolStripMenuItem, "settingsToolStripMenuItem");
             settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
             // 
-            // toolStripMenuItem1
+            // toolStripSeparator2
             // 
-            resources.ApplyResources(toolStripMenuItem1, "toolStripMenuItem1");
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(toolStripSeparator2, "toolStripSeparator2");
             // 
             // tsmiTrayMenuQuit
             // 
-            resources.ApplyResources(tsmiTrayMenuQuit, "tsmiTrayMenuQuit");
             tsmiTrayMenuQuit.Name = "tsmiTrayMenuQuit";
+            resources.ApplyResources(tsmiTrayMenuQuit, "tsmiTrayMenuQuit");
             tsmiTrayMenuQuit.Click += tsmiMainMenuQuit_Click;
             // 
             // AppController
@@ -1244,6 +1284,8 @@ namespace VirtualSpace
             panel_General.ResumeLayout(false);
             tab_General.ResumeLayout(false);
             tabPage_Genernal_Main.ResumeLayout(false);
+            gb_storage.ResumeLayout(false);
+            gb_storage.PerformLayout();
             gb_general.ResumeLayout(false);
             gb_general.PerformLayout();
             gb_nav.ResumeLayout(false);
@@ -1339,7 +1381,7 @@ namespace VirtualSpace
         private System.Windows.Forms.NotifyIcon niTray;
         private System.Windows.Forms.ContextMenuStrip trayMenu;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayMenuQuit;
         private System.Windows.Forms.TabPage MT_About;
         private System.Windows.Forms.LinkLabel llb_Company;
@@ -1397,7 +1439,6 @@ namespace VirtualSpace
         private System.Windows.Forms.Label lb_mouse_action;
         private System.Windows.Forms.ComboBox cb_mouse_func;
         private System.Windows.Forms.GroupBox lb_ui_vd_view;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RadioButton rb_vd_index_1;
         private System.Windows.Forms.RadioButton rb_vd_index_0;
         private System.Windows.Forms.CheckBox chb_show_vd_index;
@@ -1428,5 +1469,11 @@ namespace VirtualSpace
         private System.Windows.Forms.RadioButton rb_vdi_on_tray_style_2;
         private System.Windows.Forms.RadioButton rb_vdi_on_tray_style_1;
         private System.Windows.Forms.RadioButton rb_vdi_on_tray_style_0;
+        private System.Windows.Forms.GroupBox gb_storage;
+        private System.Windows.Forms.Button btn_chooseConfigRoot;
+        private System.Windows.Forms.TextBox tb_configRoot;
+        private System.Windows.Forms.Label lb_note_configRoot;
+        private System.Windows.Forms.Label lb_configRoot;
+        private System.Windows.Forms.ToolStripMenuItem tsmiMainMenuRestart;
     }
 }

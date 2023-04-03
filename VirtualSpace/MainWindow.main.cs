@@ -29,6 +29,7 @@ namespace VirtualSpace
         private static          MainWindow     _instance;
         private static          long           _forceSwitchOnTimeout;
         private                 IAppController _acForm;
+        public static           IAppController AcForm => _instance._acForm;
 
         private MainWindow()
         {

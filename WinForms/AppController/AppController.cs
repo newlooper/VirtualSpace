@@ -15,7 +15,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -53,6 +52,7 @@ namespace VirtualSpace
             InitUiConfig();
             InitClusterConfig();
             InitMouseConfig();
+            InitStorageConfig();
 
             CheckAdmin();
 
@@ -225,7 +225,7 @@ namespace VirtualSpace
 
         private void openLogFolderToolStripMenuItem_Click( object sender, EventArgs e )
         {
-            var logFolder = Path.Combine( ConfigManager.AppFolder, "Logs" );
+            var logFolder = Path.Combine( ConfigManager.AppRootFolder, "Logs" );
             if ( Directory.Exists( logFolder ) )
             {
                 var startInfo = new ProcessStartInfo
@@ -251,6 +251,27 @@ namespace VirtualSpace
         private void aboutToolStripMenuItem_Click( object sender, EventArgs e )
         {
             mainTabs.SelectTab( 5 );
+        }
+
+        private void InitStorageConfig()
+        {
+            tb_configRoot.Text = ConfigManager.ConfigRootFolder;
+        }
+
+        private void btn_chooseConfigRoot_Click( object sender, EventArgs e )
+        {
+            using var fbd = new FolderBrowserDialog();
+
+            if ( fbd.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace( fbd.SelectedPath ) )
+            {
+                tb_configRoot.Text = fbd.SelectedPath;
+                ConfigManager.SetConfigRoot( fbd.SelectedPath );
+            }
+        }
+
+        private void tsmiMainMenuRestart_Click( object sender, EventArgs e )
+        {
+            User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RestartApp, 0 );
         }
     }
 }

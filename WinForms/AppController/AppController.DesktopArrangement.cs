@@ -30,9 +30,9 @@ namespace VirtualSpace
             User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.DesktopArrangement, 0 );
         }
 
-        public static void RenderDesktopArrangementButtons( string selectedDa )
+        public void RenderDesktopArrangementButtons( string selectedDa )
         {
-            foreach ( var c in _instance.tlp_DesktopArrangement.Controls )
+            foreach ( var c in tlp_DesktopArrangement.Controls )
             {
                 var i = c as Button;
                 i.BackColor = i.Name.EndsWith( selectedDa ) ? Color.MistyRose : Color.Gainsboro;
