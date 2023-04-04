@@ -280,4 +280,20 @@ possible reason:
   <data name="KB.Hotkey.SVD_BACK_LAST" xml:space="preserve">
     <value>Switch Back To Last Desktop</value>
   </data>
+  <data name="Profile.Confirm.Delete" xml:space="preserve">
+    <value>Are you sure to delete this profile?
+all files related with this profile will be deleted too.</value>
+  </data>
+  <data name="Profile.Warning.LastProfileProtect" xml:space="preserve">
+    <value>You can't rename or delete the last profile.</value>
+  </data>
+  <data name="Profile.Warning.InvalidProfileName" xml:space="preserve">
+    <value>Invalid profile name, or profile name already exists.</value>
+  </data>
+  <data name="MsgBox.Caption.Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="MsgBox.Caption.Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
 </root>

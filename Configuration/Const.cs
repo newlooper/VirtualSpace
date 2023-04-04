@@ -54,6 +54,7 @@ namespace VirtualSpace.Config
         public static class Settings
         {
             public const string RuleFileExt     = ".rules";
+            public const string ClusterFileExt  = ".cluster";
             public const string ProfilesFolder  = "Profiles";
             public const string CacheFolder     = "Cache";
             public const string PluginsFolder   = "Plugins";

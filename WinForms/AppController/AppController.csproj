@@ -50,6 +50,9 @@
         <Compile Update="AppController.lang.cs">
             <SubType>Form</SubType>
         </Compile>
+        <Compile Update="AppController.profile.cs">
+          <SubType>Form</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

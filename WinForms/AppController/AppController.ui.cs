@@ -15,9 +15,15 @@ namespace VirtualSpace
 {
     public partial class AppController
     {
-        private void InitUiConfig()
+        private void InitUiConfig( bool resetEventHandlers = true )
         {
             var ui = ConfigManager.CurrentProfile.UI;
+            if ( resetEventHandlers )
+            {
+                chb_show_vd_name.CheckedChanged -= chb_show_vd_name_CheckedChanged;
+                chb_show_vd_index.CheckedChanged -= chb_show_vd_index_CheckedChanged;
+                rb_vd_index_0.CheckedChanged -= rb_vd_index_0_CheckedChanged;
+            }
 
             chb_show_vd_name.Checked = ui.ShowVdName;
             chb_show_vd_index.Checked = ui.ShowVdIndex;
@@ -31,10 +37,12 @@ namespace VirtualSpace
                 rb_vd_index_1.Checked = true;
             }
 
-            chb_show_vd_name.CheckedChanged += chb_show_vd_name_CheckedChanged;
-            chb_show_vd_index.CheckedChanged += chb_show_vd_index_CheckedChanged;
-
-            rb_vd_index_0.CheckedChanged += rb_vd_index_0_CheckedChanged;
+            if ( resetEventHandlers )
+            {
+                chb_show_vd_name.CheckedChanged += chb_show_vd_name_CheckedChanged;
+                chb_show_vd_index.CheckedChanged += chb_show_vd_index_CheckedChanged;
+                rb_vd_index_0.CheckedChanged += rb_vd_index_0_CheckedChanged;
+            }
         }
 
         private void chb_show_vd_name_CheckedChanged( object? sender, EventArgs e )

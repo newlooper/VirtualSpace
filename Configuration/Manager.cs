@@ -19,6 +19,7 @@ using System.Windows;
 using Microsoft.Win32;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config.Entity;
+using VirtualSpace.Config.Events.Expression;
 using VirtualSpace.Config.Profiles;
 using Settings = VirtualSpace.Config.Const.Settings;
 
@@ -62,25 +63,6 @@ namespace VirtualSpace.Config
             return true;
         }
 
-        public static string GetConfigRoot()
-        {
-            using var vsReg         = Registry.CurrentUser.CreateSubKey( Const.Reg.RegKeyApp );
-            var       configRootReg = vsReg.GetValue( Const.Reg.RegKeyConfigRoot );
-            if ( configRootReg is null || !Directory.Exists( configRootReg.ToString() ) )
-            {
-                return AppRootFolder;
-            }
-
-            return configRootReg.ToString();
-        }
-
-        public static void SetConfigRoot( string path )
-        {
-            using var vsReg = Registry.CurrentUser.CreateSubKey( Const.Reg.RegKeyApp );
-            vsReg.SetValue( Const.Reg.RegKeyConfigRoot, path );
-            ConfigRootFolder = path;
-        }
-
         private static void InitConfig( string filePath )
         {
             if ( File.Exists( filePath ) )
@@ -90,6 +72,11 @@ namespace VirtualSpace.Config
                 _ = fs.Read( buffer, 0, (int)fs.Length );
                 var utf8Reader = new Utf8JsonReader( buffer );
                 Configs = JsonSerializer.Deserialize<ConfigTemplate>( ref utf8Reader );
+                var cluster = ReadCluster();
+                if ( cluster is not null )
+                {
+                    Configs.Cluster = cluster;
+                }
 
                 Logger.Info( $"Settings File Loaded, Version: {Configs.Version}, Current Profile: {Configs.CurrentProfileName}" );
             }
@@ -107,6 +94,7 @@ namespace VirtualSpace.Config
                     }
                 };
                 Save( filePath, "init", "Setting File" );
+                SaveCluster( Configs.Cluster );
             }
         }
 
@@ -118,11 +106,117 @@ namespace VirtualSpace.Config
                 var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, new JsonSerializerOptions {WriteIndented = true} );
                 await File.WriteAllBytesAsync( filePath, contents ).ConfigureAwait( false );
                 Logger.Info( $"Settings Saved [{reasonName}: {reason}]." );
+
+                if ( reasonName.Contains( ".Configs.Cluster." ) )
+                    SaveCluster( Configs.Cluster );
             }
             catch ( Exception ex )
             {
                 Logger.Error( "Failed to save Settings: " + ex.Message );
             }
+        }
+
+        public static async void SwitchProfile( string name )
+        {
+            Configs.CurrentProfileName = name;
+            var cluster = ReadCluster(); // after CurrentProfileName changed
+            if ( cluster is not null )
+            {
+                Configs.Cluster = cluster;
+            }
+
+            Conditions.SwitchRuleProfile(); // after CurrentProfileName changed
+
+            try
+            {
+                var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, new JsonSerializerOptions {WriteIndented = true} );
+                await File.WriteAllBytesAsync( ConfigFilePath, contents ).ConfigureAwait( false );
+                Logger.Info( $"[Profile]Switch: {name}" );
+            }
+            catch ( Exception ex )
+            {
+                Logger.Error( "Failed to save Settings: " + ex.Message );
+            }
+        }
+
+        public static void SaveCluster( Cluster cluster )
+        {
+            SaveProfile( Path.Combine( ProfileFolder, Configs.CurrentProfileName + Settings.ClusterFileExt ), cluster );
+        }
+
+        private static Cluster? ReadCluster()
+        {
+            return ReadProfile<Cluster>( Path.Combine( ProfileFolder, Configs.CurrentProfileName + Settings.ClusterFileExt ) );
+        }
+
+        private static async void SaveProfile<T>( string path, T p )
+        {
+            try
+            {
+                var content = JsonSerializer.SerializeToUtf8Bytes( p, new JsonSerializerOptions {WriteIndented = true} );
+                await File.WriteAllBytesAsync( path, content );
+
+                Logger.Info( $"[Profile]{typeof( T ).Name}.{Configs.CurrentProfileName} Saved." );
+            }
+            catch ( Exception ex )
+            {
+                Logger.Error( $"Failed to save profile of {typeof( T ).Name}: {ex.Message}" );
+            }
+        }
+
+        private static T? ReadProfile<T>( string path )
+        {
+            if ( !File.Exists( path ) )
+                return default;
+            try
+            {
+                using var fs     = new FileStream( path, FileMode.Open, FileAccess.Read );
+                var       buffer = new byte[fs.Length];
+                _ = fs.Read( buffer, 0, (int)fs.Length );
+                var utf8Reader = new Utf8JsonReader( buffer );
+                return JsonSerializer.Deserialize<T>( ref utf8Reader );
+            }
+            catch ( Exception ex )
+            {
+                Logger.Error( $"Failed to read profile of {typeof( T ).Name}: {ex.Message}" );
+                return default;
+            }
+        }
+
+        public static void DeleteProfiles( string profileName )
+        {
+            var dir = new DirectoryInfo( ProfileFolder );
+
+            try
+            {
+                foreach ( var file in dir.EnumerateFiles( profileName + ".*" ) ) // such violent
+                {
+                    file.Delete();
+                }
+            }
+            catch ( Exception ex )
+            {
+                Logger.Error( $"Failed to delete related files of profile {profileName}: {ex.Message}" );
+            }
+        }
+
+        public static void SetConfigRoot( string path )
+        {
+            using var vsReg = Registry.CurrentUser.CreateSubKey( Const.Reg.RegKeyApp );
+            vsReg.SetValue( Const.Reg.RegKeyConfigRoot, path );
+            ConfigRootFolder = path;
+        }
+
+        private static string GetConfigRoot()
+        {
+            using var vsReg         = Registry.CurrentUser.CreateSubKey( Const.Reg.RegKeyApp );
+            var       configRootReg = vsReg.GetValue( Const.Reg.RegKeyConfigRoot );
+            if ( configRootReg is null || !Directory.Exists( configRootReg.ToString() ) )
+            {
+                return AppRootFolder;
+            }
+
+            return configRootReg.ToString();
         }
 
         private static void CheckFolders()
@@ -137,12 +231,12 @@ namespace VirtualSpace.Config
             Directory.CreateDirectory( PluginsFolder );
         }
 
-        public static string GetRulesPath( string? path = null )
+        public static string GetRuleFilePath( string? profile = null )
         {
             CheckFolders();
-            return string.IsNullOrEmpty( path )
+            return string.IsNullOrEmpty( profile )
                 ? Path.Combine( ProfileFolder, Configs.CurrentProfileName + Settings.RuleFileExt )
-                : Path.Combine( ProfileFolder, path + Settings.RuleFileExt );
+                : Path.Combine( ProfileFolder, profile + Settings.RuleFileExt );
         }
 
         public static string GetCachePath()

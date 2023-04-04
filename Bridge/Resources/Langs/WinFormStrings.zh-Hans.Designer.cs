@@ -308,6 +308,24 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 确认.
+        /// </summary>
+        internal static string MsgBox_Caption_Confirm {
+            get {
+                return ResourceManager.GetString("MsgBox.Caption.Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 警告.
+        /// </summary>
+        internal static string MsgBox_Caption_Warning {
+            get {
+                return ResourceManager.GetString("MsgBox.Caption.Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 切换到下一行.
         /// </summary>
         internal static string Nav_CircleHType_NextRow {
@@ -322,6 +340,34 @@ namespace VirtualSpace.Resources.Langs {
         internal static string Nav_CircleHType_SameRow {
             get {
                 return ResourceManager.GetString("Nav.CircleHType.SameRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 确定要删除这个配置文件吗？
+        ///所有与此配置文件相关的文件都将被删除。.
+        /// </summary>
+        internal static string Profile_Confirm_Delete {
+            get {
+                return ResourceManager.GetString("Profile.Confirm.Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 配置文件名无效，或该文件已存在。.
+        /// </summary>
+        internal static string Profile_Warning_InvalidProfileName {
+            get {
+                return ResourceManager.GetString("Profile.Warning.InvalidProfileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 不能重命名或删除最后一个配置文件。.
+        /// </summary>
+        internal static string Profile_Warning_LastProfileProtect {
+            get {
+                return ResourceManager.GetString("Profile.Warning.LastProfileProtect", resourceCulture);
             }
         }
         
@@ -493,16 +539,16 @@ namespace VirtualSpace.Resources.Langs {
         ///
         ///支持的列表
         ///====================================
-        ///VirtualSpace10	Windows 10	Redstone5(17763)
-        ///VirtualSpace10	Windows 10	19H1(18362)
-        ///VirtualSpace10	Windows 10	19H2(18363)
-        ///VirtualSpace10	Windows 10	20H1(19041)
-        ///VirtualSpace10	Windows 10	20H2(19042)
-        ///VirtualSpace10	Windows 10	21H1(19043)
-        ///VirtualSpace10	Windows 10	21H2(19044)
-        ///VirtualSpace10	Windows 10	22H2(19045)
-        ///VirtualSpace(11)	Windows 11	21H2(22000)
-        ///VirtualSpace(11)	Windows 11	22H2(22621)
+        ///Windows 10	Redstone5(17763)
+        ///Windows 10	19H1(18362)
+        ///Windows 10	19H2(18363)
+        ///Windows 10	20H1(19041)
+        ///Windows 10	20H2(19042)
+        ///Windows 10	21H1(19043)
+        ///Windows 10	21H2(19044)
+        ///Windows 10	22H2(19045)
+        ///Windows 11	21H2(22000)
+        ///Windows 11	22H2(22621)
         ///====================================.
         /// </summary>
         internal static string VersionCheckFail {

@@ -281,4 +281,20 @@ Windows 11	22H2(22621)
   <data name="KB.Hotkey.SVD_BACK_LAST" xml:space="preserve">
     <value>切换回上一个桌面</value>
   </data>
+  <data name="Profile.Warning.LastProfileProtect" xml:space="preserve">
+    <value>不能重命名或删除最后一个配置文件。</value>
+  </data>
+  <data name="Profile.Confirm.Delete" xml:space="preserve">
+    <value>确定要删除这个配置文件吗？
+所有与此配置文件相关的文件都将被删除。</value>
+  </data>
+  <data name="Profile.Warning.InvalidProfileName" xml:space="preserve">
+    <value>配置文件名无效，或该文件已存在。</value>
+  </data>
+  <data name="MsgBox.Caption.Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="MsgBox.Caption.Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
 </root>

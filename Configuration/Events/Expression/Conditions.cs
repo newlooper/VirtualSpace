@@ -60,7 +60,7 @@ namespace VirtualSpace.Config.Events.Expression
 
         private static List<RuleTemplate> InitRules()
         {
-            var path  = Manager.GetRulesPath();
+            var path  = Manager.GetRuleFilePath();
             var rules = new List<RuleTemplate>();
             if ( !File.Exists( path ) ) return rules;
 
@@ -230,7 +230,7 @@ namespace VirtualSpace.Config.Events.Expression
             return writeOptions;
         }
 
-        public static async void SaveRules( string path, List<RuleTemplate> ruleList )
+        public static async void SaveRules( List<RuleTemplate> ruleList, string? path = null )
         {
             Interlocked.Increment( ref _updateRuleLock );
 
@@ -239,10 +239,24 @@ namespace VirtualSpace.Config.Events.Expression
 
             Interlocked.Decrement( ref _updateRuleLock );
 
+            path ??= Manager.GetRuleFilePath();
+
             await File.WriteAllBytesAsync( path, JsonSerializer.SerializeToUtf8Bytes(
                 ruleList, GetJsonSerializerOptions() ) );
 
             Logger.Info( $"[RULE]Rules.{Manager.Configs.CurrentProfileName} Saved." );
+        }
+
+        public static void SwitchRuleProfile()
+        {
+            Interlocked.Increment( ref _updateRuleLock );
+
+            _rules = InitRules();
+            BuildRuleExp( _rules );
+
+            Interlocked.Decrement( ref _updateRuleLock );
+
+            Logger.Info( $"[RULE]Switch Rule Profile: {Manager.Configs.CurrentProfileName}" );
         }
     }
 

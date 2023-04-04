@@ -15,11 +15,14 @@ namespace VirtualSpace
 {
     public partial class AppController
     {
-        private void ReadNavConfig()
+        private void ReadNavConfig( bool resetEventHandlers = true )
         {
-            cb_nav_circle_h.CheckedChanged -= cb_nav_circle_h_CheckedChanged;
-            cb_nav_circle_h_type.SelectedIndexChanged -= cb_nav_circle_h_type_SelectedIndexChanged;
-            cb_nav_circle_v.CheckedChanged -= cb_nav_circle_v_CheckedChanged;
+            if ( resetEventHandlers )
+            {
+                cb_nav_circle_h.CheckedChanged -= cb_nav_circle_h_CheckedChanged;
+                cb_nav_circle_h_type.SelectedIndexChanged -= cb_nav_circle_h_type_SelectedIndexChanged;
+                cb_nav_circle_v.CheckedChanged -= cb_nav_circle_v_CheckedChanged;
+            }
 
             cb_nav_circle_h_type.Items.Clear();
             cb_nav_circle_h_type.Items.Add( Agent.Langs.GetString( "Nav.CircleHType.NextRow" ) );
@@ -29,9 +32,12 @@ namespace VirtualSpace
             cb_nav_circle_h_type.SelectedIndex = ConfigManager.CurrentProfile.Navigation.CirculationHType;
             cb_nav_circle_v.Checked = ConfigManager.CurrentProfile.Navigation.CirculationV;
 
-            cb_nav_circle_h.CheckedChanged += cb_nav_circle_h_CheckedChanged;
-            cb_nav_circle_h_type.SelectedIndexChanged += cb_nav_circle_h_type_SelectedIndexChanged;
-            cb_nav_circle_v.CheckedChanged += cb_nav_circle_v_CheckedChanged;
+            if ( resetEventHandlers )
+            {
+                cb_nav_circle_h.CheckedChanged += cb_nav_circle_h_CheckedChanged;
+                cb_nav_circle_h_type.SelectedIndexChanged += cb_nav_circle_h_type_SelectedIndexChanged;
+                cb_nav_circle_v.CheckedChanged += cb_nav_circle_v_CheckedChanged;
+            }
         }
 
         private void cb_nav_circle_h_CheckedChanged( object? sender, EventArgs e )

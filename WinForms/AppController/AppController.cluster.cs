@@ -122,17 +122,23 @@ namespace VirtualSpace
             niTray.Icon = Icon.FromHandle( bitmap.GetHicon() );
         }
 
-        private void InitClusterConfig()
+        private void InitClusterConfig( bool resetEventHandlers = true )
         {
+            if ( resetEventHandlers )
+            {
+                chb_HideMainViewIfItsShown.CheckedChanged -= chb_HideMainViewIfItsShown_CheckedChanged;
+                chb_notify_vd_changed.CheckedChanged -= chb_notify_vd_changed_CheckedChanged;
+                chb_showVDIndexOnTrayIcon.CheckedChanged -= chb_showVDIndexOnTrayIcon_CheckedChanged;
+                chb_HideOnStart.CheckedChanged -= chb_HideOnStart_CheckedChanged;
+                rb_vdi_on_tray_style_0.CheckedChanged -= rb_vdi_on_tray_style_0_CheckedChanged;
+                rb_vdi_on_tray_style_1.CheckedChanged -= rb_vdi_on_tray_style_0_CheckedChanged;
+                rb_vdi_on_tray_style_2.CheckedChanged -= rb_vdi_on_tray_style_0_CheckedChanged;
+            }
+
             chb_HideMainViewIfItsShown.Checked = ConfigManager.Configs.Cluster.HideMainViewIfItsShown;
             chb_notify_vd_changed.Checked = ConfigManager.Configs.Cluster.NotificationOnVdChanged;
             chb_showVDIndexOnTrayIcon.Checked = ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon;
             chb_HideOnStart.Checked = ConfigManager.Configs.Cluster.HideOnStart;
-
-            chb_HideMainViewIfItsShown.CheckedChanged += chb_HideMainViewIfItsShown_CheckedChanged;
-            chb_notify_vd_changed.CheckedChanged += chb_notify_vd_changed_CheckedChanged;
-            chb_showVDIndexOnTrayIcon.CheckedChanged += chb_showVDIndexOnTrayIcon_CheckedChanged;
-            chb_HideOnStart.CheckedChanged += chb_HideOnStart_CheckedChanged;
 
             switch ( ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon )
             {
@@ -150,9 +156,16 @@ namespace VirtualSpace
                     break;
             }
 
-            rb_vdi_on_tray_style_0.CheckedChanged += rb_vdi_on_tray_style_0_CheckedChanged;
-            rb_vdi_on_tray_style_1.CheckedChanged += rb_vdi_on_tray_style_0_CheckedChanged;
-            rb_vdi_on_tray_style_2.CheckedChanged += rb_vdi_on_tray_style_0_CheckedChanged;
+            if ( resetEventHandlers )
+            {
+                chb_HideMainViewIfItsShown.CheckedChanged += chb_HideMainViewIfItsShown_CheckedChanged;
+                chb_notify_vd_changed.CheckedChanged += chb_notify_vd_changed_CheckedChanged;
+                chb_showVDIndexOnTrayIcon.CheckedChanged += chb_showVDIndexOnTrayIcon_CheckedChanged;
+                chb_HideOnStart.CheckedChanged += chb_HideOnStart_CheckedChanged;
+                rb_vdi_on_tray_style_0.CheckedChanged += rb_vdi_on_tray_style_0_CheckedChanged;
+                rb_vdi_on_tray_style_1.CheckedChanged += rb_vdi_on_tray_style_0_CheckedChanged;
+                rb_vdi_on_tray_style_2.CheckedChanged += rb_vdi_on_tray_style_0_CheckedChanged;
+            }
         }
 
         private void rb_vdi_on_tray_style_0_CheckedChanged( object? sender, EventArgs e )

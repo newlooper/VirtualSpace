@@ -53,6 +53,7 @@ namespace VirtualSpace
             InitClusterConfig();
             InitMouseConfig();
             InitStorageConfig();
+            InitProfileList();
 
             CheckAdmin();
 
@@ -112,11 +113,6 @@ namespace VirtualSpace
             var icon = Bitmap.FromHicon( iconResult.hIcon );
             icon.MakeTransparent();
             runAsAdministratorToolStripMenuItem.Image = icon;
-        }
-
-        private void tsmiMainMenuQuit_Click( object sender, EventArgs e )
-        {
-            User32.PostMessage( _mainWindowHandle, WinMsg.WM_CLOSE, 0, 0 );
         }
 
         private void AppController_FormClosing( object sender, FormClosingEventArgs e )
@@ -272,6 +268,11 @@ namespace VirtualSpace
         private void tsmiMainMenuRestart_Click( object sender, EventArgs e )
         {
             User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RestartApp, 0 );
+        }
+
+        private void tsmiMainMenuQuit_Click( object sender, EventArgs e )
+        {
+            User32.PostMessage( _mainWindowHandle, WinMsg.WM_CLOSE, 0, 0 );
         }
     }
 }

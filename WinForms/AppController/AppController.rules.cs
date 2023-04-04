@@ -70,7 +70,7 @@ namespace VirtualSpace
 
             _handleItemCheck = true;
 
-            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
+            Conditions.SaveRules( rules );
         }
 
         private static void AddRule( RuleTemplate rule )
@@ -130,7 +130,7 @@ namespace VirtualSpace
             _handleItemCheck = false;
             lv_Rules.Items.Add( LviByRule( clone ) );
             _handleItemCheck = true;
-            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
+            Conditions.SaveRules( rules );
         }
 
         private void btn_RuleRemove_Click( object sender, EventArgs e )
@@ -147,7 +147,7 @@ namespace VirtualSpace
 
             rules.RemoveAt( lv_Rules.SelectedIndices[0] );
             lv_Rules.Items.RemoveAt( lv_Rules.SelectedIndices[0] );
-            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
+            Conditions.SaveRules( rules );
         }
 
         private void OpenRuleDialog( int index = -1 )
@@ -182,7 +182,7 @@ namespace VirtualSpace
 
             var index = e.Index;
             rules[index].Enabled = e.NewValue == CheckState.Checked;
-            Conditions.SaveRules( ConfigManager.GetRulesPath(), rules );
+            Conditions.SaveRules( rules );
         }
 
         private void lv_Rules_VisibleChanged( object sender, EventArgs e )
@@ -209,6 +209,12 @@ namespace VirtualSpace
         {
             if ( Keys.Delete != e.KeyCode ) return;
             DeleteSelectedItem();
+        }
+
+        private void llb_goto_general_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+        {
+            ts_PageNavButton_Click( sender, e );
+            mainTabs.SelectTab( 0 );
         }
     }
 }

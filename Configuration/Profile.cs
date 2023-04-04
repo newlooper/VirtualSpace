@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using VirtualSpace.Config.Entity;
 
 namespace VirtualSpace.Config
@@ -29,5 +30,11 @@ namespace VirtualSpace.Config
             CirculationV = false,
             CirculationHType = 0
         };
+
+        public Profile Clone()
+        {
+            var profile = JsonSerializer.Deserialize<Profile>( JsonSerializer.Serialize( this ) );
+            return profile;
+        }
     }
 }
