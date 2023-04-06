@@ -297,4 +297,10 @@ Windows 11	22H2(22621)
   <data name="MsgBox.Caption.Warning" xml:space="preserve">
     <value>警告</value>
   </data>
+  <data name="Tray.Menu.Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Tray.Menu.Quit" xml:space="preserve">
+    <value>退出</value>
+  </data>
 </root>

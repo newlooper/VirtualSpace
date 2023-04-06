@@ -30,7 +30,6 @@ namespace VirtualSpace
             void Invoker()
             {
                 SetControlLang( _instance.logCMS, lang );
-                SetControlLang( _instance.trayMenu, lang );
 
                 _instance.tv_keyboard.Nodes.Clear();
                 _instance.tv_keyboard.Nodes.AddRange( new[]
@@ -161,18 +160,18 @@ namespace VirtualSpace
             {
                 var l = (ToolStripMenuItem)obj;
 
+                ConfigManager.CurrentProfile.UI.Language = l.Name;
+                ConfigManager.Save( reason: ConfigManager.CurrentProfile.UI.Language );
+                User32.PostMessage( _instance._mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.UpdateTrayLang, 0 );
+
                 if ( Math.Abs( SysInfo.Dpi.ScaleX - 1.0f ) > 0 )
                 {
                     _cancelTokenSourceForLog.Cancel();
-                    ConfigManager.CurrentProfile.UI.Language = l.Name;
-                    ConfigManager.Save( reason: ConfigManager.CurrentProfile.UI.Language );
                     User32.PostMessage( _mainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RestartAppController, 0 );
                     return;
                 }
 
                 SetAllLang( l.Name );
-                ConfigManager.CurrentProfile.UI.Language = l.Name;
-                ConfigManager.Save( reason: ConfigManager.CurrentProfile.UI.Language );
 
                 foreach ( ToolStripMenuItem lang in langToolStripMenuItem.DropDownItems )
                 {

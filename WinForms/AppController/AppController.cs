@@ -46,6 +46,7 @@ namespace VirtualSpace
             InitializeComponent();
 
             base.Text = Const.Window.VS_CONTROLLER_TITLE;
+            pb_AboutLogo.Image = Images.BytesToBitmap( Agent.Images.GetObject( "AboutLogo_2" ) );
 
             InitRuleListView();
             InitPluginListView();
@@ -167,11 +168,6 @@ namespace VirtualSpace
                 var button = item as ToolStripButton;
                 button.Checked = sender == item;
             }
-        }
-
-        private void settingsToolStripMenuItem_Click( object sender, EventArgs e )
-        {
-            BringToTop();
         }
 
         private void llb_Company_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )

@@ -25,7 +25,7 @@ namespace VirtualSpace.Helpers
         public const string WIDTH_HEIGHT_SPLITTER = "x";
     }
 
-    internal static class Images
+    public static class Images
     {
         public static Bitmap GetScaledBitmap( int width, int height, string path, ref Wallpaper wp, string cachePath, long quality )
         {
@@ -71,6 +71,18 @@ namespace VirtualSpace.Helpers
             }
 
             return null;
+        }
+
+        public static Icon BytesToIcon( object bytes )
+        {
+            using var ms = new MemoryStream( (byte[])bytes );
+            return new Icon( ms );
+        }
+
+        public static Bitmap BytesToBitmap( object bytes )
+        {
+            using var ms = new MemoryStream( (byte[])bytes );
+            return new Bitmap( ms );
         }
     }
 

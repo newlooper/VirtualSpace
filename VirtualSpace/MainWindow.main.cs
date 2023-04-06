@@ -16,6 +16,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
+using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
@@ -176,10 +177,15 @@ namespace VirtualSpace
 
         public static void UpdateVDIndexOnTrayIcon( Guid guid )
         {
-            if ( !Manager.Configs.Cluster.ShowVDIndexOnTrayIcon ) return;
+            if ( !Manager.Configs.Cluster.ShowVDIndexOnTrayIcon )
+            {
+                TrayIcon.InitTrayIcon();
+                return;
+            }
+
             var i     = ConfigManager.CurrentProfile.DesktopOrder.IndexOf( guid );
             var index = ConfigManager.CurrentProfile.UI.ShowVdIndexType == 0 ? i : i + 1;
-            _instance._acForm.UpdateVDIndexOnTrayIcon( index.ToString() );
+            TrayIcon.UpdateVDIndexOnTrayIcon( index.ToString() );
         }
 
         private static void TryRunAsAdmin()
@@ -208,6 +214,11 @@ namespace VirtualSpace
             {
                 App.TryMutex();
             }
+        }
+
+        public static void Quit()
+        {
+            _instance.Close();
         }
     }
 }

@@ -253,6 +253,9 @@ namespace VirtualSpace
                         case UserMessage.RefreshTrayIcon:
                             UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
                             break;
+                        case UserMessage.UpdateTrayLang:
+                            TrayIcon.SetLang();
+                            break;
                         case UserMessage.RunAsAdministrator:
                             TryRunAsAdmin();
                             goto RETURN;

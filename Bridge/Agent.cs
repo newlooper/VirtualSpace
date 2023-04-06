@@ -26,5 +26,9 @@ namespace VirtualSpace
         public static ResourceManager Langs = new(
             Assembly.GetExecutingAssembly().GetName().Name + ".Resources.Langs.WinFormStrings",
             typeof( Agent ).Assembly );
+
+        public static ResourceManager Images = new(
+            Assembly.GetExecutingAssembly().GetName().Name + ".Resources.Images.Images",
+            typeof( Agent ).Assembly );
     }
 }

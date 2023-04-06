@@ -452,6 +452,24 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quit.
+        /// </summary>
+        internal static string Tray_Menu_Quit {
+            get {
+                return ResourceManager.GetString("Tray.Menu.Quit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string Tray_Menu_Settings {
+            get {
+                return ResourceManager.GetString("Tray.Menu.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Virtual Desktop.
         /// </summary>
         internal static string VDW_CTM_Desktop_Create {

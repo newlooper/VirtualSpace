@@ -188,11 +188,6 @@ namespace VirtualSpace
             panel_mask = new System.Windows.Forms.Panel();
             mainStatusStrip = new System.Windows.Forms.StatusStrip();
             tssl_main_tips = new System.Windows.Forms.ToolStripStatusLabel();
-            niTray = new System.Windows.Forms.NotifyIcon(components);
-            trayMenu = new System.Windows.Forms.ContextMenuStrip(components);
-            settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            tsmiTrayMenuQuit = new System.Windows.Forms.ToolStripMenuItem();
             mainMenu.SuspendLayout();
             MT_Logs.SuspendLayout();
             logTabs.SuspendLayout();
@@ -236,7 +231,6 @@ namespace VirtualSpace
             ts_PageNav.SuspendLayout();
             panel_PageNav.SuspendLayout();
             mainStatusStrip.SuspendLayout();
-            trayMenu.SuspendLayout();
             SuspendLayout();
             // 
             // mainMenu
@@ -1183,7 +1177,6 @@ namespace VirtualSpace
             // pb_AboutLogo
             // 
             resources.ApplyResources(pb_AboutLogo, "pb_AboutLogo");
-            pb_AboutLogo.Image = global::AppController.Properties.Resources.AboutLogo_2;
             pb_AboutLogo.Name = "pb_AboutLogo";
             pb_AboutLogo.TabStop = false;
             // 
@@ -1288,35 +1281,6 @@ namespace VirtualSpace
             resources.ApplyResources(tssl_main_tips, "tssl_main_tips");
             tssl_main_tips.Name = "tssl_main_tips";
             // 
-            // niTray
-            // 
-            resources.ApplyResources(niTray, "niTray");
-            niTray.ContextMenuStrip = trayMenu;
-            // 
-            // trayMenu
-            // 
-            resources.ApplyResources(trayMenu, "trayMenu");
-            trayMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
-            trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { settingsToolStripMenuItem, toolStripSeparator2, tsmiTrayMenuQuit });
-            trayMenu.Name = "trayMenu";
-            // 
-            // settingsToolStripMenuItem
-            // 
-            resources.ApplyResources(settingsToolStripMenuItem, "settingsToolStripMenuItem");
-            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator2
-            // 
-            resources.ApplyResources(toolStripSeparator2, "toolStripSeparator2");
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            // 
-            // tsmiTrayMenuQuit
-            // 
-            resources.ApplyResources(tsmiTrayMenuQuit, "tsmiTrayMenuQuit");
-            tsmiTrayMenuQuit.Name = "tsmiTrayMenuQuit";
-            tsmiTrayMenuQuit.Click += tsmiMainMenuQuit_Click;
-            // 
             // AppController
             // 
             resources.ApplyResources(this, "$this");
@@ -1397,7 +1361,6 @@ namespace VirtualSpace
             panel_PageNav.PerformLayout();
             mainStatusStrip.ResumeLayout(false);
             mainStatusStrip.PerformLayout();
-            trayMenu.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1451,11 +1414,6 @@ namespace VirtualSpace
         private System.Windows.Forms.Panel panel_mask;
         private System.Windows.Forms.TabPage MT_Plugins;
         private System.Windows.Forms.StatusStrip mainStatusStrip;
-        private System.Windows.Forms.NotifyIcon niTray;
-        private System.Windows.Forms.ContextMenuStrip trayMenu;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem tsmiTrayMenuQuit;
         private System.Windows.Forms.TabPage MT_About;
         private System.Windows.Forms.LinkLabel llb_Company;
         private System.Windows.Forms.ListBox lbox_Env;

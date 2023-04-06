@@ -296,4 +296,10 @@ all files related with this profile will be deleted too.</value>
   <data name="MsgBox.Caption.Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
+  <data name="Tray.Menu.Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Tray.Menu.Quit" xml:space="preserve">
+    <value>Quit</value>
+  </data>
 </root>

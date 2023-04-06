@@ -30,6 +30,7 @@ namespace VirtualSpace.Helpers
         public const int ShowVdw                         = 1015;
         public const int ShowThumbsOfVdw                 = 1016;
         public const int RefreshTrayIcon                 = 1017;
+        public const int UpdateTrayLang                  = 1018;
 
         public const int NavLeft  = 1201;
         public const int NavRight = 1202;
