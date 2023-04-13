@@ -70,6 +70,9 @@
   <data name="lb_Name.Text" xml:space="preserve">
     <value>名称</value>
   </data>
+  <data name="gb_Basic.Text" xml:space="preserve">
+    <value>基本</value>
+  </data>
   <data name="cb_CommandLine.Size" type="System.Drawing.Size, System.Drawing">
     <value>63, 21</value>
   </data>
@@ -105,6 +108,9 @@
   </data>
   <data name="cb_Title.Text" xml:space="preserve">
     <value>窗口标题</value>
+  </data>
+  <data name="gb_Rules.Text" xml:space="preserve">
+    <value>公共窗口规则</value>
   </data>
   <data name="cb_MoveToScreen.Size" type="System.Drawing.Size, System.Drawing">
     <value>87, 21</value>
@@ -142,6 +148,9 @@
   <data name="cb_MoveToDesktop.Text" xml:space="preserve">
     <value>移动到桌面</value>
   </data>
+  <data name="gb_Actions.Text" xml:space="preserve">
+    <value>窗口动作</value>
+  </data>
   <data name="btn_RuleSave.Text" xml:space="preserve">
     <value>保存</value>
   </data>
@@ -156,6 +165,9 @@
   </data>
   <data name="lb_Created.Text" xml:space="preserve">
     <value>创建时间</value>
+  </data>
+  <data name="gb_Info.Text" xml:space="preserve">
+    <value>信息</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>规则定义</value>

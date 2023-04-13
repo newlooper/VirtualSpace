@@ -3517,7 +3517,7 @@
     <value>toolStrip1</value>
   </data>
   <data name="lb_note_configRoot.Text" xml:space="preserve">
-    <value>Note: change config folder need restart program. this operation only change location, no files will be copied or moved to avoid overwrite files unexpectedly. if you want reuse current configs, you may manualy copy 'settings.json' and 'Profiles' to the folder you choosed, then restart program.</value>
+    <value>Note: change config folder need restart program. this operation only change location, no files will be copied or moved to avoid overwrite files unexpectedly. if you want reuse current configs, you may manually copy 'settings.json' and 'Profiles' to the folder you choosed, then restart program.</value>
   </data>
   <data name="cb_hk_key.Items1" xml:space="preserve">
     <value>D1</value>

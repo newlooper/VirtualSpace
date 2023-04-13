@@ -57,28 +57,1091 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="cb_ProcessPath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="&gt;&gt;cb_ProcessPath.Name" xml:space="preserve">
+    <value>cb_ProcessPath</value>
+  </data>
+  <data name="&gt;&gt;cbb_ProcessName.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="cb_PinWindow.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;cb_PinApp.Name" xml:space="preserve">
+    <value>cb_PinApp</value>
+  </data>
+  <data name="&gt;&gt;lb_Updated.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;cb_ProcessPath.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btn_RuleSave.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <data name="&gt;&gt;cb_MoveToDesktop.ZOrder" xml:space="preserve">
-    <value>7</value>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="gb_Actions.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cbb_MoveToDesktop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>493, 25</value>
+  </data>
+  <data name="cbb_MoveToScreen.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;lbCreated.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lbUpdated.Size" type="System.Drawing.Size, System.Drawing">
+    <value>0, 17</value>
+  </data>
+  <data name="&gt;&gt;lbCreated.Name" xml:space="preserve">
+    <value>lbCreated</value>
+  </data>
+  <data name="&gt;&gt;tb_Name.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cb_FollowWindow.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tb_ProcessName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>252, 50</value>
+  </data>
+  <data name="&gt;&gt;cb_FollowWindow.Name" xml:space="preserve">
+    <value>cb_FollowWindow</value>
+  </data>
+  <data name="lb_Created.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lb_Updated.Name" xml:space="preserve">
+    <value>lb_Updated</value>
+  </data>
+  <data name="&gt;&gt;cb_WinInScreen.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="cbb_ProcessPath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="tb_ProcessPath.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="cb_Enabled.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cbb_MoveToScreen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>613, 25</value>
+  </data>
+  <data name="tb_CommandLine.Size" type="System.Drawing.Size, System.Drawing">
+    <value>509, 23</value>
+  </data>
+  <data name="&gt;&gt;cbb_MoveToScreen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lb_Created.Name" xml:space="preserve">
+    <value>lb_Created</value>
+  </data>
+  <data name="cbb_WinInScreen.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
+  </data>
+  <data name="&gt;&gt;cbb_WinInScreen.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="&gt;&gt;cbb_MoveToDesktop.Parent" xml:space="preserve">
+    <value>gb_Actions</value>
+  </data>
+  <data name="tb_Title.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="cbb_Title.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lbUpdated.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="&gt;&gt;tb_Title.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="tb_WndClass.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="&gt;&gt;cb_PinWindow.Name" xml:space="preserve">
+    <value>cb_PinWindow</value>
+  </data>
+  <data name="&gt;&gt;tb_ProcessPath.Name" xml:space="preserve">
+    <value>tb_ProcessPath</value>
+  </data>
+  <data name="&gt;&gt;cb_PinApp.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lbCreated.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="&gt;&gt;cbb_Title.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="&gt;&gt;cbb_WinInScreen.Name" xml:space="preserve">
+    <value>cbb_WinInScreen</value>
+  </data>
+  <data name="cb_WinInScreen.Text" xml:space="preserve">
+    <value>Window In Screen</value>
+  </data>
+  <data name="&gt;&gt;cbb_ProcessPath.Name" xml:space="preserve">
+    <value>cbb_ProcessPath</value>
+  </data>
+  <data name="gb_Basic.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_WndClass.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="tb_WndClass.Size" type="System.Drawing.Size, System.Drawing">
+    <value>509, 23</value>
+  </data>
+  <data name="gb_Info.Location" type="System.Drawing.Point, System.Drawing">
+    <value>454, 11</value>
+  </data>
+  <data name="lb_Updated.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cb_PinApp.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;cb_ProcessPath.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="cb_CommandLine.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 106</value>
+  </data>
+  <data name="cb_MoveToDesktop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;tb_ProcessName.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;lb_Name.Name" xml:space="preserve">
+    <value>lb_Name</value>
+  </data>
+  <data name="gb_Rules.Text" xml:space="preserve">
+    <value>Common Window Rule</value>
+  </data>
+  <data name="gb_Actions.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;lb_Name.Parent" xml:space="preserve">
+    <value>gb_Basic</value>
+  </data>
+  <data name="&gt;&gt;lb_Updated.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="gb_Info.Size" type="System.Drawing.Size, System.Drawing">
+    <value>319, 86</value>
+  </data>
+  <data name="cb_Title.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="cbb_WndClass.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="cbb_CommandLine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;lbUpdated.Name" xml:space="preserve">
+    <value>lbUpdated</value>
   </data>
   <data name="&gt;&gt;cb_WndClass.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tb_Title.Size" type="System.Drawing.Size, System.Drawing">
-    <value>509, 23</value>
+  <data name="cbb_ProcessName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 25</value>
+  </data>
+  <data name="cb_ProcessName.Text" xml:space="preserve">
+    <value>Process Name</value>
+  </data>
+  <data name="cb_WndClass.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="tb_Name.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;cb_WinInScreen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cbb_WinInScreen.Location" type="System.Drawing.Point, System.Drawing">
+    <value>148, 158</value>
+  </data>
+  <data name="&gt;&gt;cbb_WndClass.Name" xml:space="preserve">
+    <value>cbb_WndClass</value>
+  </data>
+  <data name="tb_WndClass.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_Title.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 21</value>
+  </data>
+  <data name="&gt;&gt;cb_Enabled.Name" xml:space="preserve">
+    <value>cb_Enabled</value>
+  </data>
+  <data name="&gt;&gt;cb_PinApp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cbb_MoveToScreen.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="lb_Name.Size" type="System.Drawing.Size, System.Drawing">
+    <value>43, 17</value>
+  </data>
+  <data name="&gt;&gt;cbb_WinInScreen.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="cbb_MoveToDesktop.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="cb_PinApp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 21</value>
+  </data>
+  <data name="cbb_CommandLine.Location" type="System.Drawing.Point, System.Drawing">
+    <value>148, 104</value>
+  </data>
+  <data name="&gt;&gt;lbUpdated.Parent" xml:space="preserve">
+    <value>gb_Info</value>
+  </data>
+  <data name="cbb_CommandLine.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="cb_HideFromView.Text" xml:space="preserve">
+    <value>Hide From View</value>
+  </data>
+  <data name="cb_MoveToScreen.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="tb_WndClass.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;cb_WinInScreen.Name" xml:space="preserve">
+    <value>cb_WinInScreen</value>
+  </data>
+  <data name="&gt;&gt;cb_Title.Name" xml:space="preserve">
+    <value>cb_Title</value>
+  </data>
+  <data name="&gt;&gt;cb_ProcessName.Name" xml:space="preserve">
+    <value>cb_ProcessName</value>
+  </data>
+  <data name="&gt;&gt;gb_Actions.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lb_Created.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lbUpdated.Location" type="System.Drawing.Point, System.Drawing">
+    <value>87, 47</value>
+  </data>
+  <data name="&gt;&gt;cbb_WinInScreen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cb_Title.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="lb_Created.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="&gt;&gt;btn_RuleSave.Name" xml:space="preserve">
+    <value>btn_RuleSave</value>
+  </data>
+  <data name="gb_Actions.Text" xml:space="preserve">
+    <value>Window Actions</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="lbUpdated.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tb_CommandLine.Name" xml:space="preserve">
+    <value>tb_CommandLine</value>
+  </data>
+  <data name="&gt;&gt;cb_MoveToDesktop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gb_Basic.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="gb_Info.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;tb_ProcessName.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="lb_Name.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="cb_WinInScreen.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;cbb_ProcessPath.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="cbb_WndClass.Location" type="System.Drawing.Point, System.Drawing">
+    <value>148, 131</value>
+  </data>
+  <data name="tb_ProcessPath.Location" type="System.Drawing.Point, System.Drawing">
+    <value>252, 78</value>
+  </data>
+  <data name="&gt;&gt;cb_HideFromView.Name" xml:space="preserve">
+    <value>cb_HideFromView</value>
+  </data>
+  <data name="&gt;&gt;statusBar.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cb_ProcessPath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cbb_CommandLine.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 25</value>
+  </data>
+  <data name="cb_FollowWindow.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="cb_PinWindow.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lb_Created.Size" type="System.Drawing.Size, System.Drawing">
+    <value>54, 17</value>
+  </data>
+  <data name="&gt;&gt;cb_PinApp.Parent" xml:space="preserve">
+    <value>gb_Actions</value>
+  </data>
+  <data name="&gt;&gt;cbb_ProcessPath.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>784, 561</value>
+  </data>
+  <data name="cb_MoveToDesktop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>132, 21</value>
+  </data>
+  <data name="&gt;&gt;tb_Title.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="cbb_WndClass.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 25</value>
+  </data>
+  <data name="cb_WinInScreen.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="cb_MoveToScreen.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="lb_Created.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;cb_PinWindow.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;statusBar.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="cbb_Title.Location" type="System.Drawing.Point, System.Drawing">
+    <value>148, 23</value>
+  </data>
+  <data name="&gt;&gt;tb_WndClass.Name" xml:space="preserve">
+    <value>tb_WndClass</value>
+  </data>
+  <data name="&gt;&gt;cb_WinInScreen.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="cb_PinApp.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cb_ProcessName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 21</value>
+  </data>
+  <data name="&gt;&gt;btn_RuleSave.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="cb_WndClass.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;cb_WndClass.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="gb_Info.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;cb_MoveToDesktop.Parent" xml:space="preserve">
+    <value>gb_Actions</value>
+  </data>
+  <data name="&gt;&gt;lb_Created.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cb_MoveToScreen.Text" xml:space="preserve">
+    <value>Move To Screen</value>
+  </data>
+  <data name="cb_HideFromView.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;cb_ProcessPath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lb_Name.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;gb_Basic.Name" xml:space="preserve">
+    <value>gb_Basic</value>
+  </data>
+  <data name="cb_CommandLine.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cb_HideFromView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>119, 21</value>
+  </data>
+  <data name="cb_ProcessName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;gb_Rules.Name" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="btn_RuleSave.Location" type="System.Drawing.Point, System.Drawing">
+    <value>665, 507</value>
+  </data>
+  <data name="lb_Updated.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 47</value>
+  </data>
+  <data name="&gt;&gt;gb_Info.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cbb_CommandLine.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="&gt;&gt;cb_HideFromView.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;cb_MoveToDesktop.Name" xml:space="preserve">
+    <value>cb_MoveToDesktop</value>
+  </data>
+  <data name="&gt;&gt;tb_ProcessName.Name" xml:space="preserve">
+    <value>tb_ProcessName</value>
+  </data>
+  <data name="cbb_ProcessPath.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel1.Name" xml:space="preserve">
+    <value>toolStripStatusLabel1</value>
+  </data>
+  <data name="cbb_WndClass.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;tb_CommandLine.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cbb_MoveToDesktop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>7, 17</value>
+  </data>
+  <data name="&gt;&gt;tb_CommandLine.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;cbb_WndClass.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cb_MoveToScreen.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 132</value>
+  </data>
+  <data name="cb_MoveToScreen.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cb_PinWindow.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 51</value>
+  </data>
+  <data name="&gt;&gt;cb_WndClass.Name" xml:space="preserve">
+    <value>cb_WndClass</value>
+  </data>
+  <data name="&gt;&gt;cb_PinWindow.Parent" xml:space="preserve">
+    <value>gb_Actions</value>
+  </data>
+  <data name="&gt;&gt;statusBar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lbCreated.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbb_MoveToDesktop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>148, 23</value>
+  </data>
+  <data name="tb_Title.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="statusBar.Text" xml:space="preserve">
+    <value>statusStrip1</value>
+  </data>
+  <data name="&gt;&gt;cbb_CommandLine.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel2.Name" xml:space="preserve">
+    <value>toolStripStatusLabel2</value>
+  </data>
+  <data name="lb_Updated.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="&gt;&gt;gb_Rules.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;cbb_MoveToDesktop.Name" xml:space="preserve">
+    <value>cbb_MoveToDesktop</value>
+  </data>
+  <data name="cb_ProcessPath.Text" xml:space="preserve">
+    <value>Process Path</value>
+  </data>
+  <data name="&gt;&gt;gb_Rules.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btn_RuleSave.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="cb_ProcessPath.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="lbCreated.Location" type="System.Drawing.Point, System.Drawing">
+    <value>87, 23</value>
+  </data>
+  <data name="&gt;&gt;tb_Title.Name" xml:space="preserve">
+    <value>tb_Title</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cb_PinWindow.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="gb_Basic.Size" type="System.Drawing.Size, System.Drawing">
+    <value>442, 89</value>
+  </data>
+  <data name="&gt;&gt;cb_MoveToScreen.Name" xml:space="preserve">
+    <value>cb_MoveToScreen</value>
+  </data>
+  <data name="&gt;&gt;cbb_MoveToScreen.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cb_CommandLine.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="tb_Title.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;cb_HideFromView.Parent" xml:space="preserve">
+    <value>gb_Actions</value>
+  </data>
+  <data name="cb_Enabled.Text" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="statusBar.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 0, 9, 0</value>
+  </data>
+  <data name="gb_Rules.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;cb_ProcessName.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="tb_CommandLine.Location" type="System.Drawing.Point, System.Drawing">
+    <value>252, 105</value>
+  </data>
+  <data name="lbCreated.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
   <data name="gb_Rules.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="cb_PinApp.AutoSize" type="System.Boolean, mscorlib">
+  <data name="tb_Name.Location" type="System.Drawing.Point, System.Drawing">
+    <value>50, 21</value>
+  </data>
+  <data name="cbb_ProcessName.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="btn_RuleSave.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 24</value>
+  </data>
+  <data name="tb_Title.Size" type="System.Drawing.Size, System.Drawing">
+    <value>509, 23</value>
+  </data>
+  <data name="&gt;&gt;cb_ProcessName.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="cbb_WinInScreen.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="cb_WinInScreen.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 160</value>
+  </data>
+  <data name="gb_Rules.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 101</value>
+  </data>
+  <data name="&gt;&gt;cbb_Title.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cb_MoveToDesktop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 24</value>
+  </data>
+  <data name="tb_ProcessName.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="cbb_WndClass.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;gb_Basic.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="cb_ProcessName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 51</value>
+  </data>
+  <data name="&gt;&gt;cb_MoveToDesktop.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;cbb_Title.Name" xml:space="preserve">
+    <value>cbb_Title</value>
+  </data>
+  <data name="cb_WinInScreen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>132, 21</value>
+  </data>
+  <data name="&gt;&gt;cbb_ProcessName.Name" xml:space="preserve">
+    <value>cbb_ProcessName</value>
+  </data>
+  <data name="cbb_ProcessPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 25</value>
+  </data>
+  <data name="&gt;&gt;cb_WndClass.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="cb_WndClass.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 133</value>
+  </data>
+  <data name="&gt;&gt;tb_ProcessPath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cb_MoveToScreen.Parent" xml:space="preserve">
+    <value>gb_Actions</value>
+  </data>
+  <data name="&gt;&gt;lbUpdated.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;cb_CommandLine.Name" xml:space="preserve">
+    <value>cb_CommandLine</value>
+  </data>
+  <data name="cb_FollowWindow.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="&gt;&gt;lb_Name.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lb_Name.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="&gt;&gt;cb_CommandLine.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="statusBar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>784, 22</value>
+  </data>
+  <data name="cb_WndClass.Text" xml:space="preserve">
+    <value>Window Class</value>
+  </data>
+  <data name="&gt;&gt;tb_Name.Parent" xml:space="preserve">
+    <value>gb_Basic</value>
+  </data>
+  <data name="&gt;&gt;statusBar.Name" xml:space="preserve">
+    <value>statusBar</value>
+  </data>
+  <data name="&gt;&gt;cb_Title.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="&gt;&gt;gb_Actions.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="gb_Basic.Text" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="cb_WinInScreen.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="&gt;&gt;cb_Enabled.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cb_FollowWindow.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;tb_Title.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cb_MoveToScreen.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;cb_FollowWindow.Parent" xml:space="preserve">
+    <value>gb_Actions</value>
+  </data>
+  <data name="&gt;&gt;cb_CommandLine.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tb_CommandLine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;tb_WndClass.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="lbUpdated.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbb_Title.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="cb_Title.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="gb_Actions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>765, 173</value>
+  </data>
+  <data name="cbb_CommandLine.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>0, 17</value>
+  </data>
+  <data name="&gt;&gt;cb_HideFromView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbb_Title.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="&gt;&gt;tb_ProcessPath.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="cb_HideFromView.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;cb_Title.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="lb_Name.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="&gt;&gt;cb_ProcessName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gb_Actions.Name" xml:space="preserve">
+    <value>gb_Actions</value>
+  </data>
+  <data name="&gt;&gt;cb_Title.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="&gt;&gt;gb_Info.Name" xml:space="preserve">
+    <value>gb_Info</value>
+  </data>
+  <data name="gb_Info.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="cb_CommandLine.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="&gt;&gt;cbb_WndClass.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="cb_MoveToScreen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>122, 21</value>
+  </data>
+  <data name="cb_PinApp.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 78</value>
+  </data>
+  <data name="cb_ProcessPath.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 79</value>
+  </data>
+  <data name="cb_Enabled.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;tb_Name.Name" xml:space="preserve">
+    <value>tb_Name</value>
+  </data>
+  <data name="cb_Title.Text" xml:space="preserve">
+    <value>Window Title</value>
+  </data>
+  <data name="&gt;&gt;cb_MoveToScreen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lb_Created.Text" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="cbb_ProcessName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cbb_Title.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;cbb_MoveToScreen.Name" xml:space="preserve">
+    <value>cbb_MoveToScreen</value>
+  </data>
+  <data name="lb_Created.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 23</value>
+  </data>
+  <data name="tb_ProcessName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_ProcessName.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;cb_Enabled.Parent" xml:space="preserve">
+    <value>gb_Basic</value>
+  </data>
+  <data name="cbb_ProcessPath.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="cb_PinWindow.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;gb_Actions.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tb_CommandLine.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;tb_WndClass.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="statusBar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 539</value>
+  </data>
+  <data name="cbb_MoveToDesktop.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;cbb_MoveToScreen.Parent" xml:space="preserve">
+    <value>gb_Actions</value>
+  </data>
+  <data name="cb_ProcessName.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cb_CommandLine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_ProcessName.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;cbb_CommandLine.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cb_Title.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="&gt;&gt;lbCreated.Parent" xml:space="preserve">
+    <value>gb_Info</value>
+  </data>
+  <data name="lbCreated.Size" type="System.Drawing.Size, System.Drawing">
+    <value>0, 17</value>
+  </data>
+  <data name="tb_Name.Size" type="System.Drawing.Size, System.Drawing">
+    <value>380, 23</value>
+  </data>
+  <data name="gb_Basic.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="cbb_MoveToScreen.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_FollowWindow.Text" xml:space="preserve">
+    <value>Follow Window</value>
+  </data>
+  <data name="cbb_WinInScreen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>613, 25</value>
+  </data>
+  <data name="btn_RuleSave.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="cb_ProcessPath.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="tb_ProcessPath.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="tb_Title.Location" type="System.Drawing.Point, System.Drawing">
+    <value>252, 23</value>
+  </data>
+  <data name="cb_MoveToDesktop.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;tb_WndClass.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="cb_FollowWindow.Location" type="System.Drawing.Point, System.Drawing">
+    <value>646, 25</value>
+  </data>
+  <data name="cb_FollowWindow.Size" type="System.Drawing.Size, System.Drawing">
+    <value>115, 21</value>
+  </data>
+  <data name="&gt;&gt;cb_FollowWindow.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cb_Title.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 24</value>
+  </data>
+  <data name="cb_FollowWindow.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_ProcessPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>101, 21</value>
+  </data>
+  <data name="&gt;&gt;lb_Created.Parent" xml:space="preserve">
+    <value>gb_Info</value>
+  </data>
+  <data name="&gt;&gt;cbb_MoveToDesktop.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="cb_PinWindow.Text" xml:space="preserve">
+    <value>Pin Window</value>
+  </data>
+  <data name="cb_WndClass.Size" type="System.Drawing.Size, System.Drawing">
+    <value>108, 21</value>
+  </data>
+  <data name="gb_Actions.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cb_WndClass.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="tb_ProcessName.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;tb_Name.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cb_PinWindow.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;gb_Rules.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="cbb_ProcessName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>148, 50</value>
+  </data>
+  <data name="lb_Name.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lb_Updated.Parent" xml:space="preserve">
+    <value>gb_Info</value>
+  </data>
+  <data name="cbb_ProcessPath.Location" type="System.Drawing.Point, System.Drawing">
+    <value>148, 77</value>
+  </data>
+  <data name="&gt;&gt;cbb_ProcessName.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;gb_Info.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cb_CommandLine.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 21</value>
+  </data>
+  <data name="toolStripStatusLabel1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
+  </data>
+  <data name="cb_MoveToDesktop.Text" xml:space="preserve">
+    <value>Move To Desktop</value>
+  </data>
+  <data name="btn_RuleSave.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="cb_WinInScreen.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="tb_ProcessPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>509, 23</value>
+  </data>
+  <data name="cb_MoveToDesktop.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;gb_Basic.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gb_Info.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="gb_Basic.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 8</value>
+  </data>
+  <data name="&gt;&gt;tb_CommandLine.Parent" xml:space="preserve">
+    <value>gb_Rules</value>
+  </data>
+  <data name="tb_ProcessName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>509, 23</value>
+  </data>
+  <data name="lb_Updated.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="&gt;&gt;cbb_CommandLine.Name" xml:space="preserve">
+    <value>cbb_CommandLine</value>
+  </data>
+  <data name="&gt;&gt;cbb_MoveToDesktop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbb_ProcessPath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cb_Enabled.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 52</value>
+  </data>
+  <data name="gb_Rules.Size" type="System.Drawing.Size, System.Drawing">
+    <value>765, 200</value>
+  </data>
+  <data name="&gt;&gt;lbUpdated.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cbb_WinInScreen.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="gb_Info.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="cb_FollowWindow.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbCreated.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbUpdated.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cb_PinWindow.Size" type="System.Drawing.Size, System.Drawing">
+    <value>95, 21</value>
+  </data>
+  <data name="&gt;&gt;btn_RuleSave.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tb_WndClass.Location" type="System.Drawing.Point, System.Drawing">
+    <value>252, 132</value>
+  </data>
+  <data name="&gt;&gt;cb_CommandLine.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cb_Enabled.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tb_ProcessName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cbb_MoveToScreen.Location" type="System.Drawing.Point, System.Drawing">
+    <value>148, 130</value>
+  </data>
+  <data name="cb_Enabled.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lb_Updated.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
   </data>
   <data name="cb_CommandLine.Text" xml:space="preserve">
@@ -87,1154 +1150,95 @@
   <data name="cb_Enabled.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 21</value>
   </data>
-  <data name="&gt;&gt;cb_Enabled.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;cb_WndClass.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;tb_CommandLine.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;cb_HideFromView.Parent" xml:space="preserve">
-    <value>gb_Actions</value>
-  </data>
-  <data name="cbb_WndClass.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;lb_Name.Name" xml:space="preserve">
-    <value>lb_Name</value>
-  </data>
-  <data name="&gt;&gt;gb_Info.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;cbb_Title.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;cb_FollowWindow.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="lb_Created.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 23</value>
-  </data>
-  <data name="&gt;&gt;cbb_MoveToScreen.Parent" xml:space="preserve">
-    <value>gb_Actions</value>
-  </data>
-  <data name="&gt;&gt;cb_ProcessName.Name" xml:space="preserve">
-    <value>cb_ProcessName</value>
-  </data>
-  <data name="tb_ProcessName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;cb_MoveToScreen.Name" xml:space="preserve">
-    <value>cb_MoveToScreen</value>
-  </data>
-  <data name="tb_WndClass.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="cb_ProcessPath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>101, 21</value>
-  </data>
-  <data name="tb_CommandLine.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="cb_Enabled.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 52</value>
-  </data>
-  <data name="tb_ProcessPath.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="tb_ProcessName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>509, 23</value>
-  </data>
-  <data name="lbCreated.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 23</value>
-  </data>
-  <data name="&gt;&gt;cb_WinInScreen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbb_MoveToScreen.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cb_HideFromView.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cbb_ProcessPath.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="cb_ProcessName.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="cb_MoveToDesktop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>132, 21</value>
-  </data>
-  <data name="cb_PinApp.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="tb_Name.Size" type="System.Drawing.Size, System.Drawing">
-    <value>380, 23</value>
-  </data>
-  <data name="cb_ProcessPath.Text" xml:space="preserve">
-    <value>Process Path</value>
-  </data>
-  <data name="cb_Title.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 24</value>
-  </data>
-  <data name="&gt;&gt;lbUpdated.Name" xml:space="preserve">
-    <value>lbUpdated</value>
-  </data>
-  <data name="cbb_ProcessName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 50</value>
-  </data>
-  <data name="lb_Updated.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;cbb_ProcessPath.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;cb_ProcessPath.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel1.Name" xml:space="preserve">
-    <value>toolStripStatusLabel1</value>
-  </data>
-  <data name="cb_ProcessName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>111, 21</value>
-  </data>
-  <data name="&gt;&gt;gb_Actions.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="cb_MoveToDesktop.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="cb_FollowWindow.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 21</value>
-  </data>
-  <data name="&gt;&gt;cbb_WinInScreen.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;cbb_WndClass.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lbCreated.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="cb_ProcessName.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="cb_WndClass.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="cb_CommandLine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 21</value>
-  </data>
-  <data name="lbCreated.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
-  </data>
-  <data name="cb_MoveToDesktop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 24</value>
-  </data>
-  <data name="cb_FollowWindow.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="tb_WndClass.Size" type="System.Drawing.Size, System.Drawing">
-    <value>509, 23</value>
-  </data>
-  <data name="gb_Basic.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;cb_HideFromView.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;statusBar.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;statusBar.Name" xml:space="preserve">
-    <value>statusBar</value>
-  </data>
-  <data name="gb_Actions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>765, 173</value>
-  </data>
-  <data name="&gt;&gt;cb_PinWindow.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tb_Name.Parent" xml:space="preserve">
-    <value>gb_Basic</value>
-  </data>
-  <data name="&gt;&gt;cbb_MoveToScreen.Name" xml:space="preserve">
-    <value>cbb_MoveToScreen</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>784, 561</value>
-  </data>
-  <data name="lbUpdated.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="cb_WinInScreen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>132, 21</value>
-  </data>
-  <data name="statusBar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 539</value>
-  </data>
-  <data name="&gt;&gt;cb_HideFromView.Name" xml:space="preserve">
-    <value>cb_HideFromView</value>
-  </data>
-  <data name="&gt;&gt;lb_Updated.Parent" xml:space="preserve">
-    <value>gb_Info</value>
-  </data>
-  <data name="cbb_Title.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 25</value>
-  </data>
-  <data name="lb_Name.Size" type="System.Drawing.Size, System.Drawing">
-    <value>43, 17</value>
-  </data>
-  <data name="cb_PinWindow.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="&gt;&gt;tb_Name.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;cb_WndClass.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="cb_FollowWindow.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="tb_ProcessName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>252, 50</value>
-  </data>
-  <data name="cbb_WinInScreen.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
-  </data>
-  <data name="&gt;&gt;gb_Info.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cb_CommandLine.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;cb_Title.ZOrder" xml:space="preserve">
-    <value>16</value>
-  </data>
-  <data name="tb_Name.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="cb_ProcessName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 51</value>
-  </data>
-  <data name="&gt;&gt;tb_WndClass.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="cb_MoveToDesktop.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tb_Title.ZOrder" xml:space="preserve">
-    <value>14</value>
-  </data>
-  <data name="&gt;&gt;cbb_ProcessName.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="gb_Rules.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;gb_Rules.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;cbb_ProcessName.Name" xml:space="preserve">
-    <value>cbb_ProcessName</value>
-  </data>
-  <data name="cb_WndClass.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 133</value>
-  </data>
-  <data name="&gt;&gt;lb_Name.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbb_CommandLine.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;cb_Enabled.Name" xml:space="preserve">
-    <value>cb_Enabled</value>
-  </data>
-  <data name="gb_Actions.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;cb_WinInScreen.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="cbb_ProcessName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;cb_PinApp.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;lbUpdated.Parent" xml:space="preserve">
-    <value>gb_Info</value>
-  </data>
-  <data name="&gt;&gt;cbb_ProcessPath.Name" xml:space="preserve">
-    <value>cbb_ProcessPath</value>
-  </data>
-  <data name="cb_MoveToScreen.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 132</value>
-  </data>
-  <data name="toolStripStatusLabel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
-  </data>
-  <data name="cb_PinApp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 78</value>
-  </data>
-  <data name="cb_FollowWindow.Text" xml:space="preserve">
-    <value>Follow Window</value>
-  </data>
-  <data name="&gt;&gt;gb_Actions.Name" xml:space="preserve">
-    <value>gb_Actions</value>
-  </data>
-  <data name="cbb_WndClass.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 131</value>
-  </data>
-  <data name="&gt;&gt;lb_Created.Name" xml:space="preserve">
-    <value>lb_Created</value>
-  </data>
-  <data name="&gt;&gt;tb_WndClass.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cb_PinWindow.Parent" xml:space="preserve">
-    <value>gb_Actions</value>
-  </data>
-  <data name="cb_Title.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="gb_Rules.Text" xml:space="preserve">
-    <value>Common Window Rule</value>
-  </data>
-  <data name="cb_MoveToScreen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>122, 21</value>
-  </data>
-  <data name="gb_Basic.Text" xml:space="preserve">
-    <value>Basic</value>
-  </data>
-  <data name="&gt;&gt;cb_Title.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lbCreated.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="&gt;&gt;cb_Enabled.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lb_Updated.Name" xml:space="preserve">
-    <value>lb_Updated</value>
-  </data>
-  <data name="cbb_WinInScreen.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="cbb_MoveToDesktop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 23</value>
-  </data>
-  <data name="cbb_WinInScreen.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;tb_WndClass.Name" xml:space="preserve">
-    <value>tb_WndClass</value>
-  </data>
-  <data name="&gt;&gt;tb_Title.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;btn_RuleSave.Name" xml:space="preserve">
-    <value>btn_RuleSave</value>
-  </data>
-  <data name="cb_ProcessPath.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="cb_WinInScreen.Text" xml:space="preserve">
-    <value>Window In Screen</value>
-  </data>
-  <data name="tb_ProcessPath.Location" type="System.Drawing.Point, System.Drawing">
-    <value>252, 78</value>
-  </data>
-  <data name="gb_Info.Text" xml:space="preserve">
-    <value>Info</value>
-  </data>
-  <data name="&gt;&gt;tb_ProcessPath.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;cb_PinWindow.Name" xml:space="preserve">
-    <value>cb_PinWindow</value>
-  </data>
-  <data name="cbb_MoveToScreen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>613, 25</value>
-  </data>
-  <data name="tb_Name.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cb_WndClass.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;cbb_CommandLine.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="gb_Actions.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;cb_FollowWindow.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tb_Title.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lb_Created.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 17</value>
-  </data>
-  <data name="cb_PinApp.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;gb_Actions.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;cbb_CommandLine.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="lb_Updated.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 17</value>
-  </data>
-  <data name="&gt;&gt;cbb_Title.Name" xml:space="preserve">
-    <value>cbb_Title</value>
-  </data>
-  <data name="cb_ProcessPath.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cbb_CommandLine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="lb_Updated.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="lbCreated.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lb_Name.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 23</value>
-  </data>
-  <data name="&gt;&gt;lbCreated.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;lbCreated.Name" xml:space="preserve">
-    <value>lbCreated</value>
-  </data>
-  <data name="cb_CommandLine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;tb_WndClass.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="cb_CommandLine.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="tb_Name.Location" type="System.Drawing.Point, System.Drawing">
-    <value>50, 21</value>
-  </data>
-  <data name="&gt;&gt;cb_PinApp.Parent" xml:space="preserve">
-    <value>gb_Actions</value>
-  </data>
-  <data name="cb_HideFromView.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="statusBar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>784, 22</value>
-  </data>
-  <data name="btn_RuleSave.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cbb_ProcessName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 25</value>
-  </data>
-  <data name="&gt;&gt;cb_PinWindow.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cb_WndClass.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cbb_ProcessPath.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 77</value>
-  </data>
-  <data name="&gt;&gt;cbb_CommandLine.Name" xml:space="preserve">
-    <value>cbb_CommandLine</value>
-  </data>
-  <data name="&gt;&gt;btn_RuleSave.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
   <data name="cb_PinApp.Text" xml:space="preserve">
     <value>Pin Application of Window</value>
-  </data>
-  <data name="lb_Name.Text" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="cb_WndClass.Text" xml:space="preserve">
-    <value>Window Class</value>
-  </data>
-  <data name="gb_Basic.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cb_PinWindow.Text" xml:space="preserve">
-    <value>Pin Window</value>
-  </data>
-  <data name="&gt;&gt;cbb_WinInScreen.Name" xml:space="preserve">
-    <value>cbb_WinInScreen</value>
-  </data>
-  <data name="gb_Info.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cbb_Title.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 23</value>
-  </data>
-  <data name="&gt;&gt;cb_MoveToScreen.Parent" xml:space="preserve">
-    <value>gb_Actions</value>
-  </data>
-  <data name="&gt;&gt;gb_Rules.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;cbb_ProcessPath.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cb_PinApp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 21</value>
-  </data>
-  <data name="&gt;&gt;gb_Rules.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="btn_RuleSave.Text" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="&gt;&gt;cb_PinApp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cb_Title.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tb_ProcessPath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>509, 23</value>
-  </data>
-  <data name="&gt;&gt;cb_Title.Name" xml:space="preserve">
-    <value>cb_Title</value>
-  </data>
-  <data name="&gt;&gt;statusBar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tb_CommandLine.Name" xml:space="preserve">
-    <value>tb_CommandLine</value>
-  </data>
-  <data name="lb_Created.Text" xml:space="preserve">
-    <value>Created</value>
-  </data>
-  <data name="lbUpdated.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
-  </data>
-  <data name="toolStripStatusLabel1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
-  </data>
-  <data name="&gt;&gt;cbb_MoveToDesktop.Name" xml:space="preserve">
-    <value>cbb_MoveToDesktop</value>
-  </data>
-  <data name="&gt;&gt;tb_CommandLine.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cb_CommandLine.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbb_MoveToDesktop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>493, 25</value>
-  </data>
-  <data name="tb_ProcessName.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="btn_RuleSave.Location" type="System.Drawing.Point, System.Drawing">
-    <value>665, 507</value>
-  </data>
-  <data name="cb_ProcessPath.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;cb_CommandLine.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;cb_Enabled.Parent" xml:space="preserve">
-    <value>gb_Basic</value>
-  </data>
-  <data name="tb_ProcessPath.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;gb_Info.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="cbb_ProcessName.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;cb_ProcessPath.Name" xml:space="preserve">
-    <value>cb_ProcessPath</value>
-  </data>
-  <data name="cb_WinInScreen.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 160</value>
-  </data>
-  <data name="cb_Enabled.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lb_Created.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;tb_Name.Name" xml:space="preserve">
-    <value>tb_Name</value>
-  </data>
-  <data name="&gt;&gt;tb_Name.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cb_HideFromView.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="tb_ProcessPath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;cb_PinApp.Name" xml:space="preserve">
-    <value>cb_PinApp</value>
-  </data>
-  <data name="lbUpdated.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 47</value>
-  </data>
-  <data name="tb_CommandLine.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="btn_RuleSave.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="cbb_MoveToDesktop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;gb_Basic.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="cb_ProcessPath.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 79</value>
-  </data>
-  <data name="&gt;&gt;cb_FollowWindow.Name" xml:space="preserve">
-    <value>cb_FollowWindow</value>
-  </data>
-  <data name="&gt;&gt;statusBar.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="cb_WinInScreen.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lb_Name.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lb_Updated.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="cb_HideFromView.Text" xml:space="preserve">
-    <value>Hide From View</value>
-  </data>
-  <data name="&gt;&gt;btn_RuleSave.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lb_Name.Parent" xml:space="preserve">
-    <value>gb_Basic</value>
-  </data>
-  <data name="gb_Actions.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="cbb_Title.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="lbCreated.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="lb_Updated.Text" xml:space="preserve">
     <value>Updated</value>
   </data>
-  <data name="statusBar.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="cb_PinApp.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="tb_ProcessPath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <data name="cb_WinInScreen.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tb_Title.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="lb_Created.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="cbb_MoveToDesktop.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;cbb_MoveToDesktop.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;cb_MoveToScreen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lb_Updated.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="&gt;&gt;cbb_ProcessName.ZOrder" xml:space="preserve">
-    <value>12</value>
-  </data>
-  <data name="gb_Rules.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cb_ProcessName.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cb_PinWindow.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;tb_ProcessPath.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="cbb_MoveToScreen.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="cb_PinWindow.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 51</value>
-  </data>
-  <data name="&gt;&gt;cbb_MoveToScreen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cb_Title.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="cbb_Title.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;tb_Title.Name" xml:space="preserve">
-    <value>tb_Title</value>
-  </data>
-  <data name="cbb_ProcessPath.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;cb_ProcessPath.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cb_CommandLine.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cb_MoveToScreen.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cb_MoveToScreen.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;lb_Name.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;lbCreated.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gb_Basic.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbb_WndClass.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 25</value>
-  </data>
-  <data name="lbUpdated.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="cbb_WndClass.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;gb_Info.Name" xml:space="preserve">
-    <value>gb_Info</value>
-  </data>
-  <data name="&gt;&gt;tb_CommandLine.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;cbb_WndClass.Name" xml:space="preserve">
-    <value>cbb_WndClass</value>
-  </data>
-  <data name="&gt;&gt;btn_RuleSave.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Rule Definition</value>
-  </data>
-  <data name="&gt;&gt;tb_ProcessPath.Name" xml:space="preserve">
-    <value>tb_ProcessPath</value>
-  </data>
-  <data name="tb_WndClass.Location" type="System.Drawing.Point, System.Drawing">
-    <value>252, 132</value>
-  </data>
-  <data name="tb_Title.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="cbb_ProcessName.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;lb_Created.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;gb_Basic.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="gb_Basic.Size" type="System.Drawing.Size, System.Drawing">
-    <value>442, 89</value>
-  </data>
-  <data name="&gt;&gt;cb_WndClass.Name" xml:space="preserve">
-    <value>cb_WndClass</value>
-  </data>
-  <data name="cbb_WinInScreen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>613, 25</value>
-  </data>
-  <data name="&gt;&gt;lbUpdated.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;cb_WinInScreen.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="tb_ProcessName.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="gb_Actions.Text" xml:space="preserve">
-    <value>Window Actions</value>
-  </data>
-  <data name="&gt;&gt;cb_MoveToDesktop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gb_Info.Location" type="System.Drawing.Point, System.Drawing">
-    <value>454, 11</value>
-  </data>
-  <data name="cbb_WndClass.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>RuleForm</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel2.Name" xml:space="preserve">
-    <value>toolStripStatusLabel2</value>
-  </data>
-  <data name="&gt;&gt;gb_Rules.Name" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="cb_Enabled.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;cbb_MoveToDesktop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gb_Rules.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 101</value>
-  </data>
-  <data name="gb_Info.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="lb_Created.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="cb_Enabled.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cb_Title.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 21</value>
-  </data>
-  <data name="&gt;&gt;cb_HideFromView.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cb_WndClass.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 21</value>
-  </data>
-  <data name="tb_CommandLine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cb_CommandLine.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
-  </data>
-  <data name="cb_MoveToScreen.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="tb_Title.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cbb_ProcessPath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 25</value>
-  </data>
-  <data name="cb_MoveToDesktop.Text" xml:space="preserve">
-    <value>Move To Desktop</value>
-  </data>
-  <data name="&gt;&gt;tb_ProcessName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lb_Updated.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 47</value>
-  </data>
-  <data name="&gt;&gt;cb_ProcessName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cb_FollowWindow.Parent" xml:space="preserve">
-    <value>gb_Actions</value>
-  </data>
-  <data name="cbb_MoveToScreen.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 130</value>
-  </data>
-  <data name="lbUpdated.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="statusBar.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 0, 9, 0</value>
-  </data>
-  <data name="tb_Title.Location" type="System.Drawing.Point, System.Drawing">
-    <value>252, 23</value>
-  </data>
-  <data name="cbb_CommandLine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 25</value>
-  </data>
-  <data name="tb_CommandLine.Location" type="System.Drawing.Point, System.Drawing">
-    <value>252, 105</value>
-  </data>
-  <data name="cb_Enabled.Text" xml:space="preserve">
-    <value>Enabled</value>
-  </data>
-  <data name="&gt;&gt;cb_MoveToScreen.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tb_CommandLine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>509, 23</value>
-  </data>
-  <data name="statusBar.Text" xml:space="preserve">
-    <value>statusStrip1</value>
-  </data>
-  <data name="cb_PinWindow.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 21</value>
-  </data>
-  <data name="&gt;&gt;lbUpdated.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="btn_RuleSave.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 24</value>
-  </data>
-  <data name="&gt;&gt;cbb_ProcessName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cb_WinInScreen.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="&gt;&gt;cbb_MoveToDesktop.Parent" xml:space="preserve">
-    <value>gb_Actions</value>
-  </data>
-  <data name="gb_Basic.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 8</value>
-  </data>
-  <data name="cbb_ProcessPath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;gb_Basic.Name" xml:space="preserve">
-    <value>gb_Basic</value>
-  </data>
-  <data name="cbb_Title.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;cbb_WndClass.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="cbb_MoveToScreen.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="&gt;&gt;gb_Actions.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbb_CommandLine.TabIndex" type="System.Int32, mscorlib">
-    <value>18</value>
-  </data>
-  <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="toolStripStatusLabel2.Size" type="System.Drawing.Size, System.Drawing">
     <value>0, 17</value>
   </data>
-  <data name="lb_Name.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="cbb_CommandLine.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 104</value>
-  </data>
-  <data name="cbb_CommandLine.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="cb_CommandLine.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 106</value>
-  </data>
-  <data name="&gt;&gt;cbb_WinInScreen.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="cb_PinWindow.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;tb_ProcessName.Name" xml:space="preserve">
-    <value>tb_ProcessName</value>
-  </data>
-  <data name="cb_WinInScreen.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="&gt;&gt;tb_ProcessPath.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>7, 17</value>
-  </data>
-  <data name="cb_Title.Text" xml:space="preserve">
-    <value>Window Title</value>
-  </data>
-  <data name="cb_MoveToDesktop.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="gb_Basic.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="cb_HideFromView.Location" type="System.Drawing.Point, System.Drawing">
     <value>7, 105</value>
   </data>
-  <data name="cb_ProcessName.Text" xml:space="preserve">
-    <value>Process Name</value>
+  <data name="cbb_Title.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 25</value>
   </data>
-  <data name="cb_Title.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
-  </data>
-  <data name="gb_Basic.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;cb_ProcessPath.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="cb_FollowWindow.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;lb_Updated.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="gb_Info.Size" type="System.Drawing.Size, System.Drawing">
-    <value>319, 86</value>
-  </data>
-  <data name="cb_ProcessName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="gb_Info.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;cb_MoveToDesktop.Name" xml:space="preserve">
-    <value>cb_MoveToDesktop</value>
-  </data>
-  <data name="&gt;&gt;cbb_ProcessPath.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="&gt;&gt;cbb_MoveToScreen.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="gb_Rules.Size" type="System.Drawing.Size, System.Drawing">
-    <value>765, 200</value>
-  </data>
-  <data name="tb_WndClass.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="&gt;&gt;cbb_Title.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cb_WinInScreen.Name" xml:space="preserve">
-    <value>cb_WinInScreen</value>
+  <data name="tb_CommandLine.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
   </data>
   <data name="gb_Actions.Location" type="System.Drawing.Point, System.Drawing">
     <value>8, 306</value>
   </data>
-  <data name="&gt;&gt;cb_CommandLine.Name" xml:space="preserve">
-    <value>cb_CommandLine</value>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>RuleForm</value>
   </data>
-  <data name="cb_FollowWindow.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="cb_ProcessPath.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="cbb_WinInScreen.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 158</value>
+  <data name="statusBar.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
   </data>
-  <data name="&gt;&gt;lbCreated.Parent" xml:space="preserve">
-    <value>gb_Info</value>
+  <data name="cb_PinApp.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="cb_HideFromView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>119, 21</value>
+  <data name="gb_Rules.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
-  <data name="cb_Title.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="lb_Updated.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
-  <data name="&gt;&gt;lb_Updated.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cb_FollowWindow.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="cbb_MoveToDesktop.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;cb_ProcessName.ZOrder" xml:space="preserve">
-    <value>13</value>
-  </data>
-  <data name="cb_MoveToScreen.Text" xml:space="preserve">
-    <value>Move To Screen</value>
-  </data>
-  <data name="lbUpdated.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="tb_WndClass.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="&gt;&gt;tb_ProcessName.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;cb_MoveToDesktop.Parent" xml:space="preserve">
-    <value>gb_Actions</value>
-  </data>
-  <data name="&gt;&gt;tb_ProcessName.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <data name="cb_HideFromView.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="&gt;&gt;lb_Created.Parent" xml:space="preserve">
-    <value>gb_Info</value>
-  </data>
-  <data name="cb_WndClass.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <data name="&gt;&gt;cb_ProcessName.Parent" xml:space="preserve">
-    <value>gb_Rules</value>
-  </data>
-  <data name="&gt;&gt;cbb_Title.ZOrder" xml:space="preserve">
-    <value>15</value>
-  </data>
-  <data name="&gt;&gt;cbb_WndClass.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="cb_FollowWindow.Location" type="System.Drawing.Point, System.Drawing">
-    <value>646, 25</value>
+  <data name="cb_HideFromView.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="cb_MoveToScreen.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <data name="&gt;&gt;lb_Created.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="cb_PinApp.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
-  <data name="&gt;&gt;cbb_WinInScreen.Type" xml:space="preserve">
+  <data name="lb_Name.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 23</value>
+  </data>
+  <data name="&gt;&gt;cbb_WndClass.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="cb_MoveToDesktop.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="&gt;&gt;tb_ProcessPath.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Rule Definition</value>
+  </data>
+  <data name="tb_Name.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="&gt;&gt;lbCreated.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;cbb_ProcessName.Type" xml:space="preserve">
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cb_PinWindow.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="cbb_ProcessName.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
-  <data name="cb_MoveToDesktop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cb_HideFromView.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <metadata name="statusBar.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, System.Private.CoreLib, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
+    <value>zh-Hans</value>
   </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
