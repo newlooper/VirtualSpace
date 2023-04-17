@@ -107,7 +107,7 @@ namespace VirtualSpace.Config
             filePath ??= ConfigFilePath;
             try
             {
-                var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, new JsonSerializerOptions {WriteIndented = true} );
+                var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, JsonWriteOptions );
                 await File.WriteAllBytesAsync( filePath, contents ).ConfigureAwait( false );
                 Logger.Info( $"Settings Saved [{reasonName}: {reason}]." );
 
@@ -133,7 +133,7 @@ namespace VirtualSpace.Config
 
             try
             {
-                var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, new JsonSerializerOptions {WriteIndented = true} );
+                var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, JsonWriteOptions );
                 await File.WriteAllBytesAsync( ConfigFilePath, contents ).ConfigureAwait( false );
                 Logger.Info( $"[Profile]Switch: {name}" );
             }
@@ -161,7 +161,7 @@ namespace VirtualSpace.Config
         {
             try
             {
-                var content = JsonSerializer.SerializeToUtf8Bytes( p, new JsonSerializerOptions {WriteIndented = true} );
+                var content = JsonSerializer.SerializeToUtf8Bytes( p, JsonWriteOptions );
                 await File.WriteAllBytesAsync( path, content );
 
                 Logger.Info( $"[Profile]{typeof( T ).Name}.{Configs.CurrentProfileName} Saved." );
@@ -260,5 +260,7 @@ namespace VirtualSpace.Config
             CheckFolders();
             return PluginsFolder;
         }
+
+        private static readonly JsonSerializerOptions JsonWriteOptions = new() {WriteIndented = true};
     }
 }

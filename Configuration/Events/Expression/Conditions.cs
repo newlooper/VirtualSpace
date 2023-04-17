@@ -190,44 +190,32 @@ namespace VirtualSpace.Config.Events.Expression
             _ = fs.Read( buffer, 0, (int)fs.Length );
             var utf8Reader = new Utf8JsonReader( buffer );
 
-            var readOptions = new JsonSerializerOptions();
-#if NETCOREAPP3_1 || NET5_0
-            readOptions.Converters.Add( new JsonConverterJsonDocument() );
-#endif
+            var readOptions = GetJsonDeserializerOptions();
             return JsonSerializer.Deserialize<List<RuleTemplate>>( ref utf8Reader, readOptions );
         }
 
         public static ExpressionTemplate ParseExpressionTemplate( JsonDocument doc )
         {
-            var readOptions = new JsonSerializerOptions();
-#if NETCOREAPP3_1 || NET5_0
-            readOptions.Converters.Add( new JsonConverterJsonDocument() );
-            var json = JsonSerializer.Serialize( doc.RootElement, GetJsonSerializerOptions() );
-            return JsonSerializer.Deserialize<ExpressionTemplate>( json, readOptions );
-#elif NET6_0
+            var readOptions = GetJsonDeserializerOptions();
             return JsonSerializer.Deserialize<ExpressionTemplate>( doc, readOptions );
-#endif
+        }
+
+        private static JsonSerializerOptions? _readOptions;
+        private static JsonSerializerOptions? _writeOptions;
+
+        private static JsonSerializerOptions GetJsonDeserializerOptions()
+        {
+            return _readOptions ??= new JsonSerializerOptions();
         }
 
         public static JsonSerializerOptions GetJsonSerializerOptions()
         {
-#if NETCOREAPP3_1 || NET5_0
-            var writeOptions = new JsonSerializerOptions
-            {
-                IgnoreNullValues = true,
-                WriteIndented = true,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            };
-            writeOptions.Converters.Add( new JsonConverterJsonDocument() );
-#elif NET6_0
-            var writeOptions = new JsonSerializerOptions
+            return _writeOptions ??= new JsonSerializerOptions
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 WriteIndented = true,
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
-#endif
-            return writeOptions;
         }
 
         public static async void SaveRules( List<RuleTemplate> ruleList, string? path = null )
@@ -259,19 +247,4 @@ namespace VirtualSpace.Config.Events.Expression
             Logger.Info( $"[RULE]Switch Rule Profile: {Manager.Configs.CurrentProfileName}" );
         }
     }
-
-#if NETCOREAPP3_1 || NET5_0
-    internal sealed class JsonConverterJsonDocument : JsonConverter<JsonDocument>
-    {
-        public override JsonDocument Read( ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options )
-        {
-            return JsonDocument.ParseValue( ref reader );
-        }
-
-        public override void Write( Utf8JsonWriter writer, JsonDocument value, JsonSerializerOptions options )
-        {
-            value.RootElement.WriteTo( writer );
-        }
-    }
-#endif
 }
