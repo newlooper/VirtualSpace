@@ -11,10 +11,6 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.listbox.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.button.xaml" />
-            </ResourceDictionary.MergedDictionaries>
             <converters:ThemeConverter x:Key="ThemeConverter" />
         </ResourceDictionary>
     </UserControl.Resources>

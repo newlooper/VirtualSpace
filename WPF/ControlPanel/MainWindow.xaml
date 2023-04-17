@@ -19,13 +19,6 @@
         Height="800" Width="1280" WindowStartupLocation="CenterScreen"
         Loaded="MainWindow_OnLoaded" Closing="MainWindow_OnClosing">
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ControlPanel;component/ControlPanel.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="71" />

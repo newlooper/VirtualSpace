@@ -10,9 +10,6 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.popupbox.xaml" />
-            </ResourceDictionary.MergedDictionaries>
             <Style TargetType="ScrollViewer">
                 <Setter Property="Margin" Value="5" />
             </Style>

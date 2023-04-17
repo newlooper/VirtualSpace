@@ -9,14 +9,6 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.button.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    
     <StackPanel>
         <DockPanel VerticalAlignment="Center">
             <wpf:PackIcon DockPanel.Dock="Left" Kind="{Binding Icon}" Width="30" Height="30" Margin="20,30,10,30"></wpf:PackIcon>

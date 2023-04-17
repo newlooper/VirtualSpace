@@ -12,13 +12,14 @@ namespace VirtualSpace.Factory
 {
     public static class AppControllerFactory
     {
-        public static IAppController Create( string name = "WinForm" )
+        public static IAppController Create( string name = "WinForm", App? app = null )
         {
             switch ( name )
             {
                 case "WinForm":
                     return new AppController();
                 case "WPF":
+                    app?.Resources.MergedDictionaries.Add( ControlPanel.ExportResourceDictionary.Instance );
                     return new ControlPanel.MainWindow();
                 default:
                     return null;

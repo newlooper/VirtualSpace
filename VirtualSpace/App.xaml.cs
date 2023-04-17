@@ -112,9 +112,9 @@ namespace VirtualSpace
             return createdNew;
         }
 
-        private static MainWindow CreateCanvas( StartupEventArgs args )
+        private MainWindow CreateCanvas( StartupEventArgs args )
         {
-            var canvas = VirtualSpace.MainWindow.Create( AppControllerFactory.Create( "WPF" ) );
+            var canvas = VirtualSpace.MainWindow.Create( AppControllerFactory.Create( "WPF", this ) );
             return canvas;
         }
 

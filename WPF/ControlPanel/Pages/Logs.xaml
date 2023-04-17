@@ -11,11 +11,6 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.button.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.card.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.togglebutton.xaml" />
-            </ResourceDictionary.MergedDictionaries>
             <ContextMenu x:Key="ctx">
                 <MenuItem Header="{lex:Loc logTab.Menu.Clear}" Click="Clear_Click" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}" />
             </ContextMenu>
