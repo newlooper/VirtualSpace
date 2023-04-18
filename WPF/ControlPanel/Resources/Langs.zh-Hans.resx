@@ -573,4 +573,7 @@
   <data name="Page.Control.MouseAction.ExpanderHeader" xml:space="preserve">
     <value>展开详情</value>
   </data>
+  <data name="Page.Rules.Rule.Tag" xml:space="preserve">
+    <value>标签(分组)</value>
+  </data>
 </root>

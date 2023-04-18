@@ -23,15 +23,19 @@ public partial class Rules
 {
     private ListSortDirection    _lastDirection = ListSortDirection.Ascending;
     private GridViewColumnHeader _lastHeaderClicked;
-    private bool                 _isLoaded;
+    private bool                 _needRefresh;
 
     private void RuleList_OnLoaded( object sender, RoutedEventArgs e )
     {
-        if ( _isLoaded ) return;
+        if ( !_needRefresh ) return;
         SortSelectedColumn( DefaultSortColumnHeader, ListSortDirection.Ascending, RuleList.ItemsSource );
-        var view             = (CollectionView)CollectionViewSource.GetDefaultView( RuleList.ItemsSource );
+        var view = (CollectionView)CollectionViewSource.GetDefaultView( RuleList.ItemsSource );
         view.Filter = NameFilter;
-        _isLoaded = true;
+
+        view.GroupDescriptions.Clear();
+        var groupDescription = new PropertyGroupDescription( "Tag" );
+        view.GroupDescriptions.Add( groupDescription );
+        _needRefresh = false;
     }
 
     private bool NameFilter( object item )

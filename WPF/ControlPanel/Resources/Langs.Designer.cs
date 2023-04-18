@@ -1100,6 +1100,15 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
+        ///   查找类似 Tag(Group) 的本地化字符串。
+        /// </summary>
+        internal static string Page_Rules_Rule_Tag {
+            get {
+                return ResourceManager.GetString("Page.Rules.Rule.Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Window Title 的本地化字符串。
         /// </summary>
         internal static string Page_Rules_Rule_Title {

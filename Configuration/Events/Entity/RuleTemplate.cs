@@ -20,6 +20,7 @@ namespace VirtualSpace.Config.Events.Entity
     {
         [DoNotNotify] public Guid                Id      { get; set; } = Guid.NewGuid();
         public               string?             Name    { get; set; }
+        public               string?             Tag     { get; set; }
         public               bool                Enabled { get; set; }
         [DoNotNotify] public Func<Window, bool>? Exp;
         [DoNotNotify] public JsonDocument?       Expression { get; set; }

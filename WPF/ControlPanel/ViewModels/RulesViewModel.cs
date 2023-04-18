@@ -21,29 +21,26 @@ namespace ControlPanel.ViewModels;
 
 public class RulesViewModel : ViewModelBase
 {
-    private static  RulesViewModel?                        _instance;
-    public readonly FullObservableCollection<RuleTemplate> Rules;
+    private static RulesViewModel?                        _instance;
+    public         FullObservableCollection<RuleTemplate> Rules;
 
-    public RulesViewModel()
+    private RulesViewModel()
     {
         _instance = this;
         Rules = new FullObservableCollection<RuleTemplate>( Conditions.FetchRules() );
-
-        Rules.CollectionChanged -= RulesOnListChanged;
         Rules.CollectionChanged += RulesOnListChanged;
     }
+
+    public static RulesViewModel Instance => _instance ??= new RulesViewModel();
 
     public static void ReloadRules()
     {
         if ( _instance == null ) return;
 
         _instance.Rules.CollectionChanged -= _instance.RulesOnListChanged;
-
-        _instance.Rules.Clear();
-        foreach ( var rule in Conditions.FetchRules() )
-            _instance.Rules.Add( rule );
-
+        _instance.Rules = new FullObservableCollection<RuleTemplate>( Conditions.FetchRules() );
         _instance.Rules.CollectionChanged += _instance.RulesOnListChanged;
+        Pages.Rules.ReloadRules();
     }
 
     private void RulesOnListChanged( object? sender, NotifyCollectionChangedEventArgs e )

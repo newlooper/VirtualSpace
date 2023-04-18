@@ -63,34 +63,48 @@
 
         <materialDesign:Card materialDesign:ElevationAssist.Elevation="Dp2" Grid.Row="1" Margin="10,10,10,0"
                              Visibility="{Binding Path=IsBottomDrawerOpen, ElementName=DrawerHost, Converter={StaticResource DrawerStateMutexConverter}}">
-            <ListView x:Name="RuleList" SelectionMode="Single"
-                      SelectionChanged="RuleList_OnSelectionChanged"
-                      PreviewKeyDown="RuleList_OnPreviewKeyDown"
-                      ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      GridViewColumnHeader.Click="RuleList_OnColumnHeaderClick" Loaded="RuleList_OnLoaded">
-
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn>
-                            <GridViewColumn.CellTemplate>
+                <ListView x:Name="RuleList" SelectionMode="Single"
+                          SelectionChanged="RuleList_OnSelectionChanged"
+                          PreviewKeyDown="RuleList_OnPreviewKeyDown"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"                     
+                          GridViewColumnHeader.Click="RuleList_OnColumnHeaderClick" Loaded="RuleList_OnLoaded">
+                    <ListView.Resources>
+                        <Style x:Key="{x:Static GridView.GridViewScrollViewerStyleKey}" 
+                               BasedOn="{StaticResource {x:Static GridView.GridViewScrollViewerStyleKey}}" 
+                               TargetType="ScrollViewer">
+                            <Setter Property="CanContentScroll" Value="False"/>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock FontWeight="Bold" FontSize="14" Margin="10,0" Text="{Binding Name}" />
                                 </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="{Binding Path=ActualWidth,ElementName=RuleList,Converter={StaticResource WidthHeightConverter},ConverterParameter=400}"
-                                        DisplayMemberBinding="{Binding Name}"
-                                        Header="{lex:Loc Generic.Name}">
-                        </GridViewColumn>
-                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding Created,StringFormat={}{0:yyyy-MM-dd HH:mm}}">
-                            <GridViewColumnHeader x:Name="DefaultSortColumnHeader" Content="{lex:Loc Page.Rules.Created}"></GridViewColumnHeader>
-                        </GridViewColumn>
-                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding Updated,StringFormat={}{0:yyyy-MM-dd HH:mm}}"
-                                        Header="{lex:Loc Page.Rules.Updated}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="{Binding Path=ActualWidth,ElementName=RuleList,Converter={StaticResource WidthHeightConverter},ConverterParameter=400}"
+                                            DisplayMemberBinding="{Binding Name}"
+                                            Header="{lex:Loc Generic.Name}">
+                            </GridViewColumn>
+                            <GridViewColumn Width="150" DisplayMemberBinding="{Binding Created,StringFormat={}{0:yyyy-MM-dd HH:mm}}">
+                                <GridViewColumnHeader x:Name="DefaultSortColumnHeader" Content="{lex:Loc Page.Rules.Created}"></GridViewColumnHeader>
+                            </GridViewColumn>
+                            <GridViewColumn Width="150" DisplayMemberBinding="{Binding Updated,StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                                            Header="{lex:Loc Page.Rules.Updated}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
         </materialDesign:Card>
 
         <materialDesign:DrawerHost Grid.Row="2" x:Name="DrawerHost"
@@ -147,20 +161,30 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBox x:Name="NameTextBox"
-                                             MinWidth="500" FontSize="14" Margin="0"
-                                             materialDesign:HintAssist.FloatingScale="0.80"
-                                             materialDesign:HintAssist.Hint="{lex:Loc Generic.Name}"
-                                             materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                                        <TextBox.Text>
-                                            <Binding Path="Name" UpdateSourceTrigger="Explicit">
-                                                <Binding.ValidationRules>
-                                                    <validation:NotEmptyValidationRule ValidatesOnTargetUpdated="False" />
-                                                </Binding.ValidationRules>
-                                            </Binding>
-                                        </TextBox.Text>
-                                    </TextBox>
+                                    <DockPanel>
+                                        <TextBox DockPanel.Dock="Right"
+                                                 MinWidth="150" FontSize="14" Margin="20 0"
+                                                 materialDesign:HintAssist.FloatingScale="0.80"
+                                                 materialDesign:HintAssist.Hint="{lex:Loc Page.Rules.Rule.Tag}"
+                                                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                 Text="{Binding Tag}">
+                                        </TextBox>
+                                        <TextBox x:Name="NameTextBox"
+                                                 MinWidth="500" FontSize="14"
+                                                 materialDesign:HintAssist.FloatingScale="0.80"
+                                                 materialDesign:HintAssist.Hint="{lex:Loc Generic.Name}"
+                                                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                            <TextBox.Text>
+                                                <Binding Path="Name" UpdateSourceTrigger="Explicit">
+                                                    <Binding.ValidationRules>
+                                                        <validation:NotEmptyValidationRule ValidatesOnTargetUpdated="False" />
+                                                    </Binding.ValidationRules>
+                                                </Binding>
+                                            </TextBox.Text>
+                                        </TextBox>
+                                    </DockPanel>
 
                                     <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
                                         <Label Content="{lex:Loc Page.Rules.Rule.Enabled}" VerticalAlignment="Center" />

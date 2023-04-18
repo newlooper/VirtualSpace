@@ -574,4 +574,7 @@ some settings may need restart program to take effect.</value>
   <data name="Page.Control.MouseAction.ExpanderHeader" xml:space="preserve">
     <value>Expand for details.</value>
   </data>
+  <data name="Page.Rules.Rule.Tag" xml:space="preserve">
+    <value>Tag(Group)</value>
+  </data>
 </root>
