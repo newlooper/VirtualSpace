@@ -8,18 +8,21 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
+using System.Collections.ObjectModel;
+using System.Windows;
+
 namespace VirtualSpace.Factory
 {
     public static class AppControllerFactory
     {
-        public static IAppController Create( string name = "WinForm", App? app = null )
+        public static IAppController Create( string name = "WinForm", Collection<ResourceDictionary>? mergedDictionaries = null )
         {
             switch ( name )
             {
                 case "WinForm":
                     return new AppController();
                 case "WPF":
-                    app?.Resources.MergedDictionaries.Add( ControlPanel.ExportResourceDictionary.Instance );
+                    mergedDictionaries?.Add( ControlPanel.ExportResourceDictionary.Instance );
                     return new ControlPanel.MainWindow();
                 default:
                     return null;

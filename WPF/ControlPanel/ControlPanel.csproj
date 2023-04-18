@@ -19,7 +19,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
-        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All"/>
+        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
         <PackageReference Include="WPFLocalizeExtension" Version="3.10.0" />
     </ItemGroup>
 
@@ -30,7 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Resource Include="Resources\AboutLogo_2.png" />
+        <Resource Include="Resources\Images\AboutLogo_2.png" />
         <Resource Include="Resources\Images\m0.png" />
         <Resource Include="Resources\Images\m1.png" />
         <Resource Include="Resources\Images\m2.png" />
@@ -60,6 +60,7 @@
     </ItemGroup>
 
     <PropertyGroup>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <SatelliteResourceLanguages>en-US,zh-Hans</SatelliteResourceLanguages>
     </PropertyGroup>
 
