@@ -18,13 +18,15 @@ namespace VirtualSpace.Config.Events.Entity
     [AddINotifyPropertyChangedInterface]
     public partial class RuleTemplate
     {
-        [DoNotNotify] public Guid                Id      { get; set; } = Guid.NewGuid();
-        public               string?             Name    { get; set; }
-        public               string?             Tag     { get; set; }
-        public               bool                Enabled { get; set; }
+        [DoNotNotify] public Guid                Id               { get; set; } = Guid.NewGuid();
+        [DoNotNotify] public string?             Name             { get; set; }
+        [DoNotNotify] public string?             Tag              { get; set; }
+        [DoNotNotify] public int                 Weight           { get; set; } = 50;
+        public               bool                Enabled          { get; set; }
+        public               bool                ContinueAfterHit { get; set; }
         [DoNotNotify] public Func<Window, bool>? Exp;
         [DoNotNotify] public JsonDocument?       Expression { get; set; }
-        public               Behavior?           Action     { get; set; }
+        [DoNotNotify] public Behavior?           Action     { get; set; }
         [DoNotNotify] public DateTime?           Created    { get; set; }
         public               DateTime?           Updated    { get; set; }
     }

@@ -1181,6 +1181,15 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
+        ///   查找类似 Weight 的本地化字符串。
+        /// </summary>
+        internal static string Page_Rules_Weight {
+            get {
+                return ResourceManager.GetString("Page.Rules.Weight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Language 的本地化字符串。
         /// </summary>
         internal static string Page_Settings_Language {

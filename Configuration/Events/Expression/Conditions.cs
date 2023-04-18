@@ -75,6 +75,8 @@ namespace VirtualSpace.Config.Events.Expression
             {
                 rule.Exp = Jp.ExpressionFromJsonDoc<Window>( rule.Expression );
             }
+
+            _rules.Sort( ( x, y ) => -x.Weight.CompareTo( y.Weight ) );
         }
 
         public static List<RuleTemplate> FetchRules()
@@ -151,11 +153,10 @@ namespace VirtualSpace.Config.Events.Expression
 
                         ////////////////////////////////////////////////////////////////
                         // 某个窗口可能与多条规则匹配，继续循环就表示所有相应的动作都会按顺序执行
-                        // 但是，如果在此处退出循环，则表示仅执行第一条匹配规则的动作
-                        // if ( OnlyRunActionOfFirstMatchedRule ) // <- 日后可能会引入选项来进行配置
-                        // {
-                        //     break;
-                        // }
+                        // 最终的方案：给规则添加一个属性，用于指定是否在匹配到规则后继续检查其他规则
+                        // 默认为 false，即匹配到规则后立即退出循环
+                        if ( !r.ContinueAfterHit )
+                            break;
                     }
                 }
 

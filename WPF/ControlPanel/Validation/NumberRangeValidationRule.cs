@@ -10,17 +10,27 @@
 
 using System.Globalization;
 using System.Windows.Controls;
-using WPFLocalizeExtension.Engine;
 
 namespace ControlPanel.Validation;
 
-public class NotEmptyValidationRule : ValidationRule
+public class NumberRangeValidationRule : ValidationRule
 {
     public override ValidationResult Validate( object? value, CultureInfo cultureInfo )
     {
-        return string.IsNullOrWhiteSpace( ( value ?? "" ).ToString() )
-            ? new ValidationResult( false,
-                LocalizeDictionary.Instance.GetLocalizedObject( "Validation.Error.Required", null, LocalizeDictionary.Instance.Culture ).ToString() )
-            : ValidationResult.ValidResult;
+        try
+        {
+            var v = int.Parse( value.ToString() );
+            if ( v < Min || v > Max )
+                return new ValidationResult( false, $"{Min} - {Max}" );
+        }
+        catch
+        {
+            return new ValidationResult( false, $"{Min} - {Max}" );
+        }
+
+        return ValidationResult.ValidResult;
     }
+
+    public int Min { get; set; }
+    public int Max { get; set; }
 }

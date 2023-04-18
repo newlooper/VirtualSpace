@@ -28,7 +28,7 @@ public partial class Rules
     private void RuleList_OnLoaded( object sender, RoutedEventArgs e )
     {
         if ( !_needRefresh ) return;
-        SortSelectedColumn( DefaultSortColumnHeader, ListSortDirection.Ascending, RuleList.ItemsSource );
+        SortSelectedColumn( DefaultSortColumnHeader, ListSortDirection.Descending, RuleList.ItemsSource );
         var view = (CollectionView)CollectionViewSource.GetDefaultView( RuleList.ItemsSource );
         view.Filter = NameFilter;
 
@@ -42,6 +42,17 @@ public partial class Rules
     {
         if ( string.IsNullOrEmpty( tbNameFilter.Text ) )
             return true;
+
+        var keyword = tbNameFilter.Text.Trim();
+        if ( keyword is @"\" or @"\\" or @"\\G" )
+            return true;
+
+        if ( keyword.StartsWith( @"\\G" ) && keyword.Length > 3 )
+        {
+            keyword = keyword[3..];
+            return ( item as RuleTemplate ).Tag?.IndexOf( keyword, StringComparison.OrdinalIgnoreCase ) >= 0;
+        }
+
         return ( item as RuleTemplate ).Name.IndexOf( tbNameFilter.Text, StringComparison.OrdinalIgnoreCase ) >= 0;
     }
 

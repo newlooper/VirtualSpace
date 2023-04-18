@@ -577,4 +577,7 @@ some settings may need restart program to take effect.</value>
   <data name="Page.Rules.Rule.Tag" xml:space="preserve">
     <value>Tag(Group)</value>
   </data>
+  <data name="Page.Rules.Weight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
 </root>
