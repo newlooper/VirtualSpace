@@ -6,7 +6,7 @@
         xmlns:cvt="clr-namespace:VirtualSpace.Helpers"
         mc:Ignorable="d"
         xmlns:localConfig="clr-namespace:Cube3D.Config"
-        Title="Cube3D Settings" Height="450" Width="800" Topmost="True" Loaded="Window_Loaded">
+        Title="Cube3D Settings" Height="450" Width="800" Topmost="True" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <cvt:TransitionTypeConverter x:Key="Ttc" />
     </Window.Resources>
