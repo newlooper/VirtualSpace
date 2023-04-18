@@ -42,7 +42,7 @@ namespace VirtualSpace.VirtualDesktop
                 ConfigManager.Save( reason: "reset", reasonName: "ConfigManager.CurrentProfile.UI.DesktopArrangement" );
             }
 
-            MainWindow.AcForm.RenderDesktopArrangementButtons( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
+            // MainWindow.AcForm.RenderDesktopArrangementButtons( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
 
             var da = ConfigManager.CurrentProfile.UI.DesktopArrangement;
 

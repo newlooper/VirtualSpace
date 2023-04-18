@@ -15,7 +15,7 @@ namespace VirtualSpace.Factory
 {
     public static class AppControllerFactory
     {
-        public static IAppController Create( string name = "WinForm", Collection<ResourceDictionary>? mergedDictionaries = null )
+        public static IAppController Create( string name = "WPF", Collection<ResourceDictionary>? mergedDictionaries = null )
         {
             switch ( name )
             {

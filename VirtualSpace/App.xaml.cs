@@ -114,7 +114,7 @@ namespace VirtualSpace
 
         private MainWindow CreateCanvas( StartupEventArgs args )
         {
-            var canvas = VirtualSpace.MainWindow.Create( AppControllerFactory.Create( "WPF", this.Resources.MergedDictionaries ) );
+            var canvas = VirtualSpace.MainWindow.Create( AppControllerFactory.Create( mergedDictionaries: Resources.MergedDictionaries ) );
             return canvas;
         }
 

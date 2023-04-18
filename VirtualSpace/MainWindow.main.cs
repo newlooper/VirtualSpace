@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using VirtualSpace.Config;
+using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
 using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop;
@@ -30,7 +31,21 @@ namespace VirtualSpace
         private static          MainWindow     _instance;
         private static          long           _forceSwitchOnTimeout;
         private                 IAppController _acForm;
-        public static           IAppController AcForm => _instance._acForm;
+
+        public static IAppController AcForm
+        {
+            get
+            {
+                if ( _instance._acForm is null )
+                {
+                    _instance._acForm = AppControllerFactory.Create();
+                    _instance._acForm.SetMainWindowHandle( _instance.Handle );
+                }
+
+                return _instance._acForm;
+            }
+            private set => _instance._acForm = value;
+        }
 
         private MainWindow()
         {
@@ -110,7 +125,7 @@ namespace VirtualSpace
 
         private void Bootstrap()
         {
-            _acForm.SetMainWindowHandle( Handle );
+            AcForm.SetMainWindowHandle( Handle );
             RegisterHotKey( Handle );
             FixStyle();
             EnableBlur();

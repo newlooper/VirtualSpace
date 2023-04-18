@@ -226,15 +226,18 @@ namespace VirtualSpace
 
                             break;
                         case UserMessage.ShowAppController:
-                            _acForm.BringToTop();
+                            AcForm.BringToTop();
                             break;
                         case UserMessage.RestartAppController:
-                            _acForm.Quit();
-                            _acForm = AppControllerFactory.Create();
-                            _acForm.SetMainWindowHandle( Handle );
-                            _acForm.BringToTop();
+                            AcForm.Quit();
+                            AcForm = AppControllerFactory.Create();
+                            AcForm.SetMainWindowHandle( Handle );
+                            AcForm.BringToTop();
 
                             UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
+                            break;
+                        case UserMessage.AppControllerClosed:
+                            AcForm = null;
                             break;
                         case UserMessage.SwitchDesktop:
                             SwitchDesktopByDirection( lParam );
