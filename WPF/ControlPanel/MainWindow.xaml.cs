@@ -103,7 +103,7 @@ public partial class MainWindow : Window, IAppController
     {
         var psi = new ProcessStartInfo
         {
-            FileName = Process.GetCurrentProcess().MainModule.FileName,
+            FileName = Environment.ProcessPath,
             UseShellExecute = true
         };
 
