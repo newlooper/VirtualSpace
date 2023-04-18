@@ -62,7 +62,7 @@
                                     <DataTemplate>
                                         <materialDesign:PopupBox
                                             Margin="30,0,0,0"
-                                            StaysOpen="True"
+                                            StaysOpen="False"
                                             PlacementMode="BottomAndAlignRightEdges">
                                             <ListBox SelectionChanged="Selector_OnSelectionChanged" MinWidth="100">
                                                 <ListBoxItem

@@ -51,6 +51,13 @@ public partial class MainWindow : Window, IAppController
     public void BringToTop()
     {
         Show();
+        if ( WindowState == WindowState.Minimized )
+        {
+            WindowState = WindowState.Normal;
+        }
+
+        Topmost = false;
+        Topmost = true;
     }
 
     public void SetMainWindowHandle( IntPtr handle )
