@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="ControlPanel.Pages.Help"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="760" d:DesignWidth="1024">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Image Source="../Resources/Images/AboutLogo_2.png" Width="128" Height="128"></Image>
+            <TextBlock FontSize="100" Margin="20,0" x:Name="lb_AppName"></TextBlock>
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="0 10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock>Version</TextBlock><TextBlock Grid.Row="0" Grid.Column="1" x:Name="lb_Version"></TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0">Copyright</TextBlock><TextBlock Grid.Row="1" Grid.Column="1" x:Name="lb_Copyright"></TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="0"></TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="1">
+                <Hyperlink Click="Hyperlink_OnClick" x:Name="llb_CompanyUri">
+                    <Run x:Name="llb_CompanyText"></Run>
+                </Hyperlink>
+            </TextBlock>
+        </Grid>
+        <Border Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left"
+                BorderThickness="1" Margin="0 10" BorderBrush="DarkGray">
+            <ListBox x:Name="lbox_Env" Height="200" Width="700"></ListBox>
+        </Border>
+
+    </Grid>
+</UserControl>

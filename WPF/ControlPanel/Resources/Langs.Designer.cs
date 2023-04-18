@@ -322,6 +322,15 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
+        ///   查找类似 About 的本地化字符串。
+        /// </summary>
+        internal static string NavBar_About {
+            get {
+                return ResourceManager.GetString("NavBar.About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Control 的本地化字符串。
         /// </summary>
         internal static string NavBar_Control {

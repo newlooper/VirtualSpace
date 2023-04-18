@@ -27,7 +27,7 @@ namespace VirtualSpace.Config.Events.Entity
         [DoNotNotify] public Func<Window, bool>? Exp;
         [DoNotNotify] public JsonDocument?       Expression { get; set; }
         [DoNotNotify] public Behavior?           Action     { get; set; }
-        [DoNotNotify] public DateTime?           Created    { get; set; }
+        public               DateTime?           Created    { get; set; }
         public               DateTime?           Updated    { get; set; }
     }
 

@@ -25,7 +25,8 @@ public class NavBarItem : TabItem
         {"Control", ( PackIconKind.CursorPointer, "NavBar.Control" )},
         {"Rules", ( PackIconKind.BookOpenPageVariant, "NavBar.Rules" )},
         {"Plugins", ( PackIconKind.ToyBrickMarkerOutline, "NavBar.Plugins" )},
-        {"Logs", ( PackIconKind.BookSearchOutline, "NavBar.Logs" )}
+        {"Logs", ( PackIconKind.BookSearchOutline, "NavBar.Logs" )},
+        {"About", ( PackIconKind.HelpBox, "NavBar.About" )},
     };
 
     private NavBarItem( string tag, PackIconKind kind, string locKey )

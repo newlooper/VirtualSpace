@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 Dylan Cheng (https://github.com/newlooper)
+﻿// Copyright (C) 2023 Dylan Cheng (https://github.com/newlooper)
 // 
 // This file is part of VirtualSpace.
 // 
@@ -8,16 +8,21 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-using System;
+using System.Windows;
 
-namespace VirtualSpace
+namespace ControlPanel.Validation;
+
+public abstract class Helper
 {
-    public interface IAppController
+    public static bool HasError( DependencyProperty dp, params FrameworkElement[] controls )
     {
-        public void BringToTop();
-        public void SetMainWindowHandle( IntPtr handle );
-        public void Quit();
-        public void RenderDesktopArrangementButtons( string selectedDa );
-        public void CreateRuleFromWindowHandle( IntPtr      handle );
+        foreach ( var control in controls )
+        {
+            var bd = control.GetBindingExpression( dp );
+            bd?.UpdateSource();
+            if ( bd?.ValidationError != null ) return true;
+        }
+
+        return false;
     }
 }

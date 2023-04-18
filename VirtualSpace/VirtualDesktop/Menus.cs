@@ -111,11 +111,7 @@ namespace VirtualSpace.VirtualDesktop
 
             void OnCreateRuleFromWindow( object? s, EventArgs evt )
             {
-                var ruleForm = new RuleForm( -1 );
-                ruleForm.Init();
-                ruleForm.SetFormValuesByWindow( mi.Vw.Handle );
-                ruleForm.TopMost = true;
-                ruleForm.ShowDialog();
+                MainWindow.AcForm.CreateRuleFromWindowHandle( mi.Vw.Handle );
             }
 
             newRuleFromWindow.Click += OnCreateRuleFromWindow;

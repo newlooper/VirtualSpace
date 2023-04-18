@@ -76,6 +76,12 @@ public partial class MainWindow : Window, IAppController
         // throw new NotImplementedException();
     }
 
+    public void CreateRuleFromWindowHandle( IntPtr handle )
+    {
+        NavBar.SelectedIndex = 3;
+        RuleEditorWindow.Create( handle ).Show();
+    }
+
     private void MainWindow_OnLoaded( object sender, RoutedEventArgs e )
     {
         InitTheme();

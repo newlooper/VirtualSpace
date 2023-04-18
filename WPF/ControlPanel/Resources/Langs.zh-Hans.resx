@@ -579,4 +579,7 @@
   <data name="Page.Rules.Weight" xml:space="preserve">
     <value>权重</value>
   </data>
+  <data name="NavBar.About" xml:space="preserve">
+    <value>关于</value>
+  </data>
 </root>

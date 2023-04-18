@@ -216,5 +216,14 @@ namespace VirtualSpace
             ts_PageNavButton_Click( sender, e );
             mainTabs.SelectTab( 0 );
         }
+
+        public void CreateRuleFromWindowHandle( IntPtr handle )
+        {
+            var ruleForm = new RuleForm( -1 );
+            ruleForm.Init();
+            ruleForm.SetFormValuesByWindow( handle );
+            ruleForm.TopMost = true;
+            ruleForm.ShowDialog();
+        }
     }
 }

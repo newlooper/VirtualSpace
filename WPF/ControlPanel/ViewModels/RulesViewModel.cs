@@ -11,6 +11,9 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using LinqExpressionBuilder;
 using VirtualSpace.Config.Events.Entity;
 using VirtualSpace.Config.Events.Expression;
@@ -77,4 +80,11 @@ public class RulesViewModel : ViewModelBase
             return desktops;
         }
     }
+
+    public static readonly JsonSerializerOptions? WriteOptions = new()
+    {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
 }

@@ -27,6 +27,7 @@ public static class PageFactory
             "NavBar.Control" => Control.Create( info.locKey, info.kind ),
             "NavBar.Plugins" => Plugins.Create( info.locKey, info.kind ),
             "NavBar.Logs" => Logs.Create( info.locKey, info.kind ),
+            "NavBar.About" => Help.Instance,
             "NavBar.Settings" => Settings.Create(),
             _ => General.Create( info.locKey, info.kind )
         };

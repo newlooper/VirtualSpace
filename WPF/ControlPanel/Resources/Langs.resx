@@ -580,4 +580,7 @@ some settings may need restart program to take effect.</value>
   <data name="Page.Rules.Weight" xml:space="preserve">
     <value>Weight</value>
   </data>
+  <data name="NavBar.About" xml:space="preserve">
+    <value>About</value>
+  </data>
 </root>
