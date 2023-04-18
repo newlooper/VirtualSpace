@@ -35,7 +35,7 @@ namespace VirtualSpace.Config
         public Profile Clone()
         {
             var profile = JsonSerializer.Deserialize<Profile>( JsonSerializer.Serialize( this ) );
-            return profile;
+            return profile!;
         }
     }
 }

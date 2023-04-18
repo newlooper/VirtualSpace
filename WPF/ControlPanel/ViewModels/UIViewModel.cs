@@ -21,7 +21,7 @@ public partial class UIViewModel : ViewModelBase
 {
     public UIViewModel()
     {
-        VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement;
+        VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
         VdCount = DesktopWrapper.Count;
         ShowVdName = Manager.CurrentProfile.UI.ShowVdName;
         ShowVdIndex = Manager.CurrentProfile.UI.ShowVdIndex;
@@ -36,13 +36,13 @@ public partial class UIViewModel : ViewModelBase
 
     private void OnDesktopCreatedEvent()
     {
-        VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement;
+        VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
         VdCount = DesktopWrapper.Count;
     }
 
     private void OnDesktopDeletedEvent( VirtualDesktopNotification vdn )
     {
-        VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement;
+        VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
         VdCount = DesktopWrapper.Count;
     }
 

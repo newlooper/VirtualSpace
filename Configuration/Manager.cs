@@ -44,8 +44,8 @@ namespace VirtualSpace.Config
         {
             try
             {
-                AppPath = Process.GetCurrentProcess().MainModule.FileName;
-                AppRootFolder = Directory.GetParent( AppPath ).FullName;
+                AppPath = Environment.ProcessPath!;
+                AppRootFolder = Directory.GetParent( AppPath )!.FullName;
 
                 ConfigRootFolder = GetConfigRoot();
                 ConfigFilePath = Path.Combine( ConfigRootFolder, Settings.SettingsFile );

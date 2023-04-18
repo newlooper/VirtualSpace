@@ -221,7 +221,7 @@ public partial class Logs
 
     public static event EventHandler<PropertyChangedEventArgs>? StaticPropertyChanged;
 
-    private static void NotifyStaticPropertyChanged( [CallerMemberName] string propertyName = null )
+    private static void NotifyStaticPropertyChanged( [CallerMemberName] string? propertyName = null )
     {
         StaticPropertyChanged?.Invoke( null, new PropertyChangedEventArgs( propertyName ) );
     }

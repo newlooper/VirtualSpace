@@ -19,7 +19,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
-        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All"/>
         <PackageReference Include="WPFLocalizeExtension" Version="3.10.0" />
     </ItemGroup>
 
