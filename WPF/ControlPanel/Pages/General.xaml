@@ -58,12 +58,16 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal">
-                            <UniformGrid Columns="2" HorizontalAlignment="Left">
-                                <CheckBox x:Name="chbNavH" Content="{lex:Loc Page.General.Nav.H}" MinWidth="400"
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox x:Name="chbNavH" Content="{lex:Loc Page.General.Nav.H}" Width="400"
                                           IsChecked="{Binding NavH}">
                                 </CheckBox>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{lex:Loc Page.General.Nav.HType}" Margin="0,5,5,0"></TextBlock>
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <TextBlock Text="{lex:Loc Page.General.Nav.HType}" Margin="5,5,5,0"></TextBlock>
                                     <ComboBox IsEnabled="{Binding ElementName=chbNavH, Path=IsChecked}"
                                               ItemsSource="{Binding NavHTypeList}"
                                               SelectedValuePath="Value"
@@ -77,7 +81,7 @@
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
                                 </StackPanel>
-                            </UniformGrid>
+                            </Grid>
                         </StackPanel>
 
                         <CheckBox Grid.Row="1" Content="{lex:Loc Page.General.Nav.V}" Margin="0,10,0,0"
@@ -102,12 +106,16 @@
                                   IsChecked="{Binding Path=Cluster.NotificationOnVdChanged}"
                                   Content="{lex:Loc Page.General.NotificationOnVdChanged}">
                         </CheckBox>
-                        <UniformGrid Grid.Row="2" HorizontalAlignment="Left" Columns="2" Margin="0,10,0,0">
-                            <CheckBox x:Name="chbShowVDIndexOnTrayIcon" MinWidth="400"
+                        <Grid Grid.Row="2" Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox x:Name="chbShowVDIndexOnTrayIcon" Width="400"
                                       Content="{lex:Loc Page.General.ShowVDIndexOnTrayIcon}"
                                       IsChecked="{Binding Path=Cluster.ShowVDIndexOnTrayIcon}">
                             </CheckBox>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" Grid.Column="1">
                                 <RadioButton Margin="0,0,20,0" Content="{lex:Loc Page.General.StyleOfVDIndexOnTrayIcon.0}"
                                              IsEnabled="{Binding ElementName=chbShowVDIndexOnTrayIcon, Path=IsChecked}"
                                              IsChecked="{Binding Path=Cluster.StyleOfVDIndexOnTrayIcon, Converter={StaticResource CheckBoxConverter},ConverterParameter=0}">
@@ -121,7 +129,7 @@
                                              IsChecked="{Binding Path=Cluster.StyleOfVDIndexOnTrayIcon, Converter={StaticResource CheckBoxConverter},ConverterParameter=2}">
                                 </RadioButton>
                             </StackPanel>
-                        </UniformGrid>
+                        </Grid>
 
                         <CheckBox Grid.Row="3" Margin="0,10,0,0"
                                   Content="{lex:Loc Page.General.HideOnStart}"

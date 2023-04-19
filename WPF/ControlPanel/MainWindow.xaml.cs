@@ -15,10 +15,12 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using ControlPanel.Factories;
 using ControlPanel.Pages;
 using VirtualSpace;
 using VirtualSpace.Config;
+using VirtualSpace.VirtualDesktop.Api;
 using WPFLocalizeExtension.Engine;
 
 namespace ControlPanel;
@@ -29,6 +31,7 @@ namespace ControlPanel;
 public partial class MainWindow : Window, IAppController
 {
     private static MainWindow _instance;
+    private static IntPtr     _handle;
 
     private IntPtr _mainWindowHandle;
 
@@ -44,16 +47,32 @@ public partial class MainWindow : Window, IAppController
         LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
         LocalizeDictionary.Instance.Culture = new CultureInfo( Manager.CurrentProfile.UI.Language );
         NavBarItem.InitNavBar( NavBar );
+
+        new WindowInteropHelper( this ).EnsureHandle();
+    }
+
+    protected override void OnSourceInitialized( EventArgs e )
+    {
+        base.OnSourceInitialized( e );
+        _handle = new WindowInteropHelper( this ).EnsureHandle();
     }
 
     public static IntPtr MainWindowHandle => _instance._mainWindowHandle;
 
     public void BringToTop()
     {
-        Show();
         if ( WindowState == WindowState.Minimized )
         {
             WindowState = WindowState.Normal;
+        }
+
+        if ( IsVisible )
+        {
+            DesktopWrapper.MoveWindowToDesktop( _handle, DesktopWrapper.CurrentIndex );
+        }
+        else
+        {
+            Show();
         }
 
         Topmost = false;

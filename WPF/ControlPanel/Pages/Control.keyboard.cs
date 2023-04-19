@@ -229,12 +229,14 @@ public partial class Control
     {
         var selectedItem = KeyboardTreeView.SelectedItem as TreeViewItem;
         if ( selectedItem == null ) return;
+        var hotkeyId = selectedItem.Name;
 
-        var msgId = Const.Hotkey.GetKeyBinding( selectedItem.Name ).MessageId;
+        var msgId = Const.Hotkey.GetKeyBinding( hotkeyId ).MessageId;
         GlobalHotKey.UnregisterHotKey( MainWindow.MainWindowHandle, msgId );
         var vm = KeyBindingBox.DataContext as KeyBindingModel;
         vm.Clear();
-        SaveHotkey( GetGhk( vm ) );
+        Manager.Configs.KeyBindings!.Remove( hotkeyId );
+        Manager.Save( reason: "clear", reasonName: hotkeyId );
     }
 
     private void ShowTips( Snackbar sb, string msg, int seconds = 1 )
