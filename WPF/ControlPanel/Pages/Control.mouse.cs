@@ -47,7 +47,6 @@ public partial class Control
         var action = (MouseAction.Action)Enum.Parse( typeof( MouseAction.Action ), actionName );
 
         Manager.Configs.MouseActions[maId] = action;
-        Manager.Save( reason: Manager.Configs.MouseActions );
-        Manager.Save( reason: action, reasonName: "MouseAction" );
+        Manager.Save( reason: action, reasonName: maId );
     }
 }

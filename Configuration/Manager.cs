@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Config.Converter;
 using VirtualSpace.Config.DataAnnotations;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Config.Events.Expression;
@@ -81,6 +82,29 @@ namespace VirtualSpace.Config
 
                 PropertyProtector.Walk( Configs );
 
+                if ( Configs.MouseActions.Count == 0 )
+                {
+                    Logger.Info( "Missing MouseActions, Try find old version from configs." );
+                    if ( Configs.MouseAction is null || Configs.MouseAction.Count == 0 )
+                    {
+                        Logger.Info( "Old version MouseActions not found, Using native default." );
+                        Configs.MouseActions = MouseAction.Info;
+                    }
+                    else
+                    {
+                        Logger.Info( "Old version MouseActions found, try to convert to new version." );
+                        try
+                        {
+                            EntityConverter.ConvertMouseAction( Configs.MouseAction, Configs.MouseActions );
+                        }
+                        catch
+                        {
+                            Logger.Info( "Convert MouseAction failed, Using native default." );
+                            Configs.MouseActions = MouseAction.Info;
+                        }
+                    }
+                }
+
                 Logger.Info( $"Settings File Loaded, Version: {Configs.Version}, Current Profile: {Configs.CurrentProfileName}" );
             }
             else
@@ -94,7 +118,8 @@ namespace VirtualSpace.Config
                     Profiles = new Dictionary<string, Profile>
                     {
                         {nameof( Default ), new Default()}
-                    }
+                    },
+                    MouseActions = MouseAction.Info
                 };
                 Save( filePath, "init", "Setting File" );
                 SaveCluster( Configs.Cluster );
@@ -140,10 +165,10 @@ namespace VirtualSpace.Config
             {
                 Logger.Error( "Failed to save Settings: " + ex.Message );
             }
-            
+
             ProfileChanged?.Invoke( null, null );
         }
-        
+
         public static event EventHandler<EventArgs>? ProfileChanged;
 
         public static void SaveCluster( Cluster cluster )

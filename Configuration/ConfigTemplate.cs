@@ -39,8 +39,10 @@ namespace VirtualSpace.Config
             {Const.Hotkey.SWITCH_BACK_LAST, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.SWITCH_BACK_LAST].MessageId}}
         };
 
-        public Dictionary<string, MouseAction.Action>? MouseAction  { get; set; } = null;
-        public Dictionary<string, MouseAction.Action>? MouseActions { get; set; } = Config.MouseAction.Info;
+        public Dictionary<string, MouseAction.Action>? MouseAction { get; set; } = new();
+
+        // public Dictionary<string, MouseAction.Action>? MouseActions { get; set; } = Config.MouseAction.Info;
+        public Dictionary<string, MouseAction.Action> MouseActions { get; set; } = new();
 
         [PropertyProtector]
         public Cluster Cluster { get; set; } = new()
@@ -53,7 +55,7 @@ namespace VirtualSpace.Config
 
         public MouseAction.Action GetMouseActionById( string id )
         {
-            if ( MouseActions == null || MouseActions.Count == 0 )
+            if ( MouseActions.Count == 0 )
             {
                 MouseActions = Config.MouseAction.Info;
             }

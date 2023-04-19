@@ -203,12 +203,13 @@ namespace VirtualSpace.Config
             DesktopShowForSelectedDesktop
         }
 
-        public static string MOUSE_NODE_DESKTOP_PREFIX = "mouse_node_d_";
-        public static string MOUSE_NODE_WINDOW_PREFIX  = "mouse_node_w_";
-        public const  string KEY_SPLITTER              = "+";
+        public static          string MOUSE_NODE_DESKTOP_PREFIX = "mouse_node_d_";
+        public static          string MOUSE_NODE_WINDOW_PREFIX  = "mouse_node_w_";
+        public const           string KEY_SPLITTER              = "+";
+        public static readonly string NoneKeyCode               = ( (int)Keys.None ).ToString( "X2" );
 
         private static readonly Dictionary<MouseButtons, string> MouseButtonsName;
-        private static readonly Dictionary<Keys, string>         KeysName;
+        public static readonly  Dictionary<Keys, string>         KeysName;
 
         ////////////////////////////////////////////////////////////////
         // 鼠标动作表，信息包含默认行为
@@ -234,17 +235,15 @@ namespace VirtualSpace.Config
                 {Keys.Shift, "Shift"}
             };
 
-            var noneKeyCode = ( (int)Keys.None ).ToString( "X2" );
-
             Info = new Dictionary<string, Action>
             {
-                {MOUSE_NODE_DESKTOP_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView},
-                {MOUSE_NODE_DESKTOP_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly},
-                {MOUSE_NODE_DESKTOP_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
+                {MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView},
+                {MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly},
+                {MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
 
-                {MOUSE_NODE_WINDOW_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView},
-                {MOUSE_NODE_WINDOW_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly},
-                {MOUSE_NODE_WINDOW_PREFIX + noneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
+                {MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView},
+                {MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly},
+                {MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
             };
 
             Info1 = new Dictionary<string, Action>
