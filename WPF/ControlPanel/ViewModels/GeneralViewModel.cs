@@ -29,7 +29,8 @@ public partial class GeneralViewModel : ViewModelBase
         NavH = Manager.CurrentProfile.Navigation.CirculationH;
         NavV = Manager.CurrentProfile.Navigation.CirculationV;
         NavHType = Manager.CurrentProfile.Navigation.CirculationHType;
-        RunOnStartup = TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName );
+        RunOnStartup = TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName ) ||
+                       TaskSchedulerHelper.IsTaskExistsByName( Const.AppName );
         Cluster = new ClusterProxy( Manager.Configs.Cluster );
         Manager.ProfileChanged += UpdateClusterProxy;
         _isInitialized = true;
@@ -52,7 +53,8 @@ public partial class GeneralViewModel : ViewModelBase
                     Manager.Save( reason: Manager.CurrentProfile.Navigation );
                     break;
                 case nameof( RunOnStartup ):
-                    if ( RunOnStartup == TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName ) ) break;
+                    if ( (bool)after && TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName ) ) break;
+                    if ( !(bool)after && !TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName ) ) break;
                     try
                     {
                         if ( RunOnStartup )
@@ -61,6 +63,8 @@ public partial class GeneralViewModel : ViewModelBase
                         }
                         else
                         {
+                            if ( TaskSchedulerHelper.IsTaskExistsByName( Const.AppName ) )
+                                TaskSchedulerHelper.DeleteTaskByName( Const.AppName );
                             TaskSchedulerHelper.DeleteTaskByName( Const.AppName, Const.AppName );
                         }
                     }
