@@ -19,11 +19,12 @@ namespace VirtualSpace.Config
 {
     public class Profile
     {
-        [PropertyProtector] public UserInterface UI                             { get; set; }
-        public                     bool          DaemonAutoStart                { get; set; }
-        public                     List<Guid>?   DesktopOrder                   { get; set; }
-        [PropertyProtector] public Mouse         Mouse                          { get; set; }
-        public                     bool          IgnoreWindowOnRuleCheckTimeout { get; set; } = true;
+        [PropertyProtector] public               UserInterface UI                             { get; set; }
+        public                                   bool          DaemonAutoStart                { get; set; }
+        [PropertyProtector( 0, 0, 3600 )] public int           DaemonAutoStartDelay           { get; set; }
+        public                                   List<Guid>?   DesktopOrder                   { get; set; }
+        [PropertyProtector] public               Mouse         Mouse                          { get; set; }
+        public                                   bool          IgnoreWindowOnRuleCheckTimeout { get; set; } = true;
 
         public Navigation Navigation { get; set; } = new()
         {

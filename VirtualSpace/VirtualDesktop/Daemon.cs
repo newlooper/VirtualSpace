@@ -111,12 +111,16 @@ namespace VirtualSpace.VirtualDesktop
             }
         }
 
-        public static void Start()
+        public static async void Start()
         {
             WaitForAction();
             StartDaemon();
             if ( ConfigManager.CurrentProfile.DaemonAutoStart )
+            {
+                if ( Manager.CurrentProfile.DaemonAutoStartDelay > 0 )
+                    await Task.Delay( Manager.CurrentProfile.DaemonAutoStartDelay * Const.OneSecond );
                 CanRun.Set();
+            }
         }
 
         public static void SetCanRun( bool isCanRun )
