@@ -182,14 +182,25 @@ namespace VirtualSpace.VirtualDesktop
             MainWindow.RenderCellBorder();
         }
 
+        private static List<Guid> _lastDesktopOrder = new();
+
         public static void SaveOrder( List<Guid>? newOrder = null )
         {
+            static bool IsSameGuidList( List<Guid> a, List<Guid> b )
+            {
+                if ( a.Count != b.Count ) return false;
+                return !a.Where( ( t, i ) => t != b[i] ).Any();
+            }
+
             if ( newOrder != null )
             {
                 ConfigManager.CurrentProfile.DesktopOrder = newOrder;
             }
 
+            if ( IsSameGuidList( _lastDesktopOrder, ConfigManager.CurrentProfile.DesktopOrder! ) ) return;
+
             ConfigManager.Save( reason: "sync&save", reasonName: "ConfigManager.CurrentProfile.DesktopOrder" );
+            _lastDesktopOrder = new List<Guid>( ConfigManager.CurrentProfile.DesktopOrder! );
         }
 
         public static int GetVdIndexByGuid( Guid guid )

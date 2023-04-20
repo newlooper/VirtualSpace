@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using ControlPanel.Pages.Menus;
@@ -25,14 +26,14 @@ namespace ControlPanel.Pages;
 
 public partial class Logs
 {
-    private static string _tbInfo    = string.Empty;
-    private static string _tbDebug   = string.Empty;
-    private static string _tbVerbose = string.Empty;
-    private static string _tbEvent   = string.Empty;
-    private static string _tbWarning = string.Empty;
-    private static string _tbError   = string.Empty;
+    private static readonly StringBuilder SbDebug   = new();
+    private static readonly StringBuilder SbVerbose = new();
+    private static readonly StringBuilder SbEvent   = new();
+    private static readonly StringBuilder SbWarning = new();
+    private static readonly StringBuilder SbError   = new();
+    private static readonly StringBuilder SbInfo    = new();
 
-    private static Logs? _instance = null;
+    private static Logs? _instance;
 
     private Logs()
     {
@@ -79,103 +80,109 @@ public partial class Logs
 
     public static string TbInfo
     {
-        get => _tbInfo;
+        get => SbInfo.ToString();
         set
         {
             if ( value is null )
             {
-                _tbInfo = string.Empty;
+                SbInfo.Clear();
             }
             else
             {
-                _tbInfo = value;
-                NotifyStaticPropertyChanged();
+                SbInfo.Append( value );
             }
+
+            NotifyStaticPropertyChanged();
         }
     }
 
     public static string TbDebug
     {
-        get => _tbDebug;
+        get => SbDebug.ToString();
         set
         {
             if ( value is null )
             {
-                _tbDebug = string.Empty;
+                SbDebug.Clear();
             }
             else
             {
-                _tbDebug = value;
-                NotifyStaticPropertyChanged();
+                SbDebug.Append( value );
             }
+
+            NotifyStaticPropertyChanged();
         }
     }
 
     public static string TbVerbose
     {
-        get => _tbVerbose;
+        get => SbVerbose.ToString();
         set
         {
             if ( value is null )
             {
-                _tbVerbose = string.Empty;
+                SbVerbose.Clear();
             }
             else
             {
-                _tbVerbose = value;
-                NotifyStaticPropertyChanged();
+                SbVerbose.Append( value );
             }
+
+            NotifyStaticPropertyChanged();
         }
     }
 
     public static string TbEvent
     {
-        get => _tbEvent;
+        get => SbEvent.ToString();
         set
         {
             if ( value is null )
             {
-                _tbEvent = string.Empty;
+                SbEvent.Clear();
             }
             else
             {
-                _tbEvent = value;
-                NotifyStaticPropertyChanged();
+                SbEvent.Append( value );
             }
+
+            NotifyStaticPropertyChanged();
         }
     }
 
     public static string TbWarning
     {
-        get => _tbWarning;
+        get => SbWarning.ToString();
         set
         {
             if ( value is null )
             {
-                _tbWarning = string.Empty;
+                SbWarning.Clear();
             }
             else
             {
-                _tbWarning = value;
-                NotifyStaticPropertyChanged();
+                SbWarning.Append( value );
             }
+
+            NotifyStaticPropertyChanged();
         }
     }
 
     public static string TbError
     {
-        get => _tbError;
+        get => SbError.ToString();
         set
         {
             if ( value is null )
             {
-                _tbError = string.Empty;
+                SbError.Clear();
             }
             else
             {
-                _tbError = value;
-                NotifyStaticPropertyChanged();
+                SbError.Append( value );
             }
+
+            NotifyStaticPropertyChanged();
         }
     }
 
@@ -189,32 +196,25 @@ public partial class Logs
         switch ( type )
         {
             case "INFO":
-                _tbInfo += message;
-                TbInfo = _tbInfo;
+                TbInfo = message;
                 break;
             case "DEBUG":
-                _tbDebug += message;
-                TbDebug = _tbDebug;
+                TbDebug = message;
                 break;
             case "VERBOSE":
-                _tbVerbose += message;
-                TbVerbose = _tbVerbose;
+                TbVerbose = message;
                 break;
             case "EVENT":
-                _tbEvent += message;
-                TbEvent = _tbEvent;
+                TbEvent = message;
                 break;
             case "WARNING":
-                _tbWarning += message;
-                TbWarning = _tbWarning;
+                TbWarning = message;
                 break;
             case "ERROR":
-                _tbError += message;
-                TbError = _tbError;
+                TbError = message;
                 break;
             default:
-                _tbError += message;
-                TbError = _tbError;
+                TbError = message;
                 break;
         }
     }
@@ -235,7 +235,7 @@ public partial class Logs
                 if ( cm.PlacementTarget is TabItem t )
                 {
                     t.IsSelected = true;
-                    this[TcLogs.SelectedIndex] = string.Empty;
+                    this[TcLogs.SelectedIndex] = null;
                 }
             }
         }
@@ -251,12 +251,12 @@ public partial class Logs
 
     public static void ClearAll()
     {
-        TbInfo = string.Empty;
-        TbDebug = string.Empty;
-        TbVerbose = string.Empty;
-        TbEvent = string.Empty;
-        TbWarning = string.Empty;
-        TbError = string.Empty;
+        TbInfo = null;
+        TbDebug = null;
+        TbVerbose = null;
+        TbEvent = null;
+        TbWarning = null;
+        TbError = null;
     }
 
     public static void OpenLogsDir()
