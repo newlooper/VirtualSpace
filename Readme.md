@@ -30,7 +30,7 @@ or build the program yourself (see below).
 
 > Note
 > 
-> WPF\ControlPanel is currently not used by VirtualSpace, you may unload it in your IDE
+> WinForms\AppController is currently not used by VirtualSpace, you may unload it in your IDE
 
 ### 3.2 plugins
 
