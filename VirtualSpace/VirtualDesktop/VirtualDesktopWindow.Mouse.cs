@@ -49,11 +49,11 @@ namespace VirtualSpace.VirtualDesktop
             _dragBounds = new Rectangle(
                 new Point( _startPoint.X - dragSize.Width / 2, _startPoint.Y - dragSize.Height / 2 ),
                 dragSize );
-            foreach ( var window in _visibleWindows.Where( window => window.Rect.Contains( e.Location ) ) )
+
+            _selectedWindow = _visibleWindows.FirstOrDefault( w => w.Rect.Contains( e.Location ) );
+            if ( _selectedWindow != null )
             {
-                Logger.Verbose( "SELECT.Win " + window.Title );
-                _selectedWindow = window;
-                break;
+                Logger.Verbose( "SELECT.Win " + _selectedWindow.Title );
             }
         }
 
