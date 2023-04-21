@@ -87,9 +87,7 @@ public partial class Rules
     {
         var r = RuleList.SelectedItem as RuleTemplate;
         if ( r == null ) return;
-        gbRuleEditForm.DataContext = r;
 
-        UserControlRuleEditor.RuleInEditing = r;
         UserControlRuleEditor.RuleDate.Visibility = Visibility.Visible;
 
         DrawerHost.IsBottomDrawerOpen = true;
@@ -99,16 +97,12 @@ public partial class Rules
     {
         RuleList.SelectedIndex = -1;
 
-        UserControlRuleEditor.RuleInEditing = new RuleTemplate // 平地起风云
+        UserControlRuleEditor.RuleDefBox.DataContext = new RuleTemplate // 平地起风云
         {
             Id = Guid.Empty,
             Enabled = true,
             Action = new Behavior()
         };
-
-        gbRuleEditForm.DataContext = UserControlRuleEditor.RuleInEditing;
-
-        UserControlRuleEditor.RuleDefBox.DataContext = UserControlRuleEditor.RuleInEditing;
         UserControlRuleEditor.RuleDate.Visibility = Visibility.Hidden;
 
         DrawerHost.IsBottomDrawerOpen = true;

@@ -31,7 +31,6 @@ public partial class RuleForm : UserControl
         InitializeComponent();
     }
 
-    public RuleTemplate?                          RuleInEditing       { get; set; }
     public FullObservableCollection<RuleTemplate> RuleListItemsSource { get; set; }
 
     private void Cbb_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
@@ -40,8 +39,9 @@ public partial class RuleForm : UserControl
 
         var field = cbb.Name.Split( "_" )[1]; // 依赖控件名，若修改控件名，此处也要修改
 
-        var r = RuleInEditing;
-        if ( r == null ) return;
+        var r = RuleDefBox.DataContext as RuleTemplate;
+        if ( r?.Expression == null ) return;
+
         var exp = Conditions.ParseExpressionTemplate( r.Expression );
         foreach ( var rule in exp.rules.Where( rule => rule.field == field ) )
         {
@@ -56,7 +56,7 @@ public partial class RuleForm : UserControl
     {
         if ( Helper.HasError( TextBox.TextProperty, tbName, tbWeight ) ) goto FAIL;
 
-        var r = RuleInEditing;
+        var r = RuleDefBox.DataContext as RuleTemplate;
 
         if ( chb_Title.IsChecked == false &&
              chb_ProcessName.IsChecked == false &&

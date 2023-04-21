@@ -33,7 +33,7 @@ public partial class RuleEditorWindow
     {
         var w = new RuleEditorWindow();
 
-        w.RuleEditor.RuleInEditing = new RuleTemplate
+        w.RuleEditor.DataContext = new RuleTemplate
         {
             Id = Guid.Empty,
             Enabled = true,
@@ -86,7 +86,6 @@ public partial class RuleEditorWindow
         }
 
         w.RuleEditor.RuleListItemsSource = RulesViewModel.Instance.Rules;
-        w.RuleEditor.RuleDefBox.DataContext = w.RuleEditor.RuleInEditing;
         w.RuleEditor.RuleDate.Visibility = Visibility.Hidden;
 
         return w;

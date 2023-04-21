@@ -112,7 +112,7 @@
                                    MinWidth="700" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" BottomDrawerCornerRadius="10">
 
             <materialDesign:DrawerHost.BottomDrawerContent>
-                <GroupBox MinHeight="680" x:Name="gbRuleEditForm" VerticalAlignment="Top" Margin="10,0"
+                <GroupBox MinHeight="680" VerticalAlignment="Top" Margin="10,0"
                           Header="{lex:Loc {Binding Path=Id,Converter={StaticResource RuleHeaderByStateConverter}}}"
                           Height="{Binding Path=ActualHeight,ElementName=RulesFrame,Converter={StaticResource WidthHeightConverter},ConverterParameter=80}">
                     <userControls:RuleForm x:Name="UserControlRuleEditor"></userControls:RuleForm>
