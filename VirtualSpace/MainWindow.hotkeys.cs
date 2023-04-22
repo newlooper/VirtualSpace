@@ -31,7 +31,7 @@ namespace VirtualSpace
 
         private void RegisterHotKey( IntPtr hWnd )
         {
-            foreach ( var (k, kbInProfile) in Manager.Configs.KeyBindings )
+            foreach ( var (k, kbInProfile) in Manager.Configs.KeyBindings! )
             {
                 var ghkCode = kbInProfile.GhkCode;
                 if ( ghkCode == "" ) continue;
