@@ -156,7 +156,7 @@ public partial class Control
 
             km = kbm.LWin ? GlobalHotKey.KeyModifiers.WindowsKey : GlobalHotKey.KeyModifiers.None;
             km |= kbm.Ctrl ? GlobalHotKey.KeyModifiers.Ctrl : GlobalHotKey.KeyModifiers.None;
-            km |= kbm.Ctrl ? GlobalHotKey.KeyModifiers.Alt : GlobalHotKey.KeyModifiers.None;
+            km |= kbm.Alt ? GlobalHotKey.KeyModifiers.Alt : GlobalHotKey.KeyModifiers.None;
             km |= kbm.Shift ? GlobalHotKey.KeyModifiers.Shift : GlobalHotKey.KeyModifiers.None;
 
             ghkCode += kbm.Key;
