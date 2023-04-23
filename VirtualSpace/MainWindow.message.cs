@@ -29,7 +29,7 @@ namespace VirtualSpace
 {
     public partial class MainWindow
     {
-        private uint _taskbarCreatedMessage;
+        private        uint          _taskbarCreatedMessage;
 
         private void RegisterSystemMessages()
         {
@@ -227,6 +227,9 @@ namespace VirtualSpace
                             break;
                         case UserMessage.ShowAppController:
                             AcForm.BringToTop();
+                            break;
+                        case UserMessage.ToggleWindowFilter:
+                            ToggleWindowFilter();
                             break;
                         case UserMessage.RestartAppController:
                             AcForm.Quit();

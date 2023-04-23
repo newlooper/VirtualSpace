@@ -28,6 +28,7 @@ namespace VirtualSpace
     public partial class MainWindow
     {
         private static readonly Stopwatch RiseTaskViewTimer = Stopwatch.StartNew();
+        private static readonly Stopwatch DoublePressTimer  = Stopwatch.StartNew();
 
         private void RegisterHotKey( IntPtr hWnd )
         {
@@ -95,7 +96,30 @@ namespace VirtualSpace
             if ( nCode >= 0 )
             {
                 var info = (LLKH.KBDLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LLKH.KBDLLHOOKSTRUCT ) );
-                if ( (int)wParam != LLKH.WM_KEYDOWN ) goto NEXT;
+
+                var keyType = (int)wParam;
+
+                if ( IsShowing() && info.vkCode == (int)Keys.LShiftKey )
+                {
+                    switch ( keyType )
+                    {
+                        case LLKH.WM_KEYUP:
+                            DoublePressTimer.Restart();
+                            break;
+                        case LLKH.WM_KEYDOWN:
+                        {
+                            if ( DoublePressTimer.ElapsedMilliseconds < 200 )
+                            {
+                                User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.ToggleWindowFilter, 0 );
+                                return LowLevelHooks.Handled;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+                if ( keyType != LLKH.WM_KEYDOWN ) goto NEXT;
 
                 /////////////////////////////////////////////////////////////////////////////////
                 // hook [LWin+Tab] to replace TaskView 

@@ -192,6 +192,15 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
+        ///   查找类似 Toggle Window Filter 的本地化字符串。
+        /// </summary>
+        internal static string hk_node_toggle_window_filter {
+            get {
+                return ResourceManager.GetString("hk_node_toggle_window_filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Desktop 的本地化字符串。
         /// </summary>
         internal static string K_D {

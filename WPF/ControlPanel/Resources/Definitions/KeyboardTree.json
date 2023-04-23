@@ -23,6 +23,11 @@
         {
           "Name": "hk_node_rise_mainview_for_active_app_in_current_vd",
           "Header": "hk_node_rise_mainview_for_active_app_in_current_vd"
+        },
+        {
+          "Name": "hk_node_toggle_window_filter",
+          "Header": "hk_node_toggle_window_filter",
+          "IsHidden": true
         }
       ]
     },

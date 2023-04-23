@@ -93,7 +93,8 @@ public partial class Control
 
         KeyboardTreeView.Items.Clear();
 
-        BuildTreeView( KeyboardTreeView, JsonDocument.Parse( result ), new ValueTuple<string, string, string, string>( "Name", "Header", "Tag", "Nodes" ) );
+        BuildTreeView( KeyboardTreeView, JsonDocument.Parse( result ),
+            new ValueTuple<string, string, string, string, string>( "Name", "Header", "Tag", "IsHidden", "Nodes" ) );
 
         var nodeDesktop       = KeyboardTreeView.Items[1] as TreeViewItem;
         var nodeDesktopSwitch = nodeDesktop.Items[0] as TreeViewItem;
@@ -138,10 +139,20 @@ public partial class Control
         nodeDesktopSwitch.Items.Add( item4 );
     }
 
-    private (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) GetGhk( KeyBindingModel kbm )
+    private static (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) GetGhk( KeyBindingModel kbm )
     {
         string ghkCode;
-        var    km = GlobalHotKey.KeyModifiers.None;
+        var    kms = GlobalHotKey.KeyModifiers.None;
+
+        string GenGhkCode( bool @checked, string code )
+        {
+            return ( @checked ? code : Const.Hotkey.NONE ) + Const.Hotkey.SPLITTER;
+        }
+
+        GlobalHotKey.KeyModifiers GenKm( bool @checked, GlobalHotKey.KeyModifiers km )
+        {
+            return @checked ? km : GlobalHotKey.KeyModifiers.None;
+        }
 
         if ( string.IsNullOrEmpty( kbm.Key ) )
         {
@@ -149,20 +160,20 @@ public partial class Control
         }
         else
         {
-            ghkCode = ( kbm.LWin ? Const.Hotkey.WIN : Const.Hotkey.NONE ) + Const.Hotkey.SPLITTER;
-            ghkCode += ( kbm.Ctrl ? Const.Hotkey.CTRL : Const.Hotkey.NONE ) + Const.Hotkey.SPLITTER;
-            ghkCode += ( kbm.Alt ? Const.Hotkey.ALT : Const.Hotkey.NONE ) + Const.Hotkey.SPLITTER;
-            ghkCode += ( kbm.Shift ? Const.Hotkey.SHIFT : Const.Hotkey.NONE ) + Const.Hotkey.SPLITTER;
+            ghkCode = GenGhkCode( kbm.LWin, Const.Hotkey.WIN );
+            ghkCode += GenGhkCode( kbm.Ctrl, Const.Hotkey.CTRL );
+            ghkCode += GenGhkCode( kbm.Alt, Const.Hotkey.ALT );
+            ghkCode += GenGhkCode( kbm.Shift, Const.Hotkey.SHIFT );
 
-            km = kbm.LWin ? GlobalHotKey.KeyModifiers.WindowsKey : GlobalHotKey.KeyModifiers.None;
-            km |= kbm.Ctrl ? GlobalHotKey.KeyModifiers.Ctrl : GlobalHotKey.KeyModifiers.None;
-            km |= kbm.Alt ? GlobalHotKey.KeyModifiers.Alt : GlobalHotKey.KeyModifiers.None;
-            km |= kbm.Shift ? GlobalHotKey.KeyModifiers.Shift : GlobalHotKey.KeyModifiers.None;
+            kms = GenKm( kbm.LWin, GlobalHotKey.KeyModifiers.WindowsKey );
+            kms |= GenKm( kbm.Ctrl, GlobalHotKey.KeyModifiers.Ctrl );
+            kms |= GenKm( kbm.Alt, GlobalHotKey.KeyModifiers.Alt );
+            kms |= GenKm( kbm.Shift, GlobalHotKey.KeyModifiers.Shift );
 
             ghkCode += kbm.Key;
         }
 
-        return new ValueTuple<string, GlobalHotKey.KeyModifiers>( ghkCode, km );
+        return new ValueTuple<string, GlobalHotKey.KeyModifiers>( ghkCode, kms );
     }
 
     private void SaveHotkey( (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) ghk )

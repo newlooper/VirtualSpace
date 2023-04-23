@@ -19,5 +19,12 @@
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="-1" CaptionHeight="0" />
     </WindowChrome.WindowChrome>
-    <Grid x:Name="MainGrid" />
+    <Grid x:Name="Canvas">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid x:Name="MainGrid" />
+    </Grid>
+
 </Window>

@@ -400,4 +400,7 @@ Duplicate one and edit it.</value>
   <data name="Mouse.Tips.Exists" xml:space="preserve">
     <value>MouseAction Exists, try another combine or Mousebutton</value>
   </data>
+  <data name="hk_node_toggle_window_filter" xml:space="preserve">
+    <value>Toggle Window Filter</value>
+  </data>
 </root>

@@ -32,8 +32,13 @@ namespace VirtualSpace.VirtualDesktop
         public void ShowThumbnails()
         {
             var wndCount = _visibleWindows.Count;
-            if ( wndCount < 1 ) return;
+            if ( !string.IsNullOrEmpty( WindowFilter.Keyword ) )
+            {
+                _visibleWindows.RemoveAll( wnd => !wnd.Title.ToLower().Contains( WindowFilter.Keyword.ToLower() ) );
+                wndCount = _visibleWindows.Count;
+            }
 
+            if ( wndCount < 1 ) return;
             _visibleWindows.Sort( ( x, y ) => x.Title.CompareTo( y.Title ) );
 
             var rows = Math.Floor( Math.Sqrt( wndCount ) );

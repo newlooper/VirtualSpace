@@ -152,6 +152,9 @@ namespace VirtualSpace
             {
                 VirtualDesktopManager.ShowVisibleWindowsForDesktops();
             }
+
+            if ( _instance.Canvas.RowDefinitions[1].Height.Value > 0 )
+                _instance.ShowFilterWindow();
         }
 
         private static void BringToTopForCurrentVd( int processId = 0 )
@@ -182,6 +185,7 @@ namespace VirtualSpace
         public static void HideAll()
         {
             _instance.Hide();
+            HideFilterWindow();
             VirtualDesktopManager.HideAllVirtualDesktops();
         }
 

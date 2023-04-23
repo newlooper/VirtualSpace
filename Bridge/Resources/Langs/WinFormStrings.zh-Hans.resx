@@ -400,4 +400,7 @@ Windows 11	22H2(22621)
   <data name="Mouse.Tips.Exists" xml:space="preserve">
     <value>相同的鼠标动作已存在，尝试换一种组合或鼠标键</value>
   </data>
+  <data name="hk_node_toggle_window_filter" xml:space="preserve">
+    <value>开关窗口过滤器</value>
+  </data>
 </root>

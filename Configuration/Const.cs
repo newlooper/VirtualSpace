@@ -42,6 +42,7 @@ namespace VirtualSpace.Config
             public const string VD_CONTAINER_TITLE  = "VirtualSpace__VirtualDesktopWindow!";
             public const string VD_DRAG_TITLE       = "VirtualSpace__VirtualDesktopDragWindow!";
             public const string VS_CONTROLLER_TITLE = "[Virtual Space Controller]";
+            public const int    FILTER_BAR_HEIGHT   = 100;
         }
 
         public static class VirtualDesktop
@@ -104,6 +105,7 @@ namespace VirtualSpace.Config
             public const string NAV_UP                                 = "hk_node_nav_up";
             public const string NAV_DOWN                               = "hk_node_nav_down";
             public const string SWITCH_BACK_LAST                       = "hk_node_svd_back_last";
+            public const string TOGGLE_WINDOW_FILTER                   = "hk_node_toggle_window_filter";
 
             ////////////////////////////////////////////////////////////////
             // 可由热键调用的程序功能表
@@ -125,6 +127,7 @@ namespace VirtualSpace.Config
                 {NAV_UP, ( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" )},
                 {NAV_DOWN, ( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" )},
                 {SWITCH_BACK_LAST, ( "Switch Back To Last Desktop", UserMessage.SwitchBackToLastDesktop, "" )},
+                {TOGGLE_WINDOW_FILTER, ( "Toggle Window Filter", UserMessage.ToggleWindowFilter, "" )}
             };
 
             public static string GetFuncDesc( string key )

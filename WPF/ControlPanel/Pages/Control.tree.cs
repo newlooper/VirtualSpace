@@ -38,7 +38,7 @@ public partial class Control
         return path;
     }
 
-    private static void BuildTreeView( object node, object jsonDoc, (string Name, string Header, string Tag, string Nodes) keys )
+    private static void BuildTreeView( object node, object jsonDoc, (string Name, string Header, string Tag, string IsHidden, string Nodes) keys )
     {
         switch ( node )
         {
@@ -72,6 +72,11 @@ public partial class Control
                         Header = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString() ),
                         IsExpanded = true
                     };
+
+                    if ( child.TryGetProperty( keys.IsHidden, out var isHidden ) && isHidden.GetBoolean() )
+                    {
+                        subNode.Visibility = Visibility.Collapsed;
+                    }
 
                     if ( child.TryGetProperty( keys.Name, out var name ) )
                         subNode.Name = name.GetString();
