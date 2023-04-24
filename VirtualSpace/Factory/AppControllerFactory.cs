@@ -20,7 +20,7 @@ namespace VirtualSpace.Factory
             switch ( name )
             {
                 case "WinForm":
-                    return new AppController();
+                    // return new AppController();
                 case "WPF":
                     mergedDictionaries?.Add( ControlPanel.ExportResourceDictionary.Instance );
                     return new ControlPanel.MainWindow();
