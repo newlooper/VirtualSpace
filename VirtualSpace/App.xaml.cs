@@ -9,7 +9,9 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
@@ -136,6 +138,7 @@ namespace VirtualSpace
             var screen = Screen.FromPoint( new Point() );
             var ar     = SysInfo.GetAspectRadioOfScreen();
             Logger.Info( $"Application Start Successfully: {ConfigManager.AppPath}" );
+            LogForVersion();
             Logger.Info( $"System Version: {SysInfo.OSVersion}" );
             Logger.Info( $"Total Screens: {Screen.AllScreens.Length}" );
             Logger.Info( $"Total VirtualDesktops: {DesktopWrapper.Count}" );
@@ -145,7 +148,26 @@ namespace VirtualSpace
             Logger.Info( $"Start Position: [{Screen.PrimaryScreen.Bounds.Location.X}, {Screen.PrimaryScreen.Bounds.Location.Y}]" );
             Logger.Info( $"Start Size: {Screen.PrimaryScreen.Bounds.Width}*{Screen.PrimaryScreen.Bounds.Height}" );
             Logger.Info( $"Is Running As Administrator: {SysInfo.IsAdministrator}" );
-            Logger.Info( $"Language Config: {ConfigManager.CurrentProfile.UI.Language}" );
+            Logger.Info( $"Current Profile: {ConfigManager.Configs.CurrentProfileName}" );
+            Logger.Info( $"Language: {ConfigManager.CurrentProfile.UI.Language}" );
+        }
+
+        private static void LogForVersion()
+        {
+            var version = string.Empty;
+            try
+            {
+                version = ( (AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(
+                    Assembly.GetEntryAssembly(),
+                    typeof( AssemblyInformationalVersionAttribute ),
+                    false ) ).InformationalVersion;
+            }
+            catch
+            {
+                // ignored
+            }
+
+            if ( !string.IsNullOrEmpty( version ) ) Logger.Info( $"Application Version: {version}" );
         }
     }
 }
