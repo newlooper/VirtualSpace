@@ -668,6 +668,15 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
+        ///   查找类似 When the MainView shown, [Double LShift] to open WindowFilter. 的本地化字符串。
+        /// </summary>
+        internal static string Page_General_EnableWindowFilter {
+            get {
+                return ResourceManager.GetString("Page.General.EnableWindowFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 When use hotkey rise the MainView, Close it if the MainView already shown. 的本地化字符串。
         /// </summary>
         internal static string Page_General_HideMainViewIfItsShown {

@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
+using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop;
 
@@ -27,7 +28,7 @@ namespace VirtualSpace
         private static readonly Timer FilterTimer = new()
         {
             Enabled = true,
-            Interval = 1000
+            Interval = Manager.Configs.Cluster.WindowFilterKeywordScanningInterval
         };
 
         private WindowFilter()
@@ -39,7 +40,10 @@ namespace VirtualSpace
         {
             if ( _instance == null )
             {
-                _instance = new WindowFilter();
+                _instance = new WindowFilter
+                {
+                    Height = Const.Window.FILTER_BAR_HEIGHT
+                };
                 new WindowInteropHelper( _instance ).EnsureHandle();
             }
 

@@ -583,4 +583,7 @@ some settings may need restart program to take effect.</value>
   <data name="NavBar.About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="Page.General.EnableWindowFilter" xml:space="preserve">
+    <value>When the MainView shown, [Double LShift] to open WindowFilter.</value>
+  </data>
 </root>

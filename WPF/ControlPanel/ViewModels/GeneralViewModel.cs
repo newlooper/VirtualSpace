@@ -112,6 +112,7 @@ public partial class GeneralViewModel : ViewModelBase
             ShowVDIndexOnTrayIcon = cluster.ShowVDIndexOnTrayIcon;
             StyleOfVDIndexOnTrayIcon = cluster.StyleOfVDIndexOnTrayIcon;
             HideOnStart = cluster.HideOnStart;
+            EnableWindowFilter = cluster.EnableWindowFilter;
             _isInitialized = true;
         }
 
@@ -121,6 +122,7 @@ public partial class GeneralViewModel : ViewModelBase
         public new       bool    ShowVDIndexOnTrayIcon    { get; set; }
         public new       int     StyleOfVDIndexOnTrayIcon { get; set; }
         public new       bool    HideOnStart              { get; set; }
+        public new       bool    EnableWindowFilter       { get; set; }
 
         public void OnPropertyChanged( string propertyName, object before, object after )
         {
@@ -146,6 +148,9 @@ public partial class GeneralViewModel : ViewModelBase
                         break;
                     case nameof( HideOnStart ):
                         _cluster.HideOnStart = HideOnStart;
+                        break;
+                    case nameof( EnableWindowFilter ):
+                        _cluster.EnableWindowFilter = EnableWindowFilter;
                         break;
                 }
 

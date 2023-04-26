@@ -22,7 +22,10 @@ namespace VirtualSpace.Config.Entity
         public bool HideOnStart                { get; set; }
         public bool ForceFocusForegroundWindow { get; set; } = true;
         public bool EnableDoubleBufferedForVDW { get; set; } = true;
+        public bool EnableWindowFilter         { get; set; } = false;
 
-        [PropertyProtector( 50L, 0L, 100L )] public long VdwWallpaperQuality { get; set; }
+        [PropertyProtector( 50L, 0L, 100L )]   public long VdwWallpaperQuality                      { get; set; }
+        [PropertyProtector( 200, 100, 1000 )]  public int  ToggleWindowFilterDoublePressMaxInterval { get; set; }
+        [PropertyProtector( 1000, 100, 1000 )] public int  WindowFilterKeywordScanningInterval      { get; set; }
     }
 }

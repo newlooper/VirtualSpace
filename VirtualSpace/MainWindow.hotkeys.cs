@@ -99,7 +99,9 @@ namespace VirtualSpace
 
                 var keyType = (int)wParam;
 
-                if ( IsShowing() && info.vkCode == (int)Keys.LShiftKey )
+                if ( IsShowing() && 
+                     Manager.Configs.Cluster.EnableWindowFilter &&
+                     info.vkCode == (int)Keys.LShiftKey )
                 {
                     switch ( keyType )
                     {
@@ -108,7 +110,7 @@ namespace VirtualSpace
                             break;
                         case LLKH.WM_KEYDOWN:
                         {
-                            if ( DoublePressTimer.ElapsedMilliseconds < 200 )
+                            if ( DoublePressTimer.ElapsedMilliseconds < Manager.Configs.Cluster.ToggleWindowFilterDoublePressMaxInterval )
                             {
                                 User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.ToggleWindowFilter, 0 );
                                 return LowLevelHooks.Handled;
