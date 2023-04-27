@@ -145,22 +145,6 @@ public partial class RuleForm : UserControl
         e.Handled = true;
     }
 
-    // private void ResetForm()
-    // {
-    //     chb_Title.IsChecked = chb_CommandLine.IsChecked = chb_ProcessName.IsChecked =
-    //         chb_ProcessPath.IsChecked = chb_WinInScreen.IsChecked = chb_WndClass.IsChecked = false;
-    //     chb_MoveToDesktop.IsChecked = chb_MoveToScreen.IsChecked = chb_FollowWindow.IsChecked =
-    //         chb_PinWindow.IsChecked = chb_PinApp.IsChecked = chb_HideFromView.IsChecked = false;
-    //
-    //     tbName.Text = "";
-    //
-    //     cbb_Title.SelectedIndex = cbb_ProcessName.SelectedIndex = cbb_ProcessPath.SelectedIndex =
-    //         cbb_CommandLine.SelectedIndex = cbb_WinInScreen.SelectedIndex = cbb_WndClass.SelectedIndex = 0;
-    //     cbb_MoveToDesktop.SelectedIndex = cbb_MoveToScreen.SelectedIndex = 0;
-    //
-    //     tb_Title.Text = tb_ProcessName.Text = tb_ProcessPath.Text = tb_CommandLine.Text = tb_WndClass.Text = "";
-    // }
-
     private void BuildRule( CheckBox cb, ComboBox cbb, TextBox? tb, ExpressionTemplate exp )
     {
         if ( cb.IsChecked != true ) return;

@@ -97,7 +97,6 @@ public partial class MainWindow : Window, IAppController
 
     public void CreateRuleFromWindowHandle( IntPtr handle )
     {
-        NavBar.SelectedIndex = 3;
         RuleEditorWindow.Create( handle ).Show();
     }
 
