@@ -9,6 +9,7 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
@@ -23,6 +24,8 @@ namespace ControlPanel;
 
 public partial class RuleEditorWindow
 {
+    private static RuleEditorWindow? _instance;
+
     private RuleEditorWindow()
     {
         InitializeComponent();
@@ -31,9 +34,9 @@ public partial class RuleEditorWindow
 
     public static RuleEditorWindow Create( IntPtr handle )
     {
-        var w = new RuleEditorWindow();
+        _instance ??= new RuleEditorWindow();
 
-        w.RuleEditor.DataContext = new RuleTemplate
+        _instance.RuleEditor.DataContext = new RuleTemplate
         {
             Id = Guid.Empty,
             Enabled = true,
@@ -42,37 +45,37 @@ public partial class RuleEditorWindow
 
         var sbTitle = new StringBuilder( Const.WindowTitleMaxLength );
         _ = User32.GetWindowText( handle, sbTitle, sbTitle.Capacity );
-        w.RuleEditor.chb_Title.IsChecked = true;
-        w.RuleEditor.tb_Title.Text = sbTitle.ToString();
+        _instance.RuleEditor.chb_Title.IsChecked = true;
+        _instance.RuleEditor.tb_Title.Text = sbTitle.ToString();
 
         _ = User32.GetWindowThreadProcessId( handle, out var pId );
         var process = Process.GetProcessById( pId );
-        w.RuleEditor.chb_ProcessName.IsChecked = true;
-        w.RuleEditor.tb_ProcessName.Text = process.ProcessName;
+        _instance.RuleEditor.chb_ProcessName.IsChecked = true;
+        _instance.RuleEditor.tb_ProcessName.Text = process.ProcessName;
 
         try
         {
-            w.RuleEditor.tb_ProcessPath.Text = process.MainModule?.FileName;
+            _instance.RuleEditor.tb_ProcessPath.Text = process.MainModule?.FileName;
         }
         catch ( Exception ex )
         {
-            w.RuleEditor.chb_ProcessPath.IsChecked = false;
-            w.RuleEditor.tb_ProcessPath.Text = ex.Message;
+            _instance.RuleEditor.chb_ProcessPath.IsChecked = false;
+            _instance.RuleEditor.tb_ProcessPath.Text = ex.Message;
         }
 
         try
         {
-            w.RuleEditor.tb_CommandLine.Text = process.GetCommandLineArgs();
+            _instance.RuleEditor.tb_CommandLine.Text = process.GetCommandLineArgs();
         }
         catch ( Exception ex )
         {
-            w.RuleEditor.chb_CommandLine.IsChecked = false;
-            w.RuleEditor.tb_CommandLine.Text = ex.Message;
+            _instance.RuleEditor.chb_CommandLine.IsChecked = false;
+            _instance.RuleEditor.tb_CommandLine.Text = ex.Message;
         }
 
         var sbCName = new StringBuilder( Const.WindowClassMaxLength );
         _ = User32.GetClassName( handle, sbCName, sbCName.Capacity );
-        w.RuleEditor.tb_WndClass.Text = sbCName.ToString();
+        _instance.RuleEditor.tb_WndClass.Text = sbCName.ToString();
 
         var allScreens = Screen.AllScreens;
         var screen     = Screen.FromHandle( handle );
@@ -80,15 +83,15 @@ public partial class RuleEditorWindow
         {
             if ( screen.DeviceName == allScreens[i].DeviceName )
             {
-                w.RuleEditor.cbb_WinInScreen.SelectedValue = i;
+                _instance.RuleEditor.cbb_WinInScreen.SelectedValue = i;
                 break;
             }
         }
 
-        w.RuleEditor.RuleListItemsSource = RulesViewModel.Instance.Rules;
-        w.RuleEditor.RuleDate.Visibility = Visibility.Hidden;
+        _instance.RuleEditor.RuleListItemsSource = RulesViewModel.Instance.Rules;
+        _instance.RuleEditor.RuleDate.Visibility = Visibility.Hidden;
 
-        return w;
+        return _instance;
     }
 
     private void ClickEventFromSubControl( object sender, RoutedEventArgs e )
@@ -105,5 +108,11 @@ public partial class RuleEditorWindow
                     break;
             }
         }
+    }
+
+    private void RuleEditorWindow_OnClosing( object? sender, CancelEventArgs e )
+    {
+        e.Cancel = true;
+        Hide();
     }
 }

@@ -53,10 +53,12 @@ public partial class MainWindow : Window, IAppController
 
     public void ForceLoad()
     {
+        ShowInTaskbar = false;
         Left = Const.FakeHideX;
         Top = Const.FakeHideY;
         Show();
         Hide();
+        ShowInTaskbar = true;
     }
 
     protected override void OnSourceInitialized( EventArgs e )
@@ -108,7 +110,7 @@ public partial class MainWindow : Window, IAppController
 
     public void CreateRuleFromWindowHandle( IntPtr handle )
     {
-        RuleEditorWindow.Create( handle ).Show();
+        RuleEditorWindow.Create( handle ).ShowDialog();
     }
 
     private void MainWindow_OnLoaded( object sender, RoutedEventArgs e )
