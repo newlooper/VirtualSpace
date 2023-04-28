@@ -51,6 +51,14 @@ public partial class MainWindow : Window, IAppController
         new WindowInteropHelper( this ).EnsureHandle();
     }
 
+    public void ForceLoad()
+    {
+        Left = Const.FakeHideX;
+        Top = Const.FakeHideY;
+        Show();
+        Hide();
+    }
+
     protected override void OnSourceInitialized( EventArgs e )
     {
         base.OnSourceInitialized( e );
@@ -61,6 +69,9 @@ public partial class MainWindow : Window, IAppController
 
     public void BringToTop()
     {
+        Left = ( SystemParameters.PrimaryScreenWidth - Width ) / 2;
+        Top = ( SystemParameters.PrimaryScreenHeight - Height ) / 2;
+
         if ( WindowState == WindowState.Minimized )
         {
             WindowState = WindowState.Normal;

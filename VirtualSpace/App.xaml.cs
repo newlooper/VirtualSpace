@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
@@ -140,6 +141,7 @@ namespace VirtualSpace
             Logger.Info( $"Application Start Successfully: {ConfigManager.AppPath}" );
             LogForVersion();
             Logger.Info( $"System Version: {SysInfo.OSVersion}" );
+            Logger.Info( $".NET Runtime: {RuntimeInformation.FrameworkDescription}" );
             Logger.Info( $"Total Screens: {Screen.AllScreens.Length}" );
             Logger.Info( $"Total VirtualDesktops: {DesktopWrapper.Count}" );
             Logger.Info( $"Start Screen: {screen.DeviceName} ({screen.DeviceFriendlyName()})" );

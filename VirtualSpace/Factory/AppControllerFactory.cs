@@ -23,7 +23,9 @@ namespace VirtualSpace.Factory
                     // return new AppController();
                 case "WPF":
                     mergedDictionaries?.Add( ControlPanel.ExportResourceDictionary.Instance );
-                    return new ControlPanel.MainWindow();
+                    var mw = new ControlPanel.MainWindow();
+                    mw.ForceLoad();
+                    return mw;
                 default:
                     return null;
             }

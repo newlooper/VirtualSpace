@@ -16,7 +16,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="Segoe UI,Segoe UI Emoji,Segoe UI Symbol,Microsoft YaHei UI,Microsoft YaHei"
-        Height="800" Width="1280" WindowStartupLocation="CenterScreen"
+        Height="800" Width="1280"
         Loaded="MainWindow_OnLoaded" Closing="MainWindow_OnClosing">
 
     <Grid>
