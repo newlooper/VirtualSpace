@@ -585,4 +585,7 @@
   <data name="Page.General.EnableWindowFilter" xml:space="preserve">
     <value>当主视图显示时，[双击左SHIFT]打开窗口过滤器。</value>
   </data>
+  <data name="Window.RuleDefinition" xml:space="preserve">
+    <value>规则定义</value>
+  </data>
 </root>

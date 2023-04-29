@@ -53,6 +53,8 @@ public partial class MainWindow : Window, IAppController
 
     public void ForceLoad()
     {
+        if ( IsVisible ) return;
+        
         ShowInTaskbar = false;
         Left = Const.FakeHideX;
         Top = Const.FakeHideY;
@@ -110,6 +112,7 @@ public partial class MainWindow : Window, IAppController
 
     public void CreateRuleFromWindowHandle( IntPtr handle )
     {
+        ForceLoad();
         RuleEditorWindow.Create( handle ).ShowDialog();
     }
 

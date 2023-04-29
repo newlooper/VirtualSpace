@@ -586,4 +586,7 @@ some settings may need restart program to take effect.</value>
   <data name="Page.General.EnableWindowFilter" xml:space="preserve">
     <value>When the MainView shown, [Double LShift] to open WindowFilter.</value>
   </data>
+  <data name="Window.RuleDefinition" xml:space="preserve">
+    <value>Rule Definition</value>
+  </data>
 </root>

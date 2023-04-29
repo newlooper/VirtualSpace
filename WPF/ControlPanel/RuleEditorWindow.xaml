@@ -15,7 +15,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="Segoe UI,Segoe UI Emoji,Segoe UI Symbol,Microsoft YaHei UI,Microsoft YaHei"
         WindowStartupLocation="CenterScreen" Closing="RuleEditorWindow_OnClosing"
-        Title="RuleEditorWindow" Height="700" Width="1024" Topmost="True">
+        Title="{lex:Loc Window.RuleDefinition}" Height="700" Width="1024" Topmost="True">
 
     <Window.Resources>
         <ResourceDictionary>
