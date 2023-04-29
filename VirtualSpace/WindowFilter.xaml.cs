@@ -42,7 +42,8 @@ namespace VirtualSpace
             {
                 _instance = new WindowFilter
                 {
-                    Height = Const.Window.FILTER_BAR_HEIGHT
+                    Height = Const.Window.WINDOW_FILTER_BAR_HEIGHT,
+                    Title = Const.Window.VS_WINDOW_FILTER_TITLE
                 };
                 new WindowInteropHelper( _instance ).EnsureHandle();
             }

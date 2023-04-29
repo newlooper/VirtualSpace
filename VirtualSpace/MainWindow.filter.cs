@@ -25,7 +25,7 @@ namespace VirtualSpace
             var filterRow = Canvas.RowDefinitions[1];
             if ( filterRow.Height.Value == 0 )
             {
-                filterRow.Height = new GridLength( Const.Window.FILTER_BAR_HEIGHT, GridUnitType.Pixel );
+                filterRow.Height = new GridLength( Const.Window.WINDOW_FILTER_BAR_HEIGHT, GridUnitType.Pixel );
                 ShowFilterWindow();
             }
             else
@@ -43,7 +43,7 @@ namespace VirtualSpace
             var wf = WindowFilter.GetInstance( _instance.Handle );
             wf.Width = Width;
             wf.Left = Left;
-            wf.Top = Height - Const.Window.FILTER_BAR_HEIGHT;
+            wf.Top = Height - Const.Window.WINDOW_FILTER_BAR_HEIGHT;
             wf.Show();
             wf.SetFocus();
         }

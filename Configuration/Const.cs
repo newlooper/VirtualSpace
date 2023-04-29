@@ -38,11 +38,12 @@ namespace VirtualSpace.Config
 
         public static class Window
         {
-            public const string VD_FRAME_TITLE      = "VirtualSpace__VirtualDesktopFrame!";
-            public const string VD_CONTAINER_TITLE  = "VirtualSpace__VirtualDesktopWindow!";
-            public const string VD_DRAG_TITLE       = "VirtualSpace__VirtualDesktopDragWindow!";
-            public const string VS_CONTROLLER_TITLE = "[Virtual Space Controller]";
-            public const int    FILTER_BAR_HEIGHT   = 100;
+            public const string VD_FRAME_TITLE           = "VirtualSpace__VirtualDesktopFrame!";
+            public const string VD_CONTAINER_TITLE       = "VirtualSpace__VirtualDesktopWindow!";
+            public const string VD_DRAG_TITLE            = "VirtualSpace__VirtualDesktopDragWindow!";
+            public const string VS_CONTROLLER_TITLE      = "[Virtual Space Controller]";
+            public const string VS_WINDOW_FILTER_TITLE   = "VirtualSpace__WindowFilter!";
+            public const int    WINDOW_FILTER_BAR_HEIGHT = 100;
         }
 
         public static class VirtualDesktop

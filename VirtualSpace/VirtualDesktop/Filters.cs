@@ -32,6 +32,7 @@ namespace VirtualSpace.VirtualDesktop
             Const.Window.VD_CONTAINER_TITLE,
             Const.Window.VD_DRAG_TITLE,
             Const.Window.VS_CONTROLLER_TITLE,
+            Const.Window.VS_WINDOW_FILTER_TITLE,
             "WinFormsDesigner"
         };
 
