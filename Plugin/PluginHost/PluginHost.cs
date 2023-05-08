@@ -14,7 +14,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
 
@@ -118,19 +117,13 @@ namespace VirtualSpace.Plugin
         {
             try
             {
-                using var process = Process.GetProcessById( pluginInfo.ProcessId );
-                var       exe     = process.MainModule?.FileName;
-                ClosePlugin( pluginInfo );
-                Task.Run( () =>
-                {
-                    Thread.Sleep( PluginConst.RestartDelay );
-                    Process.Start( exe );
-                    Logger.Info( $"[PLUGIN] {pluginInfo.Display} Restarted." );
-                } );
+                WinApi.PostMessage( pluginInfo.Handle, WinApi.UM_RESTART, 0, PluginConst.RestartDelay );
+                Logger.Info( $"[PLUGIN] {pluginInfo.Display} Restarted." );
             }
-            catch
+            catch ( Exception ex )
             {
                 Logger.Warning( "Failed Restart Plugin, Abort Operation." );
+                Logger.Warning( ex.Message );
             }
         }
 

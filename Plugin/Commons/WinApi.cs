@@ -34,6 +34,7 @@ namespace VirtualSpace.Plugin
         public const  int UM_SWITCHDESKTOP  = WM_USER + 1;
         public const  int UM_PLUGINSETTINGS = WM_USER + 2;
         public const  int UM_OTHERSCREENS   = WM_USER + 3;
+        public const  int UM_RESTART        = WM_USER + 4;
 
         [DllImport( "user32.dll", CharSet = CharSet.Auto )]
         public static extern bool PostMessage( IntPtr hWnd, int msg, uint wParam, uint lParam );
