@@ -121,6 +121,9 @@ namespace VirtualSpace.Config
                     },
                     MouseActions = MouseAction.Info
                 };
+
+                PropertyProtector.Walk( Configs );
+                
                 Save( filePath, "init", "Setting File" );
                 SaveCluster( Configs.Cluster );
             }
