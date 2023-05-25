@@ -67,7 +67,7 @@ public partial class UIViewModel : ViewModelBase
                     Manager.Save( reason: Manager.CurrentProfile.UI.ShowVdIndex );
                     break;
                 case nameof( ShowVdIndexType ):
-                    Manager.CurrentProfile.UI.ShowVdIndexType = (byte)after;
+                    Manager.CurrentProfile.UI.ShowVdIndexType = (int)after;
                     Manager.Save( reason: Manager.CurrentProfile.UI.ShowVdIndexType );
                     break;
             }
