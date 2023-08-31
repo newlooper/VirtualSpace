@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualDesktopWrapper", "Vi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlPanel", "WPF\ControlPanel\ControlPanel.csproj", "{FAC71622-8310-4139-944B-F1FBF6588843}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualDesktop11_23H2", "VirtualDesktop\VirtualDesktop11_23H2\VirtualDesktop11_23H2.csproj", "{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +239,18 @@ Global
 		{FAC71622-8310-4139-944B-F1FBF6588843}.Release|x64.Build.0 = Release|Any CPU
 		{FAC71622-8310-4139-944B-F1FBF6588843}.Release|x86.ActiveCfg = Release|Any CPU
 		{FAC71622-8310-4139-944B-F1FBF6588843}.Release|x86.Build.0 = Release|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Debug|x64.Build.0 = Debug|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Debug|x86.Build.0 = Debug|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Release|x64.ActiveCfg = Release|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Release|x64.Build.0 = Release|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Release|x86.ActiveCfg = Release|Any CPU
+		{8D57B4D2-AB2E-41D4-AE7D-D6A4A173A40F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Windows;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
+using VirtualSpace.Helpers;
 
 namespace VirtualSpace
 {
@@ -50,16 +51,30 @@ namespace VirtualSpace
                     dllName = programName + resName + "VirtualDesktop10" + dllExt;
                     break;
                 case "VirtualDesktop11":
-                    var ver = Environment.OSVersion.Version;
-                    if ( ver.Build <= 22489 )
+                    var ver = SysInfo.OSVersion;
+                    switch ( ver.Build )
                     {
-                        Logger.Debug( "[Init]Load VirtualDesktop11.dll 21H2" );
-                        dllName = programName + resName + "VirtualDesktop11_21H2.dll";
-                    }
-                    else
-                    {
-                        Logger.Debug( "[Init]Load VirtualDesktop11.dll 22H2" );
-                        dllName = programName + resName + "VirtualDesktop11.dll";
+                        case <= 22489:
+                            Logger.Debug( "[Init]Load VirtualDesktop11.dll 21H2" );
+                            dllName = programName + resName + "VirtualDesktop11_21H2.dll";
+                            break;
+                        case 22621:
+                            if ( ver.Revision < 2215 )
+                            {
+                                Logger.Debug( "[Init]Load VirtualDesktop11.dll 22H2" );
+                                dllName = programName + resName + "VirtualDesktop11.dll";
+                            }
+                            else
+                            {
+                                Logger.Debug( "[Init]Load VirtualDesktop11.dll 23H2" );
+                                dllName = programName + resName + "VirtualDesktop11_23H2.dll";
+                            }
+
+                            break;
+                        default:
+                            Logger.Debug( "[Init]Load VirtualDesktop11.dll 22H2" );
+                            dllName = programName + resName + "VirtualDesktop11.dll";
+                            break;
                     }
 
                     break;
@@ -71,15 +86,15 @@ namespace VirtualSpace
             using var stream      = typeof( Program ).Assembly.GetManifestResourceStream( dllName );
             var       rawAssembly = new byte[stream.Length];
             stream.Read( rawAssembly, 0, rawAssembly.Length );
-            try
-            {
-                var filepath = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, shortAssemblyName + dllExt );
-                File.WriteAllBytesAsync( filepath, rawAssembly );
-            }
-            catch
-            {
-                // ignored
-            }
+            // try
+            // {
+            //     var filepath = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, shortAssemblyName + dllExt );
+            //     File.WriteAllBytesAsync( filepath, rawAssembly );
+            // }
+            // catch
+            // {
+            //     // ignored
+            // }
 
             return Assembly.Load( rawAssembly );
         }
