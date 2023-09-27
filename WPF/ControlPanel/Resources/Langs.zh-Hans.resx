@@ -300,11 +300,8 @@
   <data name="Page.Rules.Rule.FollowWindow" xml:space="preserve">
     <value>跟随窗口</value>
   </data>
-  <data name="Page.Rules.Rule.PinWindow" xml:space="preserve">
-    <value>在所有桌面上显示此应用的窗口</value>
-  </data>
   <data name="Page.Rules.Rule.PinApp" xml:space="preserve">
-    <value>在所有桌面上显示此窗口</value>
+    <value>在所有桌面上显示此应用的窗口</value>
   </data>
   <data name="Page.Rules.Rule.HideFromView" xml:space="preserve">
     <value>从视图中隐藏</value>
@@ -587,5 +584,8 @@
   </data>
   <data name="Window.RuleDefinition" xml:space="preserve">
     <value>规则定义</value>
+  </data>
+  <data name="Page.Rules.Rule.PinWindow" xml:space="preserve">
+    <value>在所有桌面上显示此窗口</value>
   </data>
 </root>

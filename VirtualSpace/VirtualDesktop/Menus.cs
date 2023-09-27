@@ -17,7 +17,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using VirtualSpace.Config;
-using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
 using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop.Api;

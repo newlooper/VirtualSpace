@@ -301,10 +301,10 @@
     <value>Follow Window</value>
   </data>
   <data name="Page.Rules.Rule.PinWindow" xml:space="preserve">
-    <value>Pin Application of Window</value>
+    <value>Pin Window</value>
   </data>
   <data name="Page.Rules.Rule.PinApp" xml:space="preserve">
-    <value>Pin Window</value>
+    <value>Pin Application of Window</value>
   </data>
   <data name="Page.Rules.Rule.HideFromView" xml:space="preserve">
     <value>Hide From View</value>
