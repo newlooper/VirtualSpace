@@ -838,7 +838,7 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Emai.
+        ///   Looks up a localized string similar to Email.
         /// </summary>
         internal static string Page_Plugins_Email {
             get {
@@ -1072,7 +1072,7 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pin Window.
+        ///   Looks up a localized string similar to Pin Application of Window.
         /// </summary>
         internal static string Page_Rules_Rule_PinApp {
             get {
@@ -1081,7 +1081,7 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pin Application of Window.
+        ///   Looks up a localized string similar to Pin Window.
         /// </summary>
         internal static string Page_Rules_Rule_PinWindow {
             get {
