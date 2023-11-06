@@ -138,16 +138,17 @@ Application Will Quit.
 
 Support List
 ====================================
-Windows 10	Redstone5(17763)
-Windows 10	19H1(18362)
-Windows 10	19H2(18363)
-Windows 10	20H1(19041)
-Windows 10	20H2(19042)
-Windows 10	21H1(19043)
-Windows 10	21H2(19044)
-Windows 10	22H2(19045)
-Windows 11	21H2(22000)
-Windows 11	22H2(22621)
+Windows 10 Redstone5(17763)
+Windows 10 19H1(18362)
+Windows 10 19H2(18363)
+Windows 10 20H1(19041)
+Windows 10 20H2(19042)
+Windows 10 21H1(19043)
+Windows 10 21H2(19044)
+Windows 10 22H2(19045)
+Windows 11 21H2(22000)
+Windows 11 22H2(22621)
+Windows 11 23H2(22631)
 ====================================</value>
   </data>
   <data name="Rule.NameRequired" xml:space="preserve">
