@@ -9,6 +9,7 @@ Cube3D is distributed in the hope that it will be useful, but WITHOUT ANY WARRAN
 You should have received a copy of the GNU General Public License along with Cube3D. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -33,10 +34,12 @@ namespace Cube3D
 
             ////////////////////////////////////////////////////////////////
             // contents
-            if ( NotifyGrid.Children.Count != vdCount )
+            var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
+            var maxCount = rowsCols * rowsCols;
+            if ( NotifyGrid.Children.Count != maxCount )
             {
                 NotifyGrid.Children.Clear();
-                for ( var i = 0; i < vdCount; i++ )
+                for ( var i = 0; i < maxCount; i++ )
                 {
                     NotifyGrid.Children.Add( new Button
                     {
