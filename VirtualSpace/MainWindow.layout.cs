@@ -74,8 +74,6 @@ namespace VirtualSpace
             _desktopCount = vdCount; // remember last count
             RowsCols = rowsCols;
             _instance.UpdateLayout();
-
-            VirtualDesktopManager.RebuildMatrixMap( RowsCols );
         }
 
         public static void ResetMainGridForSingleDesktop( int vdIndex )
@@ -133,8 +131,6 @@ namespace VirtualSpace
             _desktopCount = 1; // single, single, single
             RowsCols = rowsCols;
             _instance.UpdateLayout();
-
-            VirtualDesktopManager.RebuildMatrixMap( RowsCols );
         }
 
         public static void UpdateHoverBorder( int hover )

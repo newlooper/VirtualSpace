@@ -18,115 +18,214 @@ namespace VirtualSpace.VirtualDesktop
     {
         public static int CalculateTargetIndex( int vdCount, int fromIndex, Keys dir, Config.Entity.Navigation nav )
         {
-            var rows     = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
-            var cols     = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
+            var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
             var maxIndex = vdCount - 1;
 
-            var targetIndex = -1;
+            var da = Manager.CurrentProfile.UI.DesktopArrangement;
 
-            ////////////////////////////////////////
-            // 边界保护 / 循环判断
-            // 按行放置方式
-            switch ( dir )
+            var currentRowCol = RowColFromIndex( rowsCols, fromIndex, da );
+            var targetRowCol  = TargetRowColByDirection( rowsCols, currentRowCol, dir, currentRowCol );
+            var targetIndex   = IndexFromRowCol( rowsCols, targetRowCol, da );
+
+            while ( targetIndex > maxIndex ) // 暴力应对目标桌面不存在的情况
             {
-                case Keys.Left:
-                    if ( fromIndex % cols == 0 ) // 第一列，左侧已无元素
-                    {
-                        if ( nav.CirculationH ) // 启用水平循环
-                        {
-                            switch ( nav.CirculationHType )
-                            {
-                                case Const.VirtualDesktop.NavHTypeNextRow: // 跨行循环
-                                    targetIndex = fromIndex == 0 ? maxIndex : fromIndex - 1;
-                                    break;
-                                case Const.VirtualDesktop.NavHTypeSameRow: // 行内循环
-                                    targetIndex = fromIndex + cols - 1;
-                                    targetIndex = targetIndex > maxIndex ? maxIndex : targetIndex;
-                                    break;
-                            }
-                        }
-                        else // 未启用水平循环，原地不动
-                        {
-                            targetIndex = fromIndex;
-                        }
-                    }
-                    else
-                    {
-                        targetIndex = fromIndex - 1;
-                    }
+                targetRowCol = TargetRowColByDirection( rowsCols, targetRowCol, dir, currentRowCol );
+                targetIndex = IndexFromRowCol( rowsCols, targetRowCol, da );
+            }
 
-                    break;
-                case Keys.Right:
-                    if ( ( fromIndex + 1 ) % cols == 0 || fromIndex == maxIndex ) // 最后一列 或 最后一个桌面，右侧已无元素
-                    {
-                        if ( nav.CirculationH )
+            return IndexFromRowCol( rowsCols, targetRowCol, 0 );
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+            /// 导航不受 DesktopArrangement 影响，或者说：导航永远按照 DesktopArrarngement 为 0 的情况下进行
+            /// 也即：桌面按照配置文件中的顺序，从左上角开始，行满换行的方式填充到矩阵中
+            /// 
+            /// 此函数假设导航的目标桌面一定存在(也就是无法应对桌面数量不是 n 的平方的情况)，若不满足则由单独的代码处理
+            (int R, int C) TargetRowColByDirection( int n, (int R, int C) currentRC, Keys direction, (int R, int C) validRC )
+            {
+                var r         = currentRC.R;
+                var c         = currentRC.C;
+                var targetRow = currentRC.R;
+                var targetCol = currentRC.C;
+
+                switch ( direction )
+                {
+                    case Keys.Left:
+                        if ( c == 0 )
                         {
-                            switch ( nav.CirculationHType )
+                            if ( nav.CirculationH )
                             {
-                                case Const.VirtualDesktop.NavHTypeNextRow:
-                                    targetIndex = fromIndex == maxIndex ? 0 : fromIndex + 1;
-                                    break;
-                                case Const.VirtualDesktop.NavHTypeSameRow:
-                                    targetIndex = fromIndex / cols * cols; // ( fromIndex / cols ) 取整得到所在行号(0基)，行号与列数的积为行首索引
-                                    break;
+                                if ( nav.CirculationHType == Const.VirtualDesktop.NavHTypeNextRow )
+                                {
+                                    targetRow = r == 0 ? n - 1 : r - 1;
+                                }
+
+                                targetCol = n - 1;
+                            }
+                            else
+                            {
+                                return validRC;
                             }
                         }
                         else
                         {
-                            targetIndex = fromIndex;
+                            targetCol--;
                         }
-                    }
-                    else
-                    {
-                        targetIndex = fromIndex + 1;
-                    }
 
-                    break;
-                case Keys.Up:
-                    if ( fromIndex < cols ) // 第一行，上面已无元素
-                    {
-                        if ( nav.CirculationV ) // 启用垂直循环
+                        break;
+                    case Keys.Right:
+                        if ( c == n - 1 )
                         {
-                            targetIndex = fromIndex + ( rows - 1 ) * cols;
-                            while ( targetIndex > maxIndex )
-                                targetIndex -= cols;
+                            if ( nav.CirculationH )
+                            {
+                                if ( nav.CirculationHType == Const.VirtualDesktop.NavHTypeNextRow )
+                                {
+                                    targetRow = r == n - 1 ? 0 : r + 1;
+                                }
+
+                                targetCol = 0;
+                            }
+                            else
+                            {
+                                return validRC;
+                            }
                         }
                         else
                         {
-                            targetIndex = fromIndex;
+                            targetCol++;
                         }
-                    }
-                    else
-                    {
-                        targetIndex = fromIndex - cols;
-                    }
 
-                    break;
-                case Keys.Down:
-                    if ( fromIndex >= ( rows - 1 ) * cols ) // 最后一行，下面已无元素
-                    {
-                        if ( nav.CirculationV ) // 启用垂直循环
+                        break;
+                    case Keys.Up:
+                        if ( r == 0 )
                         {
-                            targetIndex = fromIndex - ( rows - 1 ) * cols;
+                            if ( nav.CirculationV )
+                            {
+                                targetRow = n - 1;
+                            }
+                            else
+                            {
+                                return validRC;
+                            }
                         }
                         else
                         {
-                            targetIndex = fromIndex;
+                            targetRow--;
                         }
-                    }
-                    else
-                    {
-                        targetIndex = fromIndex + cols;
-                        if ( targetIndex > maxIndex )
-                        {
-                            targetIndex = nav.CirculationV ? targetIndex % rows : fromIndex;
-                        }
-                    }
 
+                        break;
+                    case Keys.Down:
+                        if ( r == n - 1 )
+                        {
+                            if ( nav.CirculationV )
+                            {
+                                targetRow = 0;
+                            }
+                            else
+                            {
+                                return validRC;
+                            }
+                        }
+                        else
+                        {
+                            targetRow++;
+                        }
+
+                        break;
+                }
+
+                return ( targetRow, targetCol );
+            }
+        }
+
+        public static int IndexFromRowCol( int n, (int R, int C) currentRC, int? desktopArrangement )
+        {
+            var r = currentRC.R;
+            var c = currentRC.C;
+            switch ( desktopArrangement )
+            {
+                case 0:
+                    // TopLeft To BottomRight H
+                    return r * n + c;
+                case 1:
+                    // TopRight To BottomLeft H
+                    return r * n + ( n - 1 - c );
+                case 2:
+                    // BottomLeft To TopRight H
+                    return ( n - 1 - r ) * n + c;
+                case 3:
+                    // BottomRight To TopLeft H
+                    return ( n - 1 - r ) * n + ( n - 1 - c );
+                case 4:
+                    // TopLeft To BottomRight V
+                    return c * n + r;
+                case 5:
+                    // TopRight To BottomLeft V
+                    return ( n - 1 - c ) * n + r;
+                case 6:
+                    // BottomLeft To TopRight V
+                    return c * n + ( n - 1 - r );
+                case 7:
+                    // BottomRight To TopLeft V
+                    return ( n - 1 - c ) * n + ( n - 1 - r );
+                default:
+                    // TopLeft To BottomRight H
+                    return r * n + c;
+            }
+        }
+
+        public static (int R, int C) RowColFromIndex( int n, int logicIndex, int? desktopArrangement )
+        {
+            int row, col;
+            switch ( desktopArrangement )
+            {
+                case 0:
+                    // TopLeft To BottomRight H
+                    row = logicIndex / n;
+                    col = logicIndex % n;
+                    break;
+                case 1:
+                    // TopRight To BottomLeft H
+                    row = logicIndex / n;
+                    col = n - 1 - logicIndex % n;
+                    break;
+                case 2:
+                    // BottomLeft To TopRight H
+                    row = n - 1 - logicIndex / n;
+                    col = logicIndex % n;
+                    break;
+                case 3:
+                    // BottomRight To TopLeft H
+                    row = n - 1 - logicIndex / n;
+                    col = n - 1 - logicIndex % n;
+                    break;
+                case 4:
+                    // TopLeft To BottomRight V
+                    row = logicIndex % n;
+                    col = logicIndex / n;
+                    break;
+                case 5:
+                    // TopRight To BottomLeft V
+                    row = logicIndex % n;
+                    col = n - 1 - logicIndex / n;
+                    break;
+                case 6:
+                    // BottomLeft To TopRight V
+                    row = n - 1 - logicIndex % n;
+                    col = logicIndex / n;
+                    break;
+                case 7:
+                    // BottomRight To TopLeft V
+                    row = n - 1 - logicIndex % n;
+                    col = n - 1 - logicIndex / n;
+                    break;
+                default:
+                    // TopLeft To BottomRight H
+                    row = logicIndex / n;
+                    col = logicIndex % n;
                     break;
             }
 
-            return targetIndex;
+            return ( row, col );
         }
     }
 }

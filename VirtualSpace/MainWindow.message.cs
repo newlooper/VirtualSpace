@@ -29,7 +29,7 @@ namespace VirtualSpace
 {
     public partial class MainWindow
     {
-        private        uint          _taskbarCreatedMessage;
+        private uint _taskbarCreatedMessage;
 
         private void RegisterSystemMessages()
         {
@@ -249,7 +249,6 @@ namespace VirtualSpace
                             SwitchToDesktopById( VirtualDesktopManager.LastDesktopId );
                             break;
                         case UserMessage.DesktopArrangement:
-                            VirtualDesktopManager.RebuildMatrixMap( RowsCols );
                             if ( IsShowing() )
                             {
                                 VirtualDesktopManager.ShowAllVirtualDesktops();
@@ -322,12 +321,13 @@ namespace VirtualSpace
             if ( SwitchDesktopTimer.ElapsedMilliseconds <= Const.SwitchDesktopInterval ) return;
 
             var desktopOrder              = Manager.CurrentProfile.DesktopOrder;
-            var currentDesktopMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( desktopOrder.IndexOf( DesktopWrapper.CurrentGuid ) );
+            var currentVdIndex            = desktopOrder.IndexOf( DesktopWrapper.CurrentGuid );
+            var currentDesktopMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( currentVdIndex );
 
             var dir = lParam.ToInt32();
-            var targetIndex = Navigation.CalculateTargetIndex(
+            var targetMatrixIndex = Navigation.CalculateTargetIndex(
                 DesktopWrapper.Count,
-                currentDesktopMatrixIndex,
+                currentVdIndex,
                 (Keys)dir,
                 Manager.CurrentProfile.Navigation );
 
@@ -337,7 +337,7 @@ namespace VirtualSpace
                 vdCount = DesktopWrapper.Count,
                 fromIndex = currentDesktopMatrixIndex,
                 dir = dir,
-                targetIndex = targetIndex
+                targetIndex = targetMatrixIndex
             };
             var vDsiSize = Marshal.SizeOf( typeof( VirtualDesktopSwitchInfo ) );
             var pVDsi    = Marshal.AllocHGlobal( vDsiSize );
@@ -365,7 +365,7 @@ namespace VirtualSpace
             {
                 Thread.Sleep( 100 );
                 if ( _forceSwitchOnTimeout == 0 ) return;
-                DesktopWrapper.MakeVisibleByGuid( desktopOrder[VirtualDesktopManager.GetVdIndexByMatrixIndex( targetIndex )] );
+                DesktopWrapper.MakeVisibleByGuid( desktopOrder[VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
             } );
 
             Marshal.FreeHGlobal( pVDsi );

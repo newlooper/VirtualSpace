@@ -10,7 +10,6 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Collections.Generic;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
 
@@ -18,102 +17,22 @@ namespace VirtualSpace.VirtualDesktop
 {
     internal static partial class VirtualDesktopManager
     {
-        private static Dictionary<int, int>? _vdToMatrixMap;
-        private static Dictionary<int, int>? _matrixToVdMap;
-
-        public static void RebuildMatrixMap( int rowsCols )
-        {
-            var matrixDefault = new int[rowsCols, rowsCols];
-            var index         = 0;
-            for ( var i = 0; i < rowsCols; i++ )
-            {
-                for ( var j = 0; j < rowsCols; j++ )
-                {
-                    matrixDefault[i, j] = index++;
-                }
-            }
-
-            _vdToMatrixMap = new Dictionary<int, int>();
-            _matrixToVdMap = new Dictionary<int, int>();
-
-            if ( Math.Pow( rowsCols, 2 ) != DesktopWrapper.Count )
-            {
-                ConfigManager.CurrentProfile.UI.DesktopArrangement = 0;
-                ConfigManager.Save( reason: "reset", reasonName: "ConfigManager.CurrentProfile.UI.DesktopArrangement" );
-            }
-
-            // MainWindow.AcForm.RenderDesktopArrangementButtons( ConfigManager.CurrentProfile.UI.DesktopArrangement.ToString() );
-
-            var da = ConfigManager.CurrentProfile.UI.DesktopArrangement;
-
-            index = 0;
-            for ( var i = 0; i < rowsCols; i++ )
-            {
-                for ( var j = 0; j < rowsCols; j++ )
-                {
-                    switch ( da )
-                    {
-                        case 0:
-                            _vdToMatrixMap.Add( matrixDefault[i, j], index ); // TopLeft To BottomRight H
-                            _matrixToVdMap.Add( index, matrixDefault[i, j] );
-                            break;
-                        case 1:
-                            _vdToMatrixMap.Add( matrixDefault[i, rowsCols - 1 - j], index ); // TopRight To BottomLeft H
-                            _matrixToVdMap.Add( index, matrixDefault[i, rowsCols - 1 - j] );
-                            break;
-                        case 2:
-                            _vdToMatrixMap.Add( matrixDefault[rowsCols - 1 - i, j], index ); // BottomLeft To TopRight H
-                            _matrixToVdMap.Add( index, matrixDefault[rowsCols - 1 - i, j] );
-                            break;
-                        case 3:
-                            _vdToMatrixMap.Add( matrixDefault[rowsCols - 1 - i, rowsCols - 1 - j], index ); // BottomRight To TopLeft H
-                            _matrixToVdMap.Add( index, matrixDefault[rowsCols - 1 - i, rowsCols - 1 - j] );
-                            break;
-                        case 4:
-                            _vdToMatrixMap.Add( matrixDefault[j, i], index ); // TopLeft To BottomRight V
-                            _matrixToVdMap.Add( index, matrixDefault[j, i] );
-                            break;
-                        case 5:
-                            _vdToMatrixMap.Add( matrixDefault[rowsCols - 1 - j, i], index ); // TopRight To BottomLeft V
-                            _matrixToVdMap.Add( index, matrixDefault[rowsCols - 1 - j, i] );
-                            break;
-                        case 6:
-                            _vdToMatrixMap.Add( matrixDefault[j, rowsCols - 1 - i], index ); // BottomLeft To TopRight V
-                            _matrixToVdMap.Add( index, matrixDefault[j, rowsCols - 1 - i] );
-                            break;
-                        case 7:
-                            _vdToMatrixMap.Add( matrixDefault[rowsCols - 1 - j, rowsCols - 1 - i], index ); // BottomRight To TopLeft V
-                            _matrixToVdMap.Add( index, matrixDefault[rowsCols - 1 - j, rowsCols - 1 - i] );
-                            break;
-                        default:
-                            _vdToMatrixMap.Add( matrixDefault[i, j], index ); // TopLeft To BottomRight H
-                            _matrixToVdMap.Add( index, matrixDefault[i, j] );
-                            break;
-                    }
-
-                    index++;
-                }
-            }
-        }
-
         public static int GetMatrixIndexByVdIndex( int vdIndex )
         {
-            if ( _vdToMatrixMap == null )
-            {
-                RebuildMatrixMap( (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) ) );
-            }
+            var rowsCols    = (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) );
+            var rc          = Navigation.RowColFromIndex( rowsCols, vdIndex, ConfigManager.CurrentProfile.UI.DesktopArrangement );
+            var matrixIndex = Navigation.IndexFromRowCol( rowsCols, rc, 0 );
 
-            return _vdToMatrixMap[vdIndex];
+            return matrixIndex;
         }
 
         public static int GetVdIndexByMatrixIndex( int matrixIndex )
         {
-            if ( _matrixToVdMap == null )
-            {
-                RebuildMatrixMap( (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) ) );
-            }
+            var rowsCols = (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) );
+            var rc       = Navigation.RowColFromIndex( rowsCols, matrixIndex, 0 );
+            var vdIndex  = Navigation.IndexFromRowCol( rowsCols, rc, ConfigManager.CurrentProfile.UI.DesktopArrangement );
 
-            return _matrixToVdMap[matrixIndex];
+            return vdIndex;
         }
     }
 }
