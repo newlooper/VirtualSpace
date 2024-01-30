@@ -47,7 +47,7 @@ namespace VirtualSpace
             switch ( shortAssemblyName )
             {
                 case "VirtualDesktop10":
-                    Logger.Debug( $"[Init]Load VirtualDesktop10.dll" );
+                    Logger.Debug( "[Init]Load VirtualDesktop10.dll" );
                     dllName = programName + resName + "VirtualDesktop10" + dllExt;
                     break;
                 case "VirtualDesktop11":
@@ -72,7 +72,15 @@ namespace VirtualSpace
                             break;
                         case 22631:
                             Logger.Debug( "[Init]Load VirtualDesktop11.dll 23H2" );
-                            dllName = programName + resName + "VirtualDesktop11_23H2.dll";
+                            if ( ver.Revision >= 3085 )
+                            {
+                                dllName = programName + resName + "VirtualDesktop11_23H2_3085.dll";
+                            }
+                            else
+                            {
+                                dllName = programName + resName + "VirtualDesktop11_23H2.dll";
+                            }
+
                             break;
                         default:
                             Logger.Debug( "[Init]Load VirtualDesktop11.dll 22H2" );
