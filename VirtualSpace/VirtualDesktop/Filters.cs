@@ -23,7 +23,10 @@ namespace VirtualSpace.VirtualDesktop
         {
             "Progman",
             "RainmeterMeterWindow",
-            "SysDragImage"
+            "SysDragImage",
+            "DuiMenuWnd",
+            "PerryShadowWnd",
+            "SysShadow"
         };
 
         public static readonly string[] WndTitleIgnoreList =
@@ -36,7 +39,7 @@ namespace VirtualSpace.VirtualDesktop
             "WinFormsDesigner"
         };
 
-        public static readonly List<IntPtr>                      WndHandleIgnoreListByError  = new();
+        public static readonly List<IntPtr> WndHandleIgnoreListByError = new();
         public static readonly ConcurrentDictionary<IntPtr, int> WndHandleIgnoreListByManual = new();
 
         public static bool IsCloaked( IntPtr handle )

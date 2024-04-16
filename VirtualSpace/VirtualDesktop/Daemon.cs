@@ -31,11 +31,11 @@ namespace VirtualSpace.VirtualDesktop
 {
     internal static class Daemon
     {
-        private static          int               _runlevel              = 1;
-        private static readonly ManualResetEvent  CanRun                 = new( false );
-        private static readonly StringBuilder     SbWinInfo              = new( Const.WindowTitleMaxLength );
-        private static readonly Channel<Behavior> ActionConsumer         = Channels.ActionChannel;
-        private static readonly Channel<Window>   VisibleWindowsProducer = Channels.VisibleWindowsChannel;
+        private static int _runlevel = 1;
+        private static readonly ManualResetEvent CanRun = new( false );
+        private static readonly StringBuilder SbWinInfo = new( Const.WindowTitleMaxLength );
+        private static readonly Channel<Behavior> ActionConsumer = Channels.ActionChannel;
+        private static readonly Channel<Window> VisibleWindowsProducer = Channels.VisibleWindowsChannel;
 
         private static async void WaitForAction()
         {
@@ -178,8 +178,13 @@ namespace VirtualSpace.VirtualDesktop
             var classname = SbWinInfo.ToString();
             if ( Filters.WndClsIgnoreList.Contains( classname ) )
                 return true;
-            if ( classname == "#32770" && WindowTool.IsModalWindow( hWnd ) )
-                return true;
+
+            switch ( classname )
+            {
+                case "#32770" when WindowTool.IsModalWindow( hWnd ):
+                case "Chrome_WidgetWin_1" or "MozillaDropShadowWindowClass" when WindowTool.IsPopupToolWindow( hWnd ):
+                    return true;
+            }
 
             if ( classname != Const.WindowsUiCoreWindow )
             {
@@ -191,7 +196,7 @@ namespace VirtualSpace.VirtualDesktop
 
         private static void SendToCheckingRule( IntPtr hWnd, string title, string classname )
         {
-            VisibleWindowsProducer.Writer.TryWrite( new Window {Title = title, WndClass = classname, Handle = hWnd} );
+            VisibleWindowsProducer.Writer.TryWrite( new Window { Title = title, WndClass = classname, Handle = hWnd } );
         }
     }
 }
