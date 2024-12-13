@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualDesktop11_23H2", "Vi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualDesktop11_23H2_3085", "VirtualDesktop\VirtualDesktop11_23H2_3085\VirtualDesktop11_23H2_3085.csproj", "{698A0646-07E5-4A43-8D02-229BF3571086}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualDesktop11_24H2", "VirtualDesktop\VirtualDesktop11_24H2\VirtualDesktop11_24H2.csproj", "{D51F509E-9970-4454-B246-0970FF6C69CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -265,6 +267,18 @@ Global
 		{698A0646-07E5-4A43-8D02-229BF3571086}.Release|x64.Build.0 = Release|Any CPU
 		{698A0646-07E5-4A43-8D02-229BF3571086}.Release|x86.ActiveCfg = Release|Any CPU
 		{698A0646-07E5-4A43-8D02-229BF3571086}.Release|x86.Build.0 = Release|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Debug|x64.Build.0 = Debug|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Debug|x86.Build.0 = Debug|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Release|x64.ActiveCfg = Release|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Release|x64.Build.0 = Release|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{D51F509E-9970-4454-B246-0970FF6C69CC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

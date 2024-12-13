@@ -18,7 +18,7 @@ namespace VirtualSpace.Tools
         public static bool VersionCheck()
         {
             var version = Environment.OSVersion.Version;
-            if ( version is {Major: >= 10, Build: >= 17763 and < 25000} )
+            if ( version is {Major: >= 10, Build: >= 17763 and <= 26100} )
             {
                 return true;
             }
