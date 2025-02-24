@@ -109,10 +109,10 @@ namespace VirtualDesktop
             return new Desktop( DesktopManager.GetDesktop( index ) );
         }
 
-        public static Desktop FromWindow( IntPtr hWnd )
+        public static Desktop? FromWindow( IntPtr hWnd )
         {
             // return desktop object to desktop on which window <hWnd> is displayed
-            if ( hWnd == IntPtr.Zero ) throw new ArgumentNullException();
+            if ( hWnd == IntPtr.Zero ) return null;
             var id = DesktopManager.VirtualDesktopManager.GetWindowDesktopId( hWnd );
             return new Desktop( DesktopManager.VirtualDesktopManagerInternal.FindDesktop( ref id ) );
         }

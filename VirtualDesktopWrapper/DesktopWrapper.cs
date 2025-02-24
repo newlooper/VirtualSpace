@@ -190,10 +190,12 @@ namespace VirtualSpace.VirtualDesktop.Api
         {
             if ( SysInfo.IsWin10 )
             {
-                return VD10.Desktop.FromWindow( handle ).Guid;
+                var desktop10 = VD10.Desktop.FromWindow( handle );
+                return desktop10?.Guid ?? Guid.Empty;
             }
 
-            return VD11.Desktop.FromWindow( handle ).Guid;
+            var desktop11 = VD11.Desktop.FromWindow( handle );
+            return desktop11?.Guid ?? Guid.Empty;
         }
 
         public static event OnDesktopVisible OnDesktopVisibleEvent;
