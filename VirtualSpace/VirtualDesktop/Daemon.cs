@@ -117,8 +117,8 @@ namespace VirtualSpace.VirtualDesktop
             StartDaemon();
             if ( ConfigManager.CurrentProfile.DaemonAutoStart )
             {
-                if ( Manager.CurrentProfile.DaemonAutoStartDelay > 0 )
-                    await Task.Delay( Manager.CurrentProfile.DaemonAutoStartDelay * Const.OneSecond );
+                if ( ConfigManager.CurrentProfile.DaemonAutoStartDelay > 0 )
+                    await Task.Delay( ConfigManager.CurrentProfile.DaemonAutoStartDelay * Const.OneSecond );
                 CanRun.Set();
             }
         }

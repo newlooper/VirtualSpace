@@ -9,6 +9,9 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
+using System.Configuration;
+using System.IO;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -23,8 +26,22 @@ namespace VirtualSpace.AppLogs
 
         public static Serilog.Core.Logger RootLogger;
 
+        private static string _logsFolder = "Logs";
+
+        public static string LogsPath
+        {
+            get
+            {
+                var appPath       = Environment.ProcessPath!;
+                var appRootFolder = Directory.GetParent( appPath )!.FullName;
+                return Path.Combine( appRootFolder, _logsFolder );
+            }
+        }
+
         public static void InitLogger( string folder )
         {
+            _logsFolder = folder;
+            folder     = LogsPath;
             RootLogger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy( LevelSwitch )
                 .WriteTo.Logger( c =>

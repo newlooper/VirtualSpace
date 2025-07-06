@@ -42,89 +42,96 @@ namespace VirtualSpace.Commons
 
                     if ( !string.IsNullOrEmpty( line ) )
                     {
-                        var msg = JsonSerializer.Deserialize<PipeMessage>( line );
-                        switch ( msg?.Type )
-                        {
-                            case PipeMessageType.INSTANCE:
-                                Logger.Info( "Only single instance allowed, just bring to top." );
-                                User32.PostMessage( MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
-                                break;
-
-                            case PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER:
-                            {
-                                if ( !server.CanWrite ) break;
-                                using var writer   = new StreamWriter( server );
-                                var       hostInfo = HostInfoHelper.GetHostInfo();
-                                hostInfo.MainWindowHandle = MainWindowHandle.ToInt32();
-                                writer.WriteLine( JsonSerializer.Serialize( hostInfo ) );
-                                writer.Flush();
-
-                                /////////////////////////////////
-                                // 只接受已注册成功的插件
-                                // 同时若插件名相同，则后启动的覆盖先启动的
-                                foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
-                                {
-                                    Logger.Info( $"[PLUGIN\\Virtual Desktop Switch Observer] {p.Display} Started." );
-                                    p.Handle = (IntPtr)msg.Handle;
-                                    p.ProcessId = msg.ProcessId;
-                                    p.Type = PluginType.VD_SWITCH_OBSERVER;
-                                    break;
-                                }
-
-                                break;
-                            }
-
-                            case PipeMessageType.PLUGIN_CHECK_ALIVE:
-                            {
-                                var runningPlugin = PluginHost.Plugins.Find( p =>
-                                    p.Name == msg.Name
-                                    && p.Handle == (IntPtr)msg.Handle
-                                    && p.ProcessId == msg.ProcessId );
-
-                                ////////////////////////////////////////////////
-                                // 若插件提供的信息在宿主中查不到，就通知该插件自行关闭
-                                // 这通常是因为有同名插件启动，覆盖了先启动的插件的信息
-                                if ( runningPlugin == null )
-                                {
-                                    PluginHost.ClosePlugin( new PluginInfo {Handle = (IntPtr)msg.Handle} );
-                                }
-
-                                break;
-                            }
-
-                            case PipeMessageType.PLUGIN_UPDATER:
-                            {
-                                if ( !server.CanWrite ) break;
-                                using var writer = new StreamWriter( server );
-                                writer.WriteLine( JsonSerializer.Serialize( HostInfoHelper.GetHostInfo() ) );
-                                writer.Flush();
-
-                                foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
-                                {
-                                    Logger.Info( $"[PLUGIN\\App Updater] {p.Display} Started." );
-                                    p.Handle = (IntPtr)msg.Handle;
-                                    p.ProcessId = msg.ProcessId;
-                                    p.Type = PluginType.UPDATER;
-                                    break;
-                                }
-
-                                break;
-                            }
-
-                            case PipeMessageType.RESTART:
-                            {
-                                User32.PostMessage( MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RestartApp, 0 );
-                                break;
-                            }
-
-                            default:
-                                break;
-                        }
+                        MessageProcessing( line, server );
                     }
                 }
-
                 Logger.Info( "Ipc Pipe Server Shutdown." );
+                
             }, TaskCreationOptions.LongRunning );
+            
+            return;
+
+            void MessageProcessing( string line, NamedPipeServerStream server )
+            {
+                var msg = JsonSerializer.Deserialize<PipeMessage>( line );
+                switch ( msg?.Type )
+                {
+                    case PipeMessageType.INSTANCE:
+                        Logger.Info( "Only single instance allowed, just bring to top." );
+                        User32.PostMessage( MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
+                        break;
+
+                    case PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER:
+                    {
+                        if ( !server.CanWrite ) break;
+                        using var writer   = new StreamWriter( server );
+                        var       hostInfo = HostInfoHelper.GetHostInfo();
+                        hostInfo.MainWindowHandle = MainWindowHandle.ToInt32();
+                        writer.WriteLine( JsonSerializer.Serialize( hostInfo ) );
+                        writer.Flush();
+
+                        /////////////////////////////////
+                        // 只接受已注册成功的插件
+                        // 同时若插件名相同，则后启动的覆盖先启动的
+                        foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
+                        {
+                            Logger.Info( $"[PLUGIN\\Virtual Desktop Switch Observer] {p.Display} Started." );
+                            p.Handle    = (IntPtr)msg.Handle;
+                            p.ProcessId = msg.ProcessId;
+                            p.Type      = PluginType.VD_SWITCH_OBSERVER;
+                            break;
+                        }
+
+                        break;
+                    }
+
+                    case PipeMessageType.PLUGIN_CHECK_ALIVE:
+                    {
+                        var runningPlugin = PluginHost.Plugins.Find( p =>
+                            p.Name == msg.Name
+                            && p.Handle == (IntPtr)msg.Handle
+                            && p.ProcessId == msg.ProcessId );
+
+                        ////////////////////////////////////////////////
+                        // 若插件提供的信息在宿主中查不到，就通知该插件自行关闭
+                        // 这通常是因为有同名插件启动，覆盖了先启动的插件的信息
+                        if ( runningPlugin == null )
+                        {
+                            PluginHost.ClosePlugin( new PluginInfo {Handle = (IntPtr)msg.Handle} );
+                        }
+
+                        break;
+                    }
+
+                    case PipeMessageType.PLUGIN_UPDATER:
+                    {
+                        if ( !server.CanWrite ) break;
+                        using var writer = new StreamWriter( server );
+                        writer.WriteLine( JsonSerializer.Serialize( HostInfoHelper.GetHostInfo() ) );
+                        writer.Flush();
+
+                        foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
+                        {
+                            Logger.Info( $"[PLUGIN\\App Updater] {p.Display} Started." );
+                            p.Handle    = (IntPtr)msg.Handle;
+                            p.ProcessId = msg.ProcessId;
+                            p.Type      = PluginType.UPDATER;
+                            break;
+                        }
+
+                        break;
+                    }
+
+                    case PipeMessageType.RESTART:
+                    {
+                        User32.PostMessage( MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RestartApp, 0 );
+                        break;
+                    }
+
+                    default:
+                        break;
+                }
+            }
         }
 
         public static void AsClient()

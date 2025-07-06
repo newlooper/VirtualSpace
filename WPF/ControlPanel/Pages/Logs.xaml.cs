@@ -20,7 +20,7 @@ using System.Windows.Controls;
 using ControlPanel.Pages.Menus;
 using ControlPanel.ViewModels;
 using MaterialDesignThemes.Wpf;
-using VirtualSpace.Config;
+using VirtualSpace.AppLogs;
 
 namespace ControlPanel.Pages;
 
@@ -261,7 +261,7 @@ public partial class Logs
 
     public static void OpenLogsDir()
     {
-        var logFolder = Path.Combine( Manager.AppRootFolder, Const.Settings.LogsFolder );
+        var logFolder = LogManager.LogsPath;
         if ( !Directory.Exists( logFolder ) ) return;
         var startInfo = new ProcessStartInfo
         {

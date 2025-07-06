@@ -176,7 +176,7 @@ namespace Cube3D
             _frameProcessor.SetAction( () =>
             {
                 //////////////////////////////////////////////////////
-                // trigger action only after first frame be proceeded
+                // trigger action only after first frame be handled,
                 // see FrameToD3DImage.Proceed() for detail.
                 RealShow( true );
 
