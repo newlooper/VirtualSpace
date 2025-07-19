@@ -71,7 +71,7 @@ namespace VirtualSpace.Config.Events.Expression
 
         private static void BuildRuleExp( List<RuleTemplate> rules )
         {
-            foreach ( var rule in rules.Where( rule => rule.Exp is null ) )
+            foreach ( var rule in rules )
             {
                 rule.Exp = Jp.ExpressionFromJsonDoc<Window>( rule.Expression );
             }
@@ -90,8 +90,7 @@ namespace VirtualSpace.Config.Events.Expression
 
             var rules = new List<RuleTemplate>( _rules );
 
-            if ( !WindowCheckTimes.ContainsKey( win.Handle ) )
-                WindowCheckTimes[win.Handle] = 0;
+            WindowCheckTimes.TryAdd( win.Handle, 0 );
 
             var isOnePeriod = WindowCheckTimes[win.Handle] % Const.WindowCheckTimesLimit == 0;
 
@@ -146,8 +145,8 @@ namespace VirtualSpace.Config.Events.Expression
                     {
                         hasMatchedRule = true;
                         Logger.Debug( win.Title + $" match rule [{r.Name}]" );
-                        r.Action.Handle = win.Handle;
-                        r.Action.RuleName = r.Name;
+                        r.Action.Handle      = win.Handle;
+                        r.Action.RuleName    = r.Name;
                         r.Action.WindowTitle = win.Title;
                         ActionProducer.Writer.TryWrite( r.Action );
 
@@ -181,6 +180,7 @@ namespace VirtualSpace.Config.Events.Expression
                 }
 
                 WindowCheckTimes[win.Handle]++;
+                
             } ).ConfigureAwait( false );
         }
 
@@ -214,8 +214,8 @@ namespace VirtualSpace.Config.Events.Expression
             return _writeOptions ??= new JsonSerializerOptions
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                WriteIndented = true,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                WriteIndented          = true,
+                Encoder                = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
         }
 
