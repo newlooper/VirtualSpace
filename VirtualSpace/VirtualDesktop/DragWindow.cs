@@ -10,6 +10,7 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using VirtualSpace.Config;
 
@@ -22,6 +23,7 @@ namespace VirtualSpace.VirtualDesktop
             InitializeComponent();
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IntPtr Thumb { get; set; }
 
         public static DragWindow CreateAndShow( int width, int height )

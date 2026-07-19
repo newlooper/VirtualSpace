@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Channels;
 using System.Windows.Media;
+using Notification.Core;
 using Notification.Wpf;
 using Notification.Wpf.Constants;
 

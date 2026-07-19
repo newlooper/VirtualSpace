@@ -1,0 +1,28 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Bridge/Bridge.csproj" />
+  <Project Path="Configuration/Configuration.csproj" />
+  <Project Path="Helpers/Helpers.csproj" />
+  <Project Path="Ipc/Commons/Ipc.csproj" />
+  <Project Path="Ipc/IpcServer/IpcServer.csproj" />
+  <Project Path="LinqExpressionBuilder/LinqExpressionBuilder.csproj" />
+  <Project Path="Logger/Logger.csproj" />
+  <Project Path="Plugin/Commons/Plugin.csproj" />
+  <Project Path="Plugin/PluginHost/PluginHost.csproj" />
+  <Project Path="VirtualDesktop/VirtualDesktop10/VirtualDesktop10.csproj" />
+  <Project Path="VirtualDesktop/VirtualDesktop11/VirtualDesktop11.csproj" />
+  <Project Path="VirtualDesktop/VirtualDesktop11_21H2/VirtualDesktop11_21H2.csproj" />
+  <Project Path="VirtualDesktop/VirtualDesktop11_23H2/VirtualDesktop11_23H2.csproj" />
+  <Project Path="VirtualDesktop/VirtualDesktop11_23H2_3085/VirtualDesktop11_23H2_3085.csproj" />
+  <Project Path="VirtualDesktop/VirtualDesktop11_24H2/VirtualDesktop11_24H2.csproj" />
+  <Project Path="VirtualDesktopWrapper/VirtualDesktopWrapper.csproj" />
+  <Project Path="VirtualSpace/VirtualSpace.csproj">
+    <Platform Solution="Debug|x86" Project="x86" />
+  </Project>
+  <Project Path="WinForms/AppController/AppController.csproj" />
+  <Project Path="WPF/ControlPanel/ControlPanel.csproj" />
+</Solution>

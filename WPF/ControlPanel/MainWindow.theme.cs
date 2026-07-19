@@ -18,9 +18,9 @@ namespace ControlPanel;
 
 public partial class MainWindow
 {
-    private (Color pColor, Color sColor, IBaseTheme theme) GetThemeInfo()
+    private (Color pColor, Color sColor, BaseTheme theme) GetThemeInfo()
     {
-        var   theme = Theme.Light;
+        var   theme = BaseTheme.Light;
         Color pColor;
         Color sColor;
 
@@ -33,19 +33,19 @@ public partial class MainWindow
         switch ( Manager.CurrentProfile.UI.Theme )
         {
             case 0:
-                theme = SysInfo.GetAppsTheme() == SysInfo.WinAppsTheme.LIGHT ? Theme.Light : Theme.Dark;
-                pColor = theme == Theme.Dark ? pColorDark : pColorLight;
-                sColor = theme == Theme.Dark ? sColorDark : sColorLight;
+                theme = SysInfo.GetAppsTheme() == SysInfo.WinAppsTheme.LIGHT ? BaseTheme.Light : BaseTheme.Dark;
+                pColor = theme == BaseTheme.Dark ? pColorDark : pColorLight;
+                sColor = theme == BaseTheme.Dark ? sColorDark : sColorLight;
                 break;
             case 1:
                 pColor = pColorLight;
                 sColor = sColorLight;
-                theme = Theme.Light;
+                theme = BaseTheme.Light;
                 break;
             case 2:
                 pColor = pColorDark;
                 sColor = sColorDark;
-                theme = Theme.Dark;
+                theme = BaseTheme.Dark;
                 break;
         }
 

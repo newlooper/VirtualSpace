@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
@@ -34,6 +35,7 @@ namespace VirtualSpace.VirtualDesktop
         private          Point                       _fixedPosition;
         private          Size                        _initSize = Size.Empty;
         public           Guid                        VdId;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public           int                         VdIndex { get; set; }
 
         private VirtualDesktopWindow()

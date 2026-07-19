@@ -246,8 +246,13 @@ namespace VirtualSpace.Config
 
         private static string GetConfigRoot()
         {
-            using var vsReg         = Registry.CurrentUser.CreateSubKey( Const.Reg.RegKeyApp );
-            var       configRootReg = vsReg.GetValue( Const.Reg.RegKeyConfigRoot );
+            using var vsReg = Registry.CurrentUser.OpenSubKey( Const.Reg.RegKeyApp );
+            if ( vsReg is null )
+            {
+                return AppRootFolder;
+            }
+
+            var configRootReg = vsReg.GetValue( Const.Reg.RegKeyConfigRoot );
             if ( configRootReg is null || !Directory.Exists( configRootReg.ToString() ) )
             {
                 return AppRootFolder;
