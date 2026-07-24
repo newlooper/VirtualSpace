@@ -33,6 +33,7 @@ namespace VirtualSpace.Config
         public const string TaskbarCreated         = "TaskbarCreated";
         public const string TaskbarWndClass        = "Shell_TrayWnd";
         public const string WindowsCRLF            = "\r\n";
+        public const string OrganizationName       = "newlooper.com";
         public const string AppName                = "VirtualSpace";
         public const string HideWindowSplitter     = "🔙🔜";
 
@@ -68,7 +69,7 @@ namespace VirtualSpace.Config
 
         public static class Reg
         {
-            public const string RegKeyApp        = @"Software\newlooper.com\VirtualSpace";
+            public const string RegKeyApp        = @"Software\" + OrganizationName + @"\" + AppName;
             public const string RegKeyConfigRoot = "ConfigRoot";
         }
 

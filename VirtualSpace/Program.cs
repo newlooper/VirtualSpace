@@ -23,7 +23,7 @@ namespace VirtualSpace
         [STAThread]
         public static void Main()
         {
-            LogManager.InitLogger( Const.Settings.LogsFolder );
+            LogManager.InitLogger( Const.Settings.LogsFolder, Const.OrganizationName, Const.AppName );
             AppDomain.CurrentDomain.AssemblyResolve += AutoResolver;
             var app = new App
             {

@@ -27,20 +27,28 @@ namespace VirtualSpace.AppLogs
         public static Serilog.Core.Logger RootLogger;
 
         private static string _logsFolder = "Logs";
+        private static string _organizationName = "newlooper.com";
+        private static string _appName = "VirtualSpace";
 
         public static string LogsPath
         {
             get
             {
-                var appPath       = Environment.ProcessPath!;
-                var appRootFolder = Directory.GetParent( appPath )!.FullName;
+                var appRootFolder = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    _organizationName,
+                    _appName
+                );
                 return Path.Combine( appRootFolder, _logsFolder );
             }
         }
 
-        public static void InitLogger( string folder )
+        public static void InitLogger( string folder, string organizationName, string appName )
         {
             _logsFolder = folder;
+            _organizationName = organizationName;
+            _appName = appName;
+
             folder     = LogsPath;
             RootLogger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy( LevelSwitch )

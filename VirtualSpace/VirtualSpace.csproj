@@ -68,12 +68,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop10\bin\Release\net6.0-windows\VirtualDesktop10.dll" Link="Resources\VirtualDesktop10.dll" />
-        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11\bin\Release\net6.0-windows\VirtualDesktop11.dll" Link="Resources\VirtualDesktop11.dll" />
-        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11_21H2\bin\Release\net6.0-windows\VirtualDesktop11_21H2.dll" Link="Resources\VirtualDesktop11_21H2.dll" />
-        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11_23H2\bin\Release\net6.0-windows\VirtualDesktop11_23H2.dll" Link="Resources\VirtualDesktop11_23H2.dll" />
-        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11_23H2_3085\bin\Release\net6.0-windows\VirtualDesktop11_23H2_3085.dll" Link="Resources\VirtualDesktop11_23H2_3085.dll" />
-        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11_24H2\bin\Release\net6.0-windows\VirtualDesktop11_24H2.dll" Link="Resources\VirtualDesktop11_24H2.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop10\bin\Release\net10.0-windows\VirtualDesktop10.dll" Link="Resources\VirtualDesktop10.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11\bin\Release\net10.0-windows\VirtualDesktop11.dll" Link="Resources\VirtualDesktop11.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11_21H2\bin\Release\net10.0-windows\VirtualDesktop11_21H2.dll" Link="Resources\VirtualDesktop11_21H2.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11_23H2\bin\Release\net10.0-windows\VirtualDesktop11_23H2.dll" Link="Resources\VirtualDesktop11_23H2.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11_23H2_3085\bin\Release\net10.0-windows\VirtualDesktop11_23H2_3085.dll" Link="Resources\VirtualDesktop11_23H2_3085.dll" />
+        <EmbeddedResource Include="..\VirtualDesktop\VirtualDesktop11_24H2\bin\Release\net10.0-windows\VirtualDesktop11_24H2.dll" Link="Resources\VirtualDesktop11_24H2.dll" />
     </ItemGroup>
 
     <ItemGroup>
