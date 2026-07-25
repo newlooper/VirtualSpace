@@ -82,7 +82,7 @@
                 <StackPanel>
                     <DockPanel>
                         <Button DockPanel.Dock="Right" Content="{lex:Loc Page.Settings.Storage.ChangeConfigPath}" Click="ChangeConfigPath_OnClick"></Button>
-                        <TextBox x:Name="tbConfigPath" IsReadOnly="True" Focusable="False"
+                        <TextBox x:Name="tbConfigPath" IsReadOnly="True" Focusable="True"
                                  MinWidth="500" FontSize="20" Margin="0"
                                  materialDesign:HintAssist.FloatingScale="0.80"
                                  materialDesign:HintAssist.Hint="{lex:Loc Page.Settings.Storage.ConfigRootPath}"
