@@ -33,7 +33,7 @@ namespace VirtualSpace.Helpers
             lt.Delay = TimeSpan.FromSeconds( 5 );
             td.Triggers.Add( lt );
 
-            var ea = new ExecAction( fullAppPath, "" );
+            var ea = new ExecAction( $"\"{fullAppPath}\"", "" );
             td.Actions.Add( ea );
 
             TaskService.Instance.RootFolder.RegisterTaskDefinition( GetTaskPath( taskName, taskFolder ), td );
