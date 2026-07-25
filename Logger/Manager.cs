@@ -26,46 +26,36 @@ namespace VirtualSpace.AppLogs
 
         public static Serilog.Core.Logger RootLogger;
 
-        private static string _logsFolder = "Logs";
-        private static string _organizationName = "newlooper.com";
-        private static string _appName = "VirtualSpace";
+        private static string _logsFolder = "";
 
         public static string LogsPath
         {
             get
             {
-                var appRootFolder = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    _organizationName,
-                    _appName
-                );
-                return Path.Combine( appRootFolder, _logsFolder );
+                return _logsFolder;
             }
         }
 
-        public static void InitLogger( string folder, string organizationName, string appName )
+        public static void InitLogger( string folder )
         {
             _logsFolder = folder;
-            _organizationName = organizationName;
-            _appName = appName;
 
-            folder     = LogsPath;
             RootLogger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy( LevelSwitch )
                 .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Verbose ).WriteTo.File( $"{folder}/verbose.txt", LogEventLevel.Verbose ) )
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Verbose ).WriteTo.File( $"{_logsFolder}/verbose.txt", LogEventLevel.Verbose ) )
                 .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Debug ).WriteTo.File( $"{folder}/debug.txt", LogEventLevel.Debug ) )
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Debug ).WriteTo.File( $"{_logsFolder}/debug.txt", LogEventLevel.Debug ) )
                 .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Information ).WriteTo.File( $"{folder}/info.txt", LogEventLevel.Information ) )
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Information ).WriteTo.File( $"{_logsFolder}/info.txt", LogEventLevel.Information ) )
                 .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Warning ).WriteTo.File( $"{folder}/warning.txt", LogEventLevel.Warning ) )
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Warning ).WriteTo.File( $"{_logsFolder}/warning.txt", LogEventLevel.Warning ) )
                 .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Error ).WriteTo.File( $"{folder}/error.txt", LogEventLevel.Error ) )
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Error ).WriteTo.File( $"{_logsFolder}/error.txt", LogEventLevel.Error ) )
                 .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Fatal ).WriteTo.File( $"{folder}/fatal.txt", LogEventLevel.Fatal ) )
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Fatal ).WriteTo.File( $"{_logsFolder}/fatal.txt", LogEventLevel.Fatal ) )
                 .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LOG_LEVEL_EVENT ).WriteTo.File( $"{folder}/event.txt", LOG_LEVEL_EVENT ) )
+                    c.Filter.ByIncludingOnly( evt => evt.Level == LOG_LEVEL_EVENT ).WriteTo.File( $"{_logsFolder}/event.txt", LOG_LEVEL_EVENT ) )
                 .CreateLogger();
         }
 
