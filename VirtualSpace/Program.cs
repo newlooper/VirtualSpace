@@ -47,57 +47,58 @@ namespace VirtualSpace
 
             switch ( shortAssemblyName )
             {
-                case "VirtualDesktop10":
-                    Logger.Debug( "[Init]Load VirtualDesktop10.dll" );
+                case "VirtualDesktop10": // must same as the <AssemblyName> which VirtualDesktopWrapper dependent, not <Aliases> in VirtualDesktopWrapper.csproj
+                    Logger.Debug( "[Init]Load VirtualDesktop10 lib" );
                     dllName = programName + resName + "VirtualDesktop10" + dllExt;
                     break;
-                case "VirtualDesktop11":
+                case "VirtualDesktop11_24H2": // must same as the <AssemblyName> which VirtualDesktopWrapper dependent, not <Aliases> in VirtualDesktopWrapper.csproj
                     var ver = SysInfo.OSVersion;
                     switch ( ver.Build )
                     {
                         case <= 22489:
-                            Logger.Debug( "[Init]Load VirtualDesktop11.dll 21H2" );
-                            dllName = programName + resName + "VirtualDesktop11_21H2.dll";
+                            Logger.Debug( "[Init]Load VirtualDesktop11 lib 21H2" );
+                            dllName = programName + resName + "VirtualDesktop11_21H2" + dllExt;
                             break;
                         case 22621:
-                            Logger.Debug( "[Init]Load VirtualDesktop11.dll 22H2" );
+                            Logger.Debug( "[Init]Load VirtualDesktop11 lib 22H2" );
                             dllName = ver.Revision switch
                             {
-                                < 2215 => programName + resName + "VirtualDesktop11.dll",
-                                < 3085 => programName + resName + "VirtualDesktop11_23H2.dll",
-                                _ => programName + resName + "VirtualDesktop11_22H2_3085.dll"
+                                < 2215 => programName + resName + "VirtualDesktop11" + dllExt,
+                                < 3085 => programName + resName + "VirtualDesktop11_23H2" + dllExt,
+                                _ => programName + resName + "VirtualDesktop11_22H2_3085" + dllExt
                             };
 
                             break;
                         case 22631:
-                            Logger.Debug( "[Init]Load VirtualDesktop11.dll 23H2" );
+                            Logger.Debug( "[Init]Load VirtualDesktop11 lib 23H2" );
                             if ( ver.Revision >= 3085 )
                             {
-                                dllName = programName + resName + "VirtualDesktop11_23H2_3085.dll";
+                                dllName = programName + resName + "VirtualDesktop11_23H2_3085" + dllExt;
                             }
                             else
                             {
-                                dllName = programName + resName + "VirtualDesktop11_23H2.dll";
+                                dllName = programName + resName + "VirtualDesktop11_23H2" + dllExt;
                             }
 
                             break;
                         case 26100:
-                            Logger.Debug("[Init]Load VirtualDesktop11.dll 24H2");
+                            Logger.Debug("[Init]Load VirtualDesktop11 lib 24H2");
                             if (ver.Revision >= 2152) {
-                                dllName = programName + resName + "VirtualDesktop11_24H2.dll";
+                                dllName = programName + resName + "VirtualDesktop11_24H2" + dllExt;
                             } else {
-                                dllName = programName + resName + "VirtualDesktop11_23H2.dll";
+                                dllName = programName + resName + "VirtualDesktop11_23H2" + dllExt;
                             }
 
                             break;
                         default:
-                            Logger.Debug( "[Init]Load VirtualDesktop11.dll 22H2" );
-                            dllName = programName + resName + "VirtualDesktop11.dll";
+                            Logger.Debug( "[Init]Load VirtualDesktop11 lib 24H2" );
+                            dllName = programName + resName + "VirtualDesktop11_24H2" + dllExt;
                             break;
                     }
 
                     break;
                 default:
+                    Logger.Debug( $"[Init]Load {shortAssemblyName} lib" );
                     dllName = programName + resName + shortAssemblyName + dllExt;
                     break;
             }
