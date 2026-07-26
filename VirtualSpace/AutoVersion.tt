@@ -37,8 +37,8 @@ using System.Reflection;
     private static readonly string AppName = new DirectoryInfo( "." ).Name;
     private static readonly string AppDesc = "VirtualSpace - Windows VirtualDesktop Enhancement";
 
-        private const int MAJOR = 0;
-        private const int MINOR = 2;
+        private const int MAJOR = 1;
+        private const int MINOR = 0;
 
     private static readonly int DaysSinceProjectStarted = (int)( DateTime.UtcNow - ProjectStartedDate ).TotalDays;
     private static readonly int MinutesSinceMidnight = (int)DateTime.UtcNow.TimeOfDay.TotalMinutes;
