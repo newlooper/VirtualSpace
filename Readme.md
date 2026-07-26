@@ -16,7 +16,11 @@ cn: https://newlooper.com/post/original/cs/os/windows/virtualdesktop/
 
 Download from [Releases](https://github.com/newlooper/VirtualSpace/releases) page.
 
-VirtualSpace is green software, All used files are in its own directory, just unzip to a local dir (eg. `your desktop`\VirtualSpace) and run.
+~~VirtualSpace is green software, All used files are in its own directory, just unzip to a local dir (eg. `your desktop`\VirtualSpace) and run.~~
+
+> [!IMPORTANT]
+>
+> Due to security concerns related to [Microsoft Defender SmartScreen](https://learn.microsoft.com/en-us/windows/security/operating-system-security/virus-and-threat-protection/microsoft-defender-smartscreen/), and to simplify subsequent software updates and deployments, VirtualSpace, starting with version 1.0, is no longer released as portable software, but instead is packaged as an MSI installer.
 
 or build the program yourself (see below).
 
