@@ -117,14 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NavBar.Logs" xml:space="preserve">
-    <value>日志</value>
-  </data>
-  <data name="logTabInfo" xml:space="preserve">
-    <value>信息</value>
+  <data name="logTab.Menu.Clear" xml:space="preserve">
+    <value>清空</value>
   </data>
   <data name="logTabDebug" xml:space="preserve">
     <value>调试</value>
+  </data>
+  <data name="logTabError" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="NavBar.Rules" xml:space="preserve">
+    <value>规则</value>
+  </data>
+  <data name="logTabInfo" xml:space="preserve">
+    <value>信息</value>
   </data>
   <data name="logTabWarning" xml:space="preserve">
     <value>警告</value>
@@ -132,20 +138,17 @@
   <data name="NavBar.General" xml:space="preserve">
     <value>通用</value>
   </data>
-  <data name="logTab.Menu.Clear" xml:space="preserve">
-    <value>清空</value>
+  <data name="NavBar.Logs" xml:space="preserve">
+    <value>日志</value>
   </data>
   <data name="NavBar.UI" xml:space="preserve">
     <value>界面</value>
   </data>
-  <data name="NavBar.Settings" xml:space="preserve">
-    <value>设置</value>
-  </data>
   <data name="NavBar.Theme" xml:space="preserve">
     <value>主题</value>
   </data>
-  <data name="NavBar.Rules" xml:space="preserve">
-    <value>规则</value>
+  <data name="NavBar.Settings" xml:space="preserve">
+    <value>设置</value>
   </data>
   <data name="NavBar.Plugins" xml:space="preserve">
     <value>插件</value>
@@ -156,14 +159,11 @@
   <data name="Page.Settings.Language" xml:space="preserve">
     <value>语言</value>
   </data>
-  <data name="logTabError" xml:space="preserve">
-    <value>错误</value>
+  <data name="logTabVerbose" xml:space="preserve">
+    <value>详细</value>
   </data>
   <data name="logTabEvent" xml:space="preserve">
     <value>事件</value>
-  </data>
-  <data name="logTabVerbose" xml:space="preserve">
-    <value>详细</value>
   </data>
   <data name="Page.Settings.Theme.Sys" xml:space="preserve">
     <value>系统设置</value>
@@ -198,11 +198,14 @@
   <data name="Menus.Commons.Shutdown" xml:space="preserve">
     <value>退出程序</value>
   </data>
+  <data name="Page.Plugins.Name" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="Page.Plugins.Version" xml:space="preserve">
+    <value>版本</value>
+  </data>
   <data name="Page.Plugins.Author" xml:space="preserve">
     <value>作者</value>
-  </data>
-  <data name="Page.Plugins.Close" xml:space="preserve">
-    <value>关闭</value>
   </data>
   <data name="Page.Plugins.Email" xml:space="preserve">
     <value>邮箱</value>
@@ -210,26 +213,26 @@
   <data name="Page.Plugins.Operations" xml:space="preserve">
     <value>操作</value>
   </data>
-  <data name="Page.Plugins.Name" xml:space="preserve">
-    <value>名称</value>
+  <data name="Page.Plugins.Settings" xml:space="preserve">
+    <value>设置</value>
   </data>
   <data name="Page.Plugins.Restart" xml:space="preserve">
     <value>重启</value>
   </data>
-  <data name="Page.Plugins.Settings" xml:space="preserve">
-    <value>设置</value>
-  </data>
-  <data name="Page.Plugins.Version" xml:space="preserve">
-    <value>版本</value>
-  </data>
-  <data name="Page.Rules.Created" xml:space="preserve">
-    <value>创建时间</value>
+  <data name="Page.Plugins.Close" xml:space="preserve">
+    <value>关闭</value>
   </data>
   <data name="Page.Rules.Updated" xml:space="preserve">
     <value>更新时间</value>
   </data>
+  <data name="Page.Rules.Created" xml:space="preserve">
+    <value>创建时间</value>
+  </data>
   <data name="Page.Rules.Add" xml:space="preserve">
     <value>新建...</value>
+  </data>
+  <data name="Page.Rules.Edit" xml:space="preserve">
+    <value>编辑(E)...</value>
   </data>
   <data name="Page.Rules.Clone" xml:space="preserve">
     <value>复制</value>
@@ -237,14 +240,11 @@
   <data name="Page.Rules.Delete" xml:space="preserve">
     <value>删除(Del)</value>
   </data>
-  <data name="Page.Rules.Edit" xml:space="preserve">
-    <value>编辑(E)...</value>
+  <data name="Page.Rules.NewRule" xml:space="preserve">
+    <value>新建规则</value>
   </data>
   <data name="Page.Rules.EditRule" xml:space="preserve">
     <value>编辑规则</value>
-  </data>
-  <data name="Page.Rules.NewRule" xml:space="preserve">
-    <value>新建规则</value>
   </data>
   <data name="Page.Rules.Rule.Enabled" xml:space="preserve">
     <value>启用</value>
@@ -276,11 +276,11 @@
   <data name="Page.Rules.Rule.ProcessPath" xml:space="preserve">
     <value>进程路径</value>
   </data>
-  <data name="Page.Rules.Rule.WinInScreen" xml:space="preserve">
-    <value>窗口位于屏幕</value>
-  </data>
   <data name="Page.Rules.Rule.WndClass" xml:space="preserve">
     <value>窗口样式</value>
+  </data>
+  <data name="Page.Rules.Rule.WinInScreen" xml:space="preserve">
+    <value>窗口位于屏幕</value>
   </data>
   <data name="Page.Rules.Rule.CloseDefBox" xml:space="preserve">
     <value>取消</value>
@@ -299,6 +299,9 @@
   </data>
   <data name="Page.Rules.Rule.FollowWindow" xml:space="preserve">
     <value>跟随窗口</value>
+  </data>
+  <data name="Page.Rules.Rule.PinWindow" xml:space="preserve">
+    <value>在所有桌面上显示此窗口</value>
   </data>
   <data name="Page.Rules.Rule.PinApp" xml:space="preserve">
     <value>在所有桌面上显示此应用的窗口</value>
@@ -396,8 +399,8 @@
   <data name="Page.Rules.Rule.Op.=" xml:space="preserve">
     <value>是</value>
   </data>
-  <data name="Page.Rules.Rule.Op.rim" xml:space="preserve">
-    <value>正则表达式</value>
+  <data name="Page.Rules.Rule.Op.ssw" xml:space="preserve">
+    <value>以...开头</value>
   </data>
   <data name="Page.Rules.Rule.Op.esw" xml:space="preserve">
     <value>以...结尾</value>
@@ -405,8 +408,8 @@
   <data name="Page.Rules.Rule.Op.sc" xml:space="preserve">
     <value>包含</value>
   </data>
-  <data name="Page.Rules.Rule.Op.ssw" xml:space="preserve">
-    <value>以...开头</value>
+  <data name="Page.Rules.Rule.Op.rim" xml:space="preserve">
+    <value>正则表达式</value>
   </data>
   <data name="Page.Control.MouseAction.OnDesktop" xml:space="preserve">
     <value>在主视图中的虚拟桌面上点击时</value>
@@ -453,14 +456,14 @@
   <data name="Page.Control.Mouse.UseWheelSwitchDesktopWhenOnTaskbar" xml:space="preserve">
     <value>当鼠标指针在任务栏上时，用滚轮切换虚拟桌面。</value>
   </data>
-  <data name="Page.Control.Mouse.Wheel.Down" xml:space="preserve">
-    <value>SHIFT+上滚 =&gt; 导航到上面桌面</value>
+  <data name="Page.Control.Mouse.Wheel.Up" xml:space="preserve">
+    <value>上滚 =&gt; 导航到左侧桌面</value>
   </data>
   <data name="Page.Control.Mouse.Wheel.SUp" xml:space="preserve">
     <value>下滚 =&gt; 导航到右侧桌面</value>
   </data>
-  <data name="Page.Control.Mouse.Wheel.Up" xml:space="preserve">
-    <value>上滚 =&gt; 导航到左侧桌面</value>
+  <data name="Page.Control.Mouse.Wheel.Down" xml:space="preserve">
+    <value>SHIFT+上滚 =&gt; 导航到上面桌面</value>
   </data>
   <data name="Page.Control.Mouse.Wheel.SDown" xml:space="preserve">
     <value>SHIFT+下滚 =&gt; 导航到下面桌面</value>
@@ -485,20 +488,20 @@
   <data name="Page.Settings.ProfileManager" xml:space="preserve">
     <value>配置文件</value>
   </data>
-  <data name="Page.Settings.Menus.Delete" xml:space="preserve">
-    <value>删除</value>
-  </data>
   <data name="Page.Settings.Menus.Duplicate" xml:space="preserve">
     <value>复制</value>
   </data>
   <data name="Page.Settings.Menus.Rename" xml:space="preserve">
     <value>重命名</value>
   </data>
-  <data name="Dialogs.Cancel" xml:space="preserve">
-    <value>取消</value>
+  <data name="Page.Settings.Menus.Delete" xml:space="preserve">
+    <value>删除</value>
   </data>
   <data name="Dialogs.OK" xml:space="preserve">
     <value>确定</value>
+  </data>
+  <data name="Dialogs.Cancel" xml:space="preserve">
+    <value>取消</value>
   </data>
   <data name="Page.General.Basics" xml:space="preserve">
     <value>基本</value>
@@ -530,14 +533,14 @@
   <data name="Page.General.HideMainViewIfItsShown" xml:space="preserve">
     <value>当使用热键唤起主视图时，如果主视图已经显示，则关闭之。</value>
   </data>
-  <data name="Page.General.HideOnStart" xml:space="preserve">
-    <value>程序启动时不显示主视图。</value>
-  </data>
   <data name="Page.General.NotificationOnVdChanged" xml:space="preserve">
     <value>切换虚拟桌面时显示通知。</value>
   </data>
   <data name="Page.General.ShowVDIndexOnTrayIcon" xml:space="preserve">
     <value>在系统托盘图标上显示桌面索引。</value>
+  </data>
+  <data name="Page.General.HideOnStart" xml:space="preserve">
+    <value>程序启动时不显示主视图。</value>
   </data>
   <data name="Page.General.StyleOfVDIndexOnTrayIcon.0" xml:space="preserve">
     <value>默认</value>
@@ -552,11 +555,11 @@
     <value>注意：快捷键绑定、鼠标动作、日志配置和存储配置由所有配置文件共享(不区分配置文件)。
 某些设置可能需要重启程序才生效。</value>
   </data>
-  <data name="Page.General.Nav.HType.0" xml:space="preserve">
-    <value>切换到下一行</value>
-  </data>
   <data name="Page.General.Nav.HType.1" xml:space="preserve">
     <value>在同一行内循环</value>
+  </data>
+  <data name="Page.General.Nav.HType.0" xml:space="preserve">
+    <value>切换到下一行</value>
   </data>
   <data name="Menus.Commons.RunAsAdmin" xml:space="preserve">
     <value>以管理员身份运行程序</value>
@@ -585,7 +588,7 @@
   <data name="Window.RuleDefinition" xml:space="preserve">
     <value>规则定义</value>
   </data>
-  <data name="Page.Rules.Rule.PinWindow" xml:space="preserve">
-    <value>在所有桌面上显示此窗口</value>
+  <data name="Menus.Commons.Preferences" xml:space="preserve">
+    <value>偏好设置</value>
   </data>
 </root>

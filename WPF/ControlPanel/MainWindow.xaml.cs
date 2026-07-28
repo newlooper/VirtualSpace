@@ -170,7 +170,12 @@ public partial class MainWindow : Window, IAppController
 
     private void SettingsButton_OnClick( object sender, RoutedEventArgs e )
     {
-        NavBar.SelectedIndex = -1;
-        ContentFrame.Content = Settings.Create();
+        Preferences();
+    }
+
+    public static void Preferences()
+    {
+        _instance.NavBar.SelectedIndex = -1;
+        _instance.ContentFrame.Content = Settings.Create();
     }
 }

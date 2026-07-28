@@ -87,4 +87,10 @@ public partial class MenuContainer : UserControl
     {
         User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RunAsAdministrator, 0 );
     }
+
+    private void Preferences_OnClick( object sender, RoutedEventArgs e )
+    {
+        commonPopupBox.IsPopupOpen = false;
+        MainWindow.Preferences();
+    }
 }

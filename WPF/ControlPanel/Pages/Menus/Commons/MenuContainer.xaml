@@ -19,8 +19,9 @@
                          Background="{DynamicResource PrimaryHueMidBrush}"
                          Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
         <DockPanel>
-            <materialDesign:PopupBox DockPanel.Dock="Right" Margin="10"
+            <materialDesign:PopupBox x:Name="commonPopupBox" DockPanel.Dock="Right" Margin="10"
                                      PlacementMode="BottomAndAlignRightEdges"
+                                     PopupAnimation="None"
                                      StaysOpen="True">
                 <StackPanel>
                     <StackPanel.Resources>
@@ -54,6 +55,8 @@
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="32"></ColumnDefinition>
@@ -73,6 +76,9 @@
                                 Content="{lex:Loc Menus.Commons.Restart}" Click="RestartApp_OnClick" />
                         <Button Grid.Row="4" Grid.Column="1"
                                 Content="{lex:Loc Menus.Commons.Shutdown}" Click="Shutdown_OnClick" />
+                        <Separator Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" />
+                        <Button Grid.Row="6" Grid.Column="1"
+                                Content="{lex:Loc Menus.Commons.Preferences}" Click="Preferences_OnClick" />
                     </Grid>
 
 
