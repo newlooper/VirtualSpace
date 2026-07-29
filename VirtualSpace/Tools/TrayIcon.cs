@@ -107,8 +107,8 @@ namespace VirtualSpace.Tools
             switch ( index.Length )
             {
                 case 1:
-                    fontSize = 210;
-                    borderSize = 20;
+                    fontSize = 200;
+                    borderSize = 15;
                     break;
                 case 2:
                     fontSize = 160;
