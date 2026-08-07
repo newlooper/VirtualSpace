@@ -17,9 +17,6 @@
     <PropertyGroup>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(SelfContained)'=='true'">
         <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
     </PropertyGroup>
 
