@@ -1,0 +1,28 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <!--
+    Explicit payload manifest — only files listed here are packed into the MSI.
+    Add a new Component/File pair for each additional payload file.
+    Sources resolve from PublishDir passed by CI (-p:PublishDir=...).
+  -->
+  <Fragment>
+    <ComponentGroup Id="ProductPayload" Directory="INSTALLFOLDER">
+
+      <Component Id="VirtualSpace.exe" Guid="987C4448-E958-4BE5-BC3F-FEADCEAB81DF">
+        <File Id="VirtualSpace.exe"
+              Source="$(PublishDir)/VirtualSpace.exe"
+              KeyPath="yes"
+              Checksum="yes" />
+      </Component>
+
+      <!--
+      Example for a future sidecar file:
+      <Component Id="SomeData.json" Guid="PUT-NEW-GUID-HERE">
+        <File Id="SomeData.json"
+              Source="$(PublishDir)/SomeData.json"
+              KeyPath="yes" />
+      </Component>
+      -->
+
+    </ComponentGroup>
+  </Fragment>
+</Wix>

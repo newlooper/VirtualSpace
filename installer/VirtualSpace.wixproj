@@ -1,0 +1,18 @@
+<Project Sdk="WixToolset.Sdk/5.0.2">
+  <PropertyGroup>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <ProductVersion Condition="'$(ProductVersion)' == ''">0.0.0.0</ProductVersion>
+    <PublishDir Condition="'$(PublishDir)' == ''">payload</PublishDir>
+    <OutputName>VirtualSpace-$(ProductVersion)</OutputName>
+    <_PublishDirSlash>$([System.String]::Copy('$(PublishDir)').Replace('\', '/'))</_PublishDirSlash>
+    <DefineConstants>ProductVersion=$(ProductVersion);PublishDir=$(_PublishDirSlash)</DefineConstants>
+    <DefineConstants Condition="'$(IconFile)' != ''">$(DefineConstants);IconFile=$(IconFile)</DefineConstants>
+    <!-- ICE validation often blocked on CI runners; SignPath validates the signed MSI. -->
+    <SuppressValidation>true</SuppressValidation>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
+  </ItemGroup>
+</Project>
