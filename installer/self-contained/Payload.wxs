@@ -1,0 +1,50 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <!--
+    Explicit payload manifest — only files listed here are packed into the MSI.
+    Add a new Component/File pair for each additional payload file.
+    Sources resolve from PublishDir passed by CI (-p:PublishDir=...).
+    Self-contained publish also ships WPF native cor3 DLLs beside VirtualSpace.exe.
+  -->
+  <Fragment>
+    <ComponentGroup Id="ProductPayload" Directory="INSTALLFOLDER">
+
+      <Component Id="VirtualSpace.exe" Guid="987C4448-E958-4BE5-BC3F-FEADCEAB81DF">
+        <File Id="VirtualSpace.exe"
+              Source="$(PublishDir)/VirtualSpace.exe"
+              KeyPath="yes"
+              Checksum="yes" />
+      </Component>
+
+      <Component Id="D3DCompiler_47_cor3.dll" Guid="91B70657-C1E2-418D-9C4F-EA33DA50B326">
+        <File Id="D3DCompiler_47_cor3.dll"
+              Source="$(PublishDir)/D3DCompiler_47_cor3.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <Component Id="PenImc_cor3.dll" Guid="94DAB529-72D7-4407-BEA5-C5E37EA72F24">
+        <File Id="PenImc_cor3.dll"
+              Source="$(PublishDir)/PenImc_cor3.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <Component Id="PresentationNative_cor3.dll" Guid="C61A7E89-973F-4AB5-935F-81B78AC9E08F">
+        <File Id="PresentationNative_cor3.dll"
+              Source="$(PublishDir)/PresentationNative_cor3.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <Component Id="vcruntime140_cor3.dll" Guid="8C6B74F1-0151-40ED-9F7F-EEF940F67AE4">
+        <File Id="vcruntime140_cor3.dll"
+              Source="$(PublishDir)/vcruntime140_cor3.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <Component Id="wpfgfx_cor3.dll" Guid="0A839BD5-B46F-47C9-B7DA-C99A768D9DA1">
+        <File Id="wpfgfx_cor3.dll"
+              Source="$(PublishDir)/wpfgfx_cor3.dll"
+              KeyPath="yes" />
+      </Component>
+
+    </ComponentGroup>
+  </Fragment>
+</Wix>

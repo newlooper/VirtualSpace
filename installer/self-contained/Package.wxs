@@ -1,0 +1,104 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <!--
+    Scope=perMachine (matches Advanced Installer ALLUSERS=1). Per-user packages
+    fail uninstall after custom paths on other volumes: Windows Installer cannot
+    set ACLs on <volume>\Config.Msi\*.rbf (Error 5 / ACCESS_DENIED).
+  -->
+  <Package Name="VirtualSpace"
+           Manufacturer="newlooper.com"
+           Version="$(ProductVersion)"
+           UpgradeCode="4D2AFEC9-F961-40A5-9E88-2A0FBAFDF5EF"
+           Scope="perMachine"
+           Language="1033">
+
+    <SummaryInformation Description="VirtualSpace" Manufacturer="newlooper.com" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."
+                  Schedule="afterInstallInitialize" />
+
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Property Id="ARPNOREPAIR" Value="1" />
+
+    <?ifdef IconFile ?>
+    <Icon Id="AppIcon" SourceFile="$(IconFile)" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon" />
+    <?endif?>
+
+    <!--
+      Flat INSTALLFOLDER (Name=".") mirrors Advanced Installer APPDIR so SignPath
+      pe-file path="VirtualSpace.exe" matches.
+
+      Default path only on first install. Custom UI paths are stored under HKLM and
+      restored on maintenance/uninstall so files are removed from the real folder.
+    -->
+    <StandardDirectory Id="LocalAppDataFolder" />
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ProgramMenuProductFolder" Name="VirtualSpace" />
+    </StandardDirectory>
+    <Directory Id="INSTALLFOLDER" Name="." />
+
+    <Property Id="INSTALLFOLDER">
+      <RegistrySearch Id="PreviousInstallFolder"
+                      Root="HKLM"
+                      Key="Software\newlooper.com\VirtualSpace"
+                      Name="InstallDir"
+                      Type="directory" />
+    </Property>
+
+    <SetDirectory Id="INSTALLFOLDER"
+                  Value="[LocalAppDataFolder]newlooper.com\VirtualSpace"
+                  Sequence="first"
+                  Condition="NOT Installed" />
+
+    <SetProperty Id="ARPINSTALLLOCATION"
+                 Value="[INSTALLFOLDER]"
+                 After="CostFinalize"
+                 Condition="INSTALLFOLDER" />
+
+    <Feature Id="Main" Title="VirtualSpace" Level="1">
+      <ComponentGroupRef Id="ProductPayload" />
+      <ComponentGroupRef Id="InstallFolderMeta" />
+      <ComponentGroupRef Id="Shortcuts" />
+    </Feature>
+
+    <ComponentGroup Id="InstallFolderMeta" Directory="INSTALLFOLDER">
+      <Component Id="InstallDirRegistry" Guid="C3515A9F-8E1B-4B9C-8E28-DA1E50990D47">
+        <RegistryValue Root="HKLM"
+                       Key="Software\newlooper.com\VirtualSpace"
+                       Name="InstallDir"
+                       Type="string"
+                       Value="[INSTALLFOLDER]"
+                       KeyPath="yes" />
+        <RegistryValue Root="HKLM"
+                       Key="Software\newlooper.com\VirtualSpace"
+                       Name="Version"
+                       Type="string"
+                       Value="[ProductVersion]" />
+        <RemoveFolder Id="RemoveInstallFolder" On="uninstall" />
+      </Component>
+    </ComponentGroup>
+
+    <ComponentGroup Id="Shortcuts" Directory="ProgramMenuProductFolder">
+      <Component Id="StartMenuShortcut" Guid="294B6E7E-D155-4225-801C-E17C9F89A682">
+        <Shortcut Id="VirtualSpaceStartMenu"
+                  Name="VirtualSpace"
+                  Target="[#VirtualSpace.exe]"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Advertise="no" />
+        <RemoveFolder Id="RemoveProgramMenuProductFolder" On="uninstall" />
+        <RegistryValue Root="HKLM"
+                       Key="Software\newlooper.com\VirtualSpace"
+                       Name="StartMenuShortcut"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+
+    <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="..\License.rtf" />
+  </Package>
+</Wix>

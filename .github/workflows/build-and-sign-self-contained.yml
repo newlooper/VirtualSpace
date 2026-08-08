@@ -1,0 +1,273 @@
+name: build-and-sign-self-contained
+
+on:
+  workflow_dispatch:
+    inputs:
+      signing_policy:
+        description: SignPath signing policy slug
+        type: choice
+        options:
+          - test-signing
+          - release-signing
+        default: test-signing
+      version:
+        description: Optional fixed version (e.g. 1.0.1706.101). Leave empty to use AutoVersion.tt defaults
+        type: string
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+
+jobs:
+  build_and_sign:
+    runs-on: windows-latest
+
+    env:
+      TARGET_FRAMEWORK: net10.0-windows
+      DEFINE_CONSTANTS: NET10_0
+      PROJECT: VirtualSpace/VirtualSpace.csproj
+      # Prefer workflow_dispatch choice; on push use release-signing only for main/release/*
+      SIGNPATH_POLICY: >-
+        ${{
+          github.event_name == 'workflow_dispatch'
+            && inputs.signing_policy
+            || (
+                 (github.ref == 'refs/heads/1.0' || startsWith(github.ref, 'refs/heads/release/'))
+                   && 'release-signing'
+                   || 'test-signing'
+               )
+        }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      # VirtualSpace embeds prebuilt VirtualDesktop*.dll from these Release outputs
+      - name: Build VirtualDesktop assemblies
+        shell: pwsh
+        run: |
+          $projects = @(
+            'VirtualDesktop/VirtualDesktop10/VirtualDesktop10.csproj'
+            'VirtualDesktop/VirtualDesktop11/VirtualDesktop11.csproj'
+            'VirtualDesktop/VirtualDesktop11_21H2/VirtualDesktop11_21H2.csproj'
+            'VirtualDesktop/VirtualDesktop11_23H2/VirtualDesktop11_23H2.csproj'
+            'VirtualDesktop/VirtualDesktop11_23H2_3085/VirtualDesktop11_23H2_3085.csproj'
+            'VirtualDesktop/VirtualDesktop11_24H2/VirtualDesktop11_24H2.csproj'
+          )
+          foreach ($p in $projects) {
+            dotnet build $p -c Release -f $env:TARGET_FRAMEWORK
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+      # AutoVersion.cs is produced from AutoVersion.tt.
+      # Important: generate it BEFORE dotnet publish. SDK-style projects evaluate **/*.cs
+      # globs at the start of the build; if AutoVersion.cs is only created in BeforeBuild,
+      # it exists on disk afterwards but was never compiled — EXE then has empty version info.
+      # Optional workflow_dispatch "version" patches AutoVersion.tt variables first.
+      - name: Publish VirtualSpace (single-file, self-contained)
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $ide = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.TextTemplating -property installationPath
+          if (-not $ide) {
+            throw 'Visual Studio with Text Templating not found on runner (needed by csproj TextTransform).'
+          }
+          $env:DevEnvDir = Join-Path $ide 'Common7\IDE\'
+          $textTransform = Join-Path $env:DevEnvDir 'TextTransform.exe'
+          if (-not (Test-Path -LiteralPath $textTransform)) {
+            throw "TextTransform.exe not found: $textTransform"
+          }
+
+          $tt = Join-Path $env:GITHUB_WORKSPACE 'VirtualSpace\AutoVersion.tt'
+          $cs = Join-Path $env:GITHUB_WORKSPACE 'VirtualSpace\AutoVersion.cs'
+          if (-not (Test-Path -LiteralPath $tt)) {
+            throw "AutoVersion.tt not found: $tt"
+          }
+
+          $manualVersion = ''
+          if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
+            $manualVersion = '${{ inputs.version }}'.Trim()
+          }
+
+          if ($manualVersion) {
+            if ($manualVersion -notmatch '^(?<major>\d+)\.(?<minor>\d+)\.(?<build>\d+)\.(?<revision>\d+)$') {
+              throw "Invalid version '$manualVersion'. Expected major.minor.build.revision (e.g. 1.0.1706.101)."
+            }
+            $major = $Matches['major']
+            $minor = $Matches['minor']
+            $build = $Matches['build']
+            $revision = $Matches['revision']
+
+            $content = Get-Content -Path $tt -Raw
+            $content = [regex]::Replace($content, 'private const int MAJOR = \d+;', "private const int MAJOR = $major;")
+            $content = [regex]::Replace($content, 'private const int MINOR = \d+;', "private const int MINOR = $minor;")
+            $content = [regex]::Replace(
+              $content,
+              'private static readonly int DaysSinceProjectStarted = [^;]+;',
+              "private static readonly int DaysSinceProjectStarted = $build;")
+            $content = [regex]::Replace(
+              $content,
+              'private static readonly int MinutesSinceMidnight = [^;]+;',
+              "private static readonly int MinutesSinceMidnight = $revision;")
+            Set-Content -Path $tt -Value $content -NoNewline -Encoding utf8
+            Write-Host "Patched AutoVersion.tt => MAJOR=$major MINOR=$minor DaysSinceProjectStarted=$build MinutesSinceMidnight=$revision"
+          }
+          else {
+            Write-Host "Using AutoVersion.tt as-is"
+          }
+
+          # Generate AutoVersion.cs before publish so MSBuild includes it in Compile.
+          Push-Location (Split-Path $tt -Parent)
+          try {
+            & $textTransform -out $cs $tt
+            if ($LASTEXITCODE -ne 0) { throw "TextTransform failed with exit code $LASTEXITCODE" }
+          }
+          finally {
+            Pop-Location
+          }
+
+          if (-not (Test-Path -LiteralPath $cs)) {
+            throw "AutoVersion.cs was not generated by TextTransform: $cs"
+          }
+          Write-Host "----- AutoVersion.cs -----"
+          Get-Content -LiteralPath $cs | ForEach-Object { Write-Host $_ }
+          Write-Host "----- end AutoVersion.cs -----"
+
+          # pubxml is gitignored (*.pubxml). Pass the same settings as CLI properties
+          # instead of /p:PublishProfile=... (see Properties/PublishProfiles/net10.0-windows-WIN.pubxml).
+          $publishDir = "bin\Release\$env:TARGET_FRAMEWORK\publish\win-x64\"
+          dotnet clean $env:PROJECT -c Release -f $env:TARGET_FRAMEWORK
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          # File must already exist so the default Compile glob picks it up.
+          dotnet publish $env:PROJECT `
+            -c Release `
+            -f $env:TARGET_FRAMEWORK `
+            -r win-x64 `
+            --self-contained true `
+            /p:PublishSingleFile=true `
+            /p:PublishReadyToRun=false `
+            /p:PublishDir=$publishDir
+
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Locate published EXE
+        id: locate
+        shell: pwsh
+        run: |
+          $exe = Join-Path $env:GITHUB_WORKSPACE `
+            "VirtualSpace\bin\Release\$env:TARGET_FRAMEWORK\publish\win-x64\VirtualSpace.exe"
+          if (-not (Test-Path $exe)) {
+            throw "Published EXE not found: $exe"
+          }
+          $ver = (Get-Item $exe).VersionInfo.ProductVersion
+          $desc = (Get-Item $exe).VersionInfo.FileDescription
+          if ([string]::IsNullOrWhiteSpace($ver)) {
+            throw "Published EXE has empty ProductVersion. AutoVersion.cs was likely not compiled into the assembly."
+          }
+          "exe=$exe" >> $env:GITHUB_OUTPUT
+          "version=$ver" >> $env:GITHUB_OUTPUT
+          Write-Host "Found $exe"
+          Write-Host "ProductVersion=$ver"
+          Write-Host "FileDescription=$desc"
+          Write-Host "Signing policy: $env:SIGNPATH_POLICY"
+
+      # WiX Toolset SDK. Payload is an explicit allow-list in installer/self-contained/Payload.wxs
+      # (not a harvest of the whole publish dir). MSI keeps VirtualSpace.exe at package
+      # root (like Advanced Installer APPDIR) so SignPath pe-file path="VirtualSpace.exe" matches.
+      - name: Build MSI with WiX
+        id: msi
+        shell: pwsh
+        run: |
+          $exe = '${{ steps.locate.outputs.exe }}'
+          $ver = '${{ steps.locate.outputs.version }}'
+          $publishDir = Split-Path -Parent $exe
+          $wixproj = Join-Path $env:GITHUB_WORKSPACE 'installer\self-contained\VirtualSpace.wixproj'
+          $icon = Join-Path $env:GITHUB_WORKSPACE 'VirtualSpace\Resources\Logo_2.ico'
+          $outDir = Join-Path $env:GITHUB_WORKSPACE 'installer-build'
+
+          if (-not (Test-Path -LiteralPath $wixproj)) {
+            throw "WiX project not found: $wixproj"
+          }
+          if (-not (Test-Path -LiteralPath $exe)) {
+            throw "Published EXE not found: $exe"
+          }
+
+          New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+
+          $publishDirSlash = $publishDir.Replace('\', '/')
+          $msbuildProps = @(
+            "ProductVersion=$ver"
+            "PublishDir=$publishDirSlash"
+            "OutputPath=$($outDir.Replace('\', '/'))/"
+            "BaseOutputPath=$($outDir.Replace('\', '/'))/"
+          )
+          if (Test-Path -LiteralPath $icon) {
+            $msbuildProps += "IconFile=$($icon.Replace('\', '/'))"
+          }
+          else {
+            Write-Warning "Installer icon not found (ARPPRODUCTICON skipped): $icon"
+          }
+
+          Write-Host "WiX project: $wixproj"
+          Write-Host "PublishDir: $publishDirSlash"
+          Write-Host "Version: $ver"
+          Write-Host "Output: $outDir"
+
+          $propArgs = $msbuildProps | ForEach-Object { "-p:$_" }
+          & dotnet build $wixproj -c Release @propArgs
+          if ($LASTEXITCODE -ne 0) { throw "WiX build failed: $LASTEXITCODE" }
+
+          $msi = Join-Path $outDir "VirtualSpace-$ver-Full.msi"
+          if (-not (Test-Path -LiteralPath $msi)) {
+            $found = Get-ChildItem -Path $outDir -Recurse -Filter '*.msi' -ErrorAction SilentlyContinue |
+              Select-Object -First 5 -ExpandProperty FullName
+            throw "MSI not found at expected path: $msi`nFound: $($found -join ', ')"
+          }
+
+          "msi=$msi" >> $env:GITHUB_OUTPUT
+          Write-Host "Built MSI: $msi ($([math]::Round((Get-Item $msi).Length / 1MB, 2)) MB)"
+
+      - name: Upload unsigned MSI
+        id: upload-unsigned
+        uses: actions/upload-artifact@v7
+        with:
+          name: VirtualSpace-unsigned-msi-Full
+          path: ${{ steps.msi.outputs.msi }}
+          if-no-files-found: error
+          retention-days: 5
+          archive: false
+
+      - name: Submit SignPath signing request
+        id: sign
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: VirtualSpace
+          signing-policy-slug: ${{ env.SIGNPATH_POLICY }}
+          # Must match SignPath Artifact Configuration for MSI + nested EXE deep signing
+          artifact-configuration-slug: MSI-Sign-Full
+          github-artifact-id: ${{ steps.upload-unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: ${{ github.workspace }}/signed
+          skip-decompress: true
+
+      - name: Upload signed artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: VirtualSpace-${{ steps.locate.outputs.version }}-Full-Signed
+          path: ${{ github.workspace }}/signed
+          if-no-files-found: error
+          retention-days: 30
