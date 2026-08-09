@@ -105,7 +105,7 @@ namespace VirtualSpace
 
             using var stream      = typeof( Program ).Assembly.GetManifestResourceStream( dllName );
             var       rawAssembly = new byte[stream.Length];
-            stream.Read( rawAssembly, 0, rawAssembly.Length );
+            stream.ReadExactly( rawAssembly );
             // try
             // {
             //     var filepath = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, shortAssemblyName + dllExt );
