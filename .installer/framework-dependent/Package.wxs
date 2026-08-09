@@ -99,6 +99,6 @@
     </ComponentGroup>
 
     <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
-    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+    <WixVariable Id="WixUILicenseRtf" Value="..\License.rtf" />
   </Package>
 </Wix>

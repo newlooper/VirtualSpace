@@ -27,7 +27,6 @@ jobs:
 
     env:
       TARGET_FRAMEWORK: net10.0-windows
-      DEFINE_CONSTANTS: NET10_0
       PROJECT: VirtualSpace/VirtualSpace.csproj
       # Prefer workflow_dispatch choice; on push use release-signing only for main/release/*
       SIGNPATH_POLICY: >-
@@ -182,7 +181,7 @@ jobs:
           Write-Host "FileDescription=$desc"
           Write-Host "Signing policy: $env:SIGNPATH_POLICY"
 
-      # WiX Toolset SDK. Payload is an explicit allow-list in installer/self-contained/Payload.wxs
+      # WiX Toolset SDK. Payload is an explicit allow-list in .installer/self-contained/Payload.wxs
       # (not a harvest of the whole publish dir). MSI keeps VirtualSpace.exe at package
       # root (like Advanced Installer APPDIR) so SignPath pe-file path="VirtualSpace.exe" matches.
       - name: Build MSI with WiX
@@ -192,9 +191,9 @@ jobs:
           $exe = '${{ steps.locate.outputs.exe }}'
           $ver = '${{ steps.locate.outputs.version }}'
           $publishDir = Split-Path -Parent $exe
-          $wixproj = Join-Path $env:GITHUB_WORKSPACE 'installer\self-contained\VirtualSpace.wixproj'
+          $wixproj = Join-Path $env:GITHUB_WORKSPACE '.installer\self-contained\VirtualSpace.wixproj'
           $icon = Join-Path $env:GITHUB_WORKSPACE 'VirtualSpace\Resources\Logo_2.ico'
-          $outDir = Join-Path $env:GITHUB_WORKSPACE 'installer-build'
+          $outDir = Join-Path $env:GITHUB_WORKSPACE '.installer-build'
 
           if (-not (Test-Path -LiteralPath $wixproj)) {
             throw "WiX project not found: $wixproj"
