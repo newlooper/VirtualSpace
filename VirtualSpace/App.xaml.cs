@@ -147,7 +147,7 @@ namespace VirtualSpace
             Logger.Info( $"Start Screen: {screen.DeviceName} ({screen.DeviceFriendlyName()})" );
             Logger.Info( $"Start Screen Aspect Ratio: [{ar.W}:{ar.H}]" );
             Logger.Info( $"Start VirtualDesktop: Desktop[{DesktopWrapper.CurrentIndex}]" );
-            Logger.Info( $"Start Position: [{Screen.PrimaryScreen.Bounds.Location.X}, {Screen.PrimaryScreen.Bounds.Location.Y}]" );
+            Logger.Info( $"Start Position: [{Screen.PrimaryScreen!.Bounds.Location.X}, {Screen.PrimaryScreen.Bounds.Location.Y}]" );
             Logger.Info( $"Start Size: {Screen.PrimaryScreen.Bounds.Width}*{Screen.PrimaryScreen.Bounds.Height}" );
             Logger.Info( $"Is Running As Administrator: {SysInfo.IsAdministrator}" );
             Logger.Info( $"Current Profile: {ConfigManager.Configs.CurrentProfileName}" );
@@ -160,9 +160,9 @@ namespace VirtualSpace
             try
             {
                 version = ( (AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(
-                    Assembly.GetEntryAssembly(),
+                    Assembly.GetEntryAssembly()!,
                     typeof( AssemblyInformationalVersionAttribute ),
-                    false ) ).InformationalVersion;
+                    false )! ).InformationalVersion;
             }
             catch
             {

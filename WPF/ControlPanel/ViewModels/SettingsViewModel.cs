@@ -69,14 +69,14 @@ public partial class SettingsViewModel : ViewModelBase
                 case nameof( CurrentProfile ):
                     if ( string.IsNullOrEmpty( after.ToString() ) || before == after ) break;
 
-                    Manager.SwitchProfile( after.ToString() );
+                    Manager.SwitchProfile( after.ToString()! );
                     RulesViewModel.ReloadRules();
                     Theme = Manager.CurrentProfile.UI.Theme;
                     Language = Manager.CurrentProfile.UI.Language;
 
                     break;
                 case nameof( Language ):
-                    var lang = after.ToString();
+                    var lang = after.ToString()!;
                     LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
                     LocalizeDictionary.Instance.Culture = new CultureInfo( lang );
                     Manager.CurrentProfile.UI.Language = lang;

@@ -70,7 +70,7 @@ public partial class GeneralViewModel : ViewModelBase
                     }
                     catch ( Exception e )
                     {
-                        var view = new YesNoWithNote( Agent.Langs.GetString( e.Message ), PackIconKind.CloseOctagon );
+                        var view = new YesNoWithNote( Agent.Langs.GetString( e.Message )!, PackIconKind.CloseOctagon );
                         DialogHost.Show( view, "GeneralDialog" );
                         RunOnStartup = !RunOnStartup;
                     }

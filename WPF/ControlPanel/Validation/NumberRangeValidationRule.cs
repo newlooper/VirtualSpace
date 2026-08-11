@@ -19,7 +19,7 @@ public class NumberRangeValidationRule : ValidationRule
     {
         try
         {
-            var v = int.Parse( value.ToString() );
+            var v = int.Parse( value as string ?? string.Empty );
             if ( v < Min || v > Max )
                 return new ValidationResult( false, $"{Min} - {Max}" );
         }

@@ -43,7 +43,7 @@ public partial class RuleForm : UserControl
         if ( r?.Expression == null ) return;
 
         var exp = Conditions.ParseExpressionTemplate( r.Expression );
-        foreach ( var rule in exp.rules.Where( rule => rule.field == field ) )
+        foreach ( var rule in exp.rules!.Where( rule => rule.field == field ) )
         {
             rule.@operator = cbb.SelectedValue.ToString();
             break;
@@ -66,7 +66,7 @@ public partial class RuleForm : UserControl
              chb_WndClass.IsChecked == false )
         {
             Snackbar.MessageQueue?.Enqueue(
-                Agent.Langs.GetString( "Rule.AtLeastOne" ),
+                Agent.Langs.GetString( "Rule.AtLeastOne" )!,
                 null,
                 null,
                 null,
@@ -99,7 +99,7 @@ public partial class RuleForm : UserControl
         catch ( Exception ex )
         {
             Snackbar.MessageQueue?.Enqueue(
-                Agent.Langs.GetString( ex.Message ),
+                Agent.Langs.GetString( ex.Message )!,
                 null,
                 null,
                 null,
@@ -111,20 +111,20 @@ public partial class RuleForm : UserControl
 
         r.Expression = JsonDocument.Parse( JsonSerializer.Serialize( exp, RulesViewModel.WriteOptions ) );
 
-        var action = r.Action;
+        var action = r.Action!;
         if ( chb_MoveToDesktop.IsChecked == true )
         {
-            action.MoveToDesktop = int.Parse( cbb_MoveToDesktop.SelectedValue.ToString() );
+            action.MoveToDesktop = int.Parse( cbb_MoveToDesktop.SelectedValue.ToString()! );
         }
 
-        action.FollowWindow = (bool)chb_FollowWindow.IsChecked;
-        action.PinWindow = (bool)chb_PinWindow.IsChecked;
-        action.PinApp = (bool)chb_PinApp.IsChecked;
-        action.HideFromView = (bool)chb_HideFromView.IsChecked;
+        action.FollowWindow = (bool)chb_FollowWindow.IsChecked!;
+        action.PinWindow = (bool)chb_PinWindow.IsChecked!;
+        action.PinApp = (bool)chb_PinApp.IsChecked!;
+        action.HideFromView = (bool)chb_HideFromView.IsChecked!;
 
         if ( chb_MoveToScreen.IsChecked == true )
         {
-            action.MoveToScreen = int.Parse( cbb_MoveToScreen.SelectedValue.ToString() );
+            action.MoveToScreen = int.Parse( cbb_MoveToScreen.SelectedValue.ToString()! );
         }
 
         if ( r.Id == Guid.Empty )
@@ -174,7 +174,7 @@ public partial class RuleForm : UserControl
             value = V
         };
 
-        exp.rules.Add( rule );
+        exp.rules?.Add( rule );
     }
 
     private void BtnCloseDefBox_OnClick( object sender, RoutedEventArgs e )
