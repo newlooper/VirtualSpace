@@ -104,7 +104,7 @@ namespace VirtualSpace.VirtualDesktop
             else
             {
                 var vdw = sender as Form;
-                vdw.Left = e.X + vdw.Left - _startPoint.X;
+                vdw!.Left = e.X + vdw.Left - _startPoint.X;
                 vdw.Top = e.Y + vdw.Top - _startPoint.Y;
             }
         }
@@ -122,7 +122,7 @@ namespace VirtualSpace.VirtualDesktop
                 {
                     while ( true )
                     {
-                        _virtualDesktops[_hoverVdIndex].Opacity = 1; // reset hover virtual desktop opacity unconditionally
+                        _virtualDesktops![_hoverVdIndex].Opacity = 1; // reset hover virtual desktop opacity unconditionally
 
                         if ( _hoverVdIndex == VdIndex ||
                              DesktopWrapper.IsWindowPinned( _selectedWindow.Handle ) ||
@@ -165,15 +165,15 @@ namespace VirtualSpace.VirtualDesktop
                     }
                     else
                     {
-                        Swap( ConfigManager.CurrentProfile.DesktopOrder, VdIndex, _hoverVdIndex );
+                        Swap( ConfigManager.CurrentProfile.DesktopOrder!, VdIndex, _hoverVdIndex );
 
                         VirtualDesktopManager.SaveOrder();
 
-                        Logger.Verbose( $"SWAP.Desktop Desktop[{VdIndex.ToString()}] WITH Desktop[{_hoverVdIndex.ToString()}]" );
+                        Logger.Verbose( $"SWAP.Desktop Desktop[{VdIndex}] WITH Desktop[{_hoverVdIndex}]" );
                         VirtualDesktopManager.FixLayout();
                         VirtualDesktopManager.ShowAllVirtualDesktops();
                         User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
-                        User32.PostMessage( _virtualDesktops[_hoverVdIndex].Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
+                        User32.PostMessage( _virtualDesktops![_hoverVdIndex].Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
                     }
                 }
             }
@@ -185,8 +185,8 @@ namespace VirtualSpace.VirtualDesktop
                 {
                     void ActiveWindow()
                     {
-                        Logger.Verbose( $"ACTIVE.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )})" );
-                        WindowTool.ActiveWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder[_hoverVdIndex] );
+                        Logger.Verbose( $"ACTIVE.Win {_selectedWindow!.Title}({_selectedWindow.Handle:X2})" );
+                        WindowTool.ActiveWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder![_hoverVdIndex] );
                     }
 
                     var action = Manager.Configs.GetMouseActionById( MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
@@ -266,7 +266,7 @@ namespace VirtualSpace.VirtualDesktop
                                     Sender = sender,
                                     Location = e.Location,
                                     Self = this,
-                                    Vdws = _virtualDesktops
+                                    Vdws = _virtualDesktops!
                                 }
                             );
                             break;
@@ -348,7 +348,7 @@ namespace VirtualSpace.VirtualDesktop
             DesktopWrapper.MakeVisibleByGuid( VdId );
         }
 
-        private static void Swap<T>( IList<T> list, int indexA, int indexB )
+        private static void Swap( List<Guid> list, int indexA, int indexB )
         {
             ( list[indexA], list[indexB] ) = ( list[indexB], list[indexA] );
         }

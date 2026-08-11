@@ -42,7 +42,7 @@ namespace VirtualSpace
             var programName       = Assembly.GetExecutingAssembly().GetName().Name;
             var shortAssemblyName = new AssemblyName( eventArgs.Name ).Name;
 
-            if ( shortAssemblyName.EndsWith( ".resources" ) )
+            if ( shortAssemblyName?.EndsWith( ".resources" ) == true )
                 return null;
 
             switch ( shortAssemblyName )
@@ -104,7 +104,7 @@ namespace VirtualSpace
             }
 
             using var stream      = typeof( Program ).Assembly.GetManifestResourceStream( dllName );
-            var       rawAssembly = new byte[stream.Length];
+            var       rawAssembly = new byte[stream!.Length];
             stream.ReadExactly( rawAssembly );
             // try
             // {

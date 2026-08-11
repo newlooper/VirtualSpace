@@ -49,7 +49,7 @@ namespace VirtualSpace
             }
 
             var borderBrushDefault = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
+                {Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
 
             for ( var r = 0; r < rowsCols; r++ )
             {
@@ -97,7 +97,7 @@ namespace VirtualSpace
             _instance.Dispatcher.Invoke( new Action( () => { } ), DispatcherPriority.ContextIdle, null );
 
             var borderBrushDefault = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
+                {Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
 
             for ( var r = 0; r < rowsCols; r++ )
             {
@@ -136,9 +136,9 @@ namespace VirtualSpace
         public static void UpdateHoverBorder( int hover )
         {
             var borderColorHover = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWHighlightBackColor.R, Ui.VDWHighlightBackColor.G, Ui.VDWHighlightBackColor.B )};
+                {Color = Color.FromRgb( Ui.VDWHighlightBackColor!.R, Ui.VDWHighlightBackColor.G, Ui.VDWHighlightBackColor.B )};
             var borderColorDefault = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
+                {Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
 
             for ( var i = 0; i < _desktopCount; i++ )
             {
@@ -151,12 +151,12 @@ namespace VirtualSpace
         {
             var currentMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( VirtualDesktopManager.GetVdIndexByGuid( DesktopWrapper.CurrentGuid ) );
 
-            var borderColorHover = Color.FromRgb( Ui.VDWHighlightBackColor.R, Ui.VDWHighlightBackColor.G, Ui.VDWHighlightBackColor.B );
+            var borderColorHover = Color.FromRgb( Ui.VDWHighlightBackColor!.R, Ui.VDWHighlightBackColor.G, Ui.VDWHighlightBackColor.B );
 
             var borderBrushDefault = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
+                {Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
             var borderBrushCurrent = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWCurrentBackColor.R, Ui.VDWCurrentBackColor.G, Ui.VDWCurrentBackColor.B )};
+                {Color = Color.FromRgb( Ui.VDWCurrentBackColor!.R, Ui.VDWCurrentBackColor.G, Ui.VDWCurrentBackColor.B )};
 
             for ( var i = 0; i < Math.Pow( RowsCols, 2 ); i++ )
             {
@@ -199,12 +199,12 @@ namespace VirtualSpace
         {
             var cells = _instance.MainGrid.Children;
             var index = -1;
-            var dpi   = SysInfo.Dpi;
+            var (ScaleX, ScaleY) = SysInfo.Dpi;
             for ( var i = 0; i < cells.Count; i++ )
             {
                 var topLeft = cells[i].TranslatePoint( new Point(), _instance );
-                topLeft = new Point( topLeft.X * dpi.ScaleX, topLeft.Y * dpi.ScaleY );
-                var bottomRight = new Point( topLeft.X + cells[i].RenderSize.Width * dpi.ScaleX, topLeft.Y + cells[i].RenderSize.Height * dpi.ScaleY );
+                topLeft = new Point( topLeft.X * ScaleX, topLeft.Y * ScaleY );
+                var bottomRight = new Point( topLeft.X + cells[i].RenderSize.Width * ScaleX, topLeft.Y + cells[i].RenderSize.Height * ScaleY );
                 var rect        = new Rect( topLeft, bottomRight );
                 if ( rect.Contains( p ) )
                 {

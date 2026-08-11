@@ -52,7 +52,7 @@ namespace VirtualSpace.Helpers
 
         public static string? GetDefaultWallpaperPath()
         {
-            return Registry.GetValue( PATH_WALLPAPER_REGISTRY, "Wallpaper", "" ).ToString();
+            return Registry.GetValue( PATH_WALLPAPER_REGISTRY, "Wallpaper", "" )!.ToString();
         }
 
         public static string? GetWallPaperPathByGuid( Guid guid )
@@ -67,14 +67,14 @@ namespace VirtualSpace.Helpers
 
         public static Color GetBackColor()
         {
-            var color    = Registry.GetValue( PATH_COLOR_REGISTRY, "Background", "" ).ToString();
-            var strColor = color.Split( ' ' );
+            var color    = Registry.GetValue( PATH_COLOR_REGISTRY, "Background", "" )!.ToString();
+            var strColor = color!.Split( ' ' );
             return Color.FromArgb( int.Parse( strColor[0] ), int.Parse( strColor[1] ), int.Parse( strColor[2] ) );
         }
 
         public static bool AppThemeIsLight()
         {
-            return Registry.GetValue( PATH_APP_USE_LIGHT_THEME, "AppsUseLightTheme", "1" ).ToString() == "1";
+            return Registry.GetValue( PATH_APP_USE_LIGHT_THEME, "AppsUseLightTheme", "1" )!.ToString() == "1";
         }
     }
 
@@ -85,7 +85,7 @@ namespace VirtualSpace.Helpers
         public RegValueMonitor( string hive, string keyPath, string valueName )
         {
             var currentUser = WindowsIdentity.GetCurrent();
-            var sid         = currentUser.User.Value;
+            var sid         = currentUser.User?.Value;
             var q = $"SELECT * FROM RegistryValueChangeEvent WHERE Hive='{hive}' " +
                     @$"AND KeyPath='{sid}\\{keyPath}' AND ValueName='{valueName}'";
 
@@ -108,7 +108,7 @@ namespace VirtualSpace.Helpers
             var valueName = e.NewEvent.Properties["ValueName"].Value.ToString();
 
             var v = Registry.GetValue( keyPath, valueName, "" );
-            OnRegValueChanged?.Invoke( null, new RegValueChangedEventArgs( v.ToString() ) );
+            OnRegValueChanged?.Invoke( null, new RegValueChangedEventArgs( v?.ToString() ?? string.Empty ) );
         }
 
         public void Dispose()

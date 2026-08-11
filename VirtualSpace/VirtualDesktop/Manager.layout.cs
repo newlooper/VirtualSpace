@@ -210,7 +210,7 @@ namespace VirtualSpace.VirtualDesktop
 
         public static void Bootstrap()
         {
-            _vdwDefaultBackColor = Color.FromArgb( Ui.VDWDefaultBackColor.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B );
+            _vdwDefaultBackColor = Color.FromArgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B );
         }
     }
 }

@@ -45,26 +45,26 @@ namespace VirtualSpace.VirtualDesktop
 
                 if ( action.HideFromView )
                 {
-                    Logger.Debug( $"[RULE.Action]HIDE.Win {action.Handle.ToString( "X2" )}" );
+                    Logger.Debug( $"[RULE.Action]HIDE.Win {action.Handle:X2}" );
                     Filters.WndHandleIgnoreListByManual.TryAdd( action.Handle, 0 );
                 }
 
                 if ( action.MoveToScreen >= 0 )
                 {
-                    Logger.Debug( $"[RULE.Action]MOVE_TO_SCREEN.Win {action.Handle.ToString( "X2" )} TO Screen[{action.MoveToScreen.ToString()}]" );
+                    Logger.Debug( $"[RULE.Action]MOVE_TO_SCREEN.Win {action.Handle:X2} TO Screen[{action.MoveToScreen}]" );
                     WindowTool.MoveWindowToScreen( action.Handle, action.MoveToScreen );
                 }
 
                 if ( action.PinApp )
                 {
-                    Logger.Debug( $"[RULE.Action]PIN.App of {action.Handle.ToString( "X2" )} TO All Desktops" );
+                    Logger.Debug( $"[RULE.Action]PIN.App of {action.Handle:X2} TO All Desktops" );
                     try
                     {
                         DesktopWrapper.PinApp( action.Handle, false );
                     }
                     catch
                     {
-                        Logger.Error( $"[RULE.Action]PIN.App {action.Handle.ToString( "X2" )} Failed" );
+                        Logger.Error( $"[RULE.Action]PIN.App {action.Handle:X2} Failed" );
                     }
 
                     continue; // <- if PinApp, then PinWindow & MoveToDesktop is invalid
@@ -72,14 +72,14 @@ namespace VirtualSpace.VirtualDesktop
 
                 if ( action.PinWindow )
                 {
-                    Logger.Debug( $"[RULE.Action]PIN.Win {action.Handle.ToString( "X2" )} TO All Desktops" );
+                    Logger.Debug( $"[RULE.Action]PIN.Win {action.Handle:X2} TO All Desktops" );
                     try
                     {
                         DesktopWrapper.PinWindow( action.Handle, false );
                     }
                     catch
                     {
-                        Logger.Error( $"[RULE.Action]PIN.Win {action.Handle.ToString( "X2" )} Failed" );
+                        Logger.Error( $"[RULE.Action]PIN.Win {action.Handle:X2} Failed" );
                     }
 
                     continue; // <- if PinWindow, then MoveToDesktop is invalid
@@ -89,7 +89,7 @@ namespace VirtualSpace.VirtualDesktop
                 {
                     try
                     {
-                        Logger.Debug( $"[RULE.Action]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]" );
+                        Logger.Debug( $"[RULE.Action]MOVE.Win {action.Handle:X2} TO Desktop[{action.MoveToDesktop}]" );
                         DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
                         if ( action.FollowWindow )
                         {
@@ -100,11 +100,11 @@ namespace VirtualSpace.VirtualDesktop
                     {
                         CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
                         Logger.Error(
-                            $"[RULE.Action]MOVE.Win {action.Handle.ToString( "X2" )} TO Desktop[{action.MoveToDesktop.ToString()}]",
+                            $"[RULE.Action]MOVE.Win {action.Handle:X2} TO Desktop[{action.MoveToDesktop}]",
                             new NotifyObject
                             {
-                                Title = Agent.Langs.GetString( "Error.Title" ),
-                                Message = string.Format( Agent.Langs.GetString( "Error.MoveWindowToDesktop" ), action.WindowTitle, action.RuleName )
+                                Title = Agent.Langs.GetString( "Error.Title" )!,
+                                Message = string.Format( Agent.Langs.GetString( "Error.MoveWindowToDesktop" )!, action.WindowTitle, action.RuleName )
                             } );
                     }
                 }

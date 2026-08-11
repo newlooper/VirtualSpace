@@ -42,7 +42,7 @@ namespace VirtualSpace.Tools
 
         public static void InitTrayIcon()
         {
-            Ti.Icon = Images.BytesToIcon( ImageManager.GetObject( "TrayIcon" ) );
+            Ti.Icon = Images.BytesToIcon( ImageManager.GetObject( "TrayIcon" )! );
         }
 
         public static void UpdateVDIndexOnTrayIcon( string index )
@@ -67,10 +67,10 @@ namespace VirtualSpace.Tools
                     break;
             }
 
-            using var bitmap = Images.BytesToBitmap( ImageManager.GetObject( $@"{backColor}" ) );
+            using var bitmap = Images.BytesToBitmap( ImageManager.GetObject( $@"{backColor}" )! );
             if ( index.Length == 1 )
             {
-                using var number = Images.BytesToBitmap( ImageManager.GetObject( $@"Big{index}{numberColor}" ) );
+                using var number = Images.BytesToBitmap( ImageManager.GetObject( $@"Big{index}{numberColor}" )! );
                 using var gBack  = Graphics.FromImage( bitmap );
                 gBack.CompositingMode = CompositingMode.SourceOver;
                 number.MakeTransparent();
@@ -78,8 +78,8 @@ namespace VirtualSpace.Tools
             }
             else
             {
-                using var number1 = Images.BytesToBitmap( ImageManager.GetObject( $@"Small{index[0]}{numberColor}" ) );
-                using var number2 = Images.BytesToBitmap( ImageManager.GetObject( $@"Small{index[1]}{numberColor}" ) );
+                using var number1 = Images.BytesToBitmap( ImageManager.GetObject( $@"Small{index[0]}{numberColor}" )! );
+                using var number2 = Images.BytesToBitmap( ImageManager.GetObject( $@"Small{index[1]}{numberColor}" )! );
                 number1.MakeTransparent();
                 number2.MakeTransparent();
                 using var gBack = Graphics.FromImage( bitmap );
@@ -93,7 +93,7 @@ namespace VirtualSpace.Tools
 
         private static void PaintVdIndexWithLogo( string index )
         {
-            using var bitmap = Images.BytesToBitmap( ImageManager.GetObject( "TrayIconBack_Default" ) );
+            using var bitmap = Images.BytesToBitmap( ImageManager.GetObject( "TrayIconBack_Default" )! );
             var       rectF  = new RectangleF( 0, 0, bitmap.Width, bitmap.Height );
             var textFormat = new StringFormat
             {

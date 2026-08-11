@@ -202,7 +202,7 @@ namespace VirtualSpace
                 return;
             }
 
-            var i     = ConfigManager.CurrentProfile.DesktopOrder.IndexOf( guid );
+            var i     = ConfigManager.CurrentProfile.DesktopOrder!.IndexOf( guid );
             var index = ConfigManager.CurrentProfile.UI.ShowVdIndexType == 0 ? i : i + 1;
             TrayIcon.UpdateVDIndexOnTrayIcon( index.ToString() );
         }

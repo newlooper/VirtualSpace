@@ -20,7 +20,7 @@ namespace VirtualSpace.Config.Entity
         [PropertyProtector] public             Colour? VDWCurrentBackColor    { get; set; }
         [PropertyProtector] public             Colour? VDWHighlightBackColor  { get; set; }
         public                                 float   VDWDragTargetOpacity   { get; set; }
-        public                                 string  Language               { get; set; }
+        public                                 string  Language               { get; set; } = string.Empty;
         public                                 bool    ShowVdName             { get; set; } = true;
         public                                 bool    ShowVdIndex            { get; set; } = true;
         [PropertyProtector( 0, 0, 1 )]  public int     ShowVdIndexType        { get; set; }

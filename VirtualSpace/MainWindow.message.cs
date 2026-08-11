@@ -129,7 +129,7 @@ namespace VirtualSpace
 
             void SwitchByIndex( int index )
             {
-                if ( Manager.CurrentProfile.DesktopOrder.Count > index )
+                if ( Manager.CurrentProfile.DesktopOrder!.Count > index )
                     DesktopWrapper.MakeVisibleByGuid( Manager.CurrentProfile.DesktopOrder[index] );
             }
 
@@ -294,7 +294,7 @@ namespace VirtualSpace
                     {
                         Interlocked.Exchange( ref _forceSwitchOnTimeout, 0 );
                         DesktopWrapper.MakeVisibleByGuid(
-                            Manager.CurrentProfile.DesktopOrder[VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
+                            Manager.CurrentProfile.DesktopOrder![VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
                     }
 
                     break;
@@ -321,7 +321,7 @@ namespace VirtualSpace
             if ( SwitchDesktopTimer.ElapsedMilliseconds <= Const.SwitchDesktopInterval ) return;
 
             var desktopOrder              = Manager.CurrentProfile.DesktopOrder;
-            var currentVdIndex            = desktopOrder.IndexOf( DesktopWrapper.CurrentGuid );
+            var currentVdIndex            = desktopOrder!.IndexOf( DesktopWrapper.CurrentGuid );
             var currentDesktopMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( currentVdIndex );
 
             var dir = lParam.ToInt32();
