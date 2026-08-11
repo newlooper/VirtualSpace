@@ -34,7 +34,7 @@ namespace VirtualSpace.VirtualDesktop
             var wndCount = _visibleWindows.Count;
             if ( !string.IsNullOrEmpty( WindowFilter.Keyword ) )
             {
-                _visibleWindows.RemoveAll( wnd => !wnd.Title.ToLower().Contains( WindowFilter.Keyword.ToLower() ) );
+                _visibleWindows.RemoveAll( wnd => !wnd.Title.Contains( WindowFilter.Keyword, StringComparison.CurrentCultureIgnoreCase ) );
                 wndCount = _visibleWindows.Count;
             }
 
@@ -44,7 +44,7 @@ namespace VirtualSpace.VirtualDesktop
             var rows = Math.Floor( Math.Sqrt( wndCount ) );
             var cols = Math.Ceiling( wndCount / rows );
 
-            var marginH = VirtualDesktopManager.Ui.ThumbMargin.Left;
+            var marginH = VirtualDesktopManager.Ui.ThumbMargin!.Left;
             var marginV = VirtualDesktopManager.Ui.ThumbMargin.Top;
 
             //////////////////////////////////////
