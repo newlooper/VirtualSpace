@@ -95,7 +95,7 @@ namespace VirtualSpace
         {
             if ( nCode >= 0 )
             {
-                var info = (LLKH.KBDLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LLKH.KBDLLHOOKSTRUCT ) );
+                var info = Marshal.PtrToStructure<LLKH.KBDLLHOOKSTRUCT>( lParam );
 
                 var keyType = (int)wParam;
 
@@ -201,7 +201,7 @@ namespace VirtualSpace
             var hTaskbar = User32.FindWindow( Const.TaskbarWndClass, "" );
             if ( hTaskbar == IntPtr.Zero ) goto NEXT;
 
-            var info = (LowLevelMouseHook.MSLLHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( LowLevelMouseHook.MSLLHOOKSTRUCT ) );
+            var info = Marshal.PtrToStructure<LowLevelMouseHook.MSLLHOOKSTRUCT>( lParam );
             var msg  = (int)wParam;
             if ( msg == LowLevelMouseHook.WM_MOUSEWHEEL )
             {
