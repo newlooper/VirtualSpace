@@ -30,7 +30,7 @@ namespace ControlPanel;
 /// </summary>
 public partial class MainWindow : Window, IAppController
 {
-    private static MainWindow _instance;
+    private static MainWindow _instance = null!;
     private static IntPtr     _handle;
 
     private IntPtr _mainWindowHandle;

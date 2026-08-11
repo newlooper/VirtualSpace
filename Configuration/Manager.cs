@@ -29,16 +29,16 @@ namespace VirtualSpace.Config
 {
     public static class Manager
     {
-        public static ConfigTemplate Configs;
-        public static string         AppPath;
-        public static string         AppRootFolder;
-        public static string         ProfileFolder;
-        public static string         CacheFolder;
-        public static string         PluginsFolder;
+        public static ConfigTemplate Configs = null!;
+        public static string         AppPath = string.Empty;
+        public static string         AppRootFolder = string.Empty;
+        public static string         ProfileFolder = string.Empty;
+        public static string         CacheFolder = string.Empty;
+        public static string         PluginsFolder = string.Empty;
         public static string         ConfigRootFolder {
             get { return AppRootFolder; }
         }
-        public static string         ConfigFilePath;
+        public static string         ConfigFilePath = string.Empty;
 
         public static Profile CurrentProfile => Configs.Profiles[Configs.CurrentProfileName];
 
@@ -79,7 +79,7 @@ namespace VirtualSpace.Config
                 var       buffer = new byte[fs.Length];
                 _ = fs.Read( buffer, 0, (int)fs.Length );
                 var utf8Reader = new Utf8JsonReader( buffer );
-                Configs = JsonSerializer.Deserialize<ConfigTemplate>( ref utf8Reader );
+                Configs = JsonSerializer.Deserialize<ConfigTemplate>( ref utf8Reader ) ?? throw new Exception( $"Failed to deserialize ConfigTemplate from {filePath}" );
                 var cluster = ReadCluster();
                 if ( cluster is not null )
                 {
@@ -175,7 +175,7 @@ namespace VirtualSpace.Config
                 Logger.Error( "Failed to save Settings: " + ex.Message );
             }
 
-            ProfileChanged?.Invoke( null, null );
+            ProfileChanged?.Invoke( null, EventArgs.Empty );
         }
 
         public static event EventHandler<EventArgs>? ProfileChanged;
@@ -264,13 +264,13 @@ namespace VirtualSpace.Config
                 return AppRootFolder;
             }
 
-            var configRootReg = vsReg.GetValue( Const.Reg.RegKeyConfigRoot );
-            if ( configRootReg is null || !Directory.Exists( configRootReg.ToString() ) )
+            var configRootReg = vsReg.GetValue( Const.Reg.RegKeyConfigRoot ) as string ?? string.Empty;
+            if ( configRootReg == string.Empty || !Directory.Exists( configRootReg ) )
             {
                 return AppRootFolder;
             }
 
-            AppRootFolder = configRootReg.ToString();
+            AppRootFolder = configRootReg;
 
             return ConfigRootFolder;
         }

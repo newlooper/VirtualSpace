@@ -240,7 +240,7 @@ namespace VirtualSpace
                             UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
                             break;
                         case UserMessage.AppControllerClosed:
-                            AcForm = null;
+                            AcForm = null!;
                             break;
                         case UserMessage.SwitchDesktop:
                             SwitchDesktopByDirection( lParam );

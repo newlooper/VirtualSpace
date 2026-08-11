@@ -76,7 +76,7 @@ namespace VirtualSpace
                 Background = new SolidColorBrush(
                     Color.FromArgb(
                         Ui.CanvasOpacity,
-                        Ui.CanvasBackColor.R,
+                        Ui.CanvasBackColor!.R,
                         Ui.CanvasBackColor.G,
                         Ui.CanvasBackColor.B )
                 ),

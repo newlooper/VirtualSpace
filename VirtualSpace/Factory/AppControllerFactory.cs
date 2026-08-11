@@ -27,7 +27,7 @@ namespace VirtualSpace.Factory
                     mw.ForceLoad();
                     return mw;
                 default:
-                    return null;
+                    return null!;
             }
         }
     }
