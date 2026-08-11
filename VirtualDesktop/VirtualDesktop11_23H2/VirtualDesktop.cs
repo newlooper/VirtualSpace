@@ -327,7 +327,7 @@ namespace VirtualDesktop
             if ( hWnd == IntPtr.Zero ) throw new ArgumentNullException();
             _ = GetWindowThreadProcessId( hWnd, out var processId );
 
-            if ( Process.GetCurrentProcess().Id == processId )
+            if ( Environment.ProcessId == processId )
             {
                 // window of process
                 try // the easy way (if we are owner)

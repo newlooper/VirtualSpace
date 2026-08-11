@@ -9,7 +9,6 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 
@@ -23,17 +22,17 @@ namespace VirtualSpace.Plugin
         private static PluginInfo GetPluginInfo()
         {
             var file = Path.Combine( GetAppFolder(), PluginInfoFile );
-            return LoadFromJson<PluginInfo>( file );
+            return LoadFromJson<PluginInfo>( file )!;
         }
 
         public static string GetAppPath()
         {
-            return Process.GetCurrentProcess().MainModule.FileName;
+            return Environment.ProcessPath ?? string.Empty;
         }
 
         public static string GetAppFolder()
         {
-            return Directory.GetParent( GetAppPath() ).FullName;
+            return Directory.GetParent( GetAppPath() )!.FullName;
         }
 
         public static T? LoadFromJson<T>( string infoFile )

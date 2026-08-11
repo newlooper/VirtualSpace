@@ -9,7 +9,6 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace VirtualSpace.Commons
@@ -27,29 +26,29 @@ namespace VirtualSpace.Commons
     {
         public static HostInfo GetHostInfo()
         {
-            var entryAssembly = Assembly.GetEntryAssembly();
+            var entryAssembly = Assembly.GetEntryAssembly()!;
 
             var product = ( (AssemblyProductAttribute)Attribute.GetCustomAttribute(
                 entryAssembly,
                 typeof( AssemblyProductAttribute ),
-                false ) ).Product;
+                false )! ).Product;
 
             var fileVersion = ( (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(
                 entryAssembly,
                 typeof( AssemblyFileVersionAttribute ),
-                false ) ).Version;
+                false )! ).Version;
 
             var infoVersion = ( (AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(
                 entryAssembly,
                 typeof( AssemblyInformationalVersionAttribute ),
-                false ) ).InformationalVersion;
+                false )! ).InformationalVersion;
 
             return new HostInfo
             {
                 Version = new Version( fileVersion ),
                 Product = product,
                 InfoVersion = infoVersion,
-                AppPath = Process.GetCurrentProcess().MainModule.FileName
+                AppPath = Environment.ProcessPath ?? string.Empty
             };
         }
     }
