@@ -57,7 +57,7 @@ namespace VirtualSpace.Helpers
                     var       ubr         = registryKey?.GetValue( "UBR" );
                     if ( ubr != null )
                     {
-                        var buildNumber = int.Parse( ubr.ToString() );
+                        var buildNumber = int.Parse( ubr.ToString()! );
                         winVer = new Version( winVer.Major, winVer.Minor, winVer.Build, buildNumber );
                     }
                 }
@@ -68,7 +68,7 @@ namespace VirtualSpace.Helpers
 
         public static (int W, int H) GetAspectRadioOfScreen()
         {
-            var nGCD = GetGreatestCommonDivisor( Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height );
+            var nGCD = GetGreatestCommonDivisor( Screen.PrimaryScreen!.Bounds.Width, Screen.PrimaryScreen.Bounds.Height );
             return new ValueTuple<int, int>( Screen.PrimaryScreen.Bounds.Width / nGCD, Screen.PrimaryScreen.Bounds.Height / nGCD );
         }
 
@@ -129,7 +129,7 @@ namespace VirtualSpace.Helpers
             {
                 header =
                 {
-                    size = (uint)Marshal.SizeOf( typeof( DISPLAYCONFIG_TARGET_DEVICE_NAME ) ),
+                    size = (uint)Marshal.SizeOf<DISPLAYCONFIG_TARGET_DEVICE_NAME>(),
                     adapterId = adapterId,
                     id = targetId,
                     type = DISPLAYCONFIG_DEVICE_INFO_TYPE.DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME
@@ -447,7 +447,7 @@ namespace VirtualSpace.Helpers
 
             string GetCommandLineArgsCore()
             {
-                using var searcher = new ManagementObjectSearcher( $"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {process.Id.ToString()}" );
+                using var searcher = new ManagementObjectSearcher( $"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {process.Id}" );
                 using var objects  = searcher.Get();
                 var       obj      = objects.Cast<ManagementBaseObject>().SingleOrDefault();
                 return obj?["CommandLine"]?.ToString() ?? "";
