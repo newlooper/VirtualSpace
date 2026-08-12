@@ -37,12 +37,12 @@ public partial class Control
         var kbInConfig = Manager.Configs.KeyBindings;
         var hotkeyId   = selectedNode.Name;
 
-        if ( !kbInConfig!.ContainsKey( hotkeyId ) )
+        if ( !kbInConfig!.TryGetValue( hotkeyId, out VirtualSpace.Config.Entity.KeyBinding? value ) )
         {
             var kb = Const.Hotkey.GetKeyBinding( hotkeyId );
             if ( kb.MessageId == 0 ) return;
-
-            kbInConfig[hotkeyId] = kb;
+            value = kb;
+            kbInConfig[hotkeyId] = value;
         }
 
         vm.BoxVisible = Visibility.Visible;
@@ -63,14 +63,14 @@ public partial class Control
         vm.Path = path!;
         vm.Extra = Const.Hotkey.GetHotkeyExtra( hotkeyId );
 
-        if ( kbInConfig[hotkeyId].GhkCode == "" )
+        if ( value.GhkCode == "" )
         {
             vm.LWin = vm.Ctrl = vm.Alt = vm.Shift = false;
             vm.Key = Const.Hotkey.NONE;
             return;
         }
 
-        var arr = kbInConfig[hotkeyId].GhkCode.Split( Const.Hotkey.SPLITTER );
+        var arr = value.GhkCode.Split( Const.Hotkey.SPLITTER );
         if ( arr.Length == 5 )
         {
             vm.LWin = arr[0] != Const.Hotkey.NONE;

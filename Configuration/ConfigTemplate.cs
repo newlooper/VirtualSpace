@@ -58,9 +58,8 @@ namespace VirtualSpace.Config
                 MouseActions = Config.MouseAction.Info;
             }
 
-            return MouseActions.ContainsKey( id )
-                ? MouseActions[id]
-                : Config.MouseAction.Action.DoNothing;
+            return MouseActions.TryGetValue( id, out MouseAction.Action value )
+                ? value : Config.MouseAction.Action.DoNothing;
         }
     }
 }

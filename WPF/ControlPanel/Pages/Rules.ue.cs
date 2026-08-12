@@ -50,10 +50,10 @@ public partial class Rules
         if ( keyword.StartsWith( @"\\G" ) && keyword.Length > 3 )
         {
             keyword = keyword[3..];
-            return ( item as RuleTemplate )?.Tag?.IndexOf( keyword, StringComparison.OrdinalIgnoreCase ) >= 0;
+            return ( item as RuleTemplate )?.Tag?.IndexOf( keyword, StringComparison.CurrentCultureIgnoreCase ) >= 0;
         }
 
-        return ( item as RuleTemplate )?.Name?.IndexOf( tbNameFilter.Text, StringComparison.OrdinalIgnoreCase ) >= 0;
+        return ( item as RuleTemplate )?.Name?.IndexOf( tbNameFilter.Text, StringComparison.CurrentCultureIgnoreCase ) >= 0;
     }
 
     private void TbNameFilter_OnTextChanged( object sender, TextChangedEventArgs e )

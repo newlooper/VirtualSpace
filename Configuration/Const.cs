@@ -135,9 +135,9 @@ namespace VirtualSpace.Config
             public static string GetFuncDesc( string key )
             {
                 var func = "";
-                if ( Info.ContainsKey( key ) )
+                if ( Info.TryGetValue( key, out (string FuncDesc, int MessageId, string AltHotKey) value ) )
                 {
-                    func = Info[key].FuncDesc;
+                    func = value.FuncDesc;
                 }
                 else if ( key.StartsWith( SVD_TREE_NODE_PREFIX ) )
                 {
@@ -158,9 +158,9 @@ namespace VirtualSpace.Config
             public static KeyBinding GetKeyBinding( string key )
             {
                 var kb = new KeyBinding();
-                if ( Info.ContainsKey( key ) )
+                if ( Info.TryGetValue( key, out (string FuncDesc, int MessageId, string AltHotKey) value ) )
                 {
-                    kb.MessageId = Info[key].MessageId;
+                    kb.MessageId = value.MessageId;
                 }
                 else if ( key.StartsWith( SVD_TREE_NODE_PREFIX ) )
                 {
@@ -180,13 +180,9 @@ namespace VirtualSpace.Config
 
             public static string GetHotkeyExtra( string key )
             {
-                var extra = "";
-                if ( Info.ContainsKey( key ) )
-                {
-                    extra = Info[key].AltHotKey;
-                }
-
-                return extra;
+                return Info.TryGetValue( key, out (string FuncDesc, int MessageId, string AltHotKey) value ) ? 
+                    value.AltHotKey : 
+                    string.Empty;
             }
         }
     }

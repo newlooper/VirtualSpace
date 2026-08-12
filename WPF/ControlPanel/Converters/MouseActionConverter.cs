@@ -20,7 +20,7 @@ public class MouseActionConverter : IMultiValueConverter
 {
     public object Convert( object[] values, Type targetType, object parameter, CultureInfo culture )
     {
-        if ( values.Length == 0 ) return null;
+        if ( values.Length == 0 ) return null!;
 
         var prefix = values[0].ToString() == MouseAction.MOUSE_NODE_DESKTOP_PREFIX ? MouseAction.MOUSE_NODE_DESKTOP_PREFIX : MouseAction.MOUSE_NODE_WINDOW_PREFIX;
         var mks    = Keys.None;
@@ -34,12 +34,9 @@ public class MouseActionConverter : IMultiValueConverter
 
         var maId = prefix + keyCode + MouseAction.KEY_SPLITTER + mb;
 
-        if ( Manager.Configs.MouseActions.ContainsKey( maId ) )
-        {
-            return Manager.Configs.MouseActions[maId].ToString();
-        }
-
-        return MouseAction.Action.DoNothing.ToString();
+        return Manager.Configs.MouseActions.TryGetValue( maId, out MouseAction.Action value ) ? 
+            value.ToString() : 
+            MouseAction.Action.DoNothing.ToString();
     }
 
     public object[] ConvertBack( object value, Type[] targetTypes, object parameter, CultureInfo culture )
