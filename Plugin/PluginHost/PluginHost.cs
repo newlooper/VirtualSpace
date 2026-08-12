@@ -130,9 +130,9 @@ namespace VirtualSpace.Plugin
         private static Version GetHostVersion()
         {
             var fileVersion = ( (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(
-                Assembly.GetEntryAssembly(),
+                Assembly.GetEntryAssembly()!,
                 typeof( AssemblyFileVersionAttribute ),
-                false ) ).Version;
+                false )! ).Version;
             return new Version( fileVersion );
         }
     }

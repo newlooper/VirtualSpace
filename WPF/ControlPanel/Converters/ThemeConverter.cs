@@ -23,6 +23,6 @@ public class ThemeConverter : IValueConverter
 
     public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
     {
-        return int.Parse( value.ToString() );
+        return int.Parse( value.ToString()! );
     }
 }

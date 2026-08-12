@@ -82,7 +82,7 @@ public partial class RuleForm : UserControl
             rules = new List<ExpressionTemplate>(),
         };
 
-        if ( r.Expression != null )
+        if ( r?.Expression != null )
         {
             exp.id = Conditions.ParseExpressionTemplate( r.Expression ).id;
         }
@@ -109,7 +109,7 @@ public partial class RuleForm : UserControl
             goto FAIL;
         }
 
-        r.Expression = JsonDocument.Parse( JsonSerializer.Serialize( exp, RulesViewModel.WriteOptions ) );
+        r!.Expression = JsonDocument.Parse( JsonSerializer.Serialize( exp, RulesViewModel.WriteOptions ) );
 
         var action = r.Action!;
         if ( chb_MoveToDesktop.IsChecked == true )

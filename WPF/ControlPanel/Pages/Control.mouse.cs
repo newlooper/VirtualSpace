@@ -22,14 +22,14 @@ public partial class Control
     {
         MouseActionBind( DesktopMouseActionBox.DataContext as MouseActionModel,
             MouseAction.MOUSE_NODE_DESKTOP_PREFIX,
-            cbbDesktopActions.SelectedValue.ToString() );
+            cbbDesktopActions.SelectedValue.ToString()! );
     }
 
     private void WindowActionBind_OnClick( object sender, RoutedEventArgs e )
     {
         MouseActionBind( WindowMouseActionBox.DataContext as MouseActionModel,
             MouseAction.MOUSE_NODE_WINDOW_PREFIX,
-            cbbWindowActions.SelectedValue.ToString() );
+            cbbWindowActions.SelectedValue.ToString()! );
     }
 
     private void MouseActionBind( MouseActionModel vm, string prefix, string actionName )

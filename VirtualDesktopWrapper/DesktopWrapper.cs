@@ -34,12 +34,12 @@ namespace VirtualSpace.VirtualDesktop.Api
                 if ( SysInfo.IsWin10 )
                 {
                     var desktop = VD10.Desktop.FromId( guid );
-                    desktop.Remove( null );
+                    desktop?.Remove( null );
                 }
                 else
                 {
                     var desktop = VD11.Desktop.FromId( guid );
-                    desktop.Remove( null );
+                    desktop?.Remove( null );
                 }
 
                 return true;

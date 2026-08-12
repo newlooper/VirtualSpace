@@ -45,7 +45,7 @@ public partial class Settings
         if ( fbd.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace( fbd.SelectedPath ) )
         {
             var vm = DataContext as SettingsViewModel;
-            vm.ConfigRootPath = fbd.SelectedPath;
+            vm!.ConfigRootPath = fbd.SelectedPath;
             Manager.SetConfigRoot( fbd.SelectedPath );
         }
     }
@@ -60,7 +60,7 @@ public partial class Settings
 
         if ( Manager.Configs.Profiles.ContainsKey( newProfileName ) || !isValid )
         {
-            var view = new YesNoWithNote( Agent.Langs.GetString( "Profile.Warning.InvalidProfileName" ), PackIconKind.CloseOctagon );
+            var view = new YesNoWithNote( Agent.Langs.GetString( "Profile.Warning.InvalidProfileName" )!, PackIconKind.CloseOctagon );
             await DialogHost.Show( view, "ProfileDialog" );
             return;
         }
@@ -83,7 +83,7 @@ public partial class Settings
         RulesViewModel.ReloadRules();
 
         var vm = DataContext as SettingsViewModel;
-        vm.ProfileList.Add( new {Value = profileName} );
+        vm!.ProfileList.Add( new {Value = profileName} );
         vm.CurrentProfile = profileName;
     }
 
@@ -91,7 +91,7 @@ public partial class Settings
     {
         if ( Manager.Configs.Profiles.Count == 1 )
         {
-            var view = new YesNoWithNote( Agent.Langs.GetString( "Profile.Warning.LastProfileProtect" ), PackIconKind.CloseOctagon );
+            var view = new YesNoWithNote( Agent.Langs.GetString( "Profile.Warning.LastProfileProtect" )!, PackIconKind.CloseOctagon );
             await DialogHost.Show( view, "ProfileDialog" );
             return;
         }
@@ -105,12 +105,12 @@ public partial class Settings
         YesNoWithNote view;
         if ( Manager.Configs.Profiles.Count == 1 )
         {
-            view = new YesNoWithNote( Agent.Langs.GetString( "Profile.Warning.LastProfileProtect" ), PackIconKind.CloseOctagon );
+            view = new YesNoWithNote( Agent.Langs.GetString( "Profile.Warning.LastProfileProtect" )!, PackIconKind.CloseOctagon );
             await DialogHost.Show( view, "ProfileDialog" );
             return;
         }
 
-        view = new YesNoWithNote( Agent.Langs.GetString( "Profile.Confirm.Delete" ), PackIconKind.Warning );
+        view = new YesNoWithNote( Agent.Langs.GetString( "Profile.Confirm.Delete" )!, PackIconKind.Warning );
         var result = await DialogHost.Show( view, "ProfileDialog" );
         if ( result is false ) return;
 
@@ -122,7 +122,7 @@ public partial class Settings
         Manager.DeleteFilesOfProfile( delProfile );
 
         var vm = DataContext as SettingsViewModel;
-        vm.CurrentProfile = Manager.Configs.CurrentProfileName;
+        vm!.CurrentProfile = Manager.Configs.CurrentProfileName;
         vm.ProfileList.Remove( vm.ProfileList.First( x => ( (dynamic)x ).Value == delProfile ) );
     }
 
@@ -134,7 +134,7 @@ public partial class Settings
         var pndView = eventArgs.Session.Content as ProfileNameDialog;
         if ( pndView == null ) return;
 
-        var oldName = cbbProfiles.SelectedValue.ToString();
+        var oldName = cbbProfiles.SelectedValue.ToString()!;
 
         var newName = pndView.EditProfileName;
         if ( newName == oldName ) return;
@@ -145,7 +145,7 @@ public partial class Settings
 
         if ( Manager.Configs.Profiles.ContainsKey( newName ) || !isValid )
         {
-            pndView.SetErrors( Agent.Langs.GetString( "Profile.Warning.InvalidProfileName" ) );
+            pndView.SetErrors( Agent.Langs.GetString( "Profile.Warning.InvalidProfileName" )! );
             eventArgs.Cancel();
             return;
         }
@@ -157,6 +157,6 @@ public partial class Settings
         Manager.DeleteFilesOfProfile( oldName );
 
         var vm = DataContext as SettingsViewModel;
-        vm.ProfileList.Remove( vm.ProfileList.First( x => ( (dynamic)x ).Value == oldName ) );
+        vm?.ProfileList.Remove( vm.ProfileList.First( x => ( (dynamic)x ).Value == oldName ) );
     }
 }

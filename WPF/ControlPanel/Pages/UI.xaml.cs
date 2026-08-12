@@ -20,7 +20,7 @@ namespace ControlPanel.Pages;
 public partial class UI
 {
     private static UI?         _instance;
-    private static UIViewModel _vm;
+    private static UIViewModel _vm = null!;
 
     public UI()
     {
@@ -41,7 +41,7 @@ public partial class UI
     {
         var btn = (Button)e.OriginalSource;
 
-        _vm.VdArrangement = int.Parse( btn.Tag.ToString() );
+        _vm.VdArrangement = int.Parse( btn.Tag.ToString()! );
 
         User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.DesktopArrangement, 0 );
 

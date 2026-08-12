@@ -25,7 +25,7 @@ public partial class Control
         var tvi  = element as TreeViewItem;
 
         if ( includeSelf )
-            path.Push( tvi );
+            path.Push( tvi! );
 
         while ( element != null )
         {

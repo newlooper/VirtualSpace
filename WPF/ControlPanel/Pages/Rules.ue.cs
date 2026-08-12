@@ -50,10 +50,10 @@ public partial class Rules
         if ( keyword.StartsWith( @"\\G" ) && keyword.Length > 3 )
         {
             keyword = keyword[3..];
-            return ( item as RuleTemplate ).Tag?.IndexOf( keyword, StringComparison.OrdinalIgnoreCase ) >= 0;
+            return ( item as RuleTemplate )?.Tag?.IndexOf( keyword, StringComparison.OrdinalIgnoreCase ) >= 0;
         }
 
-        return ( item as RuleTemplate ).Name.IndexOf( tbNameFilter.Text, StringComparison.OrdinalIgnoreCase ) >= 0;
+        return ( item as RuleTemplate )?.Name?.IndexOf( tbNameFilter.Text, StringComparison.OrdinalIgnoreCase ) >= 0;
     }
 
     private void TbNameFilter_OnTextChanged( object sender, TextChangedEventArgs e )
@@ -88,7 +88,7 @@ public partial class Rules
             dataView.Refresh();
         }
 
-        Sort( sortBy, direction );
+        Sort( sortBy!, direction );
 
         if ( direction == ListSortDirection.Ascending )
         {

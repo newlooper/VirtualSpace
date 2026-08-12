@@ -165,7 +165,7 @@ public partial class MainWindow : Window, IAppController
         var tab = (TabControl)sender;
         if ( tab.SelectedIndex == -1 ) return;
         var selectedTab = (TabItem)tab.SelectedItem;
-        ContentFrame.Content = PageFactory.GetPage( NavBarItem.NavBarItemsInfo[selectedTab.Tag.ToString()] );
+        ContentFrame.Content = PageFactory.GetPage( NavBarItem.NavBarItemsInfo[selectedTab.Tag.ToString()!] );
     }
 
     private void SettingsButton_OnClick( object sender, RoutedEventArgs e )

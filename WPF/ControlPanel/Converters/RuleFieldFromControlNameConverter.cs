@@ -19,11 +19,11 @@ public class RuleFieldFromControlNameConverter : IValueConverter
     public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
     {
         var name = value as string;
-        return name.Split( "_" )[1];
+        return name!.Split( "_" )[1];
     }
 
     public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
     {
-        return int.Parse( value.ToString() );
+        return int.Parse( value.ToString()! );
     }
 }

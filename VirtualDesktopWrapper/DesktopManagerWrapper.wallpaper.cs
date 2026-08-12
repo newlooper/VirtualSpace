@@ -28,8 +28,8 @@ namespace VirtualSpace.VirtualDesktop.Api
             {
                 while ( true )
                 {
-                    var path  = Registry.GetValue( WALLPAPER_REGISTRY_PREFIX, "Wallpaper", "" ).ToString();
-                    var color = Registry.GetValue( COLOR_REGISTRY_PREFIX, "Background", "" ).ToString();
+                    var path  = Registry.GetValue( WALLPAPER_REGISTRY_PREFIX, "Wallpaper", "" )!.ToString();
+                    var color = Registry.GetValue( COLOR_REGISTRY_PREFIX, "Background", "" )!.ToString();
 
                     if ( string.IsNullOrEmpty( _lastColor ) )
                     {

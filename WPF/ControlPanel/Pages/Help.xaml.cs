@@ -45,28 +45,28 @@ public partial class Help : UserControl
 
     private void AppInfo()
     {
-        var entryAssembly = Assembly.GetEntryAssembly();
+        var entryAssembly = Assembly.GetEntryAssembly()!;
         try
         {
             lb_AppName.Text = ( (AssemblyProductAttribute)Attribute.GetCustomAttribute(
                 entryAssembly,
                 typeof( AssemblyProductAttribute ),
-                false ) ).Product;
+                false )! ).Product;
 
             lb_Version.Text = ( (AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(
                 entryAssembly,
                 typeof( AssemblyInformationalVersionAttribute ),
-                false ) ).InformationalVersion;
+                false )! ).InformationalVersion;
 
             lb_Copyright.Text = ( (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(
                 entryAssembly,
                 typeof( AssemblyCopyrightAttribute ),
-                false ) ).Copyright;
+                false )! ).Copyright;
 
             llb_CompanyUri.NavigateUri = new Uri( ( (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(
                 entryAssembly,
                 typeof( AssemblyCompanyAttribute ),
-                false ) ).Company );
+                false )! ).Company );
             llb_CompanyText.Text = llb_CompanyUri.NavigateUri.ToString();
         }
         catch

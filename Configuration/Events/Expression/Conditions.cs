@@ -73,7 +73,7 @@ namespace VirtualSpace.Config.Events.Expression
         {
             foreach ( var rule in rules )
             {
-                rule.Exp = Jp.ExpressionFromJsonDoc<Window>( rule.Expression );
+                rule.Exp = Jp.ExpressionFromJsonDoc<Window>( rule.Expression! );
             }
 
             _rules.Sort( ( x, y ) => -x.Weight.CompareTo( y.Weight ) );
@@ -139,14 +139,14 @@ namespace VirtualSpace.Config.Events.Expression
                 {
                     if ( !r.Enabled ) continue;
                     l.Add( win );
-                    var match = l.Where( r.Exp ).Any();
+                    var match = l.Where( r.Exp! ).Any();
                     l.Clear();
                     if ( match )
                     {
                         hasMatchedRule = true;
                         Logger.Debug( win.Title + $" match rule [{r.Name}]" );
-                        r.Action.Handle      = win.Handle;
-                        r.Action.RuleName    = r.Name;
+                        r.Action!.Handle      = win.Handle;
+                        r.Action.RuleName    = r.Name!;
                         r.Action.WindowTitle = win.Title;
                         ActionProducer.Writer.TryWrite( r.Action );
 
@@ -192,13 +192,13 @@ namespace VirtualSpace.Config.Events.Expression
             var utf8Reader = new Utf8JsonReader( buffer );
 
             var readOptions = GetJsonDeserializerOptions();
-            return JsonSerializer.Deserialize<List<RuleTemplate>>( ref utf8Reader, readOptions );
+            return JsonSerializer.Deserialize<List<RuleTemplate>>( ref utf8Reader, readOptions )!;
         }
 
         public static ExpressionTemplate ParseExpressionTemplate( JsonDocument doc )
         {
             var readOptions = GetJsonDeserializerOptions();
-            return JsonSerializer.Deserialize<ExpressionTemplate>( doc, readOptions );
+            return JsonSerializer.Deserialize<ExpressionTemplate>( doc, readOptions )!;
         }
 
         private static JsonSerializerOptions? _readOptions;

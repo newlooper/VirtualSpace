@@ -29,7 +29,7 @@ public partial class Control
     private void KeyboardTreeView_OnSelectedItemChanged( object sender, RoutedPropertyChangedEventArgs<object> e )
     {
         var vm = KeyBindingBox.DataContext as KeyBindingModel;
-        vm.BoxVisible = Visibility.Hidden;
+        vm!.BoxVisible = Visibility.Hidden;
 
         var selectedNode = e.NewValue as TreeViewItem;
         if ( selectedNode is null ) return;
@@ -37,7 +37,7 @@ public partial class Control
         var kbInConfig = Manager.Configs.KeyBindings;
         var hotkeyId   = selectedNode.Name;
 
-        if ( !kbInConfig.ContainsKey( hotkeyId ) )
+        if ( !kbInConfig!.ContainsKey( hotkeyId ) )
         {
             var kb = Const.Hotkey.GetKeyBinding( hotkeyId );
             if ( kb.MessageId == 0 ) return;
@@ -60,7 +60,7 @@ public partial class Control
             }
         }
 
-        vm.Path = path;
+        vm.Path = path!;
         vm.Extra = Const.Hotkey.GetHotkeyExtra( hotkeyId );
 
         if ( kbInConfig[hotkeyId].GhkCode == "" )
@@ -97,10 +97,10 @@ public partial class Control
             new ValueTuple<string, string, string, string, string>( "Name", "Header", "Tag", "IsHidden", "Nodes" ) );
 
         var nodeDesktop       = KeyboardTreeView.Items[1] as TreeViewItem;
-        var nodeDesktopSwitch = nodeDesktop.Items[0] as TreeViewItem;
+        var nodeDesktopSwitch = nodeDesktop!.Items[0] as TreeViewItem;
 
         var nodeWindow              = KeyboardTreeView.Items[2] as TreeViewItem;
-        var nodeWindowMove          = nodeWindow.Items[0] as TreeViewItem;
+        var nodeWindowMove          = nodeWindow!.Items[0] as TreeViewItem;
         var nodeWindowMoveAndFollow = nodeWindow.Items[1] as TreeViewItem;
 
         for ( var i = 1; i <= DesktopWrapper.Count; i++ )
@@ -111,7 +111,7 @@ public partial class Control
                 Name = Const.Hotkey.SVD_TREE_NODE_PREFIX + i,
                 Tag = "KB.Hotkey.SVD"
             };
-            nodeDesktopSwitch.Items.Add( item );
+            nodeDesktopSwitch?.Items.Add( item );
 
             var item2 = new TreeViewItem
             {
@@ -119,7 +119,7 @@ public partial class Control
                 Name = Const.Hotkey.MW_TREE_NODE_PREFIX + i,
                 Tag = "KB.Hotkey.MW"
             };
-            nodeWindowMove.Items.Add( item2 );
+            nodeWindowMove?.Items.Add( item2 );
 
             var item3 = new TreeViewItem
             {
@@ -127,7 +127,7 @@ public partial class Control
                 Name = Const.Hotkey.MWF_TREE_NODE_PREFIX + i,
                 Tag = "KB.Hotkey.MWF"
             };
-            nodeWindowMoveAndFollow.Items.Add( item3 );
+            nodeWindowMoveAndFollow?.Items.Add( item3 );
         }
 
         var item4 = new TreeViewItem
@@ -136,7 +136,7 @@ public partial class Control
             Name = Const.Hotkey.SWITCH_BACK_LAST,
             Tag = "KB.Hotkey.SVD_BACK_LAST"
         };
-        nodeDesktopSwitch.Items.Add( item4 );
+        nodeDesktopSwitch?.Items.Add( item4 );
     }
 
     private static (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) GetGhk( KeyBindingModel kbm )
@@ -179,24 +179,24 @@ public partial class Control
     private void SaveHotkey( (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) ghk )
     {
         var selectedItem = KeyboardTreeView.SelectedItem as TreeViewItem;
-        var hotkeyId     = selectedItem.Name;
+        var hotkeyId     = selectedItem!.Name;
         var kb           = Const.Hotkey.GetKeyBinding( hotkeyId );
         kb.GhkCode = ghk.keyCode;
-        Manager.Configs.KeyBindings[hotkeyId] = kb;
+        Manager.Configs.KeyBindings![hotkeyId] = kb;
         Manager.Save( reason: kb.GhkCode.Replace( Const.Hotkey.NONE + Const.Hotkey.SPLITTER, "" ), reasonName: hotkeyId );
-        ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.SettingsSaved" ) );
+        ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.SettingsSaved" )! );
     }
 
     private void RegHotkey( (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) ghk )
     {
         var selectedItem = KeyboardTreeView.SelectedItem as TreeViewItem;
-        var hotkeyId     = selectedItem.Name;
+        var hotkeyId     = selectedItem!.Name;
         var msgId        = Const.Hotkey.GetKeyBinding( hotkeyId ).MessageId;
         GlobalHotKey.UnregisterHotKey( MainWindow.MainWindowHandle, msgId );
 
         var vm = KeyBindingBox.DataContext as KeyBindingModel;
 
-        if ( string.IsNullOrEmpty( vm.Key ) || vm.Key == Const.Hotkey.NONE )
+        if ( string.IsNullOrEmpty( vm?.Key ) || vm.Key == Const.Hotkey.NONE )
         {
             return;
         }
@@ -206,11 +206,11 @@ public partial class Control
                 ghk.keyModifiers,
                 KeyInterop.VirtualKeyFromKey( Enum.Parse<Key>( vm.Key ) ) ) )
         {
-            ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.Reg.Success" ) );
+            ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.Reg.Success" )! );
         }
         else
         {
-            ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.Reg.Fail" ) );
+            ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.Reg.Fail" )! );
         }
     }
 
@@ -221,13 +221,13 @@ public partial class Control
 
         if ( ( vm.LWin | vm.Ctrl | vm.Alt | vm.Shift ) == false )
         {
-            ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.MKeyCheck" ) );
+            ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.MKeyCheck" )! );
             return;
         }
 
         if ( string.IsNullOrEmpty( vm.Key ) || vm.Key == Const.Hotkey.NONE )
         {
-            ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.KeyCheck" ) );
+            ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.KeyCheck" )! );
             return;
         }
 
@@ -245,7 +245,7 @@ public partial class Control
         var msgId = Const.Hotkey.GetKeyBinding( hotkeyId ).MessageId;
         GlobalHotKey.UnregisterHotKey( MainWindow.MainWindowHandle, msgId );
         var vm = KeyBindingBox.DataContext as KeyBindingModel;
-        vm.Clear();
+        vm?.Clear();
         Manager.Configs.KeyBindings!.Remove( hotkeyId );
         Manager.Save( reason: "clear", reasonName: hotkeyId );
     }

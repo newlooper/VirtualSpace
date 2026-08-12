@@ -51,10 +51,10 @@ namespace VirtualSpace.Config.DataAnnotations
                 if ( pair.Attr.Values is null ) // an object that have some properties which modified by [PropertyProtector( xxx )]
                 {
                     var type = pair.Property.PropertyType;
-                    if ( type.FullName.StartsWith( "System.Collections.Generic.Dictionary" ) ) // for collection Type, only Dictionary supported for now
+                    if ( type.FullName!.StartsWith( "System.Collections.Generic.Dictionary" ) ) // for collection Type, only Dictionary supported for now
                     {
                         var dict   = pair.Property.GetValue( pair.Obj );
-                        var values = ( (dynamic)dict ).Values;
+                        var values = ( (dynamic)dict! ).Values;
                         foreach ( var v in values )
                         {
                             Walk( v );
@@ -62,7 +62,7 @@ namespace VirtualSpace.Config.DataAnnotations
                     }
                     else
                     {
-                        Walk( pair.Property.GetValue( pair.Obj ) ); // a class instance
+                        Walk( pair.Property.GetValue( pair.Obj )! ); // a class instance
                     }
                 }
                 else
@@ -74,7 +74,7 @@ namespace VirtualSpace.Config.DataAnnotations
                     {
                         case byte:
                         {
-                            var current = (byte)pair.Property.GetValue( obj );
+                            var current = (byte)pair.Property.GetValue( obj )!;
                             if ( current < (byte)pair.Attr.Values[1] || current > byte.MaxValue )
                             {
                                 pair.Property.SetValue( obj, pair.Attr.Values[0], null );
@@ -85,7 +85,7 @@ namespace VirtualSpace.Config.DataAnnotations
 
                         case int:
                         {
-                            var current = (int)pair.Property.GetValue( obj );
+                            var current = (int)pair.Property.GetValue( obj )!;
                             if ( current < (int)pair.Attr.Values[1] || current > (int)pair.Attr.Values[2] )
                             {
                                 pair.Property.SetValue( obj, pair.Attr.Values[0], null );
@@ -96,7 +96,7 @@ namespace VirtualSpace.Config.DataAnnotations
 
                         case long:
                         {
-                            var current = (long)pair.Property.GetValue( obj );
+                            var current = (long)pair.Property.GetValue( obj )!;
                             if ( current < (long)pair.Attr.Values[1] || current > (long)pair.Attr.Values[2] )
                             {
                                 pair.Property.SetValue( obj, pair.Attr.Values[0], null );

@@ -22,7 +22,7 @@ public class UIButtonStyleByVdAConverter : IMultiValueConverter
         if ( parameter.ToString() == "B" )
         {
             var vda         = (int)values[0];
-            var buttonIndex = int.Parse( values[1].ToString() );
+            var buttonIndex = int.Parse( values[1].ToString()! );
             return vda == buttonIndex ? new SolidColorBrush( Colors.Pink ) : new SolidColorBrush( Colors.LightGray );
         }
 

@@ -44,7 +44,7 @@ public partial class Rules
 
     public static void ReloadRules()
     {
-        _instance.RuleList.ItemsSource = RulesViewModel.Instance.Rules;
+        _instance!.RuleList.ItemsSource = RulesViewModel.Instance.Rules;
         _instance._needRefresh = true;
     }
 
@@ -116,7 +116,7 @@ public partial class Rules
         var foc  = RuleList.ItemsSource as FullObservableCollection<RuleTemplate>;
         var time = DateTime.Now;
 
-        var et = RefreshRuleIds( Conditions.ParseExpressionTemplate( r.Expression ) );
+        var et = RefreshRuleIds( Conditions.ParseExpressionTemplate( r.Expression! ) );
 
         var clone = new RuleTemplate
         {
@@ -129,7 +129,7 @@ public partial class Rules
             Updated = time
         };
 
-        foc.Add( clone );
+        foc!.Add( clone );
     }
 
     private void BtnDeleteRule_OnClick( object sender, RoutedEventArgs e )
@@ -138,7 +138,7 @@ public partial class Rules
         if ( r == null ) return;
 
         var foc = RuleList.ItemsSource as FullObservableCollection<RuleTemplate>;
-        foc.Remove( r );
+        foc!.Remove( r );
     }
 
     private static ExpressionTemplate RefreshRuleIds( ExpressionTemplate expressionTemplate )

@@ -41,10 +41,10 @@ namespace VirtualDesktop
 
         private static void Init()
         {
-            var shell = (IServiceProvider10)Activator.CreateInstance( Type.GetTypeFromCLSID( Guids.CLSID_ImmersiveShell ) );
+            var shell = (IServiceProvider10)Activator.CreateInstance( Type.GetTypeFromCLSID( Guids.CLSID_ImmersiveShell )! )!;
 
             VirtualDesktopManager = (IVirtualDesktopManager)Activator.CreateInstance(
-                Type.GetTypeFromCLSID( Guids.CLSID_VirtualDesktopManager ) );
+                Type.GetTypeFromCLSID( Guids.CLSID_VirtualDesktopManager )! )!;
 
             VirtualDesktopManagerInternal = (IVirtualDesktopManagerInternal)shell.QueryService(
                 Guids.CLSID_VirtualDesktopManagerInternal,

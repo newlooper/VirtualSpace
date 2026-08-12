@@ -43,9 +43,9 @@ public partial class Plugins
     private void ToggleButton_OnChecked( object sender, RoutedEventArgs e )
     {
         var chb        = sender as CheckBox;
-        var name       = chb.CommandParameter as string;
+        var name       = chb!.CommandParameter as string;
         var pvm        = PluginsList.DataContext as PluginsViewModel;
-        var pluginInfo = pvm.Plugins.First( p => p.Name == name );
+        var pluginInfo = pvm!.Plugins.First( p => p.Name == name );
 
         pluginInfo.AutoStart = true;
         PluginHost.StartPlugin( pluginInfo );
@@ -55,9 +55,9 @@ public partial class Plugins
     private void ToggleButton_OnUnchecked( object sender, RoutedEventArgs e )
     {
         var chb        = sender as CheckBox;
-        var name       = chb.CommandParameter as string;
+        var name       = chb!.CommandParameter as string;
         var pvm        = PluginsList.DataContext as PluginsViewModel;
-        var pluginInfo = pvm.Plugins.First( p => p.Name == name );
+        var pluginInfo = pvm!.Plugins.First( p => p.Name == name );
 
         pluginInfo.AutoStart = false;
         PluginHost.ClosePlugin( pluginInfo );
@@ -67,11 +67,11 @@ public partial class Plugins
     private void Selector_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
     {
         var lb = sender as ListBox;
-        if ( lb.SelectedIndex == -1 ) return;
+        if ( lb!.SelectedIndex == -1 ) return;
         var lbi        = lb.SelectedItem as ListBoxItem;
-        var name       = lbi.Tag as string;
+        var name       = lbi?.Tag as string;
         var pvm        = PluginsList.DataContext as PluginsViewModel;
-        var pluginInfo = pvm.Plugins.First( p => p.Name == name );
+        var pluginInfo = pvm?.Plugins.First( p => p.Name == name )!;
 
         switch ( lb.SelectedIndex )
         {
