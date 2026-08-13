@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFrameworks>net10.0-windows</TargetFrameworks>
+        <TargetFramework>net10.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <StartupObject>VirtualSpace.Program</StartupObject>
@@ -60,7 +60,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\WPF\ControlPanel\ControlPanel.csproj" />
+        <ProjectReference Include="..\WPF\ControlPanel\ControlPanel.csproj">
+            <GlobalPropertiesToRemove>RuntimeIdentifier;RuntimeIdentifiers;SelfContained</GlobalPropertiesToRemove>
+        </ProjectReference>
     </ItemGroup>
 
     <Target Name="DeletePdb" AfterTargets="Publish">
