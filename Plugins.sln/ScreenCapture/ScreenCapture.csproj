@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net10.0-windows10.0.22000.0;</TargetFrameworks>
+        <TargetFramework>$(TfmNet10WindowsSdk22000)</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

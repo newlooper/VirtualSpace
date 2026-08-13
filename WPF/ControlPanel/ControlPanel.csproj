@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFrameworks>net10.0-windows</TargetFrameworks>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <CsWinRTEnabled>false</CsWinRTEnabled>
