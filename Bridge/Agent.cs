@@ -23,11 +23,11 @@ namespace VirtualSpace
             {"zh-Hans", "中文(简体)"}
         };
 
-        public static ResourceManager Langs = new(
+        public static readonly ResourceManager Langs = new(
             Assembly.GetExecutingAssembly().GetName().Name + ".Resources.Langs.WinFormStrings",
             typeof( Agent ).Assembly );
 
-        public static ResourceManager Images = new(
+        public static readonly ResourceManager Images = new(
             Assembly.GetExecutingAssembly().GetName().Name + ".Resources.Images.Images",
             typeof( Agent ).Assembly );
     }
