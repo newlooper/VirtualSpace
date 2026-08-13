@@ -85,7 +85,7 @@ namespace VirtualSpace.VirtualDesktop
             void MoveToScreen( object? s, EventArgs evt )
             {
                 var selectedScreen = s as ToolStripMenuItem;
-                WindowTool.MoveWindowToScreen( mi.Vw.Handle, itemScreen.DropDownItems.IndexOf( selectedScreen ) );
+                WindowTool.MoveWindowToScreen( mi.Vw.Handle, itemScreen.DropDownItems.IndexOf( selectedScreen! ) );
             }
 
             foreach ( var s in Screen.AllScreens )
@@ -171,7 +171,7 @@ namespace VirtualSpace.VirtualDesktop
             void OnUnHideWindow( object? s, EventArgs evt )
             {
                 var item = s as ToolStripMenuItem;
-                var m    = Regex.Match( item.Text, $@".*{Const.HideWindowSplitter}(.*)" );
+                var m    = Regex.Match( item?.Text!, $@".*{Const.HideWindowSplitter}(.*)" );
 
                 var h = (IntPtr)int.Parse( m.Groups[1].Value );
 
@@ -224,7 +224,7 @@ namespace VirtualSpace.VirtualDesktop
             void BatchCreate( object? s, EventArgs evt )
             {
                 var item  = s as ToolStripMenuItem;
-                var count = int.Parse( item.Text );
+                var count = int.Parse( item?.Text! );
                 if ( count > 1 )
                 {
                     VirtualDesktopManager.IsBatchCreate = true;

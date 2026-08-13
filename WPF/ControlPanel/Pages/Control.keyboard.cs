@@ -88,7 +88,7 @@ public partial class Control
         var name     = assembly.GetName().Name;
 
         using var stream = assembly.GetManifestResourceStream( $"{name}.Resources.Definitions.KeyboardTree.json" );
-        using var reader = new StreamReader( stream );
+        using var reader = new StreamReader( stream! );
         var       result = reader.ReadToEnd();
 
         KeyboardTreeView.Items.Clear();

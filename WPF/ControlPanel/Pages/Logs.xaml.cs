@@ -235,7 +235,7 @@ public partial class Logs
                 if ( cm.PlacementTarget is TabItem t )
                 {
                     t.IsSelected = true;
-                    this[TcLogs.SelectedIndex] = null;
+                    this[TcLogs.SelectedIndex] = null!;
                 }
             }
         }
@@ -251,12 +251,12 @@ public partial class Logs
 
     public static void ClearAll()
     {
-        TbInfo = null;
-        TbDebug = null;
-        TbVerbose = null;
-        TbEvent = null;
-        TbWarning = null;
-        TbError = null;
+        TbInfo = null!;
+        TbDebug = null!;
+        TbVerbose = null!;
+        TbEvent = null!;
+        TbWarning = null!;
+        TbError = null!;
     }
 
     public static void OpenLogsDir()

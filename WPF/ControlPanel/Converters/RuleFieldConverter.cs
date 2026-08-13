@@ -46,7 +46,7 @@ public class RuleFieldConverter : IMultiValueConverter
             return ForTextBox( values );
         }
 
-        return null;
+        return null!;
     }
 
     private static int ForValue( object[] values )

@@ -29,7 +29,7 @@ public partial class Control
 
         while ( element != null )
         {
-            element = VisualTreeHelper.GetParent( element ) as UIElement;
+            element = (UIElement)VisualTreeHelper.GetParent( element );
             tvi = element as TreeViewItem;
             if ( tvi != null )
                 path.Push( tvi );
@@ -48,7 +48,7 @@ public partial class Control
                 {
                     var topLevelNode = new TreeViewItem
                     {
-                        Header = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString() ),
+                        Header = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString()! ),
                         IsExpanded = true
                     };
 
@@ -69,7 +69,7 @@ public partial class Control
                 {
                     var subNode = new TreeViewItem
                     {
-                        Header = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString() ),
+                        Header = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString()! ),
                         IsExpanded = true
                     };
 

@@ -176,7 +176,7 @@ namespace VirtualSpace.Helpers
             for ( var index = 0; index < Screen.AllScreens.Length; index++ )
                 if ( Equals( screen, Screen.AllScreens[index] ) )
                     return allFriendlyNames.ToArray()[index];
-            return null;
+            return string.Empty;
         }
 
         #region enums
