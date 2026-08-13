@@ -48,11 +48,10 @@ public partial class Control
     {
         foreach ( var item in KeyboardTreeView.Items )
         {
-            var node = item as TreeViewItem;
-            if ( node is null ) continue;
+            if ( item is not TreeViewItem node ) continue;
 
             var tag = node.Tag;
-            node.Header = Agent.Langs.GetString( tag is null ? node.Name : tag.ToString() );
+            node.Header = Agent.Langs.GetString( tag is null ? node.Name : tag.ToString()! );
 
             VisitTreeViewItem( node );
         }
@@ -72,15 +71,15 @@ public partial class Control
             else
             {
                 var currentHeader = childItem.Header.ToString();
-                var m             = Regex.Match( currentHeader, @"[^\d]+(\d+)$" );
+                var m             = MyRegex().Match( currentHeader! );
                 if ( m.Success )
                 {
                     var index = m.Groups[1].Value;
-                    childItem.Header = Agent.Langs.GetString( tag.ToString() ) + index;
+                    childItem.Header = Agent.Langs.GetString( tag.ToString()! ) + index;
                 }
                 else
                 {
-                    childItem.Header = Agent.Langs.GetString( tag.ToString() );
+                    childItem.Header = Agent.Langs.GetString( tag.ToString()! );
                 }
             }
 
@@ -93,4 +92,7 @@ public partial class Control
     {
         return _instance ??= new Control( headerKey, iconKind );
     }
+
+    [GeneratedRegex( @"[^\d]+(\d+)$" )]
+    private static partial Regex MyRegex();
 }
