@@ -15,29 +15,15 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
         <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
     </PropertyGroup>
 
-    <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild" Condition="'$(Configuration)'=='Release' And '$(KeepVersionNumber)'!='true'">
-        <Message Text="======TextTemplateTransform begin======" Importance="High" />
-        <Exec WorkingDirectory="$(ProjectDir)" Command="&quot;$(DevEnvDir)TextTransform.exe&quot; -out &quot;$(ProjectDir)AutoVersion.cs&quot; &quot;$(ProjectDir)AutoVersion.tt&quot;">
-            <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
-        </Exec>
-        <Message Text="======TextTemplateTransform end======" Importance="High" />
-    </Target>
+    <Import Project="$(MSBuildThisFileDirectory).build\AutoVersion.props" />
 
     <ItemGroup>
         <ApplicationDefinition Remove="App.xaml" />
         <Page Include="App.xaml" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="AutoVersion.cs">
-            <DesignTime>True</DesignTime>
-            <DependentUpon>AutoVersion.tt</DependentUpon>
-        </Compile>
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows|AnyCPU'">
