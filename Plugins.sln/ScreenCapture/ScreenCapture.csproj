@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net6.0-windows10.0.20348.0;net6.0-windows10.0.22000.0;</TargetFrameworks>
+        <TargetFrameworks>net10.0-windows10.0.22000.0;</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
         <PackageReference Include="SharpDX.Direct3D9" Version="4.2.0" />
-        <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+        <PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
     </ItemGroup>
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.400">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
