@@ -1,0 +1,35 @@
+<Project>
+    <!-- Embed only. Do not add these as ProjectReference or AutoResolver will not run. -->
+    <Target Name="EmbedVirtualDesktopAssemblies" BeforeTargets="PrepareResourceNames">
+        <MSBuild
+            Projects="@(VirtualDesktopEmbed)"
+            Targets="Build"
+            Properties="Configuration=Release;TargetFramework=$(TfmNet10Windows)"
+            RemoveProperties="RuntimeIdentifier;RuntimeIdentifiers;SelfContained" />
+        <MSBuild
+            Projects="@(VirtualDesktopEmbed)"
+            Targets="GetTargetPath"
+            Properties="Configuration=Release;TargetFramework=$(TfmNet10Windows)"
+            RemoveProperties="RuntimeIdentifier;RuntimeIdentifiers;SelfContained">
+            <Output TaskParameter="TargetOutputs" ItemName="_VirtualDesktopEmbedDll" />
+        </MSBuild>
+        <Error Condition="'@(_VirtualDesktopEmbedDll)' == ''" Text="VirtualDesktop embed: GetTargetPath returned no outputs." />
+        <ItemGroup>
+            <_VirtualDesktopEmbedUnique Include="@(_VirtualDesktopEmbedDll->Distinct())" />
+            <EmbeddedResource Remove="@(_VirtualDesktopEmbedUnique)" />
+            <EmbeddedResource Include="@(_VirtualDesktopEmbedUnique)">
+                <Link>Resources\%(_VirtualDesktopEmbedUnique.Filename)%(_VirtualDesktopEmbedUnique.Extension)</Link>
+                <LogicalName>$(RootNamespace).Resources.%(_VirtualDesktopEmbedUnique.Filename)%(_VirtualDesktopEmbedUnique.Extension)</LogicalName>
+                <WithCulture>false</WithCulture>
+                <Type>Non-Resx</Type>
+            </EmbeddedResource>
+        </ItemGroup>
+        <Message Text="Embedded VirtualDesktop: @(_VirtualDesktopEmbedUnique->'%(Filename)%(Extension)')" Importance="High" />
+    </Target>
+
+    <Target Name="ExcludeVirtualDesktopFromPublish" AfterTargets="ComputeResolvedFilesToPublishList">
+        <ItemGroup>
+            <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="$([System.String]::Copy('%(Filename)').StartsWith('VirtualDesktop')) And '%(Filename)' != 'VirtualDesktopWrapper'" />
+        </ItemGroup>
+    </Target>
+</Project>
