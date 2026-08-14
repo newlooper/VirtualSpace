@@ -31,9 +31,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\WPF\ControlPanel\ControlPanel.csproj">
-            <GlobalPropertiesToRemove>RuntimeIdentifier;RuntimeIdentifiers;SelfContained</GlobalPropertiesToRemove>
-        </ProjectReference>
+        <ProjectReference Include="..\WPF\ControlPanel\ControlPanel.csproj" />
     </ItemGroup>
 
     <Target Name="DeletePdb" AfterTargets="Publish">

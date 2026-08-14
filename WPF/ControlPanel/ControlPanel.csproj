@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Library</OutputType>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <CsWinRTEnabled>false</CsWinRTEnabled>
         <LangVersion>11</LangVersion>
+        <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
     </PropertyGroup>
 
     <ItemGroup>
