@@ -20,12 +20,12 @@ namespace LinqExpressionBuilder
         public static readonly string   Type         = nameof( Type ).ToLower();
         public static readonly string   Field        = nameof( Field ).ToLower();
         public static readonly string   Value        = nameof( Value ).ToLower();
-        public static readonly string[] Eq           = {"=", "is", "==", "eq", "equal", "equals"};
-        public static readonly string[] In           = {"in", "∈"};
-        public static readonly string[] StartsWith   = {"ssw", "starts with", "|-"};
-        public static readonly string[] EndsWith     = {"esw", "ends with", "-|"};
-        public static readonly string[] Contains     = {"sc", "contains", "∋"};
-        public static readonly string[] RegexIsMatch = {"rim", "regex", "/r/"};
+        public static readonly string[] Eq           = { "=", "is", "==", "eq", "equal", "equals" };
+        public static readonly string[] In           = { "in", "∈" };
+        public static readonly string[] StartsWith   = { "ssw", "starts with", "|-" };
+        public static readonly string[] EndsWith     = { "esw", "ends with", "-|" };
+        public static readonly string[] Contains     = { "sc", "contains", "∋" };
+        public static readonly string[] RegexIsMatch = { "rim", "regex", "/r/" };
         public static readonly string   Condition    = nameof( Condition ).ToLower();
         public static readonly string   And          = nameof( And ).ToLower();
         public static readonly string   Or           = nameof( Or ).ToLower();
