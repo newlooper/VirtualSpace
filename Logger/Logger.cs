@@ -65,7 +65,7 @@ namespace VirtualSpace.AppLogs
             {
                 notify.Background = new SolidColorBrush( Colors.DarkRed );
                 notify.Foreground = new SolidColorBrush( Colors.White );
-                notify.Type = NotificationType.Error;
+                notify.Type       = NotificationType.Error;
                 Notify( notify );
             }
         }
@@ -84,25 +84,19 @@ namespace VirtualSpace.AppLogs
             var notificationManager = new NotificationManager();
             var content = new NotificationContent
             {
-                Title = no.Title,
-                Message = no.Message,
-                Type = no.Type,
-                TrimType = NotificationTextTrimType.NoTrim, // will show attach button on message
-                RowsCount = 5, // Will show 5 rows and trim after
-                LeftButtonContent = "", // Left button content (string or what u want
+                Title              = no.Title,
+                Message            = no.Message,
+                Type               = no.Type,
+                TrimType           = NotificationTextTrimType.NoTrim, // will show attach button on message
+                RowsCount          = 5, // Will show 5 rows and trim after
+                LeftButtonContent  = "", // Left button content (string or what u want
                 RightButtonContent = "", // Right button content (string or what u want
-                CloseOnClick = true // Set true if u want close message when left mouse button click on message (base = true)
+                CloseOnClick       = true // Set true if u want close message when left mouse button click on message (base = true)
             };
 
-            if ( no.Background != null )
-            {
-                content.Background = no.Background;
-            }
+            if ( no.Background != null ) content.Background = no.Background;
 
-            if ( no.Foreground != null )
-            {
-                content.Foreground = no.Foreground;
-            }
+            if ( no.Foreground != null ) content.Foreground = no.Foreground;
 
             NotificationConstants.MaxWidth = 1024;
             notificationManager.Show( content, "", no.ExpTime );
@@ -155,9 +149,8 @@ namespace VirtualSpace.AppLogs
             public static IntPtr SetWindowLongPtr( HandleRef hWnd, int nIndex, int dwNewLong )
             {
                 if ( IntPtr.Size == 8 )
-                    return SetWindowLongPtr64( hWnd, nIndex, (IntPtr)dwNewLong );
-                else
-                    return new IntPtr( SetWindowLong32( hWnd, nIndex, dwNewLong ) );
+                    return SetWindowLongPtr64( hWnd, nIndex, dwNewLong );
+                return new IntPtr( SetWindowLong32( hWnd, nIndex, dwNewLong ) );
             }
 
             [DllImport( "user32.dll", EntryPoint = "SetWindowLong" )]

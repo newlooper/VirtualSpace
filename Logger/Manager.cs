@@ -9,9 +9,6 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Configuration;
-using System.IO;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -20,57 +17,40 @@ namespace VirtualSpace.AppLogs
 {
     public static class LogManager
     {
-        private static readonly LoggingLevelSwitch LevelSwitch = new( LogEventLevel.Verbose );
-
-        public const string PROP_IS_EVENT = "IsEvent";
-
-        public static Serilog.Core.Logger RootLogger;
-
-        private static string _logsFolder = "";
-
-        public static string LogsPath
-        {
-            get
-            {
-                return _logsFolder;
-            }
-        }
+        private static readonly LoggingLevelSwitch  LevelSwitch   = new( LogEventLevel.Verbose );
+        public const            string              PROP_IS_EVENT = "IsEvent";
+        public static           Serilog.Core.Logger RootLogger    = null!;
+        public static           string              LogsPath { get; private set; } = "";
 
         public static void InitLogger( string folder )
         {
-            _logsFolder = folder;
+            LogsPath = folder;
 
             RootLogger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy( LevelSwitch )
-
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Verbose )
-                     .WriteTo.File( $"{_logsFolder}/verbose.txt", restrictedToMinimumLevel: LogEventLevel.Verbose ) )
-
+                    .WriteTo.File( $"{LogsPath}/verbose.txt", LogEventLevel.Verbose ) )
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Debug )
-                     .WriteTo.File( $"{_logsFolder}/debug.txt", restrictedToMinimumLevel: LogEventLevel.Debug ) )
+                    .WriteTo.File( $"{LogsPath}/debug.txt", LogEventLevel.Debug ) )
 
                 // 普通 Information：排除包含 PROP_IS_EVENT 属性的日志
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt =>
                         evt.Level == LogEventLevel.Information &&
                         !( evt.Properties.TryGetValue( PROP_IS_EVENT, out var v ) && v is ScalarValue { Value: true } ) )
-                     .WriteTo.File( $"{_logsFolder}/info.txt", restrictedToMinimumLevel: LogEventLevel.Information ) )
+                    .WriteTo.File( $"{LogsPath}/info.txt", LogEventLevel.Information ) )
 
                 // Event 日志：借用 Information，并用 PROP_IS_EVENT 属性筛选
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt =>
                         evt.Properties.TryGetValue( PROP_IS_EVENT, out var v ) && v is ScalarValue { Value: true } )
-                     .WriteTo.File(
-                        $"{_logsFolder}/event.txt", restrictedToMinimumLevel: LogEventLevel.Information,
-                        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [EVT] {Message:lj}{NewLine}{Exception}" ) )
-
+                    .WriteTo.File(
+                        $"{LogsPath}/event.txt", LogEventLevel.Information,
+                        "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [EVT] {Message:lj}{NewLine}{Exception}" ) )
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Warning )
-                     .WriteTo.File( $"{_logsFolder}/warning.txt", restrictedToMinimumLevel: LogEventLevel.Warning ) )
-
+                    .WriteTo.File( $"{LogsPath}/warning.txt", LogEventLevel.Warning ) )
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Error )
-                     .WriteTo.File( $"{_logsFolder}/error.txt", restrictedToMinimumLevel: LogEventLevel.Error ) )
-
+                    .WriteTo.File( $"{LogsPath}/error.txt", LogEventLevel.Error ) )
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Fatal )
-                     .WriteTo.File( $"{_logsFolder}/fatal.txt", restrictedToMinimumLevel: LogEventLevel.Fatal ) )
-
+                    .WriteTo.File( $"{LogsPath}/fatal.txt", LogEventLevel.Fatal ) )
                 .CreateLogger();
         }
 

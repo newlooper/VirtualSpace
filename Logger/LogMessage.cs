@@ -20,7 +20,7 @@ namespace VirtualSpace.AppLogs
         {
             return new LogMessage
             {
-                Type = type,
+                Type    = type,
                 Message = msg
             };
         }
