@@ -13,13 +13,16 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using ControlPanel.Factories;
 using ControlPanel.Pages;
+using MaterialDesignThemes.Wpf;
 using VirtualSpace;
 using VirtualSpace.Config;
+using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
 using WPFLocalizeExtension.Engine;
 
@@ -41,32 +44,14 @@ public partial class MainWindow : Window, IAppController
 
         _instance = this;
 
-        Title = Const.Window.VS_CONTROLLER_TITLE;
+        Title   = Const.Window.VS_CONTROLLER_TITLE;
         Topmost = true;
 
         LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
-        LocalizeDictionary.Instance.Culture = new CultureInfo( Manager.CurrentProfile.UI.Language );
+        LocalizeDictionary.Instance.Culture                 = new CultureInfo( Manager.CurrentProfile.UI.Language );
         NavBarItem.InitNavBar( NavBar );
 
         new WindowInteropHelper( this ).EnsureHandle();
-    }
-
-    public void ForceLoad()
-    {
-        if ( IsVisible ) return;
-        
-        ShowInTaskbar = false;
-        Left = Const.FakeHideX;
-        Top = Const.FakeHideY;
-        Show();
-        Hide();
-        ShowInTaskbar = true;
-    }
-
-    protected override void OnSourceInitialized( EventArgs e )
-    {
-        base.OnSourceInitialized( e );
-        _handle = new WindowInteropHelper( this ).EnsureHandle();
     }
 
     public static IntPtr MainWindowHandle => _instance._mainWindowHandle;
@@ -74,21 +59,14 @@ public partial class MainWindow : Window, IAppController
     public void BringToTop()
     {
         Left = ( SystemParameters.PrimaryScreenWidth - Width ) / 2;
-        Top = ( SystemParameters.PrimaryScreenHeight - Height ) / 2;
+        Top  = ( SystemParameters.PrimaryScreenHeight - Height ) / 2;
 
-        if ( WindowState == WindowState.Minimized )
-        {
-            WindowState = WindowState.Normal;
-        }
+        if ( WindowState == WindowState.Minimized ) WindowState = WindowState.Normal;
 
         if ( IsVisible )
-        {
             DesktopWrapper.MoveWindowToDesktop( _handle, DesktopWrapper.CurrentIndex );
-        }
         else
-        {
             Show();
-        }
 
         Topmost = false;
         Topmost = true;
@@ -115,6 +93,50 @@ public partial class MainWindow : Window, IAppController
         ForceLoad();
         RuleEditorWindow.Create( handle ).ShowDialog();
     }
+
+    public void ForceLoad()
+    {
+        if ( IsVisible ) return;
+
+        ShowInTaskbar = false;
+        Left          = Const.FakeHideX;
+        Top           = Const.FakeHideY;
+        Show();
+        Hide();
+        ShowInTaskbar = true;
+    }
+
+    protected override void OnSourceInitialized( EventArgs e )
+    {
+        base.OnSourceInitialized( e );
+        _handle = new WindowInteropHelper( this ).EnsureHandle();
+#if !USE_WMI
+        var source = HwndSource.FromHwnd( _handle );
+        source?.AddHook( WndProc );
+#endif
+    }
+
+#if !USE_WMI
+    private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
+    {
+        if ( msg != WinMsg.WM_SETTINGCHANGE || Manager.CurrentProfile.UI.Theme != 0 )
+            return IntPtr.Zero;
+
+        // 有些系统这里会带 "ImmersiveColorSet"；也可能为空
+        var area = Marshal.PtrToStringUni( lParam ) ?? string.Empty;
+        if ( !string.IsNullOrEmpty( area ) && !area.Equals( "ImmersiveColorSet", StringComparison.OrdinalIgnoreCase ) )
+            return IntPtr.Zero;
+
+        var theme = Resources.GetTheme();
+        var (pColor, sColor, newTheme) = GetThemeInfo();
+        theme.SetPrimaryColor( pColor );
+        theme.SetSecondaryColor( sColor );
+        theme.SetBaseTheme( newTheme );
+        Dispatcher.Invoke( () => { Resources.SetTheme( theme ); } );
+
+        return IntPtr.Zero;
+    }
+#endif
 
     private void MainWindow_OnLoaded( object sender, RoutedEventArgs e )
     {
@@ -143,7 +165,7 @@ public partial class MainWindow : Window, IAppController
     {
         var psi = new ProcessStartInfo
         {
-            FileName = Environment.ProcessPath,
+            FileName        = Environment.ProcessPath,
             UseShellExecute = true
         };
 

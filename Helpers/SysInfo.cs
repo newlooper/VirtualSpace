@@ -14,13 +14,16 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Principal;
-using System.Windows.Forms;
-using Microsoft.Win32;
 using System.Management;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Windows;
+using System.Windows.Forms;
+using Microsoft.Win32;
+#if USE_WMI
+using VirtualSpace.AppLogs;
+#endif
 
 [assembly: InternalsVisibleTo( "ControlPanel" )]
 
@@ -28,42 +31,63 @@ namespace VirtualSpace.Helpers
 {
     public static class SysInfo
     {
-        private const          int                          DefaultDpi = 96;
-        public static          (float ScaleX, float ScaleY) Dpi => GetDpi();
-        public static readonly bool                         IsWin10;
-        public static readonly bool                         IsAdministrator;
+        public enum WinAppsTheme
+        {
+            LIGHT,
+            DARK
+        }
 
+        private const          int  DEFAULT_DPI = 96;
+        public static readonly bool IsWin10;
+        public static readonly bool IsAdministrator;
+
+#if USE_WMI
+        private static readonly RegValueMonitor Rvm = new( "HKEY_USERS",
+            @"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+            "AppsUseLightTheme" );
+#endif
         static SysInfo()
         {
-            IsWin10 = Environment.OSVersion.Version is {Major: 10, Build: < 22000};
+            IsWin10 = Environment.OSVersion.Version is { Major: 10, Build: < 22000 };
             var windowsPrincipal = new WindowsPrincipal( WindowsIdentity.GetCurrent() );
             IsAdministrator = windowsPrincipal.IsInRole( WindowsBuiltInRole.Administrator );
+
+#if USE_WMI
+            ///////////////////////////////////////////////////////////////
+            // 此句的意义不仅在于打印日志，而是避免某些代码检查会报告 Rvm never used。
+            // 因为 RegValueMonitor : IDisposable 的实例在 new 后并没有被直接使用，
+            // 但其实例的功能，是在构造函数中通过注册 ManagementEventWatcher 发挥的，
+            // 因此不能因为 Rvm never used 就把其删掉。
+            Logger.Debug( $"RegValueMonitor: {Rvm} registered." );
+#endif
         }
 
-        private static (float ScaleX, float ScaleY) GetDpi()
-        {
-            using var g = Graphics.FromHwnd( IntPtr.Zero );
-            return new ValueTuple<float, float>( g.DpiX / DefaultDpi, g.DpiY / DefaultDpi );
-        }
+        public static (float ScaleX, float ScaleY) Dpi => GetDpi();
 
         public static Version OSVersion
         {
             get
             {
                 var winVer = Environment.OSVersion.Version;
-                if ( winVer.Revision == 0 )
-                {
-                    using var registryKey = Registry.LocalMachine.OpenSubKey( @"SOFTWARE\Microsoft\Windows NT\CurrentVersion" );
-                    var       ubr         = registryKey?.GetValue( "UBR" );
-                    if ( ubr != null )
-                    {
-                        var buildNumber = int.Parse( ubr.ToString()! );
-                        winVer = new Version( winVer.Major, winVer.Minor, winVer.Build, buildNumber );
-                    }
-                }
+                if ( winVer.Revision != 0 )
+                    return winVer;
+
+                using var registryKey = Registry.LocalMachine.OpenSubKey( @"SOFTWARE\Microsoft\Windows NT\CurrentVersion" );
+                var       ubr         = registryKey?.GetValue( "UBR" );
+                if ( ubr == null )
+                    return winVer;
+
+                var buildNumber = int.Parse( ubr.ToString()! );
+                winVer = new Version( winVer.Major, winVer.Minor, winVer.Build, buildNumber );
 
                 return winVer;
             }
+        }
+
+        private static (float ScaleX, float ScaleY) GetDpi()
+        {
+            using var g = Graphics.FromHwnd( IntPtr.Zero );
+            return new ValueTuple<float, float>( g.DpiX / DEFAULT_DPI, g.DpiY / DEFAULT_DPI );
         }
 
         public static (int W, int H) GetAspectRadioOfScreen()
@@ -88,36 +112,23 @@ namespace VirtualSpace.Helpers
             return Math.Abs( SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height ) > 0;
         }
 
-        public enum WinAppsTheme
-        {
-            LIGHT,
-            DARK
-        }
-
         public static WinAppsTheme GetAppsTheme()
         {
             return WinRegistry.AppThemeIsLight() ? WinAppsTheme.LIGHT : WinAppsTheme.DARK;
         }
 
-        private static RegValueMonitor _rkm = new( "HKEY_USERS",
-            @"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-            "AppsUseLightTheme" );
-
         public static List<object> GetAllScreens()
         {
             var screens    = new List<object>();
             var allScreens = Screen.AllScreens;
-            for ( var i = 0; i < allScreens.Length; i++ )
-            {
-                screens.Add( new {Value = i, Text = $"{allScreens[i].DeviceName}  ({allScreens[i].DeviceFriendlyName()})"} );
-            }
+            for ( var i = 0; i < allScreens.Length; i++ ) screens.Add( new { Value = i, Text = $"{allScreens[i].DeviceName}  ({allScreens[i].DeviceFriendlyName()})" } );
 
             return screens;
         }
     }
 
     /// <summary>
-    /// https://stackoverflow.com/questions/52875087/getting-device-friendly-name-incorrect-result
+    ///     https://stackoverflow.com/questions/52875087/getting-device-friendly-name-incorrect-result
     /// </summary>
     public static class ScreenInterrogatory
     {
@@ -129,16 +140,16 @@ namespace VirtualSpace.Helpers
             {
                 header =
                 {
-                    size = (uint)Marshal.SizeOf<DISPLAYCONFIG_TARGET_DEVICE_NAME>(),
+                    size      = (uint)Marshal.SizeOf<DISPLAYCONFIG_TARGET_DEVICE_NAME>(),
                     adapterId = adapterId,
-                    id = targetId,
-                    type = DISPLAYCONFIG_DEVICE_INFO_TYPE.DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME
+                    id        = targetId,
+                    type      = DISPLAYCONFIG_DEVICE_INFO_TYPE.DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME
                 }
             };
             var error = DisplayConfigGetDeviceInfo( ref deviceName );
-            if ( error != ERROR_SUCCESS )
-                throw new Win32Exception( error );
-            return deviceName.monitorFriendlyDeviceName;
+            return error != ERROR_SUCCESS
+                ? throw new Win32Exception( error )
+                : deviceName.monitorFriendlyDeviceName;
         }
 
         private static IEnumerable<string> GetAllMonitorsFriendlyNames()
@@ -434,7 +445,7 @@ namespace VirtualSpace.Helpers
     {
         public static string GetCommandLineArgs( this Process process )
         {
-            if ( process is null ) throw new ArgumentNullException( nameof( process ) );
+            ArgumentNullException.ThrowIfNull( process );
 
             try
             {

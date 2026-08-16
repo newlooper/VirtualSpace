@@ -33,19 +33,19 @@ public partial class MainWindow
         switch ( Manager.CurrentProfile.UI.Theme )
         {
             case 0:
-                theme = SysInfo.GetAppsTheme() == SysInfo.WinAppsTheme.LIGHT ? BaseTheme.Light : BaseTheme.Dark;
+                theme  = SysInfo.GetAppsTheme() == SysInfo.WinAppsTheme.LIGHT ? BaseTheme.Light : BaseTheme.Dark;
                 pColor = theme == BaseTheme.Dark ? pColorDark : pColorLight;
                 sColor = theme == BaseTheme.Dark ? sColorDark : sColorLight;
                 break;
             case 1:
                 pColor = pColorLight;
                 sColor = sColorLight;
-                theme = BaseTheme.Light;
+                theme  = BaseTheme.Light;
                 break;
             case 2:
                 pColor = pColorDark;
                 sColor = sColorDark;
-                theme = BaseTheme.Dark;
+                theme  = BaseTheme.Dark;
                 break;
         }
 
@@ -55,6 +55,7 @@ public partial class MainWindow
     private void InitTheme()
     {
         UpdateTheme();
+#if USE_WMI
         RegValueMonitor.OnRegValueChanged += ( o, args ) =>
         {
             if ( Manager.CurrentProfile.UI.Theme != 0 ) return;
@@ -65,6 +66,7 @@ public partial class MainWindow
             theme.SetBaseTheme( newTheme );
             Dispatcher.Invoke( () => { Resources.SetTheme( theme ); } );
         };
+#endif
     }
 
     public static void UpdateTheme()

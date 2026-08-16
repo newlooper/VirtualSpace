@@ -11,10 +11,12 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Drawing;
+using Microsoft.Win32;
+#if USE_WMI
 using System.Management;
 using System.Security.Principal;
-using Microsoft.Win32;
 using VirtualSpace.AppLogs;
+#endif
 
 namespace VirtualSpace.Helpers
 {
@@ -32,13 +34,9 @@ namespace VirtualSpace.Helpers
             var path = GetWallPaperPathByGuid( guid );
 
             if ( string.IsNullOrEmpty( path ) )
-            {
                 wallpaper.Color = GetBackColor();
-            }
             else
-            {
                 wallpaper.Image = Images.GetScaledBitmap( width, height, path, ref wallpaper, cachePath, quality );
-            }
 
             return wallpaper;
         }
@@ -78,6 +76,7 @@ namespace VirtualSpace.Helpers
         }
     }
 
+#if USE_WMI
     public class RegValueMonitor : IDisposable
     {
         private readonly ManagementEventWatcher? _watcher;
@@ -85,7 +84,7 @@ namespace VirtualSpace.Helpers
         public RegValueMonitor( string hive, string keyPath, string valueName )
         {
             var currentUser = WindowsIdentity.GetCurrent();
-            var sid         = currentUser.User?.Value;
+            var sid = currentUser.User?.Value;
             var q = $"SELECT * FROM RegistryValueChangeEvent WHERE Hive='{hive}' " +
                     @$"AND KeyPath='{sid}\\{keyPath}' AND ValueName='{valueName}'";
 
@@ -102,30 +101,31 @@ namespace VirtualSpace.Helpers
             }
         }
 
+        public void Dispose()
+        {
+            _watcher?.Stop();
+        }
+
         private static void HandleEvent( object sender, EventArrivedEventArgs e )
         {
-            var keyPath   = e.NewEvent.Properties["Hive"].Value + @"\" + e.NewEvent.Properties["KeyPath"].Value;
+            var keyPath = e.NewEvent.Properties["Hive"].Value + @"\" + e.NewEvent.Properties["KeyPath"].Value;
             var valueName = e.NewEvent.Properties["ValueName"].Value.ToString();
 
             var v = Registry.GetValue( keyPath, valueName, "" );
             OnRegValueChanged?.Invoke( null, new RegValueChangedEventArgs( v?.ToString() ?? string.Empty ) );
         }
 
-        public void Dispose()
-        {
-            _watcher?.Stop();
-        }
-
         public static event EventHandler<RegValueChangedEventArgs>? OnRegValueChanged;
 
         public class RegValueChangedEventArgs : EventArgs
         {
-            public string Value { get; set; }
-
             public RegValueChangedEventArgs( string value )
             {
                 Value = value;
             }
+
+            public string Value { get; set; }
         }
     }
+#endif
 }
