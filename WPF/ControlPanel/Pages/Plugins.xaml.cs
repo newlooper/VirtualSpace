@@ -32,7 +32,7 @@ public partial class Plugins
         PluginsList.DataContext = new PluginsViewModel();
         var mdc = (MenuContainerViewModel)MenuContainer.DataContext;
         mdc.HeaderKey = headerKey;
-        mdc.IconKind = iconKind;
+        mdc.IconKind  = iconKind;
     }
 
     public static Plugins Create( string headerKey, PackIconKind iconKind )

@@ -21,12 +21,12 @@
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="32"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="32" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Button Content="{lex:Loc Menus.Logs.ClearAll}" Grid.Column="1" Click="clearAll_OnClick" />
             <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc Menus.Logs.OpenLogsDir}" Click="openLogsDir_OnClick" />

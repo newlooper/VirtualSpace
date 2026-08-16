@@ -44,17 +44,14 @@ namespace VirtualSpace.VirtualDesktop
         private void VirtualDesktopWindow_MouseDown( object sender, MouseEventArgs e )
         {
             _virtualDesktops = VirtualDesktopManager.GetAllVirtualDesktops();
-            _startPoint = e.Location;
+            _startPoint      = e.Location;
             var dragSize = SystemInformation.DragSize * ConfigManager.CurrentProfile.Mouse.DragSizeFactor;
             _dragBounds = new Rectangle(
                 new Point( _startPoint.X - dragSize.Width / 2, _startPoint.Y - dragSize.Height / 2 ),
                 dragSize );
 
             _selectedWindow = _visibleWindows.FirstOrDefault( w => w.Rect.Contains( e.Location ) );
-            if ( _selectedWindow != null )
-            {
-                Logger.Verbose( "SELECT.Win " + _selectedWindow.Title );
-            }
+            if ( _selectedWindow != null ) Logger.Verbose( "SELECT.Win " + _selectedWindow.Title );
         }
 
         private static bool IsOutBounds( Point location )
@@ -64,10 +61,7 @@ namespace VirtualSpace.VirtualDesktop
 
         private void VirtualDesktopWindow_MouseMove( object sender, MouseEventArgs e )
         {
-            if ( _dragState == 0 && e.Button == MouseButtons.Left && IsOutBounds( e.Location ) )
-            {
-                _dragState = 1;
-            }
+            if ( _dragState == 0 && e.Button == MouseButtons.Left && IsOutBounds( e.Location ) ) _dragState = 1;
 
             if ( _dragState == 0 ) return;
 
@@ -84,9 +78,9 @@ namespace VirtualSpace.VirtualDesktop
                     {
                         var props = new DWM_THUMBNAIL_PROPERTIES
                         {
-                            fVisible = true,
-                            dwFlags = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
-                            opacity = 255,
+                            fVisible      = true,
+                            dwFlags       = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
+                            opacity       = 255,
                             rcDestination = new RECT( 0, 0, _dw.Width, _dw.Height )
                         };
                         _dw.Thumb = thumb;
@@ -99,13 +93,13 @@ namespace VirtualSpace.VirtualDesktop
                 }
 
                 _dw.Left = Cursor.Position.X - _dw.Width / 2;
-                _dw.Top = Cursor.Position.Y - _dw.Height / 2;
+                _dw.Top  = Cursor.Position.Y - _dw.Height / 2;
             }
             else
             {
                 var vdw = sender as Form;
                 vdw!.Left = e.X + vdw.Left - _startPoint.X;
-                vdw.Top = e.Y + vdw.Top - _startPoint.Y;
+                vdw.Top   = e.Y + vdw.Top - _startPoint.Y;
             }
         }
 
@@ -189,7 +183,7 @@ namespace VirtualSpace.VirtualDesktop
                         WindowTool.ActiveWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder![_hoverVdIndex] );
                     }
 
-                    var action = Manager.Configs.GetMouseActionById( MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
+                    var action = ConfigManager.Configs.GetMouseActionById( MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
                     switch ( action )
                     {
                         case MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
@@ -205,10 +199,10 @@ namespace VirtualSpace.VirtualDesktop
                         case MouseAction.Action.ContextMenu:
                             Menus.ThumbCtm( new MenuInfo
                             {
-                                Vw = _selectedWindow,
-                                Sender = sender,
+                                Vw       = _selectedWindow,
+                                Sender   = sender,
                                 Location = e.Location,
-                                Self = this
+                                Self     = this
                             } );
                             break;
                         case MouseAction.Action.WindowHideFromView:
@@ -263,10 +257,10 @@ namespace VirtualSpace.VirtualDesktop
                         case MouseAction.Action.ContextMenu:
                             Menus.VdCtm( new MenuInfo
                                 {
-                                    Sender = sender,
+                                    Sender   = sender,
                                     Location = e.Location,
-                                    Self = this,
-                                    Vdws = _virtualDesktops!
+                                    Self     = this,
+                                    Vdws     = _virtualDesktops!
                                 }
                             );
                             break;
@@ -293,9 +287,9 @@ namespace VirtualSpace.VirtualDesktop
                 _dw = null;
             }
 
-            _dragState = 0;
+            _dragState      = 0;
             _selectedWindow = null;
-            _dragBounds = Rectangle.Empty;
+            _dragBounds     = Rectangle.Empty;
         }
 
         private int HoverOnDesktop( object sender, MouseEventArgs e )
@@ -360,13 +354,9 @@ namespace VirtualSpace.VirtualDesktop
             void RefreshVDs( bool isPinned )
             {
                 if ( isPinned )
-                {
                     VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-                }
                 else
-                {
-                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this} );
-                }
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> { this } );
             }
 
             // _ = User32.ShowWindow( vw.Handle, 0 );
@@ -405,7 +395,7 @@ namespace VirtualSpace.VirtualDesktop
                 VirtualDesktopManager.HideAllVirtualDesktops();
                 _isTheOnlyOneInMainView = true;
                 VirtualDesktopManager.ShowAllVirtualDesktops();
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {this}, pId );
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> { this }, pId );
             }
         }
     }

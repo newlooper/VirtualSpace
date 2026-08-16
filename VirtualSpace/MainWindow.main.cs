@@ -32,6 +32,20 @@ namespace VirtualSpace
         private static          long           _forceSwitchOnTimeout;
         private                 IAppController _acForm;
 
+        private MainWindow()
+        {
+            InitializeComponent();
+            DataContext = this;
+            _instance   = this;
+
+            Left    = 0;
+            Top     = 0;
+            Width   = SystemParameters.PrimaryScreenWidth;
+            Height  = SystemParameters.PrimaryScreenHeight;
+            Topmost = true;
+            Title   = Const.Window.VD_FRAME_TITLE;
+        }
+
         public static IAppController AcForm
         {
             get
@@ -45,20 +59,6 @@ namespace VirtualSpace
                 return _instance._acForm;
             }
             private set => _instance._acForm = value;
-        }
-
-        private MainWindow()
-        {
-            InitializeComponent();
-            DataContext = this;
-            _instance = this;
-
-            Left = 0;
-            Top = 0;
-            Width = SystemParameters.PrimaryScreenWidth;
-            Height = SystemParameters.PrimaryScreenHeight;
-            Topmost = true;
-            Title = Const.Window.VD_FRAME_TITLE;
         }
 
         public IntPtr Handle { get; private set; }
@@ -80,7 +80,7 @@ namespace VirtualSpace
                         Ui.CanvasBackColor.G,
                         Ui.CanvasBackColor.B )
                 ),
-                BlurOpacity = Ui.CanvasOpacity,
+                BlurOpacity         = Ui.CanvasOpacity,
                 BlurBackgroundColor = Ui.CanvasBackColor.GetLongOfColor()
             };
 
@@ -145,13 +145,9 @@ namespace VirtualSpace
             VirtualDesktopManager.ShowAllVirtualDesktops();
 
             if ( processId > 0 )
-            {
                 VirtualDesktopManager.ShowVisibleWindowsForDesktops( null, processId );
-            }
             else
-            {
                 VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-            }
 
             if ( _instance.Canvas.RowDefinitions[1].Height.Value > 0 )
                 _instance.ShowFilterWindow();
@@ -170,7 +166,7 @@ namespace VirtualSpace
             CheckScreenArea();
 
             _instance.Left = 0;
-            _instance.Top = 0;
+            _instance.Top  = 0;
             _instance.Show();
         }
 
@@ -178,7 +174,7 @@ namespace VirtualSpace
         {
             if ( (int)_instance.Width == (int)SystemParameters.PrimaryScreenWidth &&
                  (int)_instance.Height == (int)SystemParameters.PrimaryScreenHeight ) return;
-            _instance.Width = SystemParameters.PrimaryScreenWidth;
+            _instance.Width  = SystemParameters.PrimaryScreenWidth;
             _instance.Height = SystemParameters.PrimaryScreenHeight;
         }
 
@@ -217,7 +213,7 @@ namespace VirtualSpace
             var app = (App)Application.Current;
             var psi = new ProcessStartInfo
             {
-                FileName = ConfigManager.AppPath,
+                FileName        = ConfigManager.AppPath,
                 UseShellExecute = true
             };
 

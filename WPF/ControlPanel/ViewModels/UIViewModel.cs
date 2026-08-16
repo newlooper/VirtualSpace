@@ -21,12 +21,12 @@ public partial class UIViewModel : ViewModelBase
 {
     public UIViewModel()
     {
-        VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
-        VdCount = DesktopWrapper.Count;
-        ShowVdName = Manager.CurrentProfile.UI.ShowVdName;
-        ShowVdIndex = Manager.CurrentProfile.UI.ShowVdIndex;
+        VdArrangement   = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
+        VdCount         = DesktopWrapper.Count;
+        ShowVdName      = Manager.CurrentProfile.UI.ShowVdName;
+        ShowVdIndex     = Manager.CurrentProfile.UI.ShowVdIndex;
         ShowVdIndexType = Manager.CurrentProfile.UI.ShowVdIndexType;
-        _isInitialized = true;
+        _isInitialized  = true;
 
         DesktopManagerWrapper.DesktopCreatedEvent -= OnDesktopCreatedEvent;
         DesktopManagerWrapper.DesktopCreatedEvent += OnDesktopCreatedEvent;
@@ -34,16 +34,22 @@ public partial class UIViewModel : ViewModelBase
         DesktopManagerWrapper.DesktopDeletedEvent += OnDesktopDeletedEvent;
     }
 
+    public bool ShowVdName      { get; set; }
+    public bool ShowVdIndex     { get; set; }
+    public int  ShowVdIndexType { get; set; }
+    public int  VdArrangement   { get; set; }
+    public int  VdCount         { get; set; }
+
     private void OnDesktopCreatedEvent()
     {
         VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
-        VdCount = DesktopWrapper.Count;
+        VdCount       = DesktopWrapper.Count;
     }
 
     private void OnDesktopDeletedEvent( VirtualDesktopNotification vdn )
     {
         VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
-        VdCount = DesktopWrapper.Count;
+        VdCount       = DesktopWrapper.Count;
     }
 
     public void OnPropertyChanged( string propertyName, object before, object after )
@@ -51,7 +57,6 @@ public partial class UIViewModel : ViewModelBase
         var propertyChanged = PropertyChanged;
         if ( propertyChanged == null ) return;
         if ( _isInitialized )
-        {
             switch ( propertyName )
             {
                 case nameof( VdArrangement ):
@@ -71,14 +76,7 @@ public partial class UIViewModel : ViewModelBase
                     Manager.Save( reason: Manager.CurrentProfile.UI.ShowVdIndexType );
                     break;
             }
-        }
 
         propertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
     }
-
-    public bool ShowVdName      { get; set; }
-    public bool ShowVdIndex     { get; set; }
-    public int  ShowVdIndexType { get; set; }
-    public int  VdArrangement   { get; set; }
-    public int  VdCount         { get; set; }
 }

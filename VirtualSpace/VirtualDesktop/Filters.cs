@@ -10,8 +10,8 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 
@@ -39,7 +39,7 @@ namespace VirtualSpace.VirtualDesktop
             "WinFormsDesigner"
         };
 
-        public static readonly List<IntPtr> WndHandleIgnoreListByError = new();
+        public static readonly List<IntPtr>                      WndHandleIgnoreListByError  = new();
         public static readonly ConcurrentDictionary<IntPtr, int> WndHandleIgnoreListByManual = new();
 
         public static bool IsCloaked( IntPtr handle )

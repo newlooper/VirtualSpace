@@ -32,7 +32,7 @@ namespace VirtualSpace
         private void FixStyle()
         {
             var style = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_STYLE );
-            style = unchecked(style | (int)0x80000000); // WS_POPUP
+            style = unchecked( style | (int)0x80000000 ); // WS_POPUP
             User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_STYLE, style );
 
             var exStyle = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_EXSTYLE );
@@ -45,7 +45,7 @@ namespace VirtualSpace
         {
             var accent = new VisualEffects.AccentPolicy
             {
-                AccentState = VisualEffects.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND,
+                AccentState   = VisualEffects.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND,
                 GradientColor = ( BlurOpacity << 24 ) | ( BlurBackgroundColor & 0xFFFFFF )
             };
 
@@ -55,9 +55,9 @@ namespace VirtualSpace
 
             var data = new VisualEffects.WindowCompositionAttributeData
             {
-                Attribute = VisualEffects.WindowCompositionAttribute.WCA_ACCENT_POLICY,
+                Attribute  = VisualEffects.WindowCompositionAttribute.WCA_ACCENT_POLICY,
                 SizeOfData = accentStructSize,
-                Data = accentPtr
+                Data       = accentPtr
             };
 
             _ = VisualEffects.SetWindowCompositionAttribute( Handle, ref data );

@@ -16,10 +16,10 @@ namespace ControlPanel;
 
 public partial class ExportResourceDictionary
 {
-    public static ExportResourceDictionary Instance { get; } = new ExportResourceDictionary();
-
     public ExportResourceDictionary()
     {
         InitializeComponent();
     }
+
+    public static ExportResourceDictionary Instance { get; } = new();
 }

@@ -31,11 +31,11 @@ namespace VirtualSpace.VirtualDesktop
 {
     internal static class Daemon
     {
-        private static int _runlevel = 1;
-        private static readonly ManualResetEvent CanRun = new( false );
-        private static readonly StringBuilder SbWinInfo = new( Const.WindowTitleMaxLength );
-        private static readonly Channel<Behavior> ActionConsumer = Channels.ActionChannel;
-        private static readonly Channel<Window> VisibleWindowsProducer = Channels.VisibleWindowsChannel;
+        private static          int               _runlevel              = 1;
+        private static readonly ManualResetEvent  CanRun                 = new( false );
+        private static readonly StringBuilder     SbWinInfo              = new( Const.WindowTitleMaxLength );
+        private static readonly Channel<Behavior> ActionConsumer         = Channels.ActionChannel;
+        private static readonly Channel<Window>   VisibleWindowsProducer = Channels.VisibleWindowsChannel;
 
         private static async void WaitForAction()
         {
@@ -86,15 +86,11 @@ namespace VirtualSpace.VirtualDesktop
                 }
 
                 if ( action.MoveToDesktop >= 0 )
-                {
                     try
                     {
                         Logger.Debug( $"[RULE.Action]MOVE.Win {action.Handle:X2} TO Desktop[{action.MoveToDesktop}]" );
                         DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
-                        if ( action.FollowWindow )
-                        {
-                            WindowTool.ActiveWindow( action.Handle, action.MoveToDesktop );
-                        }
+                        if ( action.FollowWindow ) WindowTool.ActiveWindow( action.Handle, action.MoveToDesktop );
                     }
                     catch
                     {
@@ -103,11 +99,10 @@ namespace VirtualSpace.VirtualDesktop
                             $"[RULE.Action]MOVE.Win {action.Handle:X2} TO Desktop[{action.MoveToDesktop}]",
                             new NotifyObject
                             {
-                                Title = Agent.Langs.GetString( "Error.Title" )!,
+                                Title   = Agent.Langs.GetString( "Error.Title" )!,
                                 Message = string.Format( Agent.Langs.GetString( "Error.MoveWindowToDesktop" )!, action.WindowTitle, action.RuleName )
                             } );
                     }
-                }
             }
         }
 
@@ -126,13 +121,9 @@ namespace VirtualSpace.VirtualDesktop
         public static void SetCanRun( bool isCanRun )
         {
             if ( isCanRun )
-            {
                 CanRun.Set();
-            }
             else
-            {
                 CanRun.Reset();
-            }
         }
 
         public static void SetRunLevel( int i )
@@ -186,10 +177,7 @@ namespace VirtualSpace.VirtualDesktop
                     return true;
             }
 
-            if ( classname != Const.WindowsUiCoreWindow )
-            {
-                SendToCheckingRule( hWnd, title, classname );
-            }
+            if ( classname != Const.WindowsUiCoreWindow ) SendToCheckingRule( hWnd, title, classname );
 
             return true;
         }

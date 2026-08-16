@@ -15,6 +15,9 @@ namespace ControlPanel.Validation;
 
 public class NumberRangeValidationRule : ValidationRule
 {
+    public int Min { get; set; }
+    public int Max { get; set; }
+
     public override ValidationResult Validate( object? value, CultureInfo cultureInfo )
     {
         try
@@ -30,7 +33,4 @@ public class NumberRangeValidationRule : ValidationRule
 
         return ValidationResult.ValidResult;
     }
-
-    public int Min { get; set; }
-    public int Max { get; set; }
 }

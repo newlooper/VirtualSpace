@@ -31,12 +31,10 @@ namespace VirtualSpace.VirtualDesktop
     {
         private static   List<VirtualDesktopWindow>? _virtualDesktops;
         private readonly List<VisibleWindow>         _visibleWindows = new();
+        public           Guid                        VdId;
         private          string                      _desktopName;
         private          Point                       _fixedPosition;
         private          Size                        _initSize = Size.Empty;
-        public           Guid                        VdId;
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public           int                         VdIndex { get; set; }
 
         private VirtualDesktopWindow()
         {
@@ -46,6 +44,9 @@ namespace VirtualSpace.VirtualDesktop
             UpdateStyles();
         }
 
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
+        public int VdIndex { get; set; }
+
         protected override CreateParams CreateParams
         {
             get
@@ -53,15 +54,16 @@ namespace VirtualSpace.VirtualDesktop
                 var cp = base.CreateParams;
                 cp.ExStyle |= 0x00000080; // WS_EX_TOOLWINDOW
                 cp.ExStyle |= 0x08000000; // WS_EX_NOACTIVATE
-                cp.Style = unchecked(cp.Style | (int)0x80000000); // WS_POPUP
+                cp.Style   =  unchecked( cp.Style | (int)0x80000000 ); // WS_POPUP
                 return cp;
             }
         }
 
+        protected override bool ShowWithoutActivation => true;
+
         protected override void WndProc( ref Message m )
         {
             if ( m.Msg == WinMsg.WM_HOTKEY )
-            {
                 switch ( m.WParam.ToInt32() )
                 {
                     case UserMessage.ShowVdw:
@@ -74,29 +76,26 @@ namespace VirtualSpace.VirtualDesktop
                         ShowThumbnails();
                         return;
                 }
-            }
 
             base.WndProc( ref m );
         }
-
-        protected override bool ShowWithoutActivation => true;
 
         public static VirtualDesktopWindow Create( int index, Guid guid, Size initSize, Color defaultBackColor, int vdwPadding )
         {
             var vdw = new VirtualDesktopWindow
             {
                 StartPosition = FormStartPosition.Manual,
-                TabStop = false,
-                TopLevel = true,
-                TopMost = true,
-                Name = "vdw_" + index,
-                VdId = guid,
-                VdIndex = index,
-                Size = initSize,
-                BackColor = defaultBackColor,
-                Padding = new Padding( vdwPadding ),
-                ResizeRedraw = true,
-                Text = Const.Window.VD_CONTAINER_TITLE
+                TabStop       = false,
+                TopLevel      = true,
+                TopMost       = true,
+                Name          = "vdw_" + index,
+                VdId          = guid,
+                VdIndex       = index,
+                Size          = initSize,
+                BackColor     = defaultBackColor,
+                Padding       = new Padding( vdwPadding ),
+                ResizeRedraw  = true,
+                Text          = Const.Window.VD_CONTAINER_TITLE
             };
             vdw.SetOwner( MainWindow.GetMainWindow() );
             return vdw;
@@ -113,25 +112,17 @@ namespace VirtualSpace.VirtualDesktop
             }
 
             if ( owner.Dispatcher.CheckAccess() )
-            {
                 DoSetOwner();
-            }
             else
-            {
                 owner.Dispatcher.Invoke( DoSetOwner );
-            }
         }
 
         public void UpdateWallpaper()
         {
             if ( InvokeRequired )
-            {
                 Invoke( (MethodInvoker)Refresh );
-            }
             else
-            {
                 Refresh();
-            }
         }
 
         private void VirtualDesktopWindow_Closing( object? sender, FormClosingEventArgs e )
@@ -148,13 +139,13 @@ namespace VirtualSpace.VirtualDesktop
 
         private void ShowByVdIndex()
         {
-            var ui  = VirtualDesktopManager.Ui;
+            var ui = VirtualDesktopManager.Ui;
             var (ScaleX, ScaleY) = SysInfo.Dpi;
 
             var matrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( VdIndex );
             var location    = MainWindow.GetCellLocationByMatrixIndex( matrixIndex );
             var point       = new Point( (int)( ( location.X + ui.VDWBorderSize ) * ScaleX ), (int)( ( location.Y + ui.VDWBorderSize ) * ScaleY ) );
-            Location = point;
+            Location       = point;
             _fixedPosition = point;
 
             var size      = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
@@ -170,10 +161,7 @@ namespace VirtualSpace.VirtualDesktop
             else
             {
                 var vdName = DesktopWrapper.DesktopNameFromGuid( VdId );
-                if ( vdName != _desktopName )
-                {
-                    UpdateDesktopName( vdName );
-                }
+                if ( vdName != _desktopName ) UpdateDesktopName( vdName );
 
                 Size = new Size( (int)vdwWidth, (int)vdwHeight );
 
@@ -185,10 +173,7 @@ namespace VirtualSpace.VirtualDesktop
         private (bool isCached, string path, Color? color) CachedWallpaperInfo()
         {
             var wpPath = WinRegistry.GetWallPaperPathByGuid( VdId );
-            if ( wpPath is null )
-            {
-                return new ValueTuple<bool, string, Color>( false, "", WinRegistry.GetBackColor() );
-            }
+            if ( wpPath is null ) return new ValueTuple<bool, string, Color>( false, "", WinRegistry.GetBackColor() );
 
             var (Exists, _) = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), Width, Height );
             return new ValueTuple<bool, string, Color?>( Exists, wpPath, null );
@@ -197,13 +182,9 @@ namespace VirtualSpace.VirtualDesktop
         private static void DrawImage( PaintEventArgs e, Wallpaper wp, int width = 0, int height = 0 )
         {
             if ( width > 0 && height > 0 )
-            {
                 e.Graphics.DrawImage( wp.Image, 0, 0, width, height );
-            }
             else
-            {
                 e.Graphics.DrawImage( wp.Image, 0, 0 );
-            }
 
             wp.Release();
         }
@@ -212,7 +193,7 @@ namespace VirtualSpace.VirtualDesktop
         {
             Logger.Event( $"Init Desktop[{VdIndex}] background." );
 
-            _initSize.Width = Width;
+            _initSize.Width  = Width;
             _initSize.Height = Height;
 
             if ( wpInfo.color != null )
@@ -319,15 +300,9 @@ namespace VirtualSpace.VirtualDesktop
             var ui  = ConfigManager.CurrentProfile.UI;
             var str = "";
 
-            if ( ui.ShowVdName )
-            {
-                str += _desktopName;
-            }
+            if ( ui.ShowVdName ) str += _desktopName;
 
-            if ( ui.ShowVdIndex )
-            {
-                str += ui.ShowVdIndexType == 0 ? $"[{VdIndex}]" : $"[{VdIndex + 1}]";
-            }
+            if ( ui.ShowVdIndex ) str += ui.ShowVdIndexType == 0 ? $"[{VdIndex}]" : $"[{VdIndex + 1}]";
 
             if ( str == "" ) return;
 

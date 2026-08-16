@@ -19,9 +19,9 @@ namespace VirtualSpace.VirtualDesktop
     {
         public VisibleWindow( string title, string classname, IntPtr handle )
         {
-            Title = title;
+            Title     = title;
             Classname = classname;
-            Handle = handle;
+            Handle    = handle;
         }
 
         public string Title { get; set; }
@@ -41,9 +41,9 @@ namespace VirtualSpace.VirtualDesktop
             DTP = props;
             Rect = new Rectangle
             {
-                X = props.rcDestination.Left,
-                Y = props.rcDestination.Top,
-                Width = props.rcDestination.Right - props.rcDestination.Left,
+                X      = props.rcDestination.Left,
+                Y      = props.rcDestination.Top,
+                Width  = props.rcDestination.Right - props.rcDestination.Left,
                 Height = props.rcDestination.Bottom - props.rcDestination.Top
             };
         }

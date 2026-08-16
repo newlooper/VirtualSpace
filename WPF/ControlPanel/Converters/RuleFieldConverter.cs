@@ -26,27 +26,20 @@ public class RuleFieldConverter : IMultiValueConverter
     {
         var type = parameter.ToString();
 
-        if ( type == "V" )
-        {
-            return ForValue( values );
-        }
+        if ( type == "V" ) return ForValue( values );
 
-        if ( type == typeof( ComboBox ).FullName )
-        {
-            return ForCombobox( values );
-        }
+        if ( type == typeof( ComboBox ).FullName ) return ForCombobox( values );
 
-        if ( type == typeof( CheckBox ).FullName )
-        {
-            return ForCheckBox( values );
-        }
+        if ( type == typeof( CheckBox ).FullName ) return ForCheckBox( values );
 
-        if ( type == typeof( TextBox ).FullName )
-        {
-            return ForTextBox( values );
-        }
+        if ( type == typeof( TextBox ).FullName ) return ForTextBox( values );
 
         return null!;
+    }
+
+    public object[] ConvertBack( object value, Type[] targetTypes, object parameter, CultureInfo culture )
+    {
+        throw new NotImplementedException();
     }
 
     private static int ForValue( object[] values )
@@ -60,17 +53,15 @@ public class RuleFieldConverter : IMultiValueConverter
             var jsonDocument       = (JsonDocument)values[0];
             var expressionTemplate = Conditions.ParseExpressionTemplate( jsonDocument );
             foreach ( var r in expressionTemplate.rules )
-            {
                 if ( r.field == values[1].ToString() )
                 {
-                    var index = RulesViewModel.Screens.Select( ( vv, index ) => new {nv = vv, index} )
+                    var index = RulesViewModel.Screens.Select( ( vv, index ) => new { nv = vv, index } )
                         .Where( pair => ( (dynamic)pair.nv ).Value.ToString() == r.value.V )
                         .Select( pair => pair.index + 1 )
                         .FirstOrDefault() - 1;
 
                     return index;
                 }
-            }
         }
         catch
         {
@@ -91,17 +82,15 @@ public class RuleFieldConverter : IMultiValueConverter
             var jsonDocument       = (JsonDocument)values[0];
             var expressionTemplate = Conditions.ParseExpressionTemplate( jsonDocument );
             foreach ( var r in expressionTemplate.rules )
-            {
                 if ( r.field == values[1].ToString() )
                 {
-                    var index = RulesViewModel.Operators.Select( ( v, index ) => new {value = v, index} )
+                    var index = RulesViewModel.Operators.Select( ( v, index ) => new { value = v, index } )
                         .Where( pair => ( (dynamic)pair.value ).Value.ToString() == r.@operator )
                         .Select( pair => pair.index + 1 )
                         .FirstOrDefault() - 1;
 
                     return index;
                 }
-            }
         }
         catch
         {
@@ -122,12 +111,8 @@ public class RuleFieldConverter : IMultiValueConverter
             var jsonDocument       = (JsonDocument)values[0];
             var expressionTemplate = Conditions.ParseExpressionTemplate( jsonDocument );
             foreach ( var r in expressionTemplate.rules )
-            {
                 if ( r.field == values[1].ToString() )
-                {
                     return true;
-                }
-            }
         }
         catch
         {
@@ -148,12 +133,8 @@ public class RuleFieldConverter : IMultiValueConverter
             var jsonDocument       = (JsonDocument)values[0];
             var expressionTemplate = Conditions.ParseExpressionTemplate( jsonDocument );
             foreach ( var r in expressionTemplate.rules )
-            {
                 if ( r.field == values[1].ToString() )
-                {
                     return r.value.V;
-                }
-            }
         }
         catch
         {
@@ -161,10 +142,5 @@ public class RuleFieldConverter : IMultiValueConverter
         }
 
         return "";
-    }
-
-    public object[] ConvertBack( object value, Type[] targetTypes, object parameter, CultureInfo culture )
-    {
-        throw new NotImplementedException();
     }
 }

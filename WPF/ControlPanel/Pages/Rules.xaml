@@ -69,7 +69,7 @@
                         <Setter Property="CanContentScroll" Value="False" />
                     </Style>
                     <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
-                        <Setter Property="Padding" Value="10 5"></Setter>
+                        <Setter Property="Padding" Value="10 5" />
                     </Style>
                 </ListView.Resources>
                 <ListView.GroupStyle>
@@ -92,14 +92,12 @@
                         </GridViewColumn>
                         <GridViewColumn Width="{Binding Path=ActualWidth,ElementName=RuleList,Converter={StaticResource WidthHeightConverter},ConverterParameter=500}"
                                         DisplayMemberBinding="{Binding Name}"
-                                        Header="{lex:Loc Generic.Name}">
-                        </GridViewColumn>
+                                        Header="{lex:Loc Generic.Name}" />
                         <GridViewColumn Width="100" DisplayMemberBinding="{Binding Weight}">
-                            <GridViewColumnHeader x:Name="DefaultSortColumnHeader" Content="{lex:Loc Page.Rules.Weight}"></GridViewColumnHeader>
+                            <GridViewColumnHeader x:Name="DefaultSortColumnHeader" Content="{lex:Loc Page.Rules.Weight}" />
                         </GridViewColumn>
                         <GridViewColumn Width="150" DisplayMemberBinding="{Binding Created,StringFormat={}{0:yyyy-MM-dd HH:mm}}"
-                                        Header="{lex:Loc Page.Rules.Created}">
-                        </GridViewColumn>
+                                        Header="{lex:Loc Page.Rules.Created}" />
                         <GridViewColumn Width="150" DisplayMemberBinding="{Binding Updated,StringFormat={}{0:yyyy-MM-dd HH:mm}}"
                                         Header="{lex:Loc Page.Rules.Updated}" />
                     </GridView>
@@ -115,7 +113,7 @@
                 <GroupBox MinHeight="680" VerticalAlignment="Top" Margin="10,0"
                           Header="{lex:Loc {Binding Path=Id,Converter={StaticResource RuleHeaderByStateConverter}}}"
                           Height="{Binding Path=ActualHeight,ElementName=RulesFrame,Converter={StaticResource WidthHeightConverter},ConverterParameter=80}">
-                    <userControls:RuleForm x:Name="UserControlRuleEditor"></userControls:RuleForm>
+                    <userControls:RuleForm x:Name="UserControlRuleEditor" />
                 </GroupBox>
             </materialDesign:DrawerHost.BottomDrawerContent>
 
@@ -130,8 +128,7 @@
                          materialDesign:HintAssist.Hint="{lex:Loc Generic.Filter}"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                         TextChanged="TbNameFilter_OnTextChanged">
-                </TextBox>
+                         TextChanged="TbNameFilter_OnTextChanged" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <Button Content="{lex:Loc Page.Rules.Add}" Click="BtnNewRule_OnClick" />
                     <Button x:Name="btnEditRule" Content="{lex:Loc Page.Rules.Edit}" IsEnabled="False" Click="BtnEditRule_OnClick" />

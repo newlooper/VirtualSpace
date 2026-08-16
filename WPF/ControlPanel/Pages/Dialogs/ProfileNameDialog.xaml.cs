@@ -30,7 +30,7 @@ public partial class ProfileNameDialog : UserControl
 
     public void SetErrors( string errors )
     {
-        ErrorBox.Text = errors;
+        ErrorBox.Text       = errors;
         ErrorBox.Visibility = Visibility.Visible;
     }
 }

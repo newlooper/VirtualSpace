@@ -40,14 +40,14 @@ namespace VirtualDesktop
         public int Bottom;
     }
 
-    public enum APPLICATION_VIEW_CLOAK_TYPE : int
+    public enum APPLICATION_VIEW_CLOAK_TYPE
     {
         AVCT_NONE            = 0,
         AVCT_DEFAULT         = 1,
         AVCT_VIRTUAL_DESKTOP = 2
     }
 
-    public enum APPLICATION_VIEW_COMPATIBILITY_POLICY : int
+    public enum APPLICATION_VIEW_COMPATIBILITY_POLICY
     {
         AVCP_NONE                = 0,
         AVCP_SMALL_SCREEN        = 1,

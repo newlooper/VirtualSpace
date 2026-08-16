@@ -17,13 +17,13 @@
                 <Setter Property="Height" Value="50" />
             </Style>
             <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignCheckBox}">
-                <Setter Property="Margin" Value="0,0,10,0"></Setter>
-                <Setter Property="materialDesign:CheckBoxAssist.CheckBoxSize" Value="30"></Setter>
+                <Setter Property="Margin" Value="0,0,10,0" />
+                <Setter Property="materialDesign:CheckBoxAssist.CheckBoxSize" Value="30" />
             </Style>
             <converters:LocConverter x:Key="LocConverter" />
             <converters:MouseActionConverter x:Key="MouseActionConverter" />
-            <x:Static Member="config:MouseAction.MOUSE_NODE_DESKTOP_PREFIX" x:Key="madp"></x:Static>
-            <x:Static Member="config:MouseAction.MOUSE_NODE_WINDOW_PREFIX" x:Key="mawp"></x:Static>
+            <x:Static Member="config:MouseAction.MOUSE_NODE_DESKTOP_PREFIX" x:Key="madp" />
+            <x:Static Member="config:MouseAction.MOUSE_NODE_WINDOW_PREFIX" x:Key="mawp" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -55,8 +55,8 @@
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
                             <TreeView x:Name="KeyboardTreeView"
@@ -73,7 +73,7 @@
                         <Border x:Name="KeyBindingBox" Visibility="{Binding BoxVisible}" Grid.Column="1"
                                 BorderBrush="Gray" BorderThickness="1" Margin="0,10,10,10">
                             <StackPanel>
-                                <TextBlock Margin="10" FontSize="20" Text="{Binding Path}"></TextBlock>
+                                <TextBlock Margin="10" FontSize="20" Text="{Binding Path}" />
                                 <StackPanel Orientation="Horizontal" Margin="10">
 
                                     <UniformGrid Columns="4">
@@ -159,16 +159,16 @@
                                 <Rectangle Height="1" Margin="0,10,0,0" Fill="{DynamicResource MaterialDesignDivider}" />
 
                                 <StackPanel Orientation="Horizontal" Margin="10">
-                                    <TextBlock Text="{lex:Loc Page.Control.KB.Extra}" Margin="0,0,10,0" FontSize="20" VerticalAlignment="Bottom"></TextBlock>
-                                    <TextBox IsEnabled="False" MinWidth="200" Text="{Binding Extra, Mode=OneWay}" FontSize="20"></TextBox>
+                                    <TextBlock Text="{lex:Loc Page.Control.KB.Extra}" Margin="0,0,10,0" FontSize="20" VerticalAlignment="Bottom" />
+                                    <TextBox IsEnabled="False" MinWidth="200" Text="{Binding Extra, Mode=OneWay}" FontSize="20" />
                                 </StackPanel>
 
                                 <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource MaterialDesignDivider}" />
 
                                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
                                     <materialDesign:Snackbar HorizontalAlignment="Right" Margin="10" x:Name="Snackbar" MessageQueue="{materialDesign:MessageQueue}" />
-                                    <Button Content="{lex:Loc Page.Control.KB.RegSave}" Click="RegAndSave_OnClick"></Button>
-                                    <Button Content="{lex:Loc Page.Control.KB.ClearSave}" Click="ClearAndSave_OnClick"></Button>
+                                    <Button Content="{lex:Loc Page.Control.KB.RegSave}" Click="RegAndSave_OnClick" />
+                                    <Button Content="{lex:Loc Page.Control.KB.ClearSave}" Click="ClearAndSave_OnClick" />
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -187,16 +187,16 @@
                     </TabItem.Header>
                     <StackPanel>
 
-                        <TextBlock FontSize="25" Margin="10" Text="{lex:Loc Page.Control.MouseAction.OnDesktop}"></TextBlock>
+                        <TextBlock FontSize="25" Margin="10" Text="{lex:Loc Page.Control.MouseAction.OnDesktop}" />
 
                         <Grid x:Name="DesktopMouseActionBox">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0" Grid.Column="0">
@@ -225,7 +225,7 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left">
-                                <TextBlock FontSize="30" Margin="0,8,10,10" Text="{lex:Loc Page.Control.MouseAction.Behavior}"></TextBlock>
+                                <TextBlock FontSize="30" Margin="0,8,10,10" Text="{lex:Loc Page.Control.MouseAction.Behavior}" />
                                 <ComboBox MinWidth="200" Width="400" x:Name="cbbDesktopActions"
                                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                           ItemsSource="{Binding DesktopActions}"
@@ -240,16 +240,16 @@
                                     </ComboBox.ItemTemplate>
                                     <ComboBox.SelectedValue>
                                         <MultiBinding Converter="{StaticResource MouseActionConverter}" Mode="OneWay">
-                                            <Binding Path="." Source="{StaticResource madp}"></Binding>
-                                            <Binding Path="LWin"></Binding>
-                                            <Binding Path="Ctrl"></Binding>
-                                            <Binding Path="Alt"></Binding>
-                                            <Binding Path="Shift"></Binding>
-                                            <Binding Path="MouseButton"></Binding>
+                                            <Binding Path="." Source="{StaticResource madp}" />
+                                            <Binding Path="LWin" />
+                                            <Binding Path="Ctrl" />
+                                            <Binding Path="Alt" />
+                                            <Binding Path="Shift" />
+                                            <Binding Path="MouseButton" />
                                         </MultiBinding>
                                     </ComboBox.SelectedValue>
                                 </ComboBox>
-                                <Button Content="{lex:Loc Page.Control.MouseAction.Bind}" Click="DesktopActionBind_OnClick"></Button>
+                                <Button Content="{lex:Loc Page.Control.MouseAction.Bind}" Click="DesktopActionBind_OnClick" />
                             </StackPanel>
                             <!-- <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" -->
                             <!--           HorizontalAlignment="Stretch" materialDesign:ExpanderAssist.HorizontalHeaderPadding="10 0" -->
@@ -262,16 +262,16 @@
 
                         <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource MaterialDesignDivider}" />
 
-                        <TextBlock FontSize="25" Margin="10" Text="{lex:Loc Page.Control.MouseAction.OnThumb}"></TextBlock>
+                        <TextBlock FontSize="25" Margin="10" Text="{lex:Loc Page.Control.MouseAction.OnThumb}" />
 
                         <Grid x:Name="WindowMouseActionBox">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0" Grid.Column="0">
 
@@ -297,7 +297,7 @@
                                 </ComboBox>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left">
-                                <TextBlock FontSize="30" Margin="0,8,10,10" Text="{lex:Loc Page.Control.MouseAction.Behavior}"></TextBlock>
+                                <TextBlock FontSize="30" Margin="0,8,10,10" Text="{lex:Loc Page.Control.MouseAction.Behavior}" />
                                 <ComboBox MinWidth="200" Width="400" x:Name="cbbWindowActions"
                                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                           ItemsSource="{Binding WindowActions}"
@@ -312,16 +312,16 @@
                                     </ComboBox.ItemTemplate>
                                     <ComboBox.SelectedValue>
                                         <MultiBinding Converter="{StaticResource MouseActionConverter}" Mode="OneWay">
-                                            <Binding Path="." Source="{StaticResource mawp}"></Binding>
-                                            <Binding Path="LWin"></Binding>
-                                            <Binding Path="Ctrl"></Binding>
-                                            <Binding Path="Alt"></Binding>
-                                            <Binding Path="Shift"></Binding>
-                                            <Binding Path="MouseButton"></Binding>
+                                            <Binding Path="." Source="{StaticResource mawp}" />
+                                            <Binding Path="LWin" />
+                                            <Binding Path="Ctrl" />
+                                            <Binding Path="Alt" />
+                                            <Binding Path="Shift" />
+                                            <Binding Path="MouseButton" />
                                         </MultiBinding>
                                     </ComboBox.SelectedValue>
                                 </ComboBox>
-                                <Button Content="{lex:Loc Page.Control.MouseAction.Bind}" Click="WindowActionBind_OnClick"></Button>
+                                <Button Content="{lex:Loc Page.Control.MouseAction.Bind}" Click="WindowActionBind_OnClick" />
                             </StackPanel>
                             <!-- <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" -->
                             <!--           HorizontalAlignment="Stretch" materialDesign:ExpanderAssist.HorizontalHeaderPadding="10 0" -->
@@ -335,7 +335,7 @@
                         <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource MaterialDesignDivider}" />
 
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="10" FontSize="25" Text="{lex:Loc Page.Control.Mouse.UseWheelSwitchDesktopWhenOnTaskbar}"></TextBlock>
+                            <TextBlock Margin="10" FontSize="25" Text="{lex:Loc Page.Control.Mouse.UseWheelSwitchDesktopWhenOnTaskbar}" />
                             <ToggleButton x:Name="UseWheelSwitchDesktopWhenOnTaskbar"
                                           Style="{StaticResource MaterialDesignSwitchToggleButton}"
                                           Width="50" Margin="5,5"
@@ -343,10 +343,10 @@
                         </StackPanel>
 
                         <UniformGrid Rows="2" Columns="2" Width="500" MinWidth="500" HorizontalAlignment="Left">
-                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.Up}"></TextBlock>
-                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.Down}"></TextBlock>
-                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.SUp}"></TextBlock>
-                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.SDown}"></TextBlock>
+                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.Up}" />
+                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.Down}" />
+                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.SUp}" />
+                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.SDown}" />
                         </UniformGrid>
 
                     </StackPanel>

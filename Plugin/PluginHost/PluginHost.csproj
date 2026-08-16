@@ -6,8 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Logger\Logger.csproj" />
-      <ProjectReference Include="..\Commons\Plugin.csproj" />
+        <ProjectReference Include="..\..\Logger\Logger.csproj" />
+        <ProjectReference Include="..\Commons\Plugin.csproj" />
     </ItemGroup>
 
 </Project>

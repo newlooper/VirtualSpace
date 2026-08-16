@@ -20,7 +20,7 @@ using WinRT;
 
 namespace VirtualDesktop
 {
-    public class Desktop: IDesktop
+    public class Desktop : IDesktop
     {
         private readonly IVirtualDesktop _ivd;
 
@@ -64,8 +64,7 @@ namespace VirtualDesktop
                 var hr = DesktopManager.VirtualDesktopManagerInternal.GetAdjacentDesktop( _ivd, 3, out var desktop ); // 3 = LeftDirection
                 if ( hr == 0 )
                     return new Desktop( desktop );
-                else
-                    return null;
+                return null;
             }
         }
 
@@ -77,9 +76,14 @@ namespace VirtualDesktop
                 var hr = DesktopManager.VirtualDesktopManagerInternal.GetAdjacentDesktop( _ivd, 4, out var desktop ); // 4 = RightDirection
                 if ( hr == 0 )
                     return new Desktop( desktop );
-                else
-                    return null;
+                return null;
             }
+        }
+
+        public void MakeVisible()
+        {
+            // make this desktop visible
+            DesktopManager.VirtualDesktopManagerInternal.SwitchDesktop( IntPtr.Zero, _ivd );
         }
 
         // get process id to window handle
@@ -144,10 +148,8 @@ namespace VirtualDesktop
 
             // no name found, generate generic name
             if ( string.IsNullOrEmpty( desktopName ) )
-            {
                 // create name "Desktop n" (n = number starting with 1)
-                desktopName = "Desktop " + ( DesktopManager.GetDesktopIndex( desktop._ivd ) + 1 ).ToString();
-            }
+                desktopName = "Desktop " + ( DesktopManager.GetDesktopIndex( desktop._ivd ) + 1 );
 
             return desktopName;
         }
@@ -173,10 +175,8 @@ namespace VirtualDesktop
 
             // no name found, generate generic name
             if ( string.IsNullOrEmpty( desktopName ) )
-            {
                 // create name "Desktop n" (n = number starting with 1)
-                desktopName = "Desktop " + ( index + 1 ).ToString();
-            }
+                desktopName = "Desktop " + ( index + 1 );
 
             return desktopName;
         }
@@ -203,8 +203,7 @@ namespace VirtualDesktop
             // name found?
             if ( string.IsNullOrEmpty( desktopName ) )
                 return false;
-            else
-                return true;
+            return true;
         }
 
         public static string DesktopWallpaperFromIndex( int index )
@@ -230,14 +229,12 @@ namespace VirtualDesktop
             var index = -1;
 
             for ( var i = 0; i < DesktopManager.GetDesktopCount(); i++ )
-            {
                 // loop through all virtual desktops and compare partial name to desktop name
                 if ( DesktopNameFromIndex( i ).ToUpper().IndexOf( partialName.ToUpper() ) >= 0 )
                 {
                     index = i;
                     break;
                 }
-            }
 
             return index;
         }
@@ -257,19 +254,17 @@ namespace VirtualDesktop
                 // if no fallback is given use desktop to the left except for desktop 0.
                 var dtToCheck = new Desktop( DesktopManager.GetDesktop( 0 ) );
                 if ( Equals( dtToCheck ) )
-                {
                     // desktop 0: set fallback to second desktop (= "right" desktop)
                     DesktopManager.VirtualDesktopManagerInternal.GetAdjacentDesktop( _ivd, 4, out fallbackDesktop ); // 4 = RightDirection
-                }
                 else
-                {
                     // set fallback to "left" desktop
                     DesktopManager.VirtualDesktopManagerInternal.GetAdjacentDesktop( _ivd, 3, out fallbackDesktop ); // 3 = LeftDirection
-                }
             }
             else
                 // set fallback desktop
+            {
                 fallbackDesktop = fallback._ivd;
+            }
 
             DesktopManager.VirtualDesktopManagerInternal.RemoveDesktop( _ivd, fallbackDesktop );
         }
@@ -315,12 +310,6 @@ namespace VirtualDesktop
             // set wallpaper path for all desktops
             if ( string.IsNullOrEmpty( path ) ) throw new ArgumentNullException();
             DesktopManager.VirtualDesktopManagerInternal.UpdateWallpaperPathForAllDesktops( path );
-        }
-
-        public void MakeVisible()
-        {
-            // make this desktop visible
-            DesktopManager.VirtualDesktopManagerInternal.SwitchDesktop( IntPtr.Zero, _ivd );
         }
 
         public void MoveWindow( IntPtr hWnd )
@@ -387,10 +376,8 @@ namespace VirtualDesktop
             if ( hWnd == IntPtr.Zero ) throw new ArgumentNullException();
             var view = hWnd.GetApplicationView();
             if ( !DesktopManager.VirtualDesktopPinnedApps.IsViewPinned( view ) )
-            {
                 // pin only if not already pinned
                 DesktopManager.VirtualDesktopPinnedApps.PinView( view );
-            }
         }
 
         public static void UnpinWindow( IntPtr hWnd )
@@ -399,10 +386,8 @@ namespace VirtualDesktop
             if ( hWnd == IntPtr.Zero ) throw new ArgumentNullException();
             var view = hWnd.GetApplicationView();
             if ( DesktopManager.VirtualDesktopPinnedApps.IsViewPinned( view ) )
-            {
                 // unpin only if not already unpinned
                 DesktopManager.VirtualDesktopPinnedApps.UnpinView( view );
-            }
         }
 
         public static bool IsApplicationPinned( IntPtr hWnd )
@@ -418,10 +403,8 @@ namespace VirtualDesktop
             if ( hWnd == IntPtr.Zero ) throw new ArgumentNullException();
             var appId = DesktopManager.GetAppId( hWnd );
             if ( !DesktopManager.VirtualDesktopPinnedApps.IsAppIdPinned( appId ) )
-            {
                 // pin only if not already pinned
                 DesktopManager.VirtualDesktopPinnedApps.PinAppID( appId );
-            }
         }
 
         public static void UnpinApplication( IntPtr hWnd )
@@ -431,10 +414,8 @@ namespace VirtualDesktop
             var view  = hWnd.GetApplicationView();
             var appId = DesktopManager.GetAppId( hWnd );
             if ( DesktopManager.VirtualDesktopPinnedApps.IsAppIdPinned( appId ) )
-            {
                 // unpin only if pinned
                 DesktopManager.VirtualDesktopPinnedApps.UnpinAppID( appId );
-            }
         }
 
         public static Desktop? FromId( Guid guid )

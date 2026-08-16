@@ -8,36 +8,36 @@
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Image Source="../Resources/Images/AboutLogo_2.png" Width="128" Height="128"></Image>
-            <TextBlock FontSize="100" Margin="20,0" x:Name="lb_AppName"></TextBlock>
+            <Image Source="../Resources/Images/AboutLogo_2.png" Width="128" Height="128" />
+            <TextBlock FontSize="100" Margin="20,0" x:Name="lb_AppName" />
         </StackPanel>
         <Grid Grid.Row="1" Margin="0 10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock>Version</TextBlock><TextBlock Grid.Row="0" Grid.Column="1" x:Name="lb_Version"></TextBlock>
-            <TextBlock Grid.Row="1" Grid.Column="0">Copyright</TextBlock><TextBlock Grid.Row="1" Grid.Column="1" x:Name="lb_Copyright"></TextBlock>
-            <TextBlock Grid.Row="2" Grid.Column="0"></TextBlock>
+            <TextBlock>Version</TextBlock><TextBlock Grid.Row="0" Grid.Column="1" x:Name="lb_Version" />
+            <TextBlock Grid.Row="1" Grid.Column="0">Copyright</TextBlock><TextBlock Grid.Row="1" Grid.Column="1" x:Name="lb_Copyright" />
+            <TextBlock Grid.Row="2" Grid.Column="0" />
             <TextBlock Grid.Row="2" Grid.Column="1">
                 <Hyperlink Click="Hyperlink_OnClick" x:Name="llb_CompanyUri">
-                    <Run x:Name="llb_CompanyText"></Run>
+                    <Run x:Name="llb_CompanyText" />
                 </Hyperlink>
             </TextBlock>
         </Grid>
         <Border Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left"
                 BorderThickness="1" Margin="0 10" BorderBrush="DarkGray">
-            <ListBox x:Name="lbox_Env" Height="200" Width="700"></ListBox>
+            <ListBox x:Name="lbox_Env" Height="200" Width="700" />
         </Border>
 
     </Grid>

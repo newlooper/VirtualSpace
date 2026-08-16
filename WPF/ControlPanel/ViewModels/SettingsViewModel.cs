@@ -26,14 +26,11 @@ public partial class SettingsViewModel : ViewModelBase
 
     private SettingsViewModel()
     {
-        Theme = Manager.CurrentProfile.UI.Theme;
-        Language = Manager.CurrentProfile.UI.Language;
+        Theme          = Manager.CurrentProfile.UI.Theme;
+        Language       = Manager.CurrentProfile.UI.Language;
         CurrentProfile = Manager.Configs.CurrentProfileName;
-        ProfileList = new ObservableCollection<object>();
-        foreach ( var profileName in Manager.Configs.Profiles.Keys )
-        {
-            ProfileList.Add( new {Value = profileName} );
-        }
+        ProfileList    = new ObservableCollection<object>();
+        foreach ( var profileName in Manager.Configs.Profiles.Keys ) ProfileList.Add( new { Value = profileName } );
 
         _isInitialized = true;
     }
@@ -59,7 +56,6 @@ public partial class SettingsViewModel : ViewModelBase
         if ( propertyChanged == null ) return;
 
         if ( _isInitialized )
-        {
             switch ( propertyName )
             {
                 case nameof( Theme ):
@@ -71,26 +67,24 @@ public partial class SettingsViewModel : ViewModelBase
 
                     Manager.SwitchProfile( after.ToString()! );
                     RulesViewModel.ReloadRules();
-                    Theme = Manager.CurrentProfile.UI.Theme;
+                    Theme    = Manager.CurrentProfile.UI.Theme;
                     Language = Manager.CurrentProfile.UI.Language;
 
                     break;
                 case nameof( Language ):
                     var lang = after.ToString()!;
                     LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
-                    LocalizeDictionary.Instance.Culture = new CultureInfo( lang );
-                    Manager.CurrentProfile.UI.Language = lang;
+                    LocalizeDictionary.Instance.Culture                 = new CultureInfo( lang );
+                    Manager.CurrentProfile.UI.Language                  = lang;
                     Manager.Save( reason: Manager.CurrentProfile.UI.Language );
                     User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.UpdateTrayLang, 0 );
                     LanguageChanged?.Invoke( null, EventArgs.Empty );
                     break;
             }
-        }
 
         propertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
 
         if ( _isInitialized )
-        {
             switch ( propertyName )
             {
                 case nameof( Theme ):
@@ -98,6 +92,5 @@ public partial class SettingsViewModel : ViewModelBase
                         MainWindow.UpdateTheme();
                     break;
             }
-        }
     }
 }

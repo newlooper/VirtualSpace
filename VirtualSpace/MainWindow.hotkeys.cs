@@ -73,10 +73,7 @@ namespace VirtualSpace
             Logger.Info( "Set Windows LowLevelKeyboardProc Hook" );
             LLKH.SetHook( keyboardHookProc );
 
-            if ( Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar )
-            {
-                EnableMouseHook();
-            }
+            if ( Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar ) EnableMouseHook();
         }
 
         private void EnableMouseHook()
@@ -95,14 +92,13 @@ namespace VirtualSpace
         {
             if ( nCode >= 0 )
             {
-                var info = Marshal.PtrToStructure<LLKH.KBDLLHOOKSTRUCT>( lParam );
+                var info = Marshal.PtrToStructure<LowLevelKeyboardHook.KBDLLHOOKSTRUCT>( lParam );
 
                 var keyType = (int)wParam;
 
-                if ( IsShowing() && 
+                if ( IsShowing() &&
                      Manager.Configs.Cluster.EnableWindowFilter &&
                      info.vkCode == (int)Keys.LShiftKey )
-                {
                     switch ( keyType )
                     {
                         case LLKH.WM_KEYUP:
@@ -119,7 +115,6 @@ namespace VirtualSpace
                             break;
                         }
                     }
-                }
 
                 if ( keyType != LLKH.WM_KEYDOWN ) goto NEXT;
 
@@ -129,9 +124,9 @@ namespace VirtualSpace
                      && LLKH.IsKeyHold( Keys.LWin )
                      && !( LLKH.IsKeyHold( Keys.ControlKey ) || LLKH.IsKeyHold( Keys.ShiftKey ) ) )
                 {
-                    if ( ( info.flags & LLKH.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED ) == 0 ) // not come from fake input
+                    if ( ( info.flags & LowLevelKeyboardHook.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED ) == 0 ) // not come from fake input
                     {
-                        LLKH.MultipleKeyPress( new List<Keys> {(Keys)LLKH.DUMMY_KEY} );
+                        LLKH.MultipleKeyPress( new List<Keys> { (Keys)LLKH.DUMMY_KEY } );
                         User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
                         return LowLevelHooks.Handled;
                     }
@@ -148,13 +143,13 @@ namespace VirtualSpace
                      && LLKH.IsKeyHold( Keys.ControlKey )
                      && LLKH.IsKeyHold( Keys.ShiftKey ) )
                 {
-                    if ( ( info.flags & LLKH.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED ) == 0 // not come from fake input
+                    if ( ( info.flags & LowLevelKeyboardHook.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED ) == 0 // not come from fake input
                          && RiseTaskViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
                     {
-                        LLKH.MultipleKeyPress( new List<Keys> {(Keys)LLKH.DUMMY_KEY} );
-                        LLKH.MultipleKeyUp( new List<Keys> {Keys.ControlKey, Keys.LWin, Keys.ShiftKey, Keys.Tab} );
-                        LLKH.MultipleKeyPress( new List<Keys> {Keys.LWin, Keys.Tab} );
-                        LLKH.MultipleKeyDown( new List<Keys> {Keys.ControlKey, Keys.LWin, Keys.ShiftKey} );
+                        LLKH.MultipleKeyPress( new List<Keys> { (Keys)LLKH.DUMMY_KEY } );
+                        LLKH.MultipleKeyUp( new List<Keys> { Keys.ControlKey, Keys.LWin, Keys.ShiftKey, Keys.Tab } );
+                        LLKH.MultipleKeyPress( new List<Keys> { Keys.LWin, Keys.Tab } );
+                        LLKH.MultipleKeyDown( new List<Keys> { Keys.ControlKey, Keys.LWin, Keys.ShiftKey } );
                         RiseTaskViewTimer.Restart();
                     }
 
@@ -214,13 +209,9 @@ namespace VirtualSpace
                 {
                     uint dir;
                     if ( LLKH.IsKeyHold( Keys.ShiftKey ) )
-                    {
                         dir = (uint)( info.mouseData >> 16 > 0 ? Keys.Up : Keys.Down );
-                    }
                     else
-                    {
                         dir = (uint)( info.mouseData >> 16 > 0 ? Keys.Left : Keys.Right );
-                    }
 
                     User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.SwitchDesktop, dir );
                     return LowLevelHooks.Handled;

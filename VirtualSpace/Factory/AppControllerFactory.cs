@@ -10,6 +10,7 @@
 
 using System.Collections.ObjectModel;
 using System.Windows;
+using ControlPanel;
 
 namespace VirtualSpace.Factory
 {
@@ -20,9 +21,9 @@ namespace VirtualSpace.Factory
             switch ( name )
             {
                 case "WinForm":
-                    // return new AppController();
+                // return new AppController();
                 case "WPF":
-                    mergedDictionaries?.Add( ControlPanel.ExportResourceDictionary.Instance );
+                    mergedDictionaries?.Add( ExportResourceDictionary.Instance );
                     var mw = new ControlPanel.MainWindow();
                     mw.ForceLoad();
                     return mw;

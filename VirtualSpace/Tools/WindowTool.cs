@@ -28,10 +28,10 @@ namespace VirtualSpace.Tools
             wp.Length = Marshal.SizeOf( wp );
             if ( !User32.GetWindowPlacement( hWnd, ref wp ) ) return;
 
-            var rect = wp.NormalPosition;
-            var targetX = destScreen.WorkingArea.X + rect.Left - srcScreen.WorkingArea.Left;
-            var targetY = destScreen.WorkingArea.Y + rect.Top - srcScreen.WorkingArea.Top;
-            var targetWidth = rect.Right - rect.Left;
+            var rect         = wp.NormalPosition;
+            var targetX      = destScreen.WorkingArea.X + rect.Left - srcScreen.WorkingArea.Left;
+            var targetY      = destScreen.WorkingArea.Y + rect.Top - srcScreen.WorkingArea.Top;
+            var targetWidth  = rect.Right - rect.Left;
             var targetHeight = rect.Bottom - rect.Top;
 
             switch ( wp.ShowCmd )
@@ -68,16 +68,14 @@ namespace VirtualSpace.Tools
         public static void MoveWindowToScreen( IntPtr hWnd, string deviceName )
         {
             var allScreens = Screen.AllScreens;
-            var index = -1;
+            var index      = -1;
 
             for ( var i = 0; i < allScreens.Length; i++ )
-            {
                 if ( deviceName == allScreens[i].DeviceName )
                 {
                     index = i;
                     break;
                 }
-            }
 
             if ( index < 0 ) return;
 

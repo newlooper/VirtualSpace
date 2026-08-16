@@ -27,7 +27,7 @@ namespace VirtualDesktop
 
         static DesktopManager()
         {
-            if ( Environment.OSVersion.Version is {Major: 10, Build: >= 22000} )
+            if ( Environment.OSVersion.Version is { Major: 10, Build: >= 22000 } )
                 Init();
         }
 
@@ -56,7 +56,7 @@ namespace VirtualDesktop
                 Guids.CLSID_VirtualDesktopNotificationService,
                 typeof( IVirtualDesktopNotificationService ).GUID );
 
-            _disposableNotification = new DisposableNotification();
+            _disposableNotification          = new DisposableNotification();
             _disposableNotification.DwCookie = VirtualDesktopNotificationService.Register( new EventProxy() );
         }
 
@@ -230,7 +230,7 @@ namespace VirtualDesktop
         public VirtualDesktopRenamedEventArgs( IVirtualDesktop desktop, string name )
         {
             Desktop = desktop;
-            Name = name;
+            Name    = name;
         }
 
         public IVirtualDesktop Desktop { get; }
@@ -242,7 +242,7 @@ namespace VirtualDesktop
         public VirtualDesktopWallpaperChangedEventArgs( IVirtualDesktop desktop, string path )
         {
             Desktop = desktop;
-            Path = path;
+            Path    = path;
         }
 
         public IVirtualDesktop Desktop { get; }
@@ -266,7 +266,7 @@ namespace VirtualDesktop
     {
         public VirtualDesktopMovedEventArgs( IVirtualDesktop desktop, int oldIndex, int newIndex )
         {
-            Desktop = desktop;
+            Desktop  = desktop;
             OldIndex = oldIndex;
             NewIndex = newIndex;
         }
@@ -281,7 +281,7 @@ namespace VirtualDesktop
         public VirtualDesktopDestroyEventArgs( IVirtualDesktop destroyed, IVirtualDesktop fallback )
         {
             Destroyed = destroyed;
-            Fallback = fallback;
+            Fallback  = fallback;
         }
 
         public IVirtualDesktop Destroyed { get; }

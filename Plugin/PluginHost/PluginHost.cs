@@ -25,13 +25,13 @@ namespace VirtualSpace.Plugin
 
         public static readonly Dictionary<string, uint> CareAboutMessages = new()
         {
-            {PluginConst.DirectInputNotificationMsgString, 0},
-            {PluginConst.HotPlugDetected, 0}
+            { PluginConst.DirectInputNotificationMsgString, 0 },
+            { PluginConst.HotPlugDetected, 0 }
         };
 
         /// <summary>
-        /// 此处注册的是插件的静态信息；
-        /// 插件的运行时信息，则在插件启动后通过 IPC 自行报道给宿主
+        ///     此处注册的是插件的静态信息；
+        ///     插件的运行时信息，则在插件启动后通过 IPC 自行报道给宿主
         /// </summary>
         /// <param name="pluginsPath"></param>
         public static void RegisterPlugins( string pluginsPath )
@@ -74,17 +74,14 @@ namespace VirtualSpace.Plugin
                 Plugins.Add( pluginInfo );
                 Logger.Info( $"[PLUGIN] {pluginInfo.Display} Registered." );
 
-                if ( pluginInfo is {AutoStart: true, AutoStartTiming: AutoStartTiming.AppStart} )
+                if ( pluginInfo is { AutoStart: true, AutoStartTiming: AutoStartTiming.AppStart } )
                     StartPlugin( pluginInfo );
             }
         }
 
         public static void AutoStartAfterMainWindowLoaded()
         {
-            foreach ( var pi in Plugins.Where( pi => pi is {AutoStart: true, AutoStartTiming: AutoStartTiming.MainWindowLoaded} ) )
-            {
-                StartPlugin( pi );
-            }
+            foreach ( var pi in Plugins.Where( pi => pi is { AutoStart: true, AutoStartTiming: AutoStartTiming.MainWindowLoaded } ) ) StartPlugin( pi );
         }
 
         private static void StartExe( string exe )

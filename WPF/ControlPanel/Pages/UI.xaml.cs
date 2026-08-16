@@ -31,9 +31,9 @@ public partial class UI
     {
         var mdc = (MenuContainerViewModel)MenuContainer.DataContext;
         mdc.HeaderKey = headerKey;
-        mdc.IconKind = iconKind;
-        _vm = new UIViewModel();
-        DataContext = _vm;
+        mdc.IconKind  = iconKind;
+        _vm           = new UIViewModel();
+        DataContext   = _vm;
         ButtonsContainer.AddHandler( Button.ClickEvent, new RoutedEventHandler( OnVdArrangementButtonClicked ) );
     }
 

@@ -23,18 +23,18 @@ namespace VirtualSpace.VirtualDesktop
             InitializeComponent();
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
         public IntPtr Thumb { get; set; }
 
         public static DragWindow CreateAndShow( int width, int height )
         {
             var dw = new DragWindow();
-            dw.TopLevel = true;
-            dw.TopMost = true;
+            dw.TopLevel      = true;
+            dw.TopMost       = true;
             dw.ShowInTaskbar = false;
-            dw.Width = width;
-            dw.Height = height;
-            dw.Text = Const.Window.VD_DRAG_TITLE;
+            dw.Width         = width;
+            dw.Height        = height;
+            dw.Text          = Const.Window.VD_DRAG_TITLE;
             dw.Show();
             return dw;
         }

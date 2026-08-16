@@ -25,7 +25,7 @@ public partial class MenuContainer : UserControl
     public MenuContainer()
     {
         InitializeComponent();
-        DataContext = new MenuContainerViewModel();
+        DataContext               = new MenuContainerViewModel();
         ThemeSettings.DataContext = SettingsViewModel.GetInstance();
         CheckAdmin();
     }
@@ -38,32 +38,24 @@ public partial class MenuContainer : UserControl
     private void RestartApp_OnClick( object sender, RoutedEventArgs e )
     {
         if ( Application.Current is App )
-        {
             MainWindow.RestartApp();
-        }
         else
-        {
             User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RestartApp, 0 );
-        }
     }
 
     private void Shutdown_OnClick( object sender, RoutedEventArgs e )
     {
         if ( Application.Current is App )
-        {
             MainWindow.TryQuit();
-        }
         else
-        {
             User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_CLOSE, 0, 0 );
-        }
     }
 
     private void CheckAdmin()
     {
         if ( SysInfo.IsAdministrator )
         {
-            SIID_SHIELD.Visibility = Visibility.Collapsed;
+            SIID_SHIELD.Visibility        = Visibility.Collapsed;
             menuItemRunAsAdmin.Visibility = Visibility.Collapsed;
             return;
         }
@@ -79,7 +71,7 @@ public partial class MenuContainer : UserControl
         var writeableBitmap = new WriteableBitmap( iconSource );
         SIID_SHIELD.Source = writeableBitmap;
 
-        SIID_SHIELD.Visibility = Visibility.Visible;
+        SIID_SHIELD.Visibility        = Visibility.Visible;
         menuItemRunAsAdmin.Visibility = Visibility.Visible;
     }
 

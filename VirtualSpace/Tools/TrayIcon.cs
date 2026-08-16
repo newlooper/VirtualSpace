@@ -34,9 +34,9 @@ namespace VirtualSpace.Tools
             InitTrayIcon();
 
             TraySettings.Click += ( sender, args ) => { MainWindow.AcForm.BringToTop(); };
-            TrayQuit.Click += ( sender,     args ) => { MainWindow.Quit(); };
+            TrayQuit.Click     += ( sender, args ) => { MainWindow.Quit(); };
 
-            TiMenu.Items.AddRange( new ToolStripItem[] {TraySettings, ToolStripSeparator, TrayQuit} );
+            TiMenu.Items.AddRange( TraySettings, ToolStripSeparator, TrayQuit );
             Ti.ContextMenuStrip = TiMenu;
         }
 
@@ -58,11 +58,11 @@ namespace VirtualSpace.Tools
             switch ( ConfigManager.Configs.Cluster.StyleOfVDIndexOnTrayIcon )
             {
                 case 1:
-                    backColor = "TrayIconBack_White";
+                    backColor   = "TrayIconBack_White";
                     numberColor = "Black";
                     break;
                 case 2:
-                    backColor = "TrayIconBack_Black";
+                    backColor   = "TrayIconBack_Black";
                     numberColor = "White";
                     break;
             }
@@ -97,7 +97,7 @@ namespace VirtualSpace.Tools
             var       rectF  = new RectangleF( 0, 0, bitmap.Width, bitmap.Height );
             var textFormat = new StringFormat
             {
-                Alignment = StringAlignment.Center,
+                Alignment     = StringAlignment.Center,
                 LineAlignment = StringAlignment.Center
             };
 
@@ -107,15 +107,15 @@ namespace VirtualSpace.Tools
             switch ( index.Length )
             {
                 case 1:
-                    fontSize = 200;
+                    fontSize   = 200;
                     borderSize = 15;
                     break;
                 case 2:
-                    fontSize = 160;
+                    fontSize   = 160;
                     borderSize = 30;
                     break;
                 case 3:
-                    fontSize = 110;
+                    fontSize   = 110;
                     borderSize = 30;
                     break;
             } // fontSize and borderSize based on TrayIconBack_Default's size is 256x256
@@ -129,9 +129,9 @@ namespace VirtualSpace.Tools
             gp.AddString( index, textFont.FontFamily, (int)textFont.Style, textFont.Size, rectF, textFormat );
 
             using var g = Graphics.FromImage( bitmap );
-            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.SmoothingMode     = SmoothingMode.AntiAlias;
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            g.PixelOffsetMode   = PixelOffsetMode.HighQuality;
             g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
 
             g.DrawPath( borderPen, gp );
@@ -144,10 +144,10 @@ namespace VirtualSpace.Tools
 
         public static void SetLang()
         {
-            CultureInfo.CurrentCulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
+            CultureInfo.CurrentCulture   = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
             CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
-            TraySettings.Text = Agent.Langs.GetString( "Tray.Menu.Settings" );
-            TrayQuit.Text = Agent.Langs.GetString( "Tray.Menu.Quit" );
+            TraySettings.Text            = Agent.Langs.GetString( "Tray.Menu.Settings" );
+            TrayQuit.Text                = Agent.Langs.GetString( "Tray.Menu.Quit" );
         }
 
         public static void Show()

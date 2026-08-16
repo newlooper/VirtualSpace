@@ -8,11 +8,11 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    
+
     <StackPanel>
         <DockPanel VerticalAlignment="Center">
-            <wpf:PackIcon DockPanel.Dock="Left" Kind="{Binding Icon}" Width="30" Height="30" Margin="20,30,10,30"></wpf:PackIcon>
-            <TextBlock Text="{Binding Notes}" FontSize="20" Margin="10,0" VerticalAlignment="Center"></TextBlock>
+            <wpf:PackIcon DockPanel.Dock="Left" Kind="{Binding Icon}" Width="30" Height="30" Margin="20,30,10,30" />
+            <TextBlock Text="{Binding Notes}" FontSize="20" Margin="10,0" VerticalAlignment="Center" />
         </DockPanel>
 
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">

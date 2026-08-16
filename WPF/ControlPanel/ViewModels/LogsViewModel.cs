@@ -20,9 +20,11 @@ public partial class LogsViewModel : ViewModelBase
 {
     public LogsViewModel()
     {
-        IsPrintLogs = Manager.Configs.LogConfig.ShowLogsInGui;
+        IsPrintLogs    = Manager.Configs.LogConfig.ShowLogsInGui;
         _isInitialized = true;
     }
+
+    public bool IsPrintLogs { get; set; }
 
     public void OnPropertyChanged( string propertyName, object before, object after )
     {
@@ -30,13 +32,11 @@ public partial class LogsViewModel : ViewModelBase
         if ( propertyChanged == null ) return;
         if ( _isInitialized )
         {
-            Logger.ShowLogsInGui = (bool)after;
+            Logger.ShowLogsInGui                    = (bool)after;
             Manager.Configs.LogConfig.ShowLogsInGui = Logger.ShowLogsInGui;
             Manager.Save( reason: Manager.Configs.LogConfig.ShowLogsInGui );
         }
 
         propertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
     }
-
-    public bool IsPrintLogs { get; set; }
 }

@@ -7,7 +7,6 @@
         Height="100" Width="800" Topmost="True" ShowInTaskbar="False" WindowStyle="None" ResizeMode="NoResize">
     <Grid Margin="10,5,10,10">
         <TextBox x:Name="tbFilter" ContextMenu="{x:Null}" BorderThickness="0"
-                 FontSize="50" Background="Black" Foreground="Beige" Padding="10,0">
-        </TextBox>
+                 FontSize="50" Background="Black" Foreground="Beige" Padding="10,0" />
     </Grid>
 </Window>

@@ -20,28 +20,28 @@ public class NavBarItem : TabItem
 {
     public static readonly Dictionary<string, (PackIconKind kind, string locKey)> NavBarItemsInfo = new()
     {
-        {"General", ( PackIconKind.MonitorDashboard, "NavBar.General" )},
-        {"UI", ( PackIconKind.TableAccount, "NavBar.UI" )},
-        {"Control", ( PackIconKind.CursorPointer, "NavBar.Control" )},
-        {"Rules", ( PackIconKind.BookOpenPageVariant, "NavBar.Rules" )},
-        {"Plugins", ( PackIconKind.ToyBrickMarkerOutline, "NavBar.Plugins" )},
-        {"Logs", ( PackIconKind.BookSearchOutline, "NavBar.Logs" )},
-        {"About", ( PackIconKind.HelpBox, "NavBar.About" )},
+        { "General", ( PackIconKind.MonitorDashboard, "NavBar.General" ) },
+        { "UI", ( PackIconKind.TableAccount, "NavBar.UI" ) },
+        { "Control", ( PackIconKind.CursorPointer, "NavBar.Control" ) },
+        { "Rules", ( PackIconKind.BookOpenPageVariant, "NavBar.Rules" ) },
+        { "Plugins", ( PackIconKind.ToyBrickMarkerOutline, "NavBar.Plugins" ) },
+        { "Logs", ( PackIconKind.BookSearchOutline, "NavBar.Logs" ) },
+        { "About", ( PackIconKind.HelpBox, "NavBar.About" ) }
     };
 
     private NavBarItem( string tag, PackIconKind kind, string locKey )
     {
         var stackPanel = new StackPanel
         {
-            Width = double.NaN,
+            Width  = double.NaN,
             Height = double.NaN
         };
         var packIcon = new PackIcon
         {
-            Width = 24,
-            Height = 24,
+            Width               = 24,
+            Height              = 24,
             HorizontalAlignment = HorizontalAlignment.Center,
-            Kind = kind
+            Kind                = kind
         };
         var tb = new TextBlock
         {
@@ -53,7 +53,7 @@ public class NavBarItem : TabItem
         stackPanel.Children.Add( packIcon );
         stackPanel.Children.Add( tb );
         Header = stackPanel;
-        Tag = tag;
+        Tag    = tag;
     }
 
     public static void InitNavBar( TabControl tc )

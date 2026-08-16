@@ -30,7 +30,7 @@ namespace VirtualSpace.VirtualDesktop
             while ( targetIndex > maxIndex ) // 暴力应对目标桌面不存在的情况
             {
                 targetRowCol = TargetRowColByDirection( rowsCols, targetRowCol, dir, currentRowCol );
-                targetIndex = IndexFromRowCol( rowsCols, targetRowCol, da );
+                targetIndex  = IndexFromRowCol( rowsCols, targetRowCol, da );
             }
 
             return IndexFromRowCol( rowsCols, targetRowCol, 0 );
@@ -54,10 +54,7 @@ namespace VirtualSpace.VirtualDesktop
                         {
                             if ( nav.CirculationH )
                             {
-                                if ( nav.CirculationHType == Const.VirtualDesktop.NavHTypeNextRow )
-                                {
-                                    targetRow = r == 0 ? n - 1 : r - 1;
-                                }
+                                if ( nav.CirculationHType == Const.VirtualDesktop.NavHTypeNextRow ) targetRow = r == 0 ? n - 1 : r - 1;
 
                                 targetCol = n - 1;
                             }
@@ -77,10 +74,7 @@ namespace VirtualSpace.VirtualDesktop
                         {
                             if ( nav.CirculationH )
                             {
-                                if ( nav.CirculationHType == Const.VirtualDesktop.NavHTypeNextRow )
-                                {
-                                    targetRow = r == n - 1 ? 0 : r + 1;
-                                }
+                                if ( nav.CirculationHType == Const.VirtualDesktop.NavHTypeNextRow ) targetRow = r == n - 1 ? 0 : r + 1;
 
                                 targetCol = 0;
                             }
@@ -99,13 +93,9 @@ namespace VirtualSpace.VirtualDesktop
                         if ( r == 0 )
                         {
                             if ( nav.CirculationV )
-                            {
                                 targetRow = n - 1;
-                            }
                             else
-                            {
                                 return validRC;
-                            }
                         }
                         else
                         {
@@ -117,13 +107,9 @@ namespace VirtualSpace.VirtualDesktop
                         if ( r == n - 1 )
                         {
                             if ( nav.CirculationV )
-                            {
                                 targetRow = 0;
-                            }
                             else
-                            {
                                 return validRC;
-                            }
                         }
                         else
                         {

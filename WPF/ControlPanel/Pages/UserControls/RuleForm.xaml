@@ -28,13 +28,13 @@
     <Grid x:Name="RuleDefBox">
         <Grid.Resources>
             <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
-                <Setter Property="Margin" Value="0,0,10,0"></Setter>
-                <Setter Property="Padding" Value="0"></Setter>
+                <Setter Property="Margin" Value="0,0,10,0" />
+                <Setter Property="Padding" Value="0" />
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition MinHeight="60" Height="Auto"></RowDefinition>
+            <RowDefinition />
+            <RowDefinition MinHeight="60" Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid>
@@ -96,8 +96,7 @@
                                  materialDesign:HintAssist.Hint="{lex:Loc Page.Rules.Rule.Tag}"
                                  materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                 Text="{Binding Tag, UpdateSourceTrigger=PropertyChanged}">
-                        </TextBox>
+                                 Text="{Binding Tag, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBox x:Name="tbName"
                                  MinWidth="400" FontSize="14"
                                  materialDesign:HintAssist.FloatingScale="0.80"
@@ -368,11 +367,11 @@
 
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition MinWidth="100" Width="Auto" />
@@ -382,47 +381,39 @@
 
                     <CheckBox x:Name="chb_MoveToDesktop" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5"
                               Content="{lex:Loc Page.Rules.Rule.MoveToDesktop}" VerticalAlignment="Bottom"
-                              IsChecked="{Binding Action.MoveToDesktop, Converter={StaticResource CheckBoxStateByIndexConverter}, Mode=OneWay}">
-                    </CheckBox>
+                              IsChecked="{Binding Action.MoveToDesktop, Converter={StaticResource CheckBoxStateByIndexConverter}, Mode=OneWay}" />
                     <ComboBox x:Name="cbb_MoveToDesktop" Grid.Row="0" Grid.Column="1"
                               VerticalAlignment="Bottom" Margin="20,0"
                               IsEnabled="{Binding IsChecked, ElementName=chb_MoveToDesktop}"
                               ItemsSource="{Binding Path=(models:RulesViewModel.Desktops)}"
                               DisplayMemberPath="Text" SelectedValuePath="Value"
-                              SelectedValue="{Binding Action.MoveToDesktop, Mode=OneWay, Converter={StaticResource RuleFormDefaultValueConverter}}">
-                    </ComboBox>
+                              SelectedValue="{Binding Action.MoveToDesktop, Mode=OneWay, Converter={StaticResource RuleFormDefaultValueConverter}}" />
                     <CheckBox x:Name="chb_FollowWindow" Grid.Row="0" Grid.Column="2" Margin="0,0,10,5"
                               IsEnabled="{Binding IsChecked, ElementName=chb_MoveToDesktop}"
                               Content="{lex:Loc Page.Rules.Rule.FollowWindow}" VerticalAlignment="Bottom"
-                              IsChecked="{Binding Action.FollowWindow, Mode=OneWay}">
-                    </CheckBox>
+                              IsChecked="{Binding Action.FollowWindow, Mode=OneWay}" />
 
                     <CheckBox x:Name="chb_PinWindow" Grid.Row="1" Grid.Column="0" Margin="0,5,0,5"
                               Content="{lex:Loc Page.Rules.Rule.PinWindow}" VerticalAlignment="Bottom"
-                              IsChecked="{Binding Action.PinWindow, Mode=OneWay}">
-                    </CheckBox>
+                              IsChecked="{Binding Action.PinWindow, Mode=OneWay}" />
 
                     <CheckBox x:Name="chb_PinApp" Grid.Row="2" Grid.Column="0" Margin="0,5,0,5"
                               Content="{lex:Loc Page.Rules.Rule.PinApp}" VerticalAlignment="Bottom"
-                              IsChecked="{Binding Action.PinApp, Mode=OneWay}">
-                    </CheckBox>
+                              IsChecked="{Binding Action.PinApp, Mode=OneWay}" />
 
                     <CheckBox x:Name="chb_HideFromView" Grid.Row="3" Grid.Column="0" Margin="0,5,0,5"
                               Content="{lex:Loc Page.Rules.Rule.HideFromView}" VerticalAlignment="Bottom"
-                              IsChecked="{Binding Action.HideFromView, Mode=OneWay}">
-                    </CheckBox>
+                              IsChecked="{Binding Action.HideFromView, Mode=OneWay}" />
 
                     <CheckBox x:Name="chb_MoveToScreen" Grid.Row="4" Grid.Column="0" Margin="0,5,0,0"
                               Content="{lex:Loc Page.Rules.Rule.MoveToScreen}" VerticalAlignment="Bottom"
-                              IsChecked="{Binding Action.MoveToScreen, Converter={StaticResource CheckBoxStateByIndexConverter}, Mode=OneWay}">
-                    </CheckBox>
+                              IsChecked="{Binding Action.MoveToScreen, Converter={StaticResource CheckBoxStateByIndexConverter}, Mode=OneWay}" />
                     <ComboBox x:Name="cbb_MoveToScreen" Grid.Row="4" Grid.Column="1"
                               VerticalAlignment="Bottom" Margin="20,0"
                               IsEnabled="{Binding IsChecked, ElementName=chb_MoveToScreen}"
                               ItemsSource="{Binding Path=(models:RulesViewModel.Screens)}"
                               DisplayMemberPath="Text" SelectedValuePath="Value"
-                              SelectedValue="{Binding Action.MoveToScreen, Mode=OneWay, Converter={StaticResource RuleFormDefaultValueConverter}}">
-                    </ComboBox>
+                              SelectedValue="{Binding Action.MoveToScreen, Mode=OneWay, Converter={StaticResource RuleFormDefaultValueConverter}}" />
                 </Grid>
             </Grid><!-- GridWindowActions -->
 

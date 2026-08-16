@@ -7,30 +7,30 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Helpers\Helpers.csproj" />
-		<ProjectReference Include="..\VirtualDesktop\VirtualDesktop10\VirtualDesktop10.csproj">
-			<Aliases>VirtualDesktop10</Aliases>
-			<Private>false</Private>
-		</ProjectReference>
-		<ProjectReference Include="..\VirtualDesktop\VirtualDesktop11\VirtualDesktop11.csproj">
-			<Aliases>VirtualDesktop11_22H2</Aliases>
-			<Private>false</Private>
-		</ProjectReference>
-		<ProjectReference Include="..\VirtualDesktop\VirtualDesktop11_21H2\VirtualDesktop11_21H2.csproj">
-			<Aliases>VirtualDesktop11_21H2</Aliases>
-			<Private>false</Private>
-		</ProjectReference>
-		<ProjectReference Include="..\VirtualDesktop\VirtualDesktop11_23H2\VirtualDesktop11_23H2.csproj">
-			<Aliases>VirtualDesktop11_23H2</Aliases>
-			<Private>false</Private>
-		</ProjectReference>
-		<ProjectReference Include="..\VirtualDesktop\VirtualDesktop11_23H2_3085\VirtualDesktop11_23H2_3085.csproj">
-			<Aliases>VirtualDesktop11_23H2_3085</Aliases>
-			<Private>false</Private>
-		</ProjectReference>
-		<ProjectReference Include="..\VirtualDesktop\VirtualDesktop11_24H2\VirtualDesktop11_24H2.csproj">
-			<Aliases>VirtualDesktop11</Aliases>
-			<Private>false</Private>
-		</ProjectReference>
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop10\VirtualDesktop10.csproj">
+            <Aliases>VirtualDesktop10</Aliases>
+            <Private>false</Private>
+        </ProjectReference>
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop11\VirtualDesktop11.csproj">
+            <Aliases>VirtualDesktop11_22H2</Aliases>
+            <Private>false</Private>
+        </ProjectReference>
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop11_21H2\VirtualDesktop11_21H2.csproj">
+            <Aliases>VirtualDesktop11_21H2</Aliases>
+            <Private>false</Private>
+        </ProjectReference>
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop11_23H2\VirtualDesktop11_23H2.csproj">
+            <Aliases>VirtualDesktop11_23H2</Aliases>
+            <Private>false</Private>
+        </ProjectReference>
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop11_23H2_3085\VirtualDesktop11_23H2_3085.csproj">
+            <Aliases>VirtualDesktop11_23H2_3085</Aliases>
+            <Private>false</Private>
+        </ProjectReference>
+        <ProjectReference Include="..\VirtualDesktop\VirtualDesktop11_24H2\VirtualDesktop11_24H2.csproj">
+            <Aliases>VirtualDesktop11</Aliases>
+            <Private>false</Private>
+        </ProjectReference>
     </ItemGroup>
 
 </Project>

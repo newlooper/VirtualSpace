@@ -35,7 +35,7 @@ public partial class RuleForm : UserControl
 
     private void Cbb_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
     {
-        if ( sender is not ComboBox {IsLoaded: true} cbb || cbb.SelectedValue is null ) return;
+        if ( sender is not ComboBox { IsLoaded: true } cbb || cbb.SelectedValue is null ) return;
 
         var field = cbb.Name.Split( "_" )[1]; // 依赖控件名，若修改控件名，此处也要修改
 
@@ -79,13 +79,10 @@ public partial class RuleForm : UserControl
         var exp = new ExpressionTemplate
         {
             condition = Keywords.And,
-            rules = new List<ExpressionTemplate>(),
+            rules     = new List<ExpressionTemplate>()
         };
 
-        if ( r?.Expression != null )
-        {
-            exp.id = Conditions.ParseExpressionTemplate( r.Expression ).id;
-        }
+        if ( r?.Expression != null ) exp.id = Conditions.ParseExpressionTemplate( r.Expression ).id;
 
         try
         {
@@ -111,25 +108,19 @@ public partial class RuleForm : UserControl
 
         r!.Expression = JsonDocument.Parse( JsonSerializer.Serialize( exp, RulesViewModel.WriteOptions ) );
 
-        var action = r.Action!;
-        if ( chb_MoveToDesktop.IsChecked == true )
-        {
-            action.MoveToDesktop = int.Parse( cbb_MoveToDesktop.SelectedValue.ToString()! );
-        }
+        var action                                                      = r.Action!;
+        if ( chb_MoveToDesktop.IsChecked == true ) action.MoveToDesktop = int.Parse( cbb_MoveToDesktop.SelectedValue.ToString()! );
 
         action.FollowWindow = (bool)chb_FollowWindow.IsChecked!;
-        action.PinWindow = (bool)chb_PinWindow.IsChecked!;
-        action.PinApp = (bool)chb_PinApp.IsChecked!;
+        action.PinWindow    = (bool)chb_PinWindow.IsChecked!;
+        action.PinApp       = (bool)chb_PinApp.IsChecked!;
         action.HideFromView = (bool)chb_HideFromView.IsChecked!;
 
-        if ( chb_MoveToScreen.IsChecked == true )
-        {
-            action.MoveToScreen = int.Parse( cbb_MoveToScreen.SelectedValue.ToString()! );
-        }
+        if ( chb_MoveToScreen.IsChecked == true ) action.MoveToScreen = int.Parse( cbb_MoveToScreen.SelectedValue.ToString()! );
 
         if ( r.Id == Guid.Empty )
         {
-            r.Id = Guid.NewGuid();
+            r.Id      = Guid.NewGuid();
             r.Created = DateTime.Now;
             r.Updated = r.Created;
             RuleListItemsSource.Add( r );
@@ -150,28 +141,25 @@ public partial class RuleForm : UserControl
         if ( cb.IsChecked != true ) return;
 
         Value V;
-        var opt = cbb.SelectedValue.ToString();
+        var   opt = cbb.SelectedValue.ToString();
         if ( tb is null )
         {
             opt = Keywords.Eq[0];
-            V = new Value {V = cbb.SelectedValue.ToString()};
+            V   = new Value { V = cbb.SelectedValue.ToString() };
         }
         else
         {
-            if ( opt == Keywords.RegexIsMatch[0] && !StringHelper.IsValidRegex( tb.Text ) )
-            {
-                throw new Exception( "Rule.InvalidRegex" );
-            }
+            if ( opt == Keywords.RegexIsMatch[0] && !StringHelper.IsValidRegex( tb.Text ) ) throw new Exception( "Rule.InvalidRegex" );
 
-            V = new Value {V = tb.Text};
+            V = new Value { V = tb.Text };
         }
 
         var rule = new ExpressionTemplate
         {
-            type = Keywords.String,
-            field = cb.Name.Split( "_" )[1],
+            type      = Keywords.String,
+            field     = cb.Name.Split( "_" )[1],
             @operator = opt,
-            value = V
+            value     = V
         };
 
         exp.rules?.Add( rule );

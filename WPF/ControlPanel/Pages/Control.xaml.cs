@@ -31,11 +31,11 @@ public partial class Control
     {
         var mdc = (MenuContainerViewModel)MenuContainer.DataContext;
         mdc.HeaderKey = headerKey;
-        mdc.IconKind = iconKind;
+        mdc.IconKind  = iconKind;
 
-        KeyBindingBox.DataContext = new KeyBindingModel();
-        DesktopMouseActionBox.DataContext = new MouseActionModel();
-        WindowMouseActionBox.DataContext = new MouseActionModel();
+        KeyBindingBox.DataContext                      = new KeyBindingModel();
+        DesktopMouseActionBox.DataContext              = new MouseActionModel();
+        WindowMouseActionBox.DataContext               = new MouseActionModel();
         UseWheelSwitchDesktopWhenOnTaskbar.DataContext = WindowMouseActionBox.DataContext;
 
         LoadKeyboardTreeView();

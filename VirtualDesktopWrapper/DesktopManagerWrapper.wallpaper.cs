@@ -11,42 +11,41 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using Microsoft.Win32;
 
-namespace VirtualSpace.VirtualDesktop.Api
+namespace VirtualSpace.VirtualDesktop.Api;
+
+public static partial class DesktopManagerWrapper
 {
-    public static partial class DesktopManagerWrapper
+    public delegate void WallpaperChanged();
+
+    private const  string  WALLPAPER_REGISTRY_PREFIX = @"HKEY_CURRENT_USER\Control Panel\Desktop\";
+    private const  string  COLOR_REGISTRY_PREFIX     = @"HKEY_CURRENT_USER\Control Panel\Colors\";
+    private static string? _lastPath;
+    private static string? _lastColor;
+
+    private static void WatchWallpaperEvents( WallpaperChanged wc )
     {
-        public delegate void WallpaperChanged();
-
-        private const  string  WALLPAPER_REGISTRY_PREFIX = @"HKEY_CURRENT_USER\Control Panel\Desktop\";
-        private const  string  COLOR_REGISTRY_PREFIX     = @"HKEY_CURRENT_USER\Control Panel\Colors\";
-        private static string? _lastPath;
-        private static string? _lastColor;
-
-        private static void WatchWallpaperEvents( WallpaperChanged wc )
+        Task.Factory.StartNew( () =>
         {
-            Task.Factory.StartNew( () =>
+            while ( true )
             {
-                while ( true )
+                var path  = Registry.GetValue( WALLPAPER_REGISTRY_PREFIX, "Wallpaper", "" )!.ToString();
+                var color = Registry.GetValue( COLOR_REGISTRY_PREFIX, "Background", "" )!.ToString();
+
+                if ( string.IsNullOrEmpty( _lastColor ) )
                 {
-                    var path  = Registry.GetValue( WALLPAPER_REGISTRY_PREFIX, "Wallpaper", "" )!.ToString();
-                    var color = Registry.GetValue( COLOR_REGISTRY_PREFIX, "Background", "" )!.ToString();
-
-                    if ( string.IsNullOrEmpty( _lastColor ) )
-                    {
-                        _lastPath = path;
-                        _lastColor = color;
-                    }
-
-                    if ( _lastPath != path || _lastColor != color )
-                    {
-                        _lastPath = path;
-                        _lastColor = color;
-                        wc();
-                    }
-
-                    Thread.Sleep( 1000 );
+                    _lastPath  = path;
+                    _lastColor = color;
                 }
-            }, TaskCreationOptions.LongRunning );
-        }
+
+                if ( _lastPath != path || _lastColor != color )
+                {
+                    _lastPath  = path;
+                    _lastColor = color;
+                    wc();
+                }
+
+                Thread.Sleep( 1000 );
+            }
+        }, TaskCreationOptions.LongRunning );
     }
 }

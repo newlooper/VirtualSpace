@@ -30,7 +30,7 @@ public partial class Control
         while ( element != null )
         {
             element = (UIElement)VisualTreeHelper.GetParent( element );
-            tvi = element as TreeViewItem;
+            tvi     = element as TreeViewItem;
             if ( tvi != null )
                 path.Push( tvi );
         }
@@ -48,17 +48,14 @@ public partial class Control
                 {
                     var topLevelNode = new TreeViewItem
                     {
-                        Header = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString()! ),
+                        Header     = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString()! ),
                         IsExpanded = true
                     };
 
                     if ( child.TryGetProperty( keys.Name, out var name ) )
                         topLevelNode.Name = name.GetString();
 
-                    if ( child.TryGetProperty( keys.Nodes, out var subNodes ) )
-                    {
-                        BuildTreeView( topLevelNode, subNodes, keys );
-                    }
+                    if ( child.TryGetProperty( keys.Nodes, out var subNodes ) ) BuildTreeView( topLevelNode, subNodes, keys );
 
                     treeView.Items.Add( topLevelNode );
                 }
@@ -69,22 +66,16 @@ public partial class Control
                 {
                     var subNode = new TreeViewItem
                     {
-                        Header = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString()! ),
+                        Header     = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString()! ),
                         IsExpanded = true
                     };
 
-                    if ( child.TryGetProperty( keys.IsHidden, out var isHidden ) && isHidden.GetBoolean() )
-                    {
-                        subNode.Visibility = Visibility.Collapsed;
-                    }
+                    if ( child.TryGetProperty( keys.IsHidden, out var isHidden ) && isHidden.GetBoolean() ) subNode.Visibility = Visibility.Collapsed;
 
                     if ( child.TryGetProperty( keys.Name, out var name ) )
                         subNode.Name = name.GetString();
 
-                    if ( child.TryGetProperty( keys.Nodes, out var subNodes ) )
-                    {
-                        BuildTreeView( subNode, subNodes, keys );
-                    }
+                    if ( child.TryGetProperty( keys.Nodes, out var subNodes ) ) BuildTreeView( subNode, subNodes, keys );
 
                     treeViewItem.Items.Add( subNode );
                 }

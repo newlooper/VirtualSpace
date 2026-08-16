@@ -34,38 +34,47 @@ public partial class MouseActionModel : ViewModelBase
         _isInitialized = true;
     }
 
+    public static List<object> DesktopActions { get; } = new()
+    {
+        new { Value = MouseAction.Action.DoNothing.ToString(), Text                     = "" },
+        new { Value = MouseAction.Action.ContextMenu.ToString(), Text                   = "" },
+        new { Value = MouseAction.Action.DesktopVisibleAndCloseView.ToString(), Text    = "" },
+        new { Value = MouseAction.Action.DesktopVisibleOnly.ToString(), Text            = "" },
+        new { Value = MouseAction.Action.DesktopShowForSelectedDesktop.ToString(), Text = "" }
+    };
+
+    public static List<object> WindowActions { get; } = new()
+    {
+        new { Value = MouseAction.Action.DoNothing.ToString(), Text                                     = "" },
+        new { Value = MouseAction.Action.ContextMenu.ToString(), Text                                   = "" },
+        new { Value = MouseAction.Action.WindowActiveDesktopVisibleAndCloseView.ToString(), Text        = "" },
+        new { Value = MouseAction.Action.WindowActiveDesktopVisibleOnly.ToString(), Text                = "" },
+        new { Value = MouseAction.Action.WindowClose.ToString(), Text                                   = "" },
+        new { Value = MouseAction.Action.WindowHideFromView.ToString(), Text                            = "" },
+        new { Value = MouseAction.Action.WindowShowForSelectedProcessOnly.ToString(), Text              = "" },
+        new { Value = MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop.ToString(), Text = "" }
+    };
+
+    public bool UseWheelSwitchDesktopWhenOnTaskbar { get; set; } = Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar;
+
+    public bool LWin  { get; set; }
+    public bool Ctrl  { get; set; }
+    public bool Alt   { get; set; }
+    public bool Shift { get; set; }
+
+    public List<object> MouseButtons { get; set; } = GetMouseButtons();
+
+    public string MouseButton { get; set; } = "Left";
+
     private static List<object> GetMouseButtons()
     {
         return new List<object>
         {
-            new {Value = "Left", Text = ""},
-            new {Value = "Middle", Text = ""},
-            new {Value = "Right", Text = ""}
+            new { Value = "Left", Text   = "" },
+            new { Value = "Middle", Text = "" },
+            new { Value = "Right", Text  = "" }
         };
     }
-
-    public static List<object> DesktopActions { get; } = new List<object>
-    {
-        new {Value = MouseAction.Action.DoNothing.ToString(), Text = ""},
-        new {Value = MouseAction.Action.ContextMenu.ToString(), Text = ""},
-        new {Value = MouseAction.Action.DesktopVisibleAndCloseView.ToString(), Text = ""},
-        new {Value = MouseAction.Action.DesktopVisibleOnly.ToString(), Text = ""},
-        new {Value = MouseAction.Action.DesktopShowForSelectedDesktop.ToString(), Text = ""}
-    };
-
-    public static List<object> WindowActions { get; } = new List<object>
-    {
-        new {Value = MouseAction.Action.DoNothing.ToString(), Text = ""},
-        new {Value = MouseAction.Action.ContextMenu.ToString(), Text = ""},
-        new {Value = MouseAction.Action.WindowActiveDesktopVisibleAndCloseView.ToString(), Text = ""},
-        new {Value = MouseAction.Action.WindowActiveDesktopVisibleOnly.ToString(), Text = ""},
-        new {Value = MouseAction.Action.WindowClose.ToString(), Text = ""},
-        new {Value = MouseAction.Action.WindowHideFromView.ToString(), Text = ""},
-        new {Value = MouseAction.Action.WindowShowForSelectedProcessOnly.ToString(), Text = ""},
-        new {Value = MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop.ToString(), Text = ""},
-    };
-
-    public bool UseWheelSwitchDesktopWhenOnTaskbar { get; set; } = Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar;
 
     public void OnPropertyChanged( string propertyName, object before, object after )
     {
@@ -82,18 +91,9 @@ public partial class MouseActionModel : ViewModelBase
         propertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
     }
 
-    public bool LWin     { get; set; }
-    public bool Ctrl     { get; set; }
-    public bool Alt      { get; set; }
-    public bool Shift    { get; set; }
-
-    public List<object> MouseButtons { get; set; } = GetMouseButtons();
-
-    public string MouseButton { get; set; } = "Left";
-
     public void Clear()
     {
-        LWin = Ctrl = Alt = Shift = false;
+        LWin        = Ctrl = Alt = Shift = false;
         MouseButton = "";
     }
 }
@@ -103,7 +103,7 @@ public partial class KeyBindingModel : ViewModelBase
 {
     public KeyBindingModel()
     {
-        BoxVisible = Visibility.Hidden;
+        BoxVisible     = Visibility.Hidden;
         _isInitialized = true;
     }
 
@@ -119,6 +119,6 @@ public partial class KeyBindingModel : ViewModelBase
     public void Clear()
     {
         LWin = Ctrl = Alt = Shift = false;
-        Key = Const.Hotkey.NONE;
+        Key  = Const.Hotkey.NONE;
     }
 }

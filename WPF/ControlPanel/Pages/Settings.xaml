@@ -81,16 +81,14 @@
                       Header="{lex:Loc Page.Settings.Storage}">
                 <StackPanel>
                     <DockPanel>
-                        <Button DockPanel.Dock="Right" Content="{lex:Loc Page.Settings.Storage.ChangeConfigPath}" Click="ChangeConfigPath_OnClick"></Button>
+                        <Button DockPanel.Dock="Right" Content="{lex:Loc Page.Settings.Storage.ChangeConfigPath}" Click="ChangeConfigPath_OnClick" />
                         <TextBox x:Name="tbConfigPath" IsReadOnly="True" Focusable="True"
                                  MinWidth="500" FontSize="20" Margin="0"
                                  materialDesign:HintAssist.FloatingScale="0.80"
                                  materialDesign:HintAssist.Hint="{lex:Loc Page.Settings.Storage.ConfigRootPath}"
                                  materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                 Text="{Binding ConfigRootPath}">
-
-                        </TextBox>
+                                 Text="{Binding ConfigRootPath}" />
                     </DockPanel>
 
                     <materialDesign:Chip Height="70" Margin="0,5,0,0" Content="{lex:Loc Note.Settings.Storage}" />
@@ -108,8 +106,7 @@
                                   Style="{StaticResource MaterialDesignFilledComboBox}"
                                   ItemsSource="{Binding ProfileList}"
                                   SelectedValuePath="Value" DisplayMemberPath="Value"
-                                  SelectedValue="{Binding CurrentProfile}">
-                        </ComboBox>
+                                  SelectedValue="{Binding CurrentProfile}" />
 
                         <materialDesign:PopupBox DockPanel.Dock="Right" Margin="10" MinWidth="100"
                                                  PlacementMode="BottomAndAlignRightEdges"

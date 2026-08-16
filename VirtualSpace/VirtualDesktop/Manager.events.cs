@@ -33,7 +33,7 @@ namespace VirtualSpace.VirtualDesktop
             {
                 if ( !IsBatchCreate ) UpdateMainView();
             };
-            DesktopManagerWrapper.DesktopDeletedEvent += vdn => { UpdateMainView( vdn: vdn ); };
+            DesktopManagerWrapper.DesktopDeletedEvent += vdn => { UpdateMainView( vdn ); };
             DesktopManagerWrapper.DesktopChangedEvent += vdn =>
             {
                 LastDesktopId = vdn.OldId;
@@ -45,12 +45,12 @@ namespace VirtualSpace.VirtualDesktop
                     CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
                     Logger.Notify( new NotifyObject
                     {
-                        Title = Agent.Langs.GetString( "Cluster.Notification.SVD.Current" ) + DesktopWrapper.DesktopNameFromGuid( vdn.NewId ),
-                        Message = Agent.Langs.GetString( "Cluster.Notification.SVD.Last" ) + DesktopWrapper.DesktopNameFromGuid( vdn.OldId ),
+                        Title      = Agent.Langs.GetString( "Cluster.Notification.SVD.Current" ) + DesktopWrapper.DesktopNameFromGuid( vdn.NewId ),
+                        Message    = Agent.Langs.GetString( "Cluster.Notification.SVD.Last" ) + DesktopWrapper.DesktopNameFromGuid( vdn.OldId ),
                         Background = new SolidColorBrush( Colors.DarkSlateGray ),
                         Foreground = new SolidColorBrush( Colors.White ),
-                        Type = NotificationType.Notification,
-                        ExpTime = TimeSpan.FromSeconds( 3 )
+                        Type       = NotificationType.Notification,
+                        ExpTime    = TimeSpan.FromSeconds( 3 )
                     } );
                 }
 
@@ -60,7 +60,7 @@ namespace VirtualSpace.VirtualDesktop
             DesktopManagerWrapper.RegisterVirtualDesktopEvents(
                 () =>
                 {
-                    Logger.Event( $"Wallpaper Changed" );
+                    Logger.Event( "Wallpaper Changed" );
                     Parallel.ForEach( GetAllVirtualDesktops(), ( vdw, _ ) => { vdw.UpdateWallpaper(); } );
                 },
                 ( guid, path ) =>
@@ -81,7 +81,7 @@ namespace VirtualSpace.VirtualDesktop
                     return;
                 }
 
-                forceFocusForegroundWindow ??= Manager.Configs.Cluster.ForceFocusForegroundWindow;
+                forceFocusForegroundWindow ??= ConfigManager.Configs.Cluster.ForceFocusForegroundWindow;
                 if ( (bool)forceFocusForegroundWindow )
                 {
                     var hTaskBar = User32.FindWindow( Const.TaskbarWndClass, "" );
@@ -106,7 +106,7 @@ namespace VirtualSpace.VirtualDesktop
                         if ( SysInfo.IsAdministrator )
                         {
                             Logger.Verbose( "Send [Alt+Esc]." );
-                            LowLevelKeyboardHook.MultipleKeyPress( new List<Keys> {Keys.Menu, Keys.Escape} );
+                            LowLevelKeyboardHook.MultipleKeyPress( new List<Keys> { Keys.Menu, Keys.Escape } );
                         }
                         else
                         {

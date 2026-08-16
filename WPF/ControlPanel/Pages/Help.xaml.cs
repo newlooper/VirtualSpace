@@ -20,7 +20,7 @@ namespace ControlPanel.Pages;
 
 public partial class Help : UserControl
 {
-    private static Help? _instance = null;
+    private static Help? _instance;
 
     private Help()
     {
@@ -37,7 +37,7 @@ public partial class Help : UserControl
 
         var psi = new ProcessStartInfo
         {
-            FileName = url,
+            FileName        = url,
             UseShellExecute = true
         };
         Process.Start( psi );

@@ -38,20 +38,20 @@ public partial class RuleEditorWindow
 
         _instance.RuleEditor.DataContext = new RuleTemplate
         {
-            Id = Guid.Empty,
+            Id      = Guid.Empty,
             Enabled = true,
-            Action = new Behavior()
+            Action  = new Behavior()
         };
 
         var sbTitle = new StringBuilder( Const.WindowTitleMaxLength );
-        _ = User32.GetWindowText( handle, sbTitle, sbTitle.Capacity );
+        _                                        = User32.GetWindowText( handle, sbTitle, sbTitle.Capacity );
         _instance.RuleEditor.chb_Title.IsChecked = true;
-        _instance.RuleEditor.tb_Title.Text = sbTitle.ToString();
+        _instance.RuleEditor.tb_Title.Text       = sbTitle.ToString();
 
         _ = User32.GetWindowThreadProcessId( handle, out var pId );
         var process = Process.GetProcessById( pId );
         _instance.RuleEditor.chb_ProcessName.IsChecked = true;
-        _instance.RuleEditor.tb_ProcessName.Text = process.ProcessName;
+        _instance.RuleEditor.tb_ProcessName.Text       = process.ProcessName;
 
         try
         {
@@ -60,7 +60,7 @@ public partial class RuleEditorWindow
         catch ( Exception ex )
         {
             _instance.RuleEditor.chb_ProcessPath.IsChecked = false;
-            _instance.RuleEditor.tb_ProcessPath.Text = ex.Message;
+            _instance.RuleEditor.tb_ProcessPath.Text       = ex.Message;
         }
 
         try
@@ -70,23 +70,21 @@ public partial class RuleEditorWindow
         catch ( Exception ex )
         {
             _instance.RuleEditor.chb_CommandLine.IsChecked = false;
-            _instance.RuleEditor.tb_CommandLine.Text = ex.Message;
+            _instance.RuleEditor.tb_CommandLine.Text       = ex.Message;
         }
 
         var sbCName = new StringBuilder( Const.WindowClassMaxLength );
-        _ = User32.GetClassName( handle, sbCName, sbCName.Capacity );
+        _                                     = User32.GetClassName( handle, sbCName, sbCName.Capacity );
         _instance.RuleEditor.tb_WndClass.Text = sbCName.ToString();
 
         var allScreens = Screen.AllScreens;
         var screen     = Screen.FromHandle( handle );
         for ( var i = 0; i < allScreens.Length; i++ )
-        {
             if ( screen.DeviceName == allScreens[i].DeviceName )
             {
                 _instance.RuleEditor.cbb_WinInScreen.SelectedValue = i;
                 break;
             }
-        }
 
         _instance.RuleEditor.RuleListItemsSource = RulesViewModel.Instance.Rules;
         _instance.RuleEditor.RuleDate.Visibility = Visibility.Hidden;
@@ -97,7 +95,6 @@ public partial class RuleEditorWindow
     private void ClickEventFromSubControl( object sender, RoutedEventArgs e )
     {
         if ( e.OriginalSource is Button btn )
-        {
             switch ( btn.Name )
             {
                 case "btnSave":
@@ -107,7 +104,6 @@ public partial class RuleEditorWindow
                     Close();
                     break;
             }
-        }
     }
 
     private void RuleEditorWindow_OnClosing( object? sender, CancelEventArgs e )

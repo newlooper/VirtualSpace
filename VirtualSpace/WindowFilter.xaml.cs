@@ -27,13 +27,24 @@ namespace VirtualSpace
 
         private static readonly Timer FilterTimer = new()
         {
-            Enabled = true,
+            Enabled  = true,
             Interval = Manager.Configs.Cluster.WindowFilterKeywordScanningInterval
         };
 
         private WindowFilter()
         {
             InitializeComponent();
+        }
+
+        public static string Keyword
+        {
+            get
+            {
+                if ( _instance == null ) return string.Empty;
+                if ( _instance.tbFilter.CheckAccess() ) return _instance.tbFilter.Text;
+
+                return _instance.Dispatcher.Invoke( () => _instance.tbFilter.Text );
+            }
         }
 
         public static WindowFilter GetInstance( IntPtr handle )
@@ -43,7 +54,7 @@ namespace VirtualSpace
                 _instance = new WindowFilter
                 {
                     Height = Const.Window.WINDOW_FILTER_BAR_HEIGHT,
-                    Title = Const.Window.VS_WINDOW_FILTER_TITLE
+                    Title  = Const.Window.VS_WINDOW_FILTER_TITLE
                 };
                 new WindowInteropHelper( _instance ).EnsureHandle();
             }
@@ -96,20 +107,6 @@ namespace VirtualSpace
             else
             {
                 Hide();
-            }
-        }
-
-        public static string Keyword
-        {
-            get
-            {
-                if ( _instance == null ) return string.Empty;
-                if ( _instance.tbFilter.CheckAccess() )
-                {
-                    return _instance.tbFilter.Text;
-                }
-
-                return _instance.Dispatcher.Invoke( () => _instance.tbFilter.Text );
             }
         }
     }

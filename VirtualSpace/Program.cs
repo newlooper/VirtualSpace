@@ -72,22 +72,17 @@ namespace VirtualSpace
                         case 22631:
                             Logger.Debug( "[Init]Load VirtualDesktop11 lib 23H2" );
                             if ( ver.Revision >= 3085 )
-                            {
                                 dllName = programName + resName + "VirtualDesktop11_23H2_3085" + dllExt;
-                            }
                             else
-                            {
                                 dllName = programName + resName + "VirtualDesktop11_23H2" + dllExt;
-                            }
 
                             break;
                         case 26100:
-                            Logger.Debug("[Init]Load VirtualDesktop11 lib 24H2");
-                            if (ver.Revision >= 2152) {
+                            Logger.Debug( "[Init]Load VirtualDesktop11 lib 24H2" );
+                            if ( ver.Revision >= 2152 )
                                 dllName = programName + resName + "VirtualDesktop11_24H2" + dllExt;
-                            } else {
+                            else
                                 dllName = programName + resName + "VirtualDesktop11_23H2" + dllExt;
-                            }
 
                             break;
                         default:

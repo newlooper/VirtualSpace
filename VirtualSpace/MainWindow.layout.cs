@@ -26,10 +26,10 @@ namespace VirtualSpace
     public partial class MainWindow
     {
         private static int              _desktopCount;
-        private static UserInterface    Ui       => Manager.CurrentProfile.UI;
-        private static int              RowsCols { get; set; }
         private static DropShadowEffect _borderShadowDefault;
         private static DropShadowEffect _borderShadowCurrent;
+        private static UserInterface    Ui       => Manager.CurrentProfile.UI;
+        private static int              RowsCols { get; set; }
 
         public static void ResetMainGrid()
         {
@@ -43,13 +43,10 @@ namespace VirtualSpace
             mainGrid.RowDefinitions.Clear();
             mainGrid.ColumnDefinitions.Clear();
 
-            if ( RowsCols != rowsCols )
-            {
-                _instance.Dispatcher.Invoke( new Action( () => { } ), DispatcherPriority.ContextIdle, null );
-            }
+            if ( RowsCols != rowsCols ) _instance.Dispatcher.Invoke( new Action( () => { } ), DispatcherPriority.ContextIdle, null );
 
             var borderBrushDefault = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
+                { Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B ) };
 
             for ( var r = 0; r < rowsCols; r++ )
             {
@@ -59,11 +56,11 @@ namespace VirtualSpace
                 {
                     var border = new Border
                     {
-                        Margin = new Thickness( Ui.VDWMargin ),
+                        Margin          = new Thickness( Ui.VDWMargin ),
                         BorderThickness = new Thickness( Ui.VDWBorderSize ),
-                        BorderBrush = borderBrushDefault,
-                        Effect = _borderShadowDefault,
-                        Background = Brushes.Transparent
+                        BorderBrush     = borderBrushDefault,
+                        Effect          = _borderShadowDefault,
+                        Background      = Brushes.Transparent
                     };
                     Grid.SetRow( border, r );
                     Grid.SetColumn( border, c );
@@ -72,7 +69,7 @@ namespace VirtualSpace
             }
 
             _desktopCount = vdCount; // remember last count
-            RowsCols = rowsCols;
+            RowsCols      = rowsCols;
             _instance.UpdateLayout();
         }
 
@@ -97,30 +94,30 @@ namespace VirtualSpace
             _instance.Dispatcher.Invoke( new Action( () => { } ), DispatcherPriority.ContextIdle, null );
 
             var borderBrushDefault = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
+                { Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B ) };
 
             for ( var r = 0; r < rowsCols; r++ )
             {
                 var height = bigRow == r ? bigGridLength : smallGridLength;
-                mainGrid.RowDefinitions.Add( new RowDefinition {Height = height} );
+                mainGrid.RowDefinitions.Add( new RowDefinition { Height = height } );
 
                 for ( var c = 0; c < rowsCols; c++ )
                 {
                     if ( mainGrid.ColumnDefinitions.Count < rowsCols )
                     {
                         var width = bigCol == c ? bigGridLength : smallGridLength;
-                        mainGrid.ColumnDefinitions.Add( new ColumnDefinition {Width = width} );
+                        mainGrid.ColumnDefinitions.Add( new ColumnDefinition { Width = width } );
                     }
 
                     var border = mainGrid.ColumnDefinitions[c].Width == smallGridLength
                         ? new Border()
                         : new Border
                         {
-                            Margin = new Thickness( Ui.VDWMargin ),
+                            Margin          = new Thickness( Ui.VDWMargin ),
                             BorderThickness = new Thickness( Ui.VDWBorderSize ),
-                            BorderBrush = borderBrushDefault,
-                            Effect = _borderShadowDefault,
-                            Background = Brushes.Transparent
+                            BorderBrush     = borderBrushDefault,
+                            Effect          = _borderShadowDefault,
+                            Background      = Brushes.Transparent
                         };
                     Grid.SetRow( border, r );
                     Grid.SetColumn( border, c );
@@ -129,16 +126,16 @@ namespace VirtualSpace
             }
 
             _desktopCount = 1; // single, single, single
-            RowsCols = rowsCols;
+            RowsCols      = rowsCols;
             _instance.UpdateLayout();
         }
 
         public static void UpdateHoverBorder( int hover )
         {
             var borderColorHover = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWHighlightBackColor!.R, Ui.VDWHighlightBackColor.G, Ui.VDWHighlightBackColor.B )};
+                { Color = Color.FromRgb( Ui.VDWHighlightBackColor!.R, Ui.VDWHighlightBackColor.G, Ui.VDWHighlightBackColor.B ) };
             var borderColorDefault = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
+                { Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B ) };
 
             for ( var i = 0; i < _desktopCount; i++ )
             {
@@ -154,16 +151,16 @@ namespace VirtualSpace
             var borderColorHover = Color.FromRgb( Ui.VDWHighlightBackColor!.R, Ui.VDWHighlightBackColor.G, Ui.VDWHighlightBackColor.B );
 
             var borderBrushDefault = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B )};
+                { Color = Color.FromRgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B ) };
             var borderBrushCurrent = new SolidColorBrush
-                {Color = Color.FromRgb( Ui.VDWCurrentBackColor!.R, Ui.VDWCurrentBackColor.G, Ui.VDWCurrentBackColor.B )};
+                { Color = Color.FromRgb( Ui.VDWCurrentBackColor!.R, Ui.VDWCurrentBackColor.G, Ui.VDWCurrentBackColor.B ) };
 
             for ( var i = 0; i < Math.Pow( RowsCols, 2 ); i++ )
             {
                 var border = (Border)_instance.MainGrid.Children[i];
                 if ( i == currentMatrixIndex )
                 {
-                    border.Effect = _borderShadowCurrent;
+                    border.Effect      = _borderShadowCurrent;
                     border.BorderBrush = borderBrushCurrent;
                 }
                 else
@@ -173,7 +170,7 @@ namespace VirtualSpace
                     if ( effect?.Color == Colors.White
                          || brush?.Color == borderColorHover )
                     {
-                        border.Effect = _borderShadowDefault;
+                        border.Effect      = _borderShadowDefault;
                         border.BorderBrush = borderBrushDefault;
                     }
                 }
@@ -182,10 +179,7 @@ namespace VirtualSpace
 
         public static Point GetCellLocationByMatrixIndex( int index )
         {
-            if ( _instance.Dispatcher.CheckAccess() )
-            {
-                return _instance.MainGrid.Children[index].TranslatePoint( new Point(), _instance );
-            }
+            if ( _instance.Dispatcher.CheckAccess() ) return _instance.MainGrid.Children[index].TranslatePoint( new Point(), _instance );
 
             return _instance.Dispatcher.Invoke( () => _instance.MainGrid.Children[index].TranslatePoint( new Point(), _instance ) );
         }

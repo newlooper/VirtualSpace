@@ -26,8 +26,8 @@ namespace VirtualSpace.VirtualDesktop
         private static readonly User32.EnumWindowsProc     EnumWindowsProc  = VisibleWindowFilter;
         private static readonly StringBuilder              SbWinInfo        = new( Const.WindowTitleMaxLength );
         private static          List<VirtualDesktopWindow> _virtualDesktops = new();
+        public static           Guid                       LastDesktopId    = Guid.Empty;
         public static           bool                       IsBatchCreate { get; set; }
-        public static           Guid                       LastDesktopId = Guid.Empty;
 
         private static bool VisibleWindowFilter( IntPtr hWnd, int lParam )
         {
@@ -48,10 +48,7 @@ namespace VirtualSpace.VirtualDesktop
             if ( Filters.WndClsIgnoreList.Contains( classname ) )
                 return true;
 
-            if ( classname != Const.WindowsUiCoreWindow )
-            {
-                VisibleWindows.Add( new VisibleWindow( title, classname, hWnd ) );
-            }
+            if ( classname != Const.WindowsUiCoreWindow ) VisibleWindows.Add( new VisibleWindow( title, classname, hWnd ) );
 
             return true;
         }
@@ -70,13 +67,9 @@ namespace VirtualSpace.VirtualDesktop
 
             vdwList ??= _virtualDesktops;
 
-            foreach ( var virtualDesktopWindow in vdwList )
-            {
-                virtualDesktopWindow.ClearVisibleWindows();
-            }
+            foreach ( var virtualDesktopWindow in vdwList ) virtualDesktopWindow.ClearVisibleWindows();
 
             foreach ( var win in visibleWindows )
-            {
                 try
                 {
                     if ( processId != 0 )
@@ -119,34 +112,23 @@ namespace VirtualSpace.VirtualDesktop
                         Filters.WndHandleIgnoreListByError.Add( win.Handle );
                     }
                 }
-            }
 
-            foreach ( var vdw in vdwList )
-            {
-                vdw.ShowThumbnails();
-            }
+            foreach ( var vdw in vdwList ) vdw.ShowThumbnails();
         }
 
         public static void RefreshThumbs( IntPtr h, params VirtualDesktopWindow[] vdwList )
         {
             if ( DesktopWrapper.IsWindowPinned( h ) ||
                  DesktopWrapper.IsApplicationPinned( h ) )
-            {
                 ShowVisibleWindowsForDesktops();
-            }
             else
-            {
                 ShowVisibleWindowsForDesktops( vdwList.ToList() );
-            }
         }
 
         public static void ShowAllVirtualDesktops()
         {
             UpdateVdwBackground();
-            foreach ( var vdw in _virtualDesktops )
-            {
-                User32.SendMessage( vdw.Handle, WinMsg.WM_HOTKEY, UserMessage.ShowVdw, 0 );
-            }
+            foreach ( var vdw in _virtualDesktops ) User32.SendMessage( vdw.Handle, WinMsg.WM_HOTKEY, UserMessage.ShowVdw, 0 );
         }
 
         public static void HideAllVirtualDesktops()

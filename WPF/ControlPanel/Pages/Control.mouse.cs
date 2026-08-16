@@ -34,10 +34,10 @@ public partial class Control
 
     private void MouseActionBind( MouseActionModel vm, string prefix, string actionName )
     {
-        var mks = Keys.None;
-        if ( vm.LWin ) mks |= Keys.LWin;
-        if ( vm.Ctrl ) mks |= Keys.Control;
-        if ( vm.Alt ) mks |= Keys.Alt;
+        var mks             = Keys.None;
+        if ( vm.LWin ) mks  |= Keys.LWin;
+        if ( vm.Ctrl ) mks  |= Keys.Control;
+        if ( vm.Alt ) mks   |= Keys.Alt;
         if ( vm.Shift ) mks |= Keys.Shift;
 
         var mb      = vm.MouseButton;

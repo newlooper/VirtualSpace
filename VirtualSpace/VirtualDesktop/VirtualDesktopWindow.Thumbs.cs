@@ -12,7 +12,6 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Windows.Forms;
 using VirtualSpace.Helpers;
-using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace.VirtualDesktop
 {
@@ -108,9 +107,9 @@ namespace VirtualSpace.VirtualDesktop
         {
             var props = new DWM_THUMBNAIL_PROPERTIES
             {
-                fVisible = true,
-                dwFlags = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
-                opacity = 255,
+                fVisible      = true,
+                dwFlags       = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
+                opacity       = 255,
                 rcDestination = rect
             };
 
@@ -128,7 +127,7 @@ namespace VirtualSpace.VirtualDesktop
                 var scaleFactor = cellHeight / (double)srcSize.cy;
                 var scaledX     = (int)( srcSize.cx * scaleFactor );
                 var xOffset     = ( cellWidth - scaledX ) / 2;
-                props.rcDestination.Left += xOffset;
+                props.rcDestination.Left  += xOffset;
                 props.rcDestination.Right -= xOffset;
             }
             else
@@ -136,7 +135,7 @@ namespace VirtualSpace.VirtualDesktop
                 var scaleFactor = cellWidth / (double)srcSize.cx;
                 var scaledY     = (int)( srcSize.cy * scaleFactor );
                 var yOffset     = ( cellHeight - scaledY ) / 2;
-                props.rcDestination.Top += yOffset;
+                props.rcDestination.Top    += yOffset;
                 props.rcDestination.Bottom -= yOffset;
             }
 

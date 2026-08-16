@@ -30,9 +30,9 @@ public partial class General
     {
         var mdc = (MenuContainerViewModel)MenuContainer.DataContext;
         mdc.HeaderKey = headerKey;
-        mdc.IconKind = iconKind;
-        _vm = new GeneralViewModel();
-        DataContext = _vm;
+        mdc.IconKind  = iconKind;
+        _vm           = new GeneralViewModel();
+        DataContext   = _vm;
     }
 
     public static General Create( string headerKey, PackIconKind iconKind )

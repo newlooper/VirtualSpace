@@ -36,7 +36,7 @@ namespace VirtualSpace.VirtualDesktop
             // pin window 
             var pinWindow = new ToolStripMenuItem
             {
-                Text = Agent.Langs.GetString( "VDW.CTM.Window.PinWin" ),
+                Text    = Agent.Langs.GetString( "VDW.CTM.Window.PinWin" ),
                 Checked = DesktopWrapper.IsWindowPinned( mi.Vw.Handle )
             };
             pinWindow.Click += ( s, evt ) =>
@@ -50,7 +50,7 @@ namespace VirtualSpace.VirtualDesktop
             // pin app
             var pinApp = new ToolStripMenuItem
             {
-                Text = Agent.Langs.GetString( "VDW.CTM.Window.PinApp" ),
+                Text    = Agent.Langs.GetString( "VDW.CTM.Window.PinApp" ),
                 Checked = DesktopWrapper.IsApplicationPinned( mi.Vw.Handle )
             };
             pinApp.Click += ( s, evt ) =>
@@ -92,8 +92,8 @@ namespace VirtualSpace.VirtualDesktop
             {
                 var screen = Screen.FromHandle( mi.Vw.Handle );
                 var item   = new ToolStripMenuItem( $"{s.DeviceName}  ({s.DeviceFriendlyName()})" );
-                item.Checked = screen.DeviceName == s.DeviceName;
-                item.Click += MoveToScreen;
+                item.Checked =  screen.DeviceName == s.DeviceName;
+                item.Click   += MoveToScreen;
                 itemScreen.DropDownItems.Add( item );
             }
 
@@ -147,7 +147,7 @@ namespace VirtualSpace.VirtualDesktop
             // show & edit desktop's name
             var sysIndex    = DesktopWrapper.IndexFromGuid( mi.Self.VdId );
             var currentName = DesktopWrapper.DesktopNameFromIndex( sysIndex );
-            var desktopName = new ToolStripTextBox {Text = currentName, AutoSize = false, Width = 200};
+            var desktopName = new ToolStripTextBox { Text = currentName, AutoSize = false, Width = 200 };
             desktopName.KeyPress += ( s, evt ) =>
             {
                 if ( evt.KeyChar != (char)Keys.Enter ) return;

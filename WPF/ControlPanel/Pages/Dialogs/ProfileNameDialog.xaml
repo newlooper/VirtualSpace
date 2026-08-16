@@ -8,11 +8,11 @@
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    
-    <StackPanel>
-        <TextBox Text="{Binding EditProfileName, UpdateSourceTrigger=PropertyChanged}" Margin="10" FontSize="20" MinWidth="300"></TextBox>
 
-        <TextBlock x:Name="ErrorBox" Visibility="Collapsed" Foreground="Red" Margin="10" FontSize="15"></TextBlock>
+    <StackPanel>
+        <TextBox Text="{Binding EditProfileName, UpdateSourceTrigger=PropertyChanged}" Margin="10" FontSize="20" MinWidth="300" />
+
+        <TextBlock x:Name="ErrorBox" Visibility="Collapsed" Foreground="Red" Margin="10" FontSize="15" />
 
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
             <Button Margin="10" Command="{x:Static wpf:DialogHost.CloseDialogCommand}"

@@ -13,47 +13,36 @@ extern alias VirtualDesktop10;
 extern alias VirtualDesktop11;
 using VirtualSpace.Helpers;
 
-namespace VirtualSpace.VirtualDesktop.Api
+namespace VirtualSpace.VirtualDesktop.Api;
+
+public static partial class DesktopManagerWrapper
 {
-    public static partial class DesktopManagerWrapper
+    public static Guid GetIdByIndex( int index )
     {
-        public static Guid GetIdByIndex( int index )
+        try
         {
-            try
-            {
-                if ( SysInfo.IsWin10 )
-                {
-                    return VirtualDesktop10::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
-                }
+            if ( SysInfo.IsWin10 ) return VirtualDesktop10::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
 
-                return VirtualDesktop11::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
-            }
-            catch
-            {
-                return default;
-            }
+            return VirtualDesktop11::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
         }
-
-        public static int GetViewCount()
+        catch
         {
-            if ( SysInfo.IsWin10 )
-            {
-                return VirtualDesktop10::VirtualDesktop.DesktopManager.GetViewCount();
-            }
-
-            return VirtualDesktop11::VirtualDesktop.DesktopManager.GetViewCount();
+            return default;
         }
+    }
 
-        public static void ResetDesktopManager()
-        {
-            if ( SysInfo.IsWin10 )
-            {
-                VirtualDesktop10::VirtualDesktop.DesktopManager.ResetDesktopManager();
-            }
-            else
-            {
-                VirtualDesktop11::VirtualDesktop.DesktopManager.ResetDesktopManager();
-            }
-        }
+    public static int GetViewCount()
+    {
+        if ( SysInfo.IsWin10 ) return VirtualDesktop10::VirtualDesktop.DesktopManager.GetViewCount();
+
+        return VirtualDesktop11::VirtualDesktop.DesktopManager.GetViewCount();
+    }
+
+    public static void ResetDesktopManager()
+    {
+        if ( SysInfo.IsWin10 )
+            VirtualDesktop10::VirtualDesktop.DesktopManager.ResetDesktopManager();
+        else
+            VirtualDesktop11::VirtualDesktop.DesktopManager.ResetDesktopManager();
     }
 }

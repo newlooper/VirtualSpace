@@ -23,8 +23,8 @@ public partial class YesNoWithNote : UserControl
     public YesNoWithNote( string notes, PackIconKind? iconKind = null ) : this()
     {
         DataContext = this;
-        Notes = notes;
-        Icon = iconKind ?? PackIconKind.Info;
+        Notes       = notes;
+        Icon        = iconKind ?? PackIconKind.Info;
     }
 
     public string       Notes { get; set; } = string.Empty;

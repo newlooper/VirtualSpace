@@ -17,121 +17,112 @@ using VirtualSpace.Helpers;
 using VD10 = VirtualDesktop10::VirtualDesktop;
 using VD11 = VirtualDesktop11::VirtualDesktop;
 
-namespace VirtualSpace.VirtualDesktop.Api
+namespace VirtualSpace.VirtualDesktop.Api;
+
+public static partial class DesktopManagerWrapper
 {
-    public static partial class DesktopManagerWrapper
+    public delegate void DesktopChanged( VirtualDesktopNotification vdn );
+
+    public delegate void DesktopCreated();
+
+    public delegate void DesktopDeleted( VirtualDesktopNotification vdn );
+
+    private static readonly Channel<VirtualDesktopNotification> VirtualDesktopNotifications = Channels.VirtualDesktopNotifications;
+
+    public static void RegisterVirtualDesktopEvents( WallpaperChanged wc10, Action<Guid, string> wc11 )
     {
-        private static readonly Channel<VirtualDesktopNotification> VirtualDesktopNotifications = Channels.VirtualDesktopNotifications;
+        if ( SysInfo.IsWin10 )
+            RegisterVirtualDesktopEvents10( wc10 );
+        else
+            RegisterVirtualDesktopEvents11( wc11 );
+    }
 
-        public static void RegisterVirtualDesktopEvents( WallpaperChanged wc10, Action<Guid, string> wc11 )
+    private static void RegisterVirtualDesktopEvents10( WallpaperChanged wc )
+    {
+        VD10.DesktopManager.Created += ( _, e ) =>
         {
-            if ( SysInfo.IsWin10 )
-            {
-                RegisterVirtualDesktopEvents10( wc10 );
-            }
-            else
-            {
-                RegisterVirtualDesktopEvents11( wc11 );
-            }
-        }
+            VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification { Type = VirtualDesktopNotificationType.CREATED } );
+        };
 
-        private static void RegisterVirtualDesktopEvents10( WallpaperChanged wc )
+        VD10.DesktopManager.Destroyed += ( _, e ) =>
         {
-            VD10.DesktopManager.Created += ( _, e ) =>
+            VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
             {
-                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification {Type = VirtualDesktopNotificationType.CREATED} );
-            };
+                Type  = VirtualDesktopNotificationType.DELETED,
+                NewId = e.Fallback.GetId()
+            } );
+        };
 
-            VD10.DesktopManager.Destroyed += ( _, e ) =>
-            {
-                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
-                {
-                    Type = VirtualDesktopNotificationType.DELETED,
-                    NewId = e.Fallback.GetId()
-                } );
-            };
-
-            VD10.DesktopManager.CurrentChanged += ( _, e ) =>
-            {
-                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
-                {
-                    Type = VirtualDesktopNotificationType.CURRENT_CHANGED,
-                    NewId = e.NewDesktop.GetId(),
-                    OldId = e.OldDesktop.GetId()
-                } );
-            };
-
-            WatchWallpaperEvents( wc );
-        }
-
-        private static void RegisterVirtualDesktopEvents11( Action<Guid, string> wc11 )
+        VD10.DesktopManager.CurrentChanged += ( _, e ) =>
         {
-            VD11.DesktopManager.Created += ( _, e ) =>
+            VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
             {
-                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification {Type = VirtualDesktopNotificationType.CREATED} );
-            };
+                Type  = VirtualDesktopNotificationType.CURRENT_CHANGED,
+                NewId = e.NewDesktop.GetId(),
+                OldId = e.OldDesktop.GetId()
+            } );
+        };
 
-            VD11.DesktopManager.Destroyed += ( _, e ) =>
-            {
-                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
-                {
-                    Type = VirtualDesktopNotificationType.DELETED,
-                    NewId = e.Fallback.GetId()
-                } );
-            };
+        WatchWallpaperEvents( wc );
+    }
 
-            VD11.DesktopManager.CurrentChanged += ( _, e ) =>
-            {
-                VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
-                {
-                    Type = VirtualDesktopNotificationType.CURRENT_CHANGED,
-                    NewId = e.NewDesktop.GetId(),
-                    OldId = e.OldDesktop.GetId()
-                } );
-            };
-
-            VD11.DesktopManager.WallpaperChanged += ( _, e ) =>
-            {
-                if ( string.IsNullOrEmpty( e.Path ) ) return;
-                wc11( e.Desktop.GetId(), e.Path );
-            };
-        }
-
-        public delegate void DesktopCreated();
-
-        public delegate void DesktopDeleted( VirtualDesktopNotification vdn );
-
-        public delegate void DesktopChanged( VirtualDesktopNotification vdn );
-
-        public static event DesktopCreated DesktopCreatedEvent;
-        public static event DesktopDeleted DesktopDeletedEvent;
-        public static event DesktopChanged DesktopChangedEvent;
-
-        public static async void ListenVirtualDesktopEvents()
+    private static void RegisterVirtualDesktopEvents11( Action<Guid, string> wc11 )
+    {
+        VD11.DesktopManager.Created += ( _, e ) =>
         {
-            while ( await VirtualDesktopNotifications.Reader.WaitToReadAsync() )
+            VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification { Type = VirtualDesktopNotificationType.CREATED } );
+        };
+
+        VD11.DesktopManager.Destroyed += ( _, e ) =>
+        {
+            VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
             {
-                if ( VirtualDesktopNotifications.Reader.TryRead( out var vdn ) )
+                Type  = VirtualDesktopNotificationType.DELETED,
+                NewId = e.Fallback.GetId()
+            } );
+        };
+
+        VD11.DesktopManager.CurrentChanged += ( _, e ) =>
+        {
+            VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification
+            {
+                Type  = VirtualDesktopNotificationType.CURRENT_CHANGED,
+                NewId = e.NewDesktop.GetId(),
+                OldId = e.OldDesktop.GetId()
+            } );
+        };
+
+        VD11.DesktopManager.WallpaperChanged += ( _, e ) =>
+        {
+            if ( string.IsNullOrEmpty( e.Path ) ) return;
+            wc11( e.Desktop.GetId(), e.Path );
+        };
+    }
+
+    public static event DesktopCreated DesktopCreatedEvent;
+    public static event DesktopDeleted DesktopDeletedEvent;
+    public static event DesktopChanged DesktopChangedEvent;
+
+    public static async void ListenVirtualDesktopEvents()
+    {
+        while ( await VirtualDesktopNotifications.Reader.WaitToReadAsync() )
+            if ( VirtualDesktopNotifications.Reader.TryRead( out var vdn ) )
+                switch ( vdn.Type )
                 {
-                    switch ( vdn.Type )
-                    {
-                        case VirtualDesktopNotificationType.CREATED:
-                            DesktopCreatedEvent();
+                    case VirtualDesktopNotificationType.CREATED:
+                        DesktopCreatedEvent();
 
-                            break;
-                        case VirtualDesktopNotificationType.DELETED:
-                            DesktopDeletedEvent( vdn );
+                        break;
+                    case VirtualDesktopNotificationType.DELETED:
+                        DesktopDeletedEvent( vdn );
 
-                            break;
-                        case VirtualDesktopNotificationType.CURRENT_CHANGED:
-                            DesktopChangedEvent( vdn );
+                        break;
+                    case VirtualDesktopNotificationType.CURRENT_CHANGED:
+                        DesktopChangedEvent( vdn );
 
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-            }
-        }
     }
 }

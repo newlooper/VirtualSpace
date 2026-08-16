@@ -34,7 +34,7 @@ public partial class Rules
     {
         var mdc = (MenuContainerViewModel)MenuContainer.DataContext;
         mdc.HeaderKey = headerKey;
-        mdc.IconKind = iconKind;
+        mdc.IconKind  = iconKind;
 
         ReloadRules();
         HandleClick();
@@ -45,7 +45,7 @@ public partial class Rules
     public static void ReloadRules()
     {
         _instance!.RuleList.ItemsSource = RulesViewModel.Instance.Rules;
-        _instance._needRefresh = true;
+        _instance._needRefresh          = true;
     }
 
     private void HandleClick()
@@ -56,17 +56,15 @@ public partial class Rules
     private void ClickEventFromSubControl( object sender, RoutedEventArgs e )
     {
         if ( e.OriginalSource is Button btn )
-        {
             switch ( btn.Name )
             {
                 case "btnSave":
                 case "btnCloseDefBox":
 
                     DrawerHost.IsBottomDrawerOpen = false;
-                    e.Handled = true;
+                    e.Handled                     = true;
                     break;
             }
-        }
     }
 
     public static Rules Create( string headerKey, PackIconKind iconKind )
@@ -78,8 +76,8 @@ public partial class Rules
     {
         UserControlRuleEditor.RuleDefBox.DataContext = RuleList.SelectedItem; // 笑看风云变
 
-        btnEditRule.IsEnabled = RuleList.SelectedItems.Count > 0;
-        btnCloneRule.IsEnabled = RuleList.SelectedItems.Count > 0;
+        btnEditRule.IsEnabled   = RuleList.SelectedItems.Count > 0;
+        btnCloneRule.IsEnabled  = RuleList.SelectedItems.Count > 0;
         btnDeleteRule.IsEnabled = RuleList.SelectedItems.Count > 0;
     }
 
@@ -99,9 +97,9 @@ public partial class Rules
 
         UserControlRuleEditor.RuleDefBox.DataContext = new RuleTemplate // 平地起风云
         {
-            Id = Guid.Empty,
+            Id      = Guid.Empty,
             Enabled = true,
-            Action = new Behavior()
+            Action  = new Behavior()
         };
         UserControlRuleEditor.RuleDate.Visibility = Visibility.Hidden;
 
@@ -120,13 +118,13 @@ public partial class Rules
 
         var clone = new RuleTemplate
         {
-            Name = r.Name,
+            Name       = r.Name,
             Expression = JsonDocument.Parse( JsonSerializer.Serialize( et, RulesViewModel.WriteOptions ) ),
-            Enabled = r.Enabled,
-            Tag = r.Tag,
-            Action = r.Action!.Clone(),
-            Created = time,
-            Updated = time
+            Enabled    = r.Enabled,
+            Tag        = r.Tag,
+            Action     = r.Action!.Clone(),
+            Created    = time,
+            Updated    = time
         };
 
         foc!.Add( clone );

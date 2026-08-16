@@ -31,7 +31,7 @@ namespace VirtualSpace
             else
             {
                 filterRow.Height = new GridLength( 0 );
-                HideFilterWindow( clearKeyword: false );
+                HideFilterWindow( false );
             }
 
             UpdateLayout();
@@ -42,8 +42,8 @@ namespace VirtualSpace
         {
             var wf = WindowFilter.GetInstance( _instance.Handle );
             wf.Width = Width;
-            wf.Left = Left;
-            wf.Top = Height - Const.Window.WINDOW_FILTER_BAR_HEIGHT;
+            wf.Left  = Left;
+            wf.Top   = Height - Const.Window.WINDOW_FILTER_BAR_HEIGHT;
             wf.Show();
             wf.SetFocus();
         }

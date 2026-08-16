@@ -26,6 +26,7 @@ namespace VirtualSpace.VirtualDesktop
     internal static partial class VirtualDesktopManager
     {
         private static Color         _vdwDefaultBackColor;
+        private static List<Guid>    _lastDesktopOrder = new();
         public static  UserInterface Ui => ConfigManager.CurrentProfile.UI;
 
         private static void SyncVirtualDesktops()
@@ -36,25 +37,18 @@ namespace VirtualSpace.VirtualDesktop
             for ( var index = 0; index < DesktopWrapper.Count; index++ ) // build new list according to current system vd list
             {
                 var guid = DesktopManagerWrapper.GetIdByIndex( index );
-                if ( guid == default ) continue;
+                if ( guid == Guid.Empty ) continue;
                 var survival = _virtualDesktops.Find( v => v.VdId == guid );
                 if ( survival == null )
-                {
                     survival = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
-                }
                 else
-                {
                     survival.VdIndex = index;
-                }
 
                 survivalDesktops.Add( survival );
             }
 
             var sysGuids = survivalDesktops.Select( v => v.VdId ).ToList();
-            foreach ( var old in _virtualDesktops.Where( old => !sysGuids.Contains( old.VdId ) ) )
-            {
-                old.RealClose();
-            }
+            foreach ( var old in _virtualDesktops.Where( old => !sysGuids.Contains( old.VdId ) ) ) old.RealClose();
 
             _virtualDesktops = survivalDesktops; // system vd list order at this moment
 
@@ -119,7 +113,7 @@ namespace VirtualSpace.VirtualDesktop
             try
             {
                 var fallback = _virtualDesktops[GetVdIndexByGuid( vdn.NewId )];
-                ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> {fallback} );
+                ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> { fallback } );
             }
             catch ( Exception e )
             {
@@ -182,8 +176,6 @@ namespace VirtualSpace.VirtualDesktop
             MainWindow.RenderCellBorder();
         }
 
-        private static List<Guid> _lastDesktopOrder = new();
-
         public static void SaveOrder( List<Guid>? newOrder = null )
         {
             static bool IsSameGuidList( List<Guid> a, List<Guid> b )
@@ -192,10 +184,7 @@ namespace VirtualSpace.VirtualDesktop
                 return !a.Where( ( t, i ) => t != b[i] ).Any();
             }
 
-            if ( newOrder != null )
-            {
-                ConfigManager.CurrentProfile.DesktopOrder = newOrder;
-            }
+            if ( newOrder != null ) ConfigManager.CurrentProfile.DesktopOrder = newOrder;
 
             if ( IsSameGuidList( _lastDesktopOrder, ConfigManager.CurrentProfile.DesktopOrder! ) ) return;
 

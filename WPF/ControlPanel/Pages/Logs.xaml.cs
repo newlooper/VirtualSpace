@@ -46,8 +46,8 @@ public partial class Logs
 
         var mdc = (MenuContainerViewModel)MenuContainer.DataContext;
         mdc.InjectContent = new LogsMenu();
-        mdc.HeaderKey = headerKey;
-        mdc.IconKind = iconKind;
+        mdc.HeaderKey     = headerKey;
+        mdc.IconKind      = iconKind;
     }
 
     public string this[ int index ]
@@ -84,13 +84,9 @@ public partial class Logs
         set
         {
             if ( value is null )
-            {
                 SbInfo.Clear();
-            }
             else
-            {
                 SbInfo.Append( value );
-            }
 
             NotifyStaticPropertyChanged();
         }
@@ -102,13 +98,9 @@ public partial class Logs
         set
         {
             if ( value is null )
-            {
                 SbDebug.Clear();
-            }
             else
-            {
                 SbDebug.Append( value );
-            }
 
             NotifyStaticPropertyChanged();
         }
@@ -120,13 +112,9 @@ public partial class Logs
         set
         {
             if ( value is null )
-            {
                 SbVerbose.Clear();
-            }
             else
-            {
                 SbVerbose.Append( value );
-            }
 
             NotifyStaticPropertyChanged();
         }
@@ -138,13 +126,9 @@ public partial class Logs
         set
         {
             if ( value is null )
-            {
                 SbEvent.Clear();
-            }
             else
-            {
                 SbEvent.Append( value );
-            }
 
             NotifyStaticPropertyChanged();
         }
@@ -156,13 +140,9 @@ public partial class Logs
         set
         {
             if ( value is null )
-            {
                 SbWarning.Clear();
-            }
             else
-            {
                 SbWarning.Append( value );
-            }
 
             NotifyStaticPropertyChanged();
         }
@@ -174,13 +154,9 @@ public partial class Logs
         set
         {
             if ( value is null )
-            {
                 SbError.Clear();
-            }
             else
-            {
                 SbError.Append( value );
-            }
 
             NotifyStaticPropertyChanged();
         }
@@ -229,34 +205,27 @@ public partial class Logs
     private void Clear_Click( object sender, RoutedEventArgs e )
     {
         if ( sender is MenuItem mi )
-        {
             if ( mi.CommandParameter is ContextMenu cm )
-            {
                 if ( cm.PlacementTarget is TabItem t )
                 {
-                    t.IsSelected = true;
+                    t.IsSelected               = true;
                     this[TcLogs.SelectedIndex] = null!;
                 }
-            }
-        }
     }
 
     private void TabItem_OnContextMenuOpening( object sender, ContextMenuEventArgs e )
     {
-        if ( e.Source is TabItem t )
-        {
-            t.IsSelected = true;
-        }
+        if ( e.Source is TabItem t ) t.IsSelected = true;
     }
 
     public static void ClearAll()
     {
-        TbInfo = null!;
-        TbDebug = null!;
+        TbInfo    = null!;
+        TbDebug   = null!;
         TbVerbose = null!;
-        TbEvent = null!;
+        TbEvent   = null!;
         TbWarning = null!;
-        TbError = null!;
+        TbError   = null!;
     }
 
     public static void OpenLogsDir()
@@ -266,7 +235,7 @@ public partial class Logs
         var startInfo = new ProcessStartInfo
         {
             Arguments = logFolder,
-            FileName = "explorer.exe"
+            FileName  = "explorer.exe"
         };
 
         Process.Start( startInfo );

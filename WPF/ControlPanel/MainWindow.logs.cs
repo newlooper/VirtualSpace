@@ -29,12 +29,8 @@ public partial class MainWindow
         try
         {
             while ( await LogChannel.Reader.WaitToReadAsync( stoppingToken ) )
-            {
                 if ( LogChannel.Reader.TryRead( out var message ) )
-                {
                     Logs.Append( message.Message, message.Type );
-                }
-            }
         }
         catch
         {

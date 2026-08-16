@@ -27,7 +27,7 @@
                     <StackPanel.Resources>
                         <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
                             <Setter Property="Margin" Value="5,0,5,5" />
-                            <Setter Property="Padding" Value="5"></Setter>
+                            <Setter Property="Padding" Value="5" />
                             <Setter Property="HorizontalContentAlignment" Value="Left" />
                         </Style>
                     </StackPanel.Resources>
@@ -50,27 +50,25 @@
 
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="32"></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="32" />
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
                         <Button Content="{lex:Loc Menus.Commons.Close}" Click="CloseWindow_OnClick" Grid.Column="1" />
                         <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
                         <Image x:Name="SIID_SHIELD" Grid.Row="2" Grid.Column="0"
-                               Width="16" Height="16" Margin="15,0,0,0">
-                        </Image>
+                               Width="16" Height="16" Margin="15,0,0,0" />
                         <Button x:Name="menuItemRunAsAdmin" Grid.Row="2" Grid.Column="1"
-                                Content="{lex:Loc Menus.Commons.RunAsAdmin}" Click="MenuItemRunAsAdmin_OnClick">
-                        </Button>
+                                Content="{lex:Loc Menus.Commons.RunAsAdmin}" Click="MenuItemRunAsAdmin_OnClick" />
 
                         <Button Grid.Row="3" Grid.Column="1"
                                 Content="{lex:Loc Menus.Commons.Restart}" Click="RestartApp_OnClick" />

@@ -91,21 +91,14 @@ public partial class Rules
         Sort( sortBy!, direction );
 
         if ( direction == ListSortDirection.Ascending )
-        {
             targetHeader.Column.HeaderTemplate = Resources["HeaderTemplateArrowUp"] as DataTemplate;
-        }
         else
-        {
             targetHeader.Column.HeaderTemplate = Resources["HeaderTemplateArrowDown"] as DataTemplate;
-        }
 
-        if ( _lastHeaderClicked != null && _lastHeaderClicked != targetHeader )
-        {
-            _lastHeaderClicked.Column.HeaderTemplate = null;
-        }
+        if ( _lastHeaderClicked != null && _lastHeaderClicked != targetHeader ) _lastHeaderClicked.Column.HeaderTemplate = null;
 
         _lastHeaderClicked = targetHeader;
-        _lastDirection = direction;
+        _lastDirection     = direction;
     }
 
     private void RuleList_OnColumnHeaderClick( object sender, RoutedEventArgs e )
@@ -116,13 +109,9 @@ public partial class Rules
 
         ListSortDirection direction;
         if ( headerClicked != _lastHeaderClicked )
-        {
             direction = ListSortDirection.Ascending;
-        }
         else
-        {
             direction = _lastDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
-        }
 
         SortSelectedColumn( headerClicked, direction, RuleList.ItemsSource );
     }

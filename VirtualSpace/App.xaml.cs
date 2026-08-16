@@ -61,15 +61,12 @@ namespace VirtualSpace
                 if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
                 {
                     mw.Left = Const.FakeHideX;
-                    mw.Top = Const.FakeHideY;
+                    mw.Top  = Const.FakeHideY;
                 }
 
                 mw.Show();
 
-                if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
-                {
-                    mw.FakeHide();
-                }
+                if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart ) mw.FakeHide();
 
                 PluginHost.AutoStartAfterMainWindowLoaded();
             }
@@ -98,13 +95,9 @@ namespace VirtualSpace
         {
             var createdNew = TryMutex();
             if ( createdNew )
-            {
                 IpcPipeServer.Start();
-            }
             else
-            {
                 IpcPipeServer.AsClient();
-            }
 
             return createdNew;
         }

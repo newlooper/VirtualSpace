@@ -83,7 +83,7 @@ public partial class Settings
         RulesViewModel.ReloadRules();
 
         var vm = DataContext as SettingsViewModel;
-        vm!.ProfileList.Add( new {Value = profileName} );
+        vm!.ProfileList.Add( new { Value = profileName } );
         vm.CurrentProfile = profileName;
     }
 

@@ -15,23 +15,22 @@ using VirtualSpace.Helpers;
 using VD10 = VirtualDesktop10::VirtualDesktop;
 using VD11 = VirtualDesktop11::VirtualDesktop;
 
-namespace VirtualSpace.VirtualDesktop.Api
+namespace VirtualSpace.VirtualDesktop.Api;
+
+public static partial class DesktopWrapper
 {
-    public static partial class DesktopWrapper
+    public static void Create()
     {
-        public static void Create()
+        if ( SysInfo.IsWin10 )
         {
-            if ( SysInfo.IsWin10 )
-            {
-                VD10.Desktop.Create();
-            }
-            else
-            {
-                var desk = VD11.Desktop.Create();
-                var path = WinRegistry.GetDefaultWallpaperPath();
-                if ( !string.IsNullOrEmpty( path ) )
-                    desk.SetWallpaperPath( path );
-            }
+            VD10.Desktop.Create();
+        }
+        else
+        {
+            var desk = VD11.Desktop.Create();
+            var path = WinRegistry.GetDefaultWallpaperPath();
+            if ( !string.IsNullOrEmpty( path ) )
+                desk.SetWallpaperPath( path );
         }
     }
 }
