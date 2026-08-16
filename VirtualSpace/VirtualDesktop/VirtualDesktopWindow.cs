@@ -42,6 +42,8 @@ namespace VirtualSpace.VirtualDesktop
         {
             InitializeComponent();
             base.DoubleBuffered = ConfigManager.Configs.Cluster.EnableDoubleBufferedForVDW;
+            SetStyle( ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true );
+            UpdateStyles();
         }
 
         protected override CreateParams CreateParams
@@ -147,17 +149,17 @@ namespace VirtualSpace.VirtualDesktop
         private void ShowByVdIndex()
         {
             var ui  = VirtualDesktopManager.Ui;
-            var dpi = SysInfo.Dpi;
+            var (ScaleX, ScaleY) = SysInfo.Dpi;
 
             var matrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( VdIndex );
             var location    = MainWindow.GetCellLocationByMatrixIndex( matrixIndex );
-            var point       = new Point( (int)( ( location.X + ui.VDWBorderSize ) * dpi.ScaleX ), (int)( ( location.Y + ui.VDWBorderSize ) * dpi.ScaleY ) );
+            var point       = new Point( (int)( ( location.X + ui.VDWBorderSize ) * ScaleX ), (int)( ( location.Y + ui.VDWBorderSize ) * ScaleY ) );
             Location = point;
             _fixedPosition = point;
 
             var size      = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
-            var vdwWidth  = ( size.Width - 2 * ui.VDWBorderSize ) * dpi.ScaleX + 1;
-            var vdwHeight = ( size.Height - 2 * ui.VDWBorderSize ) * dpi.ScaleY + 1;
+            var vdwWidth  = ( size.Width - 2 * ui.VDWBorderSize ) * ScaleX + 1;
+            var vdwHeight = ( size.Height - 2 * ui.VDWBorderSize ) * ScaleY + 1;
 
             ////////////////////////////////////////////////////////////////
             // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面尺寸强制归零
@@ -188,8 +190,8 @@ namespace VirtualSpace.VirtualDesktop
                 return new ValueTuple<bool, string, Color>( false, "", WinRegistry.GetBackColor() );
             }
 
-            var wpInfo = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), Width, Height );
-            return new ValueTuple<bool, string, Color?>( wpInfo.Exists, wpPath, null );
+            var (Exists, _) = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), Width, Height );
+            return new ValueTuple<bool, string, Color?>( Exists, wpPath, null );
         }
 
         private static void DrawImage( PaintEventArgs e, Wallpaper wp, int width = 0, int height = 0 )
@@ -301,7 +303,7 @@ namespace VirtualSpace.VirtualDesktop
             ShowThumbnails();
         }
 
-        private void pbWallpaper_Paint( object sender, PaintEventArgs e )
+        private void Background_Paint( object sender, PaintEventArgs e )
         {
             var wpInfo = CachedWallpaperInfo();
             if ( _initSize == Size.Empty )

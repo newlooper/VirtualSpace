@@ -55,7 +55,7 @@ namespace VirtualSpace.VirtualDesktop
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VirtualDesktopWindow_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.VirtualDesktopWindow_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.VirtualDesktopWindow_MouseUp);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.pbWallpaper_Paint);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Background_Paint);
             this.ResumeLayout(false);
 
         }

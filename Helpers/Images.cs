@@ -40,9 +40,9 @@ namespace VirtualSpace.Helpers
                     gr.DrawImage( src, new Rectangle( Point.Empty, dest.Size ) );
                 }
 
-                var md5Path = Wallpaper.Md5Hash( path );
-                var file = Path.Combine( cachePath, md5Path.Str0, md5Path.Str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
-                    md5Path.FullString + "_" + Environment.CurrentManagedThreadId );
+                var (FullString, Str0, Str1) = Wallpaper.Md5Hash( path );
+                var file = Path.Combine( cachePath, Str0, Str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
+                    FullString + "_" + Environment.CurrentManagedThreadId );
 
                 // dest.Save( file, ImageFormat.Jpeg );
 
@@ -100,10 +100,10 @@ namespace VirtualSpace.Helpers
 
         public static (bool Exists, string Path) CachedWallPaperInfo( string path, string cachePath, int width, int height )
         {
-            var md5Path    = Md5Hash( path );
-            var targetPath = Path.Combine( cachePath, md5Path.Str0, md5Path.Str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height );
+            var (FullString, Str0, Str1) = Md5Hash( path );
+            var targetPath = Path.Combine( cachePath, Str0, Str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height );
             Directory.CreateDirectory( targetPath );
-            var filepath = Path.Combine( targetPath, md5Path.FullString );
+            var filepath = Path.Combine( targetPath, FullString );
 
             return new ValueTuple<bool, string>( File.Exists( filepath ), filepath );
         }
