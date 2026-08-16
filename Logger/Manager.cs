@@ -22,7 +22,7 @@ namespace VirtualSpace.AppLogs
     {
         private static readonly LoggingLevelSwitch LevelSwitch = new( LogEventLevel.Verbose );
 
-        public const LogEventLevel LOG_LEVEL_EVENT = (LogEventLevel)0xFF;
+        public const string PROP_IS_EVENT = "IsEvent";
 
         public static Serilog.Core.Logger RootLogger;
 
@@ -42,33 +42,48 @@ namespace VirtualSpace.AppLogs
 
             RootLogger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy( LevelSwitch )
-                .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Verbose ).WriteTo.File( $"{_logsFolder}/verbose.txt", LogEventLevel.Verbose ) )
-                .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Debug ).WriteTo.File( $"{_logsFolder}/debug.txt", LogEventLevel.Debug ) )
-                .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Information ).WriteTo.File( $"{_logsFolder}/info.txt", LogEventLevel.Information ) )
-                .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Warning ).WriteTo.File( $"{_logsFolder}/warning.txt", LogEventLevel.Warning ) )
-                .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Error ).WriteTo.File( $"{_logsFolder}/error.txt", LogEventLevel.Error ) )
-                .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Fatal ).WriteTo.File( $"{_logsFolder}/fatal.txt", LogEventLevel.Fatal ) )
-                .WriteTo.Logger( c =>
-                    c.Filter.ByIncludingOnly( evt => evt.Level == LOG_LEVEL_EVENT ).WriteTo.File( $"{_logsFolder}/event.txt", LOG_LEVEL_EVENT ) )
+
+                .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Verbose )
+                     .WriteTo.File( $"{_logsFolder}/verbose.txt", restrictedToMinimumLevel: LogEventLevel.Verbose ) )
+
+                .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Debug )
+                     .WriteTo.File( $"{_logsFolder}/debug.txt", restrictedToMinimumLevel: LogEventLevel.Debug ) )
+
+                // 普通 Information：排除包含 PROP_IS_EVENT 属性的日志
+                .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt =>
+                        evt.Level == LogEventLevel.Information &&
+                        !( evt.Properties.TryGetValue( PROP_IS_EVENT, out var v ) && v is ScalarValue { Value: true } ) )
+                     .WriteTo.File( $"{_logsFolder}/info.txt", restrictedToMinimumLevel: LogEventLevel.Information ) )
+
+                // Event 日志：借用 Information，并用 PROP_IS_EVENT 属性筛选
+                .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt =>
+                        evt.Properties.TryGetValue( PROP_IS_EVENT, out var v ) && v is ScalarValue { Value: true } )
+                     .WriteTo.File(
+                        $"{_logsFolder}/event.txt", restrictedToMinimumLevel: LogEventLevel.Information,
+                        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [EVT] {Message:lj}{NewLine}{Exception}" ) )
+
+                .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Warning )
+                     .WriteTo.File( $"{_logsFolder}/warning.txt", restrictedToMinimumLevel: LogEventLevel.Warning ) )
+
+                .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Error )
+                     .WriteTo.File( $"{_logsFolder}/error.txt", restrictedToMinimumLevel: LogEventLevel.Error ) )
+
+                .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Fatal )
+                     .WriteTo.File( $"{_logsFolder}/fatal.txt", restrictedToMinimumLevel: LogEventLevel.Fatal ) )
+
                 .CreateLogger();
         }
 
         public static void GorgeousDividingLine()
         {
-            const string line = "==================================================";
+            string line = new( '=', 50 );
             RootLogger.Verbose( line );
             RootLogger.Debug( line );
             RootLogger.Information( line );
+            RootLogger.ForContext( PROP_IS_EVENT, true ).Information( "{Message}", line ); // same Level as Information
             RootLogger.Warning( line );
             RootLogger.Error( line );
             RootLogger.Fatal( line );
-            RootLogger.Write( LOG_LEVEL_EVENT, line );
         }
 
         public static void SetLogLevel( string level )

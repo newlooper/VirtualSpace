@@ -40,7 +40,9 @@ namespace VirtualSpace.AppLogs
         public static void Event( string str )
         {
             LogToGui( "EVENT", str );
-            LogManager.RootLogger.Write( LogManager.LOG_LEVEL_EVENT, str );
+            LogManager.RootLogger
+                .ForContext( LogManager.PROP_IS_EVENT, true )
+                .Information( "{Message}", str );
         }
 
         public static void Info( string str )
