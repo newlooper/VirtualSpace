@@ -13,10 +13,12 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using VirtualSpace.AppLogs;
+using Encoder = System.Drawing.Imaging.Encoder;
 
 namespace VirtualSpace.Helpers
 {
@@ -32,45 +34,35 @@ namespace VirtualSpace.Helpers
             var cached = Wallpaper.CachedWallPaper( path, cachePath, width, height );
 
             if ( cached != null ) return cached;
-            using ( var src = new Bitmap( path ) )
+            using var src  = new Bitmap( path );
+            var       dest = new Bitmap( width, height, PixelFormat.Format32bppPArgb );
+            using ( var gr = Graphics.FromImage( dest ) )
             {
-                var dest = new Bitmap( width, height, PixelFormat.Format32bppPArgb );
-                using ( var gr = Graphics.FromImage( dest ) )
-                {
-                    gr.DrawImage( src, new Rectangle( Point.Empty, dest.Size ) );
-                }
-
-                var (FullString, Str0, Str1) = Wallpaper.Md5Hash( path );
-                var file = Path.Combine( cachePath, Str0, Str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
-                    FullString + "_" + Environment.CurrentManagedThreadId );
-
-                // dest.Save( file, ImageFormat.Jpeg );
-
-                var jpgEncoder        = GetEncoder( ImageFormat.Jpeg );
-                var encoder           = System.Drawing.Imaging.Encoder.Quality;
-                var encoderParameters = new EncoderParameters( 1 );
-                var encoderParameter  = new EncoderParameter( encoder, quality );
-                encoderParameters.Param[0] = encoderParameter;
-                dest.Save( file, jpgEncoder, encoderParameters );
-
-                wp.Fullpath = file;
-
-                return dest;
+                gr.DrawImage( src, new Rectangle( Point.Empty, dest.Size ) );
             }
+
+            var (FullString, Str0, Str1) = Wallpaper.Md5Hash( path );
+            var file = Path.Combine( cachePath, Str0, Str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
+                FullString + "_" + Environment.CurrentManagedThreadId );
+
+            // dest.Save( file, ImageFormat.Jpeg );
+
+            var jpgEncoder        = GetEncoder( ImageFormat.Jpeg );
+            var encoder           = Encoder.Quality;
+            var encoderParameters = new EncoderParameters( 1 );
+            var encoderParameter  = new EncoderParameter( encoder, quality );
+            encoderParameters.Param[0] = encoderParameter;
+            dest.Save( file, jpgEncoder, encoderParameters );
+
+            wp.Fullpath = file;
+
+            return dest;
         }
 
         private static ImageCodecInfo GetEncoder( ImageFormat format )
         {
             var codecs = ImageCodecInfo.GetImageEncoders();
-            foreach ( var codec in codecs )
-            {
-                if ( codec.FormatID == format.Guid )
-                {
-                    return codec;
-                }
-            }
-
-            return null;
+            return codecs.FirstOrDefault( codec => codec.FormatID == format.Guid )!;
         }
 
         public static Icon BytesToIcon( object bytes )
@@ -110,15 +102,11 @@ namespace VirtualSpace.Helpers
 
         public static (string FullString, string Str0, string Str1) Md5Hash( string input )
         {
-            var md5        = MD5.Create();
             var inputBytes = Encoding.ASCII.GetBytes( input );
-            var hashBytes  = md5.ComputeHash( inputBytes );
+            var hashBytes  = MD5.HashData( inputBytes );
 
             var sb = new StringBuilder();
-            foreach ( var b in hashBytes )
-            {
-                sb.Append( b.ToString( "x2" ) );
-            }
+            foreach ( var b in hashBytes ) sb.Append( b.ToString( "x2" ) );
 
             var md5Str = sb.ToString();
 

@@ -34,9 +34,8 @@ namespace VirtualSpace.Helpers
         public static IntPtr SetWindowLongPtr( HandleRef hWnd, int nIndex, int dwNewLong )
         {
             if ( IntPtr.Size == 8 )
-                return SetWindowLongPtr64( hWnd, nIndex, (IntPtr)dwNewLong );
-            else
-                return new IntPtr( SetWindowLong32( hWnd, nIndex, dwNewLong ) );
+                return SetWindowLongPtr64( hWnd, nIndex, dwNewLong );
+            return new IntPtr( SetWindowLong32( hWnd, nIndex, dwNewLong ) );
         }
 
         [DllImport( "user32.dll", EntryPoint = "SetWindowLong" )]

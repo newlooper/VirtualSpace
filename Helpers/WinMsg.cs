@@ -24,6 +24,7 @@ namespace VirtualSpace.Helpers
         public const int WM_QUIT          = 0x0012;
         public const int WM_DESTROY       = 0x0002;
         public const int WM_MOUSEACTIVATE = 0x0021;
+        public const int WM_SETTINGCHANGE = 0x001A;
         public const int MA_NOACTIVATE    = 0x3;
     }
 }

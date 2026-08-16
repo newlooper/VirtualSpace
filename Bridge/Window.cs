@@ -33,9 +33,9 @@ namespace VirtualSpace.Config.Events.Entity
         {
             return new Window
             {
-                Handle = handle,
-                Title = title,
-                WndClass = wndClass,
+                Handle    = handle,
+                Title     = title,
+                WndClass  = wndClass,
                 ProcessId = pId
             };
         }

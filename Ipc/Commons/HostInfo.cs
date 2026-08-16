@@ -45,10 +45,10 @@ namespace VirtualSpace.Commons
 
             return new HostInfo
             {
-                Version = new Version( fileVersion ),
-                Product = product,
+                Version     = new Version( fileVersion ),
+                Product     = product,
                 InfoVersion = infoVersion,
-                AppPath = Environment.ProcessPath ?? string.Empty
+                AppPath     = Environment.ProcessPath ?? string.Empty
             };
         }
     }

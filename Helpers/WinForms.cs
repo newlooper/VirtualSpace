@@ -24,8 +24,8 @@ namespace VirtualSpace.Helpers
             string                                         valueMember   = ComboBoxValueMember )
         {
             cbb.DisplayMember = ComboBoxDisplayMember;
-            cbb.ValueMember = ComboBoxValueMember;
-            cbb.DataSource = dataSource;
+            cbb.ValueMember   = ComboBoxValueMember;
+            cbb.DataSource    = dataSource;
         }
     }
 }

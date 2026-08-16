@@ -107,7 +107,10 @@ namespace VirtualSpace.Config
             public const string NAV_UP                                 = "hk_node_nav_up";
             public const string NAV_DOWN                               = "hk_node_nav_down";
             public const string SWITCH_BACK_LAST                       = "hk_node_svd_back_last";
-            public const string TOGGLE_WINDOW_FILTER                   = "hk_node_toggle_window_filter";
+
+            ///////////////////////////////////////////////////
+            // 不是所有的功能都支持自定义快捷键，但为了能进入 Dictionary<> Info，必须有唯一的键
+            private const string TOGGLE_WINDOW_FILTER = "hk_node_toggle_window_filter";
 
             ////////////////////////////////////////////////////////////////
             // 可由热键调用的程序功能表
@@ -116,26 +119,26 @@ namespace VirtualSpace.Config
             // tuple.Item3 => alternate hotkey, 由程序保留，只能在源码中修改
             public static readonly Dictionary<string, (string FuncDesc, int MessageId, string AltHotKey)> Info = new()
             {
-                {RISE_VIEW, ( "Rise MainView", UserMessage.RiseView, "LWin+Tab" )},
-                {RISE_VIEW_FOR_ACTIVE_APP, ( "Rise MainView For Active App", UserMessage.RiseViewForActiveApp, "" )},
-                {RISE_VIEW_FOR_CURRENT_VD, ( "Rise MainView For Current Desktop", UserMessage.RiseViewForCurrentVD, "" )},
+                { RISE_VIEW, ( "Rise MainView", UserMessage.RiseView, "LWin+Tab" ) },
+                { RISE_VIEW_FOR_ACTIVE_APP, ( "Rise MainView For Active App", UserMessage.RiseViewForActiveApp, "" ) },
+                { RISE_VIEW_FOR_CURRENT_VD, ( "Rise MainView For Current Desktop", UserMessage.RiseViewForCurrentVD, "" ) },
                 {
                     RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD,
                     ( "Rise MainView For Active App In Current Virtual Desktop", UserMessage.RiseViewForActiveAppInCurrentVD, "" )
                 },
-                {SHOW_APP_CONTROLLER, ( "Open AppController", UserMessage.ShowAppController, "" )},
-                {NAV_LEFT, ( "Left", UserMessage.NavLeft, "LWin+Ctrl+Left" )},
-                {NAV_RIGHT, ( "Right", UserMessage.NavRight, "LWin+Ctrl+Right" )},
-                {NAV_UP, ( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" )},
-                {NAV_DOWN, ( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" )},
-                {SWITCH_BACK_LAST, ( "Switch Back To Last Desktop", UserMessage.SwitchBackToLastDesktop, "" )},
-                {TOGGLE_WINDOW_FILTER, ( "Toggle Window Filter", UserMessage.ToggleWindowFilter, "" )}
+                { SHOW_APP_CONTROLLER, ( "Open AppController", UserMessage.ShowAppController, "" ) },
+                { NAV_LEFT, ( "Left", UserMessage.NavLeft, "LWin+Ctrl+Left" ) },
+                { NAV_RIGHT, ( "Right", UserMessage.NavRight, "LWin+Ctrl+Right" ) },
+                { NAV_UP, ( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" ) },
+                { NAV_DOWN, ( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" ) },
+                { SWITCH_BACK_LAST, ( "Switch Back To Last Desktop", UserMessage.SwitchBackToLastDesktop, "" ) },
+                { TOGGLE_WINDOW_FILTER, ( "Toggle Window Filter", UserMessage.ToggleWindowFilter, "" ) }
             };
 
             public static string GetFuncDesc( string key )
             {
                 var func = "";
-                if ( Info.TryGetValue( key, out (string FuncDesc, int MessageId, string AltHotKey) value ) )
+                if ( Info.TryGetValue( key, out var value ) )
                 {
                     func = value.FuncDesc;
                 }
@@ -158,7 +161,7 @@ namespace VirtualSpace.Config
             public static KeyBinding GetKeyBinding( string key )
             {
                 var kb = new KeyBinding();
-                if ( Info.TryGetValue( key, out (string FuncDesc, int MessageId, string AltHotKey) value ) )
+                if ( Info.TryGetValue( key, out var value ) )
                 {
                     kb.MessageId = value.MessageId;
                 }
@@ -180,9 +183,9 @@ namespace VirtualSpace.Config
 
             public static string GetHotkeyExtra( string key )
             {
-                return Info.TryGetValue( key, out (string FuncDesc, int MessageId, string AltHotKey) value ) ? 
-                    value.AltHotKey : 
-                    string.Empty;
+                return Info.TryGetValue( key, out var value )
+                    ? value.AltHotKey
+                    : string.Empty;
             }
         }
     }
@@ -204,9 +207,10 @@ namespace VirtualSpace.Config
             DesktopShowForSelectedDesktop
         }
 
+        public const string KEY_SPLITTER = "+";
+
         public static          string MOUSE_NODE_DESKTOP_PREFIX = "mouse_node_d_";
         public static          string MOUSE_NODE_WINDOW_PREFIX  = "mouse_node_w_";
-        public const           string KEY_SPLITTER              = "+";
         public static readonly string NoneKeyCode               = ( (int)Keys.None ).ToString( "X2" );
 
         private static readonly Dictionary<MouseButtons, string> MouseButtonsName;
@@ -224,56 +228,56 @@ namespace VirtualSpace.Config
         {
             MouseButtonsName = new Dictionary<MouseButtons, string>
             {
-                {MouseButtons.Left, "Left"},
-                {MouseButtons.Middle, "Middle"},
-                {MouseButtons.Right, "Right"}
+                { MouseButtons.Left, "Left" },
+                { MouseButtons.Middle, "Middle" },
+                { MouseButtons.Right, "Right" }
             };
 
             KeysName = new Dictionary<Keys, string>
             {
-                {Keys.Control, "Ctrl"},
-                {Keys.Alt, "Alt"},
-                {Keys.Shift, "Shift"}
+                { Keys.Control, "Ctrl" },
+                { Keys.Alt, "Alt" },
+                { Keys.Shift, "Shift" }
             };
 
             Info = new Dictionary<string, Action>
             {
-                {MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView},
-                {MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly},
-                {MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
+                { MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView },
+                { MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly },
+                { MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu },
 
-                {MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView},
-                {MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly},
-                {MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
+                { MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView },
+                { MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly },
+                { MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu }
             };
 
             Info1 = new Dictionary<string, Action>
             {
-                {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView},
-                {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly},
-                {MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
-                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
-                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
-                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                {MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
+                { MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView },
+                { MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly },
+                { MOUSE_NODE_DESKTOP_PREFIX + MouseButtonsName[MouseButtons.Right], Action.ContextMenu },
+                { MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing },
+                { MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing },
+                { MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing },
+                { MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing },
+                { MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing },
+                { MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing },
+                { MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing },
+                { MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing },
+                { MOUSE_NODE_DESKTOP_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing },
 
-                {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView},
-                {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly},
-                {MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Right], Action.ContextMenu},
-                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
-                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing},
-                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing},
-                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing},
-                {MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing}
+                { MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView },
+                { MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly },
+                { MOUSE_NODE_WINDOW_PREFIX + MouseButtonsName[MouseButtons.Right], Action.ContextMenu },
+                { MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing },
+                { MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing },
+                { MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Control] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing },
+                { MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing },
+                { MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing },
+                { MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Alt] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing },
+                { MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DoNothing },
+                { MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DoNothing },
+                { MOUSE_NODE_WINDOW_PREFIX + KeysName[Keys.Shift] + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.DoNothing }
             };
         }
 

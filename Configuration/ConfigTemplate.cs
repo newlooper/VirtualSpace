@@ -17,38 +17,38 @@ namespace VirtualSpace.Config
 {
     public class ConfigTemplate
     {
-        [PropertyProtector] public Dictionary<string, Profile> Profiles           { get; set; }
-        public                     string                      CurrentProfileName { get; set; }
-        public                     string                      Version            { get; set; }
-        public                     LogConfig                   LogConfig          { get; set; }
+        [PropertyProtector] public Dictionary<string, Profile> Profiles           { get; init; } = null!;
+        public                     string                      CurrentProfileName { get; set; }  = null!;
+        public                     string                      Version            { get; init; } = null!;
+        public                     LogConfig                   LogConfig          { get; init; } = null!;
 
-        public Dictionary<string, KeyBinding>? KeyBindings { get; set; } = new()
+        public Dictionary<string, KeyBinding>? KeyBindings { get; init; } = new()
         {
-            {Const.Hotkey.RISE_VIEW, new KeyBinding {GhkCode = "_+Ctrl+_+Shift+Tab", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW].MessageId}},
-            {Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP].MessageId}},
-            {Const.Hotkey.RISE_VIEW_FOR_CURRENT_VD, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_CURRENT_VD].MessageId}},
+            { Const.Hotkey.RISE_VIEW, new KeyBinding { GhkCode                = "_+Ctrl+_+Shift+Tab", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW].MessageId } },
+            { Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP, new KeyBinding { GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP].MessageId } },
+            { Const.Hotkey.RISE_VIEW_FOR_CURRENT_VD, new KeyBinding { GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_CURRENT_VD].MessageId } },
             {
                 Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD,
-                new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD].MessageId}
+                new KeyBinding { GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD].MessageId }
             },
-            {Const.Hotkey.SHOW_APP_CONTROLLER, new KeyBinding {GhkCode = "_+Ctrl+Alt+_+F12", MessageId = Const.Hotkey.Info[Const.Hotkey.SHOW_APP_CONTROLLER].MessageId}},
-            {Const.Hotkey.NAV_LEFT, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_LEFT].MessageId}},
-            {Const.Hotkey.NAV_RIGHT, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_RIGHT].MessageId}},
-            {Const.Hotkey.NAV_UP, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_UP].MessageId}},
-            {Const.Hotkey.NAV_DOWN, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.NAV_DOWN].MessageId}},
-            {Const.Hotkey.SWITCH_BACK_LAST, new KeyBinding {GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.SWITCH_BACK_LAST].MessageId}}
+            { Const.Hotkey.SHOW_APP_CONTROLLER, new KeyBinding { GhkCode = "_+Ctrl+Alt+_+F12", MessageId = Const.Hotkey.Info[Const.Hotkey.SHOW_APP_CONTROLLER].MessageId } },
+            { Const.Hotkey.NAV_LEFT, new KeyBinding { GhkCode            = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.NAV_LEFT].MessageId } },
+            { Const.Hotkey.NAV_RIGHT, new KeyBinding { GhkCode           = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.NAV_RIGHT].MessageId } },
+            { Const.Hotkey.NAV_UP, new KeyBinding { GhkCode              = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.NAV_UP].MessageId } },
+            { Const.Hotkey.NAV_DOWN, new KeyBinding { GhkCode            = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.NAV_DOWN].MessageId } },
+            { Const.Hotkey.SWITCH_BACK_LAST, new KeyBinding { GhkCode    = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.SWITCH_BACK_LAST].MessageId } }
         };
 
-        public Dictionary<string, MouseAction.Action>? MouseAction  { get; set; } = new();
-        public Dictionary<string, MouseAction.Action>  MouseActions { get; set; } = new();
+        public Dictionary<string, MouseAction.Action>? MouseAction  { get; init; } = new();
+        public Dictionary<string, MouseAction.Action>  MouseActions { get; set; }  = new();
 
         [PropertyProtector]
         public Cluster Cluster { get; set; } = new()
         {
-            HideMainViewIfItsShown = false,
+            HideMainViewIfItsShown  = false,
             NotificationOnVdChanged = false,
-            ShowVDIndexOnTrayIcon = false,
-            HideOnStart = false
+            ShowVDIndexOnTrayIcon   = false,
+            HideOnStart             = false
         };
 
         public MouseAction.Action GetMouseActionById( string id )
@@ -58,8 +58,7 @@ namespace VirtualSpace.Config
                 MouseActions = Config.MouseAction.Info;
             }
 
-            return MouseActions.TryGetValue( id, out MouseAction.Action value )
-                ? value : Config.MouseAction.Action.DoNothing;
+            return MouseActions.GetValueOrDefault( id, Config.MouseAction.Action.DoNothing );
         }
     }
 }

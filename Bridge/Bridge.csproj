@@ -6,36 +6,36 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Update="Resources\Langs\WinFormStrings.Designer.cs">
-        <DependentUpon>WinFormStrings.resx</DependentUpon>
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-      </Compile>
-      <Compile Update="Resources\Langs\WinFormStrings.zh-Hans.Designer.cs">
-        <DependentUpon>WinFormStrings.zh-Hans.resx</DependentUpon>
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-      </Compile>
-      <Compile Update="Resources\Images\Images.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Images.resx</DependentUpon>
-      </Compile>
+        <Compile Update="Resources\Langs\WinFormStrings.Designer.cs">
+            <DependentUpon>WinFormStrings.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+        </Compile>
+        <Compile Update="Resources\Langs\WinFormStrings.zh-Hans.Designer.cs">
+            <DependentUpon>WinFormStrings.zh-Hans.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+        </Compile>
+        <Compile Update="Resources\Images\Images.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Images.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\Langs\WinFormStrings.resx">
-        <LastGenOutput>WinFormStrings.Designer.cs</LastGenOutput>
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Langs\WinFormStrings.zh-Hans.resx">
-        <LastGenOutput>WinFormStrings.zh-Hans.Designer.cs</LastGenOutput>
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Images\Images.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Images.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Langs\WinFormStrings.resx">
+            <LastGenOutput>WinFormStrings.Designer.cs</LastGenOutput>
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Langs\WinFormStrings.zh-Hans.resx">
+            <LastGenOutput>WinFormStrings.zh-Hans.Designer.cs</LastGenOutput>
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Images\Images.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Images.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
 </Project>

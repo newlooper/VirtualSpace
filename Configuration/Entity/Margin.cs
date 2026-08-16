@@ -21,10 +21,10 @@ namespace VirtualSpace.Config.Entity
 
         public Margin( int all )
         {
-            Top = all;
-            Right = all;
+            Top    = all;
+            Right  = all;
             Bottom = all;
-            Left = all;
+            Left   = all;
         }
 
         [PropertyProtector( 10, 0, 50 )] public int Top    { get; set; }

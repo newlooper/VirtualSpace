@@ -18,26 +18,28 @@ namespace VirtualSpace.Config.Events.Entity
     [AddINotifyPropertyChangedInterface]
     public partial class RuleTemplate
     {
+        [DoNotNotify] public Func<Window, bool>? Exp;
         [DoNotNotify] public Guid                Id               { get; set; } = Guid.NewGuid();
         [DoNotNotify] public string?             Name             { get; set; }
         [DoNotNotify] public string?             Tag              { get; set; }
         [DoNotNotify] public int                 Weight           { get; set; } = 50;
+        [DoNotNotify] public JsonDocument?       Expression       { get; set; }
+        [DoNotNotify] public Behavior?           Action           { get; set; }
         public               bool                Enabled          { get; set; }
         public               bool                ContinueAfterHit { get; set; }
-        [DoNotNotify] public Func<Window, bool>? Exp;
-        [DoNotNotify] public JsonDocument?       Expression { get; set; }
-        [DoNotNotify] public Behavior?           Action     { get; set; }
-        public               DateTime?           Created    { get; set; }
-        public               DateTime?           Updated    { get; set; }
+        public               DateTime?           Created          { get; set; }
+        public               DateTime?           Updated          { get; set; }
     }
 
+#if TEST_TEST_TEST
     public static class RuleFields
     {
-        public const string Title       = nameof( Title );
+        public const string Title = nameof( Title );
         public const string ProcessName = nameof( ProcessName );
         public const string ProcessPath = nameof( ProcessPath );
         public const string CommandLine = nameof( CommandLine );
-        public const string WndClass    = nameof( WndClass );
+        public const string WndClass = nameof( WndClass );
         public const string WinInScreen = nameof( WinInScreen );
     }
+#endif
 }

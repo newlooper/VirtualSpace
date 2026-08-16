@@ -110,11 +110,101 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 向下.
+        /// </summary>
+        internal static string hk_node_nav_down {
+            get {
+                return ResourceManager.GetString("hk_node_nav_down", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 向左.
+        /// </summary>
+        internal static string hk_node_nav_left {
+            get {
+                return ResourceManager.GetString("hk_node_nav_left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 向右.
+        /// </summary>
+        internal static string hk_node_nav_right {
+            get {
+                return ResourceManager.GetString("hk_node_nav_right", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 向上.
+        /// </summary>
+        internal static string hk_node_nav_up {
+            get {
+                return ResourceManager.GetString("hk_node_nav_up", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 打开程序控制.
+        /// </summary>
+        internal static string hk_node_open_app_controller {
+            get {
+                return ResourceManager.GetString("hk_node_open_app_controller", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 唤起主视图.
+        /// </summary>
+        internal static string hk_node_rise_mainview {
+            get {
+                return ResourceManager.GetString("hk_node_rise_mainview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 为当前活动程序唤起主视图.
+        /// </summary>
+        internal static string hk_node_rise_mainview_for_active_app {
+            get {
+                return ResourceManager.GetString("hk_node_rise_mainview_for_active_app", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 为当前桌面中的活动程序唤起主视图.
+        /// </summary>
+        internal static string hk_node_rise_mainview_for_active_app_in_current_vd {
+            get {
+                return ResourceManager.GetString("hk_node_rise_mainview_for_active_app_in_current_vd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 为当前桌面唤起主视图.
+        /// </summary>
+        internal static string hk_node_rise_mainview_for_current_vd {
+            get {
+                return ResourceManager.GetString("hk_node_rise_mainview_for_current_vd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 开关窗口过滤器.
+        /// </summary>
+        internal static string hk_node_toggle_window_filter {
+            get {
+                return ResourceManager.GetString("hk_node_toggle_window_filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 桌面.
         /// </summary>
         internal static string K_D {
             get {
-                return ResourceManager.GetString("K.D", resourceCulture);
+                return ResourceManager.GetString("K_D", resourceCulture);
             }
         }
         
@@ -123,43 +213,7 @@ namespace VirtualSpace.Resources.Langs {
         /// </summary>
         internal static string K_D_N {
             get {
-                return ResourceManager.GetString("K.D.N", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 向左.
-        /// </summary>
-        internal static string K_D_N_D {
-            get {
-                return ResourceManager.GetString("K.D.N.D", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 向右.
-        /// </summary>
-        internal static string K_D_N_L {
-            get {
-                return ResourceManager.GetString("K.D.N.L", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 向上.
-        /// </summary>
-        internal static string K_D_N_R {
-            get {
-                return ResourceManager.GetString("K.D.N.R", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 向下.
-        /// </summary>
-        internal static string K_D_N_U {
-            get {
-                return ResourceManager.GetString("K.D.N.U", resourceCulture);
+                return ResourceManager.GetString("K_D_N", resourceCulture);
             }
         }
         
@@ -168,7 +222,7 @@ namespace VirtualSpace.Resources.Langs {
         /// </summary>
         internal static string K_D_S {
             get {
-                return ResourceManager.GetString("K.D.S", resourceCulture);
+                return ResourceManager.GetString("K_D_S", resourceCulture);
             }
         }
         
@@ -177,52 +231,7 @@ namespace VirtualSpace.Resources.Langs {
         /// </summary>
         internal static string K_G {
             get {
-                return ResourceManager.GetString("K.G", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 打开程序控制.
-        /// </summary>
-        internal static string K_G_oac {
-            get {
-                return ResourceManager.GetString("K.G.oac", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 唤起主视图.
-        /// </summary>
-        internal static string K_G_rmv {
-            get {
-                return ResourceManager.GetString("K.G.rmv", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 为当前活动程序唤起主视图.
-        /// </summary>
-        internal static string K_G_rmvfaa {
-            get {
-                return ResourceManager.GetString("K.G.rmvfaa", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 为当前桌面中的活动程序唤起主视图.
-        /// </summary>
-        internal static string K_G_rmvfaaicvd {
-            get {
-                return ResourceManager.GetString("K.G.rmvfaaicvd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 为当前桌面唤起主视图.
-        /// </summary>
-        internal static string K_G_rmvfcd {
-            get {
-                return ResourceManager.GetString("K.G.rmvfcd", resourceCulture);
+                return ResourceManager.GetString("K_G", resourceCulture);
             }
         }
         
@@ -231,7 +240,7 @@ namespace VirtualSpace.Resources.Langs {
         /// </summary>
         internal static string K_W {
             get {
-                return ResourceManager.GetString("K.W", resourceCulture);
+                return ResourceManager.GetString("K_W", resourceCulture);
             }
         }
         
@@ -240,7 +249,7 @@ namespace VirtualSpace.Resources.Langs {
         /// </summary>
         internal static string K_W_M {
             get {
-                return ResourceManager.GetString("K.W.M", resourceCulture);
+                return ResourceManager.GetString("K_W_M", resourceCulture);
             }
         }
         
@@ -249,7 +258,7 @@ namespace VirtualSpace.Resources.Langs {
         /// </summary>
         internal static string K_W_MF {
             get {
-                return ResourceManager.GetString("K.W.MF", resourceCulture);
+                return ResourceManager.GetString("K_W_MF", resourceCulture);
             }
         }
         
@@ -268,6 +277,15 @@ namespace VirtualSpace.Resources.Langs {
         internal static string KB_Hotkey_KeyCheck {
             get {
                 return ResourceManager.GetString("KB.Hotkey.KeyCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 至少需要一个修改类键。.
+        /// </summary>
+        internal static string KB_Hotkey_MKeyCheck {
+            get {
+                return ResourceManager.GetString("KB.Hotkey.MKeyCheck", resourceCulture);
             }
         }
         
@@ -364,6 +382,123 @@ namespace VirtualSpace.Resources.Langs {
         /// <summary>
         ///   Looks up a localized string similar to 显示上下文菜单.
         /// </summary>
+        internal static string M_ContextMenu {
+            get {
+                return ResourceManager.GetString("M.ContextMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 桌面.
+        /// </summary>
+        internal static string M_D {
+            get {
+                return ResourceManager.GetString("M.D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 仅显示所选桌面.
+        /// </summary>
+        internal static string M_D_DesktopShowForSelectedDesktop {
+            get {
+                return ResourceManager.GetString("M.D.DesktopShowForSelectedDesktop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 切换桌面并关闭视图.
+        /// </summary>
+        internal static string M_D_DesktopVisibleAndCloseView {
+            get {
+                return ResourceManager.GetString("M.D.DesktopVisibleAndCloseView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 仅切换桌面.
+        /// </summary>
+        internal static string M_D_DesktopVisibleOnly {
+            get {
+                return ResourceManager.GetString("M.D.DesktopVisibleOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 主视图.
+        /// </summary>
+        internal static string M_ROOT {
+            get {
+                return ResourceManager.GetString("M.ROOT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 窗口.
+        /// </summary>
+        internal static string M_W {
+            get {
+                return ResourceManager.GetString("M.W", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 激活窗口，切换桌面并关闭视图.
+        /// </summary>
+        internal static string M_W_WindowActiveDesktopVisibleAndCloseView {
+            get {
+                return ResourceManager.GetString("M.W.WindowActiveDesktopVisibleAndCloseView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 激活窗口，切换桌面.
+        /// </summary>
+        internal static string M_W_WindowActiveDesktopVisibleOnly {
+            get {
+                return ResourceManager.GetString("M.W.WindowActiveDesktopVisibleOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 关闭窗口.
+        /// </summary>
+        internal static string M_W_WindowClose {
+            get {
+                return ResourceManager.GetString("M.W.WindowClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 从视图中隐藏.
+        /// </summary>
+        internal static string M_W_WindowHideFromView {
+            get {
+                return ResourceManager.GetString("M.W.WindowHideFromView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 仅显示所选桌面中的活动程序窗口.
+        /// </summary>
+        internal static string M_W_WindowShowForSelectedProcessInSelectedDesktop {
+            get {
+                return ResourceManager.GetString("M.W.WindowShowForSelectedProcessInSelectedDesktop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 仅显示此程序的窗口.
+        /// </summary>
+        internal static string M_W_WindowShowForSelectedProcessOnly {
+            get {
+                return ResourceManager.GetString("M.W.WindowShowForSelectedProcessOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 显示上下文菜单.
+        /// </summary>
         internal static string Mouse_Action_ContextMenu {
             get {
                 return ResourceManager.GetString("Mouse.Action.ContextMenu", resourceCulture);
@@ -380,7 +515,7 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 切换虚拟桌面并关闭视图.
+        ///   Looks up a localized string similar to 切换桌面并关闭视图.
         /// </summary>
         internal static string Mouse_Action_DesktopVisibleAndCloseView {
             get {
@@ -389,7 +524,7 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 仅切换虚拟桌面.
+        ///   Looks up a localized string similar to 仅切换桌面.
         /// </summary>
         internal static string Mouse_Action_DesktopVisibleOnly {
             get {
@@ -452,6 +587,15 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 相同的鼠标动作已存在，尝试换一种组合或鼠标键.
+        /// </summary>
+        internal static string Mouse_Tips_Exists {
+            get {
+                return ResourceManager.GetString("Mouse.Tips.Exists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 确认.
         /// </summary>
         internal static string MsgBox_Caption_Confirm {
@@ -507,7 +651,8 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 不能重命名或删除最后一个配置文件。.
+        ///   Looks up a localized string similar to 不能重命名或删除最后一个配置文件。
+        ///复制一个新的配置文件后即可操作。.
         /// </summary>
         internal static string Profile_Warning_LastProfileProtect {
             get {
@@ -615,6 +760,15 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 必须选择鼠标键.
+        /// </summary>
+        internal static string Validation_Mouse_Button_Required {
+            get {
+                return ResourceManager.GetString("Validation.Mouse.Button.Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 创建新的虚拟桌面.
         /// </summary>
         internal static string VDW_CTM_Desktop_Create {
@@ -701,16 +855,17 @@ namespace VirtualSpace.Resources.Langs {
         ///
         ///支持的列表
         ///====================================
-        ///Windows 10	Redstone5(17763)
-        ///Windows 10	19H1(18362)
-        ///Windows 10	19H2(18363)
-        ///Windows 10	20H1(19041)
-        ///Windows 10	20H2(19042)
-        ///Windows 10	21H1(19043)
-        ///Windows 10	21H2(19044)
-        ///Windows 10	22H2(19045)
-        ///Windows 11	21H2(22000)
-        ///Windows 11	22H2(22621)
+        ///Windows 10 Redstone5(17763)
+        ///Windows 10 19H1(18362)
+        ///Windows 10 19H2(18363)
+        ///Windows 10 20H1(19041)
+        ///Windows 10 20H2(19042)
+        ///Windows 10 21H1(19043)
+        ///Windows 10 21H2(19044)
+        ///Windows 10 22H2(19045)
+        ///Windows 11 21H2(22000)
+        ///Windows 11 22H2(22621)
+        ///Windows 11 23H2(22631)
         ///====================================.
         /// </summary>
         internal static string VersionCheckFail {

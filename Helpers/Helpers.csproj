@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Logger\Logger.csproj" />
+        <ProjectReference Include="..\Logger\Logger.csproj" />
     </ItemGroup>
 
 </Project>

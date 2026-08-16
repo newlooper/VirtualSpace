@@ -20,37 +20,37 @@ namespace VirtualSpace.Config.Profiles
         {
             UI = new UserInterface
             {
-                CanvasOpacity = 100,
-                CanvasBackColor = new Colour {R = 55, G = 55, B = 55},
-                VDWMargin = 8,
-                VDWBorderSize = 1,
-                VDWPadding = 0,
-                VDWDefaultBackColor = new Colour {R = 55, G = 55, B = 55},
-                VDWCurrentBackColor = new Colour {R = Color.Beige.R, G = Color.Beige.G, B = Color.Beige.B},
-                VDWHighlightBackColor = new Colour {R = Color.Tomato.R, G = Color.Tomato.G, B = Color.Tomato.B},
-                VDWDragTargetOpacity = 0.8f,
-                ThumbMargin = new Margin {Top = 20, Left = 10},
+                CanvasOpacity          = 100,
+                CanvasBackColor        = new Colour { R = 55, G = 55, B = 55 },
+                VDWMargin              = 8,
+                VDWBorderSize          = 1,
+                VDWPadding             = 0,
+                VDWDefaultBackColor    = new Colour { R = 55, G             = 55, B             = 55 },
+                VDWCurrentBackColor    = new Colour { R = Color.Beige.R, G  = Color.Beige.G, B  = Color.Beige.B },
+                VDWHighlightBackColor  = new Colour { R = Color.Tomato.R, G = Color.Tomato.G, B = Color.Tomato.B },
+                VDWDragTargetOpacity   = 0.8f,
+                ThumbMargin            = new Margin { Top = 20, Left = 10 },
                 ThumbDragSourceOpacity = 150,
-                Language = "en",
-                DesktopArrangement = 0,
-                ShowVdName = true,
-                ShowVdIndex = true,
-                ShowVdIndexType = 0
+                Language               = "en",
+                DesktopArrangement     = 0,
+                ShowVdName             = true,
+                ShowVdIndex            = true,
+                ShowVdIndexType        = 0
             };
             DaemonAutoStart = true;
             Mouse = new Mouse
             {
-                DragSizeFactor = 10,
-                LeftClickOnCanvas = 1,
-                RightClickOnCanvas = 0,
-                MiddleClickOnCanvas = 0,
+                DragSizeFactor                     = 10,
+                LeftClickOnCanvas                  = 1,
+                RightClickOnCanvas                 = 0,
+                MiddleClickOnCanvas                = 0,
                 UseWheelSwitchDesktopWhenOnTaskbar = false,
-                TaskbarVisibilityThreshold = 100
+                TaskbarVisibilityThreshold         = 100
             };
             Navigation = new Navigation
             {
-                CirculationH = false,
-                CirculationV = false,
+                CirculationH     = false,
+                CirculationV     = false,
                 CirculationHType = 0
             };
         }

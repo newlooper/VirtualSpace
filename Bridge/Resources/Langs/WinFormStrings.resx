@@ -1,138 +1,138 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="VDW.CTM.Desktop.Create" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="VDW.CTM.Desktop.Create" xml:space="preserve">
     <value>Create Virtual Desktop</value>
   </data>
-  <data name="VDW.CTM.Desktop.Remove" xml:space="preserve">
+    <data name="VDW.CTM.Desktop.Remove" xml:space="preserve">
     <value>Remove Virtual Desktop</value>
   </data>
-  <data name="VDW.CTM.Window.Close" xml:space="preserve">
+    <data name="VDW.CTM.Window.Close" xml:space="preserve">
     <value>Close</value>
   </data>
-  <data name="VDW.CTM.Window.PinApp" xml:space="preserve">
+    <data name="VDW.CTM.Window.PinApp" xml:space="preserve">
     <value>Show windows from this app on all desktops</value>
   </data>
-  <data name="VDW.CTM.Window.PinWin" xml:space="preserve">
+    <data name="VDW.CTM.Window.PinWin" xml:space="preserve">
     <value>Show this window on all desktops</value>
   </data>
-  <data name="VersionCheckFail" xml:space="preserve">
+    <data name="VersionCheckFail" xml:space="preserve">
     <value>Unsupported Windows Version.
 Application Will Quit.
 
@@ -151,257 +151,257 @@ Windows 11 22H2(22621)
 Windows 11 23H2(22631)
 ====================================</value>
   </data>
-  <data name="Rule.NameRequired" xml:space="preserve">
+    <data name="Rule.NameRequired" xml:space="preserve">
     <value>is required.</value>
   </data>
-  <data name="Rule.Op.Eq" xml:space="preserve">
+    <data name="Rule.Op.Eq" xml:space="preserve">
     <value>is</value>
   </data>
-  <data name="Rule.Op.Ssw" xml:space="preserve">
+    <data name="Rule.Op.Ssw" xml:space="preserve">
     <value>starts with</value>
   </data>
-  <data name="Rule.Op.Esw" xml:space="preserve">
+    <data name="Rule.Op.Esw" xml:space="preserve">
     <value>ends with</value>
   </data>
-  <data name="Rule.Op.Sc" xml:space="preserve">
+    <data name="Rule.Op.Sc" xml:space="preserve">
     <value>contains</value>
   </data>
-  <data name="Rule.Op.Regex" xml:space="preserve">
+    <data name="Rule.Op.Regex" xml:space="preserve">
     <value>regex</value>
   </data>
-  <data name="Rule.AtLeastOne" xml:space="preserve">
+    <data name="Rule.AtLeastOne" xml:space="preserve">
     <value>At least one common rule is required.</value>
   </data>
-  <data name="Rule.InvalidRegex" xml:space="preserve">
+    <data name="Rule.InvalidRegex" xml:space="preserve">
     <value>Invalid Regex.</value>
   </data>
-  <data name="VDW.CTM.Window.NewRule" xml:space="preserve">
+    <data name="VDW.CTM.Window.NewRule" xml:space="preserve">
     <value>Create Rule from this Window...</value>
   </data>
-  <data name="Rule.New" xml:space="preserve">
+    <data name="Rule.New" xml:space="preserve">
     <value>New Rule</value>
   </data>
-  <data name="Error.MoveWindowToDesktop" xml:space="preserve">
+    <data name="Error.MoveWindowToDesktop" xml:space="preserve">
     <value>Window 【{0}】 match rule 【{1}】, but error occur when moving.
 possible reason:
 - window invalid.
 - target desktop not exists.
 - target desktop invalid.</value>
   </data>
-  <data name="Error.Title" xml:space="preserve">
+    <data name="Error.Title" xml:space="preserve">
     <value>Error!</value>
   </data>
-  <data name="VDW.CTM.Window.HideFromView" xml:space="preserve">
+    <data name="VDW.CTM.Window.HideFromView" xml:space="preserve">
     <value>Hide from view</value>
   </data>
-  <data name="VDW.CTM.Desktop.UnHideWindow" xml:space="preserve">
+    <data name="VDW.CTM.Desktop.UnHideWindow" xml:space="preserve">
     <value>Unhide Window</value>
   </data>
-  <data name="VDW.CTM.Window.Screen" xml:space="preserve">
+    <data name="VDW.CTM.Window.Screen" xml:space="preserve">
     <value>Screen</value>
   </data>
-  <data name="Nav.CircleHType.NextRow" xml:space="preserve">
+    <data name="Nav.CircleHType.NextRow" xml:space="preserve">
     <value>Next row</value>
   </data>
-  <data name="Nav.CircleHType.SameRow" xml:space="preserve">
+    <data name="Nav.CircleHType.SameRow" xml:space="preserve">
     <value>Same row</value>
   </data>
-  <data name="KB.Hotkey.Cleared" xml:space="preserve">
+    <data name="KB.Hotkey.Cleared" xml:space="preserve">
     <value>Hotkey Cleared.</value>
   </data>
-  <data name="KB.Hotkey.Reg.Success" xml:space="preserve">
+    <data name="KB.Hotkey.Reg.Success" xml:space="preserve">
     <value>Register new Hotkey Success.</value>
   </data>
-  <data name="KB.Hotkey.Reg.Fail" xml:space="preserve">
+    <data name="KB.Hotkey.Reg.Fail" xml:space="preserve">
     <value>Register new Hotkey Failed.</value>
   </data>
-  <data name="KB.Hotkey.SettingsSaved" xml:space="preserve">
+    <data name="KB.Hotkey.SettingsSaved" xml:space="preserve">
     <value>Settings Saved.</value>
   </data>
-  <data name="KB.Hotkey.KeyCheck" xml:space="preserve">
+    <data name="KB.Hotkey.KeyCheck" xml:space="preserve">
     <value>Must choose a none-modifier Key.</value>
   </data>
-  <data name="Mouse.Action.DoNothing" xml:space="preserve">
+    <data name="Mouse.Action.DoNothing" xml:space="preserve">
     <value>Do Nothing</value>
   </data>
-  <data name="Mouse.Action.DesktopVisibleAndCloseView" xml:space="preserve">
+    <data name="Mouse.Action.DesktopVisibleAndCloseView" xml:space="preserve">
     <value>Switch Desktop And Close View</value>
   </data>
-  <data name="Mouse.Action.DesktopVisibleOnly" xml:space="preserve">
+    <data name="Mouse.Action.DesktopVisibleOnly" xml:space="preserve">
     <value>Switch Desktop Only</value>
   </data>
-  <data name="Mouse.Action.ContextMenu" xml:space="preserve">
+    <data name="Mouse.Action.ContextMenu" xml:space="preserve">
     <value>Show Context Menu</value>
   </data>
-  <data name="Mouse.Action.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
+    <data name="Mouse.Action.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
     <value>Active Window, Switch Virtual Desktop And Close View</value>
   </data>
-  <data name="Mouse.Action.WindowActiveDesktopVisibleOnly" xml:space="preserve">
+    <data name="Mouse.Action.WindowActiveDesktopVisibleOnly" xml:space="preserve">
     <value>Active Window, Switch Virtual Desktop Only</value>
   </data>
-  <data name="Mouse.Action.WindowClose" xml:space="preserve">
+    <data name="Mouse.Action.WindowClose" xml:space="preserve">
     <value>Close Window</value>
   </data>
-  <data name="Cluster.Notification.SVD.Current" xml:space="preserve">
+    <data name="Cluster.Notification.SVD.Current" xml:space="preserve">
     <value>Current Desktop: </value>
   </data>
-  <data name="Cluster.Notification.SVD.Last" xml:space="preserve">
+    <data name="Cluster.Notification.SVD.Last" xml:space="preserve">
     <value>Last Desktop: </value>
   </data>
-  <data name="General.RunOnStartup.Error.Permission" xml:space="preserve">
+    <data name="General.RunOnStartup.Error.Permission" xml:space="preserve">
     <value>Cannot access task with your current permissions level.
 You need to run this application 'as administrator' even if you are using an administrator account.</value>
   </data>
-  <data name="Mouse.Action.WindowShowForSelectedProcessOnly" xml:space="preserve">
+    <data name="Mouse.Action.WindowShowForSelectedProcessOnly" xml:space="preserve">
     <value>Show Windows Only From Selected App</value>
   </data>
-  <data name="KB.Hotkey.SVD" xml:space="preserve">
+    <data name="KB.Hotkey.SVD" xml:space="preserve">
     <value>Switch To Desktop </value>
   </data>
-  <data name="KB.Hotkey.MW" xml:space="preserve">
+    <data name="KB.Hotkey.MW" xml:space="preserve">
     <value>Move To Desktop </value>
   </data>
-  <data name="KB.Hotkey.MWF" xml:space="preserve">
+    <data name="KB.Hotkey.MWF" xml:space="preserve">
     <value>Move and Follow To Desktop </value>
   </data>
-  <data name="Mouse.Action.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
+    <data name="Mouse.Action.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
     <value>Show Windows Only From Selected App in Selected Desktop</value>
   </data>
-  <data name="Keys.Left" xml:space="preserve">
+    <data name="Keys.Left" xml:space="preserve">
     <value>Left</value>
   </data>
-  <data name="Keys.Middle" xml:space="preserve">
+    <data name="Keys.Middle" xml:space="preserve">
     <value>Middle</value>
   </data>
-  <data name="Keys.Right" xml:space="preserve">
+    <data name="Keys.Right" xml:space="preserve">
     <value>Right</value>
   </data>
-  <data name="Mouse.Action.DesktopShowForSelectedDesktop" xml:space="preserve">
+    <data name="Mouse.Action.DesktopShowForSelectedDesktop" xml:space="preserve">
     <value>Show Only Selected Desktop in MainView</value>
   </data>
-  <data name="KB.Hotkey.SVD_BACK_LAST" xml:space="preserve">
+    <data name="KB.Hotkey.SVD_BACK_LAST" xml:space="preserve">
     <value>Switch Back To Last Desktop</value>
   </data>
-  <data name="Profile.Confirm.Delete" xml:space="preserve">
+    <data name="Profile.Confirm.Delete" xml:space="preserve">
     <value>Are you sure to delete this profile?
 All files related with this profile will be deleted too.</value>
   </data>
-  <data name="Profile.Warning.LastProfileProtect" xml:space="preserve">
+    <data name="Profile.Warning.LastProfileProtect" xml:space="preserve">
     <value>Can not rename or delete the last profile.
 Duplicate one and edit it.</value>
   </data>
-  <data name="Profile.Warning.InvalidProfileName" xml:space="preserve">
+    <data name="Profile.Warning.InvalidProfileName" xml:space="preserve">
     <value>Invalid profile name, or profile name already exists.</value>
   </data>
-  <data name="MsgBox.Caption.Warning" xml:space="preserve">
+    <data name="MsgBox.Caption.Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
-  <data name="MsgBox.Caption.Confirm" xml:space="preserve">
+    <data name="MsgBox.Caption.Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
-  <data name="Tray.Menu.Settings" xml:space="preserve">
+    <data name="Tray.Menu.Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="Tray.Menu.Quit" xml:space="preserve">
+    <data name="Tray.Menu.Quit" xml:space="preserve">
     <value>Quit</value>
   </data>
-  <data name="K_G" xml:space="preserve">
+    <data name="K_G" xml:space="preserve">
     <value>General</value>
   </data>
-  <data name="hk_node_rise_mainview" xml:space="preserve">
+    <data name="hk_node_rise_mainview" xml:space="preserve">
     <value>Rise MainView</value>
   </data>
-  <data name="hk_node_open_app_controller" xml:space="preserve">
+    <data name="hk_node_open_app_controller" xml:space="preserve">
     <value>Open AppController</value>
   </data>
-  <data name="hk_node_rise_mainview_for_active_app" xml:space="preserve">
+    <data name="hk_node_rise_mainview_for_active_app" xml:space="preserve">
     <value>Rise MainView For Active App</value>
   </data>
-  <data name="hk_node_rise_mainview_for_current_vd" xml:space="preserve">
+    <data name="hk_node_rise_mainview_for_current_vd" xml:space="preserve">
     <value>Rise MainView For Current Desktop</value>
   </data>
-  <data name="hk_node_rise_mainview_for_active_app_in_current_vd" xml:space="preserve">
+    <data name="hk_node_rise_mainview_for_active_app_in_current_vd" xml:space="preserve">
     <value>Rise MainView For Active App In Current Desktop</value>
   </data>
-  <data name="K_D" xml:space="preserve">
+    <data name="K_D" xml:space="preserve">
     <value>Desktop</value>
   </data>
-  <data name="K_D_S" xml:space="preserve">
+    <data name="K_D_S" xml:space="preserve">
     <value>Switch</value>
   </data>
-  <data name="K_D_N" xml:space="preserve">
+    <data name="K_D_N" xml:space="preserve">
     <value>Navigation</value>
   </data>
-  <data name="K_W" xml:space="preserve">
+    <data name="K_W" xml:space="preserve">
     <value>Window</value>
   </data>
-  <data name="K_W_M" xml:space="preserve">
+    <data name="K_W_M" xml:space="preserve">
     <value>Move</value>
   </data>
-  <data name="K_W_MF" xml:space="preserve">
+    <data name="K_W_MF" xml:space="preserve">
     <value>Move and Follow</value>
   </data>
-  <data name="hk_node_nav_right" xml:space="preserve">
+    <data name="hk_node_nav_right" xml:space="preserve">
     <value>Right</value>
   </data>
-  <data name="hk_node_nav_up" xml:space="preserve">
+    <data name="hk_node_nav_up" xml:space="preserve">
     <value>Up</value>
   </data>
-  <data name="hk_node_nav_down" xml:space="preserve">
+    <data name="hk_node_nav_down" xml:space="preserve">
     <value>Down</value>
   </data>
-  <data name="hk_node_nav_left" xml:space="preserve">
+    <data name="hk_node_nav_left" xml:space="preserve">
     <value>Left</value>
   </data>
-  <data name="KB.Hotkey.MKeyCheck" xml:space="preserve">
+    <data name="KB.Hotkey.MKeyCheck" xml:space="preserve">
     <value>At least one modifier Key.</value>
   </data>
-  <data name="M.D" xml:space="preserve">
+    <data name="M.D" xml:space="preserve">
     <value>Desktop</value>
   </data>
-  <data name="M.W" xml:space="preserve">
+    <data name="M.W" xml:space="preserve">
     <value>Window</value>
   </data>
-  <data name="M.ROOT" xml:space="preserve">
+    <data name="M.ROOT" xml:space="preserve">
     <value>MainView</value>
   </data>
-  <data name="M.D.DesktopVisibleAndCloseView" xml:space="preserve">
+    <data name="M.D.DesktopVisibleAndCloseView" xml:space="preserve">
     <value>Switch Desktop and Close View</value>
   </data>
-  <data name="M.D.DesktopVisibleOnly" xml:space="preserve">
+    <data name="M.D.DesktopVisibleOnly" xml:space="preserve">
     <value>Switch Desktop Only</value>
   </data>
-  <data name="M.ContextMenu" xml:space="preserve">
+    <data name="M.ContextMenu" xml:space="preserve">
     <value>Show ContextMenu</value>
   </data>
-  <data name="M.D.DesktopShowForSelectedDesktop" xml:space="preserve">
+    <data name="M.D.DesktopShowForSelectedDesktop" xml:space="preserve">
     <value>Show Only Selected Desktop in View</value>
   </data>
-  <data name="M.W.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
+    <data name="M.W.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
     <value>Active Window, Switch Desktop and Close View</value>
   </data>
-  <data name="M.W.WindowActiveDesktopVisibleOnly" xml:space="preserve">
+    <data name="M.W.WindowActiveDesktopVisibleOnly" xml:space="preserve">
     <value>Active Window, Switch Desktop Only</value>
   </data>
-  <data name="M.W.WindowHideFromView" xml:space="preserve">
+    <data name="M.W.WindowHideFromView" xml:space="preserve">
     <value>Hide From View</value>
   </data>
-  <data name="M.W.WindowClose" xml:space="preserve">
+    <data name="M.W.WindowClose" xml:space="preserve">
     <value>Close Window</value>
   </data>
-  <data name="M.W.WindowShowForSelectedProcessOnly" xml:space="preserve">
+    <data name="M.W.WindowShowForSelectedProcessOnly" xml:space="preserve">
     <value>Show Windows Only From Selected App</value>
   </data>
-  <data name="M.W.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
+    <data name="M.W.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
     <value>Show Windows Only From Selected App in Selected Desktop</value>
   </data>
-  <data name="Validation.Mouse.Button.Required" xml:space="preserve">
+    <data name="Validation.Mouse.Button.Required" xml:space="preserve">
     <value>Mouse Button Required</value>
   </data>
-  <data name="Mouse.Tips.Exists" xml:space="preserve">
+    <data name="Mouse.Tips.Exists" xml:space="preserve">
     <value>MouseAction Exists, try another combine or Mousebutton</value>
   </data>
-  <data name="hk_node_toggle_window_filter" xml:space="preserve">
+    <data name="hk_node_toggle_window_filter" xml:space="preserve">
     <value>Toggle Window Filter</value>
   </data>
 </root>

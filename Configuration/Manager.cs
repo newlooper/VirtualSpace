@@ -29,36 +29,25 @@ namespace VirtualSpace.Config
 {
     public static class Manager
     {
-        public static ConfigTemplate Configs = null!;
-        public static string         AppPath = string.Empty;
-        public static string         AppRootFolder = string.Empty;
-        public static string         ProfileFolder = string.Empty;
-        public static string         CacheFolder = string.Empty;
-        public static string         PluginsFolder = string.Empty;
-        public static string         ConfigRootFolder {
-            get { return AppRootFolder; }
-        }
-        public static string         ConfigFilePath = string.Empty;
-
-        public static Profile CurrentProfile => Configs.Profiles[Configs.CurrentProfileName];
+        private static readonly JsonSerializerOptions JsonWriteOptions = new() { WriteIndented = true };
+        private static          string                _cacheFolder     = string.Empty;
+        private static          string                _pluginsFolder   = string.Empty;
+        private static          string                _configFilePath  = string.Empty;
+        public static           ConfigTemplate        Configs          { get; private set; } = null!;
+        public static           string                AppPath          => Environment.ProcessPath!;
+        public static           string                ProfileFolder    { get; private set; } = string.Empty;
+        public static           string                ConfigRootFolder { get; private set; } = string.Empty;
+        public static           Profile               CurrentProfile   => Configs.Profiles[Configs.CurrentProfileName];
 
         public static bool Init()
         {
             try
             {
-                AppPath = Environment.ProcessPath!;
-                //AppRootFolder = Path.Combine(
-                //    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                //    Const.OrganizationName, 
-                //    Const.AppName
-                //);
-
-                // ConfigRootFolder = GetConfigRoot();
-                ConfigFilePath = Path.Combine( ConfigRootFolder, Settings.SettingsFile );
+                _configFilePath = Path.Combine( ConfigRootFolder, Settings.SettingsFile );
 
                 CheckFolders();
 
-                InitConfig( ConfigFilePath );
+                InitConfig( _configFilePath );
 
                 LogManager.SetLogLevel( Configs.LogConfig.LogLevel );
             }
@@ -82,9 +71,7 @@ namespace VirtualSpace.Config
                 Configs = JsonSerializer.Deserialize<ConfigTemplate>( ref utf8Reader ) ?? throw new Exception( $"Failed to deserialize ConfigTemplate from {filePath}" );
                 var cluster = ReadCluster();
                 if ( cluster is not null )
-                {
                     Configs.Cluster = cluster;
-                }
 
                 PropertyProtector.Walk( Configs );
 
@@ -119,17 +106,17 @@ namespace VirtualSpace.Config
                 Configs = new ConfigTemplate
                 {
                     CurrentProfileName = nameof( Default ),
-                    Version = Settings.DefaultVersion,
-                    LogConfig = new LogConfig {LogLevel = Settings.DefaultLogLevel},
+                    Version            = Settings.DefaultVersion,
+                    LogConfig          = new LogConfig { LogLevel = Settings.DefaultLogLevel },
                     Profiles = new Dictionary<string, Profile>
                     {
-                        {nameof( Default ), new Default()}
+                        { nameof( Default ), new Default() }
                     },
                     MouseActions = MouseAction.Info
                 };
 
                 PropertyProtector.Walk( Configs );
-                
+
                 Save( filePath, "init", "Setting File" );
                 SaveCluster( Configs.Cluster );
             }
@@ -137,9 +124,9 @@ namespace VirtualSpace.Config
 
         public static async void Save( string? filePath = null, object? reason = null, [CallerArgumentExpression( "reason" )] string reasonName = "" )
         {
-            filePath ??= ConfigFilePath;
             try
             {
+                filePath ??= _configFilePath;
                 var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, JsonWriteOptions );
                 await File.WriteAllBytesAsync( filePath, contents ).ConfigureAwait( false );
                 Logger.Info( $"Settings Saved [{reasonName}: {reason}]." );
@@ -155,27 +142,24 @@ namespace VirtualSpace.Config
 
         public static async void SwitchProfile( string name )
         {
-            Configs.CurrentProfileName = name;
-            var cluster = ReadCluster(); // after CurrentProfileName changed
-            if ( cluster is not null )
-            {
-                Configs.Cluster = cluster;
-            }
-
-            Conditions.SwitchRuleProfile(); // after CurrentProfileName changed
-
             try
             {
+                Configs.CurrentProfileName = name;
+                var cluster = ReadCluster(); // after CurrentProfileName changed
+                if ( cluster is not null )
+                    Configs.Cluster = cluster;
+
+                Conditions.SwitchRuleProfile(); // after CurrentProfileName changed
                 var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, JsonWriteOptions );
-                await File.WriteAllBytesAsync( ConfigFilePath, contents ).ConfigureAwait( false );
+                await File.WriteAllBytesAsync( _configFilePath, contents ).ConfigureAwait( false );
                 Logger.Info( $"[Profile]Switch: {name}" );
+
+                ProfileChanged?.Invoke( null, EventArgs.Empty );
             }
             catch ( Exception ex )
             {
                 Logger.Error( "Failed to save Settings: " + ex.Message );
             }
-
-            ProfileChanged?.Invoke( null, EventArgs.Empty );
         }
 
         public static event EventHandler<EventArgs>? ProfileChanged;
@@ -232,9 +216,7 @@ namespace VirtualSpace.Config
                 try
                 {
                     foreach ( var file in dir.EnumerateFiles( profileName + ".*" ) ) // such violent
-                    {
                         file.Delete();
-                    }
                 }
                 catch ( Exception ex )
                 {
@@ -247,30 +229,26 @@ namespace VirtualSpace.Config
         {
             using var vsReg = Registry.CurrentUser.CreateSubKey( Const.Reg.RegKeyApp );
             vsReg.SetValue( Const.Reg.RegKeyConfigRoot, path );
-            AppRootFolder = path;
+            ConfigRootFolder = path;
         }
 
         public static string GetConfigRoot()
         {
-            AppRootFolder = Path.Combine(
-                    Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ),
-                    Const.OrganizationName,
-                    Const.AppName
-                );
+            ConfigRootFolder = Path.Combine(
+                Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ),
+                Const.OrganizationName,
+                Const.AppName
+            );
 
             using var vsReg = Registry.CurrentUser.OpenSubKey( Const.Reg.RegKeyApp );
             if ( vsReg is null )
-            {
-                return AppRootFolder;
-            }
+                return ConfigRootFolder;
 
             var configRootReg = vsReg.GetValue( Const.Reg.RegKeyConfigRoot ) as string ?? string.Empty;
             if ( configRootReg == string.Empty || !Directory.Exists( configRootReg ) )
-            {
-                return AppRootFolder;
-            }
+                return ConfigRootFolder;
 
-            AppRootFolder = configRootReg;
+            ConfigRootFolder = configRootReg;
 
             return ConfigRootFolder;
         }
@@ -280,11 +258,11 @@ namespace VirtualSpace.Config
             ProfileFolder = Path.Combine( ConfigRootFolder, Settings.ProfilesFolder );
             Directory.CreateDirectory( ProfileFolder );
 
-            CacheFolder = Path.Combine( AppRootFolder, Settings.CacheFolder );
-            Directory.CreateDirectory( CacheFolder );
+            _cacheFolder = Path.Combine( ConfigRootFolder, Settings.CacheFolder );
+            Directory.CreateDirectory( _cacheFolder );
 
-            PluginsFolder = Path.Combine( AppRootFolder, Settings.PluginsFolder );
-            Directory.CreateDirectory( PluginsFolder );
+            _pluginsFolder = Path.Combine( ConfigRootFolder, Settings.PluginsFolder );
+            Directory.CreateDirectory( _pluginsFolder );
         }
 
         public static string GetRuleFilePath( string? profile = null )
@@ -298,15 +276,13 @@ namespace VirtualSpace.Config
         public static string GetCachePath()
         {
             CheckFolders();
-            return CacheFolder;
+            return _cacheFolder;
         }
 
         public static string GetPluginsPath()
         {
             CheckFolders();
-            return PluginsFolder;
+            return _pluginsFolder;
         }
-
-        private static readonly JsonSerializerOptions JsonWriteOptions = new() {WriteIndented = true};
     }
 }

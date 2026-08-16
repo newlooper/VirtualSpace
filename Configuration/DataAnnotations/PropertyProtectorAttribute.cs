@@ -15,26 +15,26 @@ namespace VirtualSpace.Config.DataAnnotations
 {
     public class PropertyProtectorAttribute : Attribute
     {
-        public object[] Values { get; private set; }
-
         public PropertyProtectorAttribute()
         {
         }
 
         public PropertyProtectorAttribute( byte defaultV, byte min )
         {
-            Values = new object[] {defaultV, min};
+            Values = new object[] { defaultV, min };
         }
 
         public PropertyProtectorAttribute( int defaultV, int min, int max )
         {
-            Values = new object[] {defaultV, min, max};
+            Values = new object[] { defaultV, min, max };
         }
 
         public PropertyProtectorAttribute( long defaultV, long min, long max )
         {
-            Values = new object[] {defaultV, min, max};
+            Values = new object[] { defaultV, min, max };
         }
+
+        public object[] Values { get; }
     }
 
     public abstract class PropertyProtector
@@ -44,7 +44,7 @@ namespace VirtualSpace.Config.DataAnnotations
             var props = from prop in obj.GetType().GetProperties()
                 let attrs = prop.GetCustomAttributes( typeof( PropertyProtectorAttribute ), false )
                 where attrs.Any()
-                select new {Obj = obj, Property = prop, Attr = (PropertyProtectorAttribute)attrs.First()};
+                select new { Obj = obj, Property = prop, Attr = (PropertyProtectorAttribute)attrs.First() };
 
             foreach ( var pair in props )
             {

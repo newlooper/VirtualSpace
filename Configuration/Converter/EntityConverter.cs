@@ -26,12 +26,12 @@ namespace VirtualSpace.Config.Converter
             {
                 if ( maId.StartsWith( MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) )
                 {
-                    prefix = MouseAction.MOUSE_NODE_DESKTOP_PREFIX;
+                    prefix   = MouseAction.MOUSE_NODE_DESKTOP_PREFIX;
                     combined = maId[MouseAction.MOUSE_NODE_DESKTOP_PREFIX.Length..];
                 }
                 else if ( maId.StartsWith( MouseAction.MOUSE_NODE_WINDOW_PREFIX ) )
                 {
-                    prefix = MouseAction.MOUSE_NODE_WINDOW_PREFIX;
+                    prefix   = MouseAction.MOUSE_NODE_WINDOW_PREFIX;
                     combined = maId[MouseAction.MOUSE_NODE_WINDOW_PREFIX.Length..];
                 }
 
@@ -39,12 +39,12 @@ namespace VirtualSpace.Config.Converter
                 {
                     var arrMK = combined.Split( MouseAction.KEY_SPLITTER );
                     var key   = MouseAction.KeysName.Single( x => x.Value == arrMK[0] ).Key;
-                    modifier = ( (int)key ).ToString( "X2" );
+                    modifier    = ( (int)key ).ToString( "X2" );
                     mouseButton = arrMK[1];
                 }
                 else
                 {
-                    modifier = MouseAction.NoneKeyCode;
+                    modifier    = MouseAction.NoneKeyCode;
                     mouseButton = combined;
                 }
 

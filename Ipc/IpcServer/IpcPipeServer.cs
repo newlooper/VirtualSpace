@@ -40,15 +40,12 @@ namespace VirtualSpace.Commons
                     using var reader = new StreamReader( server );
                     var       line   = reader.ReadLine();
 
-                    if ( !string.IsNullOrEmpty( line ) )
-                    {
-                        MessageProcessing( line, server );
-                    }
+                    if ( !string.IsNullOrEmpty( line ) ) MessageProcessing( line, server );
                 }
+
                 Logger.Info( "Ipc Pipe Server Shutdown." );
-                
             }, TaskCreationOptions.LongRunning );
-            
+
             return;
 
             void MessageProcessing( string line, NamedPipeServerStream server )
@@ -76,7 +73,7 @@ namespace VirtualSpace.Commons
                         foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
                         {
                             Logger.Info( $"[PLUGIN\\Virtual Desktop Switch Observer] {p.Display} Started." );
-                            p.Handle    = (IntPtr)msg.Handle;
+                            p.Handle    = msg.Handle;
                             p.ProcessId = msg.ProcessId;
                             p.Type      = PluginType.VD_SWITCH_OBSERVER;
                             break;
@@ -89,16 +86,13 @@ namespace VirtualSpace.Commons
                     {
                         var runningPlugin = PluginHost.Plugins.Find( p =>
                             p.Name == msg.Name
-                            && p.Handle == (IntPtr)msg.Handle
+                            && p.Handle == msg.Handle
                             && p.ProcessId == msg.ProcessId );
 
                         ////////////////////////////////////////////////
                         // 若插件提供的信息在宿主中查不到，就通知该插件自行关闭
                         // 这通常是因为有同名插件启动，覆盖了先启动的插件的信息
-                        if ( runningPlugin == null )
-                        {
-                            PluginHost.ClosePlugin( new PluginInfo {Handle = (IntPtr)msg.Handle} );
-                        }
+                        if ( runningPlugin == null ) PluginHost.ClosePlugin( new PluginInfo { Handle = msg.Handle } );
 
                         break;
                     }
@@ -113,7 +107,7 @@ namespace VirtualSpace.Commons
                         foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
                         {
                             Logger.Info( $"[PLUGIN\\App Updater] {p.Display} Started." );
-                            p.Handle    = (IntPtr)msg.Handle;
+                            p.Handle    = msg.Handle;
                             p.ProcessId = msg.ProcessId;
                             p.Type      = PluginType.UPDATER;
                             break;
@@ -127,9 +121,6 @@ namespace VirtualSpace.Commons
                         User32.PostMessage( MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RestartApp, 0 );
                         break;
                     }
-
-                    default:
-                        break;
                 }
             }
         }
@@ -141,7 +132,7 @@ namespace VirtualSpace.Commons
             {
                 client.Connect( 3000 );
                 using var writer = new StreamWriter( client );
-                var       msg    = new PipeMessage {Type = PipeMessageType.INSTANCE};
+                var       msg    = new PipeMessage { Type = PipeMessageType.INSTANCE };
                 writer.WriteLine( JsonSerializer.Serialize( msg ) );
                 writer.Flush();
             }
@@ -154,10 +145,7 @@ namespace VirtualSpace.Commons
         public static void SimpleShutdown()
         {
             _isRunning = false;
-            foreach ( var pluginInfo in PluginHost.Plugins )
-            {
-                PluginHost.ClosePlugin( pluginInfo );
-            }
+            foreach ( var pluginInfo in PluginHost.Plugins ) PluginHost.ClosePlugin( pluginInfo );
 
             using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
             try

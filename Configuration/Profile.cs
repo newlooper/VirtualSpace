@@ -28,8 +28,8 @@ namespace VirtualSpace.Config
 
         public Navigation Navigation { get; set; } = new()
         {
-            CirculationH = false,
-            CirculationV = false,
+            CirculationH     = false,
+            CirculationV     = false,
             CirculationHType = 0
         };
 

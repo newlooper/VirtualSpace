@@ -40,6 +40,9 @@ namespace VirtualSpace.Config.Events.Expression
         public static readonly  ConcurrentBag<IntPtr>             WndHandleIgnoreListByRule = new();
         private static          long                              _updateRuleLock;
 
+        private static JsonSerializerOptions? _readOptions;
+        private static JsonSerializerOptions? _writeOptions;
+
         static Conditions()
         {
             _rules = InitRules();
@@ -86,66 +89,66 @@ namespace VirtualSpace.Config.Events.Expression
 
         private static async void CheckRulesForWindow( Window win )
         {
-            if ( _rules.Count == 0 || Interlocked.Read( ref _updateRuleLock ) != 0 ) return;
-
-            var rules = new List<RuleTemplate>( _rules );
-
-            WindowCheckTimes.TryAdd( win.Handle, 0 );
-
-            var isOnePeriod = WindowCheckTimes[win.Handle] % Const.WindowCheckTimesLimit == 0;
-
-            if ( isOnePeriod )
+            try
             {
-                Logger.Debug( $"Checking rules for {win.Title}, current profile: {Manager.Configs.CurrentProfileName}" );
-            }
+                if ( _rules.Count == 0 || Interlocked.Read( ref _updateRuleLock ) != 0 ) return;
 
-            await Task.Run( () =>
-            {
-                _ = User32.GetWindowThreadProcessId( win.Handle, out var pId );
-                using var pInfo = Process.GetProcessById( pId );
+                var rules = new List<RuleTemplate>( _rules );
 
-                win.ProcessName = pInfo.ProcessName;
-                try
+                WindowCheckTimes.TryAdd( win.Handle, 0 );
+
+                var isOnePeriod = WindowCheckTimes[win.Handle] % Const.WindowCheckTimesLimit == 0;
+
+                if ( isOnePeriod )
                 {
-                    win.ProcessPath = pInfo.MainModule?.FileName;
-                    win.CommandLine = pInfo.GetCommandLineArgs();
-                }
-                catch ( Exception ex )
-                {
-                    Logger.Warning( "Get Process Info: " + ex.Message );
+                    Logger.Debug( $"Checking rules for {win.Title}, current profile: {Manager.Configs.CurrentProfileName}" );
                 }
 
-                var screen      = Screen.FromHandle( win.Handle );
-                var screenIndex = 0;
-                var allScreens  = Screen.AllScreens;
-                for ( var i = 0; i < allScreens.Length; i++ )
+                await Task.Run( () =>
                 {
-                    if ( screen.DeviceName == allScreens[i].DeviceName )
+                    _ = User32.GetWindowThreadProcessId( win.Handle, out var pId );
+                    using var pInfo = Process.GetProcessById( pId );
+
+                    win.ProcessName = pInfo.ProcessName;
+                    try
                     {
+                        win.ProcessPath = pInfo.MainModule?.FileName;
+                        win.CommandLine = pInfo.GetCommandLineArgs();
+                    }
+                    catch ( Exception ex )
+                    {
+                        Logger.Warning( "Get Process Info: " + ex.Message );
+                    }
+
+                    var screen      = Screen.FromHandle( win.Handle );
+                    var screenIndex = 0;
+                    var allScreens  = Screen.AllScreens;
+                    for ( var i = 0; i < allScreens.Length; i++ )
+                    {
+                        if ( screen.DeviceName != allScreens[i].DeviceName )
+                            continue;
                         screenIndex = i;
                         break;
                     }
-                }
 
-                win.WinInScreen = screenIndex.ToString();
+                    win.WinInScreen = screenIndex.ToString();
 
-                if ( !User32.IsWindow( win.Handle ) ) return;
+                    if ( !User32.IsWindow( win.Handle ) ) return;
 
-                var hasMatchedRule = false;
+                    var hasMatchedRule = false;
 
-                var l = new List<Window>();
+                    var l = new List<Window>();
 
-                foreach ( var r in rules )
-                {
-                    if ( !r.Enabled ) continue;
-                    l.Add( win );
-                    var match = l.Where( r.Exp! ).Any();
-                    l.Clear();
-                    if ( match )
+                    foreach ( var r in rules.Where( r => r.Enabled ) )
                     {
+                        l.Add( win );
+                        var match = l.Where( r.Exp! ).Any();
+                        l.Clear();
+                        if ( !match )
+                            continue;
                         hasMatchedRule = true;
                         Logger.Debug( win.Title + $" match rule [{r.Name}]" );
-                        r.Action!.Handle      = win.Handle;
+                        r.Action!.Handle     = win.Handle;
                         r.Action.RuleName    = r.Name!;
                         r.Action.WindowTitle = win.Title;
                         ActionProducer.Writer.TryWrite( r.Action );
@@ -157,31 +160,35 @@ namespace VirtualSpace.Config.Events.Expression
                         if ( !r.ContinueAfterHit )
                             break;
                     }
-                }
 
-                if ( hasMatchedRule )
-                {
-                    WndHandleIgnoreListByRule.Add( win.Handle );
-                    return;
-                }
-
-                if ( isOnePeriod )
-                {
-                    Logger.Debug( $"Window [{win.Title}] has no matched rules." );
-                }
-
-                if ( Manager.CurrentProfile.IgnoreWindowOnRuleCheckTimeout )
-                {
-                    if ( WindowCheckTimes[win.Handle] >= Const.WindowCheckTimesLimit )
+                    if ( hasMatchedRule )
                     {
-                        Logger.Debug( $"Try find rules for [{win.Title}] too many times, ignore the window." );
                         WndHandleIgnoreListByRule.Add( win.Handle );
+                        return;
                     }
-                }
 
-                WindowCheckTimes[win.Handle]++;
-                
-            } ).ConfigureAwait( false );
+                    if ( isOnePeriod )
+                    {
+                        Logger.Debug( $"Window [{win.Title}] has no matched rules." );
+                    }
+
+                    if ( Manager.CurrentProfile.IgnoreWindowOnRuleCheckTimeout )
+                    {
+                        if ( WindowCheckTimes[win.Handle] >= Const.WindowCheckTimesLimit )
+                        {
+                            Logger.Debug( $"Try find rules for [{win.Title}] too many times, ignore the window." );
+                            WndHandleIgnoreListByRule.Add( win.Handle );
+                        }
+                    }
+
+                    WindowCheckTimes[win.Handle]++;
+
+                } ).ConfigureAwait( false );
+            }
+            catch ( Exception e )
+            {
+                Logger.Error( $"Failed to check rules for Window {win.Title}: {e.Message}" );
+            }
         }
 
         private static List<RuleTemplate> ReadRuleFromFile( string path )
@@ -198,11 +205,8 @@ namespace VirtualSpace.Config.Events.Expression
         public static ExpressionTemplate ParseExpressionTemplate( JsonDocument doc )
         {
             var readOptions = GetJsonDeserializerOptions();
-            return JsonSerializer.Deserialize<ExpressionTemplate>( doc, readOptions )!;
+            return doc.Deserialize<ExpressionTemplate>( readOptions )!;
         }
-
-        private static JsonSerializerOptions? _readOptions;
-        private static JsonSerializerOptions? _writeOptions;
 
         private static JsonSerializerOptions GetJsonDeserializerOptions()
         {
