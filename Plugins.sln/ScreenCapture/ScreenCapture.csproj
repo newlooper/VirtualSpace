@@ -7,11 +7,6 @@
     <ItemGroup>
         <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
         <PackageReference Include="SharpDX.Direct3D9" Version="4.2.0" />
-        <PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
-    </ItemGroup>
-
-    <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
-        <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22000.196" />
     </ItemGroup>
 
     <ItemGroup>
