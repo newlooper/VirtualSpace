@@ -31,7 +31,7 @@ public partial class RuleForm : UserControl
         InitializeComponent();
     }
 
-    public FullObservableCollection<RuleTemplate> RuleListItemsSource { get; set; }
+    public FullObservableCollection<RuleTemplate>? RuleListItemsSource { get; set; }
 
     private void Cbb_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
     {
@@ -123,7 +123,7 @@ public partial class RuleForm : UserControl
             r.Id      = Guid.NewGuid();
             r.Created = DateTime.Now;
             r.Updated = r.Created;
-            RuleListItemsSource.Add( r );
+            RuleListItemsSource?.Add( r );
         }
         else
         {
