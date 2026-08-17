@@ -56,7 +56,8 @@ namespace VirtualSpace
                 var mw = CreateCanvas( e );
                 Current.MainWindow = mw;
 
-                IpcPipeServer.MainWindowHandle = mw.Handle;
+                IpcPipeServer.MainWindowHandle            = mw.Handle;
+                PluginHost.HostContext.MainWindowHandle   = mw.Handle;
 
                 if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
                 {

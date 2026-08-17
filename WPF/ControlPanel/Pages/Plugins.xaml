@@ -4,14 +4,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:commons="clr-namespace:ControlPanel.Pages.Menus.Commons"
+             xmlns:converters="clr-namespace:ControlPanel.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
              mc:Ignorable="d">
 
     <UserControl.Resources>
         <ResourceDictionary>
+            <converters:LocConverter x:Key="LocConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <Style TargetType="ScrollViewer">
                 <Setter Property="Margin" Value="5" />
+            </Style>
+            <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+                <Setter Property="Padding" Value="5,5" />
+            </Style>
+            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignPaperSecondaryLightButton}">
+                <Setter Property="Margin" Value="0,5,20,5" />
+                <Setter Property="Height" Value="30" />
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -24,55 +34,71 @@
         <Grid Grid.Row="0">
             <commons:MenuContainer x:Name="MenuContainer" />
         </Grid>
-        <Grid Grid.Row="1">
-            <materialDesign:Card materialDesign:ElevationAssist.Elevation="Dp2" Margin="10,10,10,12">
+        <Grid Grid.Row="1" x:Name="PluginsContent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,0,20,0">
+                <Button Content="{lex:Loc Page.Plugins.Refresh}"
+                        Command="{Binding RefreshCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}" />
+            </StackPanel>
+            <materialDesign:Card Grid.Row="1" materialDesign:ElevationAssist.Elevation="Dp2" Margin="10,10,10,12">
                 <ListView x:Name="PluginsList" ItemsSource="{Binding Plugins}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn>
+                            <GridViewColumn Width="40">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding AutoStart}"
-                                                  Checked="ToggleButton_OnChecked"
-                                                  Unchecked="ToggleButton_OnUnchecked"
-                                                  CommandParameter="{Binding Name}" />
+                                        <CheckBox IsChecked="{Binding IsLoaded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="100"
-                                            DisplayMemberBinding="{Binding Name}"
-                                            Header="{lex:Loc Page.Plugins.Name}" />
-                            <GridViewColumn
-                                Header="{lex:Loc Page.Plugins.Version}">
+                            <GridViewColumn Width="120" DisplayMemberBinding="{Binding Name}">
+                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Name}" />
+                            </GridViewColumn>
+                            <GridViewColumn Width="100" DisplayMemberBinding="{Binding Version}">
+                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Version}" />
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="PluginDescriptionColumn" Width="200">
+                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Description}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock TextAlignment="Center" Width="120" Text="{Binding Version}" />
+                                        <TextBlock Margin="0"
+                                                   Text="{Binding Description}"
+                                                   TextWrapping="Wrap"
+                                                   MaxWidth="{Binding Width, Source={x:Reference PluginDescriptionColumn}}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn
-                                DisplayMemberBinding="{Binding Author}"
-                                Header="{lex:Loc Page.Plugins.Author}" />
-                            <GridViewColumn Width="200"
-                                            DisplayMemberBinding="{Binding Email}"
-                                            Header="{lex:Loc Page.Plugins.Email}" />
-                            <GridViewColumn
-                                Header="{lex:Loc Page.Plugins.Operations}">
+                            <GridViewColumn Width="120" DisplayMemberBinding="{Binding Author}">
+                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Author}" />
+                            </GridViewColumn>
+                            <GridViewColumn Width="100">
+                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Status}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <materialDesign:PopupBox
-                                            Margin="30,0,0,0"
-                                            StaysOpen="False"
-                                            PlacementMode="BottomAndAlignRightEdges">
-                                            <ListBox SelectionChanged="Selector_OnSelectionChanged" MinWidth="100">
-                                                <ListBoxItem
-                                                    Content="{lex:Loc Page.Plugins.Settings}" Tag="{Binding Name}" />
-                                                <ListBoxItem
-                                                    Content="{lex:Loc Page.Plugins.Restart}" Tag="{Binding Name}" />
-                                                <ListBoxItem
-                                                    Content="{lex:Loc Page.Plugins.Close}" Tag="{Binding Name}" />
-                                            </ListBox>
-                                        </materialDesign:PopupBox>
+                                        <TextBlock TextAlignment="Center"
+                                                   Text="{lex:Loc {Binding LoadStatus, Mode=OneWay,
+                                                          Converter={StaticResource LocConverter},
+                                                          ConverterParameter=Page.Plugins.Status.}}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="260">
+                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Operations}" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="{lex:Loc Page.Plugins.Settings}"
+                                                    Command="{Binding SettingsCommand}" />
+                                            <Button Content="{lex:Loc Page.Plugins.Restart}"
+                                                    Command="{Binding RestartCommand}" />
+                                            <Button Content="{lex:Loc Page.Plugins.Close}"
+                                                    Command="{Binding CloseCommand}"
+                                                    Visibility="{Binding ShowCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

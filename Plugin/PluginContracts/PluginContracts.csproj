@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+        <LangVersion>9</LangVersion>
+        <RootNamespace>VirtualSpace.PluginContracts</RootNamespace>
+        <AssemblyName>VirtualSpace.PluginContracts</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="..\..\Configuration\AppIdentity.cs" Link="AppIdentity.cs" />
+    </ItemGroup>
+
+</Project>

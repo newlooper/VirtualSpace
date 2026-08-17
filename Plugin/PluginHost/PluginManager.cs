@@ -1,39 +1,23 @@
-﻿// Copyright (C) 2022 Dylan Cheng (https://github.com/newlooper)
-// 
+// Copyright (C) 2022 Dylan Cheng (https://github.com/newlooper)
+//
 // This file is part of VirtualSpace.
-// 
+//
 // VirtualSpace is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-// 
+//
 // VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.IO;
 using System.Text.Json;
+using VirtualSpace.PluginContracts;
 
 namespace VirtualSpace.Plugin
 {
     public static class PluginManager
     {
-        public const           string     PluginInfoFile = "plugin.json";
-        public static readonly PluginInfo PluginInfo     = GetPluginInfo();
-
-        private static PluginInfo GetPluginInfo()
-        {
-            var file = Path.Combine( GetAppFolder(), PluginInfoFile );
-            return LoadFromJson<PluginInfo>( file )!;
-        }
-
-        public static string GetAppPath()
-        {
-            return Environment.ProcessPath ?? string.Empty;
-        }
-
-        public static string GetAppFolder()
-        {
-            return Directory.GetParent( GetAppPath() )!.FullName;
-        }
+        public const string PluginInfoFile = "plugin.json";
 
         public static T? LoadFromJson<T>( string infoFile )
         {
@@ -46,13 +30,15 @@ namespace VirtualSpace.Plugin
 
         public static bool CheckRequirements( Requirements? req )
         {
+            if ( req?.WinVer?.Min is null ) return true;
+
             var check   = false;
             var version = Environment.OSVersion.Version;
 
-            if ( version.Major >= req?.WinVer.Min.Major && version.Build >= req.WinVer.Min.Build )
+            if ( version.Major >= req.WinVer.Min.Major && version.Build >= req.WinVer.Min.Build )
                 check = true;
 
-            if ( req?.WinVer.Max != null && ( version.Major > req.WinVer.Max.Major || version.Build > req.WinVer.Max.Build ) )
+            if ( req.WinVer.Max != null && ( version.Major > req.WinVer.Max.Major || version.Build > req.WinVer.Max.Build ) )
                 check = false;
 
             return check;
@@ -60,9 +46,25 @@ namespace VirtualSpace.Plugin
 
         public static void SavePluginInfo( PluginInfo pi )
         {
-            var file     = Path.Combine( pi.Folder, PluginInfoFile );
+            var dir = PluginPaths.GetPluginDataDirectory( pi.Name );
+            Directory.CreateDirectory( dir );
+            var file     = Path.Combine( dir, PluginInfoFile );
             var contents = JsonSerializer.SerializeToUtf8Bytes( pi, new JsonSerializerOptions { WriteIndented = true } );
-            File.WriteAllBytesAsync( file, contents );
+            File.WriteAllBytes( file, contents );
+        }
+
+        public static PluginInfo? LoadPersistedPluginInfo( string pluginName )
+        {
+            var file = Path.Combine( PluginPaths.GetPluginDataDirectory( pluginName ), PluginInfoFile );
+            if ( !File.Exists( file ) ) return null;
+            try
+            {
+                return LoadFromJson<PluginInfo>( file );
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

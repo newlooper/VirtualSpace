@@ -25,6 +25,14 @@ namespace VirtualSpace.Helpers
         public const int WM_DESTROY       = 0x0002;
         public const int WM_MOUSEACTIVATE = 0x0021;
         public const int WM_SETTINGCHANGE = 0x001A;
+        public const int WM_DISPLAYCHANGE = 0x007E;
+        public const int WM_COPYDATA      = 0x004A;
         public const int MA_NOACTIVATE    = 0x3;
+
+        private const int WM_USER           = 0x0400;
+        public const  int UM_SWITCHDESKTOP  = WM_USER + 1;
+        public const  int UM_PLUGINSETTINGS = WM_USER + 2;
+        public const  int UM_OTHERSCREENS   = WM_USER + 3;
+        public const  int UM_RESTART        = WM_USER + 4;
     }
 }

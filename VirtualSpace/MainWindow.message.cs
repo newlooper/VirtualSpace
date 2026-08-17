@@ -21,6 +21,7 @@ using VirtualSpace.Config;
 using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
+using VirtualSpace.PluginContracts;
 using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
@@ -35,6 +36,23 @@ namespace VirtualSpace
         {
             _taskbarCreatedMessage = User32.RegisterWindowMessage( Const.TaskbarCreated );
             foreach ( var strMsg in PluginHost.CareAboutMessages.Keys ) PluginHost.CareAboutMessages[strMsg] = User32.RegisterWindowMessage( strMsg );
+
+            PluginHost.HostContext.MainWindowHandle       =  Handle;
+            PluginHost.HostContext.DesktopSwitchRequested -= OnPluginDesktopSwitchRequested;
+            PluginHost.HostContext.DesktopSwitchRequested += OnPluginDesktopSwitchRequested;
+        }
+
+        private void OnPluginDesktopSwitchRequested( int targetIndex )
+        {
+            ApplyDesktopSwitch( targetIndex );
+        }
+
+        private void ApplyDesktopSwitch( int targetMatrixIndex )
+        {
+            if ( targetMatrixIndex < 0 || targetMatrixIndex >= DesktopWrapper.Count ) return;
+            Interlocked.Exchange( ref _forceSwitchOnTimeout, 0 );
+            DesktopWrapper.MakeVisibleByGuid(
+                Manager.CurrentProfile.DesktopOrder![VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
         }
 
         private void Window_MouseDown( object sender, MouseButtonEventArgs e )
@@ -273,15 +291,8 @@ namespace VirtualSpace
                     }
 
                     break;
-                case WinApi.UM_SWITCHDESKTOP:
-                    var targetMatrixIndex = wParam.ToInt32();
-                    if ( targetMatrixIndex >= 0 && targetMatrixIndex < DesktopWrapper.Count )
-                    {
-                        Interlocked.Exchange( ref _forceSwitchOnTimeout, 0 );
-                        DesktopWrapper.MakeVisibleByGuid(
-                            Manager.CurrentProfile.DesktopOrder![VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
-                    }
-
+                case WinMsg.UM_SWITCHDESKTOP:
+                    ApplyDesktopSwitch( wParam.ToInt32() );
                     break;
                 // case WinMsg.WM_MOUSEACTIVATE:
                 //     handled = true;
@@ -316,7 +327,17 @@ namespace VirtualSpace
                 (Keys)dir,
                 Manager.CurrentProfile.Navigation );
 
-            var vDsi = new VirtualDesktopSwitchInfo
+            var switchInfo = new VirtualSpace.PluginContracts.VirtualDesktopSwitchInfo
+            {
+                HostHandle  = Handle,
+                VdCount     = DesktopWrapper.Count,
+                FromIndex   = currentDesktopMatrixIndex,
+                Dir         = dir,
+                TargetIndex = targetMatrixIndex
+            };
+            PluginHost.Publish( PluginEvents.VirtualDesktopSwitch, switchInfo );
+
+            var vDsi = new VirtualSpace.Commons.VirtualDesktopSwitchInfo
             {
                 hostHandle  = Handle,
                 vdCount     = DesktopWrapper.Count,
@@ -324,21 +345,24 @@ namespace VirtualSpace
                 dir         = dir,
                 targetIndex = targetMatrixIndex
             };
-            var vDsiSize = Marshal.SizeOf<VirtualDesktopSwitchInfo>();
+            var vDsiSize = Marshal.SizeOf<VirtualSpace.Commons.VirtualDesktopSwitchInfo>();
             var pVDsi    = Marshal.AllocHGlobal( vDsiSize );
             Marshal.StructureToPtr( vDsi, pVDsi, true );
 
             var cds = new COPYDATASTRUCT
             {
-                dwData = WinApi.UM_SWITCHDESKTOP,
+                dwData = WinMsg.UM_SWITCHDESKTOP,
                 cbData = vDsiSize,
                 lpData = pVDsi
             };
-            var pCds = Marshal.AllocHGlobal( Marshal.SizeOf<COPYDATASTRUCT>());
+            var pCds = Marshal.AllocHGlobal( Marshal.SizeOf<COPYDATASTRUCT>() );
             Marshal.StructureToPtr( cds, pCds, true );
 
-            foreach ( var pluginInfo in PluginHost.Plugins.Where( p => p.Type == PluginType.VD_SWITCH_OBSERVER && User32.IsWindow( p.Handle ) ) )
-                User32.SendMessage( pluginInfo.Handle, WinApi.WM_COPYDATA, 0, (ulong)pCds );
+            foreach ( var pluginInfo in PluginHost.Plugins.Where( p =>
+                         p.Kind == PluginKind.ExternalProcess &&
+                         p.Type == PluginType.VD_SWITCH_OBSERVER &&
+                         User32.IsWindow( p.Handle ) ) )
+                User32.SendMessage( pluginInfo.Handle, WinMsg.WM_COPYDATA, 0, (ulong)pCds );
 
             ////////////////////////////////////////////////////////////////////////////////////
             // if none of plugins send back message after 100 ms, host will force switch desktop

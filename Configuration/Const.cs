@@ -33,8 +33,8 @@ namespace VirtualSpace.Config
         public const string TaskbarCreated         = "TaskbarCreated";
         public const string TaskbarWndClass        = "Shell_TrayWnd";
         public const string WindowsCRLF            = "\r\n";
-        public const string OrganizationName       = "newlooper.com";
-        public const string AppName                = "VirtualSpace";
+        public const string OrganizationName       = AppIdentity.OrganizationName;
+        public const string AppName                = AppIdentity.AppName;
         public const string HideWindowSplitter     = "🔙🔜";
 
         public static class Window
@@ -60,7 +60,7 @@ namespace VirtualSpace.Config
             public const string ClusterFileExt  = ".cluster";
             public const string ProfilesFolder  = "Profiles";
             public const string CacheFolder     = "Cache";
-            public const string PluginsFolder   = "Plugins";
+            public const string PluginsFolder   = AppIdentity.PluginsFolder;
             public const string LogsFolder      = "Logs";
             public const string SettingsFile    = "settings.json";
             public const string DefaultVersion  = "2.0";

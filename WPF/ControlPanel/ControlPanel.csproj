@@ -10,6 +10,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Page Remove="App.xaml" />
+        <None Include="App.xaml" />
+    </ItemGroup>
+
+    <ItemGroup>
         <EmbeddedResource Update="Resources\Langs.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Langs.Designer.cs" />
     </ItemGroup>
 

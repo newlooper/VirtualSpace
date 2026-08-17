@@ -9,6 +9,9 @@
         Loaded="Window_Loaded" ShowInTaskbar="False">
     <Window.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="PluginTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
             <Thickness x:Key="NotifyButtonMargin"></Thickness>
             <ControlTemplate x:Key="NotifyButtonTemplate" TargetType="Button">
                 <Border BorderThickness="0" CornerRadius="5" Background="#C4C4C4"

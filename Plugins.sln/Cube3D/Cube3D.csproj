@@ -1,12 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Library</OutputType>
         <TargetFramework>$(TfmNet10WindowsSdk22000)</TargetFramework>
         <LangVersion>9</LangVersion>
         <UseWPF>true</UseWPF>
         <CsWinRTEnabled>false</CsWinRTEnabled>
-        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -20,22 +22,37 @@
         <EmbeddedResource Remove="Properties\**" />
         <None Remove="Properties\**" />
         <Page Remove="Properties\**" />
-        <None Update="settings.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="plugin.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Ipc\IpcClient\IpcClient.csproj" />
-        <ProjectReference Include="..\..\Plugin\Commons\Plugin.csproj" />
+        <Compile Include="..\..\Helpers\WinMsg.cs" Link="Helpers\WinMsg.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Plugin\PluginContracts\PluginContracts.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>runtime</ExcludeAssets>
+        </ProjectReference>
         <ProjectReference Include="..\ScreenCapture\ScreenCapture.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <Folder Include="Helpers\" />
     </ItemGroup>
+
+    <Target Name="CopyToHostPlugins" AfterTargets="Build">
+        <PropertyGroup>
+            <_HostOutDir>$(MSBuildThisFileDirectory)..\..\VirtualSpace\bin\$(Configuration)\$(TfmNet10Windows)\</_HostOutDir>
+            <_PluginDest>$(_HostOutDir)Plugins\Cube3D\</_PluginDest>
+            <_CopyFrom>$([MSBuild]::EnsureTrailingSlash('$(OutDir)'))</_CopyFrom>
+        </PropertyGroup>
+        <ItemGroup>
+            <_PluginFiles Include="$(_CopyFrom)*.*"
+                          Exclude="$(_CopyFrom)*.pdb" />
+        </ItemGroup>
+        <MakeDir Directories="$(_PluginDest)" />
+        <Copy SourceFiles="@(_PluginFiles)" DestinationFolder="$(_PluginDest)" SkipUnchangedFiles="true" />
+        <Message Text="Copied Cube3D plugin to $(_PluginDest)" Importance="high" />
+    </Target>
 
 </Project>

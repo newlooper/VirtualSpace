@@ -8,7 +8,12 @@
         xmlns:localConfig="clr-namespace:Cube3D.Config"
         Title="Cube3D Settings" Height="450" Width="800" Topmost="True" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <cvt:TransitionTypeConverter x:Key="Ttc" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="PluginTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <cvt:TransitionTypeConverter x:Key="Ttc" />
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <StackPanel>

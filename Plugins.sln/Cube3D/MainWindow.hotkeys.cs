@@ -11,17 +11,14 @@ You should have received a copy of the GNU General Public License along with Cub
 
 using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using Cube3D.Config;
 using Cube3D.Effects;
 using ScreenCapture;
-using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
-using VirtualSpace.Plugin;
+using VirtualSpace.PluginContracts;
 
 #pragma warning disable CA1416
 
@@ -98,59 +95,8 @@ namespace Cube3D
                         handled = true;
                     break;
 
-                case WinApi.WM_COPYDATA:
-                    var copyDataStruct = (COPYDATASTRUCT)Marshal.PtrToStructure( lParam, typeof( COPYDATASTRUCT ) );
-                    switch ( copyDataStruct.dwData.ToInt32() )
-                    {
-                        case WinApi.UM_SWITCHDESKTOP:
-                            if ( _mainWindowRunningAnimationCount == 0 )
-                            {
-                                var vdSwitchInfo =
-                                    (VirtualDesktopSwitchInfo)Marshal.PtrToStructure( copyDataStruct.lpData, typeof( VirtualDesktopSwitchInfo ) );
-
-                                Task.Run( () => { Dispatcher.Invoke( () => PerformAnimationPrimary( vdSwitchInfo ) ); } );
-                                foreach ( var other in OtherScreens )
-                                {
-                                    other.PerformAnimationOthers( vdSwitchInfo );
-                                }
-                            }
-
-                            break;
-                    }
-
-                    break;
-
-                case WinApi.UM_PLUGINSETTINGS:
-                    if ( _sw is null || PresentationSource.FromVisual( _sw ) == null )
-                    {
-                        _sw = new SettingsWindow();
-                        _sw.SetMainWindow( this );
-                        _sw.ShowDialog();
-                    }
-                    else
-                    {
-                        _sw.Activate();
-                    }
-
-                    break;
-                case WinApi.UM_OTHERSCREENS:
-                    switch ( wParam.ToInt32() )
-                    {
-                        case 0:
-                            ClearOtherScreens();
-                            break;
-                        case 1:
-                            CreateOtherScreens();
-                            break;
-                    }
-
-                    break;
-
                 case WinMsg.WM_DISPLAYCHANGE:
-                    App.Restart();
-                    break;
-                case WinApi.UM_RESTART:
-                    App.Restart();
+                    RestartRequested?.Invoke();
                     break;
 
                 case WinMsg.WM_MOUSEACTIVATE:
@@ -168,7 +114,7 @@ namespace Cube3D
             _capture?.StartCaptureSession();
 
             if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 )
-                NotificationGridLayout( vdSwitchInfo.vdCount );
+                NotificationGridLayout( vdSwitchInfo.VdCount );
 
             var em = EaseFactory.GetEaseModeByName( SettingsManager.Settings.EaseMode );
             var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, em );
@@ -182,18 +128,18 @@ namespace Cube3D
 
                 if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 )
                 {
-                    NotificationGridAnimation( vdSwitchInfo.fromIndex, vdSwitchInfo.targetIndex, vdSwitchInfo.vdCount, ef );
+                    NotificationGridAnimation( vdSwitchInfo.FromIndex, vdSwitchInfo.TargetIndex, vdSwitchInfo.VdCount, ef );
                     Interlocked.Increment( ref _mainWindowRunningAnimationCount );
                 }
 
-                if ( vdSwitchInfo.targetIndex != vdSwitchInfo.fromIndex &&
+                if ( vdSwitchInfo.TargetIndex != vdSwitchInfo.FromIndex &&
                      ( SettingsManager.Settings.TransitionType & TransitionType.AnimationOnly ) > 0 )
                 {
-                    _effect.AnimationInDirection( (KeyCode)vdSwitchInfo.dir, MainModel3DGroup, ef );
+                    _effect.AnimationInDirection( (KeyCode)vdSwitchInfo.Dir, MainModel3DGroup, ef );
                     Interlocked.Increment( ref _mainWindowRunningAnimationCount );
                 }
 
-                WinApi.PostMessage( vdSwitchInfo.hostHandle, WinApi.UM_SWITCHDESKTOP, (uint)vdSwitchInfo.targetIndex, 0 );
+                _host?.RequestDesktopSwitch( vdSwitchInfo.TargetIndex );
             } );
         }
 
@@ -201,14 +147,14 @@ namespace Cube3D
         {
             if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) == 0 ) return;
 
-            NotificationGridLayout( vdSwitchInfo.vdCount );
+            NotificationGridLayout( vdSwitchInfo.VdCount );
 
             var em = EaseFactory.GetEaseModeByName( SettingsManager.Settings.EaseMode );
             var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, em );
 
             RealShow();
 
-            NotificationGridAnimation( vdSwitchInfo.fromIndex, vdSwitchInfo.targetIndex, vdSwitchInfo.vdCount, ef );
+            NotificationGridAnimation( vdSwitchInfo.FromIndex, vdSwitchInfo.TargetIndex, vdSwitchInfo.VdCount, ef );
         }
     }
 }

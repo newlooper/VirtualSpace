@@ -96,31 +96,6 @@ namespace VirtualSpace.Commons
 
                         break;
                     }
-
-                    case PipeMessageType.PLUGIN_UPDATER:
-                    {
-                        if ( !server.CanWrite ) break;
-                        using var writer = new StreamWriter( server );
-                        writer.WriteLine( JsonSerializer.Serialize( HostInfoHelper.GetHostInfo() ) );
-                        writer.Flush();
-
-                        foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
-                        {
-                            Logger.Info( $"[PLUGIN\\App Updater] {p.Display} Started." );
-                            p.Handle    = msg.Handle;
-                            p.ProcessId = msg.ProcessId;
-                            p.Type      = PluginType.UPDATER;
-                            break;
-                        }
-
-                        break;
-                    }
-
-                    case PipeMessageType.RESTART:
-                    {
-                        User32.PostMessage( MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RestartApp, 0 );
-                        break;
-                    }
                 }
             }
         }
@@ -145,7 +120,7 @@ namespace VirtualSpace.Commons
         public static void SimpleShutdown()
         {
             _isRunning = false;
-            foreach ( var pluginInfo in PluginHost.Plugins ) PluginHost.ClosePlugin( pluginInfo );
+            PluginHost.CloseAllPlugins();
 
             using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
             try

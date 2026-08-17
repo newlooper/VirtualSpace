@@ -13,14 +13,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using Cube3D.Config;
 using ScreenCapture;
-using VirtualSpace.Commons;
 using VirtualSpace.Helpers;
-using VirtualSpace.Plugin;
+using VirtualSpace.PluginContracts;
 
 #pragma warning disable CA1416
 
@@ -35,6 +35,7 @@ namespace Cube3D
 
         private readonly MonitorInfo _monitorInfo;
         public           IntPtr      Handle;
+        private          IHostContext _host;
 
         public MainWindow()
         {
@@ -86,51 +87,58 @@ namespace Cube3D
             source?.AddHook( WndProc );
         }
 
+        internal static Action RestartRequested;
+
+        internal void AttachHost( IHostContext host )
+        {
+            _host = host;
+        }
+
+        internal void OnVirtualDesktopSwitch( VirtualDesktopSwitchInfo vdSwitchInfo )
+        {
+            if ( _mainWindowRunningAnimationCount != 0 ) return;
+
+            Task.Run( () => { Dispatcher.Invoke( () => PerformAnimationPrimary( vdSwitchInfo ) ); } );
+            foreach ( var other in OtherScreens )
+            {
+                other.PerformAnimationOthers( vdSwitchInfo );
+            }
+        }
+
+        internal void OpenSettings()
+        {
+            if ( _sw is null || PresentationSource.FromVisual( _sw ) == null )
+            {
+                _sw = new SettingsWindow();
+                _sw.SetMainWindow( this );
+                _sw.ShowDialog();
+            }
+            else
+            {
+                _sw.Activate();
+            }
+        }
+
+        internal void CloseAll()
+        {
+            ClearOtherScreens();
+            Close();
+        }
+
+        internal void SetOtherScreensVisible( bool visible )
+        {
+            if ( visible ) CreateOtherScreens();
+            else ClearOtherScreens();
+        }
+
         private void Register()
         {
-            if ( !_monitorInfo.IsPrimary ) return;
+            if ( !_monitorInfo.IsPrimary || _host == null ) return;
 
-            var pipeMessage = new PipeMessage
-            {
-                Type = PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER,
-                Name = PluginManager.PluginInfo.Name,
-                Handle = Handle.ToInt32()
-            };
-
-            void Exit()
-            {
-                Application.Current.Shutdown();
-            }
-
-            void SetOwner( HostInfo hostInfo )
-            {
-                var pluginInfo = PluginManager.PluginInfo;
-                if ( pluginInfo.Requirements.HostVersion == null ||
-                     pluginInfo.Requirements.HostVersion > hostInfo.Version )
-                {
-                    MessageBox.Show( "Plugin Error.\nThe host does not meet the Requirements." );
-                    Exit();
-                    return;
-                }
-
-                User32.SetWindowLongPtr( new HandleRef( this, Handle ),
-                    (int)GetWindowLongFields.GWL_HWNDPARENT,
-                    hostInfo.MainWindowHandle
-                );
-            }
-
-            IpcPipeClient.PluginCheckIn<HostInfo>(
-                pipeMessage,
-                () => { MessageBox.Show( "This Program require VirtualSpace running first." ); },
-                Exit,
-                SetOwner
+            User32.SetWindowLongPtr( new HandleRef( this, Handle ),
+                (int)GetWindowLongFields.GWL_HWNDPARENT,
+                _host.MainWindowHandle.ToInt32()
             );
-#if DEBUG
-            var interval = 1;
-#else
-            var interval = SettingsManager.Settings.CheckAliveInterval;
-#endif
-            IpcPipeClient.CheckAlive( pipeMessage.Name, pipeMessage.Handle, pipeMessage.ProcessId, interval, Exit );
         }
 
         private void Bootstrap()
@@ -180,13 +188,13 @@ namespace Cube3D
         {
             if ( SettingsManager.Settings.TransitionType == TransitionType.NotificationGridOnly || !_monitorInfo.IsPrimary )
             {
-                Background = (Brush)Application.Current.Resources["BackgroundTrans"];
+                Background = PluginUi.BackgroundTrans;
                 WinChrome.GlassFrameThickness = new Thickness( -1 );
                 Vp3D.Visibility = Visibility.Hidden;
             }
             else
             {
-                Background = (Brush)Application.Current.Resources["BackgroundLgb"];
+                Background = PluginUi.BackgroundLgb;
                 WinChrome.GlassFrameThickness = new Thickness( 0 );
                 Vp3D.Visibility = Visibility.Visible;
             }

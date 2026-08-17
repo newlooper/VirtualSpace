@@ -1,11 +1,11 @@
 ﻿// Copyright (C) 2022 Dylan Cheng (https://github.com/newlooper)
-// 
+//
 // This file is part of Cube3D.
-// 
+//
 // Cube3D is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-// 
+//
 // Cube3D is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License along with Cube3D. If not, see <https://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
@@ -17,23 +17,27 @@ namespace Cube3D.D3DImages
 {
     public static class D3DImages
     {
-        public static readonly D3DImage FrontD3DImage  = Application.Current.Resources[Const.Front] as D3DImage;
-        public static readonly D3DImage OthersD3DImage = Application.Current.Resources[Const.Others] as D3DImage;
+        public static D3DImage FrontD3DImage  { get; private set; }
+        public static D3DImage OthersD3DImage { get; private set; }
 
-        public static readonly Dictionary<string, D3DImageInfo> D3DImageDict = new()
+        public static Dictionary<string, D3DImageInfo> D3DImageDict { get; private set; } = new();
+
+        public static void Initialize( ResourceDictionary resources )
         {
+            FrontD3DImage  = (D3DImage)resources[Const.Front];
+            OthersD3DImage = (D3DImage)resources[Const.Others];
+            D3DImageDict = new Dictionary<string, D3DImageInfo>
             {
-                Const.Front, new D3DImageInfo
-                {
-                    Image = FrontD3DImage
-                }
-            },
-            {
-                Const.Others, new D3DImageInfo
-                {
-                    Image = OthersD3DImage
-                }
-            }
-        };
+                { Const.Front, new D3DImageInfo { Image = FrontD3DImage } },
+                { Const.Others, new D3DImageInfo { Image = OthersD3DImage } }
+            };
+        }
+
+        public static void Reset()
+        {
+            FrontD3DImage  = null;
+            OthersD3DImage = null;
+            D3DImageDict   = new Dictionary<string, D3DImageInfo>();
+        }
     }
 }

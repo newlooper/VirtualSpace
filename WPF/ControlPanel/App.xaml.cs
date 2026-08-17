@@ -1,10 +1,24 @@
-﻿using System.Windows;
+using System;
+using System.Windows;
+using System.Windows.Markup;
 
 namespace ControlPanel;
 
-/// <summary>
-///     Interaction logic for App.xaml
-/// </summary>
-public partial class App : Application
+public partial class App : Application, IComponentConnector
 {
+    private bool _contentLoaded;
+
+    public void InitializeComponent()
+    {
+        if ( _contentLoaded ) return;
+        _contentLoaded = true;
+        Resources.MergedDictionaries.Add( new ResourceDictionary
+        {
+            Source = new Uri( "/ControlPanel;component/ControlPanel.xaml", UriKind.Relative )
+        } );
+    }
+
+    void IComponentConnector.Connect( int connectionId, object target )
+    {
+    }
 }

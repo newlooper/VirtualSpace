@@ -1,0 +1,27 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        Empty implicit styles shadow host Application-level styles (MaterialDesign).
+        Controls then fall back to the WPF theme default, matching standalone Cube3D.
+    -->
+    <Style TargetType="Window" />
+    <Style TargetType="Button" />
+    <Style TargetType="ToggleButton" />
+    <Style TargetType="RepeatButton" />
+    <Style TargetType="CheckBox" />
+    <Style TargetType="ComboBox" />
+    <Style TargetType="ComboBoxItem" />
+    <Style TargetType="Label" />
+    <Style TargetType="GroupBox" />
+    <Style TargetType="Slider" />
+    <Style TargetType="TextBlock" />
+    <Style TargetType="TextBox" />
+    <Style TargetType="ScrollViewer" />
+    <Style TargetType="ScrollBar" />
+    <Style TargetType="ToolTip" />
+    <Style TargetType="Thumb" />
+    <Style TargetType="ListBox" />
+    <Style TargetType="ListBoxItem" />
+    <Style TargetType="ProgressBar" />
+    <Style TargetType="Separator" />
+</ResourceDictionary>

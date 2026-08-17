@@ -32,7 +32,30 @@
 
     <ItemGroup>
         <ProjectReference Include="..\WPF\ControlPanel\ControlPanel.csproj" />
+        <ProjectReference Include="..\Plugins.sln\Cube3D\Cube3D.csproj">
+            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+            <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
+            <GlobalPropertiesToRemove>TargetFramework;RuntimeIdentifier;SelfContained</GlobalPropertiesToRemove>
+            <SetTargetFramework>TargetFramework=$(TfmNet10WindowsSdk22000)</SetTargetFramework>
+            <ExcludeAssets>all</ExcludeAssets>
+        </ProjectReference>
     </ItemGroup>
+
+    <Target Name="CopyPluginsToPublishDir" AfterTargets="Publish">
+        <PropertyGroup>
+            <_HostPluginsDir>$(MSBuildThisFileDirectory)bin\$(Configuration)\$(TargetFramework)\Plugins\</_HostPluginsDir>
+        </PropertyGroup>
+        <ItemGroup>
+            <_HostPluginFiles Include="$(_HostPluginsDir)**\*.*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(_HostPluginFiles)"
+              DestinationFolder="$(PublishDir)Plugins\%(RecursiveDir)"
+              SkipUnchangedFiles="true"
+              Condition="'@(_HostPluginFiles)' != ''" />
+        <Message Text="Copied host plugins to $(PublishDir)Plugins"
+                 Importance="high"
+                 Condition="'@(_HostPluginFiles)' != ''" />
+    </Target>
 
     <Target Name="DeletePdb" AfterTargets="Publish">
         <ItemGroup>

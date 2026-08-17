@@ -98,8 +98,10 @@ namespace VirtualSpace
                     break;
             }
 
-            using var stream      = typeof( Program ).Assembly.GetManifestResourceStream( dllName );
-            var       rawAssembly = new byte[stream!.Length];
+            using var stream = typeof( Program ).Assembly.GetManifestResourceStream( dllName );
+            if ( stream is null ) return null;
+
+            var rawAssembly = new byte[stream.Length];
             stream.ReadExactly( rawAssembly );
             // try
             // {

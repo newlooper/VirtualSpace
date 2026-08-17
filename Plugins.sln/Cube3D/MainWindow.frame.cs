@@ -38,7 +38,7 @@ namespace Cube3D
             catch
             {
                 await Task.Delay( 1000 );
-                App.Restart();
+                RestartRequested?.Invoke();
                 return;
             }
 

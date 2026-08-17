@@ -11,8 +11,10 @@
     <Project Path="Ipc/IpcServer/IpcServer.csproj" />
     <Project Path="LinqExpressionBuilder/LinqExpressionBuilder.csproj" />
     <Project Path="Logger/Logger.csproj" />
-    <Project Path="Plugin/Commons/Plugin.csproj" />
+    <Project Path="Plugin/PluginContracts/PluginContracts.csproj" />
     <Project Path="Plugin/PluginHost/PluginHost.csproj" />
+    <Project Path="Plugins.sln/Cube3D/Cube3D.csproj" />
+    <Project Path="Plugins.sln/ScreenCapture/ScreenCapture.csproj" />
     <Project Path="VirtualDesktop/VirtualDesktop10/VirtualDesktop10.csproj" />
     <Project Path="VirtualDesktop/VirtualDesktop11/VirtualDesktop11.csproj" />
     <Project Path="VirtualDesktop/VirtualDesktop11_21H2/VirtualDesktop11_21H2.csproj" />

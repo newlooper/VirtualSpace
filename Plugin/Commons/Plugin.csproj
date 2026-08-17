@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <Nullable>enable</Nullable>
-        <LangVersion>9</LangVersion>
-    </PropertyGroup>
-
-</Project>

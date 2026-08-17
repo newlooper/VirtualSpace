@@ -222,6 +222,27 @@
     <data name="Page.Plugins.Close" xml:space="preserve">
     <value>关闭</value>
   </data>
+    <data name="Page.Plugins.Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+    <data name="Page.Plugins.Status" xml:space="preserve">
+    <value>状态</value>
+  </data>
+    <data name="Page.Plugins.Status.Available" xml:space="preserve">
+    <value>可用</value>
+  </data>
+    <data name="Page.Plugins.Status.Loaded" xml:space="preserve">
+    <value>已加载</value>
+  </data>
+    <data name="Page.Plugins.Status.Missing" xml:space="preserve">
+    <value>缺失</value>
+  </data>
+    <data name="Page.Plugins.Status.Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+    <data name="Page.Plugins.Refresh" xml:space="preserve">
+    <value>刷新插件</value>
+  </data>
     <data name="Page.Rules.Updated" xml:space="preserve">
     <value>更新时间</value>
   </data>

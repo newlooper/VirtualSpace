@@ -13,7 +13,6 @@ using System.Windows;
 using System.Windows.Controls;
 using Cube3D.Config;
 using Cube3D.Effects;
-using VirtualSpace.Plugin;
 
 namespace Cube3D
 {
@@ -127,7 +126,7 @@ namespace Cube3D
             if ( !_isLoaded ) return;
             SettingsManager.Settings.ShowNotificationGridOnAllScreens = true;
             SettingsManager.SaveJson();
-            WinApi.PostMessage( _mainWindow.Handle, WinApi.UM_OTHERSCREENS, 1, 0 );
+            _mainWindow.SetOtherScreensVisible( true );
         }
 
         private void CbNgOnAllScreens_OnUnchecked( object sender, RoutedEventArgs e )
@@ -135,7 +134,7 @@ namespace Cube3D
             if ( !_isLoaded ) return;
             SettingsManager.Settings.ShowNotificationGridOnAllScreens = false;
             SettingsManager.SaveJson();
-            WinApi.PostMessage( _mainWindow.Handle, WinApi.UM_OTHERSCREENS, 0, 0 );
+            _mainWindow.SetOtherScreensVisible( false );
         }
     }
 }
