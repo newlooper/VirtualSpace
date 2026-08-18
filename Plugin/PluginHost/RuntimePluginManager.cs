@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Helpers;
 using VirtualSpace.PluginContracts;
@@ -50,6 +51,19 @@ namespace VirtualSpace.Plugin
         {
             foreach ( var pi in Plugins.Where( p => p.AutoStart && p.AutoStartTiming == timing && !p.IsLoaded ).ToList() )
                 Start( pi );
+        }
+
+        public async Task AutoStartAsync( AutoStartTiming timing )
+        {
+            foreach ( var pi in Plugins.Where( p => p.AutoStart && p.AutoStartTiming == timing && !p.IsLoaded ).ToList() )
+            {
+                if ( pi.Kind == PluginKind.InProcess )
+                    await PluginLoader.LoadAsync( pi, HostContext ).ConfigureAwait( true );
+                else
+                    Start( pi );
+            }
+
+            PluginsChanged?.Invoke();
         }
 
         public void Start( PluginInfo pluginInfo )

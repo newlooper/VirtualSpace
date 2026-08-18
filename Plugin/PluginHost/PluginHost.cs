@@ -9,6 +9,7 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using VirtualSpace.PluginContracts;
 
 namespace VirtualSpace.Plugin
@@ -39,6 +40,11 @@ namespace VirtualSpace.Plugin
         public static void AutoStartAfterMainWindowLoaded()
         {
             RuntimePluginManager.Instance.AutoStart( AutoStartTiming.MainWindowLoaded );
+        }
+
+        public static Task AutoStartAfterMainWindowLoadedAsync()
+        {
+            return RuntimePluginManager.Instance.AutoStartAsync( AutoStartTiming.MainWindowLoaded );
         }
 
         public static void PluginSettings( PluginInfo pluginInfo )

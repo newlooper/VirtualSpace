@@ -30,6 +30,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using Windows.Graphics;
 using Windows.Graphics.Capture;
 using Windows.Graphics.DirectX;
@@ -63,6 +64,8 @@ namespace ScreenCapture
         private          int                                 _disposed;
         private readonly object                              _sync = new();
 
+        private static readonly object DeviceLock = new();
+
         private D3D9ShareCapture()
         {
             EnsureSharedDevices();
@@ -76,14 +79,35 @@ namespace ScreenCapture
 
         private static void EnsureSharedDevices()
         {
-            if ( _d3D9Device != null && _d3D11Device != null && _sharpDxD3D11Device != null ) return;
+            lock ( DeviceLock )
+            {
+                EnsureD3D11();
+                EnsureD3D9();
+            }
+        }
 
+        public static Task PreloadD3D11Async()
+        {
+            return Task.Run( () =>
+            {
+                lock ( DeviceLock ) EnsureD3D11();
+            } );
+        }
+
+        private static void EnsureD3D11()
+        {
+            if ( _sharpDxD3D11Device != null && _d3D11Device != null ) return;
+            _sharpDxD3D11Device = new D3D11.Device( DriverType.Hardware, D3D11.DeviceCreationFlags.BgraSupport );
+            _d3D11Device = Direct3D11Helper.CreateDirect3DDeviceFromSharpDXDevice( _sharpDxD3D11Device );
+        }
+
+        private static void EnsureD3D9()
+        {
+            if ( _d3D9Device != null ) return;
             _d3D9Context = new D3D9.Direct3DEx();
             _d3D9Device = new D3D9.DeviceEx( _d3D9Context, 0, D3D9.DeviceType.Hardware,
                 IntPtr.Zero, D3D9.CreateFlags.HardwareVertexProcessing | D3D9.CreateFlags.Multithreaded | D3D9.CreateFlags.FpuPreserve,
                 GetPresentParameters() );
-            _sharpDxD3D11Device = new D3D11.Device( DriverType.Hardware, D3D11.DeviceCreationFlags.BgraSupport );
-            _d3D11Device = Direct3D11Helper.CreateDirect3DDeviceFromSharpDXDevice( _sharpDxD3D11Device );
         }
 
         public void Dispose()
@@ -116,26 +140,29 @@ namespace ScreenCapture
 
         public static void ReleaseSharedDevices()
         {
-            try
+            lock ( DeviceLock )
             {
-                _sharpDxD3D11Device?.ImmediateContext?.ClearState();
-                _sharpDxD3D11Device?.ImmediateContext?.Flush();
+                try
+                {
+                    _sharpDxD3D11Device?.ImmediateContext?.ClearState();
+                    _sharpDxD3D11Device?.ImmediateContext?.Flush();
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                _sharpDxD3D11Device?.Dispose();
+                _sharpDxD3D11Device = null;
+
+                ( _d3D11Device as IDisposable )?.Dispose();
+                _d3D11Device = null;
+
+                _d3D9Device?.Dispose();
+                _d3D9Device = null;
+                _d3D9Context?.Dispose();
+                _d3D9Context = null;
             }
-            catch
-            {
-                // ignored
-            }
-
-            _sharpDxD3D11Device?.Dispose();
-            _sharpDxD3D11Device = null;
-
-            ( _d3D11Device as IDisposable )?.Dispose();
-            _d3D11Device = null;
-
-            _d3D9Device?.Dispose();
-            _d3D9Device = null;
-            _d3D9Context?.Dispose();
-            _d3D9Context = null;
         }
 
         public static D3D9ShareCapture Create( MonitorInfo mi, FrameProcessor fp )

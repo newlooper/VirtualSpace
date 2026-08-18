@@ -15,6 +15,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
 using VirtualSpace.PluginContracts;
 
@@ -182,44 +183,111 @@ namespace VirtualSpace.Plugin
                 return false;
             }
 
-            PluginLoadContext? alc = null;
             try
             {
-                alc = new PluginLoadContext( info.AssemblyPath );
+                var prepared = Prepare( info );
+                return CompleteLoad( info, hostContext, prepared );
+            }
+            catch ( Exception ex )
+            {
+                return FailLoad( info, ex, null );
+            }
+        }
+
+        public static async Task<bool> LoadAsync( PluginInfo info, IHostContext hostContext )
+        {
+            if ( info.Kind != PluginKind.InProcess ) return false;
+            if ( Loaded.ContainsKey( info.Name ) ) return true;
+            if ( string.IsNullOrEmpty( info.AssemblyPath ) || !File.Exists( info.AssemblyPath ) )
+            {
+                info.LoadStatus = PluginLoadStatus.Missing;
+                return false;
+            }
+
+            if ( !PluginManager.CheckRequirements( info.Requirements ) )
+            {
+                Logger.Warning( $"[PLUGIN] {info.Display} does not meet OS requirements." );
+                info.LoadStatus = PluginLoadStatus.Error;
+                return false;
+            }
+
+            PreparedPlugin prepared;
+            try
+            {
+                prepared = await Task.Run( () => Prepare( info ) ).ConfigureAwait( true );
+            }
+            catch ( Exception ex )
+            {
+                return FailLoad( info, ex, null );
+            }
+
+            try
+            {
+                return CompleteLoad( info, hostContext, prepared );
+            }
+            catch ( Exception ex )
+            {
+                return FailLoad( info, ex, prepared.Context );
+            }
+        }
+
+        private readonly struct PreparedPlugin
+        {
+            public IPlugin           Instance { get; init; }
+            public PluginLoadContext Context  { get; init; }
+        }
+
+        private static PreparedPlugin Prepare( PluginInfo info )
+        {
+            var alc = new PluginLoadContext( info.AssemblyPath );
+            try
+            {
                 var assembly = alc.LoadFromAssemblyPath( info.AssemblyPath );
                 var pluginType = FindPluginType( assembly );
                 if ( pluginType is null )
                     throw new InvalidOperationException( $"No {nameof( IPlugin )} implementation in {info.Entry}" );
 
                 var instance = (IPlugin)Activator.CreateInstance( pluginType )!;
-                var loaded = new LoadedPlugin
+                return new PreparedPlugin { Instance = instance, Context = alc };
+            }
+            catch
+            {
+                alc.Unload();
+                throw;
+            }
+        }
+
+        private static bool CompleteLoad( PluginInfo info, IHostContext hostContext, PreparedPlugin prepared )
+        {
+            try
+            {
+                ActivePlugin = prepared.Instance;
+                prepared.Instance.Initialize( hostContext );
+
+                Loaded[info.Name] = new LoadedPlugin
                 {
                     Info     = info,
-                    Instance = instance,
-                    Context  = alc
+                    Instance = prepared.Instance,
+                    Context  = prepared.Context
                 };
-
-                ActivePlugin = instance;
-                instance.Initialize( hostContext );
-
-                Loaded[info.Name] = loaded;
-                info.IsLoaded     = true;
-                info.LoadStatus   = PluginLoadStatus.Loaded;
-                info.Type         = instance.Type;
+                info.IsLoaded   = true;
+                info.LoadStatus = PluginLoadStatus.Loaded;
+                info.Type       = prepared.Instance.Type;
                 Logger.Info( $"[PLUGIN.Load] {info.Display}" );
                 return true;
-            }
-            catch ( Exception ex )
-            {
-                Logger.Warning( $"[PLUGIN] failed to load {info.Display}: {ex.Message}" );
-                info.LoadStatus = PluginLoadStatus.Error;
-                alc?.Unload();
-                return false;
             }
             finally
             {
                 ActivePlugin = null;
             }
+        }
+
+        private static bool FailLoad( PluginInfo info, Exception ex, PluginLoadContext? alc )
+        {
+            Logger.Warning( $"[PLUGIN] failed to load {info.Display}: {ex.Message}" );
+            info.LoadStatus = PluginLoadStatus.Error;
+            alc?.Unload();
+            return false;
         }
 
         public static void Unload( PluginInfo info, HostContext hostContext )

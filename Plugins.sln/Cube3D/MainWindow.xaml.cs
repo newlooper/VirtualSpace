@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Cube3D.Config;
 using ScreenCapture;
 using VirtualSpace.Helpers;
@@ -177,14 +178,15 @@ namespace Cube3D
 
             Bootstrap();
 
-            if ( _monitorInfo.IsPrimary )
-            {
-                Build3D();
+            if ( !_monitorInfo.IsPrimary ) return;
 
-                await StartPrimaryMonitorCapture();
+            Build3D();
+            CreateOtherScreens();
 
-                CreateOtherScreens();
-            }
+            await Dispatcher.Yield( DispatcherPriority.Background );
+            await D3D9ShareCapture.PreloadD3D11Async();
+            if ( !IsLoaded ) return;
+            await StartPrimaryMonitorCapture();
         }
 
         public void SetTransitionType()

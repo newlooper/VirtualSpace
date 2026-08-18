@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Config;
@@ -69,7 +70,9 @@ namespace VirtualSpace
 
                 if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart ) mw.FakeHide();
 
-                PluginHost.AutoStartAfterMainWindowLoaded();
+                _ = Dispatcher.InvokeAsync(
+                    () => { _ = PluginHost.AutoStartAfterMainWindowLoadedAsync(); },
+                    DispatcherPriority.ApplicationIdle );
             }
             else
             {
