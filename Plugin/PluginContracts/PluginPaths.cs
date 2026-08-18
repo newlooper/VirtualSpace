@@ -9,26 +9,61 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace VirtualSpace.PluginContracts
 {
     public static class PluginPaths
     {
+        private static string? _dataRoot;
+
+        public static void SetDataRoot( string path )
+        {
+            _dataRoot = string.IsNullOrWhiteSpace( path ) ? null : path;
+        }
+
         public static string GetPluginDataDirectory( string pluginName )
         {
+            return Path.Combine( GetDataRoot(), pluginName );
+        }
+
+        private static string GetHostPluginsDirectory()
+        {
+            return Path.Combine( GetInstallDirectory(), AppIdentity.PluginsFolder );
+        }
+
+        public static IReadOnlyList<string> GetBundledPluginDirectories()
+        {
+            var roots      = new List<string>();
+            var besideHost = GetHostPluginsDirectory();
+            if ( Directory.Exists( besideHost ) )
+                roots.Add( besideHost );
+
+            if ( roots.Count == 0 )
+                roots.Add( besideHost );
+
+            return roots;
+        }
+
+        private static string GetInstallDirectory()
+        {
+            var fromExe = Path.GetDirectoryName( Environment.ProcessPath );
+            return !string.IsNullOrEmpty( fromExe )
+                ? fromExe
+                : AppContext.BaseDirectory.TrimEnd( Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar );
+        }
+
+        private static string GetDataRoot()
+        {
+            if ( !string.IsNullOrEmpty( _dataRoot ) )
+                return _dataRoot;
+
             return Path.Combine(
                 Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ),
                 AppIdentity.OrganizationName,
                 AppIdentity.AppName,
-                AppIdentity.PluginsFolder,
-                pluginName );
-        }
-
-        public static string GetHostPluginsDirectory()
-        {
-            var appDir = Path.GetDirectoryName( Environment.ProcessPath ) ?? AppContext.BaseDirectory;
-            return Path.Combine( appDir, AppIdentity.PluginsFolder );
+                AppIdentity.PluginsFolder );
         }
     }
 }

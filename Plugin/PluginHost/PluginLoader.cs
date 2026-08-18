@@ -44,7 +44,7 @@ namespace VirtualSpace.Plugin
         public static string ComputeFileHash( string path )
         {
             using var sha = SHA256.Create();
-            using var fs  = File.OpenRead( path );
+            using var fs  = new FileStream( path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete );
             return Convert.ToHexString( sha.ComputeHash( fs ) );
         }
 
@@ -55,28 +55,55 @@ namespace VirtualSpace.Plugin
 
             foreach ( var folder in Directory.GetDirectories( pluginsRoot ) )
             {
-                foreach ( var dll in Directory.GetFiles( folder, "*.dll" ) )
+                try
                 {
-                    if ( dll.EndsWith( ".resources.dll", StringComparison.OrdinalIgnoreCase ) ) continue;
-
-                    var info = TryCloneLoadedMetadata( dll, folder ) ?? TryReadMetadata( dll );
+                    var info = TryScanFolder( folder );
                     if ( info is null ) continue;
-
-                    info.Folder       = folder;
-                    info.AssemblyPath = dll;
-                    info.Entry        = Path.GetFileName( dll );
-                    info.Kind         = PluginKind.InProcess;
-                    info.FileHash     = ComputeFileHash( dll );
-                    if ( !info.IsLoaded )
-                        info.LoadStatus = PluginLoadStatus.Available;
-                    OverlayPersistedSettings( info );
-                    PluginManager.EnsureDataFiles( info );
                     result.Add( info );
-                    break;
+                }
+                catch ( Exception ex )
+                {
+                    Logger.Warning( $"[PLUGIN] skip {folder}: {ex.Message}" );
                 }
             }
 
             return result;
+        }
+
+        private static PluginInfo? TryScanFolder( string folder )
+        {
+            foreach ( var dll in EnumerateCandidateDlls( folder ) )
+            {
+                var info = TryCloneLoadedMetadata( dll, folder ) ?? TryReadMetadata( dll );
+                if ( info is null ) continue;
+
+                info.Folder       = folder;
+                info.AssemblyPath = dll;
+                info.Entry        = Path.GetFileName( dll );
+                info.Kind         = PluginKind.InProcess;
+                info.FileHash     = ComputeFileHash( dll );
+                if ( !info.IsLoaded )
+                    info.LoadStatus = PluginLoadStatus.Available;
+                OverlayPersistedSettings( info );
+                PluginManager.EnsureDataFiles( info );
+                return info;
+            }
+
+            return null;
+        }
+
+        private static IEnumerable<string> EnumerateCandidateDlls( string folder )
+        {
+            var preferred = Path.Combine( folder, Path.GetFileName( folder ) + ".dll" );
+            if ( File.Exists( preferred ) )
+                yield return preferred;
+
+            foreach ( var dll in Directory.GetFiles( folder, "*.dll" ) )
+            {
+                if ( dll.EndsWith( ".resources.dll", StringComparison.OrdinalIgnoreCase ) ) continue;
+                if ( string.Equals( dll, preferred, StringComparison.OrdinalIgnoreCase ) ) continue;
+                yield return dll;
+            }
         }
 
         private static PluginInfo? TryCloneLoadedMetadata( string dllPath, string folder )

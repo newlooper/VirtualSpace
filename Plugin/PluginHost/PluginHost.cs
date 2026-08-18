@@ -10,7 +10,6 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using VirtualSpace.PluginContracts;
 
 namespace VirtualSpace.Plugin
 {
@@ -49,7 +48,7 @@ namespace VirtualSpace.Plugin
 
         public static void PluginSettings( PluginInfo pluginInfo )
         {
-            RuntimePluginManager.Instance.ShowSettings( pluginInfo );
+            RuntimePluginManager.ShowSettings( pluginInfo );
         }
 
         public static void StartPlugin( PluginInfo pluginInfo )

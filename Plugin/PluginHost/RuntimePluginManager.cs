@@ -22,28 +22,32 @@ namespace VirtualSpace.Plugin
 {
     public sealed class RuntimePluginManager
     {
-        public static RuntimePluginManager Instance { get; } = new();
-
-        public List<PluginInfo> Plugins     { get; } = new();
-        public HostContext      HostContext { get; } = new();
-
         public event Action? PluginsChanged;
 
-        public void Initialize( string? legacyPluginsPath = null )
+        private       string?              _pluginsDataPath;
+        public static RuntimePluginManager Instance    { get; } = new();
+        public        List<PluginInfo>     Plugins     { get; } = new();
+        public        HostContext          HostContext { get; } = new();
+
+        public void Initialize( string? pluginsDataPath = null )
         {
+            _pluginsDataPath = pluginsDataPath;
+            if ( !string.IsNullOrEmpty( _pluginsDataPath ) )
+                PluginPaths.SetDataRoot( _pluginsDataPath );
+
             HostContext.HostVersion = GetHostVersion();
-            ScanDllPlugins( PluginPaths.GetHostPluginsDirectory(), disturbLoaded: false );
-
-            if ( !string.IsNullOrEmpty( legacyPluginsPath ) )
-                ScanExePlugins( legacyPluginsPath );
-
-            ScanExePlugins( PluginPaths.GetHostPluginsDirectory() );
+            ScanDllPlugins( disturbLoaded: false );
+            foreach ( var root in PluginScanRoots() )
+                ScanExePlugins( root );
             PluginsChanged?.Invoke();
         }
 
         public void Refresh()
         {
-            ScanDllPlugins( PluginPaths.GetHostPluginsDirectory(), disturbLoaded: false );
+            ScanDllPlugins( disturbLoaded: false );
+            foreach ( var root in PluginScanRoots() )
+                ScanExePlugins( root );
+            MarkMissingExePlugins();
             PluginsChanged?.Invoke();
         }
 
@@ -114,7 +118,7 @@ namespace VirtualSpace.Plugin
             }
         }
 
-        public void ShowSettings( PluginInfo pluginInfo )
+        public static void ShowSettings( PluginInfo pluginInfo )
         {
             if ( pluginInfo.Kind == PluginKind.InProcess )
             {
@@ -136,9 +140,9 @@ namespace VirtualSpace.Plugin
             HostContext.Publish( eventName, payload );
         }
 
-        private void ScanDllPlugins( string pluginsRoot, bool disturbLoaded )
+        private void ScanDllPlugins( bool disturbLoaded )
         {
-            var discovered = PluginLoader.ScanMetadata( pluginsRoot );
+            var discovered = DiscoverDllPlugins();
             var hostVer    = HostContext.HostVersion;
 
             foreach ( var existing in Plugins.Where( p => p.Kind == PluginKind.InProcess ).ToList() )
@@ -155,15 +159,15 @@ namespace VirtualSpace.Plugin
                     existing.FileHash     = match.FileHash;
                     existing.AssemblyPath = match.AssemblyPath;
                     existing.Folder       = match.Folder;
+                    existing.LoadStatus   = PluginLoadStatus.Loaded;
                     continue;
                 }
 
                 CopyDiscoveredMetadata( existing, match );
             }
 
-            foreach ( var info in discovered )
+            foreach ( var info in discovered.Where( info => Plugins.All( p => p.Name != info.Name ) ) )
             {
-                if ( Plugins.Any( p => p.Name == info.Name ) ) continue;
                 if ( info.Requirements?.HostVersion != null && info.Requirements.HostVersion > hostVer )
                 {
                     Logger.Warning( $"[PLUGIN] {info.Display} not satisfy the host version" );
@@ -173,6 +177,32 @@ namespace VirtualSpace.Plugin
                 Plugins.Add( info );
                 Logger.Info( $"[PLUGIN] {info.Display} Registered." );
             }
+        }
+
+        private List<PluginInfo> DiscoverDllPlugins()
+        {
+            var seen = new HashSet<string>( StringComparer.OrdinalIgnoreCase );
+
+            return ( from root in PluginScanRoots()
+                from info in PluginLoader.ScanMetadata( root )
+                where seen.Add( info.Name )
+                select info ).ToList();
+        }
+
+        private List<string> PluginScanRoots()
+        {
+            var roots = new List<string>();
+            AddScanRoot( roots, _pluginsDataPath );
+            foreach ( var bundled in PluginPaths.GetBundledPluginDirectories() )
+                AddScanRoot( roots, bundled );
+            return roots;
+        }
+
+        private static void AddScanRoot( List<string> roots, string? path )
+        {
+            if ( string.IsNullOrEmpty( path ) ) return;
+            if ( roots.Any( r => string.Equals( r, path, StringComparison.OrdinalIgnoreCase ) ) ) return;
+            roots.Add( path );
         }
 
         private static void CopyDiscoveredMetadata( PluginInfo target, PluginInfo source )
@@ -187,14 +217,27 @@ namespace VirtualSpace.Plugin
             target.AssemblyPath = source.AssemblyPath;
             target.Entry        = source.Entry;
             target.FileHash     = source.FileHash;
+            target.Requirements = source.Requirements;
             target.Kind         = PluginKind.InProcess;
             if ( !target.IsLoaded )
                 target.LoadStatus = PluginLoadStatus.Available;
         }
 
-        private void ScanExePlugins( string pluginsPath )
+        private void MarkMissingExePlugins()
         {
-            if ( !Directory.Exists( pluginsPath ) ) return;
+            foreach ( var existing in Plugins.Where( p => p.Kind == PluginKind.ExternalProcess ) )
+            {
+                var entry = Path.Combine( existing.Folder, existing.Entry );
+                if ( !File.Exists( entry ) )
+                    existing.LoadStatus = PluginLoadStatus.Missing;
+                else if ( !existing.IsLoaded )
+                    existing.LoadStatus = PluginLoadStatus.Available;
+            }
+        }
+
+        private void ScanExePlugins( string? pluginsPath )
+        {
+            if ( string.IsNullOrEmpty( pluginsPath ) || !Directory.Exists( pluginsPath ) ) return;
 
             foreach ( var path in Directory.GetDirectories( pluginsPath ) )
             {
@@ -235,12 +278,12 @@ namespace VirtualSpace.Plugin
             info.AutoStart       = persisted.AutoStart;
             info.AutoStartTiming = persisted.AutoStartTiming;
             if ( persisted.RestartPolicy is not null ) info.RestartPolicy = persisted.RestartPolicy;
-            if ( persisted.ClosePolicy is not null ) info.ClosePolicy = persisted.ClosePolicy;
+            if ( persisted.ClosePolicy is not null ) info.ClosePolicy     = persisted.ClosePolicy;
         }
 
         private static void StartExe( string exe )
         {
-            System.Threading.Tasks.Task.Run( () => System.Diagnostics.Process.Start( exe ) );
+            Task.Run( () => System.Diagnostics.Process.Start( exe ) );
         }
 
         private static Version GetHostVersion()
