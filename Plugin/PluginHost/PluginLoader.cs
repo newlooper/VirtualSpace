@@ -241,6 +241,9 @@ namespace VirtualSpace.Plugin
             loaded.Instance = null!;
             Loaded.Remove( info.Name );
             alc.Unload();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
 
             info.IsLoaded   = false;
             info.LoadStatus = File.Exists( info.AssemblyPath ) ? PluginLoadStatus.Available : PluginLoadStatus.Missing;

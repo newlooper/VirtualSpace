@@ -121,6 +121,9 @@ namespace Cube3D
 
         internal void CloseAll()
         {
+            StopCapture();
+            _sw?.Close();
+            _sw = null;
             ClearOtherScreens();
             Close();
         }

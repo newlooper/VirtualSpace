@@ -11,6 +11,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using Cube3D.Config;
 using Cube3D.Effects;
 
@@ -48,14 +49,14 @@ namespace Cube3D
 
             ComboBoxEffects.SelectedItem = SettingsManager.Settings.SelectedEffect;
 
-            foreach ( EaseType ease in Enum.GetValues( typeof( EaseType ) ) )
+            foreach ( var name in EaseFactory.Names )
             {
-                ComboBoxEase.Items.Add( ease );
+                ComboBoxEase.Items.Add( name );
             }
 
             ComboBoxEase.SelectedItem = SettingsManager.Settings.EaseType;
 
-            foreach ( EaseMode easeMode in Enum.GetValues( typeof( EaseMode ) ) )
+            foreach ( EasingMode easeMode in Enum.GetValues( typeof( EasingMode ) ) )
             {
                 ComboBoxEaseMode.Items.Add( easeMode );
             }
@@ -84,14 +85,14 @@ namespace Cube3D
         private void ComboBoxEase_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
         {
             if ( !_isLoaded ) return;
-            SettingsManager.Settings.EaseType = (EaseType)ComboBoxEase.SelectedItem;
+            SettingsManager.Settings.EaseType = ComboBoxEase.SelectedItem as string ?? EaseFactory.None;
             SettingsManager.SaveJson();
         }
 
         private void ComboBoxEaseMode_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
         {
             if ( !_isLoaded ) return;
-            SettingsManager.Settings.EaseMode = (EaseMode)ComboBoxEaseMode.SelectedItem;
+            SettingsManager.Settings.EaseMode = (EasingMode)ComboBoxEaseMode.SelectedItem;
             SettingsManager.SaveJson();
         }
 

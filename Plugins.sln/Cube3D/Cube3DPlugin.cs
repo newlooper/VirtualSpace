@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using Cube3D.Config;
+using ScreenCapture;
 using VirtualSpace.Plugin;
 using VirtualSpace.PluginContracts;
 
@@ -80,13 +81,24 @@ namespace Cube3D
             if ( _host != null && _onSwitch != null )
                 _host.Unsubscribe( PluginEvents.VirtualDesktopSwitch, _onSwitch );
 
-            _mainWindow?.CloseAll();
-            _mainWindow = null;
-            D3DImages.D3DImages.Reset();
-            PluginUi.Resources = null;
-            _resources         = null;
-            _onSwitch          = null;
-            _host              = null;
+            void TearDown()
+            {
+                _mainWindow?.CloseAll();
+                _mainWindow = null;
+                D3DImages.D3DImages.Reset();
+                D3D9ShareCapture.ReleaseSharedDevices();
+                PluginUi.Resources = null;
+                _resources         = null;
+            }
+
+            var dispatcher = _mainWindow?.Dispatcher ?? Application.Current?.Dispatcher;
+            if ( dispatcher != null && !dispatcher.CheckAccess() )
+                dispatcher.Invoke( TearDown );
+            else
+                TearDown();
+
+            _onSwitch = null;
+            _host     = null;
         }
 
         public void ShowSettings()

@@ -8,6 +8,7 @@
 //
 // You should have received a copy of the GNU General Public License along with Cube3D. If not, see <https://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Interop;
@@ -35,9 +36,25 @@ namespace Cube3D.D3DImages
 
         public static void Reset()
         {
+            ClearBackBuffer( FrontD3DImage );
+            ClearBackBuffer( OthersD3DImage );
             FrontD3DImage  = null;
             OthersD3DImage = null;
             D3DImageDict   = new Dictionary<string, D3DImageInfo>();
+        }
+
+        private static void ClearBackBuffer( D3DImage image )
+        {
+            if ( image == null ) return;
+            if ( !image.TryLock( TimeSpan.FromMilliseconds( 200 ) ) ) return;
+            try
+            {
+                image.SetBackBuffer( D3DResourceType.IDirect3DSurface9, IntPtr.Zero );
+            }
+            finally
+            {
+                image.Unlock();
+            }
         }
     }
 }

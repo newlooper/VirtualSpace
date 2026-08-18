@@ -9,6 +9,8 @@
 // You should have received a copy of the GNU General Public License along with Cube3D. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -71,60 +73,47 @@ namespace Cube3D.Effects
         Down  = 0x28
     }
 
-    public enum EaseType
-    {
-        None,
-        BounceEase,
-        CircleEase,
-        CubicEase,
-        ExponentialEase,
-        PowerEase,
-        QuadraticEase,
-        QuarticEase,
-        QuinticEase,
-        SineEase
-    }
-
-    public enum EaseMode
-    {
-        EaseIn,
-        EaseOut,
-        EaseInOut
-    }
-
     public static class EaseFactory
     {
-        public static IEasingFunction GetEaseByName( EaseType et, EasingMode em )
-        {
-            IEasingFunction ef = et switch
-            {
-                EaseType.BounceEase => new BounceEase {EasingMode = em},
-                EaseType.CircleEase => new CircleEase {EasingMode = em},
-                EaseType.CubicEase => new CubicEase {EasingMode = em},
-                EaseType.ExponentialEase => new ExponentialEase {EasingMode = em},
-                EaseType.PowerEase => new PowerEase {EasingMode = em},
-                EaseType.QuadraticEase => new QuadraticEase {EasingMode = em},
-                EaseType.QuarticEase => new QuarticEase {EasingMode = em},
-                EaseType.QuinticEase => new QuinticEase {EasingMode = em},
-                EaseType.SineEase => new SineEase {EasingMode = em},
-                EaseType.None => null,
-                _ => null
-            };
+        public const string None = nameof( None );
 
-            return ef;
+        public static readonly IReadOnlyList<Type> Types = new[]
+        {
+            typeof( BackEase ),
+            typeof( BounceEase ),
+            typeof( CircleEase ),
+            typeof( CubicEase ),
+            typeof( ElasticEase ),
+            typeof( ExponentialEase ),
+            typeof( PowerEase ),
+            typeof( QuadraticEase ),
+            typeof( QuarticEase ),
+            typeof( QuinticEase ),
+            typeof( SineEase )
+        };
+
+        public static IReadOnlyList<string> Names { get; } =
+            new[] { None }.Concat( Types.Select( t => t.Name ) ).ToArray();
+
+        public static EasingFunctionBase GetEaseByName( string name, EasingMode mode )
+        {
+            if ( string.IsNullOrEmpty( name ) || name == None ) return null;
+
+            foreach ( var type in Types )
+            {
+                if ( type.Name != name ) continue;
+                var ef = (EasingFunctionBase)Activator.CreateInstance( type );
+                ef.EasingMode = mode;
+                return ef;
+            }
+
+            return null;
         }
 
-        public static EasingMode GetEaseModeByName( EaseMode em )
+        internal static string NameFromLegacyIndex( int index )
         {
-            var eMode = em switch
-            {
-                EaseMode.EaseIn => EasingMode.EaseIn,
-                EaseMode.EaseOut => EasingMode.EaseOut,
-                EaseMode.EaseInOut => EasingMode.EaseInOut,
-                _ => EasingMode.EaseOut
-            };
-
-            return eMode;
+            if ( index <= 0 || index > Types.Count ) return None;
+            return Types[index - 1].Name;
         }
     }
 }

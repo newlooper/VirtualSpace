@@ -110,14 +110,14 @@ namespace Cube3D
         private void PerformAnimationPrimary( VirtualDesktopSwitchInfo vdSwitchInfo )
         {
             var mi = ( from m in MonitorEnumerationHelper.GetMonitors() where m.IsPrimary select m ).First();
+            StopCapture();
             _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
             _capture?.StartCaptureSession();
 
             if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 )
                 NotificationGridLayout( vdSwitchInfo.VdCount );
 
-            var em = EaseFactory.GetEaseModeByName( SettingsManager.Settings.EaseMode );
-            var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, em );
+            var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, SettingsManager.Settings.EaseMode );
 
             _frameProcessor.SetAction( () =>
             {
@@ -149,8 +149,7 @@ namespace Cube3D
 
             NotificationGridLayout( vdSwitchInfo.VdCount );
 
-            var em = EaseFactory.GetEaseModeByName( SettingsManager.Settings.EaseMode );
-            var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, em );
+            var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, SettingsManager.Settings.EaseMode );
 
             RealShow();
 
