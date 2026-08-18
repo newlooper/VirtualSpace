@@ -22,44 +22,29 @@ using VirtualSpace.PluginContracts;
 [assembly: PluginMetadata(
     "Cube3D",
     "Cube3D",
-    "2.1",
+    "3.1",
     "3D animation for virtual desktop switching",
     "Dylan Cheng",
     "newlooper@hotmail.com",
     Type = PluginType.VD_SWITCH_OBSERVER,
-    DefaultAutoStart = true,
+    DefaultAutoStart = false,
     DefaultAutoStartTiming = AutoStartTiming.MainWindowLoaded,
     MinWinMajor = 10,
     MinWinBuild = 19041,
-    MinHostVersion = "0.1.454" )]
+    MinHostVersion = "1.1.0" )]
 
 namespace Cube3D
 {
-    public sealed class Cube3DPlugin : IPlugin
+    public sealed class Cube3DPlugin : PluginBase
     {
         private IHostContext       _host;
         private MainWindow         _mainWindow;
         private ResourceDictionary _resources;
         private Action<object>     _onSwitch;
 
-        public string Name        => "Cube3D";
-        public string Display     => "Cube3D";
-        public string Version     => "2.1";
-        public string Description => "3D animation for virtual desktop switching";
-        public string Author      => "Dylan Cheng";
-        public string Email       => "newlooper@hotmail.com";
+        public override IReadOnlyList<string> SubscribedEvents { get; } = new[] { PluginEvents.VirtualDesktopSwitch };
 
-        public PluginType Type => PluginType.VD_SWITCH_OBSERVER;
-
-        public Requirements Requirements { get; } = new()
-        {
-            WinVer      = new WinVer { Min = new Ver { Major = 10, Build = 19041 } },
-            HostVersion = new Version( 0, 1, 454 )
-        };
-
-        public IReadOnlyList<string> SubscribedEvents { get; } = new[] { PluginEvents.VirtualDesktopSwitch };
-
-        public void Initialize( IHostContext hostContext )
+        public override void Initialize( IHostContext hostContext )
         {
             _host = hostContext;
             SettingsManager.Initialize( hostContext.GetPluginDataPath( Name ) );
@@ -75,7 +60,7 @@ namespace Cube3D
             StartUi();
         }
 
-        public void Shutdown()
+        public override void Shutdown()
         {
             MainWindow.RestartRequested = null;
             if ( _host != null && _onSwitch != null )
@@ -101,7 +86,7 @@ namespace Cube3D
             _host     = null;
         }
 
-        public void ShowSettings()
+        public override void ShowSettings()
         {
             _mainWindow?.OpenSettings();
         }

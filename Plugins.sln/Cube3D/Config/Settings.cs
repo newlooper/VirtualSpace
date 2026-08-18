@@ -18,8 +18,8 @@ namespace Cube3D.Config
 {
     public class Settings
     {
-        private int _animationDuration;
-        private int _checkAliveInterval;
+        private int _animationDuration  = 500;
+        private int _checkAliveInterval = 30;
 
         public int AnimationDuration
         {
@@ -54,9 +54,11 @@ namespace Cube3D.Config
         }
 
         [JsonConverter( typeof( EffectTypeJsonConverter ) )]
-        public string         SelectedEffect                   { get; set; } = EffectFactory.Default;
+        public string SelectedEffect { get; set; } = EffectFactory.Default;
+
         [JsonConverter( typeof( EaseTypeJsonConverter ) )]
-        public string         EaseType                         { get; set; } = EaseFactory.None;
+        public string EaseType { get; set; } = EaseFactory.None;
+
         public EasingMode     EaseMode                         { get; set; } = EasingMode.EaseOut;
         public TransitionType TransitionType                   { get; set; } = TransitionType.AnimationAndNotificationGrid;
         public bool           ShowNotificationGridOnAllScreens { get; set; }

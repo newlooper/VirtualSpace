@@ -70,6 +70,7 @@ namespace VirtualSpace.Plugin
                     if ( !info.IsLoaded )
                         info.LoadStatus = PluginLoadStatus.Available;
                     OverlayPersistedSettings( info );
+                    PluginManager.EnsureDataFiles( info );
                     result.Add( info );
                     break;
                 }
@@ -134,14 +135,7 @@ namespace VirtualSpace.Plugin
                     Type            = attr.Type,
                     AutoStart       = attr.DefaultAutoStart,
                     AutoStartTiming = attr.DefaultAutoStartTiming,
-                    Requirements = new Requirements
-                    {
-                        WinVer = new WinVer
-                        {
-                            Min = new Ver { Major = attr.MinWinMajor, Build = attr.MinWinBuild }
-                        },
-                        HostVersion = string.IsNullOrEmpty( attr.MinHostVersion ) ? null : new Version( attr.MinHostVersion )
-                    }
+                    Requirements    = attr.ToRequirements()
                 };
             }
             catch ( Exception ex )
@@ -273,6 +267,7 @@ namespace VirtualSpace.Plugin
                 info.IsLoaded   = true;
                 info.LoadStatus = PluginLoadStatus.Loaded;
                 info.Type       = prepared.Instance.Type;
+                PluginManager.EnsureDataFiles( info );
                 Logger.Info( $"[PLUGIN.Load] {info.Display}" );
                 return true;
             }

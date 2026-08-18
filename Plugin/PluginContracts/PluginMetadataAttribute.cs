@@ -39,5 +39,17 @@ namespace VirtualSpace.PluginContracts
         public int             MinWinMajor              { get; set; } = 10;
         public int             MinWinBuild              { get; set; } = 19041;
         public string?         MinHostVersion           { get; set; }
+
+        public Requirements ToRequirements()
+        {
+            return new Requirements
+            {
+                WinVer = new WinVer
+                {
+                    Min = new Ver { Major = MinWinMajor, Build = MinWinBuild }
+                },
+                HostVersion = string.IsNullOrEmpty( MinHostVersion ) ? null : new Version( MinHostVersion )
+            };
+        }
     }
 }

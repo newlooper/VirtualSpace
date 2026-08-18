@@ -28,7 +28,9 @@ public partial class PluginItemViewModel : ViewModelBase
         SettingsCommand = new RelayCommand( () => PluginHost.PluginSettings( _info ) );
         RestartCommand = new RelayCommand( () =>
         {
+            _info.AutoStart = true;
             PluginHost.RestartPlugin( _info );
+            PluginManager.SavePluginInfo( _info );
             RefreshLoadState();
         } );
         CloseCommand = new RelayCommand( () =>

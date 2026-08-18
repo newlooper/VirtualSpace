@@ -6,7 +6,7 @@
         <VS_Description>VirtualSpace - Windows VirtualDesktop Enhancement</VS_Description>
         <VS_Company>https://github.com/newlooper</VS_Company>
         <VS_Major Condition="'$(VS_Major)' == ''">1</VS_Major>
-        <VS_Minor Condition="'$(VS_Minor)' == ''">0</VS_Minor>
+        <VS_Minor Condition="'$(VS_Minor)' == ''">1</VS_Minor>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(AppVersion)' == ''">
