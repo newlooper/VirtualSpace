@@ -42,9 +42,9 @@ namespace Cube3D
 
         private void Window_Loaded( object sender, RoutedEventArgs e )
         {
-            foreach ( EffectType effect in Enum.GetValues( typeof( EffectType ) ) )
+            foreach ( var name in EffectFactory.Names )
             {
-                ComboBoxEffects.Items.Add( effect );
+                ComboBoxEffects.Items.Add( name );
             }
 
             ComboBoxEffects.SelectedItem = SettingsManager.Settings.SelectedEffect;
@@ -78,7 +78,7 @@ namespace Cube3D
         private void ComboBoxEffects_SelectionChanged( object sender, SelectionChangedEventArgs e )
         {
             if ( !_isLoaded ) return;
-            SettingsManager.Settings.SelectedEffect = (EffectType)ComboBoxEffects.SelectedItem;
+            SettingsManager.Settings.SelectedEffect = ComboBoxEffects.SelectedItem as string ?? EffectFactory.Default;
             SettingsManager.SaveJson();
         }
 

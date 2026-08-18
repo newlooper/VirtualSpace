@@ -53,7 +53,8 @@ namespace Cube3D.Config
             }
         }
 
-        public EffectType     SelectedEffect                   { get; set; }
+        [JsonConverter( typeof( EffectTypeJsonConverter ) )]
+        public string         SelectedEffect                   { get; set; } = EffectFactory.Default;
         [JsonConverter( typeof( EaseTypeJsonConverter ) )]
         public string         EaseType                         { get; set; } = EaseFactory.None;
         public EasingMode     EaseMode                         { get; set; } = EasingMode.EaseOut;
@@ -67,6 +68,23 @@ namespace Cube3D.Config
         AnimationOnly                = 0b0001,
         NotificationGridOnly         = 0b0010,
         AnimationAndNotificationGrid = AnimationOnly | NotificationGridOnly
+    }
+
+    internal sealed class EffectTypeJsonConverter : JsonConverter<string>
+    {
+        public override string Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+        {
+            if ( reader.TokenType == JsonTokenType.Number && reader.TryGetInt32( out var index ) )
+                return EffectFactory.NameFromLegacyIndex( index );
+            return reader.TokenType == JsonTokenType.String
+                ? reader.GetString() ?? EffectFactory.Default
+                : EffectFactory.Default;
+        }
+
+        public override void Write( Utf8JsonWriter writer, string value, JsonSerializerOptions options )
+        {
+            writer.WriteStringValue( value );
+        }
     }
 
     internal sealed class EaseTypeJsonConverter : JsonConverter<string>

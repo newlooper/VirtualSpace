@@ -55,22 +55,47 @@ namespace Cube3D.Effects
         }
     }
 
-    public enum EffectType
-    {
-        Cube,
-        InsideCube,
-        Slide,
-        Reveal,
-        Fade,
-        Flip
-    }
-
     public enum KeyCode
     {
         Left  = 0x25,
         Up    = 0x26,
         Right = 0x27,
         Down  = 0x28
+    }
+
+    public static class EffectFactory
+    {
+        public static readonly IReadOnlyList<Type> Types = new[]
+        {
+            typeof( Cube ),
+            typeof( InsideCube ),
+            typeof( Slide ),
+            typeof( Reveal ),
+            typeof( Fade ),
+            typeof( Flip )
+        };
+
+        public static string Default { get; } = Types[0].Name;
+
+        public static IReadOnlyList<string> Names { get; } =
+            Types.Select( t => t.Name ).ToArray();
+
+        public static Effect Create( string name )
+        {
+            foreach ( var type in Types )
+            {
+                if ( type.Name != name ) continue;
+                return (Effect)Activator.CreateInstance( type );
+            }
+
+            return (Effect)Activator.CreateInstance( Types[0] );
+        }
+
+        internal static string NameFromLegacyIndex( int index )
+        {
+            if ( index < 0 || index >= Types.Count ) return Default;
+            return Types[index].Name;
+        }
     }
 
     public static class EaseFactory

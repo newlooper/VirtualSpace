@@ -9,6 +9,7 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -18,10 +19,12 @@ namespace VirtualSpace.Plugin
     internal sealed class PluginLoadContext : AssemblyLoadContext
     {
         private readonly AssemblyDependencyResolver _resolver;
+        private readonly string                     _pluginDir;
 
         public PluginLoadContext( string pluginPath ) : base( isCollectible: true )
         {
-            _resolver = new AssemblyDependencyResolver( pluginPath );
+            _resolver  = new AssemblyDependencyResolver( pluginPath );
+            _pluginDir = Path.GetDirectoryName( pluginPath ) ?? string.Empty;
         }
 
         protected override Assembly? Load( AssemblyName assemblyName )
@@ -40,8 +43,8 @@ namespace VirtualSpace.Plugin
                     return null;
             }
 
-            var path = _resolver.ResolveAssemblyToPath( assemblyName );
-            return path is null ? null : LoadFromAssemblyPath( path );
+            var path = _resolver.ResolveAssemblyToPath( assemblyName ) ?? Path.Combine( _pluginDir, assemblyName.Name + ".dll" );
+            return File.Exists( path ) ? LoadFromAssemblyPath( path ) : null;
         }
 
         private static bool IsSharedWithHost( string assemblyName )
@@ -70,8 +73,9 @@ namespace VirtualSpace.Plugin
 
         protected override IntPtr LoadUnmanagedDll( string unmanagedDllName )
         {
-            var path = _resolver.ResolveUnmanagedDllToPath( unmanagedDllName );
-            return path is null ? IntPtr.Zero : LoadUnmanagedDllFromPath( path );
+            var path = _resolver.ResolveUnmanagedDllToPath( unmanagedDllName )
+                       ?? Path.Combine( _pluginDir, unmanagedDllName );
+            return File.Exists( path ) ? LoadUnmanagedDllFromPath( path ) : IntPtr.Zero;
         }
     }
 }

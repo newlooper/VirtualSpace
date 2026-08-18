@@ -40,18 +40,7 @@ namespace Cube3D
 
         public void Build3D()
         {
-            var settings = SettingsManager.Settings;
-            _effect = settings.SelectedEffect switch
-            {
-                EffectType.Cube => new Cube(),
-                EffectType.Flip => new Flip(),
-                EffectType.Slide => new Slide(),
-                EffectType.Reveal => new Reveal(),
-                EffectType.Fade => new Fade(),
-                EffectType.InsideCube => new InsideCube(),
-                _ => new Cube()
-            };
-
+            _effect = EffectFactory.Create( SettingsManager.Settings.SelectedEffect );
             _effect.Build( MainModel3DGroup );
             _effect.AddAnimationCompletedListener( AnimationCompleted );
         }
