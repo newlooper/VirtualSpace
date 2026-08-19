@@ -1,0 +1,62 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <!--
+    Cube3D plugin payload from publish layout:
+      Plugins\Cube3D\*.dll
+    Shared by framework-dependent and self-contained MSIs.
+  -->
+  <Fragment>
+    <ComponentGroup Id="Cube3DPayload" Directory="Cube3DFolder">
+
+      <Component Id="Cube3D.dll" Guid="EEA9645B-11FF-4D82-846A-4656147354B5">
+        <File Id="Cube3D.dll"
+              Source="$(PublishDir)/Plugins/Cube3D/Cube3D.dll"
+              KeyPath="yes" />
+        <RemoveFolder Id="RemoveCube3DFolder" On="uninstall" />
+        <RemoveFolder Id="RemovePluginsFolder" Directory="PluginsFolder" On="uninstall" />
+      </Component>
+
+      <Component Id="Microsoft.Windows.SDK.NET.dll" Guid="C45A6DAB-FB1F-4CDE-AA82-F35DBE367959">
+        <File Id="Microsoft.Windows.SDK.NET.dll"
+              Source="$(PublishDir)/Plugins/Cube3D/Microsoft.Windows.SDK.NET.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <Component Id="ScreenCapture.dll" Guid="C92DE387-9660-4137-80C6-496F66D05122">
+        <File Id="ScreenCapture.dll"
+              Source="$(PublishDir)/Plugins/Cube3D/ScreenCapture.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <Component Id="SharpDX.Direct3D11.dll" Guid="AB46E226-2923-42E7-9F47-A9A4B8B7BE0F">
+        <File Id="SharpDX.Direct3D11.dll"
+              Source="$(PublishDir)/Plugins/Cube3D/SharpDX.Direct3D11.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <Component Id="SharpDX.Direct3D9.dll" Guid="23CED3A9-66A9-4D5A-AE66-BB23FF6A4367">
+        <File Id="SharpDX.Direct3D9.dll"
+              Source="$(PublishDir)/Plugins/Cube3D/SharpDX.Direct3D9.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <Component Id="SharpDX.dll" Guid="802AFC07-C4B4-4E46-A900-7C4337D633BA">
+        <File Id="SharpDX.dll"
+              Source="$(PublishDir)/Plugins/Cube3D/SharpDX.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <Component Id="SharpDX.DXGI.dll" Guid="02AB4799-4A72-409D-A973-3A4E906646F5">
+        <File Id="SharpDX.DXGI.dll"
+              Source="$(PublishDir)/Plugins/Cube3D/SharpDX.DXGI.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <Component Id="WinRT.Runtime.dll" Guid="EE397AD8-4B48-473E-B3C5-E4DE5ABA1722">
+        <File Id="WinRT.Runtime.dll"
+              Source="$(PublishDir)/Plugins/Cube3D/WinRT.Runtime.dll"
+              KeyPath="yes" />
+      </Component>
+
+    </ComponentGroup>
+  </Fragment>
+</Wix>

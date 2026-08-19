@@ -14,15 +14,6 @@
               Checksum="yes" />
       </Component>
 
-      <!--
-      Example for a future sidecar file:
-      <Component Id="SomeData.json" Guid="PUT-NEW-GUID-HERE">
-        <File Id="SomeData.json"
-              Source="$(PublishDir)/SomeData.json"
-              KeyPath="yes" />
-      </Component>
-      -->
-
     </ComponentGroup>
   </Fragment>
 </Wix>

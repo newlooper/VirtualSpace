@@ -38,7 +38,11 @@
     <StandardDirectory Id="ProgramMenuFolder">
       <Directory Id="ProgramMenuProductFolder" Name="VirtualSpace" />
     </StandardDirectory>
-    <Directory Id="INSTALLFOLDER" Name="." />
+    <Directory Id="INSTALLFOLDER" Name=".">
+      <Directory Id="PluginsFolder" Name="Plugins">
+        <Directory Id="Cube3DFolder" Name="Cube3D" />
+      </Directory>
+    </Directory>
 
     <Property Id="INSTALLFOLDER">
       <RegistrySearch Id="PreviousInstallFolder"
@@ -60,6 +64,7 @@
 
     <Feature Id="Main" Title="VirtualSpace" Level="1">
       <ComponentGroupRef Id="ProductPayload" />
+      <ComponentGroupRef Id="Cube3DPayload" />
       <ComponentGroupRef Id="InstallFolderMeta" />
       <ComponentGroupRef Id="Shortcuts" />
     </Feature>

@@ -116,8 +116,8 @@ jobs:
           Write-Host "FileDescription=$desc"
           Write-Host "Signing policy: $env:SIGNPATH_POLICY"
 
-      # WiX Toolset SDK. Payload is an explicit allow-list in .installer/self-contained/Payload.wxs
-      # (not a harvest of the whole publish dir). MSI keeps VirtualSpace.exe at package
+      # WiX Toolset SDK. Root files are listed in .installer/self-contained/Payload.wxs;
+      # Plugins\Cube3D is .installer/Cube3DPayload.wxs. MSI keeps VirtualSpace.exe at package
       # root (like Advanced Installer APPDIR) so SignPath pe-file path="VirtualSpace.exe" matches.
       - name: Build MSI with WiX
         id: msi
