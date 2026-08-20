@@ -29,29 +29,38 @@ namespace VirtualSpace.AppLogs
             RootLogger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy( LevelSwitch )
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Verbose )
-                    .WriteTo.File( $"{LogsPath}/verbose.txt", LogEventLevel.Verbose ) )
+                    .WriteTo.File( $"{LogsPath}/verbose.txt", LogEventLevel.Verbose, shared: true, rollOnFileSizeLimit: true ) )
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Debug )
-                    .WriteTo.File( $"{LogsPath}/debug.txt", LogEventLevel.Debug ) )
+                    .WriteTo.File( $"{LogsPath}/debug.txt", LogEventLevel.Debug, shared: true, rollOnFileSizeLimit: true ) )
 
                 // 普通 Information：排除包含 PROP_IS_EVENT 属性的日志
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt =>
                         evt.Level == LogEventLevel.Information &&
                         !( evt.Properties.TryGetValue( PROP_IS_EVENT, out var v ) && v is ScalarValue { Value: true } ) )
-                    .WriteTo.File( $"{LogsPath}/info.txt", LogEventLevel.Information ) )
+                    .WriteTo.File( $"{LogsPath}/info.txt", LogEventLevel.Information, shared: true, rollOnFileSizeLimit: true ) )
 
                 // Event 日志：借用 Information，并用 PROP_IS_EVENT 属性筛选
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt =>
                         evt.Properties.TryGetValue( PROP_IS_EVENT, out var v ) && v is ScalarValue { Value: true } )
                     .WriteTo.File(
-                        $"{LogsPath}/event.txt", LogEventLevel.Information,
-                        "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [EVT] {Message:lj}{NewLine}{Exception}" ) )
+                        $"{LogsPath}/event.txt",
+                        LogEventLevel.Information,
+                        "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [EVT] {Message:lj}{NewLine}{Exception}",
+                        shared: true,
+                        rollOnFileSizeLimit: true ) )
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Warning )
-                    .WriteTo.File( $"{LogsPath}/warning.txt", LogEventLevel.Warning ) )
+                    .WriteTo.File( $"{LogsPath}/warning.txt", LogEventLevel.Warning, shared: true, rollOnFileSizeLimit: true ) )
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Error )
-                    .WriteTo.File( $"{LogsPath}/error.txt", LogEventLevel.Error ) )
+                    .WriteTo.File( $"{LogsPath}/error.txt", LogEventLevel.Error, shared: true, rollOnFileSizeLimit: true ) )
                 .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Fatal )
-                    .WriteTo.File( $"{LogsPath}/fatal.txt", LogEventLevel.Fatal ) )
+                    .WriteTo.File( $"{LogsPath}/fatal.txt", LogEventLevel.Fatal, shared: true, rollOnFileSizeLimit: true ) )
                 .CreateLogger();
+        }
+
+        public static void CloseAndFlush()
+        {
+            RootLogger?.Dispose();
+            RootLogger = null!;
         }
 
         public static void GorgeousDividingLine()

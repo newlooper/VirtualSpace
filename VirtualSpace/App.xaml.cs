@@ -86,6 +86,7 @@ namespace VirtualSpace
 
             ReleaseMutex();
             IpcPipeServer.SimpleShutdown();
+            LogManager.CloseAndFlush();
         }
 
         public void ReleaseMutex()
