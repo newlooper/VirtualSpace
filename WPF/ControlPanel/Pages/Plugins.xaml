@@ -40,7 +40,8 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,0,20,0">
-                <Button Content="{lex:Loc Page.Plugins.Refresh}"
+                <!-- Fully-qualified keys: ListView/GridView break the visual tree used by DefaultAssembly. -->
+                <Button Content="{lex:Loc ControlPanel:Langs:Page.Plugins.Refresh}"
                         Command="{Binding RefreshCommand}"
                         Style="{StaticResource MaterialDesignOutlinedButton}" />
             </StackPanel>
@@ -56,13 +57,13 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Width="120" DisplayMemberBinding="{Binding Name}">
-                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Name}" />
+                                <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Plugins.Name}" />
                             </GridViewColumn>
                             <GridViewColumn Width="100" DisplayMemberBinding="{Binding Version}">
-                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Version}" />
+                                <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Plugins.Version}" />
                             </GridViewColumn>
                             <GridViewColumn x:Name="PluginDescriptionColumn" Width="200">
-                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Description}" />
+                                <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Plugins.Description}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Margin="0"
@@ -73,29 +74,29 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Width="120" DisplayMemberBinding="{Binding Author}">
-                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Author}" />
+                                <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Plugins.Author}" />
                             </GridViewColumn>
                             <GridViewColumn Width="100">
-                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Status}" />
+                                <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Plugins.Status}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock TextAlignment="Center"
                                                    Text="{lex:Loc {Binding LoadStatus, Mode=OneWay,
                                                           Converter={StaticResource LocConverter},
-                                                          ConverterParameter=Page.Plugins.Status.}}" />
+                                                          ConverterParameter=ControlPanel:Langs:Page.Plugins.Status.}}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Width="260">
-                                <GridViewColumnHeader Content="{lex:Loc Page.Plugins.Operations}" />
+                                <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Plugins.Operations}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Content="{lex:Loc Page.Plugins.Settings}"
+                                            <Button Content="{lex:Loc ControlPanel:Langs:Page.Plugins.Settings}"
                                                     Command="{Binding SettingsCommand}" />
-                                            <Button Content="{lex:Loc Page.Plugins.Restart}"
+                                            <Button Content="{lex:Loc ControlPanel:Langs:Page.Plugins.Restart}"
                                                     Command="{Binding RestartCommand}" />
-                                            <Button Content="{lex:Loc Page.Plugins.Close}"
+                                            <Button Content="{lex:Loc ControlPanel:Langs:Page.Plugins.Close}"
                                                     Command="{Binding CloseCommand}"
                                                     Visibility="{Binding ShowCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         </StackPanel>

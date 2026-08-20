@@ -3,11 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
         xmlns:cvt="clr-namespace:VirtualSpace.Helpers"
         xmlns:localConfig="clr-namespace:Cube3D.Config"
         mc:Ignorable="d"
-        Title="Cube3D Settings"
-        Height="520" Width="820"
+        lex:LocalizeDictionary.OutputMissingKeys="True"
+        Title="{lex:Loc VirtualSpace.PluginContracts:Langs:Cube3D.Settings.WindowTitle}"
+        Height="520" Width="900"
         Topmost="True"
         Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
@@ -68,10 +70,10 @@
 
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <GroupBox Header="Basic">
+                <GroupBox Header="{lex:Loc VirtualSpace.PluginContracts:Langs:Cube3D.Settings.Basic}">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,4">
-                            <TextBlock Style="{StaticResource SettingLabel}" Text="Animation Duration (ms)" />
+                            <TextBlock Style="{StaticResource SettingLabel}" Text="{lex:Loc VirtualSpace.PluginContracts:Langs:Cube3D.Settings.AnimationDuration}" />
                             <Slider x:Name="SliderAnimationDuration"
                                     Width="300"
                                     Margin="10,8,0,0"
@@ -91,26 +93,26 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="0,4">
-                            <TextBlock Style="{StaticResource SettingLabel}" Text="Animation Type" />
+                            <TextBlock Style="{StaticResource SettingLabel}" Text="{lex:Loc VirtualSpace.PluginContracts:Langs:Cube3D.Settings.AnimationType}" />
                             <ComboBox Width="160" x:Name="ComboBoxEffects" SelectionChanged="ComboBoxEffects_SelectionChanged" />
-                            <Button Content="Apply" Click="ApplyEffect_OnClick" />
+                            <Button Content="{lex:Loc VirtualSpace.PluginContracts:Langs:Cube3D.Settings.Apply}" Click="ApplyEffect_OnClick" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="0,4">
-                            <TextBlock Style="{StaticResource SettingLabel}" Text="Ease Type" />
+                            <TextBlock Style="{StaticResource SettingLabel}" Text="{lex:Loc VirtualSpace.PluginContracts:Langs:Cube3D.Settings.EaseType}" />
                             <ComboBox Width="160" x:Name="ComboBoxEase" SelectionChanged="ComboBoxEase_OnSelectionChanged" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="0,4">
-                            <TextBlock Style="{StaticResource SettingLabel}" Text="Ease Mode" />
+                            <TextBlock Style="{StaticResource SettingLabel}" Text="{lex:Loc VirtualSpace.PluginContracts:Langs:Cube3D.Settings.EaseMode}" />
                             <ComboBox Width="160" x:Name="ComboBoxEaseMode" SelectionChanged="ComboBoxEaseMode_OnSelectionChanged" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="0,4">
-                            <TextBlock Style="{StaticResource SettingLabel}" Text="Transition Type" />
+                            <TextBlock Style="{StaticResource SettingLabel}" Text="{lex:Loc VirtualSpace.PluginContracts:Langs:Cube3D.Settings.TransitionType}" />
                             <ComboBox Width="280" x:Name="ComboBoxTransitionType" SelectionChanged="ComboBoxTransitionType_OnSelectionChanged" />
                             <CheckBox x:Name="CbNgOnAllScreens"
-                                      Content="Show NotificationGrid on All Screens"
+                                      Content="{lex:Loc VirtualSpace.PluginContracts:Langs:Cube3D.Settings.ShowNgOnAllScreens}"
                                       Checked="CbNgOnAllScreens_OnChecked"
                                       Unchecked="CbNgOnAllScreens_OnUnchecked"
                                       IsEnabled="{Binding ElementName=ComboBoxTransitionType,
@@ -123,7 +125,7 @@
         </ScrollViewer>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,4,10,10">
-            <Button Content="Close" Click="Close_OnClick" />
+            <Button Content="{lex:Loc VirtualSpace.PluginContracts:Langs:Cube3D.Settings.Close}" Click="Close_OnClick" />
         </StackPanel>
     </Grid>
 </Window>

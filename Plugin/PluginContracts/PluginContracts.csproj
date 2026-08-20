@@ -5,10 +5,23 @@
         <LangVersion>9</LangVersion>
         <RootNamespace>VirtualSpace.PluginContracts</RootNamespace>
         <AssemblyName>VirtualSpace.PluginContracts</AssemblyName>
+        <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
     </PropertyGroup>
 
     <ItemGroup>
         <Compile Include="..\..\Configuration\AppIdentity.cs" Link="AppIdentity.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\Langs.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Langs.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <Compile Update="Resources\Langs.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Langs.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>

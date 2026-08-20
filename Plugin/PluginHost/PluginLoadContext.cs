@@ -54,7 +54,9 @@ namespace VirtualSpace.Plugin
                    || string.Equals( assemblyName, "WinRT.Runtime", StringComparison.OrdinalIgnoreCase )
                    || string.Equals( assemblyName, "MaterialDesignThemes.Wpf", StringComparison.OrdinalIgnoreCase )
                    || string.Equals( assemblyName, "MaterialDesignColors", StringComparison.OrdinalIgnoreCase )
-                   || string.Equals( assemblyName, "Microsoft.Xaml.Behaviors", StringComparison.OrdinalIgnoreCase );
+                   || string.Equals( assemblyName, "Microsoft.Xaml.Behaviors", StringComparison.OrdinalIgnoreCase )
+                   || string.Equals( assemblyName, "WPFLocalizeExtension", StringComparison.OrdinalIgnoreCase )
+                   || string.Equals( assemblyName, "XAMLMarkupExtensions", StringComparison.OrdinalIgnoreCase );
         }
 
         private void EnsureLoadedInDefaultContext( AssemblyName assemblyName )
@@ -67,6 +69,9 @@ namespace VirtualSpace.Plugin
                 EnsureLoadedInDefaultContext( new AssemblyName( "MaterialDesignColors" ) );
                 EnsureLoadedInDefaultContext( new AssemblyName( "Microsoft.Xaml.Behaviors" ) );
             }
+
+            if ( string.Equals( assemblyName.Name, "WPFLocalizeExtension", StringComparison.OrdinalIgnoreCase ) )
+                EnsureLoadedInDefaultContext( new AssemblyName( "XAMLMarkupExtensions" ) );
 
             foreach ( var assembly in Default.Assemblies )
             {

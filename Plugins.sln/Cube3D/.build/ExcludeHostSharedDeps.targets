@@ -1,16 +1,16 @@
 <Project>
     <!--
-      MaterialDesignThemes / MaterialDesignColors / Microsoft.Xaml.Behaviors ship with the host
-      (ControlPanel) and are shared via PluginLoadContext → Default ALC.
-
-      Keep them out of Cube3D OutDir and Plugins\Cube3D so Debug and Publish both verify
-      host borrowing (same idea as VirtualSpace/.build/EmbeddedVDLib.targets excluding
-      VirtualDesktop* from publish).
+      Assemblies that ship with the host (ControlPanel) and are shared via
+      PluginLoadContext → Default ALC. Keep them out of Cube3D OutDir / Plugins\Cube3D
+      so Debug and Publish both verify host borrowing (same idea as
+      VirtualSpace/.build/EmbeddedVDLib.targets excluding VirtualDesktop* from publish).
     -->
     <ItemGroup>
         <Cube3DHostSharedAssembly Include="MaterialDesignThemes.Wpf" />
         <Cube3DHostSharedAssembly Include="MaterialDesignColors" />
         <Cube3DHostSharedAssembly Include="Microsoft.Xaml.Behaviors" />
+        <Cube3DHostSharedAssembly Include="WPFLocalizeExtension" />
+        <Cube3DHostSharedAssembly Include="XAMLMarkupExtensions" />
     </ItemGroup>
 
     <Target Name="RemoveHostSharedAssembliesFromOutput" AfterTargets="CopyFilesToOutputDirectory">
@@ -31,7 +31,9 @@
             <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
                                    Condition="'%(Filename)' == 'MaterialDesignThemes.Wpf'
                                               Or '%(Filename)' == 'MaterialDesignColors'
-                                              Or '%(Filename)' == 'Microsoft.Xaml.Behaviors'" />
+                                              Or '%(Filename)' == 'Microsoft.Xaml.Behaviors'
+                                              Or '%(Filename)' == 'WPFLocalizeExtension'
+                                              Or '%(Filename)' == 'XAMLMarkupExtensions'" />
         </ItemGroup>
     </Target>
 </Project>

@@ -14,6 +14,8 @@
 
     <PropertyGroup>
         <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
+        <RootNamespace>Cube3D</RootNamespace>
+        <AssemblyName>Cube3D</AssemblyName>
     </PropertyGroup>
 
     <Import Project="$(MSBuildThisFileDirectory).build\AutoVersion.props" />
@@ -31,8 +33,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <!-- Compile against host MD; runtime comes from Default ALC (see ExcludeHostSharedDeps.targets). -->
         <PackageReference Include="MaterialDesignThemes" Version="5.3.2" ExcludeAssets="runtime" />
+        <PackageReference Include="WPFLocalizeExtension" Version="3.10.0" ExcludeAssets="runtime" />
     </ItemGroup>
 
     <ItemGroup>
@@ -56,11 +58,12 @@
         </PropertyGroup>
         <ItemGroup>
             <_PluginFiles Include="$(_CopyFrom)*.*"
-                          Exclude="$(_CopyFrom)*.pdb;$(_CopyFrom)*.deps.json;$(_CopyFrom)MaterialDesign*.dll;$(_CopyFrom)Microsoft.Xaml.Behaviors.dll" />
+                          Exclude="$(_CopyFrom)*.pdb;$(_CopyFrom)*.deps.json;$(_CopyFrom)MaterialDesign*.dll;$(_CopyFrom)Microsoft.Xaml.Behaviors.dll;$(_CopyFrom)WPFLocalizeExtension.dll;$(_CopyFrom)XAMLMarkupExtensions.dll" />
             <_StaleShared Include="$(_PluginDest)%(Cube3DHostSharedAssembly.Identity).dll" />
+            <_StaleSatellites Include="$(_PluginDest)**\*.resources.dll" />
         </ItemGroup>
         <MakeDir Directories="$(_PluginDest)" />
-        <Delete Files="@(_StaleShared)" TreatErrorsAsWarnings="true" />
+        <Delete Files="@(_StaleShared);@(_StaleSatellites)" TreatErrorsAsWarnings="true" />
         <Copy SourceFiles="@(_PluginFiles)" DestinationFolder="$(_PluginDest)" SkipUnchangedFiles="true" />
         <Message Text="Copied Cube3D plugin to $(_PluginDest) (host-shared deps excluded: @(Cube3DHostSharedAssembly))"
                  Importance="high" />
