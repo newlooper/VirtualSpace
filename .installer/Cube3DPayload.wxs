@@ -3,6 +3,7 @@
     Cube3D plugin payload from publish layout:
       Plugins\Cube3D\*.dll
     Shared by framework-dependent and self-contained MSIs.
+    MaterialDesign* / Microsoft.Xaml.Behaviors come from the host (shared ALC), not the plugin folder.
   -->
   <Fragment>
     <ComponentGroup Id="Cube3DPayload" Directory="Cube3DFolder">

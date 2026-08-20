@@ -12,14 +12,11 @@ namespace Cube3D.Config
 {
     public static class Const
     {
-        public const double FakeHideX                 = -10000.0;
-        public const double FakeHideY                 = -10000.0;
-        public const int    AnimationDurationMin      = 100;
-        public const int    AnimationDurationMax      = 1000;
-        public const int    CheckAliveIntervalMin     = 1;
-        public const int    CheckAliveIntervalMax     = 60;
-        public const int    CheckAliveIntervalDefault = 10;
-        public const string Front                     = nameof( Front );
-        public const string Others                    = nameof( Others );
+        public const double FakeHideX            = -10000.0;
+        public const double FakeHideY            = -10000.0;
+        public const int    AnimationDurationMin = 100;
+        public const int    AnimationDurationMax = 1000;
+        public const string Front                = nameof( Front );
+        public const string Others               = nameof( Others );
     }
 }

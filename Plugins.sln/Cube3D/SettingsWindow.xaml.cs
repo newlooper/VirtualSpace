@@ -34,12 +34,6 @@ namespace Cube3D
             set => SettingsManager.Settings.AnimationDuration = value;
         }
 
-        public int CheckAliveInterval
-        {
-            get => SettingsManager.Settings.CheckAliveInterval;
-            set => SettingsManager.Settings.CheckAliveInterval = value;
-        }
-
         private void Window_Loaded( object sender, RoutedEventArgs e )
         {
             foreach ( var name in EffectFactory.Names )

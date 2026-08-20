@@ -1,0 +1,37 @@
+<Project>
+    <!--
+      MaterialDesignThemes / MaterialDesignColors / Microsoft.Xaml.Behaviors ship with the host
+      (ControlPanel) and are shared via PluginLoadContext → Default ALC.
+
+      Keep them out of Cube3D OutDir and Plugins\Cube3D so Debug and Publish both verify
+      host borrowing (same idea as VirtualSpace/.build/EmbeddedVDLib.targets excluding
+      VirtualDesktop* from publish).
+    -->
+    <ItemGroup>
+        <Cube3DHostSharedAssembly Include="MaterialDesignThemes.Wpf" />
+        <Cube3DHostSharedAssembly Include="MaterialDesignColors" />
+        <Cube3DHostSharedAssembly Include="Microsoft.Xaml.Behaviors" />
+    </ItemGroup>
+
+    <Target Name="RemoveHostSharedAssembliesFromOutput" AfterTargets="CopyFilesToOutputDirectory">
+        <PropertyGroup>
+            <_Cube3DOutDir>$([MSBuild]::EnsureTrailingSlash('$(OutDir)'))</_Cube3DOutDir>
+        </PropertyGroup>
+        <ItemGroup>
+            <_HostSharedOut Include="$(_Cube3DOutDir)%(Cube3DHostSharedAssembly.Identity).dll" />
+            <_HostSharedOut Include="$(_Cube3DOutDir)%(Cube3DHostSharedAssembly.Identity).pdb" />
+        </ItemGroup>
+        <Delete Files="@(_HostSharedOut)" TreatErrorsAsWarnings="true" />
+        <Message Text="Cube3D: stripped host-shared deps from OutDir (must resolve from host): @(Cube3DHostSharedAssembly)"
+                 Importance="high" />
+    </Target>
+
+    <Target Name="ExcludeHostSharedAssembliesFromPublish" AfterTargets="ComputeResolvedFilesToPublishList">
+        <ItemGroup>
+            <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
+                                   Condition="'%(Filename)' == 'MaterialDesignThemes.Wpf'
+                                              Or '%(Filename)' == 'MaterialDesignColors'
+                                              Or '%(Filename)' == 'Microsoft.Xaml.Behaviors'" />
+        </ItemGroup>
+    </Target>
+</Project>

@@ -132,7 +132,11 @@ public partial class MainWindow : Window, IAppController
         theme.SetPrimaryColor( pColor );
         theme.SetSecondaryColor( sColor );
         theme.SetBaseTheme( newTheme );
-        Dispatcher.Invoke( () => { Resources.SetTheme( theme ); } );
+        Dispatcher.Invoke( () =>
+        {
+            Resources.SetTheme( theme );
+            Application.Current?.Resources.SetTheme( theme );
+        } );
 
         return IntPtr.Zero;
     }

@@ -18,8 +18,7 @@ namespace Cube3D.Config
 {
     public class Settings
     {
-        private int _animationDuration  = 500;
-        private int _checkAliveInterval = 30;
+        private int _animationDuration = 500;
 
         public int AnimationDuration
         {
@@ -33,22 +32,6 @@ namespace Cube3D.Config
                 else
                 {
                     _animationDuration = value;
-                }
-            }
-        }
-
-        public int CheckAliveInterval
-        {
-            get => _checkAliveInterval;
-            set
-            {
-                if ( value < Const.CheckAliveIntervalMin || value > Const.CheckAliveIntervalMax )
-                {
-                    _checkAliveInterval = Const.CheckAliveIntervalDefault;
-                }
-                else
-                {
-                    _checkAliveInterval = value;
                 }
             }
         }

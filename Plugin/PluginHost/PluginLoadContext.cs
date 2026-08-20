@@ -51,7 +51,10 @@ namespace VirtualSpace.Plugin
         {
             return string.Equals( assemblyName, "VirtualSpace.PluginContracts", StringComparison.OrdinalIgnoreCase )
                    || string.Equals( assemblyName, "Microsoft.Windows.SDK.NET", StringComparison.OrdinalIgnoreCase )
-                   || string.Equals( assemblyName, "WinRT.Runtime", StringComparison.OrdinalIgnoreCase );
+                   || string.Equals( assemblyName, "WinRT.Runtime", StringComparison.OrdinalIgnoreCase )
+                   || string.Equals( assemblyName, "MaterialDesignThemes.Wpf", StringComparison.OrdinalIgnoreCase )
+                   || string.Equals( assemblyName, "MaterialDesignColors", StringComparison.OrdinalIgnoreCase )
+                   || string.Equals( assemblyName, "Microsoft.Xaml.Behaviors", StringComparison.OrdinalIgnoreCase );
         }
 
         private void EnsureLoadedInDefaultContext( AssemblyName assemblyName )
@@ -59,10 +62,23 @@ namespace VirtualSpace.Plugin
             if ( string.Equals( assemblyName.Name, "Microsoft.Windows.SDK.NET", StringComparison.OrdinalIgnoreCase ) )
                 EnsureLoadedInDefaultContext( new AssemblyName( "WinRT.Runtime" ) );
 
+            if ( string.Equals( assemblyName.Name, "MaterialDesignThemes.Wpf", StringComparison.OrdinalIgnoreCase ) )
+            {
+                EnsureLoadedInDefaultContext( new AssemblyName( "MaterialDesignColors" ) );
+                EnsureLoadedInDefaultContext( new AssemblyName( "Microsoft.Xaml.Behaviors" ) );
+            }
+
             foreach ( var assembly in Default.Assemblies )
             {
                 if ( string.Equals( assembly.GetName().Name, assemblyName.Name, StringComparison.OrdinalIgnoreCase ) )
                     return;
+            }
+
+            var hostPath = Path.Combine( AppContext.BaseDirectory, assemblyName.Name + ".dll" );
+            if ( File.Exists( hostPath ) )
+            {
+                Default.LoadFromAssemblyPath( hostPath );
+                return;
             }
 
             var path = _resolver.ResolveAssemblyToPath( assemblyName );

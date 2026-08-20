@@ -4,73 +4,126 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:cvt="clr-namespace:VirtualSpace.Helpers"
-        mc:Ignorable="d"
         xmlns:localConfig="clr-namespace:Cube3D.Config"
-        Title="Cube3D Settings" Height="450" Width="800" Topmost="True" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d"
+        Title="Cube3D Settings"
+        Height="520" Width="820"
+        Topmost="True"
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="14"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="Segoe UI,Segoe UI Emoji,Segoe UI Symbol,Microsoft YaHei UI,Microsoft YaHei">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="PluginTheme.xaml" />
+                <!-- Theme colors come from Application.Resources (ControlPanel UpdateTheme). -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <cvt:TransitionTypeConverter x:Key="Ttc" />
+            <Style TargetType="GroupBox" BasedOn="{StaticResource MaterialDesignGroupBox}">
+                <Setter Property="Margin" Value="10" />
+                <Setter Property="HeaderTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <TextBlock Foreground="{DynamicResource MaterialDesignBody}"
+                                       Text="{Binding}"
+                                       FontWeight="Bold"
+                                       FontSize="16" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignPaperSecondaryLightButton}">
+                <Setter Property="Margin" Value="10,5" />
+                <Setter Property="Height" Value="36" />
+                <Setter Property="MinWidth" Value="100" />
+            </Style>
+            <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignCheckBox}">
+                <Setter Property="Margin" Value="10,0,0,0" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignFilledComboBox}">
+                <Setter Property="Margin" Value="10,5,0,5" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+            <Style x:Key="SettingLabel" TargetType="TextBlock">
+                <Setter Property="Width" Value="200" />
+                <Setter Property="Margin" Value="10,0,0,0" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
-        <StackPanel>
+
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <GroupBox Header="Basic" Margin="10">
+                <GroupBox Header="Basic">
                     <StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="180">Animation Duration(ms):</Label>
-                            <Slider x:Name="SliderAnimationDuration" Margin="10,15,0,0" HorizontalAlignment="Left" Width="300"
-                                    IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
+                        <StackPanel Orientation="Horizontal" Margin="0,4">
+                            <TextBlock Style="{StaticResource SettingLabel}" Text="Animation Duration (ms)" />
+                            <Slider x:Name="SliderAnimationDuration"
+                                    Width="300"
+                                    Margin="10,8,0,0"
+                                    VerticalAlignment="Center"
+                                    IsSnapToTickEnabled="True"
+                                    IsMoveToPointEnabled="True"
                                     Minimum="{Binding Source={x:Static localConfig:Const.AnimationDurationMin}}"
                                     Maximum="{Binding Source={x:Static localConfig:Const.AnimationDurationMax}}"
-                                    Value="{Binding AnimationDuration}" TickFrequency="10" TickPlacement="None" LargeChange="10" />
-                            <TextBlock Margin="5,16,0,0" Text="{Binding ElementName=SliderAnimationDuration, Path=Value}" />
+                                    Value="{Binding AnimationDuration}"
+                                    TickFrequency="10"
+                                    TickPlacement="None"
+                                    LargeChange="10" />
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       MinWidth="40"
+                                       Text="{Binding ElementName=SliderAnimationDuration, Path=Value}" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="180">Animation Type:</Label>
-                            <ComboBox Width="120" Margin="10,10,0,0" x:Name="ComboBoxEffects" SelectionChanged="ComboBoxEffects_SelectionChanged" />
-                            <Button Width="120" Margin="10, 10,0,0" Click="ApplyEffect_OnClick">Apply</Button>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,4">
+                            <TextBlock Style="{StaticResource SettingLabel}" Text="Animation Type" />
+                            <ComboBox Width="160" x:Name="ComboBoxEffects" SelectionChanged="ComboBoxEffects_SelectionChanged" />
+                            <Button Content="Apply" Click="ApplyEffect_OnClick" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="180" xml:space="preserve">        Ease Type:</Label>
-                            <ComboBox Width="120" Margin="10,10,0,0" x:Name="ComboBoxEase" SelectionChanged="ComboBoxEase_OnSelectionChanged" />
+
+                        <StackPanel Orientation="Horizontal" Margin="0,4">
+                            <TextBlock Style="{StaticResource SettingLabel}" Text="Ease Type" />
+                            <ComboBox Width="160" x:Name="ComboBoxEase" SelectionChanged="ComboBoxEase_OnSelectionChanged" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="180" xml:space="preserve">        Ease Mode:</Label>
-                            <ComboBox Width="120" Margin="10,10,0,0" x:Name="ComboBoxEaseMode" SelectionChanged="ComboBoxEaseMode_OnSelectionChanged" />
+
+                        <StackPanel Orientation="Horizontal" Margin="0,4">
+                            <TextBlock Style="{StaticResource SettingLabel}" Text="Ease Mode" />
+                            <ComboBox Width="160" x:Name="ComboBoxEaseMode" SelectionChanged="ComboBoxEaseMode_OnSelectionChanged" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="180">Transition Type:</Label>
-                            <ComboBox Width="300" Margin="10,10,0,0" x:Name="ComboBoxTransitionType" SelectionChanged="ComboBoxTransitionType_OnSelectionChanged" />
-                            <CheckBox Margin="10,15,0,0" x:Name="CbNgOnAllScreens" Checked="CbNgOnAllScreens_OnChecked" Unchecked="CbNgOnAllScreens_OnUnchecked"
+
+                        <StackPanel Orientation="Horizontal" Margin="0,4">
+                            <TextBlock Style="{StaticResource SettingLabel}" Text="Transition Type" />
+                            <ComboBox Width="280" x:Name="ComboBoxTransitionType" SelectionChanged="ComboBoxTransitionType_OnSelectionChanged" />
+                            <CheckBox x:Name="CbNgOnAllScreens"
+                                      Content="Show NotificationGrid on All Screens"
+                                      Checked="CbNgOnAllScreens_OnChecked"
+                                      Unchecked="CbNgOnAllScreens_OnUnchecked"
                                       IsEnabled="{Binding ElementName=ComboBoxTransitionType,
-                                      Path=SelectedItem,
-                                      Converter={StaticResource Ttc} }">
-                                Show NotificationGrid on All Screens
-                            </CheckBox>
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Others" Margin="10">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Margin="10,10,0,0" Width="180">Check Alive Interval(seconds):</Label>
-                            <Slider x:Name="SliderCheckAliveInterval" Margin="10,15,0,0" HorizontalAlignment="Left" Width="300"
-                                    IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
-                                    Minimum="{Binding Source={x:Static localConfig:Const.CheckAliveIntervalMin}}"
-                                    Maximum="{Binding Source={x:Static localConfig:Const.CheckAliveIntervalMax}}"
-                                    Value="{Binding CheckAliveInterval}" TickPlacement="None" />
-                            <TextBlock Margin="5,16,0,0" Text="{Binding ElementName=SliderCheckAliveInterval, Path=Value}" />
+                                                          Path=SelectedItem,
+                                                          Converter={StaticResource Ttc}}" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button Padding="5" Click="Close_OnClick">Close</Button>
-            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,4,10,10">
+            <Button Content="Close" Click="Close_OnClick" />
         </StackPanel>
     </Grid>
 </Window>

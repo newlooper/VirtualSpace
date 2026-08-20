@@ -8,6 +8,7 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
+using System.Windows;
 using System.Windows.Media;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
@@ -59,12 +60,7 @@ public partial class MainWindow
         RegValueMonitor.OnRegValueChanged += ( o, args ) =>
         {
             if ( Manager.CurrentProfile.UI.Theme != 0 ) return;
-            var theme = Resources.GetTheme();
-            var (pColor, sColor, newTheme) = GetThemeInfo();
-            theme.SetPrimaryColor( pColor );
-            theme.SetSecondaryColor( sColor );
-            theme.SetBaseTheme( newTheme );
-            Dispatcher.Invoke( () => { Resources.SetTheme( theme ); } );
+            Dispatcher.Invoke( UpdateTheme );
         };
 #endif
     }
@@ -72,6 +68,10 @@ public partial class MainWindow
     public static void UpdateTheme()
     {
         var (primaryColor, secondaryColor, initTheme) = _instance.GetThemeInfo();
-        _instance.Resources.SetTheme( Theme.Create( initTheme, primaryColor, secondaryColor ) );
+        var theme = Theme.Create( initTheme, primaryColor, secondaryColor );
+        _instance.Resources.SetTheme( theme );
+        // Application-level theme so plugin windows (e.g. Cube3D Settings) can follow
+        // without referencing ControlPanel types.
+        Application.Current?.Resources.SetTheme( theme );
     }
 }

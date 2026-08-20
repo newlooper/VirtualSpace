@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--
         Empty implicit styles shadow host Application-level styles (MaterialDesign).
+        Used by MainWindow only — SettingsWindow loads MaterialDesign on its own.
         Controls then fall back to the WPF theme default, matching standalone Cube3D.
     -->
     <Style TargetType="Window" />
