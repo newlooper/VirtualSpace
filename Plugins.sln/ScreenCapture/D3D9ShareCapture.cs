@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -61,10 +62,9 @@ namespace ScreenCapture
         private          SizeInt32                           _lastSize;
         private          MonitorInfo                         _monitorInfo;
 
-        private          int                                 _disposed;
-        private readonly object                              _sync = new();
-
-        private static readonly object DeviceLock = new();
+        private                 int  _disposed;
+        private readonly        Lock _sync      = new();
+        private static readonly Lock DeviceLock = new();
 
         private D3D9ShareCapture()
         {
@@ -73,7 +73,7 @@ namespace ScreenCapture
             if ( _propertyInfoIsCursorCaptureEnabled != default ) return;
 
             var typeGraphicsCaptureSession = typeof( GraphicsCaptureSession );
-            _propertyInfoIsBorderRequired = typeGraphicsCaptureSession.GetProperty( "IsBorderRequired" );
+            _propertyInfoIsBorderRequired       = typeGraphicsCaptureSession.GetProperty( "IsBorderRequired" );
             _propertyInfoIsCursorCaptureEnabled = typeGraphicsCaptureSession.GetProperty( "IsCursorCaptureEnabled" );
         }
 
@@ -96,9 +96,42 @@ namespace ScreenCapture
 
         private static void EnsureD3D11()
         {
-            if ( _sharpDxD3D11Device != null && _d3D11Device != null ) return;
+            if ( _sharpDxD3D11Device != null && _d3D11Device != null )
+            {
+                try
+                {
+                    if ( _sharpDxD3D11Device.DeviceRemovedReason.Success )
+                        return;
+                }
+                catch
+                {
+                    // fall through and recreate
+                }
+
+                InvalidateD3D11DevicesLocked();
+            }
+
             _sharpDxD3D11Device = new D3D11.Device( DriverType.Hardware, D3D11.DeviceCreationFlags.BgraSupport );
-            _d3D11Device = Direct3D11Helper.CreateDirect3DDeviceFromSharpDXDevice( _sharpDxD3D11Device );
+            _d3D11Device        = Direct3D11Helper.CreateDirect3DDeviceFromSharpDXDevice( _sharpDxD3D11Device );
+        }
+
+        private static void InvalidateD3D11DevicesLocked()
+        {
+            try
+            {
+                _sharpDxD3D11Device?.ImmediateContext?.ClearState();
+                _sharpDxD3D11Device?.ImmediateContext?.Flush();
+            }
+            catch
+            {
+                // ignored
+            }
+
+            _sharpDxD3D11Device?.Dispose();
+            _sharpDxD3D11Device = null;
+
+            ( _d3D11Device as IDisposable )?.Dispose();
+            _d3D11Device = null;
         }
 
         private static void EnsureD3D9()
@@ -116,15 +149,9 @@ namespace ScreenCapture
 
             lock ( _sync )
             {
-                if ( _captureFramePool != null )
-                    _captureFramePool.FrameArrived -= OnCaptureFrameArrived;
-
-                try { _captureSession?.Dispose(); } catch { /* ignored */ }
-                try { _captureFramePool?.Dispose(); } catch { /* ignored */ }
-                _captureSession   = null;
-                _captureFramePool = null;
-                _captureItem      = null;
-                _fp               = null;
+                TearDownCaptureSession();
+                _captureItem = null;
+                _fp          = null;
 
                 foreach ( var texture in _renderTargetPool.Values )
                     texture?.Dispose();
@@ -142,21 +169,7 @@ namespace ScreenCapture
         {
             lock ( DeviceLock )
             {
-                try
-                {
-                    _sharpDxD3D11Device?.ImmediateContext?.ClearState();
-                    _sharpDxD3D11Device?.ImmediateContext?.Flush();
-                }
-                catch
-                {
-                    // ignored
-                }
-
-                _sharpDxD3D11Device?.Dispose();
-                _sharpDxD3D11Device = null;
-
-                ( _d3D11Device as IDisposable )?.Dispose();
-                _d3D11Device = null;
+                InvalidateD3D11DevicesLocked();
 
                 _d3D9Device?.Dispose();
                 _d3D9Device = null;
@@ -165,20 +178,30 @@ namespace ScreenCapture
             }
         }
 
-        public static D3D9ShareCapture Create( MonitorInfo mi, FrameProcessor fp )
+        public static D3D9ShareCapture? Create( MonitorInfo mi, FrameProcessor fp )
         {
-            var item = CaptureHelper.CreateItemForMonitor( mi.Hmon );
-            if ( item == null ) return null;
+            if ( mi.ScreenSize.X <= 0 || mi.ScreenSize.Y <= 0 ) return null;
 
-            var capture = new D3D9ShareCapture
+            GraphicsCaptureItem item;
+            try
+            {
+                item = CaptureHelper.CreateItemForMonitor( mi.Hmon );
+            }
+            catch ( Exception ex )
+            {
+                Trace.WriteLine( $"[ScreenCapture.Error] CreateItemForMonitor failed: {ex.Message}" );
+                return null;
+            }
+
+            if ( item == null || item.Size.Width <= 0 || item.Size.Height <= 0 ) return null;
+
+            return new D3D9ShareCapture
             {
                 _captureItem = item,
-                _fp = fp,
-                _lastSize = item.Size,
+                _fp          = fp,
+                _lastSize    = item.Size,
                 _monitorInfo = mi
             };
-
-            return capture;
         }
 
         public void UpdateCapturePrimaryMonitor()
@@ -189,37 +212,81 @@ namespace ScreenCapture
             if ( monitor.Hmon == _monitorInfo.Hmon ) return;
             _monitorInfo = monitor;
 
-            var item = CaptureHelper.CreateItemForMonitor( _monitorInfo.Hmon );
+            var item                         = CaptureHelper.CreateItemForMonitor( _monitorInfo.Hmon );
             if ( item != null ) _captureItem = item;
         }
 
-        public void StartCaptureSession()
+        public bool StartCaptureSession()
         {
-            if ( _captureItem == null ) return;
+            if ( Volatile.Read( ref _disposed ) != 0 || _captureItem == null ) return false;
+            if ( _captureItem.Size.Width <= 0 || _captureItem.Size.Height <= 0 ) return false;
 
-            _captureFramePool = Direct3D11CaptureFramePool.Create( _d3D11Device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, _captureItem.Size );
-            _captureFramePool.FrameArrived += OnCaptureFrameArrived;
-
-            _captureSession = _captureFramePool.CreateCaptureSession( _captureItem );
-
-            if ( _propertyInfoIsCursorCaptureEnabled != null )
+            lock ( DeviceLock )
             {
-                _propertyInfoIsCursorCaptureEnabled.SetValue( _captureSession, false );
+                EnsureSharedDevices();
             }
 
-            if ( _propertyInfoIsBorderRequired != null )
+            TearDownCaptureSession();
+
+            try
             {
-                try
+                _captureFramePool              =  Direct3D11CaptureFramePool.Create( _d3D11Device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, _captureItem.Size );
+                _captureFramePool.FrameArrived += OnCaptureFrameArrived;
+
+                _captureSession = _captureFramePool.CreateCaptureSession( _captureItem );
+
+                if ( _propertyInfoIsCursorCaptureEnabled != null )
+                    _propertyInfoIsCursorCaptureEnabled.SetValue( _captureSession, false );
+
+                if ( _propertyInfoIsBorderRequired != null )
                 {
-                    _propertyInfoIsBorderRequired.SetValue( _captureSession, false );
+                    try
+                    {
+                        _propertyInfoIsBorderRequired.SetValue( _captureSession, false );
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
-                catch
-                {
-                    // ignored
-                }
+
+                _captureSession.StartCapture();
+                return true;
+            }
+            catch ( Exception ex )
+            {
+                Trace.WriteLine( $"[ScreenCapture.Error] StartCaptureSession failed: {ex}" );
+                TearDownCaptureSession();
+                ReleaseSharedDevices();
+                return false;
+            }
+        }
+
+        private void TearDownCaptureSession()
+        {
+            if ( _captureFramePool != null )
+                _captureFramePool.FrameArrived -= OnCaptureFrameArrived;
+
+            try
+            {
+                _captureSession?.Dispose();
+            }
+            catch
+            {
+                /* ignored */
             }
 
-            _captureSession.StartCapture();
+            try
+            {
+                _captureFramePool?.Dispose();
+            }
+            catch
+            {
+                /* ignored */
+            }
+
+            _captureSession   = null;
+            _captureFramePool = null;
         }
 
         public void StopCaptureSession()
@@ -250,25 +317,25 @@ namespace ScreenCapture
 
                     using ( var bitmap = Direct3D11Helper.CreateSharpDXTexture2D( frame.Surface ) )
                     {
-                        if ( !_frameCopyPool.ContainsKey( bitmap.NativePointer ) || newSize )
+                        if ( !_frameCopyPool.TryGetValue( bitmap.NativePointer, out var copy) || newSize )
                         {
                             var desc = new D3D11.Texture2DDescription
                             {
-                                BindFlags            = D3D11.BindFlags.RenderTarget | D3D11.BindFlags.ShaderResource,
-                                Format               = Format.B8G8R8A8_UNorm,
-                                Width                = bitmap.Description.Width,
-                                Height               = bitmap.Description.Height,
-                                MipLevels            = 1,
-                                SampleDescription    = new SampleDescription( 1, 0 ),
-                                Usage                = D3D11.ResourceUsage.Default,
-                                OptionFlags          = D3D11.ResourceOptionFlags.Shared,
-                                CpuAccessFlags       = D3D11.CpuAccessFlags.None,
-                                ArraySize            = 1
+                                BindFlags         = D3D11.BindFlags.RenderTarget | D3D11.BindFlags.ShaderResource,
+                                Format            = Format.B8G8R8A8_UNorm,
+                                Width             = bitmap.Description.Width,
+                                Height            = bitmap.Description.Height,
+                                MipLevels         = 1,
+                                SampleDescription = new SampleDescription( 1, 0 ),
+                                Usage             = D3D11.ResourceUsage.Default,
+                                OptionFlags       = D3D11.ResourceOptionFlags.Shared,
+                                CpuAccessFlags    = D3D11.CpuAccessFlags.None,
+                                ArraySize         = 1
                             };
-                            _frameCopyPool[bitmap.NativePointer] = new D3D11.Texture2D( _sharpDxD3D11Device, desc );
+                            copy = new D3D11.Texture2D( _sharpDxD3D11Device, desc );
+                            _frameCopyPool[bitmap.NativePointer] = copy;
                         }
 
-                        var copy         = _frameCopyPool[bitmap.NativePointer];
                         _sharpDxD3D11Device.ImmediateContext.CopyResource( bitmap, copy );
                         var sharedHandle = GetSharedHandle( copy );
 
@@ -329,9 +396,9 @@ namespace ScreenCapture
         {
             var presentParams = new D3D9.PresentParameters
             {
-                Windowed = true,
-                SwapEffect = D3D9.SwapEffect.Discard,
-                DeviceWindowHandle = NativeMethods.GetDesktopWindow(),
+                Windowed             = true,
+                SwapEffect           = D3D9.SwapEffect.Discard,
+                DeviceWindowHandle   = NativeMethods.GetDesktopWindow(),
                 PresentationInterval = D3D9.PresentInterval.Default
             };
 

@@ -41,6 +41,7 @@ namespace Cube3D
         private void StopCapture()
         {
             _capture?.StopCaptureSession();
+            _capture = null;
         }
 
         private bool WindowFilter( IntPtr hWnd, int lParam )
@@ -96,7 +97,7 @@ namespace Cube3D
                     break;
 
                 case WinMsg.WM_DISPLAYCHANGE:
-                    RestartRequested?.Invoke();
+                    ScheduleDisplayChangeRecovery();
                     break;
 
                 case WinMsg.WM_MOUSEACTIVATE:
@@ -109,17 +110,21 @@ namespace Cube3D
 
         private void PerformAnimationPrimary( VirtualDesktopSwitchInfo vdSwitchInfo )
         {
-            var mi = ( from m in MonitorEnumerationHelper.GetMonitors() where m.IsPrimary select m ).First();
-            StopCapture();
-            _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
-            _capture?.StartCaptureSession();
+            var mi = TryGetPrimaryMonitor();
+            if ( mi == null ) return;
+
+            if ( !TryStartCapture( mi ) )
+            {
+                ScheduleCaptureRetry();
+                return;
+            }
 
             if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 )
                 NotificationGridLayout( vdSwitchInfo.VdCount );
 
             var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, SettingsManager.Settings.EaseMode );
 
-            _frameProcessor.SetAction( () =>
+            _frameProcessor!.SetAction( () =>
             {
                 //////////////////////////////////////////////////////
                 // trigger action only after first frame be handled,

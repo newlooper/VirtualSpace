@@ -91,10 +91,16 @@ namespace Cube3D
             _mainWindow?.OpenSettings();
         }
 
+        private readonly object _restartLock = new();
+
         private void RestartUi()
         {
-            _mainWindow?.CloseAll();
-            StartUi();
+            lock ( _restartLock )
+            {
+                _mainWindow?.CloseAll();
+                D3D9ShareCapture.ReleaseSharedDevices();
+                StartUi();
+            }
         }
 
         private void StartUi()

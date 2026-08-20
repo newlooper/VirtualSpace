@@ -9,7 +9,7 @@ Cube3D is distributed in the hope that it will be useful, but WITHOUT ANY WARRAN
 You should have received a copy of the GNU General Public License along with Cube3D. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using ScreenCapture;
 
@@ -17,40 +17,61 @@ namespace Cube3D
 {
     public partial class MainWindow
     {
-        private D3D9ShareCapture _capture;
-        private FrameToD3DImage  _frameProcessor;
+        private D3D9ShareCapture? _capture;
+        private FrameToD3DImage?  _frameProcessor;
 
         private Task StartPrimaryMonitorCapture()
         {
-            var monitor = ( from m in MonitorEnumerationHelper.GetMonitors()
-                where m.IsPrimary
-                select m ).First();
-            return StartMonitorCapture( monitor );
+            var monitor = TryGetPrimaryMonitor();
+            return monitor == null ? Task.CompletedTask : StartMonitorCapture( monitor, _windowLoadGeneration );
         }
 
-        private async Task StartMonitorCapture( MonitorInfo mi )
+        private async Task StartMonitorCapture( MonitorInfo mi, int loadGeneration )
         {
-            _frameProcessor = new FrameToD3DImage( D3DImages.D3DImages.D3DImageDict );
-            try
-            {
-                _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
-            }
-            catch
-            {
-                await Task.Delay( 1000 );
-                RestartRequested?.Invoke();
-                return;
-            }
+            if ( !await WarmupMonitorCaptureAsync( loadGeneration, mi ).ConfigureAwait( true ) )
+                ScheduleCaptureRetry();
+        }
 
-            if ( _capture != null )
-            {
-                _capture.StartCaptureSession();
+        private async Task<bool> WarmupMonitorCaptureAsync( int loadGeneration, MonitorInfo? monitor = null )
+        {
+            monitor ??= TryGetPrimaryMonitor();
+            if ( monitor == null ) return false;
+
+            _frameProcessor ??= new FrameToD3DImage( D3DImages.D3DImages.D3DImageDict );
+
+            if ( !TryStartCapture( monitor ) )
+                return false;
+
 #if DEBUG
-                await Task.Delay( 50 );
+            await Task.Delay( 50 ).ConfigureAwait( true );
 #endif
+            if ( !IsLoadCurrent( loadGeneration ) || !IsLoaded )
+            {
+                StopCapture();
+                return true;
             }
 
             StopCapture();
+            return true;
+        }
+
+        private bool TryStartCapture( MonitorInfo mi )
+        {
+            StopCapture();
+
+            _frameProcessor ??= new FrameToD3DImage( D3DImages.D3DImages.D3DImageDict );
+            _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
+            if ( _capture == null )
+            {
+                Trace.WriteLine( "[Cube3D.Error] capture create failed." );
+                return false;
+            }
+
+            if ( _capture.StartCaptureSession() ) return true;
+
+            Trace.WriteLine( "[Cube3D.Error] capture session failed." );
+            StopCapture();
+            return false;
         }
     }
 }

@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
@@ -34,7 +35,7 @@ namespace Cube3D
     {
         private static readonly List<MainWindow> OtherScreens = new();
 
-        private readonly MonitorInfo _monitorInfo;
+        private MonitorInfo _monitorInfo;
         public           IntPtr      Handle;
         private          IHostContext _host;
 
@@ -122,6 +123,8 @@ namespace Cube3D
 
         internal void CloseAll()
         {
+            InvalidateLoadsOnClose();
+            _displayChangeDebounceTimer?.Stop();
             StopCapture();
             _sw?.Close();
             _sw = null;
@@ -172,6 +175,9 @@ namespace Cube3D
 
         private async void Window_Loaded( object sender, RoutedEventArgs e )
         {
+            _windowLoadGeneration = Interlocked.Increment( ref _loadGeneration );
+            var loadGeneration = _windowLoadGeneration;
+
             FakeHide();
 
             SetTransitionType();
@@ -184,9 +190,13 @@ namespace Cube3D
             CreateOtherScreens();
 
             await Dispatcher.Yield( DispatcherPriority.Background );
+            if ( !IsLoadCurrent( loadGeneration ) || !IsLoaded ) return;
+
             await D3D9ShareCapture.PreloadD3D11Async();
-            if ( !IsLoaded ) return;
-            await StartPrimaryMonitorCapture();
+            if ( !IsLoadCurrent( loadGeneration ) || !IsLoaded ) return;
+
+            if ( !await WarmupMonitorCaptureAsync( loadGeneration ).ConfigureAwait( true ) )
+                ScheduleCaptureRetry();
         }
 
         public void SetTransitionType()
