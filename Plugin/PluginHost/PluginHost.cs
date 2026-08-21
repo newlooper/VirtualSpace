@@ -71,6 +71,11 @@ namespace VirtualSpace.Plugin
             RuntimePluginManager.Instance.CloseAll();
         }
 
+        public static void TearDownForSessionEnd()
+        {
+            RuntimePluginManager.Instance.TearDownForSessionEnd();
+        }
+
         public static void Publish( string eventName, object payload )
         {
             RuntimePluginManager.Instance.Publish( eventName, payload );

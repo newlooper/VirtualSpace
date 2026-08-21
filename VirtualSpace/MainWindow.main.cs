@@ -17,6 +17,7 @@ using System.Windows.Media;
 using VirtualSpace.Config;
 using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
+using VirtualSpace.Plugin;
 using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
@@ -233,6 +234,15 @@ namespace VirtualSpace
 
         public static void Quit()
         {
+            try
+            {
+                PluginHost.CloseAllPlugins();
+            }
+            catch
+            {
+                // ignored — process is exiting
+            }
+
             _instance.Close();
             Application.Current.Shutdown();
         }

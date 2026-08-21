@@ -70,6 +70,8 @@ namespace VirtualSpace
 
                 if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart ) mw.FakeHide();
 
+                Current.SessionEnding += OnSessionEnding;
+
                 _ = Dispatcher.InvokeAsync(
                     () => { _ = PluginHost.AutoStartAfterMainWindowLoadedAsync(); },
                     DispatcherPriority.ApplicationIdle );
@@ -80,8 +82,31 @@ namespace VirtualSpace
             }
         }
 
+        private static void OnSessionEnding( object sender, SessionEndingCancelEventArgs e )
+        {
+            Logger.Info( $"Windows session ending ({e.ReasonSessionEnding}); tearing down plugins." );
+            try
+            {
+                PluginHost.TearDownForSessionEnd();
+            }
+            catch ( Exception ex )
+            {
+                Logger.Warning( $"Plugin session-end teardown failed: {ex.Message}" );
+            }
+        }
+
         protected override void OnExit( ExitEventArgs e )
         {
+            Current.SessionEnding -= OnSessionEnding;
+            try
+            {
+                PluginHost.CloseAllPlugins();
+            }
+            catch ( Exception ex )
+            {
+                Logger.Warning( $"Plugin unload on exit failed: {ex.Message}" );
+            }
+
             base.OnExit( e );
 
             ReleaseMutex();

@@ -135,6 +135,28 @@ namespace VirtualSpace.Plugin
                 Close( pluginInfo );
         }
 
+        /// <summary>
+        /// Fast teardown for OS logoff/shutdown: close plugin UI without ALC unload / GC
+        /// (process is exiting; heavy unload can delay WM_QUERYENDSESSION and block restart).
+        /// </summary>
+        public void TearDownForSessionEnd()
+        {
+            foreach ( var pluginInfo in Plugins.Where( p => p.IsLoaded ).ToList() )
+            {
+                try
+                {
+                    if ( pluginInfo.Kind == PluginKind.InProcess )
+                        PluginLoader.GetInstance( pluginInfo.Name )?.Shutdown();
+                    else if ( pluginInfo.Handle != IntPtr.Zero )
+                        User32.PostMessage( pluginInfo.Handle, WinMsg.WM_CLOSE, 0, 0 );
+                }
+                catch ( Exception ex )
+                {
+                    Logger.Warning( $"[PLUGIN] Session-end teardown {pluginInfo.Display} failed: {ex.Message}" );
+                }
+            }
+        }
+
         public void Publish( string eventName, object payload )
         {
             HostContext.Publish( eventName, payload );
