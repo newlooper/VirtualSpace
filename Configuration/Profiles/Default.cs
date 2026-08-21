@@ -31,7 +31,7 @@ namespace VirtualSpace.Config.Profiles
                 VDWDragTargetOpacity   = 0.8f,
                 ThumbMargin            = new Margin { Top = 20, Left = 10 },
                 ThumbDragSourceOpacity = 150,
-                Language               = "en",
+                Language               = Agent.FallbackLanguage,
                 DesktopArrangement     = 0,
                 ShowVdName             = true,
                 ShowVdIndex            = true,

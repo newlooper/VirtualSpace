@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -103,6 +104,7 @@ namespace VirtualSpace.Config
             else
             {
                 Logger.Info( "Settings File Not Found, Create From Default Template." );
+                var language = global::VirtualSpace.Agent.ResolveUiLanguage();
                 Configs = new ConfigTemplate
                 {
                     CurrentProfileName = nameof( Default ),
@@ -114,6 +116,8 @@ namespace VirtualSpace.Config
                     },
                     MouseActions = MouseAction.Info
                 };
+                Configs.Profiles[nameof( Default )].UI.Language = language;
+                Logger.Info( $"UI Language resolved from system ({CultureInfo.CurrentUICulture.Name}): {language}" );
 
                 PropertyProtector.Walk( Configs );
 
