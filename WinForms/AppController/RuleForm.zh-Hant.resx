@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cb_Enabled.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 21</value>
+  </data>
+  <data name="cb_Enabled.Text" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="lb_Name.Size" type="System.Drawing.Size, System.Drawing">
+    <value>32, 17</value>
+  </data>
+  <data name="lb_Name.Text" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="gb_Basic.Text" xml:space="preserve">
+    <value>基本</value>
+  </data>
+  <data name="cb_CommandLine.Size" type="System.Drawing.Size, System.Drawing">
+    <value>63, 21</value>
+  </data>
+  <data name="cb_CommandLine.Text" xml:space="preserve">
+    <value>命令列</value>
+  </data>
+  <data name="cb_WinInScreen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>99, 21</value>
+  </data>
+  <data name="cb_WinInScreen.Text" xml:space="preserve">
+    <value>視窗位於螢幕</value>
+  </data>
+  <data name="cb_WndClass.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 21</value>
+  </data>
+  <data name="cb_WndClass.Text" xml:space="preserve">
+    <value>視窗類別名稱</value>
+  </data>
+  <data name="cb_ProcessPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 21</value>
+  </data>
+  <data name="cb_ProcessPath.Text" xml:space="preserve">
+    <value>處理程式路徑</value>
+  </data>
+  <data name="cb_ProcessName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 21</value>
+  </data>
+  <data name="cb_ProcessName.Text" xml:space="preserve">
+    <value>處理程式名稱</value>
+  </data>
+  <data name="cb_Title.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 21</value>
+  </data>
+  <data name="cb_Title.Text" xml:space="preserve">
+    <value>視窗標題</value>
+  </data>
+  <data name="gb_Rules.Text" xml:space="preserve">
+    <value>共用視窗規則</value>
+  </data>
+  <data name="cb_MoveToScreen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>87, 21</value>
+  </data>
+  <data name="cb_MoveToScreen.Text" xml:space="preserve">
+    <value>移動到螢幕</value>
+  </data>
+  <data name="cb_HideFromView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>99, 21</value>
+  </data>
+  <data name="cb_HideFromView.Text" xml:space="preserve">
+    <value>從檢視中隱藏</value>
+  </data>
+  <data name="cb_PinApp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 21</value>
+  </data>
+  <data name="cb_PinApp.Text" xml:space="preserve">
+    <value>在所有桌面上顯示此應用程式的視窗</value>
+  </data>
+  <data name="cb_PinWindow.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 21</value>
+  </data>
+  <data name="cb_PinWindow.Text" xml:space="preserve">
+    <value>在所有桌面上顯示此視窗</value>
+  </data>
+  <data name="cb_FollowWindow.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 21</value>
+  </data>
+  <data name="cb_FollowWindow.Text" xml:space="preserve">
+    <value>跟隨視窗到桌面</value>
+  </data>
+  <data name="cb_MoveToDesktop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>87, 21</value>
+  </data>
+  <data name="cb_MoveToDesktop.Text" xml:space="preserve">
+    <value>移動到桌面</value>
+  </data>
+  <data name="gb_Actions.Text" xml:space="preserve">
+    <value>視窗動作</value>
+  </data>
+  <data name="btn_RuleSave.Text" xml:space="preserve">
+    <value>儲存</value>
+  </data>
+  <data name="lb_Updated.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 17</value>
+  </data>
+  <data name="lb_Updated.Text" xml:space="preserve">
+    <value>更新時間</value>
+  </data>
+  <data name="lb_Created.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 17</value>
+  </data>
+  <data name="lb_Created.Text" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="gb_Info.Text" xml:space="preserve">
+    <value>資訊</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>規則定義</value>
+  </data>
+</root>

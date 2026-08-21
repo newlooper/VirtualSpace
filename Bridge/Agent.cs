@@ -20,7 +20,8 @@ namespace VirtualSpace
         public static readonly Dictionary<string, string> ValidLangs = new()
         {
             { "en", "English" },
-            { "zh-Hans", "中文(简体)" }
+            { "zh-Hans", "中文(简体)" },
+            { "zh-Hant", "中文(繁體)" }
         };
 
         public static readonly ResourceManager Langs = new(

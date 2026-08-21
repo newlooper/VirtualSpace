@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Cube3D.Settings.WindowTitle" xml:space="preserve">
+    <value>Cube3D 設定</value>
+  </data>
+  <data name="Cube3D.Settings.Basic" xml:space="preserve">
+    <value>基本</value>
+  </data>
+  <data name="Cube3D.Settings.AnimationDuration" xml:space="preserve">
+    <value>動畫持續時間 (毫秒)</value>
+  </data>
+  <data name="Cube3D.Settings.AnimationType" xml:space="preserve">
+    <value>動畫類型</value>
+  </data>
+  <data name="Cube3D.Settings.Apply" xml:space="preserve">
+    <value>套用</value>
+  </data>
+  <data name="Cube3D.Settings.EaseType" xml:space="preserve">
+    <value>緩動類型</value>
+  </data>
+  <data name="Cube3D.Settings.EaseMode" xml:space="preserve">
+    <value>緩動模式</value>
+  </data>
+  <data name="Cube3D.Settings.TransitionType" xml:space="preserve">
+    <value>切換效果</value>
+  </data>
+  <data name="Cube3D.Settings.ShowNgOnAllScreens" xml:space="preserve">
+    <value>在所有顯示器上顯示通知網格</value>
+  </data>
+  <data name="Cube3D.Settings.Close" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+</root>

@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="VDW.CTM.Desktop.Create" xml:space="preserve">
+    <value>建立新的虛擬桌面</value>
+  </data>
+    <data name="VDW.CTM.Desktop.Remove" xml:space="preserve">
+    <value>刪除虛擬桌面</value>
+  </data>
+    <data name="VDW.CTM.Window.Close" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+    <data name="VDW.CTM.Window.PinApp" xml:space="preserve">
+    <value>在所有桌面上顯示此應用程式的視窗</value>
+  </data>
+    <data name="VDW.CTM.Window.PinWin" xml:space="preserve">
+    <value>在所有桌面上顯示此視窗</value>
+  </data>
+    <data name="VersionCheckFail" xml:space="preserve">
+    <value>不支援的 Windows 版本
+應用程式將退出
+
+支援的清單
+====================================
+Windows 10 Redstone5(17763)
+Windows 10 19H1(18362)
+Windows 10 19H2(18363)
+Windows 10 20H1(19041)
+Windows 10 20H2(19042)
+Windows 10 21H1(19043)
+Windows 10 21H2(19044)
+Windows 10 22H2(19045)
+Windows 11 21H2(22000)
+Windows 11 22H2(22621)
+Windows 11 23H2(22631)
+====================================</value>
+  </data>
+    <data name="Rule.Op.Eq" xml:space="preserve">
+    <value>是</value>
+  </data>
+    <data name="Rule.Op.Ssw" xml:space="preserve">
+    <value>以...開頭</value>
+  </data>
+    <data name="Rule.Op.Esw" xml:space="preserve">
+    <value>以...結尾</value>
+  </data>
+    <data name="Rule.Op.Sc" xml:space="preserve">
+    <value>包含</value>
+  </data>
+    <data name="Rule.Op.Regex" xml:space="preserve">
+    <value>正規表示式</value>
+  </data>
+    <data name="Rule.AtLeastOne" xml:space="preserve">
+    <value>至少需要一條視窗規則。</value>
+  </data>
+    <data name="Rule.InvalidRegex" xml:space="preserve">
+    <value>無效的正規表示式。</value>
+  </data>
+    <data name="Rule.NameRequired" xml:space="preserve">
+    <value>是必須的。</value>
+  </data>
+    <data name="VDW.CTM.Window.NewRule" xml:space="preserve">
+    <value>為此視窗建立規則...</value>
+  </data>
+    <data name="Rule.New" xml:space="preserve">
+    <value>新規則</value>
+  </data>
+    <data name="Error.MoveWindowToDesktop" xml:space="preserve">
+    <value>視窗 【{0}】 匹配規則 【{1}】，但移動時發生錯誤。
+可能的原因：
+- 視窗無效。
+- 目標桌面不存在。
+- 目標桌面無效。</value>
+  </data>
+    <data name="Error.Title" xml:space="preserve">
+    <value>錯誤！</value>
+  </data>
+    <data name="VDW.CTM.Window.HideFromView" xml:space="preserve">
+    <value>從檢視中隱藏</value>
+  </data>
+    <data name="VDW.CTM.Desktop.UnHideWindow" xml:space="preserve">
+    <value>取消隱藏視窗</value>
+  </data>
+    <data name="VDW.CTM.Window.Screen" xml:space="preserve">
+    <value>螢幕</value>
+  </data>
+    <data name="Nav.CircleHType.NextRow" xml:space="preserve">
+    <value>切換到下一行</value>
+  </data>
+    <data name="Nav.CircleHType.SameRow" xml:space="preserve">
+    <value>在同一行內循環</value>
+  </data>
+    <data name="KB.Hotkey.Cleared" xml:space="preserve">
+    <value>快速鍵已清除。</value>
+  </data>
+    <data name="KB.Hotkey.Reg.Success" xml:space="preserve">
+    <value>快速鍵登錄成功。</value>
+  </data>
+    <data name="KB.Hotkey.Reg.Fail" xml:space="preserve">
+    <value>快速鍵登錄失敗。</value>
+  </data>
+    <data name="KB.Hotkey.SettingsSaved" xml:space="preserve">
+    <value>設定已儲存。</value>
+  </data>
+    <data name="KB.Hotkey.KeyCheck" xml:space="preserve">
+    <value>必須選擇一個非修改類鍵。</value>
+  </data>
+    <data name="Mouse.Action.DoNothing" xml:space="preserve">
+    <value>不執行任何動作</value>
+  </data>
+    <data name="Mouse.Action.DesktopVisibleOnly" xml:space="preserve">
+    <value>僅切換桌面</value>
+  </data>
+    <data name="Mouse.Action.DesktopVisibleAndCloseView" xml:space="preserve">
+    <value>切換桌面並關閉檢視</value>
+  </data>
+    <data name="Mouse.Action.ContextMenu" xml:space="preserve">
+    <value>顯示內容功能表</value>
+  </data>
+    <data name="Mouse.Action.WindowClose" xml:space="preserve">
+    <value>關閉視窗</value>
+  </data>
+    <data name="Mouse.Action.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
+    <value>啟動視窗，切換桌面並關閉檢視</value>
+  </data>
+    <data name="Mouse.Action.WindowActiveDesktopVisibleOnly" xml:space="preserve">
+    <value>啟動視窗，切換桌面</value>
+  </data>
+    <data name="Cluster.Notification.SVD.Current" xml:space="preserve">
+    <value>目前桌面：</value>
+  </data>
+    <data name="Cluster.Notification.SVD.Last" xml:space="preserve">
+    <value>上一個桌面：</value>
+  </data>
+    <data name="General.RunOnStartup.Error.Permission" xml:space="preserve">
+    <value>目前權限等級無法存取工作排程器，
+請確保目前帳戶是此電腦的系統管理員並且“以系統管理員身份運行”運行此程式。</value>
+  </data>
+    <data name="Mouse.Action.WindowShowForSelectedProcessOnly" xml:space="preserve">
+    <value>僅顯示此程式的視窗</value>
+  </data>
+    <data name="KB.Hotkey.SVD" xml:space="preserve">
+    <value>切換到桌面 </value>
+  </data>
+    <data name="KB.Hotkey.MW" xml:space="preserve">
+    <value>移動到桌面 </value>
+  </data>
+    <data name="KB.Hotkey.MWF" xml:space="preserve">
+    <value>移動並跟隨到桌面 </value>
+  </data>
+    <data name="Mouse.Action.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
+    <value>僅顯示所選桌面中的活動程式視窗</value>
+  </data>
+    <data name="Keys.Left" xml:space="preserve">
+    <value>左鍵</value>
+  </data>
+    <data name="Keys.Middle" xml:space="preserve">
+    <value>中鍵</value>
+  </data>
+    <data name="Keys.Right" xml:space="preserve">
+    <value>右鍵</value>
+  </data>
+    <data name="Mouse.Action.DesktopShowForSelectedDesktop" xml:space="preserve">
+    <value>僅顯示所選桌面</value>
+  </data>
+    <data name="KB.Hotkey.SVD_BACK_LAST" xml:space="preserve">
+    <value>切換回上一個桌面</value>
+  </data>
+    <data name="Profile.Warning.LastProfileProtect" xml:space="preserve">
+    <value>不能重命名或刪除最後一個設定檔。
+復制一個新的設定檔後即可操作。</value>
+  </data>
+    <data name="Profile.Confirm.Delete" xml:space="preserve">
+    <value>確定要刪除這個設定檔嗎？
+所有與此設定檔相關的檔案都將被刪除。</value>
+  </data>
+    <data name="Profile.Warning.InvalidProfileName" xml:space="preserve">
+    <value>設定檔名無效，或該檔案已存在。</value>
+  </data>
+    <data name="MsgBox.Caption.Confirm" xml:space="preserve">
+    <value>確認</value>
+  </data>
+    <data name="MsgBox.Caption.Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+    <data name="Tray.Menu.Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+    <data name="Tray.Menu.Quit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+    <data name="K_G" xml:space="preserve">
+    <value>一般</value>
+  </data>
+    <data name="hk_node_open_app_controller" xml:space="preserve">
+    <value>開啟程式控制</value>
+  </data>
+    <data name="hk_node_rise_mainview" xml:space="preserve">
+    <value>喚起主檢視</value>
+  </data>
+    <data name="hk_node_rise_mainview_for_active_app" xml:space="preserve">
+    <value>為目前活動程式喚起主檢視</value>
+  </data>
+    <data name="hk_node_rise_mainview_for_current_vd" xml:space="preserve">
+    <value>為目前桌面喚起主檢視</value>
+  </data>
+    <data name="hk_node_rise_mainview_for_active_app_in_current_vd" xml:space="preserve">
+    <value>為目前桌面中的活動程式喚起主檢視</value>
+  </data>
+    <data name="K_D" xml:space="preserve">
+    <value>桌面</value>
+  </data>
+    <data name="K_D_N" xml:space="preserve">
+    <value>導覽</value>
+  </data>
+    <data name="K_D_S" xml:space="preserve">
+    <value>切換桌面</value>
+  </data>
+    <data name="K_W" xml:space="preserve">
+    <value>視窗</value>
+  </data>
+    <data name="K_W_M" xml:space="preserve">
+    <value>移動</value>
+  </data>
+    <data name="K_W_MF" xml:space="preserve">
+    <value>移動並跟隨</value>
+  </data>
+    <data name="hk_node_nav_left" xml:space="preserve">
+    <value>向左</value>
+  </data>
+    <data name="hk_node_nav_right" xml:space="preserve">
+    <value>向右</value>
+  </data>
+    <data name="hk_node_nav_up" xml:space="preserve">
+    <value>向上</value>
+  </data>
+    <data name="hk_node_nav_down" xml:space="preserve">
+    <value>向下</value>
+  </data>
+    <data name="KB.Hotkey.MKeyCheck" xml:space="preserve">
+    <value>至少需要一個修改類鍵。</value>
+  </data>
+    <data name="M.D" xml:space="preserve">
+    <value>桌面</value>
+  </data>
+    <data name="M.W" xml:space="preserve">
+    <value>視窗</value>
+  </data>
+    <data name="M.ROOT" xml:space="preserve">
+    <value>主檢視</value>
+  </data>
+    <data name="M.D.DesktopVisibleAndCloseView" xml:space="preserve">
+    <value>切換桌面並關閉檢視</value>
+  </data>
+    <data name="M.D.DesktopVisibleOnly" xml:space="preserve">
+    <value>僅切換桌面</value>
+  </data>
+    <data name="M.D.DesktopShowForSelectedDesktop" xml:space="preserve">
+    <value>僅顯示所選桌面</value>
+  </data>
+    <data name="M.ContextMenu" xml:space="preserve">
+    <value>顯示內容功能表</value>
+  </data>
+    <data name="M.W.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
+    <value>啟動視窗，切換桌面並關閉檢視</value>
+  </data>
+    <data name="M.W.WindowActiveDesktopVisibleOnly" xml:space="preserve">
+    <value>啟動視窗，切換桌面</value>
+  </data>
+    <data name="M.W.WindowHideFromView" xml:space="preserve">
+    <value>從檢視中隱藏</value>
+  </data>
+    <data name="M.W.WindowClose" xml:space="preserve">
+    <value>關閉視窗</value>
+  </data>
+    <data name="M.W.WindowShowForSelectedProcessOnly" xml:space="preserve">
+    <value>僅顯示此程式的視窗</value>
+  </data>
+    <data name="M.W.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
+    <value>僅顯示所選桌面中的活動程式視窗</value>
+  </data>
+    <data name="Validation.Mouse.Button.Required" xml:space="preserve">
+    <value>必須選擇滑鼠鍵</value>
+  </data>
+    <data name="Mouse.Tips.Exists" xml:space="preserve">
+    <value>相同的滑鼠動作已存在，嘗試換一種組合或滑鼠鍵</value>
+  </data>
+    <data name="hk_node_toggle_window_filter" xml:space="preserve">
+    <value>開關視窗過濾器</value>
+  </data>
+</root>

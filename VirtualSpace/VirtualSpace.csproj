@@ -66,7 +66,7 @@
     </Target>
 
     <PropertyGroup>
-        <SatelliteResourceLanguages>en-US,zh-Hans</SatelliteResourceLanguages>
+        <SatelliteResourceLanguages>en-US,zh-Hans,zh-Hant</SatelliteResourceLanguages>
     </PropertyGroup>
 
     <Import Project="$(MSBuildThisFileDirectory).build\EmbeddedVDLib.targets" />

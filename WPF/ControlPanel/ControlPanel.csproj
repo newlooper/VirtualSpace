@@ -66,7 +66,7 @@
 
     <PropertyGroup>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-        <SatelliteResourceLanguages>en-US,zh-Hans</SatelliteResourceLanguages>
+        <SatelliteResourceLanguages>en-US,zh-Hans,zh-Hant</SatelliteResourceLanguages>
     </PropertyGroup>
 
 </Project>

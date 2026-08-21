@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="logTab.Menu.Clear" xml:space="preserve">
+    <value>清空</value>
+  </data>
+    <data name="logTabDebug" xml:space="preserve">
+    <value>調試</value>
+  </data>
+    <data name="logTabError" xml:space="preserve">
+    <value>錯誤</value>
+  </data>
+    <data name="NavBar.Rules" xml:space="preserve">
+    <value>規則</value>
+  </data>
+    <data name="logTabInfo" xml:space="preserve">
+    <value>資訊</value>
+  </data>
+    <data name="logTabWarning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+    <data name="NavBar.General" xml:space="preserve">
+    <value>一般</value>
+  </data>
+    <data name="NavBar.Logs" xml:space="preserve">
+    <value>日志</value>
+  </data>
+    <data name="NavBar.UI" xml:space="preserve">
+    <value>介面</value>
+  </data>
+    <data name="NavBar.Theme" xml:space="preserve">
+    <value>佈景主題</value>
+  </data>
+    <data name="NavBar.Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+    <data name="NavBar.Plugins" xml:space="preserve">
+    <value>外掛程式</value>
+  </data>
+    <data name="NavBar.Help" xml:space="preserve">
+    <value>說明</value>
+  </data>
+    <data name="Page.Settings.Language" xml:space="preserve">
+    <value>語言</value>
+  </data>
+    <data name="logTabVerbose" xml:space="preserve">
+    <value>詳細</value>
+  </data>
+    <data name="logTabEvent" xml:space="preserve">
+    <value>事件</value>
+  </data>
+    <data name="Page.Settings.Theme.Sys" xml:space="preserve">
+    <value>系統設定</value>
+  </data>
+    <data name="Page.Settings.Theme" xml:space="preserve">
+    <value>佈景主題</value>
+  </data>
+    <data name="Page.Settings.Theme.Light" xml:space="preserve">
+    <value>淺色</value>
+  </data>
+    <data name="Page.Settings.Theme.Dark" xml:space="preserve">
+    <value>深色</value>
+  </data>
+    <data name="Menus.Commons.Theme.Change" xml:space="preserve">
+    <value>切換佈景主題</value>
+  </data>
+    <data name="Page.Logs.IsPrintLogs" xml:space="preserve">
+    <value>在 GUI 中顯示日志</value>
+  </data>
+    <data name="Menus.Logs.OpenLogsDir" xml:space="preserve">
+    <value>開啟日志資料夾...</value>
+  </data>
+    <data name="Menus.Logs.ClearAll" xml:space="preserve">
+    <value>清空所有日志</value>
+  </data>
+    <data name="Menus.Commons.Close" xml:space="preserve">
+    <value>關閉此視窗</value>
+  </data>
+    <data name="Menus.Commons.Restart" xml:space="preserve">
+    <value>重新啟動</value>
+  </data>
+    <data name="Menus.Commons.Shutdown" xml:space="preserve">
+    <value>退出程式</value>
+  </data>
+    <data name="Page.Plugins.Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+    <data name="Page.Plugins.Version" xml:space="preserve">
+    <value>版本</value>
+  </data>
+    <data name="Page.Plugins.Author" xml:space="preserve">
+    <value>作者</value>
+  </data>
+    <data name="Page.Plugins.Email" xml:space="preserve">
+    <value>電子郵件</value>
+  </data>
+    <data name="Page.Plugins.Operations" xml:space="preserve">
+    <value>操作</value>
+  </data>
+    <data name="Page.Plugins.Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+    <data name="Page.Plugins.Restart" xml:space="preserve">
+    <value>重新啟動</value>
+  </data>
+    <data name="Page.Plugins.Close" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+    <data name="Page.Plugins.Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+    <data name="Page.Plugins.Status" xml:space="preserve">
+    <value>狀態</value>
+  </data>
+    <data name="Page.Plugins.Status.Available" xml:space="preserve">
+    <value>可用</value>
+  </data>
+    <data name="Page.Plugins.Status.Loaded" xml:space="preserve">
+    <value>已載入</value>
+  </data>
+    <data name="Page.Plugins.Status.Missing" xml:space="preserve">
+    <value>缺失</value>
+  </data>
+    <data name="Page.Plugins.Status.Error" xml:space="preserve">
+    <value>錯誤</value>
+  </data>
+    <data name="Page.Plugins.Refresh" xml:space="preserve">
+    <value>重新整理外掛程式</value>
+  </data>
+    <data name="Page.Rules.Updated" xml:space="preserve">
+    <value>更新時間</value>
+  </data>
+    <data name="Page.Rules.Created" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+    <data name="Page.Rules.Add" xml:space="preserve">
+    <value>新建...</value>
+  </data>
+    <data name="Page.Rules.Edit" xml:space="preserve">
+    <value>編輯(E)...</value>
+  </data>
+    <data name="Page.Rules.Clone" xml:space="preserve">
+    <value>復制</value>
+  </data>
+    <data name="Page.Rules.Delete" xml:space="preserve">
+    <value>刪除(Del)</value>
+  </data>
+    <data name="Page.Rules.NewRule" xml:space="preserve">
+    <value>新建規則</value>
+  </data>
+    <data name="Page.Rules.EditRule" xml:space="preserve">
+    <value>編輯規則</value>
+  </data>
+    <data name="Page.Rules.Rule.Enabled" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+    <data name="Page.Rules.Rule.Basic" xml:space="preserve">
+    <value>基本資訊</value>
+  </data>
+    <data name="Generic.Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+    <data name="Validation.Error.Required" xml:space="preserve">
+    <value>必填項</value>
+  </data>
+    <data name="Page.Rules.Rule.Created" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+    <data name="Page.Rules.Rule.Updated" xml:space="preserve">
+    <value>更新時間</value>
+  </data>
+    <data name="Page.Rules.Rule.WindowRules" xml:space="preserve">
+    <value>視窗規則</value>
+  </data>
+    <data name="Page.Rules.Rule.Title" xml:space="preserve">
+    <value>視窗標題</value>
+  </data>
+    <data name="Page.Rules.Rule.ProcessName" xml:space="preserve">
+    <value>處理程式名</value>
+  </data>
+    <data name="Page.Rules.Rule.ProcessPath" xml:space="preserve">
+    <value>處理程式路徑</value>
+  </data>
+    <data name="Page.Rules.Rule.WndClass" xml:space="preserve">
+    <value>視窗樣式</value>
+  </data>
+    <data name="Page.Rules.Rule.WinInScreen" xml:space="preserve">
+    <value>視窗位於螢幕</value>
+  </data>
+    <data name="Page.Rules.Rule.CloseDefBox" xml:space="preserve">
+    <value>取消</value>
+  </data>
+    <data name="Page.Rules.Rule.Save" xml:space="preserve">
+    <value>儲存並關閉</value>
+  </data>
+    <data name="Page.Rules.Rule.CommandLine" xml:space="preserve">
+    <value>命令列</value>
+  </data>
+    <data name="Page.Rules.Rule.WindowActions" xml:space="preserve">
+    <value>視窗動作</value>
+  </data>
+    <data name="Page.Rules.Rule.MoveToDesktop" xml:space="preserve">
+    <value>移動到桌面</value>
+  </data>
+    <data name="Page.Rules.Rule.FollowWindow" xml:space="preserve">
+    <value>跟隨視窗</value>
+  </data>
+    <data name="Page.Rules.Rule.PinWindow" xml:space="preserve">
+    <value>在所有桌面上顯示此視窗</value>
+  </data>
+    <data name="Page.Rules.Rule.PinApp" xml:space="preserve">
+    <value>在所有桌面上顯示此應用程式的視窗</value>
+  </data>
+    <data name="Page.Rules.Rule.HideFromView" xml:space="preserve">
+    <value>從檢視中隱藏</value>
+  </data>
+    <data name="Page.Rules.Rule.MoveToScreen" xml:space="preserve">
+    <value>移動到螢幕</value>
+  </data>
+    <data name="Page.UI.VdArrangement" xml:space="preserve">
+    <value>虛擬桌面擺放方式</value>
+  </data>
+    <data name="Page.UI.VdView" xml:space="preserve">
+    <value>虛擬桌面檢視</value>
+  </data>
+    <data name="Page.UI.ShowVdName" xml:space="preserve">
+    <value>顯示虛擬桌面名稱</value>
+  </data>
+    <data name="Page.UI.ShowVdIndex" xml:space="preserve">
+    <value>顯示虛擬桌面索引</value>
+  </data>
+    <data name="Page.UI.ShowVdIndex.ZeroBased" xml:space="preserve">
+    <value>0-基索引</value>
+  </data>
+    <data name="Page.UI.ShowVdIndex.OneBased" xml:space="preserve">
+    <value>1-基索引</value>
+  </data>
+    <data name="Note.DesktopArrangement" xml:space="preserve">
+    <value>注意：當且僅當虛擬桌面的數量是自然數[1,n]的平方時，才可以變換擺放方式；條件不滿足時程式將自動重置為第一種擺放方式。</value>
+  </data>
+    <data name="Page.UI.Label.m0" xml:space="preserve">
+    <value>左上 ↘ 右下, 橫向(行滿換行)</value>
+  </data>
+    <data name="Page.UI.Label.m1" xml:space="preserve">
+    <value>右上 ↙ 左下, 橫向</value>
+  </data>
+    <data name="Page.UI.Label.m2" xml:space="preserve">
+    <value>左下 ↗ 右上, 橫向</value>
+  </data>
+    <data name="Page.UI.Label.m3" xml:space="preserve">
+    <value>右下 ↖ 左上, 橫向</value>
+  </data>
+    <data name="Page.UI.Label.m4" xml:space="preserve">
+    <value>左上 ↘ 右下, 縱向(列滿換列)</value>
+  </data>
+    <data name="Page.UI.Label.m5" xml:space="preserve">
+    <value>右上 ↙ 左下, 縱向</value>
+  </data>
+    <data name="Page.UI.Label.m6" xml:space="preserve">
+    <value>左下 ↗ 右上, 縱向</value>
+  </data>
+    <data name="Page.UI.Label.m7" xml:space="preserve">
+    <value>右下 ↖ 左上, 縱向</value>
+  </data>
+    <data name="NavBar.Control" xml:space="preserve">
+    <value>控制</value>
+  </data>
+    <data name="Page.Control.Keyboard" xml:space="preserve">
+    <value>鍵盤</value>
+  </data>
+    <data name="Page.Control.Mouse" xml:space="preserve">
+    <value>滑鼠</value>
+  </data>
+    <data name="Page.Control.KB.RegSave" xml:space="preserve">
+    <value>登錄並儲存</value>
+  </data>
+    <data name="Page.Control.KB.Extra" xml:space="preserve">
+    <value>備用</value>
+  </data>
+    <data name="Page.Control.KB.ClearSave" xml:space="preserve">
+    <value>清除並儲存</value>
+  </data>
+    <data name="Page.Rules.Tag" xml:space="preserve">
+    <value>標籤(分組)</value>
+  </data>
+    <data name="Generic.Filter" xml:space="preserve">
+    <value>過濾</value>
+  </data>
+    <data name="Page.Control.MouseAction.Save" xml:space="preserve">
+    <value>儲存</value>
+  </data>
+    <data name="Page.Control.MouseAction.Clear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+    <data name="Page.Control.MouseButtons.Left" xml:space="preserve">
+    <value>左鍵</value>
+  </data>
+    <data name="Page.Control.MouseButtons.Middle" xml:space="preserve">
+    <value>中鍵</value>
+  </data>
+    <data name="Page.Control.MouseButtons.Right" xml:space="preserve">
+    <value>右鍵</value>
+  </data>
+    <data name="Page.Rules.Rule.Op.=" xml:space="preserve">
+    <value>是</value>
+  </data>
+    <data name="Page.Rules.Rule.Op.ssw" xml:space="preserve">
+    <value>以...開頭</value>
+  </data>
+    <data name="Page.Rules.Rule.Op.esw" xml:space="preserve">
+    <value>以...結尾</value>
+  </data>
+    <data name="Page.Rules.Rule.Op.sc" xml:space="preserve">
+    <value>包含</value>
+  </data>
+    <data name="Page.Rules.Rule.Op.rim" xml:space="preserve">
+    <value>正規表示式</value>
+  </data>
+    <data name="Page.Control.MouseAction.OnDesktop" xml:space="preserve">
+    <value>在主檢視中的虛擬桌面上點擊時</value>
+  </data>
+    <data name="Page.Control.MouseAction.OnThumb" xml:space="preserve">
+    <value>在主檢視中的視窗縮圖上點擊時</value>
+  </data>
+    <data name="Page.Control.MouseAction.Behavior" xml:space="preserve">
+    <value>🖇️</value>
+  </data>
+    <data name="Mouse.Action.WindowHideFromView" xml:space="preserve">
+    <value>從檢視中隱藏</value>
+  </data>
+    <data name="Mouse.Action.DoNothing" xml:space="preserve">
+    <value>不執行任何動作</value>
+  </data>
+    <data name="Mouse.Action.DesktopVisibleAndCloseView" xml:space="preserve">
+    <value>切換桌面並關閉檢視</value>
+  </data>
+    <data name="Mouse.Action.DesktopVisibleOnly" xml:space="preserve">
+    <value>僅切換桌面</value>
+  </data>
+    <data name="Mouse.Action.ContextMenu" xml:space="preserve">
+    <value>顯示內容功能表</value>
+  </data>
+    <data name="Mouse.Action.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
+    <value>啟動視窗，切換桌面並關閉檢視</value>
+  </data>
+    <data name="Mouse.Action.WindowActiveDesktopVisibleOnly" xml:space="preserve">
+    <value>啟動視窗，切換桌面</value>
+  </data>
+    <data name="Mouse.Action.WindowClose" xml:space="preserve">
+    <value>關閉視窗</value>
+  </data>
+    <data name="Mouse.Action.WindowShowForSelectedProcessOnly" xml:space="preserve">
+    <value>僅顯示此程式的視窗</value>
+  </data>
+    <data name="Mouse.Action.WindowShowForSelectedProcessInSelectedDesktop" xml:space="preserve">
+    <value>僅顯示所選桌面中的活動程式視窗</value>
+  </data>
+    <data name="Mouse.Action.DesktopShowForSelectedDesktop" xml:space="preserve">
+    <value>僅顯示所選桌面</value>
+  </data>
+    <data name="Page.Control.Mouse.UseWheelSwitchDesktopWhenOnTaskbar" xml:space="preserve">
+    <value>當滑鼠指標在工作列上時，用滾輪切換虛擬桌面。</value>
+  </data>
+    <data name="Page.Control.Mouse.Wheel.Up" xml:space="preserve">
+    <value>上滾 =&gt; 導覽到左側桌面</value>
+  </data>
+    <data name="Page.Control.Mouse.Wheel.SUp" xml:space="preserve">
+    <value>下滾 =&gt; 導覽到右側桌面</value>
+  </data>
+    <data name="Page.Control.Mouse.Wheel.Down" xml:space="preserve">
+    <value>SHIFT+上滾 =&gt; 導覽到上面桌面</value>
+  </data>
+    <data name="Page.Control.Mouse.Wheel.SDown" xml:space="preserve">
+    <value>SHIFT+下滾 =&gt; 導覽到下面桌面</value>
+  </data>
+    <data name="Page.Control.MouseAction.Bind" xml:space="preserve">
+    <value>繫結</value>
+  </data>
+    <data name="Page.Settings.Storage.ConfigRootPath" xml:space="preserve">
+    <value>配置資料夾根路徑</value>
+  </data>
+    <data name="Page.Settings.Storage" xml:space="preserve">
+    <value>存儲</value>
+  </data>
+    <data name="Note.Settings.Storage" xml:space="preserve">
+    <value>注意：改變配置資料夾需要重新啟動程式。此操作僅改變位置，不會復制或移動任何檔案，以免檔案被意外覆蓋。
+如果你想復用目前的配置，可以手動復制"相關內容"到你選擇的資料夾，然後重新啟動程式。
+相關內容：Settings.json, Profiles\*.*</value>
+  </data>
+    <data name="Page.Settings.Storage.ChangeConfigPath" xml:space="preserve">
+    <value>變更...</value>
+  </data>
+    <data name="Page.Settings.ProfileManager" xml:space="preserve">
+    <value>設定檔</value>
+  </data>
+    <data name="Page.Settings.Menus.Duplicate" xml:space="preserve">
+    <value>復制</value>
+  </data>
+    <data name="Page.Settings.Menus.Rename" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+    <data name="Page.Settings.Menus.Delete" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+    <data name="Dialogs.OK" xml:space="preserve">
+    <value>確定</value>
+  </data>
+    <data name="Dialogs.Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+    <data name="Page.General.Basics" xml:space="preserve">
+    <value>基本</value>
+  </data>
+    <data name="Page.General.Navigation" xml:space="preserve">
+    <value>導覽</value>
+  </data>
+    <data name="Page.General.Nav.HType" xml:space="preserve">
+    <value>導覽到某個方向的邊界時，繼續沿該方向導覽將：</value>
+  </data>
+    <data name="Page.General.Cluster" xml:space="preserve">
+    <value>雜項</value>
+  </data>
+    <data name="Page.General.TaskScheduler" xml:space="preserve">
+    <value>工作排程器</value>
+  </data>
+    <data name="Note.General.Label.TaskScheduler" xml:space="preserve">
+    <value>注意：諸如啟動延遲等細節可在此設定</value>
+  </data>
+    <data name="Page.General.RunOnStartup" xml:space="preserve">
+    <value>隨系統啟動。</value>
+  </data>
+    <data name="Page.General.Nav.H" xml:space="preserve">
+    <value>水平方向循環。</value>
+  </data>
+    <data name="Page.General.Nav.V" xml:space="preserve">
+    <value>垂直方向循環。(僅相同列)</value>
+  </data>
+    <data name="Page.General.HideMainViewIfItsShown" xml:space="preserve">
+    <value>當使用快速鍵喚起主檢視時，如果主檢視已經顯示，則關閉之。</value>
+  </data>
+    <data name="Page.General.NotificationOnVdChanged" xml:space="preserve">
+    <value>切換虛擬桌面時顯示通知。</value>
+  </data>
+    <data name="Page.General.ShowVDIndexOnTrayIcon" xml:space="preserve">
+    <value>在系統系統匣圖標上顯示桌面索引。</value>
+  </data>
+    <data name="Page.General.HideOnStart" xml:space="preserve">
+    <value>程式啟動時不顯示主檢視。</value>
+  </data>
+    <data name="Page.General.StyleOfVDIndexOnTrayIcon.0" xml:space="preserve">
+    <value>預設</value>
+  </data>
+    <data name="Page.General.StyleOfVDIndexOnTrayIcon.1" xml:space="preserve">
+    <value>高對比 1</value>
+  </data>
+    <data name="Page.General.StyleOfVDIndexOnTrayIcon.2" xml:space="preserve">
+    <value>高對比 2</value>
+  </data>
+    <data name="Note.Settings.Profiles" xml:space="preserve">
+    <value>注意：快速鍵繫結、滑鼠動作、日志配置和存儲配置由所有設定檔共享(不區分設定檔)。
+某些設定可能需要重新啟動程式才生效。</value>
+  </data>
+    <data name="Page.General.Nav.HType.1" xml:space="preserve">
+    <value>在同一行內循環</value>
+  </data>
+    <data name="Page.General.Nav.HType.0" xml:space="preserve">
+    <value>切換到下一行</value>
+  </data>
+    <data name="Menus.Commons.RunAsAdmin" xml:space="preserve">
+    <value>以系統管理員身份運行程式</value>
+  </data>
+    <data name="Page.Control.MouseAction.WindowBindings" xml:space="preserve">
+    <value>先從 🖇️ 圖標左側選擇滑鼠動作，然後從 🖇️ 圖標右側選擇行為，最後繫結。 </value>
+  </data>
+    <data name="Page.Control.MouseAction.DesktopBindings" xml:space="preserve">
+    <value>先從 🖇️ 圖標左側選擇滑鼠動作，然後從 🖇️ 圖標右側選擇行為，最後繫結。 </value>
+  </data>
+    <data name="Page.Control.MouseAction.ExpanderHeader" xml:space="preserve">
+    <value>展開詳情</value>
+  </data>
+    <data name="Page.Rules.Rule.Tag" xml:space="preserve">
+    <value>標籤(分組)</value>
+  </data>
+    <data name="Page.Rules.Weight" xml:space="preserve">
+    <value>權重</value>
+  </data>
+    <data name="NavBar.About" xml:space="preserve">
+    <value>關於</value>
+  </data>
+    <data name="Page.General.EnableWindowFilter" xml:space="preserve">
+    <value>當主檢視顯示時，[雙擊左SHIFT]開啟視窗過濾器。</value>
+  </data>
+    <data name="Window.RuleDefinition" xml:space="preserve">
+    <value>規則定義</value>
+  </data>
+    <data name="Menus.Commons.Preferences" xml:space="preserve">
+    <value>偏好設定</value>
+  </data>
+</root>
