@@ -33,6 +33,8 @@ namespace VirtualSpace.VirtualDesktop
     {
         private static          int               _runlevel              = 1;
         private static readonly ManualResetEvent  CanRun                 = new( false );
+        private static readonly ManualResetEvent  StopEvent              = new( false );
+        private static          Task?             _daemonTask;
         private static readonly StringBuilder     SbWinInfo              = new( Const.WindowTitleMaxLength );
         private static readonly Channel<Behavior> ActionConsumer         = Channels.ActionChannel;
         private static readonly Channel<Window>   VisibleWindowsProducer = Channels.VisibleWindowsChannel;
@@ -118,27 +120,44 @@ namespace VirtualSpace.VirtualDesktop
             }
         }
 
-        public static void SetCanRun( bool isCanRun )
-        {
-            if ( isCanRun )
-                CanRun.Set();
-            else
-                CanRun.Reset();
-        }
-
         public static void SetRunLevel( int i )
         {
             _runlevel = i < 1 ? 1 : i;
         }
 
+        public static void Stop()
+        {
+            var task = _daemonTask;
+            if ( task is null || task.IsCompleted )
+                return;
+
+            StopEvent.Set();
+            CanRun.Set();
+
+            try
+            {
+                if ( !task.Wait( TimeSpan.FromSeconds( 1 ) ) )
+                    Logger.Warning( "Daemon shutdown timed out." );
+            }
+            catch ( Exception ex )
+            {
+                Logger.Warning( $"Daemon shutdown failed: {ex.Message}" );
+            }
+        }
+
         private static void StartDaemon()
         {
-            Task.Factory.StartNew( () =>
+            StopEvent.Reset();
+            _daemonTask = Task.Factory.StartNew( () =>
             {
                 var sw = Stopwatch.StartNew();
+                var waitHandles = new WaitHandle[] { StopEvent, CanRun };
+
                 while ( true )
                 {
-                    CanRun.WaitOne();
+                    if ( WaitHandle.WaitAny( waitHandles ) == 0 )
+                        return;
+
                     _ = User32.EnumWindows( WindowHandleFilter, 0 );
                     if ( sw.ElapsedMilliseconds >= Const.OneMinute )
                     {
@@ -146,7 +165,8 @@ namespace VirtualSpace.VirtualDesktop
                         sw.Restart();
                     }
 
-                    Thread.Sleep( _runlevel * Const.OneSecond );
+                    if ( WaitHandle.WaitAny( new WaitHandle[] { StopEvent }, _runlevel * Const.OneSecond ) == 0 )
+                        return;
                 }
             }, TaskCreationOptions.LongRunning );
         }

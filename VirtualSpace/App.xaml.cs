@@ -110,6 +110,7 @@ namespace VirtualSpace
             base.OnExit( e );
 
             ReleaseMutex();
+            Daemon.Stop();
             IpcPipeServer.SimpleShutdown();
             LogManager.CloseAndFlush();
         }
