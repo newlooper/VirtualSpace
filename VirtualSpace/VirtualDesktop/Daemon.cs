@@ -87,24 +87,25 @@ namespace VirtualSpace.VirtualDesktop
                     continue; // <- if PinWindow, then MoveToDesktop is invalid
                 }
 
-                if ( action.MoveToDesktop >= 0 )
-                    try
-                    {
-                        Logger.Debug( $"[RULE.Action]MOVE.Win {action.Handle:X2} TO Desktop[{action.MoveToDesktop}]" );
-                        DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
-                        if ( action.FollowWindow ) WindowTool.ActiveWindow( action.Handle, action.MoveToDesktop );
-                    }
-                    catch
-                    {
-                        CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
-                        Logger.Error(
-                            $"[RULE.Action]MOVE.Win {action.Handle:X2} TO Desktop[{action.MoveToDesktop}]",
-                            new NotifyObject
-                            {
-                                Title   = Agent.Langs.GetString( "Error.Title" )!,
-                                Message = string.Format( Agent.Langs.GetString( "Error.MoveWindowToDesktop" )!, action.WindowTitle, action.RuleName )
-                            } );
-                    }
+                if ( action.MoveToDesktop < 0 )
+                    continue;
+                try
+                {
+                    Logger.Debug( $"[RULE.Action]MOVE.Win {action.Handle:X2} TO Desktop[{action.MoveToDesktop}]" );
+                    DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
+                    if ( action.FollowWindow ) WindowTool.ActivateWindow( action.Handle, action.MoveToDesktop );
+                }
+                catch
+                {
+                    CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
+                    Logger.Error(
+                        $"[RULE.Action]MOVE.Win {action.Handle:X2} TO Desktop[{action.MoveToDesktop}]",
+                        new NotifyObject
+                        {
+                            Title   = Agent.Langs.GetString( "Error.Title" )!,
+                            Message = string.Format( Agent.Langs.GetString( "Error.MoveWindowToDesktop" )!, action.WindowTitle, action.RuleName )
+                        } );
+                }
             }
         }
 
@@ -112,12 +113,11 @@ namespace VirtualSpace.VirtualDesktop
         {
             WaitForAction();
             StartDaemon();
-            if ( ConfigManager.CurrentProfile.DaemonAutoStart )
-            {
-                if ( ConfigManager.CurrentProfile.DaemonAutoStartDelay > 0 )
-                    await Task.Delay( ConfigManager.CurrentProfile.DaemonAutoStartDelay * Const.OneSecond );
-                CanRun.Set();
-            }
+            if ( !ConfigManager.CurrentProfile.DaemonAutoStart )
+                return;
+            if ( ConfigManager.CurrentProfile.DaemonAutoStartDelay > 0 )
+                await Task.Delay( ConfigManager.CurrentProfile.DaemonAutoStartDelay * Const.OneSecond );
+            CanRun.Set();
         }
 
         public static void SetRunLevel( int i )

@@ -51,7 +51,7 @@ namespace VirtualSpace.VirtualDesktop
                 dragSize );
 
             _selectedWindow = _visibleWindows.FirstOrDefault( w => w.Rect.Contains( e.Location ) );
-            if ( _selectedWindow != null ) Logger.Verbose( "SELECT.Win " + _selectedWindow.Title );
+            if ( _selectedWindow != null ) Logger.Verbose( $"SELECT.Win {_selectedWindow.Title}" );
         }
 
         private static bool IsOutBounds( Point location )
@@ -89,7 +89,7 @@ namespace VirtualSpace.VirtualDesktop
 
                     var dtp = _selectedWindow.DTP;
                     dtp.opacity = VirtualDesktopManager.Ui.ThumbDragSourceOpacity;
-                    DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
+                    _           = DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
                 }
 
                 _dw.Left = Cursor.Position.X - _dw.Width / 2;
@@ -103,7 +103,7 @@ namespace VirtualSpace.VirtualDesktop
             }
         }
 
-        private void VirtualDesktopWindow_MouseUp( object sender, MouseEventArgs e )
+        private void VirtualDesktopWindow_MouseUp( object? sender, MouseEventArgs e )
         {
             if ( null == sender ) return;
 
@@ -126,7 +126,7 @@ namespace VirtualSpace.VirtualDesktop
                             // goes here means no need to move the dragged window
                             var dtp = _selectedWindow.DTP;
                             dtp.opacity = 255;
-                            DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
+                            _           = DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
                             break;
                         }
 
@@ -180,10 +180,13 @@ namespace VirtualSpace.VirtualDesktop
                     void ActiveWindow()
                     {
                         Logger.Verbose( $"ACTIVE.Win {_selectedWindow!.Title}({_selectedWindow.Handle:X2})" );
-                        WindowTool.ActiveWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder![_hoverVdIndex] );
+                        if ( User32.IsIconic( _selectedWindow.Handle ) )
+                            _ = DwmApi.DwmUnregisterThumbnail( _selectedWindow.Thumb );
+                        WindowTool.ActivateWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder![_hoverVdIndex] );
                     }
 
-                    var action = ConfigManager.Configs.GetMouseActionById( MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
+                    var action = ConfigManager.Configs.GetMouseActionById(
+                        MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
                     switch ( action )
                     {
                         case MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
@@ -192,6 +195,7 @@ namespace VirtualSpace.VirtualDesktop
                             break;
                         case MouseAction.Action.WindowActiveDesktopVisibleOnly:
                             ActiveWindow();
+                            VirtualDesktopManager.RefreshThumbs( _selectedWindow.Handle, this );
                             break;
                         case MouseAction.Action.WindowClose:
                             CloseSelectedWindow( _selectedWindow );
@@ -218,7 +222,7 @@ namespace VirtualSpace.VirtualDesktop
                             }
                             catch ( Exception ex )
                             {
-                                Logger.Warning( "show windows from selected process: " + ex.Message );
+                                Logger.Warning( $"show windows from selected process: {ex.Message}" );
                             }
 
                             break;
@@ -230,7 +234,7 @@ namespace VirtualSpace.VirtualDesktop
                             }
                             catch ( Exception ex )
                             {
-                                Logger.Warning( "show windows from selected process: " + ex.Message );
+                                Logger.Warning( $"show windows from selected process: {ex.Message}" );
                             }
 
                             break;
@@ -244,7 +248,8 @@ namespace VirtualSpace.VirtualDesktop
                 }
                 else // click on a virtual desktop
                 {
-                    var action = Manager.Configs.GetMouseActionById( MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) );
+                    var action = ConfigManager.Configs.GetMouseActionById(
+                        MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) );
                     switch ( action )
                     {
                         case MouseAction.Action.DesktopVisibleAndCloseView:
@@ -282,7 +287,7 @@ namespace VirtualSpace.VirtualDesktop
 
             if ( _dw != null )
             {
-                DwmApi.DwmUnregisterThumbnail( _dw.Thumb );
+                _ = DwmApi.DwmUnregisterThumbnail( _dw.Thumb );
                 _dw.Close();
                 _dw = null;
             }
@@ -295,6 +300,7 @@ namespace VirtualSpace.VirtualDesktop
         private int HoverOnDesktop( object sender, MouseEventArgs e )
         {
             if ( _virtualDesktops is null ) return -1;
+
             _hoverVdIndex = VdIndex;
 
             var cellIndex = MainWindow.InCell( new System.Windows.Point( Cursor.Position.X, Cursor.Position.Y ) );
@@ -304,27 +310,27 @@ namespace VirtualSpace.VirtualDesktop
                 var controlRectangle = vdw.RectangleToScreen( vdw.ClientRectangle );
                 if ( controlRectangle.Contains( Cursor.Position ) )
                 {
-                    if ( vdw.VdIndex != VdIndex )
-                    {
-                        _hoverVdIndex = vdw.VdIndex;
-                        if ( _selectedWindow != null )
-                        {
-                            if ( _dragState == 1 )
-                            {
-                                Logger.Verbose( $"DRAGGING.Win {_selectedWindow.Title} IN Desktop[{vdw.VdIndex.ToString()}]" );
-                                _dragState++;
-                            }
+                    if ( vdw.VdIndex == VdIndex )
+                        continue;
 
-                            vdw.Opacity = VirtualDesktopManager.Ui.VDWDragTargetOpacity;
-                        }
-                        else
+                    _hoverVdIndex = vdw.VdIndex;
+                    if ( _selectedWindow != null )
+                    {
+                        if ( _dragState == 1 )
                         {
-                            if ( _dragState == 1 )
-                            {
-                                Logger.Verbose( $"DRAGGING.Desk Desktop[{VdIndex.ToString()}]) ON Desktop[{vdw.VdIndex.ToString()}])" );
-                                _dragState++;
-                            }
+                            Logger.Verbose( $"DRAGGING.Win {_selectedWindow.Title} IN Desktop[{vdw.VdIndex.ToString()}]" );
+                            _dragState++;
                         }
+
+                        vdw.Opacity = VirtualDesktopManager.Ui.VDWDragTargetOpacity;
+                    }
+                    else
+                    {
+                        if ( _dragState != 1 )
+                            continue;
+
+                        Logger.Verbose( $"DRAGGING.Desk Desktop[{VdIndex.ToString()}]) ON Desktop[{vdw.VdIndex.ToString()}])" );
+                        _dragState++;
                     }
                 }
                 else

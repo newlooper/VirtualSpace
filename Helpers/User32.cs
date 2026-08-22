@@ -123,6 +123,13 @@ namespace VirtualSpace.Helpers
         public static extern int SHGetStockIconInfo( SHSTOCKICONID siid, SHGSI uFlags, ref SHSTOCKICONINFO psii );
 
         [DllImport( "user32.dll", SetLastError = true )]
+        [return: MarshalAs( UnmanagedType.Bool )]
+        public static extern bool AttachThreadInput( int idAttach, int idAttachTo, bool fAttach );
+
+        [DllImport( "user32.dll", SetLastError = true )]
+        public static extern IntPtr SetFocus( IntPtr hWnd );
+
+        [DllImport( "user32.dll", SetLastError = true )]
         public static extern void SwitchToThisWindow( IntPtr hWnd, bool fAltTab );
     }
 }

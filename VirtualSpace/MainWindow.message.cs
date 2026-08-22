@@ -152,7 +152,7 @@ namespace VirtualSpace
 
                     if ( !follow ) return;
 
-                    WindowTool.ActiveWindow( fw, sysIndex );
+                    WindowTool.ActivateWindow( fw, sysIndex );
                 }
                 catch ( Exception ex )
                 {

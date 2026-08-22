@@ -118,11 +118,18 @@ namespace VirtualSpace.VirtualDesktop
 
         public static void RefreshThumbs( IntPtr h, params VirtualDesktopWindow[] vdwList )
         {
-            if ( DesktopWrapper.IsWindowPinned( h ) ||
-                 DesktopWrapper.IsApplicationPinned( h ) )
-                ShowVisibleWindowsForDesktops();
-            else
-                ShowVisibleWindowsForDesktops( vdwList.ToList() );
+            try
+            {
+                if ( DesktopWrapper.IsWindowPinned( h ) ||
+                     DesktopWrapper.IsApplicationPinned( h ) )
+                    ShowVisibleWindowsForDesktops();
+                else
+                    ShowVisibleWindowsForDesktops( vdwList.ToList() );
+            }
+            catch ( Exception ex )
+            {
+                Logger.Error( $"RefreshThumbs: {ex.Message}" );
+            }
         }
 
         public static void ShowAllVirtualDesktops()

@@ -94,7 +94,7 @@ namespace VirtualSpace.Tools
             return index;
         }
 
-        public static void ActiveWindow( IntPtr hWnd, int desktopIndex )
+        public static void ActivateWindow( IntPtr hWnd, int desktopIndex )
         {
             if ( DesktopWrapper.CurrentIndex != desktopIndex )
             {
@@ -102,19 +102,10 @@ namespace VirtualSpace.Tools
                 DesktopWrapper.MakeVisibleByIndex( desktopIndex );
             }
 
-            try
-            {
-                Logger.Verbose( "Try SwitchToThisWindow" );
-                User32.SwitchToThisWindow( hWnd, true );
-                Logger.Verbose( "SwitchToThisWindow success." );
-            }
-            catch
-            {
-                ActiveWindowReserve( hWnd );
-            }
+            TryActivateWindow( hWnd );
         }
 
-        public static void ActiveWindow( IntPtr hWnd, Guid guid )
+        public static void ActivateWindow( IntPtr hWnd, Guid guid )
         {
             if ( DesktopWrapper.CurrentGuid != guid )
             {
@@ -123,28 +114,69 @@ namespace VirtualSpace.Tools
                 DesktopWrapper.MakeVisibleByGuid( guid, false );
             }
 
+            Logger.Verbose( $"Try activate window {hWnd:X}" );
+            TryActivateWindow( hWnd );
+            Logger.Verbose( "Activate window success." );
+        }
+
+        private static void TryActivateWindow( IntPtr hWnd )
+        {
             try
             {
-                Logger.Verbose( "Try SwitchToThisWindow" );
-                User32.SwitchToThisWindow( hWnd, true );
-                Logger.Verbose( "SwitchToThisWindow success." );
+                DoActivateWindow( hWnd );
             }
-            catch
+            catch ( Exception ex )
             {
-                ActiveWindowReserve( hWnd );
+                Logger.Warning( $"Activate window with error: {ex.Message}" );
             }
         }
 
-        private static void ActiveWindowReserve( IntPtr hWnd )
+        private static void DoActivateWindow( IntPtr hWnd )
         {
-            if ( User32.IsIconic( hWnd ) )
+            if ( hWnd == IntPtr.Zero || !User32.IsWindow( hWnd ) )
+                return;
+
+            _ = User32.IsIconic( hWnd )
+                ? User32.ShowWindow( hWnd, (short)ShowState.SW_RESTORE )
+                : User32.ShowWindow( hWnd, (short)ShowState.SW_SHOW );
+
+            if ( SysInfo.IsAdministrator )
             {
-                _ = User32.ShowWindow( hWnd, (short)ShowState.SW_RESTORE );
-            }
-            else
-            {
-                User32.SetForegroundWindow( hWnd );
                 User32.BringWindowToTop( hWnd );
+                User32.SetForegroundWindow( hWnd );
+                // User32.SetFocus( hWnd );
+                return;
+            }
+
+            try
+            {
+                User32.SwitchToThisWindow( hWnd, true );
+            }
+            catch
+            {
+                // ignore
+            }
+
+            var foreground = User32.GetForegroundWindow();
+            var foregroundThread = foreground != IntPtr.Zero
+                ? User32.GetWindowThreadProcessId( foreground, out _ )
+                : 0;
+            var targetThread = User32.GetWindowThreadProcessId( hWnd, out _ );
+
+            var attached = false;
+            if ( foregroundThread != 0 && foregroundThread != targetThread )
+                attached = User32.AttachThreadInput( foregroundThread, targetThread, true );
+
+            try
+            {
+                User32.BringWindowToTop( hWnd );
+                User32.SetForegroundWindow( hWnd );
+                // User32.SetFocus( hWnd );
+            }
+            finally
+            {
+                if ( attached )
+                    User32.AttachThreadInput( foregroundThread, targetThread, false );
             }
         }
 
