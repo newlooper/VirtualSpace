@@ -98,6 +98,18 @@ namespace VirtualSpace
 
         private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
         {
+            switch ( msg )
+            {
+                case WinMsg.WM_QUERYENDSESSION:
+                    handled = true;
+                    App.HandleSessionEndQuery( "MainWindow", lParam );
+                    return new IntPtr( 1 );
+                case WinMsg.WM_ENDSESSION:
+                    handled = true;
+                    App.HandleSessionEnd( "MainWindow", wParam );
+                    return IntPtr.Zero;
+            }
+
             if ( msg == _taskbarCreatedMessage )
             {
                 Logger.Warning( "explorer.exe restarted, reset DesktopManager and restart all Plugins." );

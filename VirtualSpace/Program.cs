@@ -15,6 +15,7 @@ using System.Windows;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
+using VirtualSpace.PluginContracts;
 
 namespace VirtualSpace
 {
@@ -24,6 +25,7 @@ namespace VirtualSpace
         public static void Main()
         {
             LogManager.InitLogger( Path.Combine( Manager.GetConfigRoot(), Const.Settings.LogsFolder ) );
+            PluginLog.Bind( Logger.Event, msg => Logger.Error( msg ) );
 
             AppDomain.CurrentDomain.AssemblyResolve += AutoResolver;
             var app = new App

@@ -63,19 +63,27 @@ namespace VirtualSpace.VirtualDesktop
 
         protected override void WndProc( ref Message m )
         {
-            if ( m.Msg == WinMsg.WM_HOTKEY )
-                switch ( m.WParam.ToInt32() )
-                {
-                    case UserMessage.ShowVdw:
-                        ShowByVdIndex();
-                        return;
-                    case UserMessage.RefreshVdw:
-                        Refresh();
-                        return;
-                    case UserMessage.ShowThumbsOfVdw:
-                        ShowThumbnails();
-                        return;
-                }
+            switch ( m.Msg )
+            {
+                case WinMsg.WM_QUERYENDSESSION:
+                    m.Result = new IntPtr( 1 );
+                    return;
+                case WinMsg.WM_HOTKEY:
+                    switch ( m.WParam.ToInt32() )
+                    {
+                        case UserMessage.ShowVdw:
+                            ShowByVdIndex();
+                            return;
+                        case UserMessage.RefreshVdw:
+                            Refresh();
+                            return;
+                        case UserMessage.ShowThumbsOfVdw:
+                            ShowThumbnails();
+                            return;
+                    }
+
+                    break;
+            }
 
             base.WndProc( ref m );
         }

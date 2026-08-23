@@ -33,7 +33,7 @@ namespace Cube3D
         private void FakeHide( bool stopCapture = false )
         {
             Left = Const.FakeHideX;
-            Top = Const.FakeHideY;
+            Top  = Const.FakeHideY;
 
             if ( stopCapture ) StopCapture();
         }
@@ -80,9 +80,9 @@ namespace Cube3D
 
             var dpi = GetDpiForMonitor( _monitorInfo.Hmon );
 
-            Left = _monitorInfo.WorkArea.Left / dpi.ScaleX;
-            Top = _monitorInfo.WorkArea.Top / dpi.ScaleY;
-            Width = _monitorInfo.ScreenSize.X / dpi.ScaleX;
+            Left   = _monitorInfo.WorkArea.Left / dpi.ScaleX;
+            Top    = _monitorInfo.WorkArea.Top / dpi.ScaleY;
+            Width  = _monitorInfo.ScreenSize.X / dpi.ScaleX;
             Height = _monitorInfo.ScreenSize.Y / dpi.ScaleY;
         }
 
@@ -90,6 +90,21 @@ namespace Cube3D
         {
             switch ( msg )
             {
+                case WinMsg.WM_QUERYENDSESSION:
+                    handled = true;
+                    LogSessionEndQuery( lParam );
+                    StopCapture();
+                    _sw?.Close();
+                    return new IntPtr( 1 );
+                case WinMsg.WM_ENDSESSION:
+                    handled = true;
+                    if ( wParam != IntPtr.Zero )
+                    {
+                        PluginLog.Event( "Cube3D", "WM_ENDSESSION" );
+                        PrepareForSessionEnd();
+                    }
+
+                    return IntPtr.Zero;
                 case WinMsg.WM_SYSCOMMAND:
                     var wP = wParam.ToInt32();
                     if ( wP is WinMsg.SC_RESTORE or WinMsg.SC_MINIMIZE or WinMsg.SC_MAXIMIZE )
@@ -106,6 +121,23 @@ namespace Cube3D
             }
 
             return IntPtr.Zero;
+        }
+
+        private static void LogSessionEndQuery( IntPtr lParam )
+        {
+            var flags    = lParam.ToInt64();
+            var closeApp = ( flags & WinMsg.ENDSESSION_CLOSEAPP ) != 0;
+            var critical = ( flags & WinMsg.ENDSESSION_CRITICAL ) != 0;
+            PluginLog.Event( "Cube3D", $"WM_QUERYENDSESSION closeApp={closeApp}, critical={critical}" );
+        }
+
+        private void PrepareForSessionEnd()
+        {
+            InvalidateLoadsOnClose();
+            _displayChangeDebounceTimer?.Stop();
+            StopCapture();
+            _sw?.Close();
+            _sw = null;
         }
 
         private void PerformAnimationPrimary( VirtualDesktopSwitchInfo vdSwitchInfo )

@@ -38,6 +38,7 @@ namespace VirtualSpace
     public partial class App : Application
     {
         private static Mutex? _mutex;
+        private        bool   _shuttingDown;
         public         bool   HideOnStart;
 
         protected override void OnStartup( StartupEventArgs e )
@@ -57,8 +58,8 @@ namespace VirtualSpace
                 var mw = CreateCanvas( e );
                 Current.MainWindow = mw;
 
-                IpcPipeServer.MainWindowHandle            = mw.Handle;
-                PluginHost.HostContext.MainWindowHandle   = mw.Handle;
+                IpcPipeServer.MainWindowHandle          = mw.Handle;
+                PluginHost.HostContext.MainWindowHandle = mw.Handle;
 
                 if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
                 {
@@ -82,17 +83,52 @@ namespace VirtualSpace
             }
         }
 
-        private static void OnSessionEnding( object sender, SessionEndingCancelEventArgs e )
+        internal static void HandleSessionEndQuery( string source, IntPtr lParam )
         {
-            Logger.Info( $"Windows session ending ({e.ReasonSessionEnding}); tearing down plugins." );
+            var flags    = lParam.ToInt64();
+            var closeApp = ( flags & WinMsg.ENDSESSION_CLOSEAPP ) != 0;
+            var critical = ( flags & WinMsg.ENDSESSION_CRITICAL ) != 0;
+            var message  = $"Windows session end query ({source}, closeApp={closeApp}, critical={critical}).";
+            Logger.Info( message );
+        }
+
+        private static void TryTearDownPluginsForSessionEnd()
+        {
             try
             {
-                PluginHost.TearDownForSessionEnd();
+                PluginHost.CloseAllPlugins();
             }
             catch ( Exception ex )
             {
                 Logger.Warning( $"Plugin session-end teardown failed: {ex.Message}" );
             }
+        }
+
+        internal static void HandleSessionEnd( string source, IntPtr wParam )
+        {
+            if ( wParam == IntPtr.Zero )
+                return;
+
+            if ( Current is not App app || app._shuttingDown )
+                return;
+
+            app._shuttingDown = true;
+            var message = $"Windows session ending ({source}); shutting down application.";
+            Logger.Info( message );
+            TryTearDownPluginsForSessionEnd();
+            app.Shutdown();
+        }
+
+        private void OnSessionEnding( object sender, SessionEndingCancelEventArgs e )
+        {
+            if ( _shuttingDown )
+                return;
+
+            _shuttingDown = true;
+            var message = $"Windows session ending (SessionEnding: {e.ReasonSessionEnding}); shutting down application.";
+            Logger.Info( message );
+            TryTearDownPluginsForSessionEnd();
+            Shutdown();
         }
 
         protected override void OnExit( ExitEventArgs e )
@@ -107,12 +143,12 @@ namespace VirtualSpace
                 Logger.Warning( $"Plugin unload on exit failed: {ex.Message}" );
             }
 
-            base.OnExit( e );
-
             ReleaseMutex();
             Daemon.Stop();
             IpcPipeServer.SimpleShutdown();
             LogManager.CloseAndFlush();
+            
+            base.OnExit( e );
         }
 
         public void ReleaseMutex()

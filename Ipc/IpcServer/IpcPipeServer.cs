@@ -74,12 +74,11 @@ namespace VirtualSpace.Commons
                 return;
 
             _isRunning = false;
-            PluginHost.CloseAllPlugins();
             WakeServer();
 
             try
             {
-                if ( !task.Wait( TimeSpan.FromSeconds( 3 ) ) )
+                if ( !task.Wait( TimeSpan.FromSeconds( 1 ) ) )
                     Logger.Warning( "Ipc Pipe Server shutdown timed out." );
             }
             catch ( Exception ex )

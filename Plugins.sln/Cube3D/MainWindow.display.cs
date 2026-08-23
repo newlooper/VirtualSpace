@@ -10,13 +10,13 @@ You should have received a copy of the GNU General Public License along with Cub
 */
 
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Cube3D.Config;
 using ScreenCapture;
+using VirtualSpace.PluginContracts;
 
 #pragma warning disable CA1416
 
@@ -75,7 +75,7 @@ namespace Cube3D
             _displayChangeDebounceTimer?.Stop();
             if ( !await TryRecoverDisplayLayoutAsync().ConfigureAwait( true ) )
             {
-                Trace.WriteLine( "[Cube3D.Error] display recovery failed, restarting UI." );
+                PluginLog.Error( "Cube3D", "display recovery failed, restarting UI." );
                 RestartRequested?.Invoke();
             }
         }

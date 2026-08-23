@@ -318,6 +318,7 @@ namespace VirtualSpace.Plugin
 
             try
             {
+                Logger.Info( $"[PLUGIN.Unloading] {info.Display}" );
                 loaded.Instance.Shutdown();
             }
             catch ( Exception ex )
@@ -337,7 +338,7 @@ namespace VirtualSpace.Plugin
 
             info.IsLoaded   = false;
             info.LoadStatus = File.Exists( info.AssemblyPath ) ? PluginLoadStatus.Available : PluginLoadStatus.Missing;
-            Logger.Info( $"[PLUGIN.Unload] {info.Display}" );
+            Logger.Info( $"[PLUGIN.Unloaded] {info.Display}" );
         }
 
         private static Type? FindPluginType( Assembly assembly )

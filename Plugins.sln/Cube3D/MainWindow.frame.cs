@@ -9,9 +9,9 @@ Cube3D is distributed in the hope that it will be useful, but WITHOUT ANY WARRAN
 You should have received a copy of the GNU General Public License along with Cube3D. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System.Diagnostics;
 using System.Threading.Tasks;
 using ScreenCapture;
+using VirtualSpace.PluginContracts;
 
 namespace Cube3D
 {
@@ -63,13 +63,13 @@ namespace Cube3D
             _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
             if ( _capture == null )
             {
-                Trace.WriteLine( "[Cube3D.Error] capture create failed." );
+                PluginLog.Error( "Cube3D", "capture create failed." );
                 return false;
             }
 
             if ( _capture.StartCaptureSession() ) return true;
 
-            Trace.WriteLine( "[Cube3D.Error] capture session failed." );
+            PluginLog.Error( "Cube3D", "capture session failed." );
             StopCapture();
             return false;
         }

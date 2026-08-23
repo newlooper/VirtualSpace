@@ -26,12 +26,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using VirtualSpace.PluginContracts;
 using Windows.Graphics;
 using Windows.Graphics.Capture;
 using Windows.Graphics.DirectX;
@@ -189,7 +189,7 @@ namespace ScreenCapture
             }
             catch ( Exception ex )
             {
-                Trace.WriteLine( $"[ScreenCapture.Error] CreateItemForMonitor failed: {ex.Message}" );
+                PluginLog.Error( "Cube3D.ScreenCapture", $"CreateItemForMonitor failed: {ex.Message}" );
                 return null;
             }
 
@@ -255,7 +255,7 @@ namespace ScreenCapture
             }
             catch ( Exception ex )
             {
-                Trace.WriteLine( $"[ScreenCapture.Error] StartCaptureSession failed: {ex}" );
+                PluginLog.Error( "Cube3D.ScreenCapture", $"StartCaptureSession failed: {ex}" );
                 TearDownCaptureSession();
                 ReleaseSharedDevices();
                 return false;
