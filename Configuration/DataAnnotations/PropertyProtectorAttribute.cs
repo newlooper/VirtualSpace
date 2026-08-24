@@ -43,7 +43,7 @@ namespace VirtualSpace.Config.DataAnnotations
         {
             var props = from prop in obj.GetType().GetProperties()
                 let attrs = prop.GetCustomAttributes( typeof( PropertyProtectorAttribute ), false )
-                where attrs.Any()
+                where attrs.Length != 0
                 select new { Obj = obj, Property = prop, Attr = (PropertyProtectorAttribute)attrs.First() };
 
             foreach ( var pair in props )

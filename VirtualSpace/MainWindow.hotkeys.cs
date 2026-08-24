@@ -35,37 +35,28 @@ namespace VirtualSpace
             foreach ( var (k, kbInProfile) in Manager.Configs.KeyBindings! )
             {
                 var ghkCode = kbInProfile.GhkCode;
-                if ( ghkCode == "" ) continue;
+                if ( ghkCode == string.Empty ) continue;
 
                 var func      = Const.Hotkey.GetFuncDesc( k );
                 var messageId = Const.Hotkey.GetKeyBinding( k ).MessageId;
                 var hotkeyStr = ghkCode.Replace( Const.Hotkey.NONE + Const.Hotkey.SPLITTER, "" );
 
                 var arr = ghkCode.Split( Const.Hotkey.SPLITTER );
-                if ( arr.Length == 5 )
-                {
-                    var km = arr[0] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.WindowsKey;
-                    km |= arr[1] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.Ctrl;
-                    km |= arr[2] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.Alt;
-                    km |= arr[3] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.Shift;
+                if ( arr.Length != 5 )
+                    continue;
+                var km = arr[0] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.WindowsKey;
+                km |= arr[1] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.Ctrl;
+                km |= arr[2] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.Alt;
+                km |= arr[3] == Const.Hotkey.NONE ? GHK.KeyModifiers.None : GHK.KeyModifiers.Shift;
 
-                    try
-                    {
-                        var key = Enum.Parse<Key>( arr[4] );
-                        Logger.Info( string.Format( "Register Global HotKey [{0}] For \"{1}\", {2}",
-                            hotkeyStr,
-                            func,
-                            GHK.RegHotKey( hWnd, messageId, km, KeyInterop.VirtualKeyFromKey( key ) )
-                                ? "Success"
-                                : "Fail" ) );
-                    }
-                    catch ( Exception ex )
-                    {
-                        Logger.Error( string.Format( "Register Global HotKey [{0}] For \"{1}\" Error: {2}",
-                            hotkeyStr,
-                            func,
-                            ex.Message ) );
-                    }
+                try
+                {
+                    var key = Enum.Parse<Key>( arr[4] );
+                    Logger.Info( $"Register Global HotKey [{hotkeyStr}] For \"{func}\", {( GHK.RegHotKey( hWnd, messageId, km, KeyInterop.VirtualKeyFromKey( key ) ) ? "Success" : "Fail" )}" );
+                }
+                catch ( Exception ex )
+                {
+                    Logger.Error( $"Register Global HotKey [{hotkeyStr}] For \"{func}\" Error: {ex.Message}" );
                 }
             }
 
@@ -92,7 +83,7 @@ namespace VirtualSpace
         {
             if ( nCode >= 0 )
             {
-                var info = Marshal.PtrToStructure<LowLevelKeyboardHook.KBDLLHOOKSTRUCT>( lParam );
+                var info = Marshal.PtrToStructure<LLKH.KBDLLHOOKSTRUCT>( lParam );
 
                 var keyType = (int)wParam;
 
@@ -124,7 +115,7 @@ namespace VirtualSpace
                      && LLKH.IsKeyHold( Keys.LWin )
                      && !( LLKH.IsKeyHold( Keys.ControlKey ) || LLKH.IsKeyHold( Keys.ShiftKey ) ) )
                 {
-                    if ( ( info.flags & LowLevelKeyboardHook.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED ) == 0 ) // not come from fake input
+                    if ( ( info.flags & LLKH.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED ) == 0 ) // not come from fake input
                     {
                         LLKH.MultipleKeyPress( new List<Keys> { (Keys)LLKH.DUMMY_KEY } );
                         User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
@@ -136,14 +127,14 @@ namespace VirtualSpace
 
                 /////////////////////////////////////////////////////////////////////////////////
                 // since we hook default [LWin+Tab],
-                // we should use a alternative way to rise the TaskView in case user want it.
+                // we should use an alternative way to rise the TaskView in case user want it.
                 // here choose [Ctrl+LWin+Shift+Tab] to try to avoid conflicts
                 if ( info.vkCode == (int)Keys.Tab
                      && LLKH.IsKeyHold( Keys.LWin )
                      && LLKH.IsKeyHold( Keys.ControlKey )
                      && LLKH.IsKeyHold( Keys.ShiftKey ) )
                 {
-                    if ( ( info.flags & LowLevelKeyboardHook.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED ) == 0 // not come from fake input
+                    if ( ( info.flags & LLKH.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED ) == 0 // not come from fake input
                          && RiseTaskViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
                     {
                         LLKH.MultipleKeyPress( new List<Keys> { (Keys)LLKH.DUMMY_KEY } );

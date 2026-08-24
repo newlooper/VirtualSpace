@@ -42,12 +42,12 @@ namespace VirtualSpace
             PluginHost.HostContext.DesktopSwitchRequested += OnPluginDesktopSwitchRequested;
         }
 
-        private void OnPluginDesktopSwitchRequested( int targetIndex )
+        private static void OnPluginDesktopSwitchRequested( int targetIndex )
         {
             ApplyDesktopSwitch( targetIndex );
         }
 
-        private void ApplyDesktopSwitch( int targetMatrixIndex )
+        private static void ApplyDesktopSwitch( int targetMatrixIndex )
         {
             if ( targetMatrixIndex < 0 || targetMatrixIndex >= DesktopWrapper.Count ) return;
             Interlocked.Exchange( ref _forceSwitchOnTimeout, 0 );
@@ -58,42 +58,56 @@ namespace VirtualSpace
         private void Window_MouseDown( object sender, MouseButtonEventArgs e )
         {
             var profile = Manager.CurrentProfile;
-            if ( e.ChangedButton == MouseButton.Left )
-                switch ( profile.Mouse.LeftClickOnCanvas )
-                {
-                    case 0:
-                        break;
-                    case 1:
-                        HideAll();
-                        break;
-                    default:
-                        HideAll();
-                        break;
-                }
-            else if ( e.ChangedButton == MouseButton.Right )
-                switch ( profile.Mouse.RightClickOnCanvas )
-                {
-                    case 0:
-                        break;
-                    case 1:
-                        HideAll();
-                        break;
-                    default:
-                        HideAll();
-                        break;
-                }
-            else if ( e.ChangedButton == MouseButton.Middle )
-                switch ( profile.Mouse.MiddleClickOnCanvas )
-                {
-                    case 0:
-                        break;
-                    case 1:
-                        HideAll();
-                        break;
-                    default:
-                        HideAll();
-                        break;
-                }
+            switch ( e.ChangedButton )
+            {
+                case MouseButton.Left:
+                    switch ( profile.Mouse.LeftClickOnCanvas )
+                    {
+                        case 0:
+                            // TODO
+                            break;
+                        case 1:
+                            HideAll();
+                            break;
+                        default:
+                            HideAll();
+                            break;
+                    }
+
+                    break;
+
+                case MouseButton.Right:
+                    switch ( profile.Mouse.RightClickOnCanvas )
+                    {
+                        case 0:
+                            // TODO
+                            break;
+                        case 1:
+                            HideAll();
+                            break;
+                        default:
+                            HideAll();
+                            break;
+                    }
+
+                    break;
+
+                case MouseButton.Middle:
+                    switch ( profile.Mouse.MiddleClickOnCanvas )
+                    {
+                        case 0:
+                            // TODO
+                            break;
+                        case 1:
+                            HideAll();
+                            break;
+                        default:
+                            HideAll();
+                            break;
+                    }
+
+                    break;
+            }
         }
 
         private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
@@ -370,11 +384,11 @@ namespace VirtualSpace
             var pCds = Marshal.AllocHGlobal( Marshal.SizeOf<COPYDATASTRUCT>() );
             Marshal.StructureToPtr( cds, pCds, true );
 
-            foreach ( var pluginInfo in PluginHost.Plugins.Where( p =>
-                         p.Kind == PluginKind.ExternalProcess &&
-                         p.Type == PluginType.VD_SWITCH_OBSERVER &&
-                         User32.IsWindow( p.Handle ) ) )
+            foreach ( var pluginInfo in PluginHost.Plugins.Where( p => p is { Kind: PluginKind.ExternalProcess, Type: PluginType.VD_SWITCH_OBSERVER }
+                                                                       && User32.IsWindow( p.Handle ) ) )
+            {
                 User32.SendMessage( pluginInfo.Handle, WinMsg.WM_COPYDATA, 0, (ulong)pCds );
+            }
 
             ////////////////////////////////////////////////////////////////////////////////////
             // if none of plugins send back message after 100 ms, host will force switch desktop

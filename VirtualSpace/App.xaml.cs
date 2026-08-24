@@ -151,7 +151,7 @@ namespace VirtualSpace
             base.OnExit( e );
         }
 
-        public void ReleaseMutex()
+        public static void ReleaseMutex()
         {
             _mutex?.ReleaseMutex();
             _mutex?.Dispose();

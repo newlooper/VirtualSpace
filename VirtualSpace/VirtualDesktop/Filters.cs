@@ -44,7 +44,7 @@ namespace VirtualSpace.VirtualDesktop
 
         public static bool IsCloaked( IntPtr handle )
         {
-            var HRESULT = DwmApi.DwmGetWindowAttribute( handle,
+            _ = DwmApi.DwmGetWindowAttribute( handle,
                 (uint)DwmApi.DwmWindowAttribute.DWMWA_CLOAKED,
                 out var cloaked,
                 sizeof( uint ) );

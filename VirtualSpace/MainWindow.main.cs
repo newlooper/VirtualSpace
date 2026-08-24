@@ -192,7 +192,7 @@ namespace VirtualSpace
 
         public static void UpdateVDIndexOnTrayIcon( Guid guid )
         {
-            if ( !Manager.Configs.Cluster.ShowVDIndexOnTrayIcon )
+            if ( !ConfigManager.Configs.Cluster.ShowVDIndexOnTrayIcon )
             {
                 TrayIcon.InitTrayIcon();
                 return;
@@ -221,7 +221,7 @@ namespace VirtualSpace
 
             try
             {
-                app.ReleaseMutex();
+                App.ReleaseMutex();
                 Process.Start( psi );
                 Application.Current.Shutdown();
             }

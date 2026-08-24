@@ -179,9 +179,9 @@ namespace VirtualSpace
 
         public static Point GetCellLocationByMatrixIndex( int index )
         {
-            if ( _instance.Dispatcher.CheckAccess() ) return _instance.MainGrid.Children[index].TranslatePoint( new Point(), _instance );
-
-            return _instance.Dispatcher.Invoke( () => _instance.MainGrid.Children[index].TranslatePoint( new Point(), _instance ) );
+            return _instance.Dispatcher.CheckAccess()
+                ? _instance.MainGrid.Children[index].TranslatePoint( new Point(), _instance )
+                : _instance.Dispatcher.Invoke( () => _instance.MainGrid.Children[index].TranslatePoint( new Point(), _instance ) );
         }
 
         public static Size GetCellSizeByMatrixIndex( int index )

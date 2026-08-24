@@ -38,7 +38,7 @@ namespace VirtualSpace.VirtualDesktop
             }
 
             if ( wndCount < 1 ) return;
-            _visibleWindows.Sort( ( x, y ) => x.Title.CompareTo( y.Title ) );
+            _visibleWindows.Sort( ( x, y ) => string.Compare( x.Title, y.Title, StringComparison.Ordinal ) );
 
             var rows = Math.Floor( Math.Sqrt( wndCount ) );
             var cols = Math.Ceiling( wndCount / rows );

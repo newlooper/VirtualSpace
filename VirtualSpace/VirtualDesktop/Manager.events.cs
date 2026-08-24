@@ -33,7 +33,7 @@ namespace VirtualSpace.VirtualDesktop
             {
                 if ( !IsBatchCreate ) UpdateMainView();
             };
-            DesktopManagerWrapper.DesktopDeletedEvent += vdn => { UpdateMainView( vdn ); };
+            DesktopManagerWrapper.DesktopDeletedEvent += UpdateMainView;
             DesktopManagerWrapper.DesktopChangedEvent += vdn =>
             {
                 LastDesktopId = vdn.OldId;
