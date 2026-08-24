@@ -49,9 +49,10 @@ download from [Releases](https://github.com/newlooper/VirtualSpace/releases) pag
 ### 3.2 plugins
 
 - Cube3D —— plugin for virtual desktop switch effects
-  - build Cube3D project
-  - put `all generated files` into main program's plugins Folder eg: `plugins\Cube3D`
-  - Run Cube3D.exe after VirtualSpace started
+  - ~~build Cube3D project~~
+  - ~~put `all generated files` into main program's plugins Folder eg: `plugins\Cube3D`~~
+  - ~~Run Cube3D.exe after VirtualSpace started~~
+  - built-in since VirtualSpace v1.1
 
 ## 4. HowTo
 
