@@ -31,11 +31,11 @@ namespace VirtualSpace.VirtualDesktop
         public void ShowThumbnails()
         {
             var wndCount = _visibleWindows.Count;
-            if ( !string.IsNullOrEmpty( WindowFilter.Keyword ) )
-            {
-                _visibleWindows.RemoveAll( wnd => !wnd.Title.Contains( WindowFilter.Keyword, StringComparison.CurrentCultureIgnoreCase ) );
-                wndCount = _visibleWindows.Count;
-            }
+            // if ( !string.IsNullOrEmpty( WindowFilter.Keyword ) )
+            // {
+            //     _visibleWindows.RemoveAll( wnd => !wnd.Title.Contains( WindowFilter.Keyword, StringComparison.CurrentCultureIgnoreCase ) );
+            //     wndCount = _visibleWindows.Count;
+            // }
 
             if ( wndCount < 1 ) return;
             _visibleWindows.Sort( ( x, y ) => string.Compare( x.Title, y.Title, StringComparison.Ordinal ) );

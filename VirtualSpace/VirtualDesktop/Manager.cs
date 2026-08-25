@@ -23,7 +23,6 @@ namespace VirtualSpace.VirtualDesktop
     internal static partial class VirtualDesktopManager
     {
         private static readonly List<VisibleWindow>        VisibleWindows   = new();
-        private static readonly User32.EnumWindowsProc     EnumWindowsProc  = VisibleWindowFilter;
         private static readonly StringBuilder              SbWinInfo        = new( Const.WindowTitleMaxLength );
         private static          List<VirtualDesktopWindow> _virtualDesktops = new();
         public static           Guid                       LastDesktopId    = Guid.Empty;
@@ -56,20 +55,23 @@ namespace VirtualSpace.VirtualDesktop
         private static List<VisibleWindow> GetVisibleWindows()
         {
             VisibleWindows.Clear();
-            _ = User32.EnumWindows( EnumWindowsProc, 0 );
+            _ = User32.EnumWindows( VisibleWindowFilter, 0 );
             return VisibleWindows;
         }
 
         public static void ShowVisibleWindowsForDesktops( List<VirtualDesktopWindow>? vdwList = null, int processId = 0 )
         {
-            var visibleWindows = GetVisibleWindows();
-            Logger.Debug( $"VisibleWindows/ApplicationViews: {visibleWindows.Count.ToString()}/{DesktopManagerWrapper.GetViewCount().ToString()}" );
+            var allVisibleWindows = GetVisibleWindows();
+            Logger.Verbose( $"VisibleWindows/ApplicationViews: {allVisibleWindows.Count.ToString()}/{DesktopManagerWrapper.GetViewCount().ToString()}" );
 
             vdwList ??= _virtualDesktops;
 
             foreach ( var virtualDesktopWindow in vdwList ) virtualDesktopWindow.ClearVisibleWindows();
 
-            foreach ( var win in visibleWindows )
+            foreach ( var win in allVisibleWindows.Where( win =>
+                         string.IsNullOrEmpty( WindowFilter.Keyword ) ||
+                         win.Title.Contains( WindowFilter.Keyword, StringComparison.CurrentCultureIgnoreCase ) ) )
+            {
                 try
                 {
                     if ( processId != 0 )
@@ -112,6 +114,7 @@ namespace VirtualSpace.VirtualDesktop
                         Filters.WndHandleIgnoreListByError.Add( win.Handle );
                     }
                 }
+            }
 
             foreach ( var vdw in vdwList ) vdw.ShowThumbnails();
         }

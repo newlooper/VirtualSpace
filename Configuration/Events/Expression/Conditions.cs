@@ -47,10 +47,10 @@ namespace VirtualSpace.Config.Events.Expression
         {
             _rules = InitRules();
             BuildRuleExp( _rules );
-            RuleChecker();
+            StartRuleChecker();
         }
 
-        private static async void RuleChecker()
+        private static async void StartRuleChecker()
         {
             while ( await VisibleWindowsConsumer.Reader.WaitToReadAsync() )
             {
@@ -101,7 +101,7 @@ namespace VirtualSpace.Config.Events.Expression
 
                 if ( isOnePeriod )
                 {
-                    Logger.Debug( $"Checking rules for {win.Title}, current profile: {Manager.Configs.CurrentProfileName}" );
+                    Logger.Debug( $"Checking rules for [{win.Title}], current profile: {Manager.Configs.CurrentProfileName}" );
                 }
 
                 await Task.Run( () =>
@@ -133,7 +133,11 @@ namespace VirtualSpace.Config.Events.Expression
 
                     win.WinInScreen = screenIndex.ToString();
 
-                    if ( !User32.IsWindow( win.Handle ) ) return;
+                    if ( !User32.IsWindow( win.Handle ) )
+                    {
+                        Logger.Debug( $"Window [{win.Title}] not found, Rules checker terminated." );
+                        return;
+                    }
 
                     var hasMatchedRule = false;
 
@@ -147,7 +151,7 @@ namespace VirtualSpace.Config.Events.Expression
                         if ( !match )
                             continue;
                         hasMatchedRule = true;
-                        Logger.Debug( win.Title + $" match rule [{r.Name}]" );
+                        Logger.Debug(  $"Window [{win.Title}] match rule [{r.Name}]" );
                         r.Action!.Handle     = win.Handle;
                         r.Action.RuleName    = r.Name!;
                         r.Action.WindowTitle = win.Title;
@@ -187,7 +191,7 @@ namespace VirtualSpace.Config.Events.Expression
             }
             catch ( Exception e )
             {
-                Logger.Error( $"Failed to check rules for Window {win.Title}: {e.Message}" );
+                Logger.Error( $"Failed to check rules for Window [{win.Title}]: {e.Message}" );
             }
         }
 
