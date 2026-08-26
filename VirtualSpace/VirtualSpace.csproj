@@ -19,7 +19,6 @@
     </PropertyGroup>
 
     <Import Project="$(MSBuildThisFileDirectory).build\AutoVersion.props" />
-    <Import Project="$(MSBuildThisFileDirectory).build\EmbeddedVDLib.props" />
 
     <ItemGroup>
         <ApplicationDefinition Remove="App.xaml" />
@@ -68,7 +67,5 @@
     <PropertyGroup>
         <SatelliteResourceLanguages>en-US,zh-Hans,zh-Hant</SatelliteResourceLanguages>
     </PropertyGroup>
-
-    <Import Project="$(MSBuildThisFileDirectory).build\EmbeddedVDLib.targets" />
 
 </Project>

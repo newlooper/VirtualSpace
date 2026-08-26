@@ -33,4 +33,7 @@
         </ProjectReference>
     </ItemGroup>
 
+    <Import Project="$(MSBuildThisFileDirectory).build\EmbeddedVDLib.props" />
+    <Import Project="$(MSBuildThisFileDirectory).build\EmbeddedVDLib.targets" />
+
 </Project>
