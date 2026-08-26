@@ -10,6 +10,7 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -31,9 +32,9 @@ namespace VirtualSpace.VirtualDesktop
 {
     internal static class Daemon
     {
-        private static          int               _runlevel              = 1;
-        private static readonly ManualResetEvent  CanRun                 = new( false );
-        private static readonly ManualResetEvent  StopEvent              = new( false );
+        private static          int               _runlevel = 1;
+        private static readonly ManualResetEvent  CanRun    = new( false );
+        private static readonly ManualResetEvent  StopEvent = new( false );
         private static          Task?             _daemonTask;
         private static readonly StringBuilder     SbWinInfo              = new( Const.WindowTitleMaxLength );
         private static readonly Channel<Behavior> ActionConsumer         = Channels.ActionChannel;
@@ -48,7 +49,7 @@ namespace VirtualSpace.VirtualDesktop
                 if ( action.HideFromView )
                 {
                     Logger.Debug( $"[RULE.Action]HIDE.Win {action.Handle:X2}" );
-                    Filters.WndHandleIgnoreListByManual.TryAdd( action.Handle, 0 );
+                    ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByManual, list => list.Add( action.Handle ) );
                 }
 
                 if ( action.MoveToScreen >= 0 )
@@ -150,7 +151,7 @@ namespace VirtualSpace.VirtualDesktop
             StopEvent.Reset();
             _daemonTask = Task.Factory.StartNew( () =>
             {
-                var sw = Stopwatch.StartNew();
+                var sw          = Stopwatch.StartNew();
                 var waitHandles = new WaitHandle[] { StopEvent, CanRun };
 
                 while ( true )
@@ -158,11 +159,15 @@ namespace VirtualSpace.VirtualDesktop
                     if ( WaitHandle.WaitAny( waitHandles ) == 0 )
                         return;
 
-                    _ = User32.EnumWindows( WindowHandleFilter, 0 );
                     if ( sw.ElapsedMilliseconds >= Const.OneMinute )
                     {
+                        _ = User32.EnumWindows( CleanIgnoreList, 0 );
                         Logger.Debug( "Daemon running normally in last minute." );
                         sw.Restart();
+                    }
+                    else
+                    {
+                        _ = User32.EnumWindows( WindowHandleFilter, 0 );
                     }
 
                     if ( WaitHandle.WaitAny( new WaitHandle[] { StopEvent }, _runlevel * Const.OneSecond ) == 0 )
@@ -205,6 +210,25 @@ namespace VirtualSpace.VirtualDesktop
         private static void SendToCheckingRule( IntPtr hWnd, string title, string classname )
         {
             VisibleWindowsProducer.Writer.TryWrite( new Window { Title = title, WndClass = classname, Handle = hWnd } );
+        }
+
+        /// <summary>
+        /// 概要：非可靠的清理窗口规则忽略列表的办法，可满足日常使用。
+        /// 原有问题：对于窗口规则重度使用场景，无论因何种原因导致已销毁窗口的 HWND 被新窗口复用，若该 HWND 在忽略列表中，将无法再进行窗口规则检查。
+        /// 现有方案：尽量保持原有机制且不增加资源占用的前提下，大幅降低上述问题的概率
+        /// 成立前提：借助 _daemonTask 中的 Const.OneMinute 心跳，期望的是“在某窗口被销毁的一分钟内，不会有相同 HWND 的窗口被创建出来”。
+        /// 额外说明：最可靠的是 HWND+PID+TIMESTAMP 做键，但代价过于高昂，因此保留通过 HWND 判断的机制。
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="lParam"></param>
+        private static bool CleanIgnoreList( IntPtr hWnd, int lParam )
+        {
+            if ( User32.IsWindow( hWnd ) ) return true;
+
+            ImmutableInterlocked.Update( ref Conditions.WndHandleIgnoreListByRule, list => list.Remove( hWnd ) );
+            ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByError, list => list.Remove( hWnd ) );
+
+            return true;
         }
     }
 }

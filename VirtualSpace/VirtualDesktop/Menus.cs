@@ -11,8 +11,10 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -69,7 +71,7 @@ namespace VirtualSpace.VirtualDesktop
 
             void OnIgnoreWindowClick( object? s, EventArgs evt )
             {
-                Filters.WndHandleIgnoreListByManual.TryAdd( mi.Vw.Handle, 0 );
+                ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByManual, list => list.Add( mi.Vw.Handle ) );
                 VirtualDesktopManager.RefreshThumbs( mi.Vw.Handle, mi.Self );
             }
 
@@ -175,18 +177,18 @@ namespace VirtualSpace.VirtualDesktop
 
                 var h = (IntPtr)int.Parse( m.Groups[1].Value );
 
-                Filters.WndHandleIgnoreListByManual.TryRemove( h, out _ );
+                ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByManual, list => list.Remove( h ) );
                 VirtualDesktopManager.RefreshThumbs( h, mi.Self );
             }
 
             var sb = new StringBuilder( Const.WindowTitleMaxLength );
-            foreach ( var handle in Filters.WndHandleIgnoreListByManual.Keys )
+            foreach ( var handle in from handle in Filters.WndHandleIgnoreListByManual
+                     where User32.IsWindow( handle )
+                     where DesktopWrapper.IsWindowPinned( handle ) ||
+                           DesktopWrapper.IsApplicationPinned( handle ) ||
+                           DesktopWrapper.GuidFromWindow( handle ) == mi.Self.VdId
+                     select handle )
             {
-                if ( !User32.IsWindow( handle ) ) continue;
-                if ( !DesktopWrapper.IsWindowPinned( handle ) &&
-                     !DesktopWrapper.IsApplicationPinned( handle ) &&
-                     DesktopWrapper.GuidFromWindow( handle ) != mi.Self.VdId ) continue;
-
                 _ = User32.GetWindowThreadProcessId( handle, out var pId );
                 var process = Process.GetProcessById( pId );
 

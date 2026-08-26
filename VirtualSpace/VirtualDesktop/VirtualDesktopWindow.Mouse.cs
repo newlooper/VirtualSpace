@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -210,7 +211,7 @@ namespace VirtualSpace.VirtualDesktop
                             } );
                             break;
                         case MouseAction.Action.WindowHideFromView:
-                            Filters.WndHandleIgnoreListByManual.TryAdd( _selectedWindow.Handle, 0 );
+                            ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByManual, list => list.Add( _selectedWindow.Handle ) );
                             VirtualDesktopManager.RefreshThumbs( _selectedWindow.Handle, this );
 
                             break;

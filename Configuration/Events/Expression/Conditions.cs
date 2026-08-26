@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -37,7 +38,7 @@ namespace VirtualSpace.Config.Events.Expression
         private static readonly Channel<Behavior>                 ActionProducer            = Channels.ActionChannel;
         private static readonly Channel<Window>                   VisibleWindowsConsumer    = Channels.VisibleWindowsChannel;
         private static readonly ConcurrentDictionary<IntPtr, int> WindowCheckTimes          = new();
-        public static readonly  ConcurrentBag<IntPtr>             WndHandleIgnoreListByRule = new();
+        public static           ImmutableList<IntPtr>             WndHandleIgnoreListByRule = ImmutableList<IntPtr>.Empty;
         private static          long                              _updateRuleLock;
 
         private static JsonSerializerOptions? _readOptions;
@@ -98,7 +99,6 @@ namespace VirtualSpace.Config.Events.Expression
                 WindowCheckTimes.TryAdd( win.Handle, 0 );
 
                 var isOnePeriod = WindowCheckTimes[win.Handle] % Const.WindowCheckTimesLimit == 0;
-
                 if ( isOnePeriod )
                 {
                     Logger.Debug( $"Checking rules for [{win.Title}], current profile: {Manager.Configs.CurrentProfileName}" );
@@ -136,6 +136,7 @@ namespace VirtualSpace.Config.Events.Expression
                     if ( !User32.IsWindow( win.Handle ) )
                     {
                         Logger.Debug( $"Window [{win.Title}] not found, Rules checker terminated." );
+                        WindowCheckTimes.TryRemove( win.Handle, out _ );
                         return;
                     }
 
@@ -151,7 +152,7 @@ namespace VirtualSpace.Config.Events.Expression
                         if ( !match )
                             continue;
                         hasMatchedRule = true;
-                        Logger.Debug(  $"Window [{win.Title}] match rule [{r.Name}]" );
+                        Logger.Debug( $"Window [{win.Title}] match rule [{r.Name}]" );
                         r.Action!.Handle     = win.Handle;
                         r.Action.RuleName    = r.Name!;
                         r.Action.WindowTitle = win.Title;
@@ -167,7 +168,8 @@ namespace VirtualSpace.Config.Events.Expression
 
                     if ( hasMatchedRule )
                     {
-                        WndHandleIgnoreListByRule.Add( win.Handle );
+                        ImmutableInterlocked.Update( ref WndHandleIgnoreListByRule, list => list.Add( win.Handle ) );
+                        WindowCheckTimes.TryRemove( win.Handle, out _ );
                         return;
                     }
 
@@ -176,17 +178,18 @@ namespace VirtualSpace.Config.Events.Expression
                         Logger.Debug( $"Window [{win.Title}] has no matched rules." );
                     }
 
-                    if ( Manager.CurrentProfile.IgnoreWindowOnRuleCheckTimeout )
+                    if ( Manager.CurrentProfile.IgnoreWindowOnRuleCheckTimeout &&
+                         WindowCheckTimes[win.Handle] >= Const.WindowCheckTimesLimit - 1 )
                     {
-                        if ( WindowCheckTimes[win.Handle] >= Const.WindowCheckTimesLimit )
-                        {
-                            Logger.Debug( $"Try find rules for [{win.Title}] too many times, ignore the window." );
-                            WndHandleIgnoreListByRule.Add( win.Handle );
-                        }
+                        Logger.Debug( $"Try find rules for [{win.Title}] too many times, ignore the window." );
+                        ImmutableInterlocked.Update( ref WndHandleIgnoreListByRule, list => list.Add( win.Handle ) );
+                        WindowCheckTimes.TryRemove( win.Handle, out _ );
+                        return;
                     }
 
                     WindowCheckTimes[win.Handle]++;
 
+                    // ignore
                 } ).ConfigureAwait( false );
             }
             catch ( Exception e )

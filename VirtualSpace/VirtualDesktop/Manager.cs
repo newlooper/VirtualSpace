@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using VirtualSpace.AppLogs;
@@ -31,7 +32,7 @@ namespace VirtualSpace.VirtualDesktop
         private static bool VisibleWindowFilter( IntPtr hWnd, int lParam )
         {
             if ( Filters.WndHandleIgnoreListByError.Contains( hWnd ) ||
-                 Filters.WndHandleIgnoreListByManual.TryGetValue( hWnd, out _ ) ||
+                 Filters.WndHandleIgnoreListByManual.Contains( hWnd ) ||
                  !User32.IsWindowVisible( hWnd ) ||
                  Filters.IsCloaked( hWnd ) )
                 return true;
@@ -111,7 +112,7 @@ namespace VirtualSpace.VirtualDesktop
                     if ( win.Classname != Const.ApplicationFrameWindow )
                     {
                         Logger.Warning( $"{ex.Message} ∵ {win.Title}({win.Handle.ToString( "X2" )}), WndClass: {win.Classname}" );
-                        Filters.WndHandleIgnoreListByError.Add( win.Handle );
+                        ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByError, list => list.Add( win.Handle ) );
                     }
                 }
             }
