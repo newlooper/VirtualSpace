@@ -20,7 +20,9 @@ cn: https://newlooper.com/post/original/cs/os/windows/virtualdesktop/
 
 ### 2.2 install use Winget 👍👍
 
-[WIP]
+```powershell
+winget install NewLooper.VirtualSpace
+```
 
 ### 2.3 install use .MSI 👍
 
