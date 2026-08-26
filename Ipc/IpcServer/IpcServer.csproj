@@ -6,7 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Helpers\Helpers.csproj" />
         <ProjectReference Include="..\..\Plugin\PluginHost\PluginHost.csproj" />
         <ProjectReference Include="..\Commons\Ipc.csproj" />
     </ItemGroup>

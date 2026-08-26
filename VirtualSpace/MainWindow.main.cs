@@ -46,20 +46,7 @@ namespace VirtualSpace
             Title   = Const.Window.VD_FRAME_TITLE;
         }
 
-        public static IAppController AcForm
-        {
-            get
-            {
-                if ( _instance._acForm is null )
-                {
-                    _instance._acForm = AppControllerFactory.Create();
-                    _instance._acForm.SetMainWindowHandle( _instance.Handle );
-                }
-
-                return _instance._acForm;
-            }
-            private set => _instance._acForm = value;
-        }
+        public static IAppController AcForm => _instance._acForm;
 
         public IntPtr Handle { get; private set; }
 

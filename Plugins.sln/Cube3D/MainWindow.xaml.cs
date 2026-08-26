@@ -35,9 +35,9 @@ namespace Cube3D
     {
         private static readonly List<MainWindow> OtherScreens = new();
 
-        private MonitorInfo _monitorInfo;
-        public           IntPtr      Handle;
-        private          IHostContext _host;
+        private MonitorInfo  _monitorInfo;
+        private IntPtr       _handle;
+        private IHostContext _host;
 
         public MainWindow()
         {
@@ -84,8 +84,8 @@ namespace Cube3D
         protected override void OnSourceInitialized( EventArgs e )
         {
             base.OnSourceInitialized( e );
-            Handle = new WindowInteropHelper( this ).EnsureHandle();
-            var source = HwndSource.FromHwnd( Handle );
+            _handle = new WindowInteropHelper( this ).EnsureHandle();
+            var source = HwndSource.FromHwnd( _handle );
             source?.AddHook( WndProc );
         }
 
@@ -142,7 +142,7 @@ namespace Cube3D
         {
             if ( !_monitorInfo.IsPrimary || _host == null ) return;
 
-            User32.SetWindowLongPtr( new HandleRef( this, Handle ),
+            User32.SetWindowLongPtr( new HandleRef( this, _handle ),
                 (int)GetWindowLongFields.GWL_HWNDPARENT,
                 _host.MainWindowHandle.ToInt32()
             );
@@ -161,16 +161,16 @@ namespace Cube3D
 
         private void FixStyle()
         {
-            _ = User32.SetWindowDisplayAffinity( Handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
+            _ = User32.SetWindowDisplayAffinity( _handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
 
-            var style = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_STYLE );
+            var style = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_STYLE );
             style = unchecked(style | (int)0x80000000); // WS_POPUP
-            User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_STYLE, style );
+            User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_STYLE, style );
 
-            var exStyle = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_EXSTYLE );
+            var exStyle = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_EXSTYLE );
             exStyle |= 0x08000000; // WS_EX_NOACTIVATE
             exStyle &= ~0x00040000; // WS_EX_APPWINDOW
-            User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
+            User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
         }
 
         private async void Window_Loaded( object sender, RoutedEventArgs e )
@@ -231,9 +231,9 @@ namespace Cube3D
             foreach ( var ow in from mi in others select new MainWindow( mi ) )
             {
                 OtherScreens.Add( ow );
-                User32.SetWindowLongPtr( new HandleRef( ow, ow.Handle ),
+                User32.SetWindowLongPtr( new HandleRef( ow, ow._handle ),
                     (int)GetWindowLongFields.GWL_HWNDPARENT,
-                    Handle.ToInt32()
+                    _handle.ToInt32()
                 );
                 ow.Show();
             }

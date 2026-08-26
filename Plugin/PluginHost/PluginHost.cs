@@ -8,6 +8,7 @@
 //
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -36,6 +37,7 @@ namespace VirtualSpace.Plugin
             RuntimePluginManager.Instance.Refresh();
         }
 
+        [Obsolete]
         public static void AutoStartAfterMainWindowLoaded()
         {
             RuntimePluginManager.Instance.AutoStart( AutoStartTiming.MainWindowLoaded );

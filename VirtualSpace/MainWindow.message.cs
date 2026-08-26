@@ -263,6 +263,7 @@ namespace VirtualSpace
                         case UserMessage.ToggleWindowFilter:
                             ToggleWindowFilter();
                             break;
+#if USE_OLD_AC
                         case UserMessage.RestartAppController:
                             AcForm.Quit();
                             AcForm = AppControllerFactory.Create();
@@ -274,6 +275,7 @@ namespace VirtualSpace
                         case UserMessage.AppControllerClosed:
                             AcForm = null!;
                             break;
+#endif
                         case UserMessage.SwitchDesktop:
                             SwitchDesktopByDirection( lParam );
                             break;

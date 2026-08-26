@@ -39,7 +39,7 @@ namespace VirtualSpace
     {
         private static Mutex? _mutex;
         private        bool   _shuttingDown;
-        public         bool   HideOnStart;
+        public         bool   HideOnStart { get; private set; }
 
         protected override void OnStartup( StartupEventArgs e )
         {
@@ -75,7 +75,7 @@ namespace VirtualSpace
 
                 _ = Dispatcher.InvokeAsync(
                     () => { _ = PluginHost.AutoStartAfterMainWindowLoadedAsync(); },
-                    DispatcherPriority.ApplicationIdle );
+                    DispatcherPriority.ApplicationIdle ); // async start for Timing="AutoStartTiming.MainWindowLoaded"
             }
             else
             {
@@ -147,7 +147,7 @@ namespace VirtualSpace
             Daemon.Stop();
             IpcPipeServer.SimpleShutdown();
             LogManager.CloseAndFlush();
-            
+
             base.OnExit( e );
         }
 
@@ -191,7 +191,7 @@ namespace VirtualSpace
 
             Daemon.Start();
 
-            PluginHost.RegisterPlugins( ConfigManager.GetPluginsPath() );
+            PluginHost.RegisterPlugins( ConfigManager.GetPluginsPath() ); // sync start for Timing="AutoStartTiming.AppStart"
         }
 
         private static void BootInfo()
