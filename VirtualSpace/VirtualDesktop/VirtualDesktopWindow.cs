@@ -148,17 +148,17 @@ namespace VirtualSpace.VirtualDesktop
         private void ShowByVdIndex()
         {
             var ui = VirtualDesktopManager.Ui;
-            var (ScaleX, ScaleY) = SysInfo.Dpi;
+            var (scaleX, scaleY) = SysInfo.Dpi;
 
             var matrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( VdIndex );
             var location    = MainWindow.GetCellLocationByMatrixIndex( matrixIndex );
-            var point       = new Point( (int)( ( location.X + ui.VDWBorderSize ) * ScaleX ), (int)( ( location.Y + ui.VDWBorderSize ) * ScaleY ) );
+            var point       = new Point( (int)( ( location.X + ui.VDWBorderSize ) * scaleX ), (int)( ( location.Y + ui.VDWBorderSize ) * scaleY ) );
             Location       = point;
             _fixedPosition = point;
 
             var size      = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
-            var vdwWidth  = ( size.Width - 2 * ui.VDWBorderSize ) * ScaleX + 1;
-            var vdwHeight = ( size.Height - 2 * ui.VDWBorderSize ) * ScaleY + 1;
+            var vdwWidth  = ( size.Width - 2 * ui.VDWBorderSize ) * scaleX + 1;
+            var vdwHeight = ( size.Height - 2 * ui.VDWBorderSize ) * scaleY + 1;
 
             ////////////////////////////////////////////////////////////////
             // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面尺寸强制归零
@@ -183,8 +183,8 @@ namespace VirtualSpace.VirtualDesktop
             var wpPath = WinRegistry.GetWallPaperPathByGuid( VdId );
             if ( wpPath is null ) return new ValueTuple<bool, string, Color>( false, "", WinRegistry.GetBackColor() );
 
-            var (Exists, _) = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), Width, Height );
-            return new ValueTuple<bool, string, Color?>( Exists, wpPath, null );
+            var (exists, _) = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), Width, Height );
+            return new ValueTuple<bool, string, Color?>( exists, wpPath, null );
         }
 
         private static void DrawImage( PaintEventArgs e, Wallpaper wp, int width = 0, int height = 0 )
@@ -210,7 +210,7 @@ namespace VirtualSpace.VirtualDesktop
                 return;
             }
 
-            if ( wpInfo.isCached )
+            if ( wpInfo.isCached || VirtualDesktopManager.IsBatchCreate )
             {
                 DrawImage( e, WinRegistry.GetWallpaperByPath( wpInfo.path,
                     Width,
@@ -220,27 +220,16 @@ namespace VirtualSpace.VirtualDesktop
             }
             else
             {
-                if ( VirtualDesktopManager.IsBatchCreate )
+                var hWnd = Handle;
+                Task.Run( () =>
                 {
-                    DrawImage( e, WinRegistry.GetWallpaperByPath( wpInfo.path,
+                    WinRegistry.GetWallpaperByPath( wpInfo.path,
                         Width,
                         Height,
                         ConfigManager.GetCachePath(),
-                        ConfigManager.Configs.Cluster.VdwWallpaperQuality ) );
-                }
-                else
-                {
-                    var hWnd = Handle;
-                    Task.Run( () =>
-                    {
-                        WinRegistry.GetWallpaperByPath( wpInfo.path,
-                            Width,
-                            Height,
-                            ConfigManager.GetCachePath(),
-                            ConfigManager.Configs.Cluster.VdwWallpaperQuality ).Release();
-                        User32.PostMessage( hWnd, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
-                    } );
-                }
+                        ConfigManager.Configs.Cluster.VdwWallpaperQuality ).Release();
+                    User32.PostMessage( hWnd, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
+                } );
             }
         }
 
