@@ -131,5 +131,15 @@ namespace VirtualSpace.Helpers
 
         [DllImport( "user32.dll", SetLastError = true )]
         public static extern void SwitchToThisWindow( IntPtr hWnd, bool fAltTab );
+
+        [DllImport( "user32.dll" )]
+        public static extern bool ShowWindowAsync( IntPtr hWnd, int nCmdShow );
+
+        [DllImport( "user32.dll", SetLastError = true )]
+        public static extern bool RedrawWindow(
+            IntPtr            hWnd,
+            IntPtr            lprcUpdate,
+            IntPtr            hrgnUpdate,
+            RedrawWindowFlags flags );
     }
 }

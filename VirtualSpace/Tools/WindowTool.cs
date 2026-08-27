@@ -10,10 +10,12 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
+using VirtualSpace.Config;
 
 namespace VirtualSpace.Tools
 {
@@ -123,7 +125,7 @@ namespace VirtualSpace.Tools
         {
             try
             {
-                DoActivateWindow( hWnd );
+                WindowActivateHelper.RestoreAndActivateWindow( hWnd );
             }
             catch ( Exception ex )
             {
@@ -131,26 +133,74 @@ namespace VirtualSpace.Tools
             }
         }
 
-        private static void DoActivateWindow( IntPtr hWnd )
+        public static bool IsModalWindow( IntPtr hWnd )
+        {
+            // child windows cannot have owners
+            var style = User32.GetWindowLong( hWnd, (int)GetWindowLongFields.GWL_STYLE );
+            if ( ( style & (int)WindowStyles.WS_CHILD ) > 0 ) return false;
+
+            var hWndOwner = User32.GetWindow( hWnd, GetWindowType.GW_OWNER );
+            if ( hWndOwner == IntPtr.Zero ) return false; // not an owned window
+            if ( User32.IsWindowEnabled( hWndOwner ) ) return false; // owner is enabled
+            return true; // an owned window whose owner is disabled
+        }
+
+        public static bool IsPopupToolWindow( IntPtr hWnd )
+        {
+            var style = (uint)User32.GetWindowLong( hWnd, (int)GetWindowLongFields.GWL_STYLE );
+            return style == 0x96000000; // WS_POPUP | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS
+        }
+    }
+    
+    public static class WindowActivateHelper
+    {
+        public static void RestoreAndActivateWindow( IntPtr hWnd )
         {
             if ( hWnd == IntPtr.Zero || !User32.IsWindow( hWnd ) )
                 return;
 
-            _ = User32.IsIconic( hWnd )
-                ? User32.ShowWindow( hWnd, (short)ShowState.SW_RESTORE )
-                : User32.ShowWindow( hWnd, (short)ShowState.SW_SHOW );
+            // 1) 先恢复/显示 (跨线程场景 Async)
+            if ( User32.IsIconic( hWnd ) )
+                User32.ShowWindowAsync( hWnd, (short)ShowState.SW_RESTORE );
+            else
+                User32.ShowWindowAsync( hWnd, (short)ShowState.SW_SHOW );
 
-            if ( SysInfo.IsAdministrator )
-            {
-                User32.BringWindowToTop( hWnd );
-                User32.SetForegroundWindow( hWnd );
-                // User32.SetFocus( hWnd );
+            // 2) 给目标线程一点时间处理 WM_QUERYOPEN / WM_SIZE / WM_PAINT 链
+            Thread.Sleep( Manager.Configs.Cluster.ActivateWindowTimeout );
+
+            // 3) 尝试激活 (管理员路径和非管理员路径统一做，减少分叉差异)
+            TryActivate( hWnd );
+
+            // 4) 强制整棵子窗口树重绘 (关键)
+            User32.RedrawWindow(
+                hWnd,
+                IntPtr.Zero,
+                IntPtr.Zero,
+                RedrawWindowFlags.RDW_INVALIDATE |
+                RedrawWindowFlags.RDW_ALLCHILDREN |
+                RedrawWindowFlags.RDW_UPDATENOW |
+                RedrawWindowFlags.RDW_FRAME );
+            
+            if ( !Manager.Configs.Cluster.TryHarderActivateMinimizedWindow ) // 4.5) 上述代码足以应对大多数情况，若有极端情况则设置 TryHarderActivateMinimizedWindow=true
                 return;
-            }
+            
+            // 5) 兜底：再给一小段时间 + 再刷一次
+            Thread.Sleep( Manager.Configs.Cluster.ActivateWindowTimeout );
+            User32.RedrawWindow(
+                hWnd,
+                IntPtr.Zero,
+                IntPtr.Zero,
+                RedrawWindowFlags.RDW_INVALIDATE |
+                RedrawWindowFlags.RDW_ALLCHILDREN |
+                RedrawWindowFlags.RDW_UPDATENOW );
+        }
 
+        private static void TryActivate( IntPtr hWnd )
+        {
+            // 老 API，保留但降级为“可选尝试”
             try
             {
-                User32.SwitchToThisWindow( hWnd, true );
+                User32.SwitchToThisWindow( hWnd, true ); // 兼容旧行为
             }
             catch
             {
@@ -171,31 +221,12 @@ namespace VirtualSpace.Tools
             {
                 User32.BringWindowToTop( hWnd );
                 User32.SetForegroundWindow( hWnd );
-                // User32.SetFocus( hWnd );
             }
             finally
             {
                 if ( attached )
                     User32.AttachThreadInput( foregroundThread, targetThread, false );
             }
-        }
-
-        public static bool IsModalWindow( IntPtr hWnd )
-        {
-            // child windows cannot have owners
-            var style = User32.GetWindowLong( hWnd, (int)GetWindowLongFields.GWL_STYLE );
-            if ( ( style & (int)WindowStyles.WS_CHILD ) > 0 ) return false;
-
-            var hWndOwner = User32.GetWindow( hWnd, GetWindowType.GW_OWNER );
-            if ( hWndOwner == IntPtr.Zero ) return false; // not an owned window
-            if ( User32.IsWindowEnabled( hWndOwner ) ) return false; // owner is enabled
-            return true; // an owned window whose owner is disabled
-        }
-
-        public static bool IsPopupToolWindow( IntPtr hWnd )
-        {
-            var style = (uint)User32.GetWindowLong( hWnd, (int)GetWindowLongFields.GWL_STYLE );
-            return style == 0x96000000; // WS_POPUP | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS
         }
     }
 }
