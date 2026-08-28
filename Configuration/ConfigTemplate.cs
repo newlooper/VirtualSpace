@@ -10,6 +10,8 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System.Collections.Generic;
+using VirtualSpace.AppLogs;
+using VirtualSpace.Config.Converter;
 using VirtualSpace.Config.DataAnnotations;
 using VirtualSpace.Config.Entity;
 
@@ -25,8 +27,8 @@ namespace VirtualSpace.Config
         public Dictionary<string, KeyBinding>? KeyBindings { get; init; } = new()
         {
             { Const.Hotkey.RISE_VIEW, new KeyBinding { GhkCode                = "_+Ctrl+_+Shift+Tab", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW].MessageId } },
-            { Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP, new KeyBinding { GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP].MessageId } },
-            { Const.Hotkey.RISE_VIEW_FOR_CURRENT_VD, new KeyBinding { GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_CURRENT_VD].MessageId } },
+            { Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP, new KeyBinding { GhkCode = "", MessageId                   = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP].MessageId } },
+            { Const.Hotkey.RISE_VIEW_FOR_CURRENT_VD, new KeyBinding { GhkCode = "", MessageId                   = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_CURRENT_VD].MessageId } },
             {
                 Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD,
                 new KeyBinding { GhkCode = "", MessageId = Const.Hotkey.Info[Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD].MessageId }
@@ -59,6 +61,32 @@ namespace VirtualSpace.Config
             }
 
             return MouseActions.GetValueOrDefault( id, Config.MouseAction.Action.DoNothing );
+        }
+
+        public static void ConvertOldMouseAction( ConfigTemplate configs )
+        {
+            if ( configs.MouseActions.Count != 0 )
+                return;
+            
+            Logger.Info( "Missing MouseActions, Try find old version from configs." );
+            if ( configs.MouseAction is null || configs.MouseAction.Count == 0 )
+            {
+                Logger.Info( "Old version MouseActions not found, Using native default." );
+                configs.MouseActions = Config.MouseAction.Info;
+            }
+            else
+            {
+                Logger.Info( "Old version MouseActions found, try to convert to new version." );
+                try
+                {
+                    EntityConverter.ConvertMouseAction( configs.MouseAction, configs.MouseActions );
+                }
+                catch
+                {
+                    Logger.Info( "Convert MouseAction failed, Using native default." );
+                    configs.MouseActions = Config.MouseAction.Info;
+                }
+            }
         }
     }
 }

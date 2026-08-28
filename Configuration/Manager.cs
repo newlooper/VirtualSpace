@@ -19,7 +19,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
 using VirtualSpace.AppLogs;
-using VirtualSpace.Config.Converter;
 using VirtualSpace.Config.DataAnnotations;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Config.Events.Expression;
@@ -76,28 +75,7 @@ namespace VirtualSpace.Config
 
                 PropertyProtector.Walk( Configs );
 
-                if ( Configs.MouseActions.Count == 0 )
-                {
-                    Logger.Info( "Missing MouseActions, Try find old version from configs." );
-                    if ( Configs.MouseAction is null || Configs.MouseAction.Count == 0 )
-                    {
-                        Logger.Info( "Old version MouseActions not found, Using native default." );
-                        Configs.MouseActions = MouseAction.Info;
-                    }
-                    else
-                    {
-                        Logger.Info( "Old version MouseActions found, try to convert to new version." );
-                        try
-                        {
-                            EntityConverter.ConvertMouseAction( Configs.MouseAction, Configs.MouseActions );
-                        }
-                        catch
-                        {
-                            Logger.Info( "Convert MouseAction failed, Using native default." );
-                            Configs.MouseActions = MouseAction.Info;
-                        }
-                    }
-                }
+                ConfigTemplate.ConvertOldMouseAction( Configs );
 
                 Logger.Info( $"Settings File Loaded, Version: {Configs.Version}, Current Profile: {Configs.CurrentProfileName}" );
             }
