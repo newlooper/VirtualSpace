@@ -32,7 +32,9 @@ namespace VirtualSpace.Config
         public const string WindowsUiCoreWindow    = "Windows.UI.Core.CoreWindow";
         public const string TaskbarCreated         = "TaskbarCreated";
         public const string TaskbarWndClass        = "Shell_TrayWnd";
+#if USE_OLD_AC
         public const string WindowsCRLF            = "\r\n";
+#endif
         public const string OrganizationName       = AppIdentity.OrganizationName;
         public const string AppName                = AppIdentity.AppName;
         public const string HideWindowSplitter     = "🔙🔜";

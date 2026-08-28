@@ -167,7 +167,7 @@ namespace VirtualSpace.VirtualDesktop
                     }
                     else
                     {
-                        _ = User32.EnumWindows( WindowHandleFilter, 0 );
+                        _ = User32.EnumWindows( WindowRuleFilter, 0 );
                     }
 
                     if ( WaitHandle.WaitAny( new WaitHandle[] { StopEvent }, _runlevel * Const.OneSecond ) == 0 )
@@ -176,7 +176,7 @@ namespace VirtualSpace.VirtualDesktop
             }, TaskCreationOptions.LongRunning );
         }
 
-        private static bool WindowHandleFilter( IntPtr hWnd, int lParam )
+        private static bool WindowRuleFilter( IntPtr hWnd, int lParam )
         {
             if ( Conditions.WndHandleIgnoreListByRule.Contains( hWnd ) ||
                  Filters.WndHandleIgnoreListByError.Contains( hWnd ) ||
