@@ -28,7 +28,7 @@
 
         <cMenus:MenuContainer x:Name="MenuContainer" Grid.Row="0" />
 
-        <materialDesign:Card Grid.Row="1" materialDesign:ElevationAssist.Elevation="Dp2" Margin="10,10,10,12">
+        <materialDesign:Card Grid.Row="1" materialDesign:ElevationAssist.Elevation="Dp2" Margin="10,10,10,12" Background="{DynamicResource MaterialDesign.Brush.Background}">
             <TabControl x:Name="TcLogs" ContextMenuOpening="TabItem_OnContextMenuOpening">
                 <TabItem Header="{lex:Loc logTabInfo}" ContextMenu="{StaticResource ctx}">
                     <ScrollViewer>

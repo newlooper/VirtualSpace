@@ -55,7 +55,7 @@
 
         <commons:MenuContainer x:Name="MenuContainer" Grid.Row="0" />
 
-        <materialDesign:Card materialDesign:ElevationAssist.Elevation="Dp2" Grid.Row="1" Margin="10,10,10,0"
+        <materialDesign:Card materialDesign:ElevationAssist.Elevation="Dp2" Grid.Row="1" Margin="10,10,10,0" Background="{DynamicResource MaterialDesign.Brush.Background}"
                              Visibility="{Binding Path=IsBottomDrawerOpen, ElementName=DrawerHost, Converter={StaticResource DrawerStateMutexConverter}}">
             <ListView x:Name="RuleList" SelectionMode="Single"
                       SelectionChanged="RuleList_OnSelectionChanged"

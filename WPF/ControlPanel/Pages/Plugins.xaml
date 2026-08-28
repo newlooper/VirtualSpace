@@ -45,7 +45,7 @@
                         Command="{Binding RefreshCommand}"
                         Style="{StaticResource MaterialDesignOutlinedButton}" />
             </StackPanel>
-            <materialDesign:Card Grid.Row="1" materialDesign:ElevationAssist.Elevation="Dp2" Margin="10,10,10,12">
+            <materialDesign:Card Grid.Row="1" materialDesign:ElevationAssist.Elevation="Dp2" Margin="10,10,10,12" Background="{DynamicResource MaterialDesign.Brush.Background}">
                 <ListView x:Name="PluginsList" ItemsSource="{Binding Plugins}">
                     <ListView.View>
                         <GridView>
