@@ -16,8 +16,10 @@ namespace VirtualSpace
     {
         public void BringToTop();
         public void SetMainWindowHandle( IntPtr handle );
+#if USE_OLD_AC
         public void Quit();
         public void RenderDesktopArrangementButtons( string selectedDa );
-        public void CreateRuleFromWindowHandle( IntPtr      handle );
+#endif
+        public void CreateRuleFromWindowHandle( IntPtr handle );
     }
 }

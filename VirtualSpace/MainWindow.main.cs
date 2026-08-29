@@ -15,7 +15,6 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using VirtualSpace.Config;
-using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
 using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop;
@@ -46,7 +45,13 @@ namespace VirtualSpace
             Title   = Const.Window.VD_FRAME_TITLE;
         }
 
-        public static IAppController AcForm => _instance._acForm;
+        public static IAppController AcForm
+        {
+            get => _instance._acForm;
+#if USE_OLD_AC
+            private set => _instance._acForm = value;
+#endif
+        }
 
         public IntPtr Handle { get; private set; }
 

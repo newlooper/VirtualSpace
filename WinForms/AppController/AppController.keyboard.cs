@@ -20,14 +20,16 @@ namespace VirtualSpace
 {
     public partial class AppController
     {
+        private const string WindowsCRLF = "\r\n";
+
         private void tv_keyboard_AfterSelect( object sender, TreeViewEventArgs e )
         {
             tb_hk_tip.Clear();
 
-            cb_hk_win.Checked = false;
-            cb_hk_ctrl.Checked = false;
-            cb_hk_alt.Checked = false;
-            cb_hk_shift.Checked = false;
+            cb_hk_win.Checked       = false;
+            cb_hk_ctrl.Checked      = false;
+            cb_hk_alt.Checked       = false;
+            cb_hk_shift.Checked     = false;
             cb_hk_key.SelectedIndex = -1;
 
             tc_Keyboard.Visible = false;
@@ -42,8 +44,8 @@ namespace VirtualSpace
                 kbInConfig[hotkeyId] = kb;
             }
 
-            lb_hk_func.Text = e.Node.FullPath;
-            lb_hk_extra.Text = Const.Hotkey.GetHotkeyExtra( hotkeyId );
+            lb_hk_func.Text     = e.Node.FullPath;
+            lb_hk_extra.Text    = Const.Hotkey.GetHotkeyExtra( hotkeyId );
             tc_Keyboard.Visible = true;
 
             if ( kbInConfig[hotkeyId].GhkCode == "" ) return;
@@ -51,9 +53,9 @@ namespace VirtualSpace
             var arr = kbInConfig[hotkeyId].GhkCode.Split( Const.Hotkey.SPLITTER );
             if ( arr.Length == 5 )
             {
-                cb_hk_win.Checked = arr[0] != Const.Hotkey.NONE;
-                cb_hk_ctrl.Checked = arr[1] != Const.Hotkey.NONE;
-                cb_hk_alt.Checked = arr[2] != Const.Hotkey.NONE;
+                cb_hk_win.Checked   = arr[0] != Const.Hotkey.NONE;
+                cb_hk_ctrl.Checked  = arr[1] != Const.Hotkey.NONE;
+                cb_hk_alt.Checked   = arr[2] != Const.Hotkey.NONE;
                 cb_hk_shift.Checked = arr[3] != Const.Hotkey.NONE;
 
                 cb_hk_key.Text = arr[4];
@@ -99,12 +101,12 @@ namespace VirtualSpace
             }
             else
             {
-                ghkCode = ( cb_hk_win.Checked ? Const.Hotkey.WIN : Const.Hotkey.NONE ) + Const.Hotkey.SPLITTER;
+                ghkCode =  ( cb_hk_win.Checked ? Const.Hotkey.WIN : Const.Hotkey.NONE ) + Const.Hotkey.SPLITTER;
                 ghkCode += ( cb_hk_ctrl.Checked ? Const.Hotkey.CTRL : Const.Hotkey.NONE ) + Const.Hotkey.SPLITTER;
                 ghkCode += ( cb_hk_alt.Checked ? Const.Hotkey.ALT : Const.Hotkey.NONE ) + Const.Hotkey.SPLITTER;
                 ghkCode += ( cb_hk_shift.Checked ? Const.Hotkey.SHIFT : Const.Hotkey.NONE ) + Const.Hotkey.SPLITTER;
 
-                km = cb_hk_win.Checked ? GlobalHotKey.KeyModifiers.WindowsKey : GlobalHotKey.KeyModifiers.None;
+                km =  cb_hk_win.Checked ? GlobalHotKey.KeyModifiers.WindowsKey : GlobalHotKey.KeyModifiers.None;
                 km |= cb_hk_ctrl.Checked ? GlobalHotKey.KeyModifiers.Ctrl : GlobalHotKey.KeyModifiers.None;
                 km |= cb_hk_alt.Checked ? GlobalHotKey.KeyModifiers.Alt : GlobalHotKey.KeyModifiers.None;
                 km |= cb_hk_shift.Checked ? GlobalHotKey.KeyModifiers.Shift : GlobalHotKey.KeyModifiers.None;
@@ -119,10 +121,10 @@ namespace VirtualSpace
         {
             var hotkeyId = tv_keyboard.SelectedNode.Name;
             var kb       = Const.Hotkey.GetKeyBinding( hotkeyId );
-            kb.GhkCode = ghk.keyCode;
+            kb.GhkCode                            = ghk.keyCode;
             Manager.Configs.KeyBindings[hotkeyId] = kb;
             Manager.Save( reason: kb.GhkCode.Replace( Const.Hotkey.NONE + Const.Hotkey.SPLITTER, "" ), reasonName: hotkeyId );
-            tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.SettingsSaved" ) + Const.WindowsCRLF;
+            tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.SettingsSaved" ) + WindowsCRLF;
         }
 
         private void RegHotkey( (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) ghk )
@@ -142,22 +144,22 @@ namespace VirtualSpace
                     ghk.keyModifiers,
                     KeyInterop.VirtualKeyFromKey( Enum.Parse<Key>( cb_hk_key.SelectedItem.ToString() ) ) ) )
             {
-                tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.Reg.Success" ) + Const.WindowsCRLF;
+                tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.Reg.Success" ) + WindowsCRLF;
             }
             else
             {
-                tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.Reg.Fail" ) + Const.WindowsCRLF;
+                tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.Reg.Fail" ) + WindowsCRLF;
             }
         }
 
         private void ClearHotkey()
         {
-            cb_hk_win.Checked = false;
-            cb_hk_ctrl.Checked = false;
-            cb_hk_alt.Checked = false;
-            cb_hk_shift.Checked = false;
-            cb_hk_key.SelectedIndex = -1;
-            tb_hk_tip.Text += Agent.Langs.GetString( "KB.Hotkey.Cleared" ) + Const.WindowsCRLF;
+            cb_hk_win.Checked       =  false;
+            cb_hk_ctrl.Checked      =  false;
+            cb_hk_alt.Checked       =  false;
+            cb_hk_shift.Checked     =  false;
+            cb_hk_key.SelectedIndex =  -1;
+            tb_hk_tip.Text          += Agent.Langs.GetString( "KB.Hotkey.Cleared" ) + WindowsCRLF;
         }
 
         private void cb_hk_key_SelectedIndexChanged( object sender, EventArgs e )

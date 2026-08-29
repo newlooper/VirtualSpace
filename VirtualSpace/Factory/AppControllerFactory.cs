@@ -16,20 +16,16 @@ namespace VirtualSpace.Factory
 {
     public static class AppControllerFactory
     {
-        public static IAppController Create( string name = "WPF", Collection<ResourceDictionary>? mergedDictionaries = null )
+        public static IAppController Create( Collection<ResourceDictionary>? mergedDictionaries = null )
         {
-            switch ( name )
-            {
-                case "WinForm":
-                // return new AppController();
-                case "WPF":
-                    mergedDictionaries?.Add( ExportResourceDictionary.Instance );
-                    var mw = new ControlPanel.MainWindow();
-                    mw.ForceLoad();
-                    return mw;
-                default:
-                    return null!;
-            }
+#if USE_OLD_AC
+            return new AppController();
+#else
+            mergedDictionaries?.Add( ExportResourceDictionary.Instance );
+            var mw = new ControlPanel.MainWindow();
+            mw.ForceLoad();
+            return mw;
+#endif
         }
     }
 }

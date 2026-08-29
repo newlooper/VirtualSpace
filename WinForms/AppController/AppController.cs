@@ -217,7 +217,7 @@ namespace VirtualSpace
 
         private void openLogFolderToolStripMenuItem_Click( object sender, EventArgs e )
         {
-            var logFolder = Path.Combine( ConfigManager.AppRootFolder, "Logs" );
+            var logFolder = Path.Combine( ConfigManager.ConfigRootFolder, "Logs" );
             if ( Directory.Exists( logFolder ) )
             {
                 var startInfo = new ProcessStartInfo

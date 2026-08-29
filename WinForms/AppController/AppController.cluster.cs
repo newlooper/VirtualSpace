@@ -143,7 +143,7 @@ namespace VirtualSpace
 
         private void chb_RunOnStartup_VisibleChanged( object sender, EventArgs e )
         {
-            chb_RunOnStartup.Checked = TaskSchedulerHelper.IsTaskExistsByName( Const.AppName );
+            chb_RunOnStartup.Checked = TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName );
         }
 
         private void llb_TaskScheduler_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
