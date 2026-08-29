@@ -25,7 +25,8 @@ namespace VirtualSpace.VirtualDesktop
             "SysDragImage",
             "DuiMenuWnd",
             "PerryShadowWnd",
-            "SysShadow"
+            "SysShadow",
+            "Xaml_WindowedPopupClass"
         };
 
         public static readonly string[] WndTitleIgnoreList =
