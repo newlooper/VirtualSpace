@@ -18,8 +18,8 @@
         <AssemblyName>Cube3D</AssemblyName>
     </PropertyGroup>
 
-    <Import Project="$(MSBuildThisFileDirectory).build\AutoVersion.props" />
-    <Import Project="$(MSBuildThisFileDirectory).build\ExcludeHostSharedDeps.targets" />
+    <Import Project="$(MSBuildThisFileDirectory)..\.build\AutoVersion.props" />
+    <Import Project="$(MSBuildThisFileDirectory)..\.build\ExcludeHostSharedDeps.targets" />
 
     <ItemGroup>
         <Compile Remove="Properties\**" />
@@ -45,23 +45,23 @@
         <Folder Include="Helpers\" />
     </ItemGroup>
 
-    <!-- Runs after host-shared deps are stripped from OutDir so Debug Plugins\Cube3D never contains them. -->
+    <!-- Runs after host-shared deps are stripped from OutDir so Debug Plugins\$(MSBuildProjectName) never contains them. -->
     <Target Name="CopyToHostPlugins" AfterTargets="RemoveHostSharedAssembliesFromOutput">
         <PropertyGroup>
             <_HostOutDir>$(MSBuildThisFileDirectory)..\..\VirtualSpace\bin\$(Configuration)\$(TfmNet10Windows)\</_HostOutDir>
-            <_PluginDest>$(_HostOutDir)Plugins\Cube3D\</_PluginDest>
+            <_PluginDest>$(_HostOutDir)Plugins\$(MSBuildProjectName)\</_PluginDest>
             <_CopyFrom>$([MSBuild]::EnsureTrailingSlash('$(OutDir)'))</_CopyFrom>
         </PropertyGroup>
         <ItemGroup>
             <_PluginFiles Include="$(_CopyFrom)*.*"
                           Exclude="$(_CopyFrom)*.pdb;$(_CopyFrom)*.deps.json;$(_CopyFrom)MaterialDesign*.dll;$(_CopyFrom)Microsoft.Xaml.Behaviors.dll;$(_CopyFrom)WPFLocalizeExtension.dll;$(_CopyFrom)XAMLMarkupExtensions.dll" />
-            <_StaleShared Include="$(_PluginDest)%(Cube3DHostSharedAssembly.Identity).dll" />
+            <_StaleShared Include="$(_PluginDest)%(HostSharedAssembly.Identity).dll" />
             <_StaleSatellites Include="$(_PluginDest)**\*.resources.dll" />
         </ItemGroup>
         <MakeDir Directories="$(_PluginDest)" />
         <Delete Files="@(_StaleShared);@(_StaleSatellites)" TreatErrorsAsWarnings="true" />
         <Copy SourceFiles="@(_PluginFiles)" DestinationFolder="$(_PluginDest)" SkipUnchangedFiles="true" />
-        <Message Text="Copied Cube3D plugin to $(_PluginDest) (host-shared deps excluded: @(Cube3DHostSharedAssembly))"
+        <Message Text="Copied $(MSBuildProjectName) plugin to $(_PluginDest) (host-shared deps excluded: @(HostSharedAssembly))"
                  Importance="high" />
     </Target>
 

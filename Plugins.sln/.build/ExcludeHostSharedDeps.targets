@@ -1,28 +1,28 @@
 <Project>
     <!--
       Assemblies that ship with the host (ControlPanel) and are shared via
-      PluginLoadContext → Default ALC. Keep them out of Cube3D OutDir / Plugins\Cube3D
+      PluginLoadContext → Default ALC. Keep them out of plugin OutDir / Plugins\$(MSBuildProjectName)
       so Debug and Publish both verify host borrowing (same idea as
       VirtualSpace/.build/EmbeddedVDLib.targets excluding VirtualDesktop* from publish).
     -->
     <ItemGroup>
-        <Cube3DHostSharedAssembly Include="MaterialDesignThemes.Wpf" />
-        <Cube3DHostSharedAssembly Include="MaterialDesignColors" />
-        <Cube3DHostSharedAssembly Include="Microsoft.Xaml.Behaviors" />
-        <Cube3DHostSharedAssembly Include="WPFLocalizeExtension" />
-        <Cube3DHostSharedAssembly Include="XAMLMarkupExtensions" />
+        <HostSharedAssembly Include="MaterialDesignThemes.Wpf" />
+        <HostSharedAssembly Include="MaterialDesignColors" />
+        <HostSharedAssembly Include="Microsoft.Xaml.Behaviors" />
+        <HostSharedAssembly Include="WPFLocalizeExtension" />
+        <HostSharedAssembly Include="XAMLMarkupExtensions" />
     </ItemGroup>
 
     <Target Name="RemoveHostSharedAssembliesFromOutput" AfterTargets="CopyFilesToOutputDirectory">
         <PropertyGroup>
-            <_Cube3DOutDir>$([MSBuild]::EnsureTrailingSlash('$(OutDir)'))</_Cube3DOutDir>
+            <_PluginOutDir>$([MSBuild]::EnsureTrailingSlash('$(OutDir)'))</_PluginOutDir>
         </PropertyGroup>
         <ItemGroup>
-            <_HostSharedOut Include="$(_Cube3DOutDir)%(Cube3DHostSharedAssembly.Identity).dll" />
-            <_HostSharedOut Include="$(_Cube3DOutDir)%(Cube3DHostSharedAssembly.Identity).pdb" />
+            <_HostSharedOut Include="$(_PluginOutDir)%(HostSharedAssembly.Identity).dll" />
+            <_HostSharedOut Include="$(_PluginOutDir)%(HostSharedAssembly.Identity).pdb" />
         </ItemGroup>
         <Delete Files="@(_HostSharedOut)" TreatErrorsAsWarnings="true" />
-        <Message Text="Cube3D: stripped host-shared deps from OutDir (must resolve from host): @(Cube3DHostSharedAssembly)"
+        <Message Text="$(MSBuildProjectName): stripped host-shared deps from OutDir (must resolve from host): @(HostSharedAssembly)"
                  Importance="high" />
     </Target>
 
