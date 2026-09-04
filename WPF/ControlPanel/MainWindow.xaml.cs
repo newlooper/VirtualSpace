@@ -70,6 +70,8 @@ public partial class MainWindow : Window, IAppController
 
         Topmost = false;
         Topmost = true;
+        
+        User32.ClipCursor( IntPtr.Zero );
     }
 
     public void SetMainWindowHandle( IntPtr handle )

@@ -193,12 +193,12 @@ namespace VirtualSpace
         {
             var cells = _instance.MainGrid.Children;
             var index = -1;
-            var (ScaleX, ScaleY) = SysInfo.Dpi;
+            var (scaleX, scaleY) = SysInfo.Dpi;
             for ( var i = 0; i < cells.Count; i++ )
             {
                 var topLeft = cells[i].TranslatePoint( new Point(), _instance );
-                topLeft = new Point( topLeft.X * ScaleX, topLeft.Y * ScaleY );
-                var bottomRight = new Point( topLeft.X + cells[i].RenderSize.Width * ScaleX, topLeft.Y + cells[i].RenderSize.Height * ScaleY );
+                topLeft = new Point( topLeft.X * scaleX, topLeft.Y * scaleY );
+                var bottomRight = new Point( topLeft.X + cells[i].RenderSize.Width * scaleX, topLeft.Y + cells[i].RenderSize.Height * scaleY );
                 var rect        = new Rect( topLeft, bottomRight );
                 if ( rect.Contains( p ) )
                 {

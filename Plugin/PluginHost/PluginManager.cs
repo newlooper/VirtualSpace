@@ -17,8 +17,8 @@ namespace VirtualSpace.Plugin
 {
     public static class PluginManager
     {
-        public const string PluginInfoFile = "plugin.json";
-        public const string SettingsFile   = "settings.json";
+        public const  string PluginInfoFile = "plugin.json";
+        private const string SETTINGS_FILE  = "settings.json";
 
         public static T? LoadFromJson<T>( string infoFile )
         {
@@ -65,10 +65,10 @@ namespace VirtualSpace.Plugin
             if ( !File.Exists( pluginFile ) )
                 SavePluginInfo( info );
 
-            var settingsFile = Path.Combine( dir, SettingsFile );
+            var settingsFile = Path.Combine( dir, SETTINGS_FILE );
             if ( File.Exists( settingsFile ) || string.IsNullOrEmpty( info.Folder ) ) return;
 
-            var bundled = Path.Combine( info.Folder, SettingsFile );
+            var bundled = Path.Combine( info.Folder, SETTINGS_FILE );
             if ( File.Exists( bundled ) )
                 File.Copy( bundled, settingsFile );
         }

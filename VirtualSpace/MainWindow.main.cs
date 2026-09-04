@@ -160,6 +160,8 @@ namespace VirtualSpace
             _instance.Left = 0;
             _instance.Top  = 0;
             _instance.Show();
+            // User32.SetForegroundWindow( _instance.Handle );
+            User32.ClipCursor( IntPtr.Zero );
         }
 
         private static void CheckScreenArea()

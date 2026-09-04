@@ -19,8 +19,8 @@ namespace VirtualSpace.AppLogs
     {
         private static readonly LoggingLevelSwitch  LevelSwitch   = new( LogEventLevel.Verbose );
         public const            string              PROP_IS_EVENT = "IsEvent";
-        public static           Serilog.Core.Logger RootLogger    = null!;
-        public static           string              LogsPath { get; private set; } = "";
+        public static           Serilog.Core.Logger RootLogger { get; private set; } = null!;
+        public static           string              LogsPath   { get; private set; } = "";
 
         public static void InitLogger( string folder )
         {

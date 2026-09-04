@@ -23,7 +23,7 @@ namespace VirtualSpace.AppLogs
     public static class Logger
     {
         public static readonly Channel<LogMessage> LogChannel = Channel.CreateUnbounded<LogMessage>();
-        public static          bool                ShowLogsInGui { get; set; } = false;
+        public static          bool                ShowLogsInGui { get; set; }
 
         public static void Verbose( string str )
         {
@@ -108,7 +108,7 @@ namespace VirtualSpace.AppLogs
         private static bool ToastWindowFilter( IntPtr hWnd, int lParam )
         {
             var sbTitle = new StringBuilder( 128 );
-            User32.GetWindowText( hWnd, sbTitle, sbTitle.Capacity );
+            _ = User32.GetWindowText( hWnd, sbTitle, sbTitle.Capacity );
             var title = sbTitle.ToString();
 
             var sbCName = new StringBuilder( 512 );
@@ -162,7 +162,7 @@ namespace VirtualSpace.AppLogs
             [DllImport( "user32.dll" )]
             public static extern int GetWindowText( IntPtr hWnd, StringBuilder buf, int nMaxCount );
 
-            [DllImport( "user32.dll", SetLastError = true, CharSet = CharSet.Auto )]
+            [DllImport( "user32.dll", CharSet = CharSet.Auto, SetLastError = false )]
             public static extern int GetClassName( IntPtr hWnd, StringBuilder lpClassName, int nMaxCount );
 
             [DllImport( "user32.dll" )]
@@ -172,11 +172,11 @@ namespace VirtualSpace.AppLogs
 
     public class NotifyObject
     {
-        public string           Title      { get; set; } = "";
-        public string           Message    { get; set; } = "";
+        public string           Title      { get; init; } = string.Empty;
+        public string           Message    { get; init; } = string.Empty;
         public NotificationType Type       { get; set; }
         public SolidColorBrush? Background { get; set; }
         public SolidColorBrush? Foreground { get; set; }
-        public TimeSpan         ExpTime    { get; set; } = TimeSpan.FromSeconds( 10 );
+        public TimeSpan         ExpTime    { get; init; } = TimeSpan.FromSeconds( 10 );
     }
 }

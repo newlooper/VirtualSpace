@@ -15,19 +15,19 @@ namespace Cube3D.Config
 {
     public class SettingsManager
     {
-        private const  string    PluginSettingFile = "settings.json";
-        private static string    _dataDirectory    = string.Empty;
-        public static  Settings  Settings          { get; private set; } = new();
+        private const  string   PLUGIN_SETTING_FILE = "settings.json";
+        private static string   _dataDirectory      = string.Empty;
+        public static  Settings Settings { get; private set; } = new();
 
         public static void Initialize( string dataDirectory )
         {
             _dataDirectory = dataDirectory;
             Directory.CreateDirectory( _dataDirectory );
 
-            var dest = Path.Combine( _dataDirectory, PluginSettingFile );
+            var dest = Path.Combine( _dataDirectory, PLUGIN_SETTING_FILE );
             if ( !File.Exists( dest ) )
             {
-                var bundled = Path.Combine( Path.GetDirectoryName( typeof( SettingsManager ).Assembly.Location ) ?? string.Empty, PluginSettingFile );
+                var bundled = Path.Combine( Path.GetDirectoryName( typeof( SettingsManager ).Assembly.Location ) ?? string.Empty, PLUGIN_SETTING_FILE );
                 if ( File.Exists( bundled ) )
                     File.Copy( bundled, dest );
                 else
@@ -48,7 +48,7 @@ namespace Cube3D.Config
 
         public static void SaveJson( string file = null )
         {
-            file ??= Path.Combine( _dataDirectory, PluginSettingFile );
+            file ??= Path.Combine( _dataDirectory, PLUGIN_SETTING_FILE );
             Directory.CreateDirectory( Path.GetDirectoryName( file )! );
             var contents = JsonSerializer.SerializeToUtf8Bytes( Settings, new JsonSerializerOptions { WriteIndented = true } );
             File.WriteAllBytes( file, contents );

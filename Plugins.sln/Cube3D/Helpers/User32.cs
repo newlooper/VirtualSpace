@@ -153,7 +153,7 @@ namespace VirtualSpace.Helpers
         [DllImport( "user32.dll", EntryPoint = "SetWindowLongPtr" )]
         private static extern IntPtr SetWindowLongPtr64( HandleRef hWnd, int nIndex, IntPtr dwNewLong );
 
-        [DllImport( "user32.dll", SetLastError = true )]
+        [DllImport( "user32.dll", SetLastError = false )]
         public static extern bool SetWindowPos( IntPtr hWnd, SpecialWindowHandles hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags );
 
         [DllImport( "user32.dll" )]

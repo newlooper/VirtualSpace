@@ -12,7 +12,7 @@ namespace VirtualSpace.Config.Entity
 {
     public class LogConfig
     {
-        public bool   ShowLogsInGui { get; set; } = false;
+        public bool   ShowLogsInGui { get; set; }
         public string LogLevel      { get; set; }
     }
 }

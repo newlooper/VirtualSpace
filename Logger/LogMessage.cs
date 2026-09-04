@@ -13,8 +13,8 @@ namespace VirtualSpace.AppLogs
 {
     public class LogMessage
     {
-        public string Type    { get; set; }
-        public string Message { get; set; }
+        public string Type    { get; private init; }
+        public string Message { get; private init; }
 
         public static LogMessage CreateMessage( string type, string msg )
         {

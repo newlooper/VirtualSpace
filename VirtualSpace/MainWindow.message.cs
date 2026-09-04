@@ -18,7 +18,6 @@ using System.Windows.Input;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Config;
-using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
 using VirtualSpace.PluginContracts;

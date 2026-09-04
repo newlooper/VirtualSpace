@@ -220,7 +220,7 @@ namespace VirtualSpace.Config.Events.Expression
             return _readOptions ??= new JsonSerializerOptions();
         }
 
-        public static JsonSerializerOptions GetJsonSerializerOptions()
+        private static JsonSerializerOptions GetJsonSerializerOptions()
         {
             return _writeOptions ??= new JsonSerializerOptions
             {
