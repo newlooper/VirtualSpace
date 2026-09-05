@@ -11,7 +11,6 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using ControlPanel.ViewModels;
@@ -43,10 +42,10 @@ public partial class RuleEditorWindow
             Action  = new Behavior()
         };
 
-        var sbTitle = new StringBuilder( Const.WindowTitleMaxLength );
-        _                                        = User32.GetWindowText( handle, sbTitle, sbTitle.Capacity );
+        var titleBuf = new char[Const.WindowTitleMaxLength];
+        var titleLen = User32.GetWindowText( handle, titleBuf, titleBuf.Length );
         _instance.RuleEditor.chb_Title.IsChecked = true;
-        _instance.RuleEditor.tb_Title.Text       = sbTitle.ToString();
+        _instance.RuleEditor.tb_Title.Text       = titleLen <= 0 ? string.Empty : new string( titleBuf, 0, titleLen );
 
         _ = User32.GetWindowThreadProcessId( handle, out var pId );
         var process = Process.GetProcessById( pId );
@@ -73,9 +72,9 @@ public partial class RuleEditorWindow
             _instance.RuleEditor.tb_CommandLine.Text       = ex.Message;
         }
 
-        var sbCName = new StringBuilder( Const.WindowClassMaxLength );
-        _                                     = User32.GetClassName( handle, sbCName, sbCName.Capacity );
-        _instance.RuleEditor.tb_WndClass.Text = sbCName.ToString();
+        var classBuf = new char[Const.WindowClassMaxLength];
+        var classLen = User32.GetClassName( handle, classBuf, classBuf.Length );
+        _instance.RuleEditor.tb_WndClass.Text = classLen <= 0 ? string.Empty : new string( classBuf, 0, classLen );
 
         var allScreens = Screen.AllScreens;
         var screen     = Screen.FromHandle( handle );

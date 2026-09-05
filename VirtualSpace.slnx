@@ -7,6 +7,7 @@
     <Project Path="Bridge/Bridge.csproj" />
     <Project Path="Configuration/Configuration.csproj" />
     <Project Path="Helpers/Helpers.csproj" />
+    <Project Path="Interop/Interop.csproj" />
     <Project Path="Ipc/Commons/Ipc.csproj" />
     <Project Path="Ipc/IpcServer/IpcServer.csproj" />
     <Project Path="LinqExpressionBuilder/LinqExpressionBuilder.csproj" />

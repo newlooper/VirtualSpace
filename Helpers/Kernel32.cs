@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace VirtualSpace.Helpers
 {
-    public static class Kernel32
+    public static partial class Kernel32
     {
-        [DllImport( "kernel32.dll", CharSet = CharSet.Unicode, SetLastError = false )]
-        public static extern IntPtr GetModuleHandle( string lpModuleName );
+        [LibraryImport( "kernel32.dll", EntryPoint = "GetModuleHandleW", StringMarshalling = StringMarshalling.Utf16 )]
+        public static partial IntPtr GetModuleHandle( string lpModuleName );
     }
 }

@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace VirtualSpace.Helpers
 {
-    public static class VisualEffects
+    public static partial class VisualEffects
     {
         public enum AccentState
         {
@@ -22,8 +22,8 @@ namespace VirtualSpace.Helpers
             // ...
         }
 
-        [DllImport( "user32.dll" )]
-        public static extern int SetWindowCompositionAttribute( IntPtr hWnd, ref WindowCompositionAttributeData data );
+        [LibraryImport( "user32.dll" )]
+        public static partial int SetWindowCompositionAttribute( IntPtr hWnd, ref WindowCompositionAttributeData data );
 
         [StructLayout( LayoutKind.Sequential )]
         public struct AccentPolicy

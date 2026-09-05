@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
@@ -24,7 +23,7 @@ namespace VirtualSpace.VirtualDesktop
     internal static partial class VirtualDesktopManager
     {
         private static readonly List<VisibleWindow>        VisibleWindows   = new();
-        private static readonly StringBuilder              SbWinInfo        = new( Const.WindowTitleMaxLength );
+        private static readonly char[]                     WinInfoBuffer    = new char[Const.WindowTitleMaxLength];
         private static          List<VirtualDesktopWindow> _virtualDesktops = new();
         public static           Guid                       LastDesktopId    = Guid.Empty;
         public static           bool                       IsBatchCreate { get; set; }
@@ -37,14 +36,14 @@ namespace VirtualSpace.VirtualDesktop
                  Filters.IsCloaked( hWnd ) )
                 return true;
 
-            _ = User32.GetWindowText( hWnd, SbWinInfo, SbWinInfo.Capacity );
-            var title = SbWinInfo.ToString();
+            var titleLen = User32.GetWindowText( hWnd, WinInfoBuffer, WinInfoBuffer.Length );
+            var title    = titleLen <= 0 ? string.Empty : new string( WinInfoBuffer, 0, titleLen );
             if ( string.IsNullOrEmpty( title ) ||
                  Filters.WndTitleIgnoreList.Contains( title ) )
                 return true;
 
-            _ = User32.GetClassName( hWnd, SbWinInfo, SbWinInfo.Capacity );
-            var classname = SbWinInfo.ToString();
+            var classLen  = User32.GetClassName( hWnd, WinInfoBuffer, WinInfoBuffer.Length );
+            var classname = classLen <= 0 ? string.Empty : new string( WinInfoBuffer, 0, classLen );
             if ( Filters.WndClsIgnoreList.Contains( classname ) )
                 return true;
 

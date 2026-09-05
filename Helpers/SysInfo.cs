@@ -29,7 +29,7 @@ using VirtualSpace.AppLogs;
 
 namespace VirtualSpace.Helpers
 {
-    public static class SysInfo
+    public static partial class SysInfo
     {
         public enum WinAppsTheme
         {
@@ -130,7 +130,7 @@ namespace VirtualSpace.Helpers
     /// <summary>
     ///     https://stackoverflow.com/questions/52875087/getting-device-friendly-name-incorrect-result
     /// </summary>
-    public static class ScreenInterrogatory
+    public static partial class ScreenInterrogatory
     {
         private const int ERROR_SUCCESS = 0;
 
@@ -423,10 +423,11 @@ namespace VirtualSpace.Helpers
 
         #region DLLImports
 
-        [DllImport( "user32.dll" )]
-        public static extern int GetDisplayConfigBufferSizes(
+        [LibraryImport( "user32.dll" )]
+        public static partial int GetDisplayConfigBufferSizes(
             QUERY_DEVICE_CONFIG_FLAGS flags, out uint numPathArrayElements, out uint numModeInfoArrayElements );
 
+        // Nested bool / complex layout: keep runtime marshalling via DllImport.
         [DllImport( "user32.dll" )]
         public static extern int QueryDisplayConfig(
             QUERY_DEVICE_CONFIG_FLAGS flags,
@@ -435,6 +436,7 @@ namespace VirtualSpace.Helpers
             IntPtr                    currentTopologyId
         );
 
+        // ByValTStr fields are not supported by LibraryImport marshalling.
         [DllImport( "user32.dll" )]
         public static extern int DisplayConfigGetDeviceInfo( ref DISPLAYCONFIG_TARGET_DEVICE_NAME deviceName );
 

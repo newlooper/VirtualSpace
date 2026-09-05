@@ -15,7 +15,6 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using VirtualSpace.Config;
@@ -181,7 +180,7 @@ namespace VirtualSpace.VirtualDesktop
                 VirtualDesktopManager.RefreshThumbs( h, mi.Self );
             }
 
-            var sb = new StringBuilder( Const.WindowTitleMaxLength );
+            var titleBuf = new char[Const.WindowTitleMaxLength];
             foreach ( var handle in from handle in Filters.WndHandleIgnoreListByManual
                      where User32.IsWindow( handle )
                      where DesktopWrapper.IsWindowPinned( handle ) ||
@@ -192,8 +191,8 @@ namespace VirtualSpace.VirtualDesktop
                 _ = User32.GetWindowThreadProcessId( handle, out var pId );
                 var process = Process.GetProcessById( pId );
 
-                _ = User32.GetWindowText( handle, sb, sb.Capacity );
-                var title = sb.ToString();
+                var titleLen = User32.GetWindowText( handle, titleBuf, titleBuf.Length );
+                var title    = titleLen <= 0 ? string.Empty : new string( titleBuf, 0, titleLen );
 
                 var item = new ToolStripMenuItem( $"[{title}] of {process.ProcessName}(.exe){Const.HideWindowSplitter}{handle}" );
                 item.Click += OnUnHideWindow;

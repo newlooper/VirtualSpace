@@ -8,6 +8,7 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
+#if USE_OLD_AC
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -29,3 +30,4 @@ namespace VirtualSpace.Helpers
         }
     }
 }
+#endif

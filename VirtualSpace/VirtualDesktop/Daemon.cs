@@ -14,7 +14,6 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -36,7 +35,7 @@ namespace VirtualSpace.VirtualDesktop
         private static readonly ManualResetEvent  CanRun    = new( false );
         private static readonly ManualResetEvent  StopEvent = new( false );
         private static          Task?             _daemonTask;
-        private static readonly StringBuilder     SbWinInfo              = new( Const.WindowTitleMaxLength );
+        private static readonly char[]            WinInfoBuffer          = new char[Const.WindowTitleMaxLength];
         private static readonly Channel<Behavior> ActionConsumer         = Channels.ActionChannel;
         private static readonly Channel<Window>   VisibleWindowsProducer = Channels.VisibleWindowsChannel;
 
@@ -184,14 +183,14 @@ namespace VirtualSpace.VirtualDesktop
                  Filters.IsCloaked( hWnd ) )
                 return true;
 
-            _ = User32.GetWindowText( hWnd, SbWinInfo, SbWinInfo.Capacity );
-            var title = SbWinInfo.ToString();
+            var titleLen = User32.GetWindowText( hWnd, WinInfoBuffer, WinInfoBuffer.Length );
+            var title    = titleLen <= 0 ? string.Empty : new string( WinInfoBuffer, 0, titleLen );
             if ( string.IsNullOrEmpty( title ) ||
                  Filters.WndTitleIgnoreList.Contains( title ) )
                 return true;
 
-            _ = User32.GetClassName( hWnd, SbWinInfo, SbWinInfo.Capacity );
-            var classname = SbWinInfo.ToString();
+            var classLen  = User32.GetClassName( hWnd, WinInfoBuffer, WinInfoBuffer.Length );
+            var classname = classLen <= 0 ? string.Empty : new string( WinInfoBuffer, 0, classLen );
             if ( Filters.WndClsIgnoreList.Contains( classname ) )
                 return true;
 

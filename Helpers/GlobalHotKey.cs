@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 
 namespace VirtualSpace.Helpers
 {
-    public static class GlobalHotKey
+    public static partial class GlobalHotKey
     {
         [Flags]
         public enum KeyModifiers
@@ -37,11 +37,13 @@ namespace VirtualSpace.Helpers
             return RegisterHotKey( hWnd, id, fsModifiers, vk );
         }
 
-        [DllImport( "user32.dll", SetLastError = false )]
-        private static extern bool RegisterHotKey( IntPtr hWnd, int id, KeyModifiers fsModifiers, int vk );
+        [LibraryImport( "user32.dll" )]
+        [return: MarshalAs( UnmanagedType.Bool )]
+        private static partial bool RegisterHotKey( IntPtr hWnd, int id, KeyModifiers fsModifiers, int vk );
 
-        [DllImport( "user32.dll", SetLastError = false )]
-        public static extern bool UnregisterHotKey( IntPtr hWnd, int id );
+        [LibraryImport( "user32.dll" )]
+        [return: MarshalAs( UnmanagedType.Bool )]
+        public static partial bool UnregisterHotKey( IntPtr hWnd, int id );
 
         public static void UnRegAllHotKey()
         {

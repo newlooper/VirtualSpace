@@ -93,13 +93,6 @@ namespace VirtualSpace.Helpers
     }
 
     [StructLayout( LayoutKind.Sequential )]
-    public struct SIZE
-    {
-        public int cx;
-        public int cy;
-    }
-
-    [StructLayout( LayoutKind.Sequential )]
     public struct POINT
     {
         public int X;

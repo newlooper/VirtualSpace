@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace VirtualSpace.Helpers
 {
-    public static class DwmApi
+    public static partial class DwmApi
     {
         [Flags]
         public enum DwmWindowAttribute : uint
@@ -111,20 +111,21 @@ namespace VirtualSpace.Helpers
         public static readonly int DWM_TNP_OPACITY         = 0x4;
         public static readonly int DWM_TNP_RECTDESTINATION = 0x1;
 
-        [DllImport( "dwmapi.dll" )]
-        public static extern int DwmRegisterThumbnail( IntPtr dest, IntPtr src, out IntPtr thumb );
+        [LibraryImport( "dwmapi.dll" )]
+        public static partial int DwmRegisterThumbnail( IntPtr dest, IntPtr src, out IntPtr thumb );
 
-        [DllImport( "dwmapi.dll" )]
-        public static extern int DwmUnregisterThumbnail( IntPtr thumb );
+        [LibraryImport( "dwmapi.dll" )]
+        public static partial int DwmUnregisterThumbnail( IntPtr thumb );
 
-        [DllImport( "dwmapi.dll" )]
-        public static extern int DwmQueryThumbnailSourceSize( IntPtr thumb, out SIZE size );
+        [LibraryImport( "dwmapi.dll" )]
+        public static partial int DwmQueryThumbnailSourceSize( IntPtr thumb, out SIZE size );
 
+        // bool fields in DWM_THUMBNAIL_PROPERTIES need runtime marshalling.
         [DllImport( "dwmapi.dll" )]
         public static extern int DwmUpdateThumbnailProperties( IntPtr hThumb, ref DWM_THUMBNAIL_PROPERTIES props );
 
-        [DllImport( "dwmapi.dll" )]
-        public static extern int DwmGetWindowAttribute( IntPtr hWnd, uint dwAttribute, out int pvAttribute, int cbAttribute );
+        [LibraryImport( "dwmapi.dll" )]
+        public static partial int DwmGetWindowAttribute( IntPtr hWnd, uint dwAttribute, out int pvAttribute, int cbAttribute );
     }
 
     [StructLayout( LayoutKind.Sequential )]
@@ -136,5 +137,12 @@ namespace VirtualSpace.Helpers
         public byte opacity;
         public bool fVisible;
         public bool fSourceClientAreaOnly;
+    }
+    
+    [StructLayout( LayoutKind.Sequential )]
+    public struct SIZE
+    {
+        public int cx;
+        public int cy;
     }
 }

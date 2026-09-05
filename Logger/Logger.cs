@@ -11,12 +11,12 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Channels;
 using System.Windows.Media;
 using Notification.Core;
 using Notification.Wpf;
 using Notification.Wpf.Constants;
+using VirtualSpace.Helpers;
 
 namespace VirtualSpace.AppLogs
 {
@@ -107,66 +107,23 @@ namespace VirtualSpace.AppLogs
 
         private static bool ToastWindowFilter( IntPtr hWnd, int lParam )
         {
-            var sbTitle = new StringBuilder( 128 );
-            _ = User32.GetWindowText( hWnd, sbTitle, sbTitle.Capacity );
-            var title = sbTitle.ToString();
+            var titleBuf = new char[128];
+            var titleLen = User32.GetWindowText( hWnd, titleBuf, titleBuf.Length );
+            var title    = titleLen <= 0 ? string.Empty : new string( titleBuf, 0, titleLen );
 
-            var sbCName = new StringBuilder( 512 );
-            _ = User32.GetClassName( hWnd, sbCName, sbCName.Capacity );
-            var classname = sbCName.ToString();
+            var classBuf  = new char[512];
+            var classLen  = User32.GetClassName( hWnd, classBuf, classBuf.Length );
+            var classname = classLen <= 0 ? string.Empty : new string( classBuf, 0, classLen );
 
             if ( title == "ToastWindow" && classname.StartsWith( "HwndWrapper[VirtualSpace" ) )
             {
                 var exStyle = User32.GetWindowLong( hWnd, (int)GetWindowLongFields.GWL_EXSTYLE );
-                exStyle |= User32.WS_EX_TOOLWINDOW;
+                exStyle |= 0x80; // WS_EX_TOOLWINDOW
                 User32.SetWindowLongPtr( new HandleRef( null, hWnd ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
                 return false;
             }
 
             return true;
-        }
-
-        private enum GetWindowLongFields
-        {
-            GWL_USERDATA   = -21, // 0xFFFFFFEB
-            GWL_EXSTYLE    = -20, // 0xFFFFFFEC
-            GWL_STYLE      = -16, // 0xFFFFFFF0
-            GWL_ID         = -12, // 0xFFFFFFF4
-            GWL_HWNDPARENT = -8, // 0xFFFFFFF8
-            GWL_HINSTANCE  = -6, // 0xFFFFFFFA
-            GWL_WNDPROC    = -4 // 0xFFFFFFFC
-        }
-
-        private static class User32
-        {
-            public delegate bool EnumWindowsProc( IntPtr hWnd, int lParam );
-
-            public const int WS_EX_TOOLWINDOW = 0x80;
-
-            [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-            public static extern int GetWindowLong( IntPtr hWnd, int nIndex );
-
-            public static IntPtr SetWindowLongPtr( HandleRef hWnd, int nIndex, int dwNewLong )
-            {
-                if ( IntPtr.Size == 8 )
-                    return SetWindowLongPtr64( hWnd, nIndex, dwNewLong );
-                return new IntPtr( SetWindowLong32( hWnd, nIndex, dwNewLong ) );
-            }
-
-            [DllImport( "user32.dll", EntryPoint = "SetWindowLong" )]
-            private static extern int SetWindowLong32( HandleRef hWnd, int nIndex, int dwNewLong );
-
-            [DllImport( "user32.dll", EntryPoint = "SetWindowLongPtr" )]
-            private static extern IntPtr SetWindowLongPtr64( HandleRef hWnd, int nIndex, IntPtr dwNewLong );
-
-            [DllImport( "user32.dll" )]
-            public static extern int GetWindowText( IntPtr hWnd, StringBuilder buf, int nMaxCount );
-
-            [DllImport( "user32.dll", CharSet = CharSet.Auto, SetLastError = false )]
-            public static extern int GetClassName( IntPtr hWnd, StringBuilder lpClassName, int nMaxCount );
-
-            [DllImport( "user32.dll" )]
-            public static extern int EnumWindows( EnumWindowsProc func, int lParam );
         }
     }
 

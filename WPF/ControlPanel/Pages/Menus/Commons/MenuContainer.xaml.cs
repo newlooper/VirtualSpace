@@ -63,7 +63,7 @@ public partial class MenuContainer : UserControl
         var iconResult = new SHSTOCKICONINFO();
         iconResult.cbSize = (uint)Marshal.SizeOf( iconResult );
 
-        _ = User32.SHGetStockIconInfo( SHSTOCKICONID.SIID_SHIELD, SHGSI.SHGSI_ICON | SHGSI.SHGSI_SMALLICON, ref iconResult );
+        _ = Shell32.SHGetStockIconInfo( SHSTOCKICONID.SIID_SHIELD, SHGSI.SHGSI_ICON | SHGSI.SHGSI_SMALLICON, ref iconResult );
         using var icon = Bitmap.FromHicon( iconResult.hIcon );
         icon.MakeTransparent();
 
