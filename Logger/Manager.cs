@@ -79,9 +79,9 @@ namespace VirtualSpace.AppLogs
         {
             LevelSwitch.MinimumLevel = level switch
             {
-                "DEBUG" => LogEventLevel.Verbose,
-                "EVENT" => LogEventLevel.Debug,
-                "INFO" => LogEventLevel.Information,
+                "VERBOSE" => LogEventLevel.Verbose,
+                "DEBUG" => LogEventLevel.Debug,
+                "EVENT" or "INFO" => LogEventLevel.Information,
                 "WARNING" => LogEventLevel.Warning,
                 "ERROR" => LogEventLevel.Error,
                 "FATAL" => LogEventLevel.Fatal,

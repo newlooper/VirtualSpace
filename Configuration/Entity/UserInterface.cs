@@ -27,6 +27,7 @@ namespace VirtualSpace.Config.Entity
         [PropertyProtector( 0, 0, 50 )] public int     VDWPadding             { get; set; }
         [PropertyProtector( 5, 0, 50 )] public int     VDWBorderSize          { get; set; }
         [PropertyProtector( 8, 8, 50 )] public int     VDWMargin              { get; set; }
+        [PropertyProtector( 6, 2, 8 )]  public int     VDWShadowSize          { get; set; }
         [PropertyProtector( 1, 1 )]     public byte    CanvasOpacity          { get; set; }
         [PropertyProtector]             public Margin? ThumbMargin            { get; set; }
         public                                 byte    ThumbDragSourceOpacity { get; set; }

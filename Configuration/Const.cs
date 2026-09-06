@@ -63,7 +63,7 @@ namespace VirtualSpace.Config
             public const string LogsFolder      = "Logs";
             public const string SettingsFile    = "settings.json";
             public const string DefaultVersion  = "2.0";
-            public const string DefaultLogLevel = "EVENT";
+            public const string DefaultLogLevel = "INFO";
         }
 
         public static class Reg

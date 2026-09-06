@@ -78,8 +78,6 @@ namespace VirtualSpace
 
             new WindowInteropHelper( mw ).EnsureHandle();
 
-            mw.InitCellBorderShadowEffect();
-
             return mw;
         }
 

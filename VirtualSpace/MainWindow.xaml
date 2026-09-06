@@ -10,12 +10,6 @@
         MouseDown="Window_MouseDown"
         Loaded="Window_Loaded"
         Closing="Window_Closing">
-    <Window.Resources>
-        <ResourceDictionary>
-            <DropShadowEffect x:Key="VdwShadowDefault" Opacity="1" ShadowDepth="1" Color="Black" BlurRadius="10"></DropShadowEffect>
-            <DropShadowEffect x:Key="VdwShadowCurrent" Opacity="1" ShadowDepth="1" Color="White" BlurRadius="10"></DropShadowEffect>
-        </ResourceDictionary>
-    </Window.Resources>
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="-1" CaptionHeight="0" />
     </WindowChrome.WindowChrome>

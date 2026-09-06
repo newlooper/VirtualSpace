@@ -23,6 +23,7 @@ namespace VirtualSpace.Config.Profiles
                 CanvasOpacity          = 100,
                 CanvasBackColor        = new Colour { R = 55, G = 55, B = 55 },
                 VDWMargin              = 8,
+                VDWShadowSize          = 6,
                 VDWBorderSize          = 1,
                 VDWPadding             = 0,
                 VDWDefaultBackColor    = new Colour { R = 55, G             = 55, B             = 55 },
