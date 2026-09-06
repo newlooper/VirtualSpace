@@ -13,13 +13,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using VirtualSpace.AppLogs;
-using VirtualSpace.Config;
 using VirtualSpace.Helpers;
+using VirtualSpace.Config;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
 using Point = System.Drawing.Point;
@@ -34,7 +31,6 @@ namespace VirtualSpace.VirtualDesktop
         public           Guid                        VdId;
         private          string                      _desktopName;
         private          Point                       _fixedPosition;
-        private          Size                        _initSize = Size.Empty;
 
         private VirtualDesktopWindow()
         {
@@ -125,14 +121,6 @@ namespace VirtualSpace.VirtualDesktop
                 owner.Dispatcher.Invoke( DoSetOwner );
         }
 
-        public void UpdateWallpaper()
-        {
-            if ( InvokeRequired )
-                Invoke( (MethodInvoker)Refresh );
-            else
-                Refresh();
-        }
-
         private void VirtualDesktopWindow_Closing( object? sender, FormClosingEventArgs e )
         {
             e.Cancel = true;
@@ -142,6 +130,7 @@ namespace VirtualSpace.VirtualDesktop
         {
             FormClosing -= VirtualDesktopWindow_Closing;
             ClearVisibleWindows();
+            ReleaseWallpaperResources();
             Close();
         }
 
@@ -176,146 +165,6 @@ namespace VirtualSpace.VirtualDesktop
                 if ( !Visible )
                     Show();
             }
-        }
-
-        private (bool isCached, string path, Color? color) CachedWallpaperInfo()
-        {
-            var wpPath = WinRegistry.GetWallPaperPathByGuid( VdId );
-            if ( wpPath is null ) return new ValueTuple<bool, string, Color>( false, "", WinRegistry.GetBackColor() );
-
-            var (exists, _) = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), Width, Height );
-            return new ValueTuple<bool, string, Color?>( exists, wpPath, null );
-        }
-
-        private static void DrawImage( PaintEventArgs e, Wallpaper wp, int width = 0, int height = 0 )
-        {
-            if ( width > 0 && height > 0 )
-                e.Graphics.DrawImage( wp.Image, 0, 0, width, height );
-            else
-                e.Graphics.DrawImage( wp.Image, 0, 0 );
-
-            wp.Release();
-        }
-
-        private void InitPaint( (bool isCached, string path, Color? color) wpInfo, PaintEventArgs e )
-        {
-            Logger.Event( $"Init Desktop[{VdIndex}] background." );
-
-            _initSize.Width  = Width;
-            _initSize.Height = Height;
-
-            if ( wpInfo.color != null )
-            {
-                BackColor = (Color)wpInfo.color;
-                return;
-            }
-
-            if ( wpInfo.isCached || VirtualDesktopManager.IsBatchCreate )
-            {
-                DrawImage( e, WinRegistry.GetWallpaperByPath( wpInfo.path,
-                    Width,
-                    Height,
-                    ConfigManager.GetCachePath(),
-                    ConfigManager.Configs.Cluster.VdwWallpaperQuality ) );
-            }
-            else
-            {
-                var hWnd = Handle;
-                Task.Run( () =>
-                {
-                    WinRegistry.GetWallpaperByPath( wpInfo.path,
-                        Width,
-                        Height,
-                        ConfigManager.GetCachePath(),
-                        ConfigManager.Configs.Cluster.VdwWallpaperQuality ).Release();
-                    User32.PostMessage( hWnd, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
-                } );
-            }
-        }
-
-        private void NormalPaint( (bool isCached, string path, Color? color) wpInfo, PaintEventArgs e )
-        {
-            if ( wpInfo.color != null )
-            {
-                BackColor = (Color)wpInfo.color;
-                return;
-            }
-
-            if ( wpInfo.isCached )
-            {
-                DrawImage( e, WinRegistry.GetWallpaperByPath( wpInfo.path,
-                    Width,
-                    Height,
-                    ConfigManager.GetCachePath(),
-                    ConfigManager.Configs.Cluster.VdwWallpaperQuality ) );
-            }
-            else
-            {
-                Logger.Event( $"Create cache image({Width}*{Height}) for Desktop[{VdIndex}]" );
-                Task.Run( () =>
-                {
-                    // only once for path with current Width*Height
-                    WinRegistry.GetWallpaperByPath( wpInfo.path,
-                            Width,
-                            Height,
-                            ConfigManager.GetCachePath(),
-                            ConfigManager.Configs.Cluster.VdwWallpaperQuality )
-                        .Release();
-                } );
-
-                ////////////////////////////////////////////////////////////////////////////////////
-                // use init size, so we can create cache image async
-                e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor; // faster
-                DrawImage( e, WinRegistry.GetWallpaperByPath( wpInfo.path,
-                    _initSize.Width,
-                    _initSize.Height,
-                    ConfigManager.GetCachePath(),
-                    ConfigManager.Configs.Cluster.VdwWallpaperQuality ), Width, Height );
-            }
-        }
-
-        private void RefreshThumbs( object? o, EventArgs e )
-        {
-            Logger.Event( $"Repaint thumbs in Desktop[{VdIndex}] due to size changed." );
-            ReleaseThumbnails();
-            ShowThumbnails();
-        }
-
-        private void Background_Paint( object sender, PaintEventArgs e )
-        {
-            var wpInfo = CachedWallpaperInfo();
-            if ( _initSize == Size.Empty )
-            {
-                Resize += RefreshThumbs;
-                InitPaint( wpInfo, e );
-            }
-            else
-            {
-                NormalPaint( wpInfo, e );
-            }
-
-            var ui  = ConfigManager.CurrentProfile.UI;
-            var str = "";
-
-            if ( ui.ShowVdName ) str += _desktopName;
-
-            if ( ui.ShowVdIndex ) str += ui.ShowVdIndexType == 0 ? $"[{VdIndex}]" : $"[{VdIndex + 1}]";
-
-            if ( str == "" ) return;
-
-            using var font = new Font( "Segoe UI emoji", 10 );
-            e.Graphics.DrawString(
-                str,
-                font,
-                Brushes.Beige,
-                new Point( 2, Height - 30 )
-            );
-        }
-
-        public void UpdateDesktopName( string name )
-        {
-            _desktopName = name;
-            Refresh();
         }
     }
 }

@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Windows.Forms;
+using VirtualSpace.AppLogs;
 using VirtualSpace.Helpers;
 
 namespace VirtualSpace.VirtualDesktop
@@ -26,6 +27,13 @@ namespace VirtualSpace.VirtualDesktop
         {
             ReleaseThumbnails();
             _visibleWindows.Clear();
+        }
+
+        private void RefreshThumbs( object? o, EventArgs e )
+        {
+            Logger.Event( $"Repaint thumbs in Desktop[{VdIndex}] due to size changed." );
+            ReleaseThumbnails();
+            ShowThumbnails();
         }
 
         public void ShowThumbnails()

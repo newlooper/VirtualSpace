@@ -41,9 +41,9 @@ namespace VirtualSpace.Helpers
                 gr.DrawImage( src, new Rectangle( Point.Empty, dest.Size ) );
             }
 
-            var (FullString, Str0, Str1) = Wallpaper.Md5Hash( path );
-            var file = Path.Combine( cachePath, Str0, Str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
-                FullString + "_" + Environment.CurrentManagedThreadId );
+            var (fullString, str0, str1) = Wallpaper.Md5Hash( path );
+            var file = Path.Combine( cachePath, str0, str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
+                fullString + "_" + Environment.CurrentManagedThreadId );
 
             // dest.Save( file, ImageFormat.Jpeg );
 
@@ -65,6 +65,18 @@ namespace VirtualSpace.Helpers
             return codecs.FirstOrDefault( codec => codec.FormatID == format.Guid )!;
         }
 
+        public static Bitmap LoadWithoutFileLock( string path )
+        {
+            var       bytes = File.ReadAllBytes( path );
+            using var ms    = new MemoryStream( bytes, writable: false );
+            using var src   = new Bitmap( ms );
+            var       dest  = new Bitmap( src.Width, src.Height, PixelFormat.Format32bppPArgb );
+            using var g     = Graphics.FromImage( dest );
+            g.DrawImageUnscaled( src, 0, 0 );
+
+            return dest;
+        }
+        
         public static Icon BytesToIcon( object bytes )
         {
             using var ms = new MemoryStream( (byte[])bytes );
@@ -87,15 +99,15 @@ namespace VirtualSpace.Helpers
         public static Bitmap? CachedWallPaper( string path, string cachePath, int width, int height )
         {
             var cached = CachedWallPaperInfo( path, cachePath, width, height );
-            return cached.Exists ? new Bitmap( cached.Path ) : null;
+            return cached.Exists ? Images.LoadWithoutFileLock( cached.Path ) : null;
         }
 
         public static (bool Exists, string Path) CachedWallPaperInfo( string path, string cachePath, int width, int height )
         {
-            var (FullString, Str0, Str1) = Md5Hash( path );
-            var targetPath = Path.Combine( cachePath, Str0, Str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height );
+            var (fullString, str0, str1) = Md5Hash( path );
+            var targetPath = Path.Combine( cachePath, str0, str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height );
             Directory.CreateDirectory( targetPath );
-            var filepath = Path.Combine( targetPath, FullString );
+            var filepath = Path.Combine( targetPath, fullString );
 
             return new ValueTuple<bool, string>( File.Exists( filepath ), filepath );
         }

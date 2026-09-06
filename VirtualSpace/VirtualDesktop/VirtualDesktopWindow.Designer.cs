@@ -28,6 +28,7 @@ namespace VirtualSpace.VirtualDesktop
                 components.Dispose();
             }
             ReleaseThumbnails();
+            ReleaseWallpaperResources();
             base.Dispose( disposing );
         }
 
