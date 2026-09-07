@@ -178,9 +178,9 @@ namespace VirtualSpace.VirtualDesktop
                 // goes here means a Click
                 if ( _selectedWindow != null && User32.IsWindow( _selectedWindow.Handle ) ) // click on a thumbnail
                 {
-                    void ActiveWindow()
+                    void ActivateWindow()
                     {
-                        Logger.Verbose( $"ACTIVE.Win {_selectedWindow!.Title}({_selectedWindow.Handle:X2})" );
+                        Logger.Verbose( $"ACTIVATE.Win {_selectedWindow!.Title}({_selectedWindow.Handle:X2})" );
                         if ( User32.IsIconic( _selectedWindow.Handle ) )
                             _ = DwmApi.DwmUnregisterThumbnail( _selectedWindow.Thumb );
                         WindowTool.ActivateWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder![_hoverVdIndex] );
@@ -191,11 +191,11 @@ namespace VirtualSpace.VirtualDesktop
                     switch ( action )
                     {
                         case MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
-                            ActiveWindow();
+                            ActivateWindow();
                             MainWindow.HideAll();
                             break;
                         case MouseAction.Action.WindowActiveDesktopVisibleOnly:
-                            ActiveWindow();
+                            ActivateWindow();
                             VirtualDesktopManager.RefreshThumbs( _selectedWindow.Handle, this );
                             break;
                         case MouseAction.Action.WindowClose:
@@ -242,7 +242,7 @@ namespace VirtualSpace.VirtualDesktop
                         case MouseAction.Action.DoNothing:
                             break;
                         default:
-                            ActiveWindow();
+                            ActivateWindow();
                             MainWindow.HideAll();
                             break;
                     }

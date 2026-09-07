@@ -24,7 +24,30 @@ namespace VirtualSpace.Helpers
 {
     internal static class PathInfo
     {
-        public const string WIDTH_HEIGHT_SPLITTER = "x";
+        public const string FILE_NAME_SPLITTER = "_";
+
+        public static string GenImageName( string fullString, int width, int height )
+        {
+            return fullString + FILE_NAME_SPLITTER +
+                   width.ToString( "x2" ) + "x" + height.ToString( "x2" );
+        }
+        
+        public static (string FullString, string Str0, string Str1) Md5Hash( string input )
+        {
+            var inputBytes = Encoding.ASCII.GetBytes( input );
+            var hashBytes  = MD5.HashData( inputBytes );
+
+            var sb = new StringBuilder();
+            foreach ( var b in hashBytes ) sb.Append( b.ToString( "x2" ) );
+
+            var md5Str = sb.ToString();
+
+            return new ValueTuple<string, string, string>(
+                md5Str,
+                md5Str.Substring( 0, 1 ),
+                md5Str.Substring( 1, 1 )
+            );
+        }
     }
 
     public static class Images
@@ -41,9 +64,10 @@ namespace VirtualSpace.Helpers
                 gr.DrawImage( src, new Rectangle( Point.Empty, dest.Size ) );
             }
 
-            var (fullString, str0, str1) = Wallpaper.Md5Hash( path );
-            var file = Path.Combine( cachePath, str0, str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height,
-                fullString + "_" + Environment.CurrentManagedThreadId );
+            var (fullString, str0, str1) = PathInfo.Md5Hash( path );
+            var file = Path.Combine( cachePath, str0, str1,
+                PathInfo.GenImageName( fullString, width, height ) +
+                PathInfo.FILE_NAME_SPLITTER + Environment.CurrentManagedThreadId );
 
             // dest.Save( file, ImageFormat.Jpeg );
 
@@ -76,7 +100,7 @@ namespace VirtualSpace.Helpers
 
             return dest;
         }
-        
+
         public static Icon BytesToIcon( object bytes )
         {
             using var ms = new MemoryStream( (byte[])bytes );
@@ -104,29 +128,12 @@ namespace VirtualSpace.Helpers
 
         public static (bool Exists, string Path) CachedWallPaperInfo( string path, string cachePath, int width, int height )
         {
-            var (fullString, str0, str1) = Md5Hash( path );
-            var targetPath = Path.Combine( cachePath, str0, str1, width + PathInfo.WIDTH_HEIGHT_SPLITTER + height );
+            var (fullString, str0, str1) = PathInfo.Md5Hash( path );
+            var targetPath = Path.Combine( cachePath, str0, str1 );
             Directory.CreateDirectory( targetPath );
-            var filepath = Path.Combine( targetPath, fullString );
+            var filepath = Path.Combine( targetPath, PathInfo.GenImageName( fullString, width, height ) );
 
             return new ValueTuple<bool, string>( File.Exists( filepath ), filepath );
-        }
-
-        public static (string FullString, string Str0, string Str1) Md5Hash( string input )
-        {
-            var inputBytes = Encoding.ASCII.GetBytes( input );
-            var hashBytes  = MD5.HashData( inputBytes );
-
-            var sb = new StringBuilder();
-            foreach ( var b in hashBytes ) sb.Append( b.ToString( "x2" ) );
-
-            var md5Str = sb.ToString();
-
-            return new ValueTuple<string, string, string>(
-                md5Str,
-                md5Str.Substring( 0, 1 ),
-                md5Str.Substring( 1, 1 )
-            );
         }
 
         public void Release()

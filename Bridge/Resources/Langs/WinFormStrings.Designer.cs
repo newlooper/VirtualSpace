@@ -443,7 +443,7 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active Window, Switch Desktop and Close View.
+        ///   Looks up a localized string similar to Activate Window, Switch Desktop and Close View.
         /// </summary>
         internal static string M_W_WindowActiveDesktopVisibleAndCloseView {
             get {
@@ -452,7 +452,7 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active Window, Switch Desktop Only.
+        ///   Looks up a localized string similar to Activate Window, Switch Desktop Only.
         /// </summary>
         internal static string M_W_WindowActiveDesktopVisibleOnly {
             get {
@@ -542,7 +542,7 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active Window, Switch Virtual Desktop And Close View.
+        ///   Looks up a localized string similar to Activate Window, Switch Virtual Desktop And Close View.
         /// </summary>
         internal static string Mouse_Action_WindowActiveDesktopVisibleAndCloseView {
             get {
@@ -551,7 +551,7 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active Window, Switch Virtual Desktop Only.
+        ///   Looks up a localized string similar to Activate Window, Switch Virtual Desktop Only.
         /// </summary>
         internal static string Mouse_Action_WindowActiveDesktopVisibleOnly {
             get {

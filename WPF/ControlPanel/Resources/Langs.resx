@@ -458,10 +458,10 @@ if the conditions are not satisfied, the program will automatically reset to the
     <value>Show Context Menu</value>
   </data>
     <data name="Mouse.Action.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
-    <value>Active Window, Switch Virtual Desktop And Close View</value>
+    <value>Activate Window, Switch Virtual Desktop And Close View</value>
   </data>
     <data name="Mouse.Action.WindowActiveDesktopVisibleOnly" xml:space="preserve">
-    <value>Active Window, Switch Virtual Desktop Only</value>
+    <value>Activate Window, Switch Virtual Desktop Only</value>
   </data>
     <data name="Mouse.Action.WindowClose" xml:space="preserve">
     <value>Close Window</value>

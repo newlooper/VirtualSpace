@@ -276,7 +276,7 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active Window, Switch Virtual Desktop And Close View.
+        ///   Looks up a localized string similar to Activate Window, Switch Virtual Desktop And Close View.
         /// </summary>
         internal static string Mouse_Action_WindowActiveDesktopVisibleAndCloseView {
             get {
@@ -285,7 +285,7 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active Window, Switch Virtual Desktop Only.
+        ///   Looks up a localized string similar to Activate Window, Switch Virtual Desktop Only.
         /// </summary>
         internal static string Mouse_Action_WindowActiveDesktopVisibleOnly {
             get {
@@ -847,6 +847,15 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string Page_Plugins_Description {
+            get {
+                return ResourceManager.GetString("Page.Plugins.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
         internal static string Page_Plugins_Email {
@@ -874,6 +883,15 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh Plugins.
+        /// </summary>
+        internal static string Page_Plugins_Refresh {
+            get {
+                return ResourceManager.GetString("Page.Plugins.Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restart.
         /// </summary>
         internal static string Page_Plugins_Restart {
@@ -888,6 +906,51 @@ namespace ControlPanel.Resources {
         internal static string Page_Plugins_Settings {
             get {
                 return ResourceManager.GetString("Page.Plugins.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        internal static string Page_Plugins_Status {
+            get {
+                return ResourceManager.GetString("Page.Plugins.Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available.
+        /// </summary>
+        internal static string Page_Plugins_Status_Available {
+            get {
+                return ResourceManager.GetString("Page.Plugins.Status.Available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Page_Plugins_Status_Error {
+            get {
+                return ResourceManager.GetString("Page.Plugins.Status.Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaded.
+        /// </summary>
+        internal static string Page_Plugins_Status_Loaded {
+            get {
+                return ResourceManager.GetString("Page.Plugins.Status.Loaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing.
+        /// </summary>
+        internal static string Page_Plugins_Status_Missing {
+            get {
+                return ResourceManager.GetString("Page.Plugins.Status.Missing", resourceCulture);
             }
         }
         

@@ -234,10 +234,10 @@ possible reason:
     <value>Show Context Menu</value>
   </data>
     <data name="Mouse.Action.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
-    <value>Active Window, Switch Virtual Desktop And Close View</value>
+    <value>Activate Window, Switch Virtual Desktop And Close View</value>
   </data>
     <data name="Mouse.Action.WindowActiveDesktopVisibleOnly" xml:space="preserve">
-    <value>Active Window, Switch Virtual Desktop Only</value>
+    <value>Activate Window, Switch Virtual Desktop Only</value>
   </data>
     <data name="Mouse.Action.WindowClose" xml:space="preserve">
     <value>Close Window</value>
@@ -378,10 +378,10 @@ Duplicate one and edit it.</value>
     <value>Show Only Selected Desktop in View</value>
   </data>
     <data name="M.W.WindowActiveDesktopVisibleAndCloseView" xml:space="preserve">
-    <value>Active Window, Switch Desktop and Close View</value>
+    <value>Activate Window, Switch Desktop and Close View</value>
   </data>
     <data name="M.W.WindowActiveDesktopVisibleOnly" xml:space="preserve">
-    <value>Active Window, Switch Desktop Only</value>
+    <value>Activate Window, Switch Desktop Only</value>
   </data>
     <data name="M.W.WindowHideFromView" xml:space="preserve">
     <value>Hide From View</value>
