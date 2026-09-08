@@ -109,7 +109,7 @@ public static class Const
 
         ///////////////////////////////////////////////////
         // 不是所有的功能都支持自定义快捷键，但为了能进入 Dictionary<> Info，必须有唯一的键
-        private const string TOGGLE_WINDOW_FILTER = "hk_node_toggle_window_filter";
+        public const string TOGGLE_WINDOW_FILTER = "hk_node_toggle_window_filter";
 
         ////////////////////////////////////////////////////////////////
         // 可由热键调用的程序功能表

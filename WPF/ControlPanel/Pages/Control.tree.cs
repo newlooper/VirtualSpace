@@ -9,11 +9,9 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using VirtualSpace;
 
 namespace ControlPanel.Pages;
 
@@ -40,64 +38,5 @@ public partial class Control
         }
 
         return path;
-    }
-
-    private static void BuildTreeView( object node, object jsonDoc, (string Name, string Header, string Tag, string IsHidden, string Nodes) keys )
-    {
-        switch ( node )
-        {
-            case TreeView treeView:
-                var nodes = ( (JsonDocument)jsonDoc ).RootElement.GetProperty( keys.Nodes );
-                foreach ( var child in nodes.EnumerateArray() )
-                {
-                    var topLevelNode = new TreeViewItem
-                    {
-                        Header     = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString()! ),
-                        IsExpanded = true
-                    };
-
-                    if ( child.TryGetProperty( keys.Name, out var name ) )
-                    {
-                        topLevelNode.Name = name.GetString();
-                    }
-
-                    if ( child.TryGetProperty( keys.Nodes, out var subNodes ) )
-                    {
-                        BuildTreeView( topLevelNode, subNodes, keys );
-                    }
-
-                    treeView.Items.Add( topLevelNode );
-                }
-
-                break;
-            case TreeViewItem treeViewItem:
-                foreach ( var child in ( (JsonElement)jsonDoc ).EnumerateArray() )
-                {
-                    var subNode = new TreeViewItem
-                    {
-                        Header     = Agent.Langs.GetString( child.GetProperty( keys.Header ).GetString()! ),
-                        IsExpanded = true
-                    };
-
-                    if ( child.TryGetProperty( keys.IsHidden, out var isHidden ) && isHidden.GetBoolean() )
-                    {
-                        subNode.Visibility = Visibility.Collapsed;
-                    }
-
-                    if ( child.TryGetProperty( keys.Name, out var name ) )
-                    {
-                        subNode.Name = name.GetString();
-                    }
-
-                    if ( child.TryGetProperty( keys.Nodes, out var subNodes ) )
-                    {
-                        BuildTreeView( subNode, subNodes, keys );
-                    }
-
-                    treeViewItem.Items.Add( subNode );
-                }
-
-                break;
-        }
     }
 }

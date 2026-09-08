@@ -9,9 +9,6 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
-using System.IO;
-using System.Reflection;
-using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -31,8 +28,7 @@ public partial class Control
         var vm = KeyBindingBox.DataContext as KeyBindingModel;
         vm!.BoxVisible = Visibility.Hidden;
 
-        var selectedNode = e.NewValue as TreeViewItem;
-        if ( selectedNode is null )
+        if ( e.NewValue is not TreeViewItem selectedNode )
         {
             return;
         }
@@ -91,26 +87,57 @@ public partial class Control
         }
     }
 
+    private static TreeViewItem CreateKbNode( string key, bool hidden = false )
+    {
+        return new TreeViewItem
+        {
+            Name       = key,
+            Header     = Agent.Langs.GetString( key ),
+            IsExpanded = true,
+            Visibility = hidden ? Visibility.Collapsed : Visibility.Visible
+        };
+    }
+
+    private static void AddKbChildren( TreeViewItem parent, params TreeViewItem[] children )
+    {
+        foreach ( var child in children )
+        {
+            parent.Items.Add( child );
+        }
+    }
+
     private void LoadKeyboardTreeView()
     {
-        var assembly = Assembly.GetExecutingAssembly();
-        var name     = assembly.GetName().Name;
-
-        using var stream = assembly.GetManifestResourceStream( $"{name}.Resources.Definitions.KeyboardTree.json" );
-        using var reader = new StreamReader( stream! );
-        var       result = reader.ReadToEnd();
-
         KeyboardTreeView.Items.Clear();
 
-        BuildTreeView( KeyboardTreeView, JsonDocument.Parse( result ),
-            new ValueTuple<string, string, string, string, string>( "Name", "Header", "Tag", "IsHidden", "Nodes" ) );
+        var nodeGeneral = CreateKbNode( "K_G" );
+        AddKbChildren( nodeGeneral,
+            CreateKbNode( Const.Hotkey.RISE_VIEW ),
+            CreateKbNode( Const.Hotkey.SHOW_APP_CONTROLLER ),
+            CreateKbNode( Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP ),
+            CreateKbNode( Const.Hotkey.RISE_VIEW_FOR_CURRENT_VD ),
+            CreateKbNode( Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD ),
+            CreateKbNode( Const.Hotkey.TOGGLE_WINDOW_FILTER, hidden: true ) );
 
-        var nodeDesktop       = KeyboardTreeView.Items[1] as TreeViewItem;
-        var nodeDesktopSwitch = nodeDesktop!.Items[0] as TreeViewItem;
+        var nodeDesktopSwitch = CreateKbNode( "K_D_S" );
+        var nodeDesktopNav    = CreateKbNode( "K_D_N" );
+        AddKbChildren( nodeDesktopNav,
+            CreateKbNode( Const.Hotkey.NAV_LEFT ),
+            CreateKbNode( Const.Hotkey.NAV_RIGHT ),
+            CreateKbNode( Const.Hotkey.NAV_UP ),
+            CreateKbNode( Const.Hotkey.NAV_DOWN ) );
 
-        var nodeWindow              = KeyboardTreeView.Items[2] as TreeViewItem;
-        var nodeWindowMove          = nodeWindow!.Items[0] as TreeViewItem;
-        var nodeWindowMoveAndFollow = nodeWindow.Items[1] as TreeViewItem;
+        var nodeDesktop = CreateKbNode( "K_D" );
+        AddKbChildren( nodeDesktop, nodeDesktopSwitch, nodeDesktopNav );
+
+        var nodeWindowMove          = CreateKbNode( "K_W_M" );
+        var nodeWindowMoveAndFollow = CreateKbNode( "K_W_MF" );
+        var nodeWindow              = CreateKbNode( "K_W" );
+        AddKbChildren( nodeWindow, nodeWindowMove, nodeWindowMoveAndFollow );
+
+        KeyboardTreeView.Items.Add( nodeGeneral );
+        KeyboardTreeView.Items.Add( nodeDesktop );
+        KeyboardTreeView.Items.Add( nodeWindow );
 
         for ( var i = 1; i <= DesktopWrapper.Count; i++ )
         {
@@ -120,7 +147,7 @@ public partial class Control
                 Name   = Const.Hotkey.SVD_TREE_NODE_PREFIX + i,
                 Tag    = "KB.Hotkey.SVD"
             };
-            nodeDesktopSwitch?.Items.Add( item );
+            nodeDesktopSwitch.Items.Add( item );
 
             var item2 = new TreeViewItem
             {
@@ -128,7 +155,7 @@ public partial class Control
                 Name   = Const.Hotkey.MW_TREE_NODE_PREFIX + i,
                 Tag    = "KB.Hotkey.MW"
             };
-            nodeWindowMove?.Items.Add( item2 );
+            nodeWindowMove.Items.Add( item2 );
 
             var item3 = new TreeViewItem
             {
@@ -136,7 +163,7 @@ public partial class Control
                 Name   = Const.Hotkey.MWF_TREE_NODE_PREFIX + i,
                 Tag    = "KB.Hotkey.MWF"
             };
-            nodeWindowMoveAndFollow?.Items.Add( item3 );
+            nodeWindowMoveAndFollow.Items.Add( item3 );
         }
 
         var item4 = new TreeViewItem
@@ -145,7 +172,7 @@ public partial class Control
             Name   = Const.Hotkey.SWITCH_BACK_LAST,
             Tag    = "KB.Hotkey.SVD_BACK_LAST"
         };
-        nodeDesktopSwitch?.Items.Add( item4 );
+        nodeDesktopSwitch.Items.Add( item4 );
     }
 
     private static (string keyCode, GlobalHotKey.KeyModifiers keyModifiers) GetGhk( KeyBindingModel kbm )
@@ -225,8 +252,7 @@ public partial class Control
 
     private void RegAndSave_OnClick( object sender, RoutedEventArgs e )
     {
-        var vm = KeyBindingBox.DataContext as KeyBindingModel;
-        if ( vm == null )
+        if ( KeyBindingBox.DataContext is not KeyBindingModel vm )
         {
             return;
         }
@@ -250,8 +276,7 @@ public partial class Control
 
     private void ClearAndSave_OnClick( object sender, RoutedEventArgs e )
     {
-        var selectedItem = KeyboardTreeView.SelectedItem as TreeViewItem;
-        if ( selectedItem == null )
+        if ( KeyboardTreeView.SelectedItem is not TreeViewItem selectedItem )
         {
             return;
         }
