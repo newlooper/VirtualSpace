@@ -39,7 +39,7 @@ public partial class RuleForm : UserControl
             return;
         }
 
-        var field = cbb.Name.Split( "_" )[1]; // 依赖控件名，若修改控件名，此处也要修改
+        var field = cbb.Tag as string;
 
         var r = RuleDefBox.DataContext as RuleTemplate;
         if ( r?.Expression == null )
@@ -180,7 +180,7 @@ public partial class RuleForm : UserControl
         var rule = new ExpressionTemplate
         {
             type      = Keywords.String,
-            field     = cb.Name.Split( "_" )[1],
+            field     = cbb.Tag as string,
             @operator = opt,
             value     = V
         };

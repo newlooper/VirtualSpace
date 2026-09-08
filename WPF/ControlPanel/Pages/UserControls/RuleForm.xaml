@@ -18,7 +18,6 @@
                 <Setter Property="Height" Value="50" />
             </Style>
             <converters:RuleFieldConverter x:Key="RuleFieldConverter" />
-            <converters:RuleFieldFromControlNameConverter x:Key="RuleFieldFromControlNameConverter" />
             <converters:CheckBoxStateByIndexConverter x:Key="CheckBoxStateByIndexConverter" />
             <converters:RuleFormDefaultValueConverter x:Key="RuleFormDefaultValueConverter" />
             <converters:LocConverter x:Key="LocConverter" />
@@ -138,16 +137,16 @@
 
                 <TextBlock Margin="0 15 0 0" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{lex:Loc Page.Rules.Rule.WindowRules}" />
 
-                <CheckBox x:Name="chb_Title" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
+                <CheckBox x:Name="chb_Title" Tag="Title" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
                           Content="{lex:Loc Page.Rules.Rule.Title}" VerticalAlignment="Bottom">
                     <CheckBox.IsChecked>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type CheckBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </CheckBox.IsChecked>
                 </CheckBox>
-                <ComboBox x:Name="cbb_Title" Grid.Row="1" Grid.Column="1"
+                <ComboBox x:Name="cbb_Title" Tag="Title" Grid.Row="1" Grid.Column="1"
                           VerticalAlignment="Bottom" Margin="20,0"
                           IsEnabled="{Binding IsChecked, ElementName=chb_Title}"
                           ItemsSource="{Binding Path=(models:RulesViewModel.Operators)}"
@@ -163,30 +162,30 @@
                     <ComboBox.SelectedIndex>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type ComboBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </ComboBox.SelectedIndex>
                 </ComboBox>
-                <TextBox x:Name="tb_Title" Grid.Row="1" Grid.Column="2" FontSize="14"
+                <TextBox x:Name="tb_Title" Tag="Title" Grid.Row="1" Grid.Column="2" FontSize="14"
                          IsEnabled="{Binding IsChecked, ElementName=chb_Title}">
                     <TextBox.Text>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type TextBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
 
-                <CheckBox x:Name="chb_ProcessName" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5"
+                <CheckBox x:Name="chb_ProcessName" Tag="ProcessName" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5"
                           Content="{lex:Loc Page.Rules.Rule.ProcessName}" VerticalAlignment="Bottom">
                     <CheckBox.IsChecked>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type CheckBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </CheckBox.IsChecked>
                 </CheckBox>
-                <ComboBox x:Name="cbb_ProcessName" Grid.Row="2" Grid.Column="1"
+                <ComboBox x:Name="cbb_ProcessName" Tag="ProcessName" Grid.Row="2" Grid.Column="1"
                           VerticalAlignment="Bottom" Margin="20,0"
                           IsEnabled="{Binding IsChecked, ElementName=chb_ProcessName}"
                           ItemsSource="{Binding Path=(models:RulesViewModel.Operators)}"
@@ -202,30 +201,30 @@
                     <ComboBox.SelectedIndex>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type ComboBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </ComboBox.SelectedIndex>
                 </ComboBox>
-                <TextBox x:Name="tb_ProcessName" Grid.Row="2" Grid.Column="2" FontSize="14"
+                <TextBox x:Name="tb_ProcessName" Tag="ProcessName" Grid.Row="2" Grid.Column="2" FontSize="14"
                          IsEnabled="{Binding IsChecked, ElementName=chb_ProcessName}">
                     <TextBox.Text>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type TextBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
 
-                <CheckBox x:Name="chb_ProcessPath" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"
+                <CheckBox x:Name="chb_ProcessPath" Tag="ProcessPath" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"
                           Content="{lex:Loc Page.Rules.Rule.ProcessPath}" VerticalAlignment="Bottom">
                     <CheckBox.IsChecked>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type CheckBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </CheckBox.IsChecked>
                 </CheckBox>
-                <ComboBox x:Name="cbb_ProcessPath" Grid.Row="3" Grid.Column="1"
+                <ComboBox x:Name="cbb_ProcessPath" Tag="ProcessPath" Grid.Row="3" Grid.Column="1"
                           VerticalAlignment="Bottom" Margin="20,0"
                           IsEnabled="{Binding IsChecked, ElementName=chb_ProcessPath}"
                           ItemsSource="{Binding Path=(models:RulesViewModel.Operators)}"
@@ -241,30 +240,30 @@
                     <ComboBox.SelectedIndex>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type ComboBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </ComboBox.SelectedIndex>
                 </ComboBox>
-                <TextBox x:Name="tb_ProcessPath" Grid.Row="3" Grid.Column="2" FontSize="14"
+                <TextBox x:Name="tb_ProcessPath" Tag="ProcessPath" Grid.Row="3" Grid.Column="2" FontSize="14"
                          IsEnabled="{Binding IsChecked, ElementName=chb_ProcessPath}">
                     <TextBox.Text>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type TextBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
 
-                <CheckBox x:Name="chb_CommandLine" Grid.Row="4" Grid.Column="0" Margin="0,0,0,5"
+                <CheckBox x:Name="chb_CommandLine" Tag="CommandLine" Grid.Row="4" Grid.Column="0" Margin="0,0,0,5"
                           Content="{lex:Loc Page.Rules.Rule.CommandLine}" VerticalAlignment="Bottom">
                     <CheckBox.IsChecked>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type CheckBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </CheckBox.IsChecked>
                 </CheckBox>
-                <ComboBox x:Name="cbb_CommandLine" Grid.Row="4" Grid.Column="1"
+                <ComboBox x:Name="cbb_CommandLine" Tag="CommandLine" Grid.Row="4" Grid.Column="1"
                           VerticalAlignment="Bottom" Margin="20,0"
                           IsEnabled="{Binding IsChecked, ElementName=chb_CommandLine}"
                           ItemsSource="{Binding Path=(models:RulesViewModel.Operators)}"
@@ -280,30 +279,30 @@
                     <ComboBox.SelectedIndex>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type ComboBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </ComboBox.SelectedIndex>
                 </ComboBox>
-                <TextBox x:Name="tb_CommandLine" Grid.Row="4" Grid.Column="2" FontSize="14"
+                <TextBox x:Name="tb_CommandLine" Tag="CommandLine" Grid.Row="4" Grid.Column="2" FontSize="14"
                          IsEnabled="{Binding IsChecked, ElementName=chb_CommandLine}">
                     <TextBox.Text>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type TextBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
 
-                <CheckBox x:Name="chb_WndClass" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5"
+                <CheckBox x:Name="chb_WndClass" Tag="WndClass" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5"
                           Content="{lex:Loc Page.Rules.Rule.WndClass}" VerticalAlignment="Bottom">
                     <CheckBox.IsChecked>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type CheckBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </CheckBox.IsChecked>
                 </CheckBox>
-                <ComboBox x:Name="cbb_WndClass" Grid.Row="5" Grid.Column="1"
+                <ComboBox x:Name="cbb_WndClass" Tag="WndClass" Grid.Row="5" Grid.Column="1"
                           VerticalAlignment="Bottom"
                           IsEnabled="{Binding IsChecked, ElementName=chb_WndClass}" Margin="20,0"
                           ItemsSource="{Binding Path=(models:RulesViewModel.Operators)}"
@@ -319,30 +318,30 @@
                     <ComboBox.SelectedIndex>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type ComboBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </ComboBox.SelectedIndex>
                 </ComboBox>
-                <TextBox x:Name="tb_WndClass" Grid.Row="5" Grid.Column="2" FontSize="14"
+                <TextBox x:Name="tb_WndClass" Tag="WndClass" Grid.Row="5" Grid.Column="2" FontSize="14"
                          IsEnabled="{Binding IsChecked, ElementName=chb_WndClass}">
                     <TextBox.Text>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type TextBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
 
-                <CheckBox x:Name="chb_WinInScreen" Grid.Row="6" Grid.Column="0"
+                <CheckBox x:Name="chb_WinInScreen" Tag="WinInScreen" Grid.Row="6" Grid.Column="0"
                           Content="{lex:Loc Page.Rules.Rule.WinInScreen}" VerticalAlignment="Bottom">
                     <CheckBox.IsChecked>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="{x:Type CheckBox}">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </CheckBox.IsChecked>
                 </CheckBox>
-                <ComboBox x:Name="cbb_WinInScreen" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
+                <ComboBox x:Name="cbb_WinInScreen" Tag="WinInScreen" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
                           VerticalAlignment="Bottom" Margin="20,0,10,0"
                           IsEnabled="{Binding IsChecked, ElementName=chb_WinInScreen}"
                           ItemsSource="{Binding Path=(models:RulesViewModel.Screens)}"
@@ -350,7 +349,7 @@
                     <ComboBox.SelectedIndex>
                         <MultiBinding Converter="{StaticResource RuleFieldConverter}" Mode="OneWay" ConverterParameter="V">
                             <Binding Path="Expression" />
-                            <Binding Path="Name" RelativeSource="{RelativeSource Self}" Converter="{StaticResource RuleFieldFromControlNameConverter}" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </ComboBox.SelectedIndex>
                 </ComboBox>
