@@ -81,7 +81,7 @@ namespace VirtualSpace.VirtualDesktop
                         {
                             fVisible      = true,
                             dwFlags       = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
-                            opacity       = 255,
+                            opacity       = byte.MaxValue,
                             rcDestination = new RECT( 0, 0, _dw.Width, _dw.Height )
                         };
                         _dw.Thumb = thumb;
@@ -126,7 +126,7 @@ namespace VirtualSpace.VirtualDesktop
                             //////////////////////////
                             // goes here means no need to move the dragged window
                             var dtp = _selectedWindow.DTP;
-                            dtp.opacity = 255;
+                            dtp.opacity = byte.MaxValue;
                             _           = DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
                             break;
                         }
@@ -160,7 +160,7 @@ namespace VirtualSpace.VirtualDesktop
                     }
                     else
                     {
-                        Swap( ConfigManager.CurrentProfile.DesktopOrder!, VdIndex, _hoverVdIndex );
+                        ConfigManager.CurrentProfile.DesktopOrder?.Swap( VdIndex, _hoverVdIndex );
 
                         VirtualDesktopManager.SaveOrder();
 
@@ -349,11 +349,6 @@ namespace VirtualSpace.VirtualDesktop
             DesktopWrapper.MakeVisibleByGuid( VdId );
         }
 
-        private static void Swap( List<Guid> list, int indexA, int indexB )
-        {
-            ( list[indexA], list[indexB] ) = ( list[indexB], list[indexA] );
-        }
-
         public async void CloseSelectedWindow( VisibleWindow vw )
         {
             var isWindowPinned = DesktopWrapper.IsWindowPinned( vw.Handle ) || DesktopWrapper.IsApplicationPinned( vw.Handle );
@@ -363,7 +358,7 @@ namespace VirtualSpace.VirtualDesktop
                 if ( isPinned )
                     VirtualDesktopManager.ShowVisibleWindowsForDesktops();
                 else
-                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> { this } );
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this] );
             }
 
             // _ = User32.ShowWindow( vw.Handle, 0 );
@@ -402,7 +397,7 @@ namespace VirtualSpace.VirtualDesktop
                 VirtualDesktopManager.HideAllVirtualDesktops();
                 _isTheOnlyOneInMainView = true;
                 VirtualDesktopManager.ShowAllVirtualDesktops();
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> { this }, pId );
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this], pId );
             }
         }
     }
