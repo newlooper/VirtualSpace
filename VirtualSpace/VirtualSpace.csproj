@@ -9,7 +9,6 @@
         <ApplicationIcon>Resources\Logo_2.ico</ApplicationIcon>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <Platforms>AnyCPU;x64;x86</Platforms>
-        <LangVersion>9</LangVersion>
         <CsWinRTEnabled>false</CsWinRTEnabled>
     </PropertyGroup>
 

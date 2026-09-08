@@ -5,7 +5,6 @@
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <CsWinRTEnabled>false</CsWinRTEnabled>
-        <LangVersion>11</LangVersion>
         <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
     </PropertyGroup>
 

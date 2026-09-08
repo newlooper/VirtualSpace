@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <LangVersion>9</LangVersion>
         <UseWPF>true</UseWPF>
         <Nullable>enable</Nullable>
     </PropertyGroup>

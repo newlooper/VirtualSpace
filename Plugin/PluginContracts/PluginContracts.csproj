@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <Nullable>enable</Nullable>
-        <LangVersion>9</LangVersion>
         <RootNamespace>VirtualSpace.PluginContracts</RootNamespace>
         <AssemblyName>VirtualSpace.PluginContracts</AssemblyName>
         <SatelliteResourceLanguages>zh-Hans,zh-Hant</SatelliteResourceLanguages>

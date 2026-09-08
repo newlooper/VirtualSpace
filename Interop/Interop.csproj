@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <Nullable>enable</Nullable>
-        <LangVersion>9</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RootNamespace>VirtualSpace.Helpers</RootNamespace>
         <AssemblyName>VirtualSpace.Interop</AssemblyName>

@@ -3,7 +3,6 @@
     <PropertyGroup>
         <OutputType>Library</OutputType>
         <TargetFramework>$(TfmNet10WindowsSdk22000)</TargetFramework>
-        <LangVersion>9</LangVersion>
         <UseWPF>true</UseWPF>
         <CsWinRTEnabled>false</CsWinRTEnabled>
         <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>

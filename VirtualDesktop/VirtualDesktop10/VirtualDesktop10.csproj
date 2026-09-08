@@ -3,7 +3,6 @@
     <PropertyGroup>
         <Nullable>enable</Nullable>
         <CsWinRTEnabled>false</CsWinRTEnabled>
-        <LangVersion>9</LangVersion>
     </PropertyGroup>
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0-windows' Or '$(TargetFramework)' == 'net6.0-windows' ">
