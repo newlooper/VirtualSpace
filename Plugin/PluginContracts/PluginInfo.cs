@@ -12,87 +12,86 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace VirtualSpace.Plugin
+namespace VirtualSpace.Plugin;
+
+public class PluginInfo
 {
-    public class PluginInfo
-    {
-        [JsonIgnore] public string          Folder       = string.Empty;
-        [JsonIgnore] public IntPtr          Handle;
-        [JsonIgnore] public int             ProcessId;
-        [JsonIgnore] public string          AssemblyPath = string.Empty;
-        [JsonIgnore] public string          FileHash     = string.Empty;
-        [JsonIgnore] public PluginKind      Kind;
-        [JsonIgnore] public PluginLoadStatus LoadStatus  = PluginLoadStatus.Available;
-        [JsonIgnore] public bool            IsLoaded;
+    [JsonIgnore] public string           AssemblyPath = string.Empty;
+    [JsonIgnore] public string           FileHash     = string.Empty;
+    [JsonIgnore] public string           Folder       = string.Empty;
+    [JsonIgnore] public IntPtr           Handle;
+    [JsonIgnore] public bool             IsLoaded;
+    [JsonIgnore] public PluginKind       Kind;
+    [JsonIgnore] public PluginLoadStatus LoadStatus = PluginLoadStatus.Available;
+    [JsonIgnore] public int              ProcessId;
 
-        public PluginType      Type            { get; set; }
-        public string          Name            { get; set; } = string.Empty;
-        public string          Display         { get; set; } = string.Empty;
-        public string          Version         { get; set; } = string.Empty;
-        public string          Description     { get; set; } = string.Empty;
-        public string          Author          { get; set; } = string.Empty;
-        public string          Email           { get; set; } = string.Empty;
-        public string          Entry           { get; set; } = string.Empty;
-        public bool            AutoStart       { get; set; }
-        public AutoStartTiming AutoStartTiming { get; set; } = AutoStartTiming.MainWindowLoaded;
-        public Policy?         RestartPolicy   { get; set; }
-        public Policy?         ClosePolicy     { get; set; }
-        public Requirements?   Requirements    { get; set; }
-    }
+    public PluginType      Type            { get; set; }
+    public string          Name            { get; set; } = string.Empty;
+    public string          Display         { get; set; } = string.Empty;
+    public string          Version         { get; set; } = string.Empty;
+    public string          Description     { get; set; } = string.Empty;
+    public string          Author          { get; set; } = string.Empty;
+    public string          Email           { get; set; } = string.Empty;
+    public string          Entry           { get; set; } = string.Empty;
+    public bool            AutoStart       { get; set; }
+    public AutoStartTiming AutoStartTiming { get; set; } = AutoStartTiming.MainWindowLoaded;
+    public Policy?         RestartPolicy   { get; set; }
+    public Policy?         ClosePolicy     { get; set; }
+    public Requirements?   Requirements    { get; set; }
+}
 
-    public class Policy
-    {
-        public PolicyTrigger Trigger { get; set; }
-        public List<string>  Values  { get; set; } = new();
-        public bool          Enabled { get; set; }
-    }
+public class Policy
+{
+    public PolicyTrigger Trigger { get; set; }
+    public List<string>  Values  { get; set; } = [];
+    public bool          Enabled { get; set; }
+}
 
-    public enum PolicyTrigger
-    {
-        WINDOWS_MESSAGE
-    }
+public enum PolicyTrigger
+{
+    WINDOWS_MESSAGE
+}
 
-    public enum PluginType
-    {
-        NONE,
-        VD_SWITCH_OBSERVER
-    }
+public enum PluginType
+{
+    NONE,
+    VD_SWITCH_OBSERVER
+}
 
-    public enum PluginKind
-    {
-        ExternalProcess,
-        InProcess
-    }
+public enum PluginKind
+{
+    ExternalProcess,
+    InProcess
+}
 
-    public enum PluginLoadStatus
-    {
-        Available,
-        Loaded,
-        Missing,
-        Error
-    }
+public enum PluginLoadStatus
+{
+    Available,
+    Loaded,
+    Missing,
+    Error
+}
 
-    public class Requirements
-    {
-        public WinVer   WinVer      { get; set; } = new();
-        public Version? HostVersion { get; set; }
-    }
+public class Requirements
+{
+    public WinVer   WinVer      { get; set; } = new();
+    public Version? HostVersion { get; set; }
+}
 
-    public class WinVer
-    {
-        public Ver  Min { get; set; } = new();
-        public Ver? Max { get; set; }
-    }
+public class WinVer
+{
+    public Ver  Min { get; set; } = new();
+    public Ver? Max { get; set; }
+}
 
-    public class Ver
-    {
-        public int Major { get; set; }
-        public int Build { get; set; }
-    }
+public class Ver
+{
+    public int Major { get; set; }
+    public int Build { get; set; }
+}
 
-    public enum AutoStartTiming
-    {
-        AppStart,
-        MainWindowLoaded
-    }
+public enum AutoStartTiming
+{
+    AppStart,
+    MainWindowLoaded
 }

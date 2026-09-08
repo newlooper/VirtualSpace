@@ -42,17 +42,22 @@ public partial class GeneralViewModel : ViewModelBase
     public bool         RunOnStartup { get; set; }
     public ClusterProxy Cluster      { get; set; }
 
-    public List<object> NavHTypeList { get; set; } = new()
-    {
+    public List<object> NavHTypeList { get; set; } =
+    [
         new { Value = Const.VirtualDesktop.NavHTypeNextRow, Text = "" },
         new { Value = Const.VirtualDesktop.NavHTypeSameRow, Text = "" }
-    };
+    ];
 
     public void OnPropertyChanged( string propertyName, object before, object after )
     {
         var propertyChanged = PropertyChanged;
-        if ( propertyChanged == null ) return;
+        if ( propertyChanged == null )
+        {
+            return;
+        }
+
         if ( _isInitialized )
+        {
             switch ( propertyName )
             {
                 case nameof( NavHType ):
@@ -64,8 +69,16 @@ public partial class GeneralViewModel : ViewModelBase
                     Manager.Save( reason: Manager.CurrentProfile.Navigation );
                     break;
                 case nameof( RunOnStartup ):
-                    if ( (bool)after && TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName ) ) break;
-                    if ( !(bool)after && !TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName ) ) break;
+                    if ( (bool)after && TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName ) )
+                    {
+                        break;
+                    }
+
+                    if ( !(bool)after && !TaskSchedulerHelper.IsTaskExistsByName( Const.AppName, Const.AppName ) )
+                    {
+                        break;
+                    }
+
                     try
                     {
                         if ( RunOnStartup )
@@ -75,7 +88,10 @@ public partial class GeneralViewModel : ViewModelBase
                         else
                         {
                             if ( TaskSchedulerHelper.IsTaskExistsByName( Const.AppName ) )
+                            {
                                 TaskSchedulerHelper.DeleteTaskByName( Const.AppName );
+                            }
+
                             TaskSchedulerHelper.DeleteTaskByName( Const.AppName, Const.AppName );
                         }
                     }
@@ -88,6 +104,7 @@ public partial class GeneralViewModel : ViewModelBase
 
                     break;
             }
+        }
 
         propertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
     }
@@ -125,7 +142,10 @@ public partial class GeneralViewModel : ViewModelBase
         public void OnPropertyChanged( string propertyName, object before, object after )
         {
             var propertyChanged = PropertyChanged;
-            if ( propertyChanged == null ) return;
+            if ( propertyChanged == null )
+            {
+                return;
+            }
 
             if ( _isInitialized )
             {

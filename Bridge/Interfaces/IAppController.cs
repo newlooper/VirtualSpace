@@ -10,16 +10,15 @@
 
 using System;
 
-namespace VirtualSpace
+namespace VirtualSpace;
+
+public interface IAppController
 {
-    public interface IAppController
-    {
-        public void BringToTop();
-        public void SetMainWindowHandle( IntPtr handle );
+    public void BringToTop();
+    public void SetMainWindowHandle( IntPtr handle );
 #if USE_OLD_AC
         public void Quit();
         public void RenderDesktopArrangementButtons( string selectedDa );
 #endif
-        public void CreateRuleFromWindowHandle( IntPtr handle );
-    }
+    public void CreateRuleFromWindowHandle( IntPtr handle );
 }

@@ -10,7 +10,6 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -30,206 +29,224 @@ using Application = System.Windows.Application;
 using ConfigManager = VirtualSpace.Config.Manager;
 using Point = System.Drawing.Point;
 
-namespace VirtualSpace
+namespace VirtualSpace;
+
+/// <summary>
+///     Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
 {
-    /// <summary>
-    ///     Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    private static Mutex? _mutex;
+    private        bool   _shuttingDown;
+    public         bool   HideOnStart { get; private set; }
+
+    protected override void OnStartup( StartupEventArgs e )
     {
-        private static Mutex? _mutex;
-        private        bool   _shuttingDown;
-        public         bool   HideOnStart { get; private set; }
+        base.OnStartup( e );
 
-        protected override void OnStartup( StartupEventArgs e )
+        LogManager.GorgeousDividingLine();
+
+        if ( SystemTool.VersionCheck() &&
+             SingleInstanceCheck() &&
+             ConfigManager.Init() )
         {
-            base.OnStartup( e );
+            Bootstrap();
 
-            LogManager.GorgeousDividingLine();
-
-            if ( SystemTool.VersionCheck() &&
-                 SingleInstanceCheck() &&
-                 ConfigManager.Init() )
+            if ( e.Args.Contains( Const.Args.HIDE_ON_START ) )
             {
-                Bootstrap();
-
-                if ( e.Args.Contains( Const.Args.HIDE_ON_START ) ) HideOnStart = true;
-
-                var mw = CreateCanvas( e );
-                Current.MainWindow = mw;
-
-                IpcPipeServer.MainWindowHandle          = mw.Handle;
-                PluginHost.HostContext.MainWindowHandle = mw.Handle;
-
-                if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
-                {
-                    mw.Left = Const.FakeHideX;
-                    mw.Top  = Const.FakeHideY;
-                }
-
-                mw.Show();
-
-                if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart ) mw.FakeHide();
-
-                Current.SessionEnding += OnSessionEnding;
-
-                _ = Dispatcher.InvokeAsync(
-                    () => { _ = PluginHost.AutoStartAfterMainWindowLoadedAsync(); },
-                    DispatcherPriority.ApplicationIdle ); // async start for Timing="AutoStartTiming.MainWindowLoaded"
-            }
-            else
-            {
-                Current.Shutdown();
-            }
-        }
-
-        internal static void HandleSessionEndQuery( string source, IntPtr lParam )
-        {
-            var flags    = lParam.ToInt64();
-            var closeApp = ( flags & WinMsg.ENDSESSION_CLOSEAPP ) != 0;
-            var critical = ( flags & WinMsg.ENDSESSION_CRITICAL ) != 0;
-            var message  = $"Windows session end query ({source}, closeApp={closeApp}, critical={critical}).";
-            Logger.Info( message );
-        }
-
-        private static void TryTearDownPluginsForSessionEnd()
-        {
-            try
-            {
-                PluginHost.CloseAllPlugins();
-            }
-            catch ( Exception ex )
-            {
-                Logger.Warning( $"Plugin session-end teardown failed: {ex.Message}" );
-            }
-        }
-
-        internal static void HandleSessionEnd( string source, IntPtr wParam )
-        {
-            if ( wParam == IntPtr.Zero )
-                return;
-
-            if ( Current is not App app || app._shuttingDown )
-                return;
-
-            app._shuttingDown = true;
-            var message = $"Windows session ending ({source}); shutting down application.";
-            Logger.Info( message );
-            TryTearDownPluginsForSessionEnd();
-            app.Shutdown();
-        }
-
-        private void OnSessionEnding( object sender, SessionEndingCancelEventArgs e )
-        {
-            if ( _shuttingDown )
-                return;
-
-            _shuttingDown = true;
-            var message = $"Windows session ending (SessionEnding: {e.ReasonSessionEnding}); shutting down application.";
-            Logger.Info( message );
-            TryTearDownPluginsForSessionEnd();
-            Shutdown();
-        }
-
-        protected override void OnExit( ExitEventArgs e )
-        {
-            Current.SessionEnding -= OnSessionEnding;
-            try
-            {
-                PluginHost.CloseAllPlugins();
-            }
-            catch ( Exception ex )
-            {
-                Logger.Warning( $"Plugin unload on exit failed: {ex.Message}" );
+                HideOnStart = true;
             }
 
-            ReleaseMutex();
-            Daemon.Stop();
-            IpcPipeServer.SimpleShutdown();
-            LogManager.CloseAndFlush();
+            var mw = CreateCanvas( e );
+            Current.MainWindow = mw;
 
-            base.OnExit( e );
-        }
+            IpcPipeServer.MainWindowHandle          = mw.Handle;
+            PluginHost.HostContext.MainWindowHandle = mw.Handle;
 
-        public static void ReleaseMutex()
-        {
-            _mutex?.ReleaseMutex();
-            _mutex?.Dispose();
-            _mutex = null;
-        }
-
-        private static bool SingleInstanceCheck()
-        {
-            var createdNew = TryMutex();
-            if ( createdNew )
-                IpcPipeServer.Start();
-            else
-                IpcPipeServer.AsClient();
-
-            return createdNew;
-        }
-
-        public static bool TryMutex()
-        {
-            _mutex = new Mutex( true, "乱花渐欲迷人眼", out var createdNew );
-            return createdNew;
-        }
-
-        private MainWindow CreateCanvas( StartupEventArgs args )
-        {
-            var canvas = VirtualSpace.MainWindow.Create( AppControllerFactory.Create( mergedDictionaries: Resources.MergedDictionaries ) );
-            return canvas;
-        }
-
-        private static void Bootstrap()
-        {
-            Logger.ShowLogsInGui = ConfigManager.Configs.LogConfig.ShowLogsInGui;
-
-            BootInfo();
-
-            TrayIcon.Show();
-
-            Daemon.Start();
-
-            PluginHost.RegisterPlugins( ConfigManager.GetPluginsPath() ); // sync start for Timing="AutoStartTiming.AppStart"
-        }
-
-        private static void BootInfo()
-        {
-            var screen = Screen.FromPoint( new Point() );
-            var ar     = SysInfo.GetAspectRadioOfScreen();
-            Logger.Info( $"Application Start Successfully: {ConfigManager.AppPath}" );
-            LogForVersion();
-            Logger.Info( $"System Version: {SysInfo.OSVersion}" );
-            Logger.Info( $".NET Runtime: {RuntimeInformation.FrameworkDescription}" );
-            Logger.Info( $"Total Screens: {Screen.AllScreens.Length}" );
-            Logger.Info( $"Total VirtualDesktops: {DesktopWrapper.Count}" );
-            Logger.Info( $"Start Screen: {screen.DeviceName} ({screen.DeviceFriendlyName()})" );
-            Logger.Info( $"Start Screen Aspect Ratio: [{ar.W}:{ar.H}]" );
-            Logger.Info( $"Start VirtualDesktop: Desktop[{DesktopWrapper.CurrentIndex}]" );
-            Logger.Info( $"Start Position: [{Screen.PrimaryScreen!.Bounds.Location.X}, {Screen.PrimaryScreen.Bounds.Location.Y}]" );
-            Logger.Info( $"Start Size: {Screen.PrimaryScreen.Bounds.Width}*{Screen.PrimaryScreen.Bounds.Height}" );
-            Logger.Info( $"Is Running As Administrator: {SysInfo.IsAdministrator}" );
-            Logger.Info( $"Current Profile: {ConfigManager.Configs.CurrentProfileName}" );
-            Logger.Info( $"Language: {ConfigManager.CurrentProfile.UI.Language}" );
-        }
-
-        private static void LogForVersion()
-        {
-            var version = string.Empty;
-            try
+            if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
             {
-                version = ( (AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(
-                    Assembly.GetEntryAssembly()!,
-                    typeof( AssemblyInformationalVersionAttribute ),
-                    false )! ).InformationalVersion;
-            }
-            catch
-            {
-                // ignored
+                mw.Left = Const.FakeHideX;
+                mw.Top  = Const.FakeHideY;
             }
 
-            if ( !string.IsNullOrEmpty( version ) ) Logger.Info( $"Application Version: {version}" );
+            mw.Show();
+
+            if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
+            {
+                mw.FakeHide();
+            }
+
+            Current.SessionEnding += OnSessionEnding;
+
+            _ = Dispatcher.InvokeAsync(
+                () => { _ = PluginHost.AutoStartAfterMainWindowLoadedAsync(); },
+                DispatcherPriority.ApplicationIdle ); // async start for Timing="AutoStartTiming.MainWindowLoaded"
+        }
+        else
+        {
+            Current.Shutdown();
+        }
+    }
+
+    internal static void HandleSessionEndQuery( string source, IntPtr lParam )
+    {
+        var flags    = lParam.ToInt64();
+        var closeApp = ( flags & WinMsg.ENDSESSION_CLOSEAPP ) != 0;
+        var critical = ( flags & WinMsg.ENDSESSION_CRITICAL ) != 0;
+        var message  = $"Windows session end query ({source}, closeApp={closeApp}, critical={critical}).";
+        Logger.Info( message );
+    }
+
+    private static void TryTearDownPluginsForSessionEnd()
+    {
+        try
+        {
+            PluginHost.CloseAllPlugins();
+        }
+        catch ( Exception ex )
+        {
+            Logger.Warning( $"Plugin session-end teardown failed: {ex.Message}" );
+        }
+    }
+
+    internal static void HandleSessionEnd( string source, IntPtr wParam )
+    {
+        if ( wParam == IntPtr.Zero )
+        {
+            return;
+        }
+
+        if ( Current is not App app || app._shuttingDown )
+        {
+            return;
+        }
+
+        app._shuttingDown = true;
+        var message = $"Windows session ending ({source}); shutting down application.";
+        Logger.Info( message );
+        TryTearDownPluginsForSessionEnd();
+        app.Shutdown();
+    }
+
+    private void OnSessionEnding( object sender, SessionEndingCancelEventArgs e )
+    {
+        if ( _shuttingDown )
+        {
+            return;
+        }
+
+        _shuttingDown = true;
+        var message = $"Windows session ending (SessionEnding: {e.ReasonSessionEnding}); shutting down application.";
+        Logger.Info( message );
+        TryTearDownPluginsForSessionEnd();
+        Shutdown();
+    }
+
+    protected override void OnExit( ExitEventArgs e )
+    {
+        Current.SessionEnding -= OnSessionEnding;
+        try
+        {
+            PluginHost.CloseAllPlugins();
+        }
+        catch ( Exception ex )
+        {
+            Logger.Warning( $"Plugin unload on exit failed: {ex.Message}" );
+        }
+
+        ReleaseMutex();
+        Daemon.Stop();
+        IpcPipeServer.SimpleShutdown();
+        LogManager.CloseAndFlush();
+
+        base.OnExit( e );
+    }
+
+    public static void ReleaseMutex()
+    {
+        _mutex?.ReleaseMutex();
+        _mutex?.Dispose();
+        _mutex = null;
+    }
+
+    private static bool SingleInstanceCheck()
+    {
+        var createdNew = TryMutex();
+        if ( createdNew )
+        {
+            IpcPipeServer.Start();
+        }
+        else
+        {
+            IpcPipeServer.AsClient();
+        }
+
+        return createdNew;
+    }
+
+    public static bool TryMutex()
+    {
+        _mutex = new Mutex( true, "乱花渐欲迷人眼", out var createdNew );
+        return createdNew;
+    }
+
+    private MainWindow CreateCanvas( StartupEventArgs args )
+    {
+        var canvas = VirtualSpace.MainWindow.Create( AppControllerFactory.Create( Resources.MergedDictionaries ) );
+        return canvas;
+    }
+
+    private static void Bootstrap()
+    {
+        Logger.ShowLogsInGui = ConfigManager.Configs.LogConfig.ShowLogsInGui;
+
+        BootInfo();
+
+        TrayIcon.Show();
+
+        Daemon.Start();
+
+        PluginHost.RegisterPlugins( ConfigManager.GetPluginsPath() ); // sync start for Timing="AutoStartTiming.AppStart"
+    }
+
+    private static void BootInfo()
+    {
+        var screen = Screen.FromPoint( new Point() );
+        var (W, H) = SysInfo.GetAspectRadioOfScreen();
+        Logger.Info( $"Application Start Successfully: {ConfigManager.AppPath}" );
+        LogForVersion();
+        Logger.Info( $"System Version: {SysInfo.OSVersion}" );
+        Logger.Info( $".NET Runtime: {RuntimeInformation.FrameworkDescription}" );
+        Logger.Info( $"Total Screens: {Screen.AllScreens.Length}" );
+        Logger.Info( $"Total VirtualDesktops: {DesktopWrapper.Count}" );
+        Logger.Info( $"Start Screen: {screen.DeviceName} ({screen.DeviceFriendlyName()})" );
+        Logger.Info( $"Start Screen Aspect Ratio: [{W}:{H}]" );
+        Logger.Info( $"Start VirtualDesktop: Desktop[{DesktopWrapper.CurrentIndex}]" );
+        Logger.Info( $"Start Position: [{Screen.PrimaryScreen!.Bounds.Location.X}, {Screen.PrimaryScreen.Bounds.Location.Y}]" );
+        Logger.Info( $"Start Size: {Screen.PrimaryScreen.Bounds.Width}*{Screen.PrimaryScreen.Bounds.Height}" );
+        Logger.Info( $"Is Running As Administrator: {SysInfo.IsAdministrator}" );
+        Logger.Info( $"Current Profile: {ConfigManager.Configs.CurrentProfileName}" );
+        Logger.Info( $"Language: {ConfigManager.CurrentProfile.UI.Language}" );
+    }
+
+    private static void LogForVersion()
+    {
+        var version = string.Empty;
+        try
+        {
+            version = ( (AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(
+                Assembly.GetEntryAssembly()!,
+                typeof( AssemblyInformationalVersionAttribute ),
+                false )! ).InformationalVersion;
+        }
+        catch
+        {
+            // ignored
+        }
+
+        if ( !string.IsNullOrEmpty( version ) )
+        {
+            Logger.Info( $"Application Version: {version}" );
         }
     }
 }

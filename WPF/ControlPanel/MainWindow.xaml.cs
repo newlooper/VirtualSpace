@@ -61,22 +61,35 @@ public partial class MainWindow : Window, IAppController
         Left = ( SystemParameters.PrimaryScreenWidth - Width ) / 2;
         Top  = ( SystemParameters.PrimaryScreenHeight - Height ) / 2;
 
-        if ( WindowState == WindowState.Minimized ) WindowState = WindowState.Normal;
+        if ( WindowState == WindowState.Minimized )
+        {
+            WindowState = WindowState.Normal;
+        }
 
         if ( IsVisible )
+        {
             DesktopWrapper.MoveWindowToDesktop( _handle, DesktopWrapper.CurrentIndex );
+        }
         else
+        {
             Show();
+        }
 
         Topmost = false;
         Topmost = true;
-        
+
         User32.ClipCursor( IntPtr.Zero );
     }
 
     public void SetMainWindowHandle( IntPtr handle )
     {
         _mainWindowHandle = handle;
+    }
+
+    public void CreateRuleFromWindowHandle( IntPtr handle )
+    {
+        ForceLoad();
+        RuleEditorWindow.Create( handle ).ShowDialog();
     }
 
     public void Quit()
@@ -90,15 +103,12 @@ public partial class MainWindow : Window, IAppController
         // throw new NotImplementedException();
     }
 
-    public void CreateRuleFromWindowHandle( IntPtr handle )
-    {
-        ForceLoad();
-        RuleEditorWindow.Create( handle ).ShowDialog();
-    }
-
     public void ForceLoad()
     {
-        if ( IsVisible ) return;
+        if ( IsVisible )
+        {
+            return;
+        }
 
         ShowInTaskbar = false;
         Left          = Const.FakeHideX;
@@ -122,12 +132,16 @@ public partial class MainWindow : Window, IAppController
     private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
     {
         if ( msg != WinMsg.WM_SETTINGCHANGE || Manager.CurrentProfile.UI.Theme != 0 )
+        {
             return IntPtr.Zero;
+        }
 
         // 有些系统这里会带 "ImmersiveColorSet"；也可能为空
         var area = Marshal.PtrToStringUni( lParam ) ?? string.Empty;
         if ( !string.IsNullOrEmpty( area ) && !area.Equals( "ImmersiveColorSet", StringComparison.OrdinalIgnoreCase ) )
+        {
             return IntPtr.Zero;
+        }
 
         var theme = Resources.GetTheme();
         var (pColor, sColor, newTheme) = GetThemeInfo();
@@ -152,7 +166,11 @@ public partial class MainWindow : Window, IAppController
 
     private void MainWindow_OnClosing( object? sender, CancelEventArgs e )
     {
-        if ( Application.Current is App ) return;
+        if ( Application.Current is App )
+        {
+            return;
+        }
+
         e.Cancel = true;
         Hide();
     }
@@ -175,7 +193,10 @@ public partial class MainWindow : Window, IAppController
             UseShellExecute = true
         };
 
-        if ( runas ) psi.Verb = "runas";
+        if ( runas )
+        {
+            psi.Verb = "runas";
+        }
 
         try
         {
@@ -191,7 +212,11 @@ public partial class MainWindow : Window, IAppController
     private void NavBar_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
     {
         var tab = (TabControl)sender;
-        if ( tab.SelectedIndex == -1 ) return;
+        if ( tab.SelectedIndex == -1 )
+        {
+            return;
+        }
+
         var selectedTab = (TabItem)tab.SelectedItem;
         ContentFrame.Content = PageFactory.GetPage( NavBarItem.NavBarItemsInfo[selectedTab.Tag.ToString()!] );
     }

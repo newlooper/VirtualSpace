@@ -32,7 +32,10 @@ public partial class Control
         vm!.BoxVisible = Visibility.Hidden;
 
         var selectedNode = e.NewValue as TreeViewItem;
-        if ( selectedNode is null ) return;
+        if ( selectedNode is null )
+        {
+            return;
+        }
 
         var kbInConfig = Manager.Configs.KeyBindings;
         var hotkeyId   = selectedNode.Name;
@@ -40,7 +43,11 @@ public partial class Control
         if ( !kbInConfig!.TryGetValue( hotkeyId, out var value ) )
         {
             var kb = Const.Hotkey.GetKeyBinding( hotkeyId );
-            if ( kb.MessageId == 0 ) return;
+            if ( kb.MessageId == 0 )
+            {
+                return;
+            }
+
             value                = kb;
             kbInConfig[hotkeyId] = value;
         }
@@ -51,10 +58,16 @@ public partial class Control
 
         var path = "";
         foreach ( var node in stack )
+        {
             if ( string.IsNullOrEmpty( path ) )
+            {
                 path = node.Header.ToString();
+            }
             else
+            {
                 path += " > " + node.Header;
+            }
+        }
 
         vm.Path  = path!;
         vm.Extra = Const.Hotkey.GetHotkeyExtra( hotkeyId );
@@ -192,21 +205,31 @@ public partial class Control
 
         var vm = KeyBindingBox.DataContext as KeyBindingModel;
 
-        if ( string.IsNullOrEmpty( vm?.Key ) || vm.Key == Const.Hotkey.NONE ) return;
+        if ( string.IsNullOrEmpty( vm?.Key ) || vm.Key == Const.Hotkey.NONE )
+        {
+            return;
+        }
 
         if ( GlobalHotKey.RegHotKey( MainWindow.MainWindowHandle,
                 msgId,
                 ghk.keyModifiers,
                 KeyInterop.VirtualKeyFromKey( Enum.Parse<Key>( vm.Key ) ) ) )
+        {
             ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.Reg.Success" )! );
+        }
         else
+        {
             ShowTips( Snackbar, Agent.Langs.GetString( "KB.Hotkey.Reg.Fail" )! );
+        }
     }
 
     private void RegAndSave_OnClick( object sender, RoutedEventArgs e )
     {
         var vm = KeyBindingBox.DataContext as KeyBindingModel;
-        if ( vm == null ) return;
+        if ( vm == null )
+        {
+            return;
+        }
 
         if ( !( vm.LWin | vm.Ctrl | vm.Alt | vm.Shift ) )
         {
@@ -228,7 +251,11 @@ public partial class Control
     private void ClearAndSave_OnClick( object sender, RoutedEventArgs e )
     {
         var selectedItem = KeyboardTreeView.SelectedItem as TreeViewItem;
-        if ( selectedItem == null ) return;
+        if ( selectedItem == null )
+        {
+            return;
+        }
+
         var hotkeyId = selectedItem.Name;
 
         var msgId = Const.Hotkey.GetKeyBinding( hotkeyId ).MessageId;

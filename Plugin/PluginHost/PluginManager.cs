@@ -13,78 +13,98 @@ using System.IO;
 using System.Text.Json;
 using VirtualSpace.PluginContracts;
 
-namespace VirtualSpace.Plugin
+namespace VirtualSpace.Plugin;
+
+public static class PluginManager
 {
-    public static class PluginManager
+    public const  string PluginInfoFile = "plugin.json";
+    private const string SETTINGS_FILE  = "settings.json";
+
+    public static T? LoadFromJson<T>( string infoFile )
     {
-        public const  string PluginInfoFile = "plugin.json";
-        private const string SETTINGS_FILE  = "settings.json";
+        using var fs     = new FileStream( infoFile, FileMode.Open, FileAccess.Read );
+        var       buffer = new byte[fs.Length];
+        _ = fs.Read( buffer, 0, (int)fs.Length );
+        var utf8Reader = new Utf8JsonReader( buffer );
+        return JsonSerializer.Deserialize<T>( ref utf8Reader );
+    }
 
-        public static T? LoadFromJson<T>( string infoFile )
+    public static bool CheckRequirements( Requirements? req )
+    {
+        if ( req?.WinVer?.Min is null )
         {
-            using var fs     = new FileStream( infoFile, FileMode.Open, FileAccess.Read );
-            var       buffer = new byte[fs.Length];
-            _ = fs.Read( buffer, 0, (int)fs.Length );
-            var utf8Reader = new Utf8JsonReader( buffer );
-            return JsonSerializer.Deserialize<T>( ref utf8Reader );
+            return true;
         }
 
-        public static bool CheckRequirements( Requirements? req )
+        var check   = false;
+        var version = Environment.OSVersion.Version;
+
+        if ( version.Major >= req.WinVer.Min.Major && version.Build >= req.WinVer.Min.Build )
         {
-            if ( req?.WinVer?.Min is null ) return true;
-
-            var check   = false;
-            var version = Environment.OSVersion.Version;
-
-            if ( version.Major >= req.WinVer.Min.Major && version.Build >= req.WinVer.Min.Build )
-                check = true;
-
-            if ( req.WinVer.Max != null && ( version.Major > req.WinVer.Max.Major || version.Build > req.WinVer.Max.Build ) )
-                check = false;
-
-            return check;
+            check = true;
         }
 
-        public static void SavePluginInfo( PluginInfo pi )
+        if ( req.WinVer.Max != null && ( version.Major > req.WinVer.Max.Major || version.Build > req.WinVer.Max.Build ) )
         {
-            var dir = PluginPaths.GetPluginDataDirectory( pi.Name );
-            Directory.CreateDirectory( dir );
-            var file     = Path.Combine( dir, PluginInfoFile );
-            var contents = JsonSerializer.SerializeToUtf8Bytes( pi, new JsonSerializerOptions { WriteIndented = true } );
-            File.WriteAllBytes( file, contents );
+            check = false;
         }
 
-        public static void EnsureDataFiles( PluginInfo info )
+        return check;
+    }
+
+    public static void SavePluginInfo( PluginInfo pi )
+    {
+        var dir = PluginPaths.GetPluginDataDirectory( pi.Name );
+        Directory.CreateDirectory( dir );
+        var file     = Path.Combine( dir, PluginInfoFile );
+        var contents = JsonSerializer.SerializeToUtf8Bytes( pi, new JsonSerializerOptions { WriteIndented = true } );
+        File.WriteAllBytes( file, contents );
+    }
+
+    public static void EnsureDataFiles( PluginInfo info )
+    {
+        if ( string.IsNullOrEmpty( info.Name ) )
         {
-            if ( string.IsNullOrEmpty( info.Name ) ) return;
-
-            var dir = PluginPaths.GetPluginDataDirectory( info.Name );
-            Directory.CreateDirectory( dir );
-
-            var pluginFile = Path.Combine( dir, PluginInfoFile );
-            if ( !File.Exists( pluginFile ) )
-                SavePluginInfo( info );
-
-            var settingsFile = Path.Combine( dir, SETTINGS_FILE );
-            if ( File.Exists( settingsFile ) || string.IsNullOrEmpty( info.Folder ) ) return;
-
-            var bundled = Path.Combine( info.Folder, SETTINGS_FILE );
-            if ( File.Exists( bundled ) )
-                File.Copy( bundled, settingsFile );
+            return;
         }
 
-        public static PluginInfo? LoadPersistedPluginInfo( string pluginName )
+        var dir = PluginPaths.GetPluginDataDirectory( info.Name );
+        Directory.CreateDirectory( dir );
+
+        var pluginFile = Path.Combine( dir, PluginInfoFile );
+        if ( !File.Exists( pluginFile ) )
         {
-            var file = Path.Combine( PluginPaths.GetPluginDataDirectory( pluginName ), PluginInfoFile );
-            if ( !File.Exists( file ) ) return null;
-            try
-            {
-                return LoadFromJson<PluginInfo>( file );
-            }
-            catch
-            {
-                return null;
-            }
+            SavePluginInfo( info );
+        }
+
+        var settingsFile = Path.Combine( dir, SETTINGS_FILE );
+        if ( File.Exists( settingsFile ) || string.IsNullOrEmpty( info.Folder ) )
+        {
+            return;
+        }
+
+        var bundled = Path.Combine( info.Folder, SETTINGS_FILE );
+        if ( File.Exists( bundled ) )
+        {
+            File.Copy( bundled, settingsFile );
+        }
+    }
+
+    public static PluginInfo? LoadPersistedPluginInfo( string pluginName )
+    {
+        var file = Path.Combine( PluginPaths.GetPluginDataDirectory( pluginName ), PluginInfoFile );
+        if ( !File.Exists( file ) )
+        {
+            return null;
+        }
+
+        try
+        {
+            return LoadFromJson<PluginInfo>( file );
+        }
+        catch
+        {
+            return null;
         }
     }
 }

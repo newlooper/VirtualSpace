@@ -20,141 +20,153 @@ using System.Text.RegularExpressions;
 using VirtualSpace.AppLogs;
 using Encoder = System.Drawing.Imaging.Encoder;
 
-namespace VirtualSpace.Helpers
+namespace VirtualSpace.Helpers;
+
+internal static class PathInfo
 {
-    internal static class PathInfo
+    public const string FILE_NAME_SPLITTER = "_";
+
+    public static string GenImageName( string fullString, int width, int height )
     {
-        public const string FILE_NAME_SPLITTER = "_";
-
-        public static string GenImageName( string fullString, int width, int height )
-        {
-            return fullString + FILE_NAME_SPLITTER +
-                   width.ToString( "x2" ) + "x" + height.ToString( "x2" );
-        }
-        
-        public static (string FullString, string Str0, string Str1) Md5Hash( string input )
-        {
-            var inputBytes = Encoding.ASCII.GetBytes( input );
-            var hashBytes  = MD5.HashData( inputBytes );
-
-            var sb = new StringBuilder();
-            foreach ( var b in hashBytes ) sb.Append( b.ToString( "x2" ) );
-
-            var md5Str = sb.ToString();
-
-            return new ValueTuple<string, string, string>(
-                md5Str,
-                md5Str.Substring( 0, 1 ),
-                md5Str.Substring( 1, 1 )
-            );
-        }
+        return fullString + FILE_NAME_SPLITTER +
+               width.ToString( "x2" ) + "x" + height.ToString( "x2" );
     }
 
-    public static class Images
+    public static (string FullString, string Str0, string Str1) Md5Hash( string input )
     {
-        public static Bitmap GetScaledBitmap( int width, int height, string path, ref Wallpaper wp, string cachePath, long quality )
+        var inputBytes = Encoding.ASCII.GetBytes( input );
+        var hashBytes  = MD5.HashData( inputBytes );
+
+        var sb = new StringBuilder();
+        foreach ( var b in hashBytes )
         {
-            var cached = Wallpaper.CachedWallPaper( path, cachePath, width, height );
-
-            if ( cached != null ) return cached;
-            using var src  = new Bitmap( path );
-            var       dest = new Bitmap( width, height, PixelFormat.Format32bppPArgb );
-            using ( var gr = Graphics.FromImage( dest ) )
-            {
-                gr.DrawImage( src, new Rectangle( Point.Empty, dest.Size ) );
-            }
-
-            var (fullString, str0, str1) = PathInfo.Md5Hash( path );
-            var file = Path.Combine( cachePath, str0, str1,
-                PathInfo.GenImageName( fullString, width, height ) +
-                PathInfo.FILE_NAME_SPLITTER + Environment.CurrentManagedThreadId );
-
-            // dest.Save( file, ImageFormat.Jpeg );
-
-            var jpgEncoder        = GetEncoder( ImageFormat.Jpeg );
-            var encoder           = Encoder.Quality;
-            var encoderParameters = new EncoderParameters( 1 );
-            var encoderParameter  = new EncoderParameter( encoder, quality );
-            encoderParameters.Param[0] = encoderParameter;
-            dest.Save( file, jpgEncoder, encoderParameters );
-
-            wp.Fullpath = file;
-
-            return dest;
+            sb.Append( b.ToString( "x2" ) );
         }
 
-        private static ImageCodecInfo GetEncoder( ImageFormat format )
+        var md5Str = sb.ToString();
+
+        return new ValueTuple<string, string, string>(
+            md5Str,
+            md5Str.Substring( 0, 1 ),
+            md5Str.Substring( 1, 1 )
+        );
+    }
+}
+
+public static class Images
+{
+    public static Bitmap GetScaledBitmap( int width, int height, string path, ref Wallpaper wp, string cachePath, long quality )
+    {
+        var cached = Wallpaper.CachedWallPaper( path, cachePath, width, height );
+
+        if ( cached != null )
         {
-            var codecs = ImageCodecInfo.GetImageEncoders();
-            return codecs.FirstOrDefault( codec => codec.FormatID == format.Guid )!;
+            return cached;
         }
 
-        public static Bitmap LoadWithoutFileLock( string path )
+        using var src  = new Bitmap( path );
+        var       dest = new Bitmap( width, height, PixelFormat.Format32bppPArgb );
+        using ( var gr = Graphics.FromImage( dest ) )
         {
-            var       bytes = File.ReadAllBytes( path );
-            using var ms    = new MemoryStream( bytes, writable: false );
-            using var src   = new Bitmap( ms );
-            var       dest  = new Bitmap( src.Width, src.Height, PixelFormat.Format32bppPArgb );
-            using var g     = Graphics.FromImage( dest );
-            g.DrawImageUnscaled( src, 0, 0 );
-
-            return dest;
+            gr.DrawImage( src, new Rectangle( Point.Empty, dest.Size ) );
         }
 
-        public static Icon BytesToIcon( object bytes )
-        {
-            using var ms = new MemoryStream( (byte[])bytes );
-            return new Icon( ms );
-        }
+        var (fullString, str0, str1) = PathInfo.Md5Hash( path );
+        var file = Path.Combine( cachePath, str0, str1,
+            PathInfo.GenImageName( fullString, width, height ) +
+            PathInfo.FILE_NAME_SPLITTER + Environment.CurrentManagedThreadId );
 
-        public static Bitmap BytesToBitmap( object bytes )
-        {
-            using var ms = new MemoryStream( (byte[])bytes );
-            return new Bitmap( ms );
-        }
+        // dest.Save( file, ImageFormat.Jpeg );
+
+        var jpgEncoder        = GetEncoder( ImageFormat.Jpeg );
+        var encoder           = Encoder.Quality;
+        var encoderParameters = new EncoderParameters( 1 );
+        var encoderParameter  = new EncoderParameter( encoder, quality );
+        encoderParameters.Param[0] = encoderParameter;
+        dest.Save( file, jpgEncoder, encoderParameters );
+
+        wp.Fullpath = file;
+
+        return dest;
     }
 
-    public class Wallpaper
+    private static ImageCodecInfo GetEncoder( ImageFormat format )
     {
-        public Bitmap? Image    { get; set; }
-        public Color   Color    { get; set; }
-        public string? Fullpath { get; set; }
+        var codecs = ImageCodecInfo.GetImageEncoders();
+        return codecs.FirstOrDefault( codec => codec.FormatID == format.Guid )!;
+    }
 
-        public static Bitmap? CachedWallPaper( string path, string cachePath, int width, int height )
+    public static Bitmap LoadWithoutFileLock( string path )
+    {
+        var       bytes = File.ReadAllBytes( path );
+        using var ms    = new MemoryStream( bytes, false );
+        using var src   = new Bitmap( ms );
+        var       dest  = new Bitmap( src.Width, src.Height, PixelFormat.Format32bppPArgb );
+        using var g     = Graphics.FromImage( dest );
+        g.DrawImageUnscaled( src, 0, 0 );
+
+        return dest;
+    }
+
+    public static Icon BytesToIcon( object bytes )
+    {
+        using var ms = new MemoryStream( (byte[])bytes );
+        return new Icon( ms );
+    }
+
+    public static Bitmap BytesToBitmap( object bytes )
+    {
+        using var ms = new MemoryStream( (byte[])bytes );
+        return new Bitmap( ms );
+    }
+}
+
+public class Wallpaper
+{
+    public Bitmap? Image    { get; set; }
+    public Color   Color    { get; set; }
+    public string? Fullpath { get; set; }
+
+    public static Bitmap? CachedWallPaper( string path, string cachePath, int width, int height )
+    {
+        var cached = CachedWallPaperInfo( path, cachePath, width, height );
+        return cached.Exists ? Images.LoadWithoutFileLock( cached.Path ) : null;
+    }
+
+    public static (bool Exists, string Path) CachedWallPaperInfo( string path, string cachePath, int width, int height )
+    {
+        var (fullString, str0, str1) = PathInfo.Md5Hash( path );
+        var targetPath = Path.Combine( cachePath, str0, str1 );
+        Directory.CreateDirectory( targetPath );
+        var filepath = Path.Combine( targetPath, PathInfo.GenImageName( fullString, width, height ) );
+
+        return new ValueTuple<bool, string>( File.Exists( filepath ), filepath );
+    }
+
+    public void Release()
+    {
+        Image?.Dispose();
+        Image = null;
+        if ( string.IsNullOrEmpty( Fullpath ) )
         {
-            var cached = CachedWallPaperInfo( path, cachePath, width, height );
-            return cached.Exists ? Images.LoadWithoutFileLock( cached.Path ) : null;
+            return;
         }
 
-        public static (bool Exists, string Path) CachedWallPaperInfo( string path, string cachePath, int width, int height )
+        try
         {
-            var (fullString, str0, str1) = PathInfo.Md5Hash( path );
-            var targetPath = Path.Combine( cachePath, str0, str1 );
-            Directory.CreateDirectory( targetPath );
-            var filepath = Path.Combine( targetPath, PathInfo.GenImageName( fullString, width, height ) );
-
-            return new ValueTuple<bool, string>( File.Exists( filepath ), filepath );
+            var file = Regex.Replace( Fullpath, @"(.*?)_\d+$", "$1" );
+            if ( !File.Exists( file ) )
+            {
+                File.Move( Fullpath, file );
+            }
         }
-
-        public void Release()
+        catch ( Exception ex )
         {
-            Image?.Dispose();
-            Image = null;
-            if ( string.IsNullOrEmpty( Fullpath ) ) return;
-            try
-            {
-                var file = Regex.Replace( Fullpath, @"(.*?)_\d+$", "$1" );
-                if ( !File.Exists( file ) )
-                    File.Move( Fullpath, file );
-            }
-            catch ( Exception ex )
-            {
-                Logger.Warning( "Delete cache file: " + ex.Message );
-            }
-            finally
-            {
-                File.Delete( Fullpath );
-            }
+            Logger.Warning( "Delete cache file: " + ex.Message );
+        }
+        finally
+        {
+            File.Delete( Fullpath );
         }
     }
 }

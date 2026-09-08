@@ -11,17 +11,16 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using VirtualSpace.Config.DataAnnotations;
 
-namespace VirtualSpace.Config.Entity
-{
-    public class Colour
-    {
-        [PropertyProtector( 55, 1 )] public byte R { get; set; }
-        [PropertyProtector( 55, 1 )] public byte G { get; set; }
-        [PropertyProtector( 55, 1 )] public byte B { get; set; }
+namespace VirtualSpace.Config.Entity;
 
-        public uint GetLongOfColor()
-        {
-            return (uint)( R * 0x10000 + G * 0x100 + B );
-        }
+public class Colour
+{
+    [PropertyProtector( 55, 1 )] public byte R { get; set; }
+    [PropertyProtector( 55, 1 )] public byte G { get; set; }
+    [PropertyProtector( 55, 1 )] public byte B { get; set; }
+
+    public uint GetLongOfColor()
+    {
+        return (uint)( R * 0x10000 + G * 0x100 + B );
     }
 }

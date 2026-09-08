@@ -12,22 +12,21 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace VirtualSpace.Helpers
-{
-    public static class WinForms
-    {
-        private const string ComboBoxDisplayMember = "Text";
-        private const string ComboBoxValueMember   = "Value";
+namespace VirtualSpace.Helpers;
 
-        public static void SetComboBoxDataSource( ComboBox cbb,
-            List<object>                                   dataSource,
-            string                                         displayMember = ComboBoxDisplayMember,
-            string                                         valueMember   = ComboBoxValueMember )
-        {
-            cbb.DisplayMember = ComboBoxDisplayMember;
-            cbb.ValueMember   = ComboBoxValueMember;
-            cbb.DataSource    = dataSource;
-        }
+public static class WinForms
+{
+    private const string ComboBoxDisplayMember = "Text";
+    private const string ComboBoxValueMember   = "Value";
+
+    public static void SetComboBoxDataSource( ComboBox cbb,
+        List<object>                                   dataSource,
+        string                                         displayMember = ComboBoxDisplayMember,
+        string                                         valueMember   = ComboBoxValueMember )
+    {
+        cbb.DisplayMember = ComboBoxDisplayMember;
+        cbb.ValueMember   = ComboBoxValueMember;
+        cbb.DataSource    = dataSource;
     }
 }
 #endif

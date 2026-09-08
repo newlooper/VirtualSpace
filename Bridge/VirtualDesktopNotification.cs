@@ -11,19 +11,18 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 
-namespace VirtualSpace.Commons
-{
-    public enum VirtualDesktopNotificationType
-    {
-        CREATED,
-        DELETED,
-        CURRENT_CHANGED
-    }
+namespace VirtualSpace.Commons;
 
-    public class VirtualDesktopNotification
-    {
-        public VirtualDesktopNotificationType Type  { get; set; }
-        public Guid                           NewId { get; set; }
-        public Guid                           OldId { get; set; }
-    }
+public enum VirtualDesktopNotificationType
+{
+    CREATED,
+    DELETED,
+    CURRENT_CHANGED
+}
+
+public class VirtualDesktopNotification
+{
+    public VirtualDesktopNotificationType Type  { get; set; }
+    public Guid                           NewId { get; set; }
+    public Guid                           OldId { get; set; }
 }

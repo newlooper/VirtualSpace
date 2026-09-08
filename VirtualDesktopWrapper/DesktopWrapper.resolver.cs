@@ -32,7 +32,9 @@ public static partial class DesktopWrapper
             var desk = VD11.Desktop.Create();
             var path = WinRegistry.GetDefaultWallpaperPath();
             if ( !string.IsNullOrEmpty( path ) )
+            {
                 desk.SetWallpaperPath( path );
+            }
         }
     }
 
@@ -46,7 +48,9 @@ public static partial class DesktopWrapper
         var shortAssemblyName = new AssemblyName( eventArgs.Name ).Name;
 
         if ( shortAssemblyName?.EndsWith( ".resources" ) == true )
+        {
             return null;
+        }
 
         switch ( shortAssemblyName )
         {
@@ -75,17 +79,25 @@ public static partial class DesktopWrapper
                     case 22631:
                         Logger.Debug( "[Init]Load VirtualDesktop11 lib 23H2" );
                         if ( ver.Revision >= 3085 )
+                        {
                             dllName = programName + resName + "VirtualDesktop11_23H2_3085" + dllExt;
+                        }
                         else
+                        {
                             dllName = programName + resName + "VirtualDesktop11_23H2" + dllExt;
+                        }
 
                         break;
                     case 26100:
                         Logger.Debug( "[Init]Load VirtualDesktop11 lib 24H2" );
                         if ( ver.Revision >= 2152 )
+                        {
                             dllName = programName + resName + "VirtualDesktop11_24H2" + dllExt;
+                        }
                         else
+                        {
                             dllName = programName + resName + "VirtualDesktop11_23H2" + dllExt;
+                        }
 
                         break;
                     default:
@@ -102,7 +114,10 @@ public static partial class DesktopWrapper
         }
 
         using var stream = typeof( DesktopWrapper ).Assembly.GetManifestResourceStream( dllName );
-        if ( stream is null ) return null;
+        if ( stream is null )
+        {
+            return null;
+        }
 
         var rawAssembly = new byte[stream.Length];
         stream.ReadExactly( rawAssembly );

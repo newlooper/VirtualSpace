@@ -11,24 +11,23 @@
 using System.Collections.Generic;
 using VirtualSpace.Plugin;
 
-namespace VirtualSpace.PluginContracts
+namespace VirtualSpace.PluginContracts;
+
+public interface IPlugin
 {
-    public interface IPlugin
-    {
-        string Name        { get; }
-        string Display     { get; }
-        string Version     { get; }
-        string Description { get; }
-        string Author      { get; }
-        string Email       { get; }
+    string Name        { get; }
+    string Display     { get; }
+    string Version     { get; }
+    string Description { get; }
+    string Author      { get; }
+    string Email       { get; }
 
-        PluginType     Type         { get; }
-        Requirements?  Requirements { get; }
+    PluginType    Type         { get; }
+    Requirements? Requirements { get; }
 
-        IReadOnlyList<string> SubscribedEvents { get; }
+    IReadOnlyList<string> SubscribedEvents { get; }
 
-        void Initialize( IHostContext hostContext );
-        void Shutdown();
-        void ShowSettings();
-    }
+    void Initialize( IHostContext hostContext );
+    void Shutdown();
+    void ShowSettings();
 }

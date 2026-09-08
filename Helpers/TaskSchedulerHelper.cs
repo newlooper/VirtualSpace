@@ -12,64 +12,63 @@ using System;
 using System.Diagnostics;
 using Microsoft.Win32.TaskScheduler;
 
-namespace VirtualSpace.Helpers
+namespace VirtualSpace.Helpers;
+
+public static class TaskSchedulerHelper
 {
-    public static class TaskSchedulerHelper
+    public static void CreateAutoRunTask( string taskName, string fullAppPath, string taskFolder = "" )
     {
-        public static void CreateAutoRunTask( string taskName, string fullAppPath, string taskFolder = "" )
+        if ( !SysInfo.IsAdministrator )
         {
-            if ( !SysInfo.IsAdministrator )
-            {
-                throw new Exception( "General.RunOnStartup.Error.Permission" );
-            }
-
-            var td = TaskService.Instance.NewTask();
-            td.RegistrationInfo.Description = "autorun " + taskName + " at system startup.";
-            td.Principal.RunLevel = TaskRunLevel.Highest;
-            td.Principal.LogonType = TaskLogonType.InteractiveToken;
-            td.Settings.ExecutionTimeLimit = TimeSpan.FromSeconds( 0 );
-
-            var lt = new LogonTrigger();
-            lt.Delay = TimeSpan.FromSeconds( 5 );
-            td.Triggers.Add( lt );
-
-            var ea = new ExecAction( $"\"{fullAppPath}\"", "" );
-            td.Actions.Add( ea );
-
-            TaskService.Instance.RootFolder.RegisterTaskDefinition( GetTaskPath( taskName, taskFolder ), td );
+            throw new Exception( "General.RunOnStartup.Error.Permission" );
         }
 
-        public static void DeleteTaskByName( string taskName, string taskFolder = "" )
-        {
-            if ( !SysInfo.IsAdministrator )
-            {
-                throw new Exception( "General.RunOnStartup.Error.Permission" );
-            }
+        var td = TaskService.Instance.NewTask();
+        td.RegistrationInfo.Description = "autorun " + taskName + " at system startup.";
+        td.Principal.RunLevel           = TaskRunLevel.Highest;
+        td.Principal.LogonType          = TaskLogonType.InteractiveToken;
+        td.Settings.ExecutionTimeLimit  = TimeSpan.FromSeconds( 0 );
 
-            using var ts = new TaskService();
-            ts.RootFolder.DeleteTask( GetTaskPath( taskName, taskFolder ) );
+        var lt = new LogonTrigger();
+        lt.Delay = TimeSpan.FromSeconds( 5 );
+        td.Triggers.Add( lt );
+
+        var ea = new ExecAction( $"\"{fullAppPath}\"", "" );
+        td.Actions.Add( ea );
+
+        TaskService.Instance.RootFolder.RegisterTaskDefinition( GetTaskPath( taskName, taskFolder ), td );
+    }
+
+    public static void DeleteTaskByName( string taskName, string taskFolder = "" )
+    {
+        if ( !SysInfo.IsAdministrator )
+        {
+            throw new Exception( "General.RunOnStartup.Error.Permission" );
         }
 
-        public static bool IsTaskExistsByName( string taskName, string taskFolder = "" )
-        {
-            using var ts       = new TaskService();
-            var       t        = ts.GetTask( GetTaskPath( taskName, taskFolder ) );
-            return t != null;
-        }
+        using var ts = new TaskService();
+        ts.RootFolder.DeleteTask( GetTaskPath( taskName, taskFolder ) );
+    }
 
-        private static string GetTaskPath( string taskName, string taskFolder )
-        {
-            return string.IsNullOrEmpty( taskFolder ) ? taskName : taskFolder + @"\" + taskName;
-        }
+    public static bool IsTaskExistsByName( string taskName, string taskFolder = "" )
+    {
+        using var ts = new TaskService();
+        var       t  = ts.GetTask( GetTaskPath( taskName, taskFolder ) );
+        return t != null;
+    }
 
-        public static void OpenWinTaskScheduler()
+    private static string GetTaskPath( string taskName, string taskFolder )
+    {
+        return string.IsNullOrEmpty( taskFolder ) ? taskName : taskFolder + @"\" + taskName;
+    }
+
+    public static void OpenWinTaskScheduler()
+    {
+        var psi = new ProcessStartInfo
         {
-            var psi = new ProcessStartInfo
-            {
-                FileName = "taskschd.msc",
-                UseShellExecute = true
-            };
-            Process.Start( psi );
-        }
+            FileName        = "taskschd.msc",
+            UseShellExecute = true
+        };
+        Process.Start( psi );
     }
 }

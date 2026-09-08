@@ -13,21 +13,20 @@ using System;
 using System.Text.Json;
 using PropertyChanged;
 
-namespace VirtualSpace.Config.Events.Entity
+namespace VirtualSpace.Config.Events.Entity;
+
+[AddINotifyPropertyChangedInterface]
+public partial class RuleTemplate
 {
-    [AddINotifyPropertyChangedInterface]
-    public partial class RuleTemplate
-    {
-        [DoNotNotify] public Func<Window, bool>? Exp;
-        [DoNotNotify] public Guid                Id               { get; set; } = Guid.NewGuid();
-        [DoNotNotify] public string?             Name             { get; set; }
-        [DoNotNotify] public string?             Tag              { get; set; }
-        [DoNotNotify] public int                 Weight           { get; set; } = 50;
-        [DoNotNotify] public JsonDocument?       Expression       { get; set; }
-        [DoNotNotify] public Behavior?           Action           { get; set; }
-        public               bool                Enabled          { get; set; }
-        public               bool                ContinueAfterHit { get; set; }
-        public               DateTime?           Created          { get; set; }
-        public               DateTime?           Updated          { get; set; }
-    }
+    [DoNotNotify] public Func<Window, bool>? Exp;
+    [DoNotNotify] public Guid                Id               { get; set; } = Guid.NewGuid();
+    [DoNotNotify] public string?             Name             { get; set; }
+    [DoNotNotify] public string?             Tag              { get; set; }
+    [DoNotNotify] public int                 Weight           { get; set; } = 50;
+    [DoNotNotify] public JsonDocument?       Expression       { get; set; }
+    [DoNotNotify] public Behavior?           Action           { get; set; }
+    public               bool                Enabled          { get; set; }
+    public               bool                ContinueAfterHit { get; set; }
+    public               DateTime?           Created          { get; set; }
+    public               DateTime?           Updated          { get; set; }
 }

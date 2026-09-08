@@ -12,12 +12,11 @@ You should have received a copy of the GNU General Public License along with Vir
 using System.Threading.Channels;
 using VirtualSpace.Config.Events.Entity;
 
-namespace VirtualSpace.Commons
+namespace VirtualSpace.Commons;
+
+public static class Channels
 {
-    public static class Channels
-    {
-        public static readonly Channel<Behavior>                   ActionChannel               = Channel.CreateUnbounded<Behavior>();
-        public static readonly Channel<Window>                     VisibleWindowsChannel       = Channel.CreateUnbounded<Window>();
-        public static readonly Channel<VirtualDesktopNotification> VirtualDesktopNotifications = Channel.CreateUnbounded<VirtualDesktopNotification>();
-    }
+    public static readonly Channel<Behavior>                   ActionChannel               = Channel.CreateUnbounded<Behavior>();
+    public static readonly Channel<Window>                     VisibleWindowsChannel       = Channel.CreateUnbounded<Window>();
+    public static readonly Channel<VirtualDesktopNotification> VirtualDesktopNotifications = Channel.CreateUnbounded<VirtualDesktopNotification>();
 }

@@ -13,22 +13,24 @@ using System.Globalization;
 using System.Windows.Data;
 using Cube3D.Config;
 
-namespace VirtualSpace.Helpers
+namespace VirtualSpace.Helpers;
+
+public class TransitionTypeConverter : IValueConverter
 {
-    public class TransitionTypeConverter : IValueConverter
+    public object Convert( object value, Type targetType, object parameters, CultureInfo culture )
     {
-        public object Convert( object value, Type targetType, object parameters, CultureInfo culture )
+        if ( value is null )
         {
-            if ( value is null ) return null;
-
-            var t = (TransitionType)value;
-
-            return ( t & TransitionType.NotificationGridOnly ) > 0;
+            return null;
         }
 
-        public object ConvertBack( object value, Type targetType, object parameters, CultureInfo culture )
-        {
-            throw new NotImplementedException();
-        }
+        var t = (TransitionType)value;
+
+        return ( t & TransitionType.NotificationGridOnly ) > 0;
+    }
+
+    public object ConvertBack( object value, Type targetType, object parameters, CultureInfo culture )
+    {
+        throw new NotImplementedException();
     }
 }

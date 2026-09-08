@@ -79,11 +79,13 @@ public partial class RuleEditorWindow
         var allScreens = Screen.AllScreens;
         var screen     = Screen.FromHandle( handle );
         for ( var i = 0; i < allScreens.Length; i++ )
+        {
             if ( screen.DeviceName == allScreens[i].DeviceName )
             {
                 _instance.RuleEditor.cbb_WinInScreen.SelectedValue = i;
                 break;
             }
+        }
 
         _instance.RuleEditor.RuleListItemsSource = RulesViewModel.Instance.Rules;
         _instance.RuleEditor.RuleDate.Visibility = Visibility.Hidden;
@@ -94,6 +96,7 @@ public partial class RuleEditorWindow
     private void ClickEventFromSubControl( object sender, RoutedEventArgs e )
     {
         if ( e.OriginalSource is Button btn )
+        {
             switch ( btn.Name )
             {
                 case "btnSave":
@@ -103,6 +106,7 @@ public partial class RuleEditorWindow
                     Close();
                     break;
             }
+        }
     }
 
     private void RuleEditorWindow_OnClosing( object? sender, CancelEventArgs e )

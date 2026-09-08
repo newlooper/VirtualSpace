@@ -13,141 +13,153 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Helpers;
 using VirtualSpace.Plugin;
 
-namespace VirtualSpace.Commons
+namespace VirtualSpace.Commons;
+
+public static class IpcPipeServer
 {
-    public static class IpcPipeServer
+    private const  string PIPE_NAME   = Config.PIPE_NAME;
+    private const  string PIPE_SERVER = Config.PIPE_SERVER;
+    private static bool   _isRunning  = true;
+    private static Task?  _serverTask;
+    public static  IntPtr MainWindowHandle { get; set; }
+
+    public static void Start()
     {
-        private const  string PIPE_NAME   = Config.PIPE_NAME;
-        private const  string PIPE_SERVER = Config.PIPE_SERVER;
-        private static bool   _isRunning  = true;
-        private static Task?  _serverTask;
-        public static  IntPtr MainWindowHandle { get; set; }
-
-        public static void Start()
+        _isRunning = true;
+        _serverTask = Task.Factory.StartNew( () =>
         {
-            _isRunning  = true;
-            _serverTask = Task.Factory.StartNew( () =>
+            Logger.Info( "Ipc Pipe Server Wait For Connections." );
+
+            while ( _isRunning )
             {
-                Logger.Info( "Ipc Pipe Server Wait For Connections." );
+                using var server = new NamedPipeServerStream( PIPE_NAME );
+                server.WaitForConnection();
+                using var reader = new StreamReader( server );
+                var       line   = reader.ReadLine();
 
-                while ( _isRunning )
+                if ( !string.IsNullOrEmpty( line ) )
                 {
-                    using var server = new NamedPipeServerStream( PIPE_NAME );
-                    server.WaitForConnection();
-                    using var reader = new StreamReader( server );
-                    var       line   = reader.ReadLine();
-
-                    if ( !string.IsNullOrEmpty( line ) ) MessageProcessing( line, server );
+                    MessageProcessing( line, server );
                 }
+            }
 
-                Logger.Info( "Ipc Pipe Server Shutdown." );
-            }, TaskCreationOptions.LongRunning );
+            Logger.Info( "Ipc Pipe Server Shutdown." );
+        }, TaskCreationOptions.LongRunning );
+    }
+
+    public static void AsClient()
+    {
+        using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
+        try
+        {
+            client.Connect( 3000 );
+            using var writer = new StreamWriter( client );
+            var       msg    = new PipeMessage { Type = PipeMessageType.INSTANCE };
+            writer.WriteLine( JsonSerializer.Serialize( msg ) );
+            writer.Flush();
+        }
+        catch
+        {
+            // ignored
+        }
+    }
+
+    public static void SimpleShutdown()
+    {
+        var task = _serverTask;
+        if ( task is null || task.IsCompleted )
+        {
+            return;
         }
 
-        public static void AsClient()
+        _isRunning = false;
+        WakeServer();
+
+        try
         {
-            using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
-            try
+            if ( !task.Wait( TimeSpan.FromSeconds( 1 ) ) )
             {
-                client.Connect( 3000 );
-                using var writer = new StreamWriter( client );
-                var       msg    = new PipeMessage { Type = PipeMessageType.INSTANCE };
-                writer.WriteLine( JsonSerializer.Serialize( msg ) );
+                Logger.Warning( "Ipc Pipe Server shutdown timed out." );
+            }
+        }
+        catch ( Exception ex )
+        {
+            Logger.Warning( $"Ipc Pipe Server shutdown failed: {ex.Message}" );
+        }
+    }
+
+    private static void WakeServer()
+    {
+        using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
+        try
+        {
+            client.Connect( 10 );
+        }
+        catch
+        {
+            // ignored
+        }
+    }
+
+    private static void MessageProcessing( string line, NamedPipeServerStream server )
+    {
+        var msg = JsonSerializer.Deserialize<PipeMessage>( line );
+        switch ( msg?.Type )
+        {
+            case PipeMessageType.INSTANCE:
+                Logger.Info( "Only single instance allowed, just bring to top." );
+                User32.PostMessage( MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
+                break;
+
+            case PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER:
+            {
+                if ( !server.CanWrite )
+                {
+                    break;
+                }
+
+                using var writer   = new StreamWriter( server );
+                var       hostInfo = HostInfoHelper.GetHostInfo();
+                hostInfo.MainWindowHandle = MainWindowHandle.ToInt32();
+                writer.WriteLine( JsonSerializer.Serialize( hostInfo ) );
                 writer.Flush();
-            }
-            catch
-            {
-                // ignored
-            }
-        }
 
-        public static void SimpleShutdown()
-        {
-            var task = _serverTask;
-            if ( task is null || task.IsCompleted )
-                return;
-
-            _isRunning = false;
-            WakeServer();
-
-            try
-            {
-                if ( !task.Wait( TimeSpan.FromSeconds( 1 ) ) )
-                    Logger.Warning( "Ipc Pipe Server shutdown timed out." );
-            }
-            catch ( Exception ex )
-            {
-                Logger.Warning( $"Ipc Pipe Server shutdown failed: {ex.Message}" );
-            }
-        }
-
-        private static void WakeServer()
-        {
-            using var client = new NamedPipeClientStream( PIPE_SERVER, PIPE_NAME, PipeDirection.InOut, PipeOptions.None );
-            try
-            {
-                client.Connect( 10 );
-            }
-            catch
-            {
-                // ignored
-            }
-        }
-
-        private static void MessageProcessing( string line, NamedPipeServerStream server )
-        {
-            var msg = JsonSerializer.Deserialize<PipeMessage>( line );
-            switch ( msg?.Type )
-            {
-                case PipeMessageType.INSTANCE:
-                    Logger.Info( "Only single instance allowed, just bring to top." );
-                    User32.PostMessage( MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RiseView, 0 );
-                    break;
-
-                case PipeMessageType.PLUGIN_VD_SWITCH_OBSERVER:
+                /////////////////////////////////
+                // 只接受已注册成功的插件
+                // 同时若插件名相同，则后启动的覆盖先启动的
+                foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
                 {
-                    if ( !server.CanWrite ) break;
-                    using var writer   = new StreamWriter( server );
-                    var       hostInfo = HostInfoHelper.GetHostInfo();
-                    hostInfo.MainWindowHandle = MainWindowHandle.ToInt32();
-                    writer.WriteLine( JsonSerializer.Serialize( hostInfo ) );
-                    writer.Flush();
-
-                    /////////////////////////////////
-                    // 只接受已注册成功的插件
-                    // 同时若插件名相同，则后启动的覆盖先启动的
-                    foreach ( var p in PluginHost.Plugins.Where( p => p.Name == msg.Name ) )
-                    {
-                        Logger.Info( $"[PLUGIN\\Virtual Desktop Switch Observer] {p.Display} Started." );
-                        p.Handle    = msg.Handle;
-                        p.ProcessId = msg.ProcessId;
-                        p.Type      = PluginType.VD_SWITCH_OBSERVER;
-                        break;
-                    }
-
+                    Logger.Info( $"[PLUGIN\\Virtual Desktop Switch Observer] {p.Display} Started." );
+                    p.Handle    = msg.Handle;
+                    p.ProcessId = msg.ProcessId;
+                    p.Type      = PluginType.VD_SWITCH_OBSERVER;
                     break;
                 }
 
-                case PipeMessageType.PLUGIN_CHECK_ALIVE:
+                break;
+            }
+
+            case PipeMessageType.PLUGIN_CHECK_ALIVE:
+            {
+                var runningPlugin = PluginHost.Plugins.Find( p =>
+                    p.Name == msg.Name
+                    && p.Handle == msg.Handle
+                    && p.ProcessId == msg.ProcessId );
+
+                ////////////////////////////////////////////////
+                // 若插件提供的信息在宿主中查不到，就通知该插件自行关闭
+                // 这通常是因为有同名插件启动，覆盖了先启动的插件的信息
+                if ( runningPlugin == null )
                 {
-                    var runningPlugin = PluginHost.Plugins.Find( p =>
-                        p.Name == msg.Name
-                        && p.Handle == msg.Handle
-                        && p.ProcessId == msg.ProcessId );
-
-                    ////////////////////////////////////////////////
-                    // 若插件提供的信息在宿主中查不到，就通知该插件自行关闭
-                    // 这通常是因为有同名插件启动，覆盖了先启动的插件的信息
-                    if ( runningPlugin == null ) PluginHost.ClosePlugin( new PluginInfo { Handle = msg.Handle } );
-
-                    break;
+                    PluginHost.ClosePlugin( new PluginInfo { Handle = msg.Handle } );
                 }
+
+                break;
             }
         }
     }

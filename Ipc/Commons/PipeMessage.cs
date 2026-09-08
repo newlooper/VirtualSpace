@@ -11,31 +11,30 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace VirtualSpace.Commons
+namespace VirtualSpace.Commons;
+
+public class PipeMessage
 {
-    public class PipeMessage
-    {
-        public PipeMessageType Type      { get; set; }
-        public int             Handle    { get; set; }
-        public int             ProcessId { get; set; }
-        public string          Name      { get; set; }
-    }
+    public PipeMessageType Type      { get; set; }
+    public int             Handle    { get; set; }
+    public int             ProcessId { get; set; }
+    public string          Name      { get; set; }
+}
 
-    [StructLayout( LayoutKind.Sequential )]
-    public struct COPYDATASTRUCT
-    {
-        public IntPtr dwData;
-        public int    cbData;
-        public IntPtr lpData;
-    }
+[StructLayout( LayoutKind.Sequential )]
+public struct COPYDATASTRUCT
+{
+    public IntPtr dwData;
+    public int    cbData;
+    public IntPtr lpData;
+}
 
-    [StructLayout( LayoutKind.Sequential )]
-    public struct VirtualDesktopSwitchInfo
-    {
-        public IntPtr hostHandle;
-        public int    vdCount;
-        public int    fromIndex;
-        public int    dir;
-        public int    targetIndex;
-    }
+[StructLayout( LayoutKind.Sequential )]
+public struct VirtualDesktopSwitchInfo
+{
+    public IntPtr hostHandle;
+    public int    vdCount;
+    public int    fromIndex;
+    public int    dir;
+    public int    targetIndex;
 }

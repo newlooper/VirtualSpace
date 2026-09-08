@@ -29,234 +29,247 @@ using VirtualSpace.Config.Events.Entity;
 using VirtualSpace.Helpers;
 using Process = System.Diagnostics.Process;
 
-namespace VirtualSpace.Config.Events.Expression
+namespace VirtualSpace.Config.Events.Expression;
+
+public static class Conditions
 {
-    public static partial class Conditions
+    private static readonly JsonParser                        Jp = new();
+    private static          List<RuleTemplate>                _rules;
+    private static readonly Channel<Behavior>                 ActionProducer            = Channels.ActionChannel;
+    private static readonly Channel<Window>                   VisibleWindowsConsumer    = Channels.VisibleWindowsChannel;
+    private static readonly ConcurrentDictionary<IntPtr, int> WindowCheckTimes          = new();
+    public static           ImmutableList<IntPtr>             WndHandleIgnoreListByRule = ImmutableList<IntPtr>.Empty;
+    private static          long                              _updateRuleLock;
+
+    private static JsonSerializerOptions? _readOptions;
+    private static JsonSerializerOptions? _writeOptions;
+
+    static Conditions()
     {
-        private static readonly JsonParser                        Jp = new();
-        private static          List<RuleTemplate>                _rules;
-        private static readonly Channel<Behavior>                 ActionProducer            = Channels.ActionChannel;
-        private static readonly Channel<Window>                   VisibleWindowsConsumer    = Channels.VisibleWindowsChannel;
-        private static readonly ConcurrentDictionary<IntPtr, int> WindowCheckTimes          = new();
-        public static           ImmutableList<IntPtr>             WndHandleIgnoreListByRule = ImmutableList<IntPtr>.Empty;
-        private static          long                              _updateRuleLock;
+        _rules = InitRules();
+        BuildRuleExp( _rules );
+        StartRuleChecker();
+    }
 
-        private static JsonSerializerOptions? _readOptions;
-        private static JsonSerializerOptions? _writeOptions;
-
-        static Conditions()
+    private static async void StartRuleChecker()
+    {
+        while ( await VisibleWindowsConsumer.Reader.WaitToReadAsync() )
         {
-            _rules = InitRules();
-            BuildRuleExp( _rules );
-            StartRuleChecker();
-        }
-
-        private static async void StartRuleChecker()
-        {
-            while ( await VisibleWindowsConsumer.Reader.WaitToReadAsync() )
+            if ( VisibleWindowsConsumer.Reader.TryRead( out var win ) )
             {
-                if ( VisibleWindowsConsumer.Reader.TryRead( out var win ) )
-                {
-                    CheckRulesForWindow( win );
-                }
+                CheckRulesForWindow( win );
             }
         }
+    }
 
-        private static List<RuleTemplate> InitRules()
+    private static List<RuleTemplate> InitRules()
+    {
+        var path  = Manager.GetRuleFilePath();
+        var rules = new List<RuleTemplate>();
+        if ( !File.Exists( path ) )
         {
-            var path  = Manager.GetRuleFilePath();
-            var rules = new List<RuleTemplate>();
-            if ( !File.Exists( path ) ) return rules;
-
-            rules = ReadRuleFromFile( path );
-
             return rules;
         }
 
-        private static void BuildRuleExp( List<RuleTemplate> rules )
+        rules = ReadRuleFromFile( path );
+
+        return rules;
+    }
+
+    private static void BuildRuleExp( List<RuleTemplate> rules )
+    {
+        foreach ( var rule in rules )
         {
-            foreach ( var rule in rules )
+            rule.Exp = Jp.ExpressionFromJsonDoc<Window>( rule.Expression! );
+        }
+
+        _rules.Sort( ( x, y ) => -x.Weight.CompareTo( y.Weight ) );
+    }
+
+    public static List<RuleTemplate> FetchRules()
+    {
+        return _rules;
+    }
+
+    private static async void CheckRulesForWindow( Window win )
+    {
+        try
+        {
+            if ( _rules.Count == 0 || Interlocked.Read( ref _updateRuleLock ) != 0 )
             {
-                rule.Exp = Jp.ExpressionFromJsonDoc<Window>( rule.Expression! );
+                return;
             }
 
-            _rules.Sort( ( x, y ) => -x.Weight.CompareTo( y.Weight ) );
-        }
+            var rules = new List<RuleTemplate>( _rules );
 
-        public static List<RuleTemplate> FetchRules()
-        {
-            return _rules;
-        }
+            WindowCheckTimes.TryAdd( win.Handle, 0 );
 
-        private static async void CheckRulesForWindow( Window win )
-        {
-            try
+            var isOnePeriod = WindowCheckTimes[win.Handle] % Const.WindowCheckTimesLimit == 0;
+            if ( isOnePeriod )
             {
-                if ( _rules.Count == 0 || Interlocked.Read( ref _updateRuleLock ) != 0 ) return;
+                Logger.Debug( $"Checking rules for [{win.Title}], current profile: {Manager.Configs.CurrentProfileName}" );
+            }
 
-                var rules = new List<RuleTemplate>( _rules );
+            await Task.Run( () =>
+            {
+                _ = User32.GetWindowThreadProcessId( win.Handle, out var pId );
+                using var pInfo = Process.GetProcessById( pId );
 
-                WindowCheckTimes.TryAdd( win.Handle, 0 );
-
-                var isOnePeriod = WindowCheckTimes[win.Handle] % Const.WindowCheckTimesLimit == 0;
-                if ( isOnePeriod )
+                win.ProcessName = pInfo.ProcessName;
+                try
                 {
-                    Logger.Debug( $"Checking rules for [{win.Title}], current profile: {Manager.Configs.CurrentProfileName}" );
+                    win.ProcessPath = pInfo.MainModule?.FileName;
+                    win.CommandLine = pInfo.GetCommandLineArgs();
+                }
+                catch ( Exception ex )
+                {
+                    Logger.Warning( "Get Process Info: " + ex.Message );
                 }
 
-                await Task.Run( () =>
+                var screen      = Screen.FromHandle( win.Handle );
+                var screenIndex = 0;
+                var allScreens  = Screen.AllScreens;
+                for ( var i = 0; i < allScreens.Length; i++ )
                 {
-                    _ = User32.GetWindowThreadProcessId( win.Handle, out var pId );
-                    using var pInfo = Process.GetProcessById( pId );
-
-                    win.ProcessName = pInfo.ProcessName;
-                    try
+                    if ( screen.DeviceName != allScreens[i].DeviceName )
                     {
-                        win.ProcessPath = pInfo.MainModule?.FileName;
-                        win.CommandLine = pInfo.GetCommandLineArgs();
-                    }
-                    catch ( Exception ex )
-                    {
-                        Logger.Warning( "Get Process Info: " + ex.Message );
+                        continue;
                     }
 
-                    var screen      = Screen.FromHandle( win.Handle );
-                    var screenIndex = 0;
-                    var allScreens  = Screen.AllScreens;
-                    for ( var i = 0; i < allScreens.Length; i++ )
+                    screenIndex = i;
+                    break;
+                }
+
+                win.WinInScreen = screenIndex.ToString();
+
+                if ( !User32.IsWindow( win.Handle ) )
+                {
+                    Logger.Debug( $"Window [{win.Title}] not found, Rules checker terminated." );
+                    WindowCheckTimes.TryRemove( win.Handle, out _ );
+                    return;
+                }
+
+                var hasMatchedRule = false;
+
+                var l = new List<Window>();
+
+                foreach ( var r in rules.Where( r => r.Enabled ) )
+                {
+                    l.Add( win );
+                    var match = l.Where( r.Exp! ).Any();
+                    l.Clear();
+                    if ( !match )
                     {
-                        if ( screen.DeviceName != allScreens[i].DeviceName )
-                            continue;
-                        screenIndex = i;
+                        continue;
+                    }
+
+                    hasMatchedRule = true;
+                    Logger.Debug( $"Window [{win.Title}] match rule [{r.Name}]" );
+                    r.Action!.Handle     = win.Handle;
+                    r.Action.RuleName    = r.Name!;
+                    r.Action.WindowTitle = win.Title;
+                    ActionProducer.Writer.TryWrite( r.Action );
+
+                    ////////////////////////////////////////////////////////////////
+                    // 某个窗口可能与多条规则匹配，继续循环就表示所有相应的动作都会按顺序执行
+                    // 最终的方案：给规则添加一个属性，用于指定是否在匹配到规则后继续检查其他规则
+                    // 默认为 false，即匹配到规则后立即退出循环
+                    if ( !r.ContinueAfterHit )
+                    {
                         break;
                     }
+                }
 
-                    win.WinInScreen = screenIndex.ToString();
+                if ( hasMatchedRule )
+                {
+                    ImmutableInterlocked.Update( ref WndHandleIgnoreListByRule, list => list.Add( win.Handle ) );
+                    WindowCheckTimes.TryRemove( win.Handle, out _ );
+                    return;
+                }
 
-                    if ( !User32.IsWindow( win.Handle ) )
-                    {
-                        Logger.Debug( $"Window [{win.Title}] not found, Rules checker terminated." );
-                        WindowCheckTimes.TryRemove( win.Handle, out _ );
-                        return;
-                    }
+                if ( isOnePeriod )
+                {
+                    Logger.Debug( $"Window [{win.Title}] has no matched rules." );
+                }
 
-                    var hasMatchedRule = false;
+                if ( Manager.CurrentProfile.IgnoreWindowOnRuleCheckTimeout &&
+                     WindowCheckTimes[win.Handle] >= Const.WindowCheckTimesLimit - 1 )
+                {
+                    Logger.Debug( $"Try find rules for [{win.Title}] too many times, ignore the window." );
+                    ImmutableInterlocked.Update( ref WndHandleIgnoreListByRule, list => list.Add( win.Handle ) );
+                    WindowCheckTimes.TryRemove( win.Handle, out _ );
+                    return;
+                }
 
-                    var l = new List<Window>();
+                WindowCheckTimes[win.Handle]++;
 
-                    foreach ( var r in rules.Where( r => r.Enabled ) )
-                    {
-                        l.Add( win );
-                        var match = l.Where( r.Exp! ).Any();
-                        l.Clear();
-                        if ( !match )
-                            continue;
-                        hasMatchedRule = true;
-                        Logger.Debug( $"Window [{win.Title}] match rule [{r.Name}]" );
-                        r.Action!.Handle     = win.Handle;
-                        r.Action.RuleName    = r.Name!;
-                        r.Action.WindowTitle = win.Title;
-                        ActionProducer.Writer.TryWrite( r.Action );
-
-                        ////////////////////////////////////////////////////////////////
-                        // 某个窗口可能与多条规则匹配，继续循环就表示所有相应的动作都会按顺序执行
-                        // 最终的方案：给规则添加一个属性，用于指定是否在匹配到规则后继续检查其他规则
-                        // 默认为 false，即匹配到规则后立即退出循环
-                        if ( !r.ContinueAfterHit )
-                            break;
-                    }
-
-                    if ( hasMatchedRule )
-                    {
-                        ImmutableInterlocked.Update( ref WndHandleIgnoreListByRule, list => list.Add( win.Handle ) );
-                        WindowCheckTimes.TryRemove( win.Handle, out _ );
-                        return;
-                    }
-
-                    if ( isOnePeriod )
-                    {
-                        Logger.Debug( $"Window [{win.Title}] has no matched rules." );
-                    }
-
-                    if ( Manager.CurrentProfile.IgnoreWindowOnRuleCheckTimeout &&
-                         WindowCheckTimes[win.Handle] >= Const.WindowCheckTimesLimit - 1 )
-                    {
-                        Logger.Debug( $"Try find rules for [{win.Title}] too many times, ignore the window." );
-                        ImmutableInterlocked.Update( ref WndHandleIgnoreListByRule, list => list.Add( win.Handle ) );
-                        WindowCheckTimes.TryRemove( win.Handle, out _ );
-                        return;
-                    }
-
-                    WindowCheckTimes[win.Handle]++;
-
-                    // ignore
-                } ).ConfigureAwait( false );
-            }
-            catch ( Exception e )
-            {
-                Logger.Error( $"Failed to check rules for Window [{win.Title}]: {e.Message}" );
-            }
+                // ignore
+            } ).ConfigureAwait( false );
         }
-
-        private static List<RuleTemplate> ReadRuleFromFile( string path )
+        catch ( Exception e )
         {
-            using var fs     = new FileStream( path, FileMode.Open, FileAccess.Read );
-            var       buffer = new byte[fs.Length];
-            _ = fs.Read( buffer, 0, (int)fs.Length );
-            var utf8Reader = new Utf8JsonReader( buffer );
-
-            var readOptions = GetJsonDeserializerOptions();
-            return JsonSerializer.Deserialize<List<RuleTemplate>>( ref utf8Reader, readOptions )!;
+            Logger.Error( $"Failed to check rules for Window [{win.Title}]: {e.Message}" );
         }
+    }
 
-        public static ExpressionTemplate ParseExpressionTemplate( JsonDocument doc )
+    private static List<RuleTemplate> ReadRuleFromFile( string path )
+    {
+        using var fs     = new FileStream( path, FileMode.Open, FileAccess.Read );
+        var       buffer = new byte[fs.Length];
+        _ = fs.Read( buffer, 0, (int)fs.Length );
+        var utf8Reader = new Utf8JsonReader( buffer );
+
+        var readOptions = GetJsonDeserializerOptions();
+        return JsonSerializer.Deserialize<List<RuleTemplate>>( ref utf8Reader, readOptions )!;
+    }
+
+    public static ExpressionTemplate ParseExpressionTemplate( JsonDocument doc )
+    {
+        var readOptions = GetJsonDeserializerOptions();
+        return doc.Deserialize<ExpressionTemplate>( readOptions )!;
+    }
+
+    private static JsonSerializerOptions GetJsonDeserializerOptions()
+    {
+        return _readOptions ??= new JsonSerializerOptions();
+    }
+
+    private static JsonSerializerOptions GetJsonSerializerOptions()
+    {
+        return _writeOptions ??= new JsonSerializerOptions
         {
-            var readOptions = GetJsonDeserializerOptions();
-            return doc.Deserialize<ExpressionTemplate>( readOptions )!;
-        }
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            WriteIndented          = true,
+            Encoder                = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        };
+    }
 
-        private static JsonSerializerOptions GetJsonDeserializerOptions()
-        {
-            return _readOptions ??= new JsonSerializerOptions();
-        }
+    public static async void SaveRules( List<RuleTemplate> ruleList, string? path = null )
+    {
+        Interlocked.Increment( ref _updateRuleLock );
 
-        private static JsonSerializerOptions GetJsonSerializerOptions()
-        {
-            return _writeOptions ??= new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                WriteIndented          = true,
-                Encoder                = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            };
-        }
+        _rules = ruleList;
+        BuildRuleExp( _rules );
 
-        public static async void SaveRules( List<RuleTemplate> ruleList, string? path = null )
-        {
-            Interlocked.Increment( ref _updateRuleLock );
+        Interlocked.Decrement( ref _updateRuleLock );
 
-            _rules = ruleList;
-            BuildRuleExp( _rules );
+        path ??= Manager.GetRuleFilePath();
 
-            Interlocked.Decrement( ref _updateRuleLock );
+        await File.WriteAllBytesAsync( path, JsonSerializer.SerializeToUtf8Bytes(
+            ruleList, GetJsonSerializerOptions() ) );
 
-            path ??= Manager.GetRuleFilePath();
+        Logger.Info( $"[RULE]Rules.{Manager.Configs.CurrentProfileName} Saved." );
+    }
 
-            await File.WriteAllBytesAsync( path, JsonSerializer.SerializeToUtf8Bytes(
-                ruleList, GetJsonSerializerOptions() ) );
+    public static void SwitchRuleProfile()
+    {
+        Interlocked.Increment( ref _updateRuleLock );
 
-            Logger.Info( $"[RULE]Rules.{Manager.Configs.CurrentProfileName} Saved." );
-        }
+        _rules = InitRules();
+        BuildRuleExp( _rules );
 
-        public static void SwitchRuleProfile()
-        {
-            Interlocked.Increment( ref _updateRuleLock );
+        Interlocked.Decrement( ref _updateRuleLock );
 
-            _rules = InitRules();
-            BuildRuleExp( _rules );
-
-            Interlocked.Decrement( ref _updateRuleLock );
-
-            Logger.Info( $"[RULE]Switch Rule Profile: {Manager.Configs.CurrentProfileName}" );
-        }
+        Logger.Info( $"[RULE]Switch Rule Profile: {Manager.Configs.CurrentProfileName}" );
     }
 }

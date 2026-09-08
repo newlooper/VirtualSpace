@@ -20,101 +20,137 @@ using VirtualSpace.PluginContracts;
 
 #pragma warning disable CA1416
 
-namespace Cube3D
+namespace Cube3D;
+
+public partial class MainWindow
 {
-    public partial class MainWindow
+    private static int              _loadGeneration;
+    private        DispatcherTimer? _displayChangeDebounceTimer;
+
+    private int _windowLoadGeneration;
+
+    private static bool IsLoadCurrent( int generation )
     {
-        private static int _loadGeneration;
+        return generation == Volatile.Read( ref _loadGeneration );
+    }
 
-        private int               _windowLoadGeneration;
-        private DispatcherTimer?  _displayChangeDebounceTimer;
+    private static void InvalidateInFlightLoads()
+    {
+        Interlocked.Increment( ref _loadGeneration );
+    }
 
-        private static bool IsLoadCurrent( int generation ) =>
-            generation == Volatile.Read( ref _loadGeneration );
+    internal void InvalidateLoadsOnClose()
+    {
+        InvalidateInFlightLoads();
+    }
 
-        private static void InvalidateInFlightLoads() =>
-            Interlocked.Increment( ref _loadGeneration );
-
-        internal void InvalidateLoadsOnClose() =>
-            InvalidateInFlightLoads();
-
-        private static MonitorInfo? TryGetPrimaryMonitor()
+    private static MonitorInfo? TryGetPrimaryMonitor()
+    {
+        var monitor = MonitorEnumerationHelper.GetMonitors().FirstOrDefault( m => m.IsPrimary );
+        if ( monitor == null )
         {
-            var monitor = MonitorEnumerationHelper.GetMonitors().FirstOrDefault( m => m.IsPrimary );
-            if ( monitor == null ) return null;
-            if ( monitor.ScreenSize.X <= 0 || monitor.ScreenSize.Y <= 0 ) return null;
-            return monitor;
+            return null;
         }
 
-        private void ApplyMonitorLayout( MonitorInfo mi )
+        if ( monitor.ScreenSize.X <= 0 || monitor.ScreenSize.Y <= 0 )
         {
-            var dpi = GetDpiForMonitor( mi.Hmon );
-            Left   = Const.FakeHideX;
-            Top    = Const.FakeHideY;
-            Width  = mi.ScreenSize.X / dpi.ScaleX;
-            Height = mi.ScreenSize.Y / dpi.ScaleY;
+            return null;
         }
 
-        private void ScheduleDisplayChangeRecovery()
-        {
-            if ( !_monitorInfo.IsPrimary ) return;
+        return monitor;
+    }
 
-            _displayChangeDebounceTimer ??= new DispatcherTimer
+    private void ApplyMonitorLayout( MonitorInfo mi )
+    {
+        var dpi = GetDpiForMonitor( mi.Hmon );
+        Left   = Const.FakeHideX;
+        Top    = Const.FakeHideY;
+        Width  = mi.ScreenSize.X / dpi.ScaleX;
+        Height = mi.ScreenSize.Y / dpi.ScaleY;
+    }
+
+    private void ScheduleDisplayChangeRecovery()
+    {
+        if ( !_monitorInfo.IsPrimary )
+        {
+            return;
+        }
+
+        _displayChangeDebounceTimer ??= new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds( 400 )
+        };
+
+        _displayChangeDebounceTimer.Stop();
+        _displayChangeDebounceTimer.Tick -= OnDisplayChangeDebounced;
+        _displayChangeDebounceTimer.Tick += OnDisplayChangeDebounced;
+        _displayChangeDebounceTimer.Start();
+    }
+
+    private async void OnDisplayChangeDebounced( object? sender, EventArgs e )
+    {
+        _displayChangeDebounceTimer?.Stop();
+        if ( !await TryRecoverDisplayLayoutAsync().ConfigureAwait( true ) )
+        {
+            PluginLog.Error( "Cube3D", "display recovery failed, restarting UI." );
+            RestartRequested?.Invoke();
+        }
+    }
+
+    private async Task<bool> TryRecoverDisplayLayoutAsync()
+    {
+        if ( !_monitorInfo.IsPrimary )
+        {
+            return true;
+        }
+
+        var generation = Volatile.Read( ref _loadGeneration );
+        StopCapture();
+        D3D9ShareCapture.ReleaseSharedDevices();
+
+        var monitor = TryGetPrimaryMonitor();
+        if ( monitor == null )
+        {
+            return false;
+        }
+
+        _monitorInfo = monitor;
+        ApplyMonitorLayout( monitor );
+        CameraPosition( monitor );
+        CreateOtherScreens();
+
+        await Dispatcher.Yield( DispatcherPriority.Background );
+        if ( !IsLoadCurrent( generation ) || !IsLoaded )
+        {
+            return true;
+        }
+
+        await D3D9ShareCapture.PreloadD3D11Async().ConfigureAwait( true );
+        if ( !IsLoadCurrent( generation ) || !IsLoaded )
+        {
+            return true;
+        }
+
+        return await WarmupMonitorCaptureAsync( generation ).ConfigureAwait( true );
+    }
+
+    private void ScheduleCaptureRetry()
+    {
+        _ = Dispatcher.BeginInvoke( async () =>
+        {
+            await Task.Delay( 1000 ).ConfigureAwait( true );
+            if ( !IsLoaded )
             {
-                Interval = TimeSpan.FromMilliseconds( 400 )
-            };
-
-            _displayChangeDebounceTimer.Stop();
-            _displayChangeDebounceTimer.Tick -= OnDisplayChangeDebounced;
-            _displayChangeDebounceTimer.Tick += OnDisplayChangeDebounced;
-            _displayChangeDebounceTimer.Start();
-        }
-
-        private async void OnDisplayChangeDebounced( object? sender, EventArgs e )
-        {
-            _displayChangeDebounceTimer?.Stop();
-            if ( !await TryRecoverDisplayLayoutAsync().ConfigureAwait( true ) )
-            {
-                PluginLog.Error( "Cube3D", "display recovery failed, restarting UI." );
-                RestartRequested?.Invoke();
+                return;
             }
-        }
 
-        private async Task<bool> TryRecoverDisplayLayoutAsync()
-        {
-            if ( !_monitorInfo.IsPrimary ) return true;
-
-            var generation = Volatile.Read( ref _loadGeneration );
-            StopCapture();
-            D3D9ShareCapture.ReleaseSharedDevices();
-
-            var monitor = TryGetPrimaryMonitor();
-            if ( monitor == null ) return false;
-
-            _monitorInfo = monitor;
-            ApplyMonitorLayout( monitor );
-            CameraPosition( monitor );
-            CreateOtherScreens();
-
-            await Dispatcher.Yield( DispatcherPriority.Background );
-            if ( !IsLoadCurrent( generation ) || !IsLoaded ) return true;
-
-            await D3D9ShareCapture.PreloadD3D11Async().ConfigureAwait( true );
-            if ( !IsLoadCurrent( generation ) || !IsLoaded ) return true;
-
-            return await WarmupMonitorCaptureAsync( generation ).ConfigureAwait( true );
-        }
-
-        private void ScheduleCaptureRetry()
-        {
-            _ = Dispatcher.BeginInvoke( async () =>
+            if ( await WarmupMonitorCaptureAsync( _windowLoadGeneration ).ConfigureAwait( true ) )
             {
-                await Task.Delay( 1000 ).ConfigureAwait( true );
-                if ( !IsLoaded ) return;
-                if ( await WarmupMonitorCaptureAsync( _windowLoadGeneration ).ConfigureAwait( true ) ) return;
-                RestartRequested?.Invoke();
-            }, DispatcherPriority.Background );
-        }
+                return;
+            }
+
+            RestartRequested?.Invoke();
+        }, DispatcherPriority.Background );
     }
 }
 

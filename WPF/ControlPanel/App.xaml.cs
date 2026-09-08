@@ -4,13 +4,17 @@ using System.Windows.Markup;
 
 namespace ControlPanel;
 
-public partial class App : Application, IComponentConnector
+public class App : Application, IComponentConnector
 {
     private bool _contentLoaded;
 
     public void InitializeComponent()
     {
-        if ( _contentLoaded ) return;
+        if ( _contentLoaded )
+        {
+            return;
+        }
+
         _contentLoaded = true;
         Resources.MergedDictionaries.Add( new ResourceDictionary
         {

@@ -11,10 +11,9 @@ You should have received a copy of the GNU General Public License along with Cub
 
 using System;
 
-namespace ScreenCapture
+namespace ScreenCapture;
+
+public abstract class FrameProcessor
 {
-    public abstract class FrameProcessor
-    {
-        public abstract void Proceed( IntPtr pointer, ulong frameNumber );
-    }
+    public abstract void Proceed( IntPtr pointer, ulong frameNumber );
 }

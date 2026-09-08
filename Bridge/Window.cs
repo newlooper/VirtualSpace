@@ -11,33 +11,32 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 
-namespace VirtualSpace.Config.Events.Entity
-{
-    public class Window
-    {
-        public IntPtr  Handle      { get; set; }
-        public string  Title       { get; set; }
-        public string  WndClass    { get; set; }
-        public string? WinInScreen { get; set; }
-        public int     VdIndex     { get; set; }
-        public int?    ProcessId   { get; set; }
-        public string? ProcessName { get; set; }
-        public string? ProcessPath { get; set; }
-        public string? CommandLine { get; set; }
+namespace VirtualSpace.Config.Events.Entity;
 
-        public static Window Create(
-            IntPtr handle,
-            string title,
-            string wndClass,
-            int    pId )
+public class Window
+{
+    public IntPtr  Handle      { get; set; }
+    public string  Title       { get; set; }
+    public string  WndClass    { get; set; }
+    public string? WinInScreen { get; set; }
+    public int     VdIndex     { get; set; }
+    public int?    ProcessId   { get; set; }
+    public string? ProcessName { get; set; }
+    public string? ProcessPath { get; set; }
+    public string? CommandLine { get; set; }
+
+    public static Window Create(
+        IntPtr handle,
+        string title,
+        string wndClass,
+        int    pId )
+    {
+        return new Window
         {
-            return new Window
-            {
-                Handle    = handle,
-                Title     = title,
-                WndClass  = wndClass,
-                ProcessId = pId
-            };
-        }
+            Handle    = handle,
+            Title     = title,
+            WndClass  = wndClass,
+            ProcessId = pId
+        };
     }
 }

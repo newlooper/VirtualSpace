@@ -24,7 +24,10 @@ public sealed class FullObservableCollection<T> : ObservableCollection<T> where 
 
     public FullObservableCollection( IEnumerable<T> normalList ) : this()
     {
-        foreach ( var item in normalList ) Add( item );
+        foreach ( var item in normalList )
+        {
+            Add( item );
+        }
     }
 
     private void CollectionChangedHandler( object? sender, NotifyCollectionChangedEventArgs e )
@@ -33,13 +36,19 @@ public sealed class FullObservableCollection<T> : ObservableCollection<T> where 
         {
             case NotifyCollectionChangedAction.Remove:
             {
-                foreach ( T item in e.OldItems ) item.PropertyChanged -= OnNotifyPropertyChanged;
+                foreach ( T item in e.OldItems )
+                {
+                    item.PropertyChanged -= OnNotifyPropertyChanged;
+                }
 
                 return;
             }
             case NotifyCollectionChangedAction.Add:
             {
-                foreach ( T item in e.NewItems ) item.PropertyChanged += OnNotifyPropertyChanged;
+                foreach ( T item in e.NewItems )
+                {
+                    item.PropertyChanged += OnNotifyPropertyChanged;
+                }
 
                 break;
             }

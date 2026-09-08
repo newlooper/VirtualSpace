@@ -54,7 +54,9 @@ public class RulesViewModel : ViewModelBase
         {
             var desktops = new List<object>();
             for ( var i = 0; i < DesktopWrapper.Count; i++ ) // system's order
+            {
                 desktops.Add( new { Value = i, Text = DesktopWrapper.DesktopNameFromIndex( i ) } );
+            }
 
             return desktops;
         }
@@ -62,7 +64,10 @@ public class RulesViewModel : ViewModelBase
 
     public static void ReloadRules()
     {
-        if ( _instance == null ) return;
+        if ( _instance == null )
+        {
+            return;
+        }
 
         _instance.Rules.CollectionChanged -= _instance.RulesOnListChanged;
         _instance.Rules                   =  new FullObservableCollection<RuleTemplate>( Conditions.FetchRules() );
@@ -77,13 +82,13 @@ public class RulesViewModel : ViewModelBase
 
     private static List<object> GetOperators()
     {
-        return new List<object>
-        {
+        return
+        [
             new { Value = Keywords.Eq[0], text           = "" },
             new { Value = Keywords.StartsWith[0], Text   = "" },
             new { Value = Keywords.EndsWith[0], Text     = "" },
             new { Value = Keywords.Contains[0], Text     = "" },
             new { Value = Keywords.RegexIsMatch[0], Text = "" }
-        };
+        ];
     }
 }

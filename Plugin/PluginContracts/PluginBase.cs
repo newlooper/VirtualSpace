@@ -13,33 +13,32 @@ using System.Collections.Generic;
 using System.Reflection;
 using VirtualSpace.Plugin;
 
-namespace VirtualSpace.PluginContracts
+namespace VirtualSpace.PluginContracts;
+
+public abstract class PluginBase : IPlugin
 {
-    public abstract class PluginBase : IPlugin
+    protected PluginBase()
     {
-        protected PluginBase()
-        {
-            Metadata = GetType().Assembly.GetCustomAttribute<PluginMetadataAttribute>()
-                       ?? throw new InvalidOperationException(
-                           $"{GetType().Assembly.GetName().Name} is missing [assembly: {nameof( PluginMetadataAttribute )}]." );
-            Requirements = Metadata.ToRequirements();
-        }
-
-        protected PluginMetadataAttribute Metadata { get; }
-
-        public string Name        => Metadata.Name;
-        public string Display     => Metadata.Display;
-        public string Version     => Metadata.Version;
-        public string Description => Metadata.Description;
-        public string Author      => Metadata.Author;
-        public string Email       => Metadata.Email;
-        public PluginType Type    => Metadata.Type;
-        public Requirements Requirements { get; }
-
-        public abstract IReadOnlyList<string> SubscribedEvents { get; }
-
-        public abstract void Initialize( IHostContext hostContext );
-        public abstract void Shutdown();
-        public abstract void ShowSettings();
+        Metadata = GetType().Assembly.GetCustomAttribute<PluginMetadataAttribute>()
+                   ?? throw new InvalidOperationException(
+                       $"{GetType().Assembly.GetName().Name} is missing [assembly: {nameof( PluginMetadataAttribute )}]." );
+        Requirements = Metadata.ToRequirements();
     }
+
+    protected PluginMetadataAttribute Metadata { get; }
+
+    public string       Name         => Metadata.Name;
+    public string       Display      => Metadata.Display;
+    public string       Version      => Metadata.Version;
+    public string       Description  => Metadata.Description;
+    public string       Author       => Metadata.Author;
+    public string       Email        => Metadata.Email;
+    public PluginType   Type         => Metadata.Type;
+    public Requirements Requirements { get; }
+
+    public abstract IReadOnlyList<string> SubscribedEvents { get; }
+
+    public abstract void Initialize( IHostContext hostContext );
+    public abstract void Shutdown();
+    public abstract void ShowSettings();
 }

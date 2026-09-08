@@ -15,121 +15,147 @@ using System.Windows.Media.Animation;
 using Cube3D.Config;
 using Cube3D.Effects;
 
-namespace Cube3D
+namespace Cube3D;
+
+public partial class SettingsWindow : Window
 {
-    public partial class SettingsWindow : Window
+    private bool       _isLoaded;
+    private MainWindow _mainWindow;
+
+    public SettingsWindow()
     {
-        private bool       _isLoaded = false;
-        private MainWindow _mainWindow;
+        DataContext = this;
+        InitializeComponent();
+    }
 
-        public SettingsWindow()
+    public int AnimationDuration
+    {
+        get => SettingsManager.Settings.AnimationDuration;
+        set => SettingsManager.Settings.AnimationDuration = value;
+    }
+
+    private void Window_Loaded( object sender, RoutedEventArgs e )
+    {
+        foreach ( var name in EffectFactory.Names )
         {
-            DataContext = this;
-            InitializeComponent();
+            ComboBoxEffects.Items.Add( name );
         }
 
-        public int AnimationDuration
+        ComboBoxEffects.SelectedItem = SettingsManager.Settings.SelectedEffect;
+
+        foreach ( var name in EaseFactory.Names )
         {
-            get => SettingsManager.Settings.AnimationDuration;
-            set => SettingsManager.Settings.AnimationDuration = value;
+            ComboBoxEase.Items.Add( name );
         }
 
-        private void Window_Loaded( object sender, RoutedEventArgs e )
+        ComboBoxEase.SelectedItem = SettingsManager.Settings.EaseType;
+
+        foreach ( EasingMode easeMode in Enum.GetValues( typeof( EasingMode ) ) )
         {
-            foreach ( var name in EffectFactory.Names )
-            {
-                ComboBoxEffects.Items.Add( name );
-            }
-
-            ComboBoxEffects.SelectedItem = SettingsManager.Settings.SelectedEffect;
-
-            foreach ( var name in EaseFactory.Names )
-            {
-                ComboBoxEase.Items.Add( name );
-            }
-
-            ComboBoxEase.SelectedItem = SettingsManager.Settings.EaseType;
-
-            foreach ( EasingMode easeMode in Enum.GetValues( typeof( EasingMode ) ) )
-            {
-                ComboBoxEaseMode.Items.Add( easeMode );
-            }
-
-            ComboBoxEaseMode.SelectedItem = SettingsManager.Settings.EaseMode;
-
-            foreach ( TransitionType tt in Enum.GetValues( typeof( TransitionType ) ) )
-            {
-                ComboBoxTransitionType.Items.Add( tt );
-            }
-
-            ComboBoxTransitionType.SelectedItem = SettingsManager.Settings.TransitionType;
-
-            CbNgOnAllScreens.IsChecked = SettingsManager.Settings.ShowNotificationGridOnAllScreens;
-
-            _isLoaded = true;
+            ComboBoxEaseMode.Items.Add( easeMode );
         }
 
-        private void ComboBoxEffects_SelectionChanged( object sender, SelectionChangedEventArgs e )
+        ComboBoxEaseMode.SelectedItem = SettingsManager.Settings.EaseMode;
+
+        foreach ( TransitionType tt in Enum.GetValues( typeof( TransitionType ) ) )
         {
-            if ( !_isLoaded ) return;
-            SettingsManager.Settings.SelectedEffect = ComboBoxEffects.SelectedItem as string ?? EffectFactory.Default;
-            SettingsManager.SaveJson();
+            ComboBoxTransitionType.Items.Add( tt );
         }
 
-        private void ComboBoxEase_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
+        ComboBoxTransitionType.SelectedItem = SettingsManager.Settings.TransitionType;
+
+        CbNgOnAllScreens.IsChecked = SettingsManager.Settings.ShowNotificationGridOnAllScreens;
+
+        _isLoaded = true;
+    }
+
+    private void ComboBoxEffects_SelectionChanged( object sender, SelectionChangedEventArgs e )
+    {
+        if ( !_isLoaded )
         {
-            if ( !_isLoaded ) return;
-            SettingsManager.Settings.EaseType = ComboBoxEase.SelectedItem as string ?? EaseFactory.None;
-            SettingsManager.SaveJson();
+            return;
         }
 
-        private void ComboBoxEaseMode_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
+        SettingsManager.Settings.SelectedEffect = ComboBoxEffects.SelectedItem as string ?? EffectFactory.Default;
+        SettingsManager.SaveJson();
+    }
+
+    private void ComboBoxEase_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
+    {
+        if ( !_isLoaded )
         {
-            if ( !_isLoaded ) return;
-            SettingsManager.Settings.EaseMode = (EasingMode)ComboBoxEaseMode.SelectedItem;
-            SettingsManager.SaveJson();
+            return;
         }
 
-        private void ComboBoxTransitionType_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
+        SettingsManager.Settings.EaseType = ComboBoxEase.SelectedItem as string ?? EaseFactory.None;
+        SettingsManager.SaveJson();
+    }
+
+    private void ComboBoxEaseMode_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
+    {
+        if ( !_isLoaded )
         {
-            if ( !_isLoaded ) return;
-            SettingsManager.Settings.TransitionType = (TransitionType)ComboBoxTransitionType.SelectedItem;
-            if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) == 0 )
-                CbNgOnAllScreens.IsChecked = false;
-            SettingsManager.SaveJson();
-            _mainWindow.SetTransitionType();
+            return;
         }
 
-        public void SetMainWindow( MainWindow mw )
+        SettingsManager.Settings.EaseMode = (EasingMode)ComboBoxEaseMode.SelectedItem;
+        SettingsManager.SaveJson();
+    }
+
+    private void ComboBoxTransitionType_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
+    {
+        if ( !_isLoaded )
         {
-            _mainWindow = mw;
+            return;
         }
 
-        private void ApplyEffect_OnClick( object sender, RoutedEventArgs e )
+        SettingsManager.Settings.TransitionType = (TransitionType)ComboBoxTransitionType.SelectedItem;
+        if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) == 0 )
         {
-            _mainWindow.Build3D();
+            CbNgOnAllScreens.IsChecked = false;
         }
 
-        private void Close_OnClick( object sender, RoutedEventArgs e )
+        SettingsManager.SaveJson();
+        _mainWindow.SetTransitionType();
+    }
+
+    public void SetMainWindow( MainWindow mw )
+    {
+        _mainWindow = mw;
+    }
+
+    private void ApplyEffect_OnClick( object sender, RoutedEventArgs e )
+    {
+        _mainWindow.Build3D();
+    }
+
+    private void Close_OnClick( object sender, RoutedEventArgs e )
+    {
+        SettingsManager.SaveJson();
+        Close();
+    }
+
+    private void CbNgOnAllScreens_OnChecked( object sender, RoutedEventArgs e )
+    {
+        if ( !_isLoaded )
         {
-            SettingsManager.SaveJson();
-            Close();
+            return;
         }
 
-        private void CbNgOnAllScreens_OnChecked( object sender, RoutedEventArgs e )
+        SettingsManager.Settings.ShowNotificationGridOnAllScreens = true;
+        SettingsManager.SaveJson();
+        _mainWindow.SetOtherScreensVisible( true );
+    }
+
+    private void CbNgOnAllScreens_OnUnchecked( object sender, RoutedEventArgs e )
+    {
+        if ( !_isLoaded )
         {
-            if ( !_isLoaded ) return;
-            SettingsManager.Settings.ShowNotificationGridOnAllScreens = true;
-            SettingsManager.SaveJson();
-            _mainWindow.SetOtherScreensVisible( true );
+            return;
         }
 
-        private void CbNgOnAllScreens_OnUnchecked( object sender, RoutedEventArgs e )
-        {
-            if ( !_isLoaded ) return;
-            SettingsManager.Settings.ShowNotificationGridOnAllScreens = false;
-            SettingsManager.SaveJson();
-            _mainWindow.SetOtherScreensVisible( false );
-        }
+        SettingsManager.Settings.ShowNotificationGridOnAllScreens = false;
+        SettingsManager.SaveJson();
+        _mainWindow.SetOtherScreensVisible( false );
     }
 }

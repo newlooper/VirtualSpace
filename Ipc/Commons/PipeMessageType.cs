@@ -8,12 +8,11 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace.Commons
+namespace VirtualSpace.Commons;
+
+public enum PipeMessageType
 {
-    public enum PipeMessageType
-    {
-        INSTANCE,
-        PLUGIN_VD_SWITCH_OBSERVER,
-        PLUGIN_CHECK_ALIVE
-    }
+    INSTANCE,
+    PLUGIN_VD_SWITCH_OBSERVER,
+    PLUGIN_CHECK_ALIVE
 }

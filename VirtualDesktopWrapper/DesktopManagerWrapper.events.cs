@@ -32,17 +32,18 @@ public static partial class DesktopManagerWrapper
     public static void RegisterVirtualDesktopEvents( WallpaperChanged wc10, Action<Guid, string> wc11 )
     {
         if ( SysInfo.IsWin10 )
+        {
             RegisterVirtualDesktopEvents10( wc10 );
+        }
         else
+        {
             RegisterVirtualDesktopEvents11( wc11 );
+        }
     }
 
     private static void RegisterVirtualDesktopEvents10( WallpaperChanged wc )
     {
-        VD10.DesktopManager.Created += ( _, e ) =>
-        {
-            VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification { Type = VirtualDesktopNotificationType.CREATED } );
-        };
+        VD10.DesktopManager.Created += ( _, e ) => { VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification { Type = VirtualDesktopNotificationType.CREATED } ); };
 
         VD10.DesktopManager.Destroyed += ( _, e ) =>
         {
@@ -68,10 +69,7 @@ public static partial class DesktopManagerWrapper
 
     private static void RegisterVirtualDesktopEvents11( Action<Guid, string> wc11 )
     {
-        VD11.DesktopManager.Created += ( _, e ) =>
-        {
-            VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification { Type = VirtualDesktopNotificationType.CREATED } );
-        };
+        VD11.DesktopManager.Created += ( _, e ) => { VirtualDesktopNotifications.Writer.TryWrite( new VirtualDesktopNotification { Type = VirtualDesktopNotificationType.CREATED } ); };
 
         VD11.DesktopManager.Destroyed += ( _, e ) =>
         {
@@ -94,7 +92,11 @@ public static partial class DesktopManagerWrapper
 
         VD11.DesktopManager.WallpaperChanged += ( _, e ) =>
         {
-            if ( string.IsNullOrEmpty( e.Path ) ) return;
+            if ( string.IsNullOrEmpty( e.Path ) )
+            {
+                return;
+            }
+
             wc11( e.Desktop.GetId(), e.Path );
         };
     }
@@ -106,7 +108,9 @@ public static partial class DesktopManagerWrapper
     public static async void ListenVirtualDesktopEvents()
     {
         while ( await VirtualDesktopNotifications.Reader.WaitToReadAsync() )
+        {
             if ( VirtualDesktopNotifications.Reader.TryRead( out var vdn ) )
+            {
                 switch ( vdn.Type )
                 {
                     case VirtualDesktopNotificationType.CREATED:
@@ -124,5 +128,7 @@ public static partial class DesktopManagerWrapper
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+            }
+        }
     }
 }

@@ -8,15 +8,14 @@
 //
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace
+namespace VirtualSpace;
+
+/// <summary>
+///     Owned by Configuration; PluginContracts compiles a linked copy (no ProjectReference).
+/// </summary>
+internal static class AppIdentity
 {
-    /// <summary>
-    /// Owned by Configuration; PluginContracts compiles a linked copy (no ProjectReference).
-    /// </summary>
-    internal static class AppIdentity
-    {
-        public const string OrganizationName = "newlooper.com";
-        public const string AppName          = "VirtualSpace";
-        public const string PluginsFolder    = "Plugins";
-    }
+    public const string OrganizationName = "newlooper.com";
+    public const string AppName          = "VirtualSpace";
+    public const string PluginsFolder    = "Plugins";
 }

@@ -55,8 +55,13 @@ public partial class UIViewModel : ViewModelBase
     public void OnPropertyChanged( string propertyName, object before, object after )
     {
         var propertyChanged = PropertyChanged;
-        if ( propertyChanged == null ) return;
+        if ( propertyChanged == null )
+        {
+            return;
+        }
+
         if ( _isInitialized )
+        {
             switch ( propertyName )
             {
                 case nameof( VdArrangement ):
@@ -76,6 +81,7 @@ public partial class UIViewModel : ViewModelBase
                     Manager.Save( reason: Manager.CurrentProfile.UI.ShowVdIndexType );
                     break;
             }
+        }
 
         propertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
     }

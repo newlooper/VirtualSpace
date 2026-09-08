@@ -8,11 +8,10 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace.Commons
+namespace VirtualSpace.Commons;
+
+public static class Config
 {
-    public static class Config
-    {
-        public const string PIPE_NAME   = "VIRTUAL_SPACE_IPC_PIPE";
-        public const string PIPE_SERVER = ".";
-    }
+    public const string PIPE_NAME   = "VIRTUAL_SPACE_IPC_PIPE";
+    public const string PIPE_SERVER = ".";
 }

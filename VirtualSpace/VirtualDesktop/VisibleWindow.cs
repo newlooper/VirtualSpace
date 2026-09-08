@@ -13,39 +13,38 @@ using System;
 using System.Drawing;
 using VirtualSpace.Helpers;
 
-namespace VirtualSpace.VirtualDesktop
+namespace VirtualSpace.VirtualDesktop;
+
+public class VisibleWindow
 {
-    public class VisibleWindow
+    public VisibleWindow( string title, string classname, IntPtr handle )
     {
-        public VisibleWindow( string title, string classname, IntPtr handle )
+        Title     = title;
+        Classname = classname;
+        Handle    = handle;
+    }
+
+    public string Title { get; set; }
+
+    public string Classname { get; set; }
+
+    public IntPtr Handle { get; set; }
+
+    public Rectangle Rect { get; set; }
+
+    public IntPtr Thumb { get; set; }
+
+    internal DWM_THUMBNAIL_PROPERTIES DTP { get; set; }
+
+    internal void SetValidArea( DWM_THUMBNAIL_PROPERTIES props )
+    {
+        DTP = props;
+        Rect = new Rectangle
         {
-            Title     = title;
-            Classname = classname;
-            Handle    = handle;
-        }
-
-        public string Title { get; set; }
-
-        public string Classname { get; set; }
-
-        public IntPtr Handle { get; set; }
-
-        public Rectangle Rect { get; set; }
-
-        public IntPtr Thumb { get; set; }
-
-        internal DWM_THUMBNAIL_PROPERTIES DTP { get; set; }
-
-        internal void SetValidArea( DWM_THUMBNAIL_PROPERTIES props )
-        {
-            DTP = props;
-            Rect = new Rectangle
-            {
-                X      = props.rcDestination.Left,
-                Y      = props.rcDestination.Top,
-                Width  = props.rcDestination.Right - props.rcDestination.Left,
-                Height = props.rcDestination.Bottom - props.rcDestination.Top
-            };
-        }
+            X      = props.rcDestination.Left,
+            Y      = props.rcDestination.Top,
+            Width  = props.rcDestination.Right - props.rcDestination.Left,
+            Height = props.rcDestination.Bottom - props.rcDestination.Top
+        };
     }
 }

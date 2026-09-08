@@ -10,18 +10,17 @@
 
 using System;
 
-namespace VirtualSpace.PluginContracts
+namespace VirtualSpace.PluginContracts;
+
+public interface IHostContext
 {
-    public interface IHostContext
-    {
-        IntPtr  MainWindowHandle { get; }
-        Version HostVersion      { get; }
+    IntPtr  MainWindowHandle { get; }
+    Version HostVersion      { get; }
 
-        string GetPluginDataPath( string pluginName );
+    string GetPluginDataPath( string pluginName );
 
-        void Subscribe( string eventName, Action<object> handler );
-        void Unsubscribe( string eventName, Action<object> handler );
+    void Subscribe( string   eventName, Action<object> handler );
+    void Unsubscribe( string eventName, Action<object> handler );
 
-        void RequestDesktopSwitch( int targetIndex );
-    }
+    void RequestDesktopSwitch( int targetIndex );
 }

@@ -28,7 +28,11 @@ public static partial class DesktopWrapper
 
     public static bool RemoveDesktopByGuid( Guid guid )
     {
-        if ( Count <= 1 ) return false;
+        if ( Count <= 1 )
+        {
+            return false;
+        }
+
         try
         {
             if ( SysInfo.IsWin10 )
@@ -56,16 +60,24 @@ public static partial class DesktopWrapper
         if ( SysInfo.IsWin10 )
         {
             if ( isPinned )
+            {
                 VD10.Desktop.UnpinWindow( handle );
+            }
             else
+            {
                 VD10.Desktop.PinWindow( handle );
+            }
         }
         else
         {
             if ( isPinned )
+            {
                 VD11.Desktop.UnpinWindow( handle );
+            }
             else
+            {
                 VD11.Desktop.PinWindow( handle );
+            }
         }
     }
 
@@ -74,16 +86,24 @@ public static partial class DesktopWrapper
         if ( SysInfo.IsWin10 )
         {
             if ( isPinned )
+            {
                 VD10.Desktop.UnpinApplication( handle );
+            }
             else
+            {
                 VD10.Desktop.PinApplication( handle );
+            }
         }
         else
         {
             if ( isPinned )
+            {
                 VD11.Desktop.UnpinApplication( handle );
+            }
             else
+            {
                 VD11.Desktop.PinApplication( handle );
+            }
         }
     }
 
@@ -147,9 +167,13 @@ public static partial class DesktopWrapper
     public static void MakeVisibleByIndex( int sysIndex )
     {
         if ( SysInfo.IsWin10 )
+        {
             VD10.Desktop.FromIndex( sysIndex ).MakeVisible();
+        }
         else
+        {
             VD11.Desktop.FromIndex( sysIndex ).MakeVisible();
+        }
     }
 
     public static void MakeVisibleByGuid( Guid guid, bool? forceFocusForegroundWindow = null )
@@ -157,11 +181,18 @@ public static partial class DesktopWrapper
         IDesktop? desktop;
 
         if ( SysInfo.IsWin10 )
+        {
             desktop = VD10.Desktop.FromId( guid );
+        }
         else
+        {
             desktop = VD11.Desktop.FromId( guid );
+        }
 
-        if ( desktop is null ) return;
+        if ( desktop is null )
+        {
+            return;
+        }
 
         OnDesktopVisibleEvent( desktop, forceFocusForegroundWindow );
     }
@@ -169,9 +200,13 @@ public static partial class DesktopWrapper
     public static void SetNameByGuid( Guid guid, string name )
     {
         if ( SysInfo.IsWin10 )
+        {
             VD10.Desktop.FromId( guid )?.SetName( name );
+        }
         else
+        {
             VD11.Desktop.FromId( guid )?.SetName( name );
+        }
     }
 
     public static Guid GuidFromWindow( IntPtr handle )

@@ -56,6 +56,7 @@ public partial class Rules
     private void ClickEventFromSubControl( object sender, RoutedEventArgs e )
     {
         if ( e.OriginalSource is Button btn )
+        {
             switch ( btn.Name )
             {
                 case "btnSave":
@@ -65,6 +66,7 @@ public partial class Rules
                     e.Handled                     = true;
                     break;
             }
+        }
     }
 
     public static Rules Create( string headerKey, PackIconKind iconKind )
@@ -84,7 +86,10 @@ public partial class Rules
     private void BtnEditRule_OnClick( object sender, RoutedEventArgs e )
     {
         var r = RuleList.SelectedItem as RuleTemplate;
-        if ( r == null ) return;
+        if ( r == null )
+        {
+            return;
+        }
 
         UserControlRuleEditor.RuleDate.Visibility = Visibility.Visible;
 
@@ -109,7 +114,10 @@ public partial class Rules
     private void BtnCloneRule_OnClick( object sender, RoutedEventArgs e )
     {
         var r = RuleList.SelectedItem as RuleTemplate;
-        if ( r == null ) return;
+        if ( r == null )
+        {
+            return;
+        }
 
         var foc  = RuleList.ItemsSource as FullObservableCollection<RuleTemplate>;
         var time = DateTime.Now;
@@ -133,7 +141,10 @@ public partial class Rules
     private void BtnDeleteRule_OnClick( object sender, RoutedEventArgs e )
     {
         var r = RuleList.SelectedItem as RuleTemplate;
-        if ( r == null ) return;
+        if ( r == null )
+        {
+            return;
+        }
 
         var foc = RuleList.ItemsSource as FullObservableCollection<RuleTemplate>;
         foc!.Remove( r );
@@ -142,12 +153,18 @@ public partial class Rules
     private static ExpressionTemplate RefreshRuleIds( ExpressionTemplate expressionTemplate )
     {
         expressionTemplate.id = Guid.NewGuid();
-        if ( expressionTemplate.rules == null ) return expressionTemplate;
+        if ( expressionTemplate.rules == null )
+        {
+            return expressionTemplate;
+        }
 
         foreach ( var rule in expressionTemplate.rules )
         {
             rule.id = Guid.NewGuid();
-            if ( rule.rules != null ) RefreshRuleIds( rule );
+            if ( rule.rules != null )
+            {
+                RefreshRuleIds( rule );
+            }
         }
 
         return expressionTemplate;

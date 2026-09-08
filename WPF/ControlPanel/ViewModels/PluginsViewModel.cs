@@ -34,6 +34,8 @@ public partial class PluginsViewModel : ViewModelBase
         PluginHost.RefreshPlugins();
         Plugins.Clear();
         foreach ( var item in PluginHost.Plugins.Select( p => new PluginItemViewModel( p ) ) )
+        {
             Plugins.Add( item );
+        }
     }
 }

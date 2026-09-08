@@ -25,380 +25,411 @@ using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
 
-namespace VirtualSpace.VirtualDesktop
+namespace VirtualSpace.VirtualDesktop;
+
+public partial class VirtualDesktopWindow
 {
-    public partial class VirtualDesktopWindow
+    private static int            _hoverVdIndex;
+    private static Point          _startPoint;
+    private static int            _dragState;
+    private static Rectangle      _dragBounds = Rectangle.Empty;
+    private static VisibleWindow? _selectedWindow;
+    private static DragWindow?    _dw;
+    private        bool           _isTheOnlyOneInMainView;
+
+    public void ResetOnlyOneStatus()
     {
-        private static int            _hoverVdIndex;
-        private static Point          _startPoint;
-        private static int            _dragState;
-        private static Rectangle      _dragBounds = Rectangle.Empty;
-        private static VisibleWindow? _selectedWindow;
-        private static DragWindow?    _dw;
-        private        bool           _isTheOnlyOneInMainView;
+        _isTheOnlyOneInMainView = false;
+    }
 
-        public void ResetOnlyOneStatus()
+    private void VirtualDesktopWindow_MouseDown( object sender, MouseEventArgs e )
+    {
+        _virtualDesktops = VirtualDesktopManager.GetAllVirtualDesktops();
+        _startPoint      = e.Location;
+        var dragSize = SystemInformation.DragSize * ConfigManager.CurrentProfile.Mouse.DragSizeFactor;
+        _dragBounds = new Rectangle(
+            new Point( _startPoint.X - dragSize.Width / 2, _startPoint.Y - dragSize.Height / 2 ),
+            dragSize );
+
+        _selectedWindow = _visibleWindows.FirstOrDefault( w => w.Rect.Contains( e.Location ) );
+        if ( _selectedWindow != null )
         {
-            _isTheOnlyOneInMainView = false;
+            Logger.Verbose( $"SELECT.Win {_selectedWindow.Title}" );
+        }
+    }
+
+    private static bool IsOutBounds( Point location )
+    {
+        return _dragBounds != Rectangle.Empty && !_dragBounds.Contains( location );
+    }
+
+    private void VirtualDesktopWindow_MouseMove( object sender, MouseEventArgs e )
+    {
+        if ( _dragState == 0 && e.Button == MouseButtons.Left && IsOutBounds( e.Location ) )
+        {
+            _dragState = 1;
         }
 
-        private void VirtualDesktopWindow_MouseDown( object sender, MouseEventArgs e )
+        if ( _dragState == 0 )
         {
-            _virtualDesktops = VirtualDesktopManager.GetAllVirtualDesktops();
-            _startPoint      = e.Location;
-            var dragSize = SystemInformation.DragSize * ConfigManager.CurrentProfile.Mouse.DragSizeFactor;
-            _dragBounds = new Rectangle(
-                new Point( _startPoint.X - dragSize.Width / 2, _startPoint.Y - dragSize.Height / 2 ),
-                dragSize );
-
-            _selectedWindow = _visibleWindows.FirstOrDefault( w => w.Rect.Contains( e.Location ) );
-            if ( _selectedWindow != null ) Logger.Verbose( $"SELECT.Win {_selectedWindow.Title}" );
+            return;
         }
 
-        private static bool IsOutBounds( Point location )
+        HoverOnDesktop( sender, e );
+
+        if ( _selectedWindow != null )
         {
-            return _dragBounds != Rectangle.Empty && !_dragBounds.Contains( location );
-        }
-
-        private void VirtualDesktopWindow_MouseMove( object sender, MouseEventArgs e )
-        {
-            if ( _dragState == 0 && e.Button == MouseButtons.Left && IsOutBounds( e.Location ) ) _dragState = 1;
-
-            if ( _dragState == 0 ) return;
-
-            HoverOnDesktop( sender, e );
-
-            if ( _selectedWindow != null )
+            if ( _dw == null )
             {
-                if ( _dw == null )
+                _dw = DragWindow.CreateAndShow( _selectedWindow.Rect.Width, _selectedWindow.Rect.Height );
+
+                var i = DwmApi.DwmRegisterThumbnail( _dw.Handle, _selectedWindow.Handle, out var thumb );
+                if ( i == 0 )
                 {
-                    _dw = DragWindow.CreateAndShow( _selectedWindow.Rect.Width, _selectedWindow.Rect.Height );
-
-                    var i = DwmApi.DwmRegisterThumbnail( _dw.Handle, _selectedWindow.Handle, out var thumb );
-                    if ( i == 0 )
+                    var props = new DWM_THUMBNAIL_PROPERTIES
                     {
-                        var props = new DWM_THUMBNAIL_PROPERTIES
-                        {
-                            fVisible      = true,
-                            dwFlags       = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
-                            opacity       = byte.MaxValue,
-                            rcDestination = new RECT( 0, 0, _dw.Width, _dw.Height )
-                        };
-                        _dw.Thumb = thumb;
-                        UpdateThumbnail( _dw.Thumb, props );
-                    }
-
-                    var dtp = _selectedWindow.DTP;
-                    dtp.opacity = VirtualDesktopManager.Ui.ThumbDragSourceOpacity;
-                    _           = DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
+                        fVisible      = true,
+                        dwFlags       = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
+                        opacity       = byte.MaxValue,
+                        rcDestination = new RECT( 0, 0, _dw.Width, _dw.Height )
+                    };
+                    _dw.Thumb = thumb;
+                    UpdateThumbnail( _dw.Thumb, props );
                 }
 
-                _dw.Left = Cursor.Position.X - _dw.Width / 2;
-                _dw.Top  = Cursor.Position.Y - _dw.Height / 2;
+                var dtp = _selectedWindow.DTP;
+                dtp.opacity = VirtualDesktopManager.Ui.ThumbDragSourceOpacity;
+                _           = DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
             }
-            else
-            {
-                var vdw = sender as Form;
-                vdw!.Left = e.X + vdw.Left - _startPoint.X;
-                vdw.Top   = e.Y + vdw.Top - _startPoint.Y;
-            }
+
+            _dw.Left = Cursor.Position.X - _dw.Width / 2;
+            _dw.Top  = Cursor.Position.Y - _dw.Height / 2;
+        }
+        else
+        {
+            var vdw = sender as Form;
+            vdw!.Left = e.X + vdw.Left - _startPoint.X;
+            vdw.Top   = e.Y + vdw.Top - _startPoint.Y;
+        }
+    }
+
+    private void VirtualDesktopWindow_MouseUp( object? sender, MouseEventArgs e )
+    {
+        if ( null == sender )
+        {
+            return;
         }
 
-        private void VirtualDesktopWindow_MouseUp( object? sender, MouseEventArgs e )
+        _hoverVdIndex = HoverOnDesktop( sender, e );
+        if ( _hoverVdIndex < 0 )
         {
-            if ( null == sender ) return;
+            return;
+        }
 
-            _hoverVdIndex = HoverOnDesktop( sender, e );
-            if ( _hoverVdIndex < 0 ) return;
-
-            if ( _dragState > 0 )
+        if ( _dragState > 0 )
+        {
+            if ( _selectedWindow != null ) // if we drag a thumbnail in a virtual desktop
             {
-                if ( _selectedWindow != null ) // if we drag a thumbnail in a virtual desktop
+                while ( true )
                 {
-                    while ( true )
+                    _virtualDesktops![_hoverVdIndex].Opacity = 1; // reset hover virtual desktop opacity unconditionally
+
+                    if ( _hoverVdIndex == VdIndex ||
+                         DesktopWrapper.IsWindowPinned( _selectedWindow.Handle ) ||
+                         DesktopWrapper.IsApplicationPinned( _selectedWindow.Handle ) )
                     {
-                        _virtualDesktops![_hoverVdIndex].Opacity = 1; // reset hover virtual desktop opacity unconditionally
+                        //////////////////////////
+                        // goes here means no need to move the dragged window
+                        var dtp = _selectedWindow.DTP;
+                        dtp.opacity = byte.MaxValue;
+                        _           = DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
+                        break;
+                    }
 
-                        if ( _hoverVdIndex == VdIndex ||
-                             DesktopWrapper.IsWindowPinned( _selectedWindow.Handle ) ||
-                             DesktopWrapper.IsApplicationPinned( _selectedWindow.Handle ) )
+                    if ( User32.IsWindow( _selectedWindow.Handle ) )
+                    {
+                        ///////////////////////////
+                        // goes here means the thumbnail window we dragged is drop in another virtual desktop
+                        // we need to move it.
+                        Logger.Verbose( $"DROP.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )}) IN Desktop[{_hoverVdIndex.ToString()}]" );
+
+                        var sysIndex = DesktopWrapper.IndexFromGuid( _virtualDesktops[_hoverVdIndex].VdId );
+                        DesktopWrapper.MoveWindowToDesktop( _selectedWindow.Handle, sysIndex );
+
+                        var relevantVirtualDesktops = new List<VirtualDesktopWindow>
                         {
-                            //////////////////////////
-                            // goes here means no need to move the dragged window
-                            var dtp = _selectedWindow.DTP;
-                            dtp.opacity = byte.MaxValue;
-                            _           = DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
-                            break;
+                            _virtualDesktops[_hoverVdIndex],
+                            this
+                        };
+                        VirtualDesktopManager.ShowVisibleWindowsForDesktops( relevantVirtualDesktops );
+                    }
+
+                    break;
+                }
+            }
+            else // if we drag a virtual desktop
+            {
+                if ( _hoverVdIndex == VdIndex )
+                {
+                    Location = _fixedPosition;
+                }
+                else
+                {
+                    ConfigManager.CurrentProfile.DesktopOrder?.Swap( VdIndex, _hoverVdIndex );
+
+                    VirtualDesktopManager.SaveOrder();
+
+                    Logger.Verbose( $"SWAP.Desktop Desktop[{VdIndex}] WITH Desktop[{_hoverVdIndex}]" );
+                    VirtualDesktopManager.FixLayout();
+                    VirtualDesktopManager.ShowAllVirtualDesktops();
+                    User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
+                    User32.PostMessage( _virtualDesktops![_hoverVdIndex].Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
+                }
+            }
+        }
+        else
+        {
+            //////////////////////////////////
+            // goes here means a Click
+            if ( _selectedWindow != null && User32.IsWindow( _selectedWindow.Handle ) ) // click on a thumbnail
+            {
+                void ActivateWindow()
+                {
+                    Logger.Verbose( $"ACTIVATE.Win {_selectedWindow!.Title}({_selectedWindow.Handle:X2})" );
+                    if ( User32.IsIconic( _selectedWindow.Handle ) )
+                    {
+                        _ = DwmApi.DwmUnregisterThumbnail( _selectedWindow.Thumb );
+                    }
+
+                    WindowTool.ActivateWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder![_hoverVdIndex] );
+                }
+
+                var action = ConfigManager.Configs.GetMouseActionById(
+                    MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
+                switch ( action )
+                {
+                    case MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
+                        ActivateWindow();
+                        MainWindow.HideAll();
+                        break;
+                    case MouseAction.Action.WindowActiveDesktopVisibleOnly:
+                        ActivateWindow();
+                        VirtualDesktopManager.RefreshThumbs( _selectedWindow.Handle, this );
+                        break;
+                    case MouseAction.Action.WindowClose:
+                        CloseSelectedWindow( _selectedWindow );
+                        break;
+                    case MouseAction.Action.ContextMenu:
+                        Menus.ThumbCtm( new MenuInfo
+                        {
+                            Vw       = _selectedWindow,
+                            Sender   = sender,
+                            Location = e.Location,
+                            Self     = this
+                        } );
+                        break;
+                    case MouseAction.Action.WindowHideFromView:
+                        ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByManual, list => list.Add( _selectedWindow.Handle ) );
+                        VirtualDesktopManager.RefreshThumbs( _selectedWindow.Handle, this );
+
+                        break;
+                    case MouseAction.Action.WindowShowForSelectedProcessOnly:
+                        try
+                        {
+                            _ = User32.GetWindowThreadProcessId( _selectedWindow.Handle, out var pId );
+                            VirtualDesktopManager.ShowVisibleWindowsForDesktops( null, pId );
                         }
-
-                        if ( User32.IsWindow( _selectedWindow.Handle ) )
+                        catch ( Exception ex )
                         {
-                            ///////////////////////////
-                            // goes here means the thumbnail window we dragged is drop in another virtual desktop
-                            // we need to move it.
-                            Logger.Verbose( $"DROP.Win {_selectedWindow.Title}({_selectedWindow.Handle.ToString( "X2" )}) IN Desktop[{_hoverVdIndex.ToString()}]" );
-
-                            var sysIndex = DesktopWrapper.IndexFromGuid( _virtualDesktops[_hoverVdIndex].VdId );
-                            DesktopWrapper.MoveWindowToDesktop( _selectedWindow.Handle, sysIndex );
-
-                            var relevantVirtualDesktops = new List<VirtualDesktopWindow>
-                            {
-                                _virtualDesktops[_hoverVdIndex],
-                                this
-                            };
-                            VirtualDesktopManager.ShowVisibleWindowsForDesktops( relevantVirtualDesktops );
+                            Logger.Warning( $"show windows from selected process: {ex.Message}" );
                         }
 
                         break;
-                    }
+                    case MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop:
+                        try
+                        {
+                            _ = User32.GetWindowThreadProcessId( _selectedWindow.Handle, out var pId );
+                            MakeTheOnlyOne( pId );
+                        }
+                        catch ( Exception ex )
+                        {
+                            Logger.Warning( $"show windows from selected process: {ex.Message}" );
+                        }
+
+                        break;
+                    case MouseAction.Action.DoNothing:
+                        break;
+                    default:
+                        ActivateWindow();
+                        MainWindow.HideAll();
+                        break;
                 }
-                else // if we drag a virtual desktop
+            }
+            else // click on a virtual desktop
+            {
+                var action = ConfigManager.Configs.GetMouseActionById(
+                    MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) );
+                switch ( action )
                 {
-                    if ( _hoverVdIndex == VdIndex )
-                    {
-                        Location = _fixedPosition;
-                    }
-                    else
-                    {
-                        ConfigManager.CurrentProfile.DesktopOrder?.Swap( VdIndex, _hoverVdIndex );
+                    case MouseAction.Action.DesktopVisibleAndCloseView:
+                        MakeVisible();
+                        MainWindow.HideAll();
+                        break;
+                    case MouseAction.Action.DesktopVisibleOnly:
+                        MakeVisible();
+                        break;
+                    case MouseAction.Action.ContextMenu:
+                        Menus.VdCtm( new MenuInfo
+                            {
+                                Sender   = sender,
+                                Location = e.Location,
+                                Self     = this,
+                                Vdws     = _virtualDesktops!
+                            }
+                        );
+                        break;
+                    case MouseAction.Action.DesktopShowForSelectedDesktop:
+                        MakeTheOnlyOne();
 
-                        VirtualDesktopManager.SaveOrder();
+                        break;
+                    case MouseAction.Action.DoNothing:
+                        break;
+                    default:
+                        MakeVisible();
+                        MainWindow.HideAll();
+                        break;
+                }
+            }
+        }
 
-                        Logger.Verbose( $"SWAP.Desktop Desktop[{VdIndex}] WITH Desktop[{_hoverVdIndex}]" );
-                        VirtualDesktopManager.FixLayout();
-                        VirtualDesktopManager.ShowAllVirtualDesktops();
-                        User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
-                        User32.PostMessage( _virtualDesktops![_hoverVdIndex].Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
+        VirtualDesktopManager.UpdateVdwBackground();
+
+        if ( _dw != null )
+        {
+            _ = DwmApi.DwmUnregisterThumbnail( _dw.Thumb );
+            _dw.Close();
+            _dw = null;
+        }
+
+        _dragState      = 0;
+        _selectedWindow = null;
+        _dragBounds     = Rectangle.Empty;
+    }
+
+    private int HoverOnDesktop( object sender, MouseEventArgs e )
+    {
+        if ( _virtualDesktops is null )
+        {
+            return -1;
+        }
+
+        _hoverVdIndex = VdIndex;
+
+        var cellIndex = MainWindow.InCell( new System.Windows.Point( Cursor.Position.X, Cursor.Position.Y ) );
+        MainWindow.UpdateHoverBorder( cellIndex );
+        foreach ( var vdw in _virtualDesktops )
+        {
+            var controlRectangle = vdw.RectangleToScreen( vdw.ClientRectangle );
+            if ( controlRectangle.Contains( Cursor.Position ) )
+            {
+                if ( vdw.VdIndex == VdIndex )
+                {
+                    continue;
+                }
+
+                _hoverVdIndex = vdw.VdIndex;
+                if ( _selectedWindow != null )
+                {
+                    if ( _dragState == 1 )
+                    {
+                        Logger.Verbose( $"DRAGGING.Win {_selectedWindow.Title} IN Desktop[{vdw.VdIndex.ToString()}]" );
+                        _dragState++;
                     }
+
+                    vdw.Opacity = VirtualDesktopManager.Ui.VDWDragTargetOpacity;
+                }
+                else
+                {
+                    if ( _dragState != 1 )
+                    {
+                        continue;
+                    }
+
+                    Logger.Verbose( $"DRAGGING.Desk Desktop[{VdIndex.ToString()}]) ON Desktop[{vdw.VdIndex.ToString()}])" );
+                    _dragState++;
                 }
             }
             else
             {
-                //////////////////////////////////
-                // goes here means a Click
-                if ( _selectedWindow != null && User32.IsWindow( _selectedWindow.Handle ) ) // click on a thumbnail
-                {
-                    void ActivateWindow()
-                    {
-                        Logger.Verbose( $"ACTIVATE.Win {_selectedWindow!.Title}({_selectedWindow.Handle:X2})" );
-                        if ( User32.IsIconic( _selectedWindow.Handle ) )
-                            _ = DwmApi.DwmUnregisterThumbnail( _selectedWindow.Thumb );
-                        WindowTool.ActivateWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder![_hoverVdIndex] );
-                    }
-
-                    var action = ConfigManager.Configs.GetMouseActionById(
-                        MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
-                    switch ( action )
-                    {
-                        case MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
-                            ActivateWindow();
-                            MainWindow.HideAll();
-                            break;
-                        case MouseAction.Action.WindowActiveDesktopVisibleOnly:
-                            ActivateWindow();
-                            VirtualDesktopManager.RefreshThumbs( _selectedWindow.Handle, this );
-                            break;
-                        case MouseAction.Action.WindowClose:
-                            CloseSelectedWindow( _selectedWindow );
-                            break;
-                        case MouseAction.Action.ContextMenu:
-                            Menus.ThumbCtm( new MenuInfo
-                            {
-                                Vw       = _selectedWindow,
-                                Sender   = sender,
-                                Location = e.Location,
-                                Self     = this
-                            } );
-                            break;
-                        case MouseAction.Action.WindowHideFromView:
-                            ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByManual, list => list.Add( _selectedWindow.Handle ) );
-                            VirtualDesktopManager.RefreshThumbs( _selectedWindow.Handle, this );
-
-                            break;
-                        case MouseAction.Action.WindowShowForSelectedProcessOnly:
-                            try
-                            {
-                                _ = User32.GetWindowThreadProcessId( _selectedWindow.Handle, out var pId );
-                                VirtualDesktopManager.ShowVisibleWindowsForDesktops( null, pId );
-                            }
-                            catch ( Exception ex )
-                            {
-                                Logger.Warning( $"show windows from selected process: {ex.Message}" );
-                            }
-
-                            break;
-                        case MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop:
-                            try
-                            {
-                                _ = User32.GetWindowThreadProcessId( _selectedWindow.Handle, out var pId );
-                                MakeTheOnlyOne( pId );
-                            }
-                            catch ( Exception ex )
-                            {
-                                Logger.Warning( $"show windows from selected process: {ex.Message}" );
-                            }
-
-                            break;
-                        case MouseAction.Action.DoNothing:
-                            break;
-                        default:
-                            ActivateWindow();
-                            MainWindow.HideAll();
-                            break;
-                    }
-                }
-                else // click on a virtual desktop
-                {
-                    var action = ConfigManager.Configs.GetMouseActionById(
-                        MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) );
-                    switch ( action )
-                    {
-                        case MouseAction.Action.DesktopVisibleAndCloseView:
-                            MakeVisible();
-                            MainWindow.HideAll();
-                            break;
-                        case MouseAction.Action.DesktopVisibleOnly:
-                            MakeVisible();
-                            break;
-                        case MouseAction.Action.ContextMenu:
-                            Menus.VdCtm( new MenuInfo
-                                {
-                                    Sender   = sender,
-                                    Location = e.Location,
-                                    Self     = this,
-                                    Vdws     = _virtualDesktops!
-                                }
-                            );
-                            break;
-                        case MouseAction.Action.DesktopShowForSelectedDesktop:
-                            MakeTheOnlyOne();
-
-                            break;
-                        case MouseAction.Action.DoNothing:
-                            break;
-                        default:
-                            MakeVisible();
-                            MainWindow.HideAll();
-                            break;
-                    }
-                }
+                vdw.Opacity = 1;
             }
-
-            VirtualDesktopManager.UpdateVdwBackground();
-
-            if ( _dw != null )
-            {
-                _ = DwmApi.DwmUnregisterThumbnail( _dw.Thumb );
-                _dw.Close();
-                _dw = null;
-            }
-
-            _dragState      = 0;
-            _selectedWindow = null;
-            _dragBounds     = Rectangle.Empty;
         }
 
-        private int HoverOnDesktop( object sender, MouseEventArgs e )
+        return _hoverVdIndex;
+    }
+
+    private void MakeVisible()
+    {
+        Logger.Verbose( $"SWITCH TO DESKTOP Desktop[{_hoverVdIndex.ToString()}]" );
+        DesktopWrapper.MakeVisibleByGuid( VdId );
+    }
+
+    public async void CloseSelectedWindow( VisibleWindow vw )
+    {
+        var isWindowPinned = DesktopWrapper.IsWindowPinned( vw.Handle ) || DesktopWrapper.IsApplicationPinned( vw.Handle );
+
+        void RefreshVDs( bool isPinned )
         {
-            if ( _virtualDesktops is null ) return -1;
-
-            _hoverVdIndex = VdIndex;
-
-            var cellIndex = MainWindow.InCell( new System.Windows.Point( Cursor.Position.X, Cursor.Position.Y ) );
-            MainWindow.UpdateHoverBorder( cellIndex );
-            foreach ( var vdw in _virtualDesktops )
+            if ( isPinned )
             {
-                var controlRectangle = vdw.RectangleToScreen( vdw.ClientRectangle );
-                if ( controlRectangle.Contains( Cursor.Position ) )
-                {
-                    if ( vdw.VdIndex == VdIndex )
-                        continue;
-
-                    _hoverVdIndex = vdw.VdIndex;
-                    if ( _selectedWindow != null )
-                    {
-                        if ( _dragState == 1 )
-                        {
-                            Logger.Verbose( $"DRAGGING.Win {_selectedWindow.Title} IN Desktop[{vdw.VdIndex.ToString()}]" );
-                            _dragState++;
-                        }
-
-                        vdw.Opacity = VirtualDesktopManager.Ui.VDWDragTargetOpacity;
-                    }
-                    else
-                    {
-                        if ( _dragState != 1 )
-                            continue;
-
-                        Logger.Verbose( $"DRAGGING.Desk Desktop[{VdIndex.ToString()}]) ON Desktop[{vdw.VdIndex.ToString()}])" );
-                        _dragState++;
-                    }
-                }
-                else
-                {
-                    vdw.Opacity = 1;
-                }
-            }
-
-            return _hoverVdIndex;
-        }
-
-        private void MakeVisible()
-        {
-            Logger.Verbose( $"SWITCH TO DESKTOP Desktop[{_hoverVdIndex.ToString()}]" );
-            DesktopWrapper.MakeVisibleByGuid( VdId );
-        }
-
-        public async void CloseSelectedWindow( VisibleWindow vw )
-        {
-            var isWindowPinned = DesktopWrapper.IsWindowPinned( vw.Handle ) || DesktopWrapper.IsApplicationPinned( vw.Handle );
-
-            void RefreshVDs( bool isPinned )
-            {
-                if ( isPinned )
-                    VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-                else
-                    VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this] );
-            }
-
-            // _ = User32.ShowWindow( vw.Handle, 0 );
-
-            User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
-
-            await Task.Run( () =>
-            {
-                var sw = Stopwatch.StartNew();
-                while ( sw.ElapsedMilliseconds < Const.WindowCloseTimeout )
-                {
-                    Thread.Sleep( 100 );
-                    // if ( User32.IsWindow( vw.Handle ) ) continue; // 严格的判断
-                    if ( User32.IsWindowVisible( vw.Handle ) ) continue; // 宽松的判断
-
-                    RefreshVDs( isWindowPinned );
-                    return;
-                }
-
-                RefreshVDs( isWindowPinned );
-            } ).ConfigureAwait( false );
-        }
-
-        public void MakeTheOnlyOne( int pId = 0 )
-        {
-            if ( _isTheOnlyOneInMainView )
-            {
-                MainWindow.ResetMainGrid();
-                VirtualDesktopManager.HideAllVirtualDesktops();
-                VirtualDesktopManager.ShowAllVirtualDesktops();
                 VirtualDesktopManager.ShowVisibleWindowsForDesktops();
             }
             else
             {
-                MainWindow.ResetMainGridForSingleDesktop( VdIndex );
-                VirtualDesktopManager.HideAllVirtualDesktops();
-                _isTheOnlyOneInMainView = true;
-                VirtualDesktopManager.ShowAllVirtualDesktops();
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this], pId );
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this] );
             }
+        }
+
+        // _ = User32.ShowWindow( vw.Handle, 0 );
+
+        User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
+
+        await Task.Run( () =>
+        {
+            var sw = Stopwatch.StartNew();
+            while ( sw.ElapsedMilliseconds < Const.WindowCloseTimeout )
+            {
+                Thread.Sleep( 100 );
+                // if ( User32.IsWindow( vw.Handle ) ) continue; // 严格的判断
+                if ( User32.IsWindowVisible( vw.Handle ) )
+                {
+                    continue; // 宽松的判断
+                }
+
+                RefreshVDs( isWindowPinned );
+                return;
+            }
+
+            RefreshVDs( isWindowPinned );
+        } ).ConfigureAwait( false );
+    }
+
+    public void MakeTheOnlyOne( int pId = 0 )
+    {
+        if ( _isTheOnlyOneInMainView )
+        {
+            MainWindow.ResetMainGrid();
+            VirtualDesktopManager.HideAllVirtualDesktops();
+            VirtualDesktopManager.ShowAllVirtualDesktops();
+            VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+        }
+        else
+        {
+            MainWindow.ResetMainGridForSingleDesktop( VdIndex );
+            VirtualDesktopManager.HideAllVirtualDesktops();
+            _isTheOnlyOneInMainView = true;
+            VirtualDesktopManager.ShowAllVirtualDesktops();
+            VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this], pId );
         }
     }
 }

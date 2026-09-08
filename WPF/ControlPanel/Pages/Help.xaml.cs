@@ -75,6 +75,8 @@ public partial class Help : UserControl
         }
 
         if ( lbox_Env.Items.Count == 0 )
+        {
             lbox_Env.Items.Add( RuntimeInformation.FrameworkDescription );
+        }
     }
 }

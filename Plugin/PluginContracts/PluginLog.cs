@@ -10,26 +10,29 @@
 
 using System;
 
-namespace VirtualSpace.PluginContracts
+namespace VirtualSpace.PluginContracts;
+
+/// <summary>
+///     Host binds these to file logging at startup.
+/// </summary>
+public static class PluginLog
 {
-    /// <summary>
-    /// Host binds these to file logging at startup.
-    /// </summary>
-    public static class PluginLog
+    private static Action<string>? _writeEvent;
+    private static Action<string>? _writeError;
+
+    public static void Bind( Action<string> writeEvent, Action<string> writeError )
     {
-        private static Action<string>? _writeEvent;
-        private static Action<string>? _writeError;
+        _writeEvent = writeEvent;
+        _writeError = writeError;
+    }
 
-        public static void Bind( Action<string> writeEvent, Action<string> writeError )
-        {
-            _writeEvent = writeEvent;
-            _writeError = writeError;
-        }
+    public static void Event( string source, string message )
+    {
+        _writeEvent?.Invoke( $"[Plugin.{source}] {message}" );
+    }
 
-        public static void Event( string source, string message ) =>
-            _writeEvent?.Invoke( $"[Plugin.{source}] {message}" );
-
-        public static void Error( string source, string message ) =>
-            _writeError?.Invoke( $"[Plugin.{source}] {message}" );
+    public static void Error( string source, string message )
+    {
+        _writeError?.Invoke( $"[Plugin.{source}] {message}" );
     }
 }

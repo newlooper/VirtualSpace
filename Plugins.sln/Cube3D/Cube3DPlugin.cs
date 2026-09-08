@@ -33,108 +33,118 @@ using VirtualSpace.PluginContracts;
     MinWinBuild = 19041,
     MinHostVersion = "1.1.0" )]
 
-namespace Cube3D
+namespace Cube3D;
+
+public sealed class Cube3DPlugin : PluginBase
 {
-    public sealed class Cube3DPlugin : PluginBase
+    private readonly object             _restartLock = new();
+    private          IHostContext       _host;
+    private          MainWindow         _mainWindow;
+    private          Action<object>     _onSwitch;
+    private          ResourceDictionary _resources;
+
+    public override IReadOnlyList<string> SubscribedEvents { get; } = new[] { PluginEvents.VirtualDesktopSwitch };
+
+    public override void Initialize( IHostContext hostContext )
     {
-        private IHostContext       _host;
-        private MainWindow         _mainWindow;
-        private ResourceDictionary _resources;
-        private Action<object>     _onSwitch;
-
-        public override IReadOnlyList<string> SubscribedEvents { get; } = new[] { PluginEvents.VirtualDesktopSwitch };
-
-        public override void Initialize( IHostContext hostContext )
+        _host = hostContext;
+        SettingsManager.Initialize( hostContext.GetPluginDataPath( Name ) );
+        MergeResources();
+        D3DImages.D3DImages.Initialize( _resources );
+        MainWindow.RestartRequested = RestartUi;
+        _onSwitch = payload =>
         {
-            _host = hostContext;
-            SettingsManager.Initialize( hostContext.GetPluginDataPath( Name ) );
-            MergeResources();
-            D3DImages.D3DImages.Initialize( _resources );
-            MainWindow.RestartRequested = RestartUi;
-            _onSwitch = payload =>
+            if ( payload is VirtualDesktopSwitchInfo info )
             {
-                if ( payload is VirtualDesktopSwitchInfo info )
-                    _mainWindow?.OnVirtualDesktopSwitch( info );
-            };
-            hostContext.Subscribe( PluginEvents.VirtualDesktopSwitch, _onSwitch );
+                _mainWindow?.OnVirtualDesktopSwitch( info );
+            }
+        };
+        hostContext.Subscribe( PluginEvents.VirtualDesktopSwitch, _onSwitch );
+        StartUi();
+    }
+
+    public override void Shutdown()
+    {
+        MainWindow.RestartRequested = null;
+        if ( _host != null && _onSwitch != null )
+        {
+            _host.Unsubscribe( PluginEvents.VirtualDesktopSwitch, _onSwitch );
+        }
+
+        void TearDown()
+        {
+            _mainWindow?.CloseAll();
+            _mainWindow = null;
+            D3DImages.D3DImages.Reset();
+            D3D9ShareCapture.ReleaseSharedDevices();
+            PluginUi.Resources = null;
+            _resources         = null;
+        }
+
+        var dispatcher = _mainWindow?.Dispatcher ?? Application.Current?.Dispatcher;
+        if ( dispatcher != null && !dispatcher.CheckAccess() )
+        {
+            dispatcher.Invoke( TearDown );
+        }
+        else
+        {
+            TearDown();
+        }
+
+        _onSwitch = null;
+        _host     = null;
+    }
+
+    public override void ShowSettings()
+    {
+        _mainWindow?.OpenSettings();
+    }
+
+    private void RestartUi()
+    {
+        lock ( _restartLock )
+        {
+            _mainWindow?.CloseAll();
+            D3D9ShareCapture.ReleaseSharedDevices();
             StartUi();
         }
+    }
 
-        public override void Shutdown()
+    private void StartUi()
+    {
+        if ( _host == null )
         {
-            MainWindow.RestartRequested = null;
-            if ( _host != null && _onSwitch != null )
-                _host.Unsubscribe( PluginEvents.VirtualDesktopSwitch, _onSwitch );
+            return;
+        }
 
-            void TearDown()
+        _mainWindow = new MainWindow();
+        _mainWindow.AttachHost( _host );
+        _mainWindow.Show();
+    }
+
+    private void MergeResources()
+    {
+        _resources = new ResourceDictionary
+        {
+            [Const.Front]                 = new D3DImage(),
+            [Const.Others]                = new D3DImage(),
+            [PluginUi.BackgroundLgbKey]   = CreateBackgroundBrush(),
+            [PluginUi.BackgroundTransKey] = Brushes.Transparent
+        };
+        PluginUi.Resources = _resources;
+    }
+
+    private static LinearGradientBrush CreateBackgroundBrush()
+    {
+        return new LinearGradientBrush
+        {
+            StartPoint = new Point( 0.5, 0 ),
+            EndPoint   = new Point( 0.5, 1 ),
+            GradientStops =
             {
-                _mainWindow?.CloseAll();
-                _mainWindow = null;
-                D3DImages.D3DImages.Reset();
-                D3D9ShareCapture.ReleaseSharedDevices();
-                PluginUi.Resources = null;
-                _resources         = null;
+                new GradientStop( Colors.Black, 0 ),
+                new GradientStop( Color.FromRgb( 0x32, 0x33, 0x34 ), 1 )
             }
-
-            var dispatcher = _mainWindow?.Dispatcher ?? Application.Current?.Dispatcher;
-            if ( dispatcher != null && !dispatcher.CheckAccess() )
-                dispatcher.Invoke( TearDown );
-            else
-                TearDown();
-
-            _onSwitch = null;
-            _host     = null;
-        }
-
-        public override void ShowSettings()
-        {
-            _mainWindow?.OpenSettings();
-        }
-
-        private readonly object _restartLock = new();
-
-        private void RestartUi()
-        {
-            lock ( _restartLock )
-            {
-                _mainWindow?.CloseAll();
-                D3D9ShareCapture.ReleaseSharedDevices();
-                StartUi();
-            }
-        }
-
-        private void StartUi()
-        {
-            if ( _host == null ) return;
-            _mainWindow = new MainWindow();
-            _mainWindow.AttachHost( _host );
-            _mainWindow.Show();
-        }
-
-        private void MergeResources()
-        {
-            _resources = new ResourceDictionary
-            {
-                [Const.Front]              = new D3DImage(),
-                [Const.Others]             = new D3DImage(),
-                [PluginUi.BackgroundLgbKey]   = CreateBackgroundBrush(),
-                [PluginUi.BackgroundTransKey] = Brushes.Transparent
-            };
-            PluginUi.Resources = _resources;
-        }
-
-        private static LinearGradientBrush CreateBackgroundBrush()
-        {
-            return new LinearGradientBrush
-            {
-                StartPoint = new Point( 0.5, 0 ),
-                EndPoint   = new Point( 0.5, 1 ),
-                GradientStops =
-                {
-                    new GradientStop( Colors.Black, 0 ),
-                    new GradientStop( Color.FromRgb( 0x32, 0x33, 0x34 ), 1 )
-                }
-            };
-        }
+        };
     }
 }

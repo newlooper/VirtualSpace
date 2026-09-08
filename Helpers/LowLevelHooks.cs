@@ -14,151 +14,154 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace VirtualSpace.Helpers
+namespace VirtualSpace.Helpers;
+
+public static class LowLevelHooks
 {
-    public static class LowLevelHooks
+    public const IntPtr Handled = 1;
+}
+
+public static class LowLevelKeyboardHook
+{
+    [Flags]
+    public enum KBDLLHOOKSTRUCTFlags : uint
     {
-        public const IntPtr Handled = 1;
+        LLKHF_EXTENDED = 0x01,
+        LLKHF_INJECTED = 0x10,
+        LLKHF_ALTDOWN  = 0x20,
+        LLKHF_UP       = 0x80
     }
 
-    public static class LowLevelKeyboardHook
+    public const   int             WM_KEYDOWN     = 0x0100;
+    public const   int             WM_KEYUP       = 0x0101;
+    public const   int             DUMMY_KEY      = 0xFF;
+    private const  int             WH_KEYBOARD_LL = 13;
+    private static User32.HookProc _hookProc      = null!;
+
+    public static IntPtr HookId { get; private set; } = IntPtr.Zero;
+
+    public static void SetHook( User32.HookProc proc )
     {
-        [Flags]
-        public enum KBDLLHOOKSTRUCTFlags : uint
+        _hookProc = proc;
+        HookId    = User32.SetWindowsHookEx( WH_KEYBOARD_LL, _hookProc, Kernel32.GetModuleHandle( null ), 0 );
+    }
+
+    public static void MultipleKeyDown( List<Keys> keys )
+    {
+        SendKeys( keys, 0 );
+    }
+
+    public static void MultipleKeyUp( List<Keys> keys )
+    {
+        SendKeys( keys, KEYEVENTF.KEYUP );
+    }
+
+    public static void MultipleKeyPress( List<Keys> keys )
+    {
+        SendKeysCombine( keys );
+    }
+
+    private static void SendKeys( List<Keys> keys, KEYEVENTF flags )
+    {
+        var inputs = new INPUT[keys.Count];
+        for ( var pos = 0; pos < keys.Count; pos++ )
         {
-            LLKHF_EXTENDED = 0x01,
-            LLKHF_INJECTED = 0x10,
-            LLKHF_ALTDOWN  = 0x20,
-            LLKHF_UP       = 0x80
-        }
-
-        public const   int             WM_KEYDOWN     = 0x0100;
-        public const   int             WM_KEYUP       = 0x0101;
-        public const   int             DUMMY_KEY      = 0xFF;
-        private const  int             WH_KEYBOARD_LL = 13;
-        private static User32.HookProc _hookProc      = null!;
-
-        public static IntPtr HookId { get; private set; } = IntPtr.Zero;
-
-        public static void SetHook( User32.HookProc proc )
-        {
-            _hookProc = proc;
-            HookId    = User32.SetWindowsHookEx( WH_KEYBOARD_LL, _hookProc, Kernel32.GetModuleHandle( null ), 0 );
-        }
-
-        public static void MultipleKeyDown( List<Keys> keys )
-        {
-            SendKeys( keys, 0 );
-        }
-
-        public static void MultipleKeyUp( List<Keys> keys )
-        {
-            SendKeys( keys, KEYEVENTF.KEYUP );
-        }
-
-        public static void MultipleKeyPress( List<Keys> keys )
-        {
-            SendKeysCombine( keys );
-        }
-
-        private static void SendKeys( List<Keys> keys, KEYEVENTF flags )
-        {
-            var inputs = new INPUT[keys.Count];
-            for ( var pos = 0; pos < keys.Count; pos++ )
+            inputs[pos].Type = InputType.INPUT_KEYBOARD;
+            inputs[pos].Data.Keyboard = new KEYBDINPUT
             {
-                inputs[pos].Type = InputType.INPUT_KEYBOARD;
-                inputs[pos].Data.Keyboard = new KEYBDINPUT
-                {
-                    Vk        = (ushort)keys[pos],
-                    Scan      = 0,
-                    Flags     = flags,
-                    Time      = 0,
-                    ExtraInfo = IntPtr.Zero
-                };
-            }
-
-            var result = User32.SendInput( Convert.ToUInt32( inputs.Length ), inputs, Marshal.SizeOf<INPUT>());
-            if ( result == 0 )
-                throw new Exception();
+                Vk        = (ushort)keys[pos],
+                Scan      = 0,
+                Flags     = flags,
+                Time      = 0,
+                ExtraInfo = IntPtr.Zero
+            };
         }
 
-        private static void SendKeysCombine( List<Keys> keys )
+        var result = User32.SendInput( Convert.ToUInt32( inputs.Length ), inputs, Marshal.SizeOf<INPUT>() );
+        if ( result == 0 )
         {
-            var inputs = new INPUT[keys.Count * 2];
-            for ( var i = 0; i < keys.Count; i++ )
-            {
-                inputs[i].Type = InputType.INPUT_KEYBOARD;
-                inputs[i].Data.Keyboard = new KEYBDINPUT
-                {
-                    Vk        = (ushort)keys[i],
-                    Scan      = 0,
-                    Flags     = 0,
-                    Time      = 0,
-                    ExtraInfo = IntPtr.Zero
-                };
-                inputs[inputs.Length - i - 1].Type = InputType.INPUT_KEYBOARD;
-                inputs[inputs.Length - i - 1].Data.Keyboard = new KEYBDINPUT
-                {
-                    Vk        = (ushort)keys[i],
-                    Scan      = 0,
-                    Flags     = KEYEVENTF.KEYUP,
-                    Time      = 0,
-                    ExtraInfo = IntPtr.Zero
-                };
-            }
-
-            var result = User32.SendInput( Convert.ToUInt32( inputs.Length ), inputs, Marshal.SizeOf<INPUT>());
-            if ( result == 0 )
-                throw new Exception();
-        }
-
-        public static bool IsKeyHold( Keys key )
-        {
-            return User32.GetAsyncKeyState( (int)key ) < 0;
-        }
-
-        public static void UnHook()
-        {
-            User32.UnhookWindowsHookEx( HookId );
-        }
-
-        public struct KBDLLHOOKSTRUCT
-        {
-            public  int                  vkCode;
-            private int                  scanCode;
-            public  KBDLLHOOKSTRUCTFlags flags;
-            private int                  time;
-            private int                  dwExtraInfo;
+            throw new Exception();
         }
     }
 
-    public static class LowLevelMouseHook
+    private static void SendKeysCombine( List<Keys> keys )
     {
-        private const  int             WH_MOUSE_LL   = 14;
-        public const   int             WM_MOUSEWHEEL = 0x020A;
-        private static User32.HookProc _hookProc     = null!;
-
-        public static IntPtr HookId { get; private set; } = IntPtr.Zero;
-
-        public static void SetHook( User32.HookProc proc )
+        var inputs = new INPUT[keys.Count * 2];
+        for ( var i = 0; i < keys.Count; i++ )
         {
-            _hookProc = proc;
-            HookId    = User32.SetWindowsHookEx( WH_MOUSE_LL, _hookProc, Kernel32.GetModuleHandle( null ), 0 );
+            inputs[i].Type = InputType.INPUT_KEYBOARD;
+            inputs[i].Data.Keyboard = new KEYBDINPUT
+            {
+                Vk        = (ushort)keys[i],
+                Scan      = 0,
+                Flags     = 0,
+                Time      = 0,
+                ExtraInfo = IntPtr.Zero
+            };
+            inputs[inputs.Length - i - 1].Type = InputType.INPUT_KEYBOARD;
+            inputs[inputs.Length - i - 1].Data.Keyboard = new KEYBDINPUT
+            {
+                Vk        = (ushort)keys[i],
+                Scan      = 0,
+                Flags     = KEYEVENTF.KEYUP,
+                Time      = 0,
+                ExtraInfo = IntPtr.Zero
+            };
         }
 
-        public static void UnHook()
+        var result = User32.SendInput( Convert.ToUInt32( inputs.Length ), inputs, Marshal.SizeOf<INPUT>() );
+        if ( result == 0 )
         {
-            User32.UnhookWindowsHookEx( HookId );
+            throw new Exception();
         }
+    }
 
-        [StructLayout( LayoutKind.Sequential )]
-        public struct MSLLHOOKSTRUCT
-        {
-            public POINT   pt;
-            public int     mouseData; // be careful, this must be ints, not uints.
-            public int     flags;
-            public int     time;
-            public UIntPtr dwExtraInfo;
-        }
+    public static bool IsKeyHold( Keys key )
+    {
+        return User32.GetAsyncKeyState( (int)key ) < 0;
+    }
+
+    public static void UnHook()
+    {
+        User32.UnhookWindowsHookEx( HookId );
+    }
+
+    public struct KBDLLHOOKSTRUCT
+    {
+        public  int                  vkCode;
+        private int                  scanCode;
+        public  KBDLLHOOKSTRUCTFlags flags;
+        private int                  time;
+        private int                  dwExtraInfo;
+    }
+}
+
+public static class LowLevelMouseHook
+{
+    private const  int             WH_MOUSE_LL   = 14;
+    public const   int             WM_MOUSEWHEEL = 0x020A;
+    private static User32.HookProc _hookProc     = null!;
+
+    public static IntPtr HookId { get; private set; } = IntPtr.Zero;
+
+    public static void SetHook( User32.HookProc proc )
+    {
+        _hookProc = proc;
+        HookId    = User32.SetWindowsHookEx( WH_MOUSE_LL, _hookProc, Kernel32.GetModuleHandle( null ), 0 );
+    }
+
+    public static void UnHook()
+    {
+        User32.UnhookWindowsHookEx( HookId );
+    }
+
+    [StructLayout( LayoutKind.Sequential )]
+    public struct MSLLHOOKSTRUCT
+    {
+        public POINT   pt;
+        public int     mouseData; // be careful, this must be ints, not uints.
+        public int     flags;
+        public int     time;
+        public UIntPtr dwExtraInfo;
     }
 }

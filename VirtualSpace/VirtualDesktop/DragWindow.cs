@@ -14,29 +14,28 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using VirtualSpace.Config;
 
-namespace VirtualSpace.VirtualDesktop
+namespace VirtualSpace.VirtualDesktop;
+
+public partial class DragWindow : Form
 {
-    public partial class DragWindow : Form
+    private DragWindow()
     {
-        private DragWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
-        public IntPtr Thumb { get; set; }
+    [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
+    public IntPtr Thumb { get; set; }
 
-        public static DragWindow CreateAndShow( int width, int height )
-        {
-            var dw = new DragWindow();
-            dw.TopLevel      = true;
-            dw.TopMost       = true;
-            dw.ShowInTaskbar = false;
-            dw.Width         = width;
-            dw.Height        = height;
-            dw.Text          = Const.Window.VD_DRAG_TITLE;
-            dw.Show();
-            return dw;
-        }
+    public static DragWindow CreateAndShow( int width, int height )
+    {
+        var dw = new DragWindow();
+        dw.TopLevel      = true;
+        dw.TopMost       = true;
+        dw.ShowInTaskbar = false;
+        dw.Width         = width;
+        dw.Height        = height;
+        dw.Text          = Const.Window.VD_DRAG_TITLE;
+        dw.Show();
+        return dw;
     }
 }

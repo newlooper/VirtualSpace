@@ -8,13 +8,12 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace.Plugin
+namespace VirtualSpace.Plugin;
+
+public static class PluginConst
 {
-    public static class PluginConst
-    {
-        public const string UxdDisplayChangeMessage          = "UxdDisplayChangeMessage";
-        public const string HotPlugDetected                  = "HotplugDetected";
-        public const string DirectInputNotificationMsgString = "DIRECTINPUT_NOTIFICATION_MSGSTRING";
-        public const int    RestartDelay                     = 5000;
-    }
+    public const string UxdDisplayChangeMessage          = "UxdDisplayChangeMessage";
+    public const string HotPlugDetected                  = "HotplugDetected";
+    public const string DirectInputNotificationMsgString = "DIRECTINPUT_NOTIFICATION_MSGSTRING";
+    public const int    RestartDelay                     = 5000;
 }

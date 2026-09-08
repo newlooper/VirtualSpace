@@ -18,148 +18,179 @@ using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
 
-namespace VirtualSpace.VirtualDesktop
+namespace VirtualSpace.VirtualDesktop;
+
+internal static partial class VirtualDesktopManager
 {
-    internal static partial class VirtualDesktopManager
+    private static readonly List<VisibleWindow>        VisibleWindows   = [];
+    private static readonly char[]                     WinInfoBuffer    = new char[Const.WindowTitleMaxLength];
+    private static          List<VirtualDesktopWindow> _virtualDesktops = [];
+    public static           Guid                       LastDesktopId    = Guid.Empty;
+    public static           bool                       IsBatchCreate { get; set; }
+
+    private static bool VisibleWindowFilter( IntPtr hWnd, int lParam )
     {
-        private static readonly List<VisibleWindow>        VisibleWindows   = new();
-        private static readonly char[]                     WinInfoBuffer    = new char[Const.WindowTitleMaxLength];
-        private static          List<VirtualDesktopWindow> _virtualDesktops = new();
-        public static           Guid                       LastDesktopId    = Guid.Empty;
-        public static           bool                       IsBatchCreate { get; set; }
-
-        private static bool VisibleWindowFilter( IntPtr hWnd, int lParam )
+        if ( Filters.WndHandleIgnoreListByError.Contains( hWnd ) ||
+             Filters.WndHandleIgnoreListByManual.Contains( hWnd ) ||
+             !User32.IsWindowVisible( hWnd ) ||
+             Filters.IsCloaked( hWnd ) )
         {
-            if ( Filters.WndHandleIgnoreListByError.Contains( hWnd ) ||
-                 Filters.WndHandleIgnoreListByManual.Contains( hWnd ) ||
-                 !User32.IsWindowVisible( hWnd ) ||
-                 Filters.IsCloaked( hWnd ) )
-                return true;
-
-            var titleLen = User32.GetWindowText( hWnd, WinInfoBuffer, WinInfoBuffer.Length );
-            var title    = titleLen <= 0 ? string.Empty : new string( WinInfoBuffer, 0, titleLen );
-            if ( string.IsNullOrEmpty( title ) ||
-                 Filters.WndTitleIgnoreList.Contains( title ) )
-                return true;
-
-            var classLen  = User32.GetClassName( hWnd, WinInfoBuffer, WinInfoBuffer.Length );
-            var classname = classLen <= 0 ? string.Empty : new string( WinInfoBuffer, 0, classLen );
-            if ( Filters.WndClsIgnoreList.Contains( classname ) )
-                return true;
-
-            if ( classname != Const.WindowsUiCoreWindow ) VisibleWindows.Add( new VisibleWindow( title, classname, hWnd ) );
-
             return true;
         }
 
-        private static List<VisibleWindow> GetVisibleWindows()
+        var titleLen = User32.GetWindowText( hWnd, WinInfoBuffer, WinInfoBuffer.Length );
+        var title    = titleLen <= 0 ? string.Empty : new string( WinInfoBuffer, 0, titleLen );
+        if ( string.IsNullOrEmpty( title ) ||
+             Filters.WndTitleIgnoreList.Contains( title ) )
         {
-            VisibleWindows.Clear();
-            _ = User32.EnumWindows( VisibleWindowFilter, 0 );
-            return VisibleWindows;
+            return true;
         }
 
-        public static void ShowVisibleWindowsForDesktops( List<VirtualDesktopWindow>? vdwList = null, int processId = 0 )
+        var classLen  = User32.GetClassName( hWnd, WinInfoBuffer, WinInfoBuffer.Length );
+        var classname = classLen <= 0 ? string.Empty : new string( WinInfoBuffer, 0, classLen );
+        if ( Filters.WndClsIgnoreList.Contains( classname ) )
         {
-            var allVisibleWindows = GetVisibleWindows();
-            Logger.Verbose( $"VisibleWindows/ApplicationViews: {allVisibleWindows.Count.ToString()}/{DesktopManagerWrapper.GetViewCount().ToString()}" );
-
-            vdwList ??= _virtualDesktops;
-
-            foreach ( var virtualDesktopWindow in vdwList ) virtualDesktopWindow.ClearVisibleWindows();
-
-            foreach ( var win in allVisibleWindows.Where( win =>
-                         string.IsNullOrEmpty( WindowFilter.Keyword ) ||
-                         win.Title.Contains( WindowFilter.Keyword, StringComparison.CurrentCultureIgnoreCase ) ) )
-            {
-                try
-                {
-                    if ( processId != 0 )
-                    {
-                        _ = User32.GetWindowThreadProcessId( win.Handle, out var pId );
-                        if ( processId != pId ) continue;
-                    }
-
-                    if ( DesktopWrapper.IsWindowPinned( win.Handle ) ||
-                         DesktopWrapper.IsApplicationPinned( win.Handle ) )
-                    {
-                        Logger.Debug( $"{win.Title} IS PINNED" );
-                        foreach ( var vdw in _virtualDesktops )
-                            vdw.AddWindow( new VisibleWindow( win.Title, win.Classname, win.Handle ) );
-                        continue;
-                    }
-
-                    var ownerId = DesktopWrapper.GuidFromWindow( win.Handle );
-                    if ( vdwList.Count == _virtualDesktops.Count ) // show for all VDs
-                    {
-                        var owner = vdwList.Find( v => v.VdId == ownerId );
-                        if ( owner is null ) continue;
-                        owner.AddWindow( win );
-                        Logger.Debug( $"Desktop[{owner.VdIndex.ToString()}]({DesktopWrapper.DesktopNameFromIndex( owner.VdIndex )}) CONTAINS {win.Title}" );
-                    }
-                    else // show for specific VDs
-                    {
-                        foreach ( var vdw in vdwList.Where( vdw => vdw.VdId == ownerId ) )
-                        {
-                            vdw.AddWindow( win );
-                            Logger.Debug( $"Desktop[{vdw.VdIndex.ToString()}]({DesktopWrapper.DesktopNameFromIndex( vdw.VdIndex )}) CONTAINS {win.Title}" );
-                        }
-                    }
-                }
-                catch ( Exception ex )
-                {
-                    if ( win.Classname != Const.ApplicationFrameWindow )
-                    {
-                        Logger.Warning( $"{ex.Message} ∵ {win.Title}({win.Handle.ToString( "X2" )}), WndClass: {win.Classname}" );
-                        ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByError, list => list.Add( win.Handle ) );
-                    }
-                }
-            }
-
-            foreach ( var vdw in vdwList ) vdw.ShowThumbnails();
+            return true;
         }
 
-        public static void RefreshThumbs( IntPtr h, params VirtualDesktopWindow[] vdwList )
+        if ( classname != Const.WindowsUiCoreWindow )
+        {
+            VisibleWindows.Add( new VisibleWindow( title, classname, hWnd ) );
+        }
+
+        return true;
+    }
+
+    private static List<VisibleWindow> GetVisibleWindows()
+    {
+        VisibleWindows.Clear();
+        _ = User32.EnumWindows( VisibleWindowFilter, 0 );
+        return VisibleWindows;
+    }
+
+    public static void ShowVisibleWindowsForDesktops( List<VirtualDesktopWindow>? vdwList = null, int processId = 0 )
+    {
+        var allVisibleWindows = GetVisibleWindows();
+        Logger.Verbose( $"VisibleWindows/ApplicationViews: {allVisibleWindows.Count.ToString()}/{DesktopManagerWrapper.GetViewCount().ToString()}" );
+
+        vdwList ??= _virtualDesktops;
+
+        foreach ( var virtualDesktopWindow in vdwList )
+        {
+            virtualDesktopWindow.ClearVisibleWindows();
+        }
+
+        foreach ( var win in allVisibleWindows.Where( win =>
+                     string.IsNullOrEmpty( WindowFilter.Keyword ) ||
+                     win.Title.Contains( WindowFilter.Keyword, StringComparison.CurrentCultureIgnoreCase ) ) )
         {
             try
             {
-                if ( DesktopWrapper.IsWindowPinned( h ) ||
-                     DesktopWrapper.IsApplicationPinned( h ) )
-                    ShowVisibleWindowsForDesktops();
-                else
-                    ShowVisibleWindowsForDesktops( vdwList.ToList() );
+                if ( processId != 0 )
+                {
+                    _ = User32.GetWindowThreadProcessId( win.Handle, out var pId );
+                    if ( processId != pId )
+                    {
+                        continue;
+                    }
+                }
+
+                if ( DesktopWrapper.IsWindowPinned( win.Handle ) ||
+                     DesktopWrapper.IsApplicationPinned( win.Handle ) )
+                {
+                    Logger.Debug( $"{win.Title} IS PINNED" );
+                    foreach ( var vdw in _virtualDesktops )
+                    {
+                        vdw.AddWindow( new VisibleWindow( win.Title, win.Classname, win.Handle ) );
+                    }
+
+                    continue;
+                }
+
+                var ownerId = DesktopWrapper.GuidFromWindow( win.Handle );
+                if ( vdwList.Count == _virtualDesktops.Count ) // show for all VDs
+                {
+                    var owner = vdwList.Find( v => v.VdId == ownerId );
+                    if ( owner is null )
+                    {
+                        continue;
+                    }
+
+                    owner.AddWindow( win );
+                    Logger.Debug( $"Desktop[{owner.VdIndex.ToString()}]({DesktopWrapper.DesktopNameFromIndex( owner.VdIndex )}) CONTAINS {win.Title}" );
+                }
+                else // show for specific VDs
+                {
+                    foreach ( var vdw in vdwList.Where( vdw => vdw.VdId == ownerId ) )
+                    {
+                        vdw.AddWindow( win );
+                        Logger.Debug( $"Desktop[{vdw.VdIndex.ToString()}]({DesktopWrapper.DesktopNameFromIndex( vdw.VdIndex )}) CONTAINS {win.Title}" );
+                    }
+                }
             }
             catch ( Exception ex )
             {
-                Logger.Error( $"RefreshThumbs: {ex.Message}" );
+                if ( win.Classname != Const.ApplicationFrameWindow )
+                {
+                    Logger.Warning( $"{ex.Message} ∵ {win.Title}({win.Handle.ToString( "X2" )}), WndClass: {win.Classname}" );
+                    ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByError, list => list.Add( win.Handle ) );
+                }
             }
         }
 
-        public static void ShowAllVirtualDesktops()
+        foreach ( var vdw in vdwList )
         {
-            UpdateVdwBackground();
-            foreach ( var vdw in _virtualDesktops ) User32.SendMessage( vdw.Handle, WinMsg.WM_HOTKEY, UserMessage.ShowVdw, 0 );
+            vdw.ShowThumbnails();
         }
+    }
 
-        public static void HideAllVirtualDesktops()
+    public static void RefreshThumbs( IntPtr h, params VirtualDesktopWindow[] vdwList )
+    {
+        try
         {
-            Menus.CloseContextMenu();
-            foreach ( var vdw in _virtualDesktops )
+            if ( DesktopWrapper.IsWindowPinned( h ) ||
+                 DesktopWrapper.IsApplicationPinned( h ) )
             {
-                vdw.ResetOnlyOneStatus();
-                vdw.Hide();
-                vdw.ClearVisibleWindows();
+                ShowVisibleWindowsForDesktops();
+            }
+            else
+            {
+                ShowVisibleWindowsForDesktops( vdwList.ToList() );
             }
         }
-
-        public static List<VirtualDesktopWindow> GetAllVirtualDesktops()
+        catch ( Exception ex )
         {
-            return _virtualDesktops;
+            Logger.Error( $"RefreshThumbs: {ex.Message}" );
         }
+    }
 
-        public static VirtualDesktopWindow GetCurrentVdw()
+    public static void ShowAllVirtualDesktops()
+    {
+        UpdateVdwBackground();
+        foreach ( var vdw in _virtualDesktops )
         {
-            return _virtualDesktops.Single( v => v.VdId == DesktopWrapper.CurrentGuid );
+            User32.SendMessage( vdw.Handle, WinMsg.WM_HOTKEY, UserMessage.ShowVdw, 0 );
         }
+    }
+
+    public static void HideAllVirtualDesktops()
+    {
+        Menus.CloseContextMenu();
+        foreach ( var vdw in _virtualDesktops )
+        {
+            vdw.ResetOnlyOneStatus();
+            vdw.Hide();
+            vdw.ClearVisibleWindows();
+        }
+    }
+
+    public static List<VirtualDesktopWindow> GetAllVirtualDesktops()
+    {
+        return _virtualDesktops;
+    }
+
+    public static VirtualDesktopWindow GetCurrentVdw()
+    {
+        return _virtualDesktops.Single( v => v.VdId == DesktopWrapper.CurrentGuid );
     }
 }

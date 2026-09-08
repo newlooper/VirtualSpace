@@ -11,45 +11,44 @@
 using System;
 using System.Reflection;
 
-namespace VirtualSpace.Commons
+namespace VirtualSpace.Commons;
+
+public class HostInfo
 {
-    public class HostInfo
-    {
-        public Version Version          { get; set; }
-        public string  Product          { get; set; }
-        public string  InfoVersion      { get; set; }
-        public string  AppPath          { get; set; }
-        public int     MainWindowHandle { get; set; }
-    }
+    public Version Version          { get; set; }
+    public string  Product          { get; set; }
+    public string  InfoVersion      { get; set; }
+    public string  AppPath          { get; set; }
+    public int     MainWindowHandle { get; set; }
+}
 
-    public static class HostInfoHelper
+public static class HostInfoHelper
+{
+    public static HostInfo GetHostInfo()
     {
-        public static HostInfo GetHostInfo()
+        var entryAssembly = Assembly.GetEntryAssembly()!;
+
+        var product = ( (AssemblyProductAttribute)Attribute.GetCustomAttribute(
+            entryAssembly,
+            typeof( AssemblyProductAttribute ),
+            false )! ).Product;
+
+        var fileVersion = ( (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(
+            entryAssembly,
+            typeof( AssemblyFileVersionAttribute ),
+            false )! ).Version;
+
+        var infoVersion = ( (AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(
+            entryAssembly,
+            typeof( AssemblyInformationalVersionAttribute ),
+            false )! ).InformationalVersion;
+
+        return new HostInfo
         {
-            var entryAssembly = Assembly.GetEntryAssembly()!;
-
-            var product = ( (AssemblyProductAttribute)Attribute.GetCustomAttribute(
-                entryAssembly,
-                typeof( AssemblyProductAttribute ),
-                false )! ).Product;
-
-            var fileVersion = ( (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(
-                entryAssembly,
-                typeof( AssemblyFileVersionAttribute ),
-                false )! ).Version;
-
-            var infoVersion = ( (AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(
-                entryAssembly,
-                typeof( AssemblyInformationalVersionAttribute ),
-                false )! ).InformationalVersion;
-
-            return new HostInfo
-            {
-                Version     = new Version( fileVersion ),
-                Product     = product,
-                InfoVersion = infoVersion,
-                AppPath     = Environment.ProcessPath ?? string.Empty
-            };
-        }
+            Version     = new Version( fileVersion ),
+            Product     = product,
+            InfoVersion = infoVersion,
+            AppPath     = Environment.ProcessPath ?? string.Empty
+        };
     }
 }

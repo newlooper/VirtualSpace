@@ -17,97 +17,107 @@ using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop;
 
-namespace VirtualSpace
+namespace VirtualSpace;
+
+public partial class WindowFilter : Window
 {
-    public partial class WindowFilter : Window
+    private static WindowFilter? _instance;
+    private static IntPtr        _handle;
+    private static string        _lastKeyword = string.Empty;
+
+    private static readonly Timer FilterTimer = new()
     {
-        private static WindowFilter? _instance;
-        private static IntPtr        _handle;
-        private static string        _lastKeyword = string.Empty;
+        Enabled  = true,
+        Interval = Manager.Configs.Cluster.WindowFilterKeywordScanningInterval
+    };
 
-        private static readonly Timer FilterTimer = new()
-        {
-            Enabled  = true,
-            Interval = Manager.Configs.Cluster.WindowFilterKeywordScanningInterval
-        };
+    private WindowFilter()
+    {
+        InitializeComponent();
+    }
 
-        private WindowFilter()
-        {
-            InitializeComponent();
-        }
-
-        public static string Keyword
-        {
-            get
-            {
-                if ( _instance == null ) return string.Empty;
-                if ( _instance.tbFilter.CheckAccess() ) return _instance.tbFilter.Text;
-
-                return _instance.Dispatcher.Invoke( () => _instance.tbFilter.Text );
-            }
-        }
-
-        public static WindowFilter GetInstance( IntPtr handle )
+    public static string Keyword
+    {
+        get
         {
             if ( _instance == null )
             {
-                _instance = new WindowFilter
-                {
-                    Height = Const.Window.WINDOW_FILTER_BAR_HEIGHT,
-                    Title  = Const.Window.VS_WINDOW_FILTER_TITLE
-                };
-                new WindowInteropHelper( _instance ).EnsureHandle();
+                return string.Empty;
             }
 
-            User32.SetWindowLongPtr( new HandleRef( _instance, _handle ),
-                (int)GetWindowLongFields.GWL_HWNDPARENT,
-                handle.ToInt32()
-            );
-
-            FilterTimer.Elapsed += FilterTimerOnElapsed;
-
-            return _instance;
-        }
-
-        private static void FilterTimerOnElapsed( object? sender, ElapsedEventArgs e )
-        {
-            if ( _lastKeyword == Keyword ) return;
-            _lastKeyword = Keyword;
-            VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-        }
-
-        protected override void OnSourceInitialized( EventArgs e )
-        {
-            base.OnSourceInitialized( e );
-            _handle = new WindowInteropHelper( this ).EnsureHandle();
-        }
-
-        public void SetFocus()
-        {
-            User32.SetForegroundWindow( _handle );
-            tbFilter.Focus();
-
-            FilterTimer.Start();
-        }
-
-        public void ClearAndHide( bool clearKeyword = true )
-        {
-            FilterTimer.Stop();
-            if ( clearKeyword )
+            if ( _instance.tbFilter.CheckAccess() )
             {
-                _lastKeyword = string.Empty;
-                tbFilter.Clear();
+                return _instance.tbFilter.Text;
             }
 
-            if ( clearKeyword )
+            return _instance.Dispatcher.Invoke( () => _instance.tbFilter.Text );
+        }
+    }
+
+    public static WindowFilter GetInstance( IntPtr handle )
+    {
+        if ( _instance == null )
+        {
+            _instance = new WindowFilter
             {
-                Close();
-                _instance = null;
-            }
-            else
-            {
-                Hide();
-            }
+                Height = Const.Window.WINDOW_FILTER_BAR_HEIGHT,
+                Title  = Const.Window.VS_WINDOW_FILTER_TITLE
+            };
+            new WindowInteropHelper( _instance ).EnsureHandle();
+        }
+
+        User32.SetWindowLongPtr( new HandleRef( _instance, _handle ),
+            (int)GetWindowLongFields.GWL_HWNDPARENT,
+            handle.ToInt32()
+        );
+
+        FilterTimer.Elapsed += FilterTimerOnElapsed;
+
+        return _instance;
+    }
+
+    private static void FilterTimerOnElapsed( object? sender, ElapsedEventArgs e )
+    {
+        if ( _lastKeyword == Keyword )
+        {
+            return;
+        }
+
+        _lastKeyword = Keyword;
+        VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+    }
+
+    protected override void OnSourceInitialized( EventArgs e )
+    {
+        base.OnSourceInitialized( e );
+        _handle = new WindowInteropHelper( this ).EnsureHandle();
+    }
+
+    public void SetFocus()
+    {
+        User32.SetForegroundWindow( _handle );
+        tbFilter.Focus();
+
+        FilterTimer.Start();
+    }
+
+    public void ClearAndHide( bool clearKeyword = true )
+    {
+        FilterTimer.Stop();
+        if ( clearKeyword )
+        {
+            _lastKeyword = string.Empty;
+            tbFilter.Clear();
+        }
+
+        if ( clearKeyword )
+        {
+            Close();
+            _instance = null;
+        }
+        else
+        {
+            Hide();
         }
     }
 }

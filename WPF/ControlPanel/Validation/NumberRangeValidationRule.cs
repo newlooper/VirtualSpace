@@ -24,7 +24,9 @@ public class NumberRangeValidationRule : ValidationRule
         {
             var v = int.Parse( value as string ?? string.Empty );
             if ( v < Min || v > Max )
+            {
                 return new ValidationResult( false, $"{Min} - {Max}" );
+            }
         }
         catch
         {

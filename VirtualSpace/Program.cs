@@ -16,22 +16,21 @@ using VirtualSpace.Config;
 using VirtualSpace.PluginContracts;
 using VirtualSpace.VirtualDesktop.Api;
 
-namespace VirtualSpace
-{
-    public static class Program
-    {
-        [STAThread]
-        public static void Main()
-        {
-            LogManager.InitLogger( Path.Combine( Manager.GetConfigRoot(), Const.Settings.LogsFolder ) );
-            PluginLog.Bind( Logger.Event, msg => Logger.Error( msg ) );
+namespace VirtualSpace;
 
-            AppDomain.CurrentDomain.AssemblyResolve += DesktopWrapper.AutoResolver;
-            var app = new App
-            {
-                ShutdownMode = ShutdownMode.OnMainWindowClose
-            };
-            app.Run();
-        }
+public static class Program
+{
+    [STAThread]
+    public static void Main()
+    {
+        LogManager.InitLogger( Path.Combine( Manager.GetConfigRoot(), Const.Settings.LogsFolder ) );
+        PluginLog.Bind( Logger.Event, msg => Logger.Error( msg ) );
+
+        AppDomain.CurrentDomain.AssemblyResolve += DesktopWrapper.AutoResolver;
+        var app = new App
+        {
+            ShutdownMode = ShutdownMode.OnMainWindowClose
+        };
+        app.Run();
     }
 }

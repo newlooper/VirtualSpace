@@ -11,25 +11,24 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using VirtualSpace.Config.DataAnnotations;
 
-namespace VirtualSpace.Config.Entity
+namespace VirtualSpace.Config.Entity;
+
+public class Margin
 {
-    public class Margin
+    public Margin()
     {
-        public Margin()
-        {
-        }
-
-        public Margin( int all )
-        {
-            Top    = all;
-            Right  = all;
-            Bottom = all;
-            Left   = all;
-        }
-
-        [PropertyProtector( 10, 0, 50 )] public int Top    { get; set; }
-        [PropertyProtector( 10, 0, 50 )] public int Right  { get; set; }
-        [PropertyProtector( 10, 0, 50 )] public int Bottom { get; set; }
-        [PropertyProtector( 10, 0, 50 )] public int Left   { get; set; }
     }
+
+    public Margin( int all )
+    {
+        Top    = all;
+        Right  = all;
+        Bottom = all;
+        Left   = all;
+    }
+
+    [PropertyProtector( 10, 0, 50 )] public int Top    { get; set; }
+    [PropertyProtector( 10, 0, 50 )] public int Right  { get; set; }
+    [PropertyProtector( 10, 0, 50 )] public int Bottom { get; set; }
+    [PropertyProtector( 10, 0, 50 )] public int Left   { get; set; }
 }

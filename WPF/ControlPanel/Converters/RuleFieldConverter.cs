@@ -26,13 +26,25 @@ public class RuleFieldConverter : IMultiValueConverter
     {
         var type = parameter.ToString();
 
-        if ( type == "V" ) return ForValue( values );
+        if ( type == "V" )
+        {
+            return ForValue( values );
+        }
 
-        if ( type == typeof( ComboBox ).FullName ) return ForCombobox( values );
+        if ( type == typeof( ComboBox ).FullName )
+        {
+            return ForCombobox( values );
+        }
 
-        if ( type == typeof( CheckBox ).FullName ) return ForCheckBox( values );
+        if ( type == typeof( CheckBox ).FullName )
+        {
+            return ForCheckBox( values );
+        }
 
-        if ( type == typeof( TextBox ).FullName ) return ForTextBox( values );
+        if ( type == typeof( TextBox ).FullName )
+        {
+            return ForTextBox( values );
+        }
 
         return null!;
     }
@@ -46,13 +58,17 @@ public class RuleFieldConverter : IMultiValueConverter
     {
         if ( values is null || values[0] is null ||
              values[0] == DependencyProperty.UnsetValue ||
-             values[1] == DependencyProperty.UnsetValue ) return 0;
+             values[1] == DependencyProperty.UnsetValue )
+        {
+            return 0;
+        }
 
         try
         {
             var jsonDocument       = (JsonDocument)values[0];
             var expressionTemplate = Conditions.ParseExpressionTemplate( jsonDocument );
             foreach ( var r in expressionTemplate.rules )
+            {
                 if ( r.field == values[1].ToString() )
                 {
                     var index = RulesViewModel.Screens.Select( ( vv, index ) => new { nv = vv, index } )
@@ -62,6 +78,7 @@ public class RuleFieldConverter : IMultiValueConverter
 
                     return index;
                 }
+            }
         }
         catch
         {
@@ -75,13 +92,17 @@ public class RuleFieldConverter : IMultiValueConverter
     {
         if ( values is null || values[0] is null ||
              values[0] == DependencyProperty.UnsetValue ||
-             values[1] == DependencyProperty.UnsetValue ) return 0;
+             values[1] == DependencyProperty.UnsetValue )
+        {
+            return 0;
+        }
 
         try
         {
             var jsonDocument       = (JsonDocument)values[0];
             var expressionTemplate = Conditions.ParseExpressionTemplate( jsonDocument );
             foreach ( var r in expressionTemplate.rules )
+            {
                 if ( r.field == values[1].ToString() )
                 {
                     var index = RulesViewModel.Operators.Select( ( v, index ) => new { value = v, index } )
@@ -91,6 +112,7 @@ public class RuleFieldConverter : IMultiValueConverter
 
                     return index;
                 }
+            }
         }
         catch
         {
@@ -104,15 +126,22 @@ public class RuleFieldConverter : IMultiValueConverter
     {
         if ( values is null || values[0] is null ||
              values[0] == DependencyProperty.UnsetValue ||
-             values[1] == DependencyProperty.UnsetValue ) return false;
+             values[1] == DependencyProperty.UnsetValue )
+        {
+            return false;
+        }
 
         try
         {
             var jsonDocument       = (JsonDocument)values[0];
             var expressionTemplate = Conditions.ParseExpressionTemplate( jsonDocument );
             foreach ( var r in expressionTemplate.rules )
+            {
                 if ( r.field == values[1].ToString() )
+                {
                     return true;
+                }
+            }
         }
         catch
         {
@@ -126,15 +155,22 @@ public class RuleFieldConverter : IMultiValueConverter
     {
         if ( values is null || values[0] is null ||
              values[0] == DependencyProperty.UnsetValue ||
-             values[1] == DependencyProperty.UnsetValue ) return "";
+             values[1] == DependencyProperty.UnsetValue )
+        {
+            return "";
+        }
 
         try
         {
             var jsonDocument       = (JsonDocument)values[0];
             var expressionTemplate = Conditions.ParseExpressionTemplate( jsonDocument );
             foreach ( var r in expressionTemplate.rules )
+            {
                 if ( r.field == values[1].ToString() )
+                {
                     return r.value.V;
+                }
+            }
         }
         catch
         {

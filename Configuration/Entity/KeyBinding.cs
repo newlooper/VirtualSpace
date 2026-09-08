@@ -9,11 +9,10 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace VirtualSpace.Config.Entity
+namespace VirtualSpace.Config.Entity;
+
+public class KeyBinding
 {
-    public class KeyBinding
-    {
-        public string GhkCode   { get; set; } = "";
-        public int    MessageId { get; set; }
-    }
+    public string GhkCode   { get; set; } = "";
+    public int    MessageId { get; set; }
 }

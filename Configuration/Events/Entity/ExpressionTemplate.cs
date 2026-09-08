@@ -12,22 +12,21 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 
-namespace VirtualSpace.Config.Events.Entity
-{
-    public class ExpressionTemplate
-    {
-        public Guid                      id        { get; set; } = Guid.NewGuid();
-        public string?                   condition { get; set; }
-        public List<ExpressionTemplate>? rules     { get; set; }
-        public string?                   type      { get; set; }
-        public string?                   field     { get; set; }
-        public string?                   @operator { get; set; }
-        public Value?                    value     { get; set; }
-    }
+namespace VirtualSpace.Config.Events.Entity;
 
-    public class Value
-    {
-        public string?       V { get; set; }
-        public List<string>? L { get; set; }
-    }
+public class ExpressionTemplate
+{
+    public Guid                      id        { get; set; } = Guid.NewGuid();
+    public string?                   condition { get; set; }
+    public List<ExpressionTemplate>? rules     { get; set; }
+    public string?                   type      { get; set; }
+    public string?                   field     { get; set; }
+    public string?                   @operator { get; set; }
+    public Value?                    value     { get; set; }
+}
+
+public class Value
+{
+    public string?       V { get; set; }
+    public List<string>? L { get; set; }
 }

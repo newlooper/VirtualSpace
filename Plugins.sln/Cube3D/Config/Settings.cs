@@ -14,78 +14,83 @@ using System.Text.Json.Serialization;
 using System.Windows.Media.Animation;
 using Cube3D.Effects;
 
-namespace Cube3D.Config
-{
-    public class Settings
-    {
-        private int _animationDuration = 500;
+namespace Cube3D.Config;
 
-        public int AnimationDuration
+public class Settings
+{
+    private int _animationDuration = 500;
+
+    public int AnimationDuration
+    {
+        get => _animationDuration;
+        set
         {
-            get => _animationDuration;
-            set
+            if ( value < Const.AnimationDurationMin || value > Const.AnimationDurationMax )
             {
-                if ( value < Const.AnimationDurationMin || value > Const.AnimationDurationMax )
-                {
-                    _animationDuration = Const.AnimationDurationMin;
-                }
-                else
-                {
-                    _animationDuration = value;
-                }
+                _animationDuration = Const.AnimationDurationMin;
+            }
+            else
+            {
+                _animationDuration = value;
             }
         }
-
-        [JsonConverter( typeof( EffectTypeJsonConverter ) )]
-        public string SelectedEffect { get; set; } = EffectFactory.Default;
-
-        [JsonConverter( typeof( EaseTypeJsonConverter ) )]
-        public string EaseType { get; set; } = EaseFactory.None;
-
-        public EasingMode     EaseMode                         { get; set; } = EasingMode.EaseOut;
-        public TransitionType TransitionType                   { get; set; } = TransitionType.AnimationAndNotificationGrid;
-        public bool           ShowNotificationGridOnAllScreens { get; set; }
     }
 
-    [Flags]
-    public enum TransitionType
+    [JsonConverter( typeof( EffectTypeJsonConverter ) )]
+    public string SelectedEffect { get; set; } = EffectFactory.Default;
+
+    [JsonConverter( typeof( EaseTypeJsonConverter ) )]
+    public string EaseType { get; set; } = EaseFactory.None;
+
+    public EasingMode     EaseMode                         { get; set; } = EasingMode.EaseOut;
+    public TransitionType TransitionType                   { get; set; } = TransitionType.AnimationAndNotificationGrid;
+    public bool           ShowNotificationGridOnAllScreens { get; set; }
+}
+
+[Flags]
+public enum TransitionType
+{
+    AnimationOnly                = 0b0001,
+    NotificationGridOnly         = 0b0010,
+    AnimationAndNotificationGrid = AnimationOnly | NotificationGridOnly
+}
+
+internal sealed class EffectTypeJsonConverter : JsonConverter<string>
+{
+    public override string Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
     {
-        AnimationOnly                = 0b0001,
-        NotificationGridOnly         = 0b0010,
-        AnimationAndNotificationGrid = AnimationOnly | NotificationGridOnly
+        if ( reader.TokenType == JsonTokenType.Number && reader.TryGetInt32( out var index ) )
+        {
+            return EffectFactory.NameFromLegacyIndex( index );
+        }
+
+        return reader.TokenType == JsonTokenType.String
+            ? reader.GetString() ?? EffectFactory.Default
+            : EffectFactory.Default;
     }
 
-    internal sealed class EffectTypeJsonConverter : JsonConverter<string>
+    public override void Write( Utf8JsonWriter writer, string value, JsonSerializerOptions options )
     {
-        public override string Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+        writer.WriteStringValue( value );
+    }
+}
+
+internal sealed class EaseTypeJsonConverter : JsonConverter<string>
+{
+    public override string Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+    {
+        if ( reader.TokenType == JsonTokenType.Number && reader.TryGetInt32( out var index ) )
         {
-            if ( reader.TokenType == JsonTokenType.Number && reader.TryGetInt32( out var index ) )
-                return EffectFactory.NameFromLegacyIndex( index );
-            return reader.TokenType == JsonTokenType.String
-                ? reader.GetString() ?? EffectFactory.Default
-                : EffectFactory.Default;
+            return EaseFactory.NameFromLegacyIndex( index );
         }
 
-        public override void Write( Utf8JsonWriter writer, string value, JsonSerializerOptions options )
-        {
-            writer.WriteStringValue( value );
-        }
+        return reader.TokenType == JsonTokenType.String
+            ? reader.GetString() ?? EaseFactory.None
+            : EaseFactory.None;
     }
 
-    internal sealed class EaseTypeJsonConverter : JsonConverter<string>
+    public override void Write( Utf8JsonWriter writer, string value, JsonSerializerOptions options )
     {
-        public override string Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
-        {
-            if ( reader.TokenType == JsonTokenType.Number && reader.TryGetInt32( out var index ) )
-                return EaseFactory.NameFromLegacyIndex( index );
-            return reader.TokenType == JsonTokenType.String
-                ? reader.GetString() ?? EaseFactory.None
-                : EaseFactory.None;
-        }
-
-        public override void Write( Utf8JsonWriter writer, string value, JsonSerializerOptions options )
-        {
-            writer.WriteStringValue( value );
-        }
+        writer.WriteStringValue( value );
     }
 }

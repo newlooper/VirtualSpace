@@ -34,26 +34,26 @@ public partial class MouseActionModel : ViewModelBase
         _isInitialized = true;
     }
 
-    public static List<object> DesktopActions { get; } = new()
-    {
-        new { Value = MouseAction.Action.DoNothing.ToString(), Text                     = "" },
-        new { Value = MouseAction.Action.ContextMenu.ToString(), Text                   = "" },
-        new { Value = MouseAction.Action.DesktopVisibleAndCloseView.ToString(), Text    = "" },
-        new { Value = MouseAction.Action.DesktopVisibleOnly.ToString(), Text            = "" },
-        new { Value = MouseAction.Action.DesktopShowForSelectedDesktop.ToString(), Text = "" }
-    };
+    public static List<object> DesktopActions { get; } =
+    [
+        new { Value = nameof( MouseAction.Action.DoNothing ), Text                     = "" },
+        new { Value = nameof( MouseAction.Action.ContextMenu ), Text                   = "" },
+        new { Value = nameof( MouseAction.Action.DesktopVisibleAndCloseView ), Text    = "" },
+        new { Value = nameof( MouseAction.Action.DesktopVisibleOnly ), Text            = "" },
+        new { Value = nameof( MouseAction.Action.DesktopShowForSelectedDesktop ), Text = "" }
+    ];
 
-    public static List<object> WindowActions { get; } = new()
-    {
-        new { Value = MouseAction.Action.DoNothing.ToString(), Text                                     = "" },
-        new { Value = MouseAction.Action.ContextMenu.ToString(), Text                                   = "" },
-        new { Value = MouseAction.Action.WindowActiveDesktopVisibleAndCloseView.ToString(), Text        = "" },
-        new { Value = MouseAction.Action.WindowActiveDesktopVisibleOnly.ToString(), Text                = "" },
-        new { Value = MouseAction.Action.WindowClose.ToString(), Text                                   = "" },
-        new { Value = MouseAction.Action.WindowHideFromView.ToString(), Text                            = "" },
-        new { Value = MouseAction.Action.WindowShowForSelectedProcessOnly.ToString(), Text              = "" },
-        new { Value = MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop.ToString(), Text = "" }
-    };
+    public static List<object> WindowActions { get; } =
+    [
+        new { Value = nameof( MouseAction.Action.DoNothing ), Text                                     = "" },
+        new { Value = nameof( MouseAction.Action.ContextMenu ), Text                                   = "" },
+        new { Value = nameof( MouseAction.Action.WindowActiveDesktopVisibleAndCloseView ), Text        = "" },
+        new { Value = nameof( MouseAction.Action.WindowActiveDesktopVisibleOnly ), Text                = "" },
+        new { Value = nameof( MouseAction.Action.WindowClose ), Text                                   = "" },
+        new { Value = nameof( MouseAction.Action.WindowHideFromView ), Text                            = "" },
+        new { Value = nameof( MouseAction.Action.WindowShowForSelectedProcessOnly ), Text              = "" },
+        new { Value = nameof( MouseAction.Action.WindowShowForSelectedProcessInSelectedDesktop ), Text = "" }
+    ];
 
     public bool UseWheelSwitchDesktopWhenOnTaskbar { get; set; } = Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar;
 
@@ -68,18 +68,22 @@ public partial class MouseActionModel : ViewModelBase
 
     private static List<object> GetMouseButtons()
     {
-        return new List<object>
-        {
+        return
+        [
             new { Value = "Left", Text   = "" },
             new { Value = "Middle", Text = "" },
             new { Value = "Right", Text  = "" }
-        };
+        ];
     }
 
     public void OnPropertyChanged( string propertyName, object before, object after )
     {
         var propertyChanged = PropertyChanged;
-        if ( propertyChanged == null ) return;
+        if ( propertyChanged == null )
+        {
+            return;
+        }
+
         if ( _isInitialized && propertyName == nameof( UseWheelSwitchDesktopWhenOnTaskbar ) )
         {
             Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar = (bool)after;

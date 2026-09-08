@@ -8,12 +8,11 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace.Config.Entity
+namespace VirtualSpace.Config.Entity;
+
+public class Navigation
 {
-    public class Navigation
-    {
-        public bool CirculationH     { get; set; }
-        public int  CirculationHType { get; set; }
-        public bool CirculationV     { get; set; }
-    }
+    public bool CirculationH     { get; set; }
+    public int  CirculationHType { get; set; }
+    public bool CirculationV     { get; set; }
 }

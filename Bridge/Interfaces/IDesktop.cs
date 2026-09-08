@@ -8,10 +8,9 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace
+namespace VirtualSpace;
+
+public interface IDesktop
 {
-    public interface IDesktop
-    {
-        public void MakeVisible();
-    }
+    public void MakeVisible();
 }

@@ -43,11 +43,11 @@ public partial class PluginItemViewModel : ViewModelBase
         _isInitialized = true;
     }
 
-    public string Name        { get; set; } = string.Empty;
-    public string Version     { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string Author      { get; set; } = string.Empty;
-    public string Email       { get; set; } = string.Empty;
+    public string Name            { get; set; } = string.Empty;
+    public string Version         { get; set; } = string.Empty;
+    public string Description     { get; set; } = string.Empty;
+    public string Author          { get; set; } = string.Empty;
+    public string Email           { get; set; } = string.Empty;
     public string LoadStatus      { get; set; } = string.Empty;
     public bool   IsLoaded        { get; set; }
     public bool   ShowCloseButton { get; set; }
@@ -59,18 +59,20 @@ public partial class PluginItemViewModel : ViewModelBase
     public void OnPropertyChanged( string propertyName, object before, object after )
     {
         if ( _isInitialized && propertyName == nameof( IsLoaded ) && (bool)after != (bool)before )
+        {
             ApplyLoadState( (bool)after );
+        }
 
         PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
     }
 
     public void SyncFrom( PluginInfo info )
     {
-        Name        = info.Display;
-        Version     = info.Version;
-        Description = info.Description;
-        Author      = info.Author;
-        Email       = info.Email;
+        Name            = info.Display;
+        Version         = info.Version;
+        Description     = info.Description;
+        Author          = info.Author;
+        Email           = info.Email;
         LoadStatus      = info.LoadStatus.ToString();
         IsLoaded        = info.IsLoaded;
         ShowCloseButton = info.Kind == PluginKind.ExternalProcess;
@@ -88,9 +90,13 @@ public partial class PluginItemViewModel : ViewModelBase
     {
         _info.AutoStart = load;
         if ( load )
+        {
             PluginHost.StartPlugin( _info );
+        }
         else
+        {
             PluginHost.ClosePlugin( _info );
+        }
 
         PluginManager.SavePluginInfo( _info );
         RefreshLoadState();

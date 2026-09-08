@@ -11,34 +11,33 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 
-namespace VirtualSpace.Config.Events.Entity
-{
-    public class Behavior
-    {
-        public IntPtr Handle;
-        public string RuleName;
-        public string WindowTitle;
-        public int    MoveToDesktop { get; set; } = -1;
-        public bool   FollowWindow  { get; set; } = true;
-        public bool   PinWindow     { get; set; }
-        public bool   PinApp        { get; set; }
-        public int    MoveToScreen  { get; set; } = -1;
-        public bool   HideFromView  { get; set; }
+namespace VirtualSpace.Config.Events.Entity;
 
-        public Behavior Clone()
+public class Behavior
+{
+    public IntPtr Handle;
+    public string RuleName;
+    public string WindowTitle;
+    public int    MoveToDesktop { get; set; } = -1;
+    public bool   FollowWindow  { get; set; } = true;
+    public bool   PinWindow     { get; set; }
+    public bool   PinApp        { get; set; }
+    public int    MoveToScreen  { get; set; } = -1;
+    public bool   HideFromView  { get; set; }
+
+    public Behavior Clone()
+    {
+        return new Behavior
         {
-            return new Behavior
-            {
-                Handle        = Handle,
-                RuleName      = RuleName,
-                WindowTitle   = WindowTitle,
-                MoveToDesktop = MoveToDesktop,
-                FollowWindow  = FollowWindow,
-                PinWindow     = PinWindow,
-                PinApp        = PinApp,
-                MoveToScreen  = MoveToScreen,
-                HideFromView  = HideFromView
-            };
-        }
+            Handle        = Handle,
+            RuleName      = RuleName,
+            WindowTitle   = WindowTitle,
+            MoveToDesktop = MoveToDesktop,
+            FollowWindow  = FollowWindow,
+            PinWindow     = PinWindow,
+            PinApp        = PinApp,
+            MoveToScreen  = MoveToScreen,
+            HideFromView  = HideFromView
+        };
     }
 }

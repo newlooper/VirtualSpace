@@ -9,7 +9,6 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Windows;
@@ -35,12 +34,18 @@ public partial class RuleForm : UserControl
 
     private void Cbb_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
     {
-        if ( sender is not ComboBox { IsLoaded: true } cbb || cbb.SelectedValue is null ) return;
+        if ( sender is not ComboBox { IsLoaded: true } cbb || cbb.SelectedValue is null )
+        {
+            return;
+        }
 
         var field = cbb.Name.Split( "_" )[1]; // 依赖控件名，若修改控件名，此处也要修改
 
         var r = RuleDefBox.DataContext as RuleTemplate;
-        if ( r?.Expression == null ) return;
+        if ( r?.Expression == null )
+        {
+            return;
+        }
 
         var exp = Conditions.ParseExpressionTemplate( r.Expression );
         foreach ( var rule in exp.rules!.Where( rule => rule.field == field ) )
@@ -54,7 +59,10 @@ public partial class RuleForm : UserControl
 
     private void BtnSave_OnClick( object sender, RoutedEventArgs e )
     {
-        if ( Helper.HasError( TextBox.TextProperty, tbName, tbWeight ) ) goto FAIL;
+        if ( Helper.HasError( TextBox.TextProperty, tbName, tbWeight ) )
+        {
+            goto FAIL;
+        }
 
         var r = RuleDefBox.DataContext as RuleTemplate;
 
@@ -79,10 +87,13 @@ public partial class RuleForm : UserControl
         var exp = new ExpressionTemplate
         {
             condition = Keywords.And,
-            rules     = new List<ExpressionTemplate>()
+            rules     = []
         };
 
-        if ( r?.Expression != null ) exp.id = Conditions.ParseExpressionTemplate( r.Expression ).id;
+        if ( r?.Expression != null )
+        {
+            exp.id = Conditions.ParseExpressionTemplate( r.Expression ).id;
+        }
 
         try
         {
@@ -108,15 +119,21 @@ public partial class RuleForm : UserControl
 
         r!.Expression = JsonDocument.Parse( JsonSerializer.Serialize( exp, RulesViewModel.WriteOptions ) );
 
-        var action                                                      = r.Action!;
-        if ( chb_MoveToDesktop.IsChecked == true ) action.MoveToDesktop = int.Parse( cbb_MoveToDesktop.SelectedValue.ToString()! );
+        var action = r.Action!;
+        if ( chb_MoveToDesktop.IsChecked == true )
+        {
+            action.MoveToDesktop = int.Parse( cbb_MoveToDesktop.SelectedValue.ToString()! );
+        }
 
         action.FollowWindow = (bool)chb_FollowWindow.IsChecked!;
         action.PinWindow    = (bool)chb_PinWindow.IsChecked!;
         action.PinApp       = (bool)chb_PinApp.IsChecked!;
         action.HideFromView = (bool)chb_HideFromView.IsChecked!;
 
-        if ( chb_MoveToScreen.IsChecked == true ) action.MoveToScreen = int.Parse( cbb_MoveToScreen.SelectedValue.ToString()! );
+        if ( chb_MoveToScreen.IsChecked == true )
+        {
+            action.MoveToScreen = int.Parse( cbb_MoveToScreen.SelectedValue.ToString()! );
+        }
 
         if ( r.Id == Guid.Empty )
         {
@@ -138,7 +155,10 @@ public partial class RuleForm : UserControl
 
     private static void BuildRule( CheckBox cb, ComboBox cbb, TextBox? tb, ExpressionTemplate exp )
     {
-        if ( cb.IsChecked != true ) return;
+        if ( cb.IsChecked != true )
+        {
+            return;
+        }
 
         Value V;
         var   opt = cbb.SelectedValue.ToString();
@@ -149,7 +169,10 @@ public partial class RuleForm : UserControl
         }
         else
         {
-            if ( opt == Keywords.RegexIsMatch[0] && !StringHelper.IsValidRegex( tb.Text ) ) throw new Exception( "Rule.InvalidRegex" );
+            if ( opt == Keywords.RegexIsMatch[0] && !StringHelper.IsValidRegex( tb.Text ) )
+            {
+                throw new Exception( "Rule.InvalidRegex" );
+            }
 
             V = new Value { V = tb.Text };
         }

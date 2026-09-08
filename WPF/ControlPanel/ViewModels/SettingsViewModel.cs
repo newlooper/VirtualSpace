@@ -30,7 +30,10 @@ public partial class SettingsViewModel : ViewModelBase
         Language       = Manager.CurrentProfile.UI.Language;
         CurrentProfile = Manager.Configs.CurrentProfileName;
         ProfileList    = new ObservableCollection<object>();
-        foreach ( var profileName in Manager.Configs.Profiles.Keys ) ProfileList.Add( new { Value = profileName } );
+        foreach ( var profileName in Manager.Configs.Profiles.Keys )
+        {
+            ProfileList.Add( new { Value = profileName } );
+        }
 
         _isInitialized = true;
     }
@@ -53,9 +56,13 @@ public partial class SettingsViewModel : ViewModelBase
     public void OnPropertyChanged( string propertyName, object before, object after )
     {
         var propertyChanged = PropertyChanged;
-        if ( propertyChanged == null ) return;
+        if ( propertyChanged == null )
+        {
+            return;
+        }
 
         if ( _isInitialized )
+        {
             switch ( propertyName )
             {
                 case nameof( Theme ):
@@ -63,7 +70,10 @@ public partial class SettingsViewModel : ViewModelBase
                     Manager.Save( reason: Manager.CurrentProfile.UI.Theme );
                     break;
                 case nameof( CurrentProfile ):
-                    if ( string.IsNullOrEmpty( after.ToString() ) || before == after ) break;
+                    if ( string.IsNullOrEmpty( after.ToString() ) || before == after )
+                    {
+                        break;
+                    }
 
                     Manager.SwitchProfile( after.ToString()! );
                     RulesViewModel.ReloadRules();
@@ -81,16 +91,22 @@ public partial class SettingsViewModel : ViewModelBase
                     LanguageChanged?.Invoke( null, EventArgs.Empty );
                     break;
             }
+        }
 
         propertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
 
         if ( _isInitialized )
+        {
             switch ( propertyName )
             {
                 case nameof( Theme ):
                     if ( before != after )
+                    {
                         MainWindow.UpdateTheme();
+                    }
+
                     break;
             }
+        }
     }
 }

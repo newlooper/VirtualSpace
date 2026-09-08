@@ -11,12 +11,11 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System.Windows;
 
-namespace VirtualSpace
+namespace VirtualSpace;
+
+/// <summary>
+///     Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    ///     Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-    }
 }

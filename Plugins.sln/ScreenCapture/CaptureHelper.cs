@@ -32,82 +32,81 @@ using Windows.Graphics.Capture;
 using WinRT;
 #endif
 
-namespace ScreenCapture
+namespace ScreenCapture;
+
+public static class CaptureHelper
 {
-    public static class CaptureHelper
+    private static readonly Guid GraphicsCaptureItemGuid = new( "79C3F95B-31F7-4EC2-A464-632EF5D30760" );
+
+    public static void SetWindow( this GraphicsCapturePicker picker, IntPtr hwnd )
     {
-        private static readonly Guid GraphicsCaptureItemGuid = new( "79C3F95B-31F7-4EC2-A464-632EF5D30760" );
+        var interop = (IInitializeWithWindow)(object)picker;
+        interop.Initialize( hwnd );
+    }
 
-        public static void SetWindow( this GraphicsCapturePicker picker, IntPtr hwnd )
-        {
-            var interop = (IInitializeWithWindow)(object)picker;
-            interop.Initialize( hwnd );
-        }
-
-        public static GraphicsCaptureItem CreateItemForWindow( IntPtr hwnd )
-        {
+    public static GraphicsCaptureItem CreateItemForWindow( IntPtr hwnd )
+    {
 #if NET5_0_OR_GREATER
-            var interop = GraphicsCaptureItem.As<IGraphicsCaptureItemInterop>();
+        var interop = GraphicsCaptureItem.As<IGraphicsCaptureItemInterop>();
 #else
-            var factory = WindowsRuntimeMarshal.GetActivationFactory( typeof( GraphicsCaptureItem ) );
-            var interop = (IGraphicsCaptureItemInterop)factory;
+        var factory = WindowsRuntimeMarshal.GetActivationFactory( typeof( GraphicsCaptureItem ) );
+        var interop = (IGraphicsCaptureItemInterop)factory;
 #endif
-            var temp        = typeof( GraphicsCaptureItem );
-            var itemPointer = interop.CreateForWindow( hwnd, GraphicsCaptureItemGuid );
+        var temp        = typeof( GraphicsCaptureItem );
+        var itemPointer = interop.CreateForWindow( hwnd, GraphicsCaptureItemGuid );
 #if NET5_0_OR_GREATER
-            var item = MarshalInterface<GraphicsCaptureItem>.FromAbi( itemPointer );
+        var item = MarshalInterface<GraphicsCaptureItem>.FromAbi( itemPointer );
 #else
-            var item = Marshal.GetObjectForIUnknown( itemPointer ) as GraphicsCaptureItem;
+        var item = Marshal.GetObjectForIUnknown( itemPointer ) as GraphicsCaptureItem;
 #endif
-            Marshal.Release( itemPointer );
+        Marshal.Release( itemPointer );
 
-            return item;
-        }
+        return item;
+    }
 
-        public static GraphicsCaptureItem CreateItemForMonitor( IntPtr hmon )
-        {
+    public static GraphicsCaptureItem CreateItemForMonitor( IntPtr hmon )
+    {
 #if NET5_0_OR_GREATER
-            var interop = GraphicsCaptureItem.As<IGraphicsCaptureItemInterop>();
+        var interop = GraphicsCaptureItem.As<IGraphicsCaptureItemInterop>();
 #else
-            var factory = WindowsRuntimeMarshal.GetActivationFactory( typeof( GraphicsCaptureItem ) );
-            var interop = (IGraphicsCaptureItemInterop)factory;
+        var factory = WindowsRuntimeMarshal.GetActivationFactory( typeof( GraphicsCaptureItem ) );
+        var interop = (IGraphicsCaptureItemInterop)factory;
 #endif
-            var temp        = typeof( GraphicsCaptureItem );
-            var itemPointer = interop.CreateForMonitor( hmon, GraphicsCaptureItemGuid );
+        var temp        = typeof( GraphicsCaptureItem );
+        var itemPointer = interop.CreateForMonitor( hmon, GraphicsCaptureItemGuid );
 
 #if NET5_0_OR_GREATER
-            var item = MarshalInterface<GraphicsCaptureItem>.FromAbi( itemPointer );
+        var item = MarshalInterface<GraphicsCaptureItem>.FromAbi( itemPointer );
 #else
-            var item = Marshal.GetObjectForIUnknown( itemPointer ) as GraphicsCaptureItem;
+        var item = Marshal.GetObjectForIUnknown( itemPointer ) as GraphicsCaptureItem;
 #endif
-            Marshal.Release( itemPointer );
+        Marshal.Release( itemPointer );
 
-            return item;
-        }
+        return item;
+    }
 
-        [ComImport]
-        [Guid( "3E68D4BD-7135-4D10-8018-9FB6D9F33FA1" )]
-        [InterfaceType( ComInterfaceType.InterfaceIsIUnknown )]
-        [ComVisible( true )]
-        private interface IInitializeWithWindow
-        {
-            void Initialize(
-                IntPtr hwnd );
-        }
+    [ComImport]
+    [Guid( "3E68D4BD-7135-4D10-8018-9FB6D9F33FA1" )]
+    [InterfaceType( ComInterfaceType.InterfaceIsIUnknown )]
+    [ComVisible( true )]
+    private interface IInitializeWithWindow
+    {
+        void Initialize(
+            IntPtr hwnd );
+    }
 
-        [ComImport]
-        [Guid( "3628E81B-3CAC-4C60-B7F4-23CE0E0C3356" )]
-        [InterfaceType( ComInterfaceType.InterfaceIsIUnknown )]
-        [ComVisible( true )]
-        private interface IGraphicsCaptureItemInterop
-        {
-            IntPtr CreateForWindow(
-                [In]     IntPtr window,
-                [In] ref Guid   iid );
+    [ComImport]
+    [Guid( "3628E81B-3CAC-4C60-B7F4-23CE0E0C3356" )]
+    [InterfaceType( ComInterfaceType.InterfaceIsIUnknown )]
+    [ComVisible( true )]
+    private interface IGraphicsCaptureItemInterop
+    {
+        IntPtr CreateForWindow(
+            [In]     IntPtr window,
+            [In] ref Guid   iid );
 
-            IntPtr CreateForMonitor(
-                [In]     IntPtr monitor,
-                [In] ref Guid   iid );
-        }
+        IntPtr CreateForMonitor(
+            [In]     IntPtr monitor,
+            [In] ref Guid   iid );
     }
 }

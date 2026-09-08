@@ -29,7 +29,11 @@ public partial class LogsViewModel : ViewModelBase
     public void OnPropertyChanged( string propertyName, object before, object after )
     {
         var propertyChanged = PropertyChanged;
-        if ( propertyChanged == null ) return;
+        if ( propertyChanged == null )
+        {
+            return;
+        }
+
         if ( _isInitialized )
         {
             Logger.ShowLogsInGui                    = (bool)after;

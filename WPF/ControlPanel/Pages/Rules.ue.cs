@@ -27,7 +27,11 @@ public partial class Rules
 
     private void RuleList_OnLoaded( object sender, RoutedEventArgs e )
     {
-        if ( !_needRefresh ) return;
+        if ( !_needRefresh )
+        {
+            return;
+        }
+
         SortSelectedColumn( DefaultSortColumnHeader, ListSortDirection.Descending, RuleList.ItemsSource );
         var view = (CollectionView)CollectionViewSource.GetDefaultView( RuleList.ItemsSource );
         view.Filter = NameFilter;
@@ -41,11 +45,15 @@ public partial class Rules
     private bool NameFilter( object item )
     {
         if ( string.IsNullOrEmpty( tbNameFilter.Text ) )
+        {
             return true;
+        }
 
         var keyword = tbNameFilter.Text.Trim();
         if ( keyword is @"\" or @"\\" or @"\\G" )
+        {
             return true;
+        }
 
         if ( keyword.StartsWith( @"\\G" ) && keyword.Length > 3 )
         {
@@ -91,11 +99,18 @@ public partial class Rules
         Sort( sortBy!, direction );
 
         if ( direction == ListSortDirection.Ascending )
+        {
             targetHeader.Column.HeaderTemplate = Resources["HeaderTemplateArrowUp"] as DataTemplate;
+        }
         else
+        {
             targetHeader.Column.HeaderTemplate = Resources["HeaderTemplateArrowDown"] as DataTemplate;
+        }
 
-        if ( _lastHeaderClicked != null && _lastHeaderClicked != targetHeader ) _lastHeaderClicked.Column.HeaderTemplate = null;
+        if ( _lastHeaderClicked != null && _lastHeaderClicked != targetHeader )
+        {
+            _lastHeaderClicked.Column.HeaderTemplate = null;
+        }
 
         _lastHeaderClicked = targetHeader;
         _lastDirection     = direction;
@@ -105,13 +120,20 @@ public partial class Rules
     {
         var headerClicked = e.OriginalSource as GridViewColumnHeader;
         if ( headerClicked == null ||
-             headerClicked.Role == GridViewColumnHeaderRole.Padding ) return;
+             headerClicked.Role == GridViewColumnHeaderRole.Padding )
+        {
+            return;
+        }
 
         ListSortDirection direction;
         if ( headerClicked != _lastHeaderClicked )
+        {
             direction = ListSortDirection.Ascending;
+        }
         else
+        {
             direction = _lastDirection == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+        }
 
         SortSelectedColumn( headerClicked, direction, RuleList.ItemsSource );
     }

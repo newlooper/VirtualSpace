@@ -12,20 +12,19 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using ControlPanel;
 
-namespace VirtualSpace.Factory
+namespace VirtualSpace.Factory;
+
+public static class AppControllerFactory
 {
-    public static class AppControllerFactory
+    public static IAppController Create( Collection<ResourceDictionary>? mergedDictionaries = null )
     {
-        public static IAppController Create( Collection<ResourceDictionary>? mergedDictionaries = null )
-        {
 #if USE_OLD_AC
             return new AppController();
 #else
-            mergedDictionaries?.Add( ExportResourceDictionary.Instance );
-            var mw = new ControlPanel.MainWindow();
-            mw.ForceLoad();
-            return mw;
+        mergedDictionaries?.Add( ExportResourceDictionary.Instance );
+        var mw = new ControlPanel.MainWindow();
+        mw.ForceLoad();
+        return mw;
 #endif
-        }
     }
 }

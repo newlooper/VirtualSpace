@@ -15,28 +15,27 @@ using System.Text.Json;
 using VirtualSpace.Config.DataAnnotations;
 using VirtualSpace.Config.Entity;
 
-namespace VirtualSpace.Config
+namespace VirtualSpace.Config;
+
+public class Profile
 {
-    public class Profile
+    [PropertyProtector] public               UserInterface UI                             { get; set; } = null!;
+    public                                   bool          DaemonAutoStart                { get; set; }
+    [PropertyProtector( 0, 0, 3600 )] public int           DaemonAutoStartDelay           { get; set; }
+    public                                   List<Guid>?   DesktopOrder                   { get; set; }
+    [PropertyProtector] public               Mouse         Mouse                          { get; set; } = null!;
+    public                                   bool          IgnoreWindowOnRuleCheckTimeout { get; set; } = true;
+
+    public Navigation Navigation { get; set; } = new()
     {
-        [PropertyProtector] public               UserInterface UI                             { get; set; } = null!;
-        public                                   bool          DaemonAutoStart                { get; set; }
-        [PropertyProtector( 0, 0, 3600 )] public int           DaemonAutoStartDelay           { get; set; }
-        public                                   List<Guid>?   DesktopOrder                   { get; set; }
-        [PropertyProtector] public               Mouse         Mouse                          { get; set; } = null!;
-        public                                   bool          IgnoreWindowOnRuleCheckTimeout { get; set; } = true;
+        CirculationH     = false,
+        CirculationV     = false,
+        CirculationHType = 0
+    };
 
-        public Navigation Navigation { get; set; } = new()
-        {
-            CirculationH     = false,
-            CirculationV     = false,
-            CirculationHType = 0
-        };
-
-        public Profile Clone()
-        {
-            var profile = JsonSerializer.Deserialize<Profile>( JsonSerializer.Serialize( this ) );
-            return profile!;
-        }
+    public Profile Clone()
+    {
+        var profile = JsonSerializer.Deserialize<Profile>( JsonSerializer.Serialize( this ) );
+        return profile!;
     }
 }

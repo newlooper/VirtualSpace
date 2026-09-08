@@ -18,63 +18,69 @@ using System.Security.Principal;
 using VirtualSpace.AppLogs;
 #endif
 
-namespace VirtualSpace.Helpers
+namespace VirtualSpace.Helpers;
+
+public static class WinRegistry
 {
-    public static class WinRegistry
+    private const string PATH_VD_WALLPAPER_REGISTRY = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops\Desktops\";
+    private const string PATH_WALLPAPER_REGISTRY    = @"HKEY_CURRENT_USER\Control Panel\Desktop\";
+    private const string PATH_COLOR_REGISTRY        = @"HKEY_CURRENT_USER\Control Panel\Colors\";
+    private const string PATH_APP_USE_LIGHT_THEME   = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\";
+
+    public static Wallpaper GetWallpaperByDesktopGuid( Guid guid, int width, int height, string cachePath, long quality )
     {
-        private const string PATH_VD_WALLPAPER_REGISTRY = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops\Desktops\";
-        private const string PATH_WALLPAPER_REGISTRY    = @"HKEY_CURRENT_USER\Control Panel\Desktop\";
-        private const string PATH_COLOR_REGISTRY        = @"HKEY_CURRENT_USER\Control Panel\Colors\";
-        private const string PATH_APP_USE_LIGHT_THEME   = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\";
+        var wallpaper = new Wallpaper();
 
-        public static Wallpaper GetWallpaperByDesktopGuid( Guid guid, int width, int height, string cachePath, long quality )
+        var path = GetWallPaperPathByGuid( guid );
+
+        if ( string.IsNullOrEmpty( path ) )
         {
-            var wallpaper = new Wallpaper();
-
-            var path = GetWallPaperPathByGuid( guid );
-
-            if ( string.IsNullOrEmpty( path ) )
-                wallpaper.Color = GetBackColor();
-            else
-                wallpaper.Image = Images.GetScaledBitmap( width, height, path, ref wallpaper, cachePath, quality );
-
-            return wallpaper;
+            wallpaper.Color = GetBackColor();
         }
-
-        public static Wallpaper GetWallpaperByPath( string path, int width, int height, string cachePath, long quality )
+        else
         {
-            var wallpaper = new Wallpaper();
             wallpaper.Image = Images.GetScaledBitmap( width, height, path, ref wallpaper, cachePath, quality );
-            return wallpaper;
         }
 
-        public static string? GetDefaultWallpaperPath()
-        {
-            return Registry.GetValue( PATH_WALLPAPER_REGISTRY, "Wallpaper", "" )!.ToString();
-        }
-
-        public static string? GetWallPaperPathByGuid( Guid guid )
-        {
-            var path = Registry.GetValue( PATH_VD_WALLPAPER_REGISTRY + "{" + guid + "}", "Wallpaper", "" )?.ToString();
-
-            if ( string.IsNullOrEmpty( path ) )
-                path = GetDefaultWallpaperPath();
-
-            return string.IsNullOrEmpty( path ) ? null : path;
-        }
-
-        public static Color GetBackColor()
-        {
-            var color    = Registry.GetValue( PATH_COLOR_REGISTRY, "Background", "" )!.ToString();
-            var strColor = color!.Split( ' ' );
-            return Color.FromArgb( int.Parse( strColor[0] ), int.Parse( strColor[1] ), int.Parse( strColor[2] ) );
-        }
-
-        public static bool AppThemeIsLight()
-        {
-            return Registry.GetValue( PATH_APP_USE_LIGHT_THEME, "AppsUseLightTheme", "1" )!.ToString() == "1";
-        }
+        return wallpaper;
     }
+
+    public static Wallpaper GetWallpaperByPath( string path, int width, int height, string cachePath, long quality )
+    {
+        var wallpaper = new Wallpaper();
+        wallpaper.Image = Images.GetScaledBitmap( width, height, path, ref wallpaper, cachePath, quality );
+        return wallpaper;
+    }
+
+    public static string? GetDefaultWallpaperPath()
+    {
+        return Registry.GetValue( PATH_WALLPAPER_REGISTRY, "Wallpaper", "" )!.ToString();
+    }
+
+    public static string? GetWallPaperPathByGuid( Guid guid )
+    {
+        var path = Registry.GetValue( PATH_VD_WALLPAPER_REGISTRY + "{" + guid + "}", "Wallpaper", "" )?.ToString();
+
+        if ( string.IsNullOrEmpty( path ) )
+        {
+            path = GetDefaultWallpaperPath();
+        }
+
+        return string.IsNullOrEmpty( path ) ? null : path;
+    }
+
+    public static Color GetBackColor()
+    {
+        var color    = Registry.GetValue( PATH_COLOR_REGISTRY, "Background", "" )!.ToString();
+        var strColor = color!.Split( ' ' );
+        return Color.FromArgb( int.Parse( strColor[0] ), int.Parse( strColor[1] ), int.Parse( strColor[2] ) );
+    }
+
+    public static bool AppThemeIsLight()
+    {
+        return Registry.GetValue( PATH_APP_USE_LIGHT_THEME, "AppsUseLightTheme", "1" )!.ToString() == "1";
+    }
+}
 
 #if USE_WMI
     public class RegValueMonitor : IDisposable
@@ -128,4 +134,3 @@ namespace VirtualSpace.Helpers
         }
     }
 #endif
-}

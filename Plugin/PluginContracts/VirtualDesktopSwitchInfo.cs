@@ -11,15 +11,14 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace VirtualSpace.PluginContracts
+namespace VirtualSpace.PluginContracts;
+
+[StructLayout( LayoutKind.Sequential )]
+public struct VirtualDesktopSwitchInfo
 {
-    [StructLayout( LayoutKind.Sequential )]
-    public struct VirtualDesktopSwitchInfo
-    {
-        public IntPtr HostHandle;
-        public int    VdCount;
-        public int    FromIndex;
-        public int    Dir;
-        public int    TargetIndex;
-    }
+    public IntPtr HostHandle;
+    public int    VdCount;
+    public int    FromIndex;
+    public int    Dir;
+    public int    TargetIndex;
 }

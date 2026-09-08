@@ -20,14 +20,32 @@ public class MouseActionConverter : IMultiValueConverter
 {
     public object Convert( object[] values, Type targetType, object parameter, CultureInfo culture )
     {
-        if ( values.Length == 0 ) return null!;
+        if ( values.Length == 0 )
+        {
+            return null!;
+        }
 
-        var prefix                 = values[0].ToString() == MouseAction.MOUSE_NODE_DESKTOP_PREFIX ? MouseAction.MOUSE_NODE_DESKTOP_PREFIX : MouseAction.MOUSE_NODE_WINDOW_PREFIX;
-        var mks                    = Keys.None;
-        if ( (bool)values[1] ) mks |= Keys.LWin;
-        if ( (bool)values[2] ) mks |= Keys.Control;
-        if ( (bool)values[3] ) mks |= Keys.Alt;
-        if ( (bool)values[4] ) mks |= Keys.Shift;
+        var prefix = values[0].ToString() == MouseAction.MOUSE_NODE_DESKTOP_PREFIX ? MouseAction.MOUSE_NODE_DESKTOP_PREFIX : MouseAction.MOUSE_NODE_WINDOW_PREFIX;
+        var mks    = Keys.None;
+        if ( (bool)values[1] )
+        {
+            mks |= Keys.LWin;
+        }
+
+        if ( (bool)values[2] )
+        {
+            mks |= Keys.Control;
+        }
+
+        if ( (bool)values[3] )
+        {
+            mks |= Keys.Alt;
+        }
+
+        if ( (bool)values[4] )
+        {
+            mks |= Keys.Shift;
+        }
 
         var mb      = values[5];
         var keyCode = ( (int)mks ).ToString( "X2" );

@@ -11,24 +11,26 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace VirtualSpace.Helpers
+namespace VirtualSpace.Helpers;
+
+public static class StringHelper
 {
-    public static class StringHelper
+    public static bool IsValidRegex( string pattern )
     {
-        public static bool IsValidRegex( string pattern )
+        if ( string.IsNullOrWhiteSpace( pattern ) )
         {
-            if ( string.IsNullOrWhiteSpace( pattern ) ) return false;
-
-            try
-            {
-                _ = Regex.Match( "", pattern );
-            }
-            catch ( ArgumentException )
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
+
+        try
+        {
+            _ = Regex.Match( "", pattern );
+        }
+        catch ( ArgumentException )
+        {
+            return false;
+        }
+
+        return true;
     }
 }

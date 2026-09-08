@@ -11,45 +11,44 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace VirtualSpace.Config.Converter
+namespace VirtualSpace.Config.Converter;
+
+public static class EntityConverter
 {
-    public static class EntityConverter
+    public static void ConvertMouseAction( Dictionary<string, MouseAction.Action> oldFormat, Dictionary<string, MouseAction.Action> newFormat )
     {
-        public static void ConvertMouseAction( Dictionary<string, MouseAction.Action> oldFormat, Dictionary<string, MouseAction.Action> newFormat )
+        var prefix      = string.Empty;
+        var combined    = string.Empty;
+        var modifier    = string.Empty;
+        var mouseButton = string.Empty;
+
+        foreach ( var (maId, ma) in oldFormat )
         {
-            var prefix      = string.Empty;
-            var combined    = string.Empty;
-            var modifier    = string.Empty;
-            var mouseButton = string.Empty;
-
-            foreach ( var (maId, ma) in oldFormat )
+            if ( maId.StartsWith( MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) )
             {
-                if ( maId.StartsWith( MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) )
-                {
-                    prefix   = MouseAction.MOUSE_NODE_DESKTOP_PREFIX;
-                    combined = maId[MouseAction.MOUSE_NODE_DESKTOP_PREFIX.Length..];
-                }
-                else if ( maId.StartsWith( MouseAction.MOUSE_NODE_WINDOW_PREFIX ) )
-                {
-                    prefix   = MouseAction.MOUSE_NODE_WINDOW_PREFIX;
-                    combined = maId[MouseAction.MOUSE_NODE_WINDOW_PREFIX.Length..];
-                }
-
-                if ( combined.Contains( MouseAction.KEY_SPLITTER ) )
-                {
-                    var arrMK = combined.Split( MouseAction.KEY_SPLITTER );
-                    var key   = MouseAction.KeysName.Single( x => x.Value == arrMK[0] ).Key;
-                    modifier    = ( (int)key ).ToString( "X2" );
-                    mouseButton = arrMK[1];
-                }
-                else
-                {
-                    modifier    = MouseAction.NoneKeyCode;
-                    mouseButton = combined;
-                }
-
-                newFormat.Add( prefix + modifier + MouseAction.KEY_SPLITTER + mouseButton, ma );
+                prefix   = MouseAction.MOUSE_NODE_DESKTOP_PREFIX;
+                combined = maId[MouseAction.MOUSE_NODE_DESKTOP_PREFIX.Length..];
             }
+            else if ( maId.StartsWith( MouseAction.MOUSE_NODE_WINDOW_PREFIX ) )
+            {
+                prefix   = MouseAction.MOUSE_NODE_WINDOW_PREFIX;
+                combined = maId[MouseAction.MOUSE_NODE_WINDOW_PREFIX.Length..];
+            }
+
+            if ( combined.Contains( MouseAction.KEY_SPLITTER ) )
+            {
+                var arrMK = combined.Split( MouseAction.KEY_SPLITTER );
+                var key   = MouseAction.KeysName.Single( x => x.Value == arrMK[0] ).Key;
+                modifier    = ( (int)key ).ToString( "X2" );
+                mouseButton = arrMK[1];
+            }
+            else
+            {
+                modifier    = MouseAction.NoneKeyCode;
+                mouseButton = combined;
+            }
+
+            newFormat.Add( prefix + modifier + MouseAction.KEY_SPLITTER + mouseButton, ma );
         }
     }
 }

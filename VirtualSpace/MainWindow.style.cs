@@ -12,57 +12,55 @@ You should have received a copy of the GNU General Public License along with Vir
 using System.Runtime.InteropServices;
 using VirtualSpace.Helpers;
 
-namespace VirtualSpace
+namespace VirtualSpace;
+
+public partial class MainWindow
 {
-    public partial class MainWindow
+    private uint BlurBackgroundColor { get; set; } = 0x555555;
+
+    private uint BlurOpacity
     {
-        private uint _blurOpacity;
-        private uint BlurBackgroundColor { get; set; } = 0x555555;
-
-        private uint BlurOpacity
+        get;
+        set
         {
-            get => _blurOpacity;
-            set
-            {
-                _blurOpacity = value;
-                EnableBlur();
-            }
+            field = value;
+            EnableBlur();
         }
+    }
 
-        private void FixStyle()
+    private void FixStyle()
+    {
+        var style = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_STYLE );
+        style = unchecked( style | (int)0x80000000 ); // WS_POPUP
+        User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_STYLE, style );
+
+        var exStyle = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_EXSTYLE );
+        exStyle |= 0x08000000; // WS_EX_NOACTIVATE
+        exStyle &= ~0x00040000; // WS_EX_APPWINDOW
+        User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
+    }
+
+    private void EnableBlur()
+    {
+        var accent = new VisualEffects.AccentPolicy
         {
-            var style = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_STYLE );
-            style = unchecked( style | (int)0x80000000 ); // WS_POPUP
-            User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_STYLE, style );
+            AccentState   = VisualEffects.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND,
+            GradientColor = ( BlurOpacity << 24 ) | ( BlurBackgroundColor & 0xFFFFFF )
+        };
 
-            var exStyle = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_EXSTYLE );
-            exStyle |= 0x08000000; // WS_EX_NOACTIVATE
-            exStyle &= ~0x00040000; // WS_EX_APPWINDOW
-            User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
-        }
+        var accentStructSize = Marshal.SizeOf( accent );
+        var accentPtr        = Marshal.AllocHGlobal( accentStructSize );
+        Marshal.StructureToPtr( accent, accentPtr, false );
 
-        private void EnableBlur()
+        var data = new VisualEffects.WindowCompositionAttributeData
         {
-            var accent = new VisualEffects.AccentPolicy
-            {
-                AccentState   = VisualEffects.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND,
-                GradientColor = ( BlurOpacity << 24 ) | ( BlurBackgroundColor & 0xFFFFFF )
-            };
+            Attribute  = VisualEffects.WindowCompositionAttribute.WCA_ACCENT_POLICY,
+            SizeOfData = accentStructSize,
+            Data       = accentPtr
+        };
 
-            var accentStructSize = Marshal.SizeOf( accent );
-            var accentPtr        = Marshal.AllocHGlobal( accentStructSize );
-            Marshal.StructureToPtr( accent, accentPtr, false );
+        _ = VisualEffects.SetWindowCompositionAttribute( Handle, ref data );
 
-            var data = new VisualEffects.WindowCompositionAttributeData
-            {
-                Attribute  = VisualEffects.WindowCompositionAttribute.WCA_ACCENT_POLICY,
-                SizeOfData = accentStructSize,
-                Data       = accentPtr
-            };
-
-            _ = VisualEffects.SetWindowCompositionAttribute( Handle, ref data );
-
-            Marshal.FreeHGlobal( accentPtr );
-        }
+        Marshal.FreeHGlobal( accentPtr );
     }
 }

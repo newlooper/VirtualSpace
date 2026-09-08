@@ -12,7 +12,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="PluginTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Thickness x:Key="NotifyButtonMargin"></Thickness>
+            <Thickness x:Key="NotifyButtonMargin" />
             <ControlTemplate x:Key="NotifyButtonTemplate" TargetType="Button">
                 <Border BorderThickness="0" CornerRadius="5" Background="#C4C4C4"
                         Margin="{DynamicResource NotifyButtonMargin}">

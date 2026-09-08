@@ -21,7 +21,10 @@ public static partial class DesktopManagerWrapper
     {
         try
         {
-            if ( SysInfo.IsWin10 ) return VirtualDesktop10::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
+            if ( SysInfo.IsWin10 )
+            {
+                return VirtualDesktop10::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
+            }
 
             return VirtualDesktop11::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
         }
@@ -33,7 +36,10 @@ public static partial class DesktopManagerWrapper
 
     public static int GetViewCount()
     {
-        if ( SysInfo.IsWin10 ) return VirtualDesktop10::VirtualDesktop.DesktopManager.GetViewCount();
+        if ( SysInfo.IsWin10 )
+        {
+            return VirtualDesktop10::VirtualDesktop.DesktopManager.GetViewCount();
+        }
 
         return VirtualDesktop11::VirtualDesktop.DesktopManager.GetViewCount();
     }
@@ -41,8 +47,12 @@ public static partial class DesktopManagerWrapper
     public static void ResetDesktopManager()
     {
         if ( SysInfo.IsWin10 )
+        {
             VirtualDesktop10::VirtualDesktop.DesktopManager.ResetDesktopManager();
+        }
         else
+        {
             VirtualDesktop11::VirtualDesktop.DesktopManager.ResetDesktopManager();
+        }
     }
 }

@@ -112,7 +112,10 @@ public partial class Settings
 
         view = new YesNoWithNote( Agent.Langs.GetString( "Profile.Confirm.Delete" )!, PackIconKind.Warning );
         var result = await DialogHost.Show( view, "ProfileDialog" );
-        if ( result is false ) return;
+        if ( result is false )
+        {
+            return;
+        }
 
         var delProfile = cbbProfiles.Text;
 
@@ -129,15 +132,24 @@ public partial class Settings
     private void ClosingEventHandler( object sender, DialogClosingEventArgs eventArgs )
     {
         eventArgs.Handled = true;
-        if ( eventArgs.Parameter is false ) return;
+        if ( eventArgs.Parameter is false )
+        {
+            return;
+        }
 
         var pndView = eventArgs.Session.Content as ProfileNameDialog;
-        if ( pndView == null ) return;
+        if ( pndView == null )
+        {
+            return;
+        }
 
         var oldName = cbbProfiles.SelectedValue.ToString()!;
 
         var newName = pndView.EditProfileName;
-        if ( newName == oldName ) return;
+        if ( newName == oldName )
+        {
+            return;
+        }
 
         var isValid = !string.IsNullOrEmpty( newName ) &&
                       newName.IndexOfAny( Path.GetInvalidFileNameChars() ) < 0 &&

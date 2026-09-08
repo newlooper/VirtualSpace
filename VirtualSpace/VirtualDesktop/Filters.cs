@@ -14,42 +14,41 @@ using System.Collections.Immutable;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 
-namespace VirtualSpace.VirtualDesktop
+namespace VirtualSpace.VirtualDesktop;
+
+public static class Filters
 {
-    public static class Filters
+    public static readonly string[] WndClsIgnoreList =
     {
-        public static readonly string[] WndClsIgnoreList =
-        {
-            "Progman",
-            "RainmeterMeterWindow",
-            "SysDragImage",
-            "DuiMenuWnd",
-            "PerryShadowWnd",
-            "SysShadow",
-            "Xaml_WindowedPopupClass"
-        };
+        "Progman",
+        "RainmeterMeterWindow",
+        "SysDragImage",
+        "DuiMenuWnd",
+        "PerryShadowWnd",
+        "SysShadow",
+        "Xaml_WindowedPopupClass"
+    };
 
-        public static readonly string[] WndTitleIgnoreList =
-        {
-            Const.Window.VD_FRAME_TITLE,
-            Const.Window.VD_CONTAINER_TITLE,
-            Const.Window.VD_DRAG_TITLE,
-            Const.Window.VS_CONTROLLER_TITLE,
-            Const.Window.VS_WINDOW_FILTER_TITLE,
-            "WinFormsDesigner"
-        };
+    public static readonly string[] WndTitleIgnoreList =
+    {
+        Const.Window.VD_FRAME_TITLE,
+        Const.Window.VD_CONTAINER_TITLE,
+        Const.Window.VD_DRAG_TITLE,
+        Const.Window.VS_CONTROLLER_TITLE,
+        Const.Window.VS_WINDOW_FILTER_TITLE,
+        "WinFormsDesigner"
+    };
 
-        public static ImmutableList<IntPtr> WndHandleIgnoreListByError  = ImmutableList<IntPtr>.Empty;
-        public static ImmutableList<IntPtr> WndHandleIgnoreListByManual = ImmutableList<IntPtr>.Empty;
+    public static ImmutableList<IntPtr> WndHandleIgnoreListByError  = ImmutableList<IntPtr>.Empty;
+    public static ImmutableList<IntPtr> WndHandleIgnoreListByManual = ImmutableList<IntPtr>.Empty;
 
-        public static bool IsCloaked( IntPtr handle )
-        {
-            _ = DwmApi.DwmGetWindowAttribute( handle,
-                (uint)DwmApi.DwmWindowAttribute.DWMWA_CLOAKED,
-                out var cloaked,
-                sizeof( uint ) );
+    public static bool IsCloaked( IntPtr handle )
+    {
+        _ = DwmApi.DwmGetWindowAttribute( handle,
+            (uint)DwmApi.DwmWindowAttribute.DWMWA_CLOAKED,
+            out var cloaked,
+            sizeof( uint ) );
 
-            return cloaked > 2;
-        }
+        return cloaked > 2;
     }
 }

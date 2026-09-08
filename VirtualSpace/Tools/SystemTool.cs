@@ -11,17 +11,19 @@
 using System;
 using System.Windows;
 
-namespace VirtualSpace.Tools
-{
-    public static class SystemTool
-    {
-        public static bool VersionCheck()
-        {
-            var version = Environment.OSVersion.Version;
-            if ( version is { Major: >= 10, Build: >= 17763 and <= 26200 } ) return true;
+namespace VirtualSpace.Tools;
 
-            MessageBox.Show( Agent.Langs.GetString( "VersionCheckFail" ), @"Error" );
-            return false;
+public static class SystemTool
+{
+    public static bool VersionCheck()
+    {
+        var version = Environment.OSVersion.Version;
+        if ( version is { Major: >= 10, Build: >= 17763 and <= 26200 } )
+        {
+            return true;
         }
+
+        MessageBox.Show( Agent.Langs.GetString( "VersionCheckFail" ), @"Error" );
+        return false;
     }
 }

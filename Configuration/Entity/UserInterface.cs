@@ -11,27 +11,26 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using VirtualSpace.Config.DataAnnotations;
 
-namespace VirtualSpace.Config.Entity
+namespace VirtualSpace.Config.Entity;
+
+public class UserInterface
 {
-    public class UserInterface
-    {
-        [PropertyProtector] public             Colour? CanvasBackColor        { get; set; }
-        [PropertyProtector] public             Colour? VDWDefaultBackColor    { get; set; }
-        [PropertyProtector] public             Colour? VDWCurrentBackColor    { get; set; }
-        [PropertyProtector] public             Colour? VDWHighlightBackColor  { get; set; }
-        public                                 float   VDWDragTargetOpacity   { get; set; }
-        public                                 string  Language               { get; set; } = string.Empty;
-        public                                 bool    ShowVdName             { get; set; } = true;
-        public                                 bool    ShowVdIndex            { get; set; } = true;
-        [PropertyProtector( 0, 0, 1 )]  public int     ShowVdIndexType        { get; set; }
-        [PropertyProtector( 0, 0, 50 )] public int     VDWPadding             { get; set; }
-        [PropertyProtector( 5, 0, 50 )] public int     VDWBorderSize          { get; set; }
-        [PropertyProtector( 8, 8, 50 )] public int     VDWMargin              { get; set; }
-        [PropertyProtector( 6, 2, 8 )]  public int     VDWShadowSize          { get; set; }
-        [PropertyProtector( 1, 1 )]     public byte    CanvasOpacity          { get; set; }
-        [PropertyProtector]             public Margin? ThumbMargin            { get; set; }
-        public                                 byte    ThumbDragSourceOpacity { get; set; }
-        [PropertyProtector( 0, 0, 7 )] public  int?    DesktopArrangement     { get; set; }
-        public                                 int     Theme                  { get; set; }
-    }
+    [PropertyProtector] public             Colour? CanvasBackColor        { get; set; }
+    [PropertyProtector] public             Colour? VDWDefaultBackColor    { get; set; }
+    [PropertyProtector] public             Colour? VDWCurrentBackColor    { get; set; }
+    [PropertyProtector] public             Colour? VDWHighlightBackColor  { get; set; }
+    public                                 float   VDWDragTargetOpacity   { get; set; }
+    public                                 string  Language               { get; set; } = string.Empty;
+    public                                 bool    ShowVdName             { get; set; } = true;
+    public                                 bool    ShowVdIndex            { get; set; } = true;
+    [PropertyProtector( 0, 0, 1 )]  public int     ShowVdIndexType        { get; set; }
+    [PropertyProtector( 0, 0, 50 )] public int     VDWPadding             { get; set; }
+    [PropertyProtector( 5, 0, 50 )] public int     VDWBorderSize          { get; set; }
+    [PropertyProtector( 8, 8, 50 )] public int     VDWMargin              { get; set; }
+    [PropertyProtector( 6, 2, 8 )]  public int     VDWShadowSize          { get; set; }
+    [PropertyProtector( 1, 1 )]     public byte    CanvasOpacity          { get; set; }
+    [PropertyProtector]             public Margin? ThumbMargin            { get; set; }
+    public                                 byte    ThumbDragSourceOpacity { get; set; }
+    [PropertyProtector( 0, 0, 7 )] public  int?    DesktopArrangement     { get; set; }
+    public                                 int     Theme                  { get; set; }
 }

@@ -25,243 +25,267 @@ using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
 
-namespace VirtualSpace
+namespace VirtualSpace;
+
+public partial class MainWindow
 {
-    public partial class MainWindow
+    private uint _taskbarCreatedMessage;
+
+    private void RegisterSystemMessages()
     {
-        private uint _taskbarCreatedMessage;
-
-        private void RegisterSystemMessages()
+        _taskbarCreatedMessage = User32.RegisterWindowMessage( Const.TaskbarCreated );
+        foreach ( var strMsg in PluginHost.CareAboutMessages.Keys )
         {
-            _taskbarCreatedMessage = User32.RegisterWindowMessage( Const.TaskbarCreated );
-            foreach ( var strMsg in PluginHost.CareAboutMessages.Keys ) PluginHost.CareAboutMessages[strMsg] = User32.RegisterWindowMessage( strMsg );
-
-            PluginHost.HostContext.MainWindowHandle       =  Handle;
-            PluginHost.HostContext.DesktopSwitchRequested -= OnPluginDesktopSwitchRequested;
-            PluginHost.HostContext.DesktopSwitchRequested += OnPluginDesktopSwitchRequested;
+            PluginHost.CareAboutMessages[strMsg] = User32.RegisterWindowMessage( strMsg );
         }
 
-        private static void OnPluginDesktopSwitchRequested( int targetIndex )
+        PluginHost.HostContext.MainWindowHandle       =  Handle;
+        PluginHost.HostContext.DesktopSwitchRequested -= OnPluginDesktopSwitchRequested;
+        PluginHost.HostContext.DesktopSwitchRequested += OnPluginDesktopSwitchRequested;
+    }
+
+    private static void OnPluginDesktopSwitchRequested( int targetIndex )
+    {
+        ApplyDesktopSwitch( targetIndex );
+    }
+
+    private static void ApplyDesktopSwitch( int targetMatrixIndex )
+    {
+        if ( targetMatrixIndex < 0 || targetMatrixIndex >= DesktopWrapper.Count )
         {
-            ApplyDesktopSwitch( targetIndex );
+            return;
         }
 
-        private static void ApplyDesktopSwitch( int targetMatrixIndex )
+        Interlocked.Exchange( ref _forceSwitchOnTimeout, 0 );
+        DesktopWrapper.MakeVisibleByGuid(
+            Manager.CurrentProfile.DesktopOrder![VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
+    }
+
+    private void Window_MouseDown( object sender, MouseButtonEventArgs e )
+    {
+        var profile = Manager.CurrentProfile;
+        switch ( e.ChangedButton )
         {
-            if ( targetMatrixIndex < 0 || targetMatrixIndex >= DesktopWrapper.Count ) return;
-            Interlocked.Exchange( ref _forceSwitchOnTimeout, 0 );
-            DesktopWrapper.MakeVisibleByGuid(
-                Manager.CurrentProfile.DesktopOrder![VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
+            case MouseButton.Left:
+                switch ( profile.Mouse.LeftClickOnCanvas )
+                {
+                    case 0:
+                        // TODO
+                        break;
+                    case 1:
+                        HideAll();
+                        break;
+                    default:
+                        HideAll();
+                        break;
+                }
+
+                break;
+
+            case MouseButton.Right:
+                switch ( profile.Mouse.RightClickOnCanvas )
+                {
+                    case 0:
+                        // TODO
+                        break;
+                    case 1:
+                        HideAll();
+                        break;
+                    default:
+                        HideAll();
+                        break;
+                }
+
+                break;
+
+            case MouseButton.Middle:
+                switch ( profile.Mouse.MiddleClickOnCanvas )
+                {
+                    case 0:
+                        // TODO
+                        break;
+                    case 1:
+                        HideAll();
+                        break;
+                    default:
+                        HideAll();
+                        break;
+                }
+
+                break;
+        }
+    }
+
+    private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
+    {
+        switch ( msg )
+        {
+            case WinMsg.WM_QUERYENDSESSION:
+                handled = true;
+                App.HandleSessionEndQuery( "MainWindow", lParam );
+                return new IntPtr( 1 );
+            case WinMsg.WM_ENDSESSION:
+                handled = true;
+                App.HandleSessionEnd( "MainWindow", wParam );
+                return IntPtr.Zero;
         }
 
-        private void Window_MouseDown( object sender, MouseButtonEventArgs e )
+        if ( msg == _taskbarCreatedMessage )
         {
-            var profile = Manager.CurrentProfile;
-            switch ( e.ChangedButton )
+            Logger.Warning( "explorer.exe restarted, reset DesktopManager and restart all Plugins." );
+
+            DesktopManagerWrapper.ResetDesktopManager();
+
+            foreach ( var plugin in PluginHost.Plugins )
             {
-                case MouseButton.Left:
-                    switch ( profile.Mouse.LeftClickOnCanvas )
-                    {
-                        case 0:
-                            // TODO
-                            break;
-                        case 1:
-                            HideAll();
-                            break;
-                        default:
-                            HideAll();
-                            break;
-                    }
+                PluginHost.RestartPlugin( plugin );
+            }
 
-                    break;
+            goto RETURN;
+        }
 
-                case MouseButton.Right:
-                    switch ( profile.Mouse.RightClickOnCanvas )
-                    {
-                        case 0:
-                            // TODO
-                            break;
-                        case 1:
-                            HideAll();
-                            break;
-                        default:
-                            HideAll();
-                            break;
-                    }
+        if ( PluginHost.CareAboutMessages.ContainsValue( (uint)msg ) )
+        {
+            var (key, _) = PluginHost.CareAboutMessages.First( m => m.Value == msg );
+            foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
+                         plugin.RestartPolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
+                         plugin.RestartPolicy.Enabled &&
+                         plugin.RestartPolicy.Values.Contains( key ) ) )
+            {
+                Logger.Info( $"Restart Plugin {plugin.Display} because {key}" );
+                PluginHost.RestartPlugin( plugin );
+            }
 
-                    break;
+            foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
+                         plugin.ClosePolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
+                         plugin.ClosePolicy.Enabled &&
+                         plugin.ClosePolicy.Values.Contains( key ) ) )
+            {
+                Logger.Info( $"Close Plugin {plugin.Display} because {key}" );
+                PluginHost.ClosePlugin( plugin );
+            }
 
-                case MouseButton.Middle:
-                    switch ( profile.Mouse.MiddleClickOnCanvas )
-                    {
-                        case 0:
-                            // TODO
-                            break;
-                        case 1:
-                            HideAll();
-                            break;
-                        default:
-                            HideAll();
-                            break;
-                    }
+            goto RETURN;
+        }
 
-                    break;
+        void SwitchByIndex( int index )
+        {
+            if ( Manager.CurrentProfile.DesktopOrder!.Count > index )
+            {
+                DesktopWrapper.MakeVisibleByGuid( Manager.CurrentProfile.DesktopOrder[index] );
             }
         }
 
-        private IntPtr WndProc( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
+        void MoveForegroundWindowToDesktop( int sysIndex, bool follow = false )
         {
-            switch ( msg )
+            if ( sysIndex >= DesktopWrapper.Count )
             {
-                case WinMsg.WM_QUERYENDSESSION:
+                return;
+            }
+
+            var fw = User32.GetForegroundWindow();
+            if ( fw == IntPtr.Zero )
+            {
+                return;
+            }
+
+            try
+            {
+                DesktopWrapper.MoveWindowToDesktop( fw, sysIndex );
+
+                if ( !follow )
+                {
+                    return;
+                }
+
+                WindowTool.ActivateWindow( fw, sysIndex );
+            }
+            catch ( Exception ex )
+            {
+                Logger.Error( $"Move Foreground Window To Desktop[{sysIndex}] ∵ " + ex.Message );
+            }
+        }
+
+        switch ( msg )
+        {
+            case WinMsg.WM_SYSCOMMAND:
+                var wP = wParam.ToInt32();
+                if ( wP is WinMsg.SC_RESTORE or WinMsg.SC_MINIMIZE or WinMsg.SC_MAXIMIZE )
+                {
                     handled = true;
-                    App.HandleSessionEndQuery( "MainWindow", lParam );
-                    return new IntPtr( 1 );
-                case WinMsg.WM_ENDSESSION:
-                    handled = true;
-                    App.HandleSessionEnd( "MainWindow", wParam );
-                    return IntPtr.Zero;
-            }
-
-            if ( msg == _taskbarCreatedMessage )
-            {
-                Logger.Warning( "explorer.exe restarted, reset DesktopManager and restart all Plugins." );
-
-                DesktopManagerWrapper.ResetDesktopManager();
-
-                foreach ( var plugin in PluginHost.Plugins ) PluginHost.RestartPlugin( plugin );
-
-                goto RETURN;
-            }
-
-            if ( PluginHost.CareAboutMessages.ContainsValue( (uint)msg ) )
-            {
-                var (key, _) = PluginHost.CareAboutMessages.First( m => m.Value == msg );
-                foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
-                             plugin.RestartPolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
-                             plugin.RestartPolicy.Enabled &&
-                             plugin.RestartPolicy.Values.Contains( key ) ) )
-                {
-                    Logger.Info( $"Restart Plugin {plugin.Display} because {key}" );
-                    PluginHost.RestartPlugin( plugin );
                 }
 
-                foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
-                             plugin.ClosePolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
-                             plugin.ClosePolicy.Enabled &&
-                             plugin.ClosePolicy.Values.Contains( key ) ) )
+                break;
+            case WinMsg.WM_HOTKEY:
+
+                var um = wParam.ToInt32();
+                switch ( um )
                 {
-                    Logger.Info( $"Close Plugin {plugin.Display} because {key}" );
-                    PluginHost.ClosePlugin( plugin );
-                }
+                    case > UserMessage.Meta.SVD_START and <= UserMessage.Meta.SVD_END:
+                        SwitchByIndex( um % UserMessage.Meta.SVD_START - 1 );
+                        break;
+                    case > UserMessage.Meta.MW_START and <= UserMessage.Meta.MW_END:
+                        MoveForegroundWindowToDesktop( um % UserMessage.Meta.MW_START - 1 );
+                        break;
+                    case > UserMessage.Meta.MWF_START and <= UserMessage.Meta.MWF_END:
+                        MoveForegroundWindowToDesktop( um % UserMessage.Meta.MWF_START - 1, true );
+                        break;
+                    case UserMessage.RiseView:
+                        if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
+                        {
+                            HideAll();
+                        }
+                        else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                        {
+                            BringToTop();
+                            RiseViewTimer.Restart();
+                        }
 
-                goto RETURN;
-            }
+                        break;
+                    case UserMessage.RiseViewForActiveApp:
+                        _ = User32.GetWindowThreadProcessId( User32.GetForegroundWindow(), out var processId );
+                        if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
+                        {
+                            HideAll();
+                        }
+                        else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                        {
+                            BringToTop( processId );
+                            RiseViewTimer.Restart();
+                        }
 
-            void SwitchByIndex( int index )
-            {
-                if ( Manager.CurrentProfile.DesktopOrder!.Count > index )
-                    DesktopWrapper.MakeVisibleByGuid( Manager.CurrentProfile.DesktopOrder[index] );
-            }
+                        break;
+                    case UserMessage.RiseViewForCurrentVD:
+                        if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
+                        {
+                            HideAll();
+                        }
+                        else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                        {
+                            BringToTopForCurrentVd();
+                            RiseViewTimer.Restart();
+                        }
 
-            void MoveForegroundWindowToDesktop( int sysIndex, bool follow = false )
-            {
-                if ( sysIndex >= DesktopWrapper.Count ) return;
+                        break;
+                    case UserMessage.RiseViewForActiveAppInCurrentVD:
+                        _ = User32.GetWindowThreadProcessId( User32.GetForegroundWindow(), out var pId );
+                        if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
+                        {
+                            HideAll();
+                        }
+                        else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                        {
+                            BringToTopForCurrentVd( pId );
+                            RiseViewTimer.Restart();
+                        }
 
-                var fw = User32.GetForegroundWindow();
-                if ( fw == IntPtr.Zero ) return;
-
-                try
-                {
-                    DesktopWrapper.MoveWindowToDesktop( fw, sysIndex );
-
-                    if ( !follow ) return;
-
-                    WindowTool.ActivateWindow( fw, sysIndex );
-                }
-                catch ( Exception ex )
-                {
-                    Logger.Error( $"Move Foreground Window To Desktop[{sysIndex}] ∵ " + ex.Message );
-                }
-            }
-
-            switch ( msg )
-            {
-                case WinMsg.WM_SYSCOMMAND:
-                    var wP = wParam.ToInt32();
-                    if ( wP is WinMsg.SC_RESTORE or WinMsg.SC_MINIMIZE or WinMsg.SC_MAXIMIZE )
-                        handled = true;
-                    break;
-                case WinMsg.WM_HOTKEY:
-
-                    var um = wParam.ToInt32();
-                    switch ( um )
-                    {
-                        case > UserMessage.Meta.SVD_START and <= UserMessage.Meta.SVD_END:
-                            SwitchByIndex( um % UserMessage.Meta.SVD_START - 1 );
-                            break;
-                        case > UserMessage.Meta.MW_START and <= UserMessage.Meta.MW_END:
-                            MoveForegroundWindowToDesktop( um % UserMessage.Meta.MW_START - 1 );
-                            break;
-                        case > UserMessage.Meta.MWF_START and <= UserMessage.Meta.MWF_END:
-                            MoveForegroundWindowToDesktop( um % UserMessage.Meta.MWF_START - 1, true );
-                            break;
-                        case UserMessage.RiseView:
-                            if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
-                            {
-                                HideAll();
-                            }
-                            else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
-                            {
-                                BringToTop();
-                                RiseViewTimer.Restart();
-                            }
-
-                            break;
-                        case UserMessage.RiseViewForActiveApp:
-                            _ = User32.GetWindowThreadProcessId( User32.GetForegroundWindow(), out var processId );
-                            if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
-                            {
-                                HideAll();
-                            }
-                            else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
-                            {
-                                BringToTop( processId );
-                                RiseViewTimer.Restart();
-                            }
-
-                            break;
-                        case UserMessage.RiseViewForCurrentVD:
-                            if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
-                            {
-                                HideAll();
-                            }
-                            else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
-                            {
-                                BringToTopForCurrentVd();
-                                RiseViewTimer.Restart();
-                            }
-
-                            break;
-                        case UserMessage.RiseViewForActiveAppInCurrentVD:
-                            _ = User32.GetWindowThreadProcessId( User32.GetForegroundWindow(), out var pId );
-                            if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
-                            {
-                                HideAll();
-                            }
-                            else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
-                            {
-                                BringToTopForCurrentVd( pId );
-                                RiseViewTimer.Restart();
-                            }
-
-                            break;
-                        case UserMessage.ShowAppController:
-                            AcForm.BringToTop();
-                            break;
-                        case UserMessage.ToggleWindowFilter:
-                            ToggleWindowFilter();
-                            break;
+                        break;
+                    case UserMessage.ShowAppController:
+                        AcForm.BringToTop();
+                        break;
+                    case UserMessage.ToggleWindowFilter:
+                        ToggleWindowFilter();
+                        break;
 #if USE_OLD_AC
                         case UserMessage.RestartAppController:
                             AcForm.Quit();
@@ -275,135 +299,151 @@ namespace VirtualSpace
                             AcForm = null!;
                             break;
 #endif
-                        case UserMessage.SwitchDesktop:
-                            SwitchDesktopByDirection( lParam );
-                            break;
-                        case UserMessage.SwitchBackToLastDesktop:
-                            SwitchToDesktopById( VirtualDesktopManager.LastDesktopId );
-                            break;
-                        case UserMessage.DesktopArrangement:
-                            if ( IsShowing() ) VirtualDesktopManager.ShowAllVirtualDesktops();
+                    case UserMessage.SwitchDesktop:
+                        SwitchDesktopByDirection( lParam );
+                        break;
+                    case UserMessage.SwitchBackToLastDesktop:
+                        SwitchToDesktopById( VirtualDesktopManager.LastDesktopId );
+                        break;
+                    case UserMessage.DesktopArrangement:
+                        if ( IsShowing() )
+                        {
+                            VirtualDesktopManager.ShowAllVirtualDesktops();
+                        }
 
-                            break;
-                        case UserMessage.RefreshTrayIcon:
-                            UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
-                            break;
-                        case UserMessage.UpdateTrayLang:
-                            TrayIcon.SetLang();
-                            break;
-                        case UserMessage.RunAsAdministrator:
-                            TryRunAsAdmin();
-                            goto RETURN;
-                        case UserMessage.RestartApp:
-                            RestartApp();
-                            goto RETURN;
-                        case UserMessage.EnableMouseHook:
-                            EnableMouseHook();
-                            goto RETURN;
-                        case UserMessage.DisableMouseHook:
-                            DisableMouseHook();
-                            goto RETURN;
-                        case UserMessage.NavLeft:
-                            SwitchDesktopByDirection( (IntPtr)Keys.Left );
-                            break;
-                        case UserMessage.NavRight:
-                            SwitchDesktopByDirection( (IntPtr)Keys.Right );
-                            break;
-                        case UserMessage.NavUp:
-                            SwitchDesktopByDirection( (IntPtr)Keys.Up );
-                            break;
-                        case UserMessage.NavDown:
-                            SwitchDesktopByDirection( (IntPtr)Keys.Down );
-                            break;
-                    }
+                        break;
+                    case UserMessage.RefreshTrayIcon:
+                        UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
+                        break;
+                    case UserMessage.UpdateTrayLang:
+                        TrayIcon.SetLang();
+                        break;
+                    case UserMessage.RunAsAdministrator:
+                        TryRunAsAdmin();
+                        goto RETURN;
+                    case UserMessage.RestartApp:
+                        RestartApp();
+                        goto RETURN;
+                    case UserMessage.EnableMouseHook:
+                        EnableMouseHook();
+                        goto RETURN;
+                    case UserMessage.DisableMouseHook:
+                        DisableMouseHook();
+                        goto RETURN;
+                    case UserMessage.NavLeft:
+                        SwitchDesktopByDirection( (IntPtr)Keys.Left );
+                        break;
+                    case UserMessage.NavRight:
+                        SwitchDesktopByDirection( (IntPtr)Keys.Right );
+                        break;
+                    case UserMessage.NavUp:
+                        SwitchDesktopByDirection( (IntPtr)Keys.Up );
+                        break;
+                    case UserMessage.NavDown:
+                        SwitchDesktopByDirection( (IntPtr)Keys.Down );
+                        break;
+                }
 
-                    break;
-                case WinMsg.UM_SWITCHDESKTOP:
-                    ApplyDesktopSwitch( wParam.ToInt32() );
-                    break;
-                // case WinMsg.WM_MOUSEACTIVATE:
-                //     handled = true;
-                //     return new IntPtr( WinMsg.MA_NOACTIVATE );
+                break;
+            case WinMsg.UM_SWITCHDESKTOP:
+                ApplyDesktopSwitch( wParam.ToInt32() );
+                break;
+            // case WinMsg.WM_MOUSEACTIVATE:
+            //     handled = true;
+            //     return new IntPtr( WinMsg.MA_NOACTIVATE );
+        }
+
+        RETURN:
+        return IntPtr.Zero;
+    }
+
+    private static void SwitchToDesktopById( Guid guid )
+    {
+        if ( guid == Guid.Empty )
+        {
+            return;
+        }
+
+        if ( SwitchDesktopTimer.ElapsedMilliseconds <= Const.SwitchDesktopInterval )
+        {
+            return;
+        }
+
+        DesktopWrapper.MakeVisibleByGuid( guid );
+        SwitchDesktopTimer.Restart();
+    }
+
+    private void SwitchDesktopByDirection( IntPtr lParam )
+    {
+        if ( SwitchDesktopTimer.ElapsedMilliseconds <= Const.SwitchDesktopInterval )
+        {
+            return;
+        }
+
+        var desktopOrder              = Manager.CurrentProfile.DesktopOrder;
+        var currentVdIndex            = desktopOrder!.IndexOf( DesktopWrapper.CurrentGuid );
+        var currentDesktopMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( currentVdIndex );
+
+        var dir = lParam.ToInt32();
+        var targetMatrixIndex = Navigation.CalculateTargetIndex(
+            DesktopWrapper.Count,
+            currentVdIndex,
+            (Keys)dir,
+            Manager.CurrentProfile.Navigation );
+
+        var switchInfo = new VirtualSpace.PluginContracts.VirtualDesktopSwitchInfo
+        {
+            HostHandle  = Handle,
+            VdCount     = DesktopWrapper.Count,
+            FromIndex   = currentDesktopMatrixIndex,
+            Dir         = dir,
+            TargetIndex = targetMatrixIndex
+        };
+        PluginHost.Publish( PluginEvents.VirtualDesktopSwitch, switchInfo );
+
+        var vDsi = new VirtualSpace.Commons.VirtualDesktopSwitchInfo
+        {
+            hostHandle  = Handle,
+            vdCount     = DesktopWrapper.Count,
+            fromIndex   = currentDesktopMatrixIndex,
+            dir         = dir,
+            targetIndex = targetMatrixIndex
+        };
+        var vDsiSize = Marshal.SizeOf<VirtualSpace.Commons.VirtualDesktopSwitchInfo>();
+        var pVDsi    = Marshal.AllocHGlobal( vDsiSize );
+        Marshal.StructureToPtr( vDsi, pVDsi, true );
+
+        var cds = new COPYDATASTRUCT
+        {
+            dwData = WinMsg.UM_SWITCHDESKTOP,
+            cbData = vDsiSize,
+            lpData = pVDsi
+        };
+        var pCds = Marshal.AllocHGlobal( Marshal.SizeOf<COPYDATASTRUCT>() );
+        Marshal.StructureToPtr( cds, pCds, true );
+
+        foreach ( var pluginInfo in PluginHost.Plugins.Where( p => p is { Kind: PluginKind.ExternalProcess, Type: PluginType.VD_SWITCH_OBSERVER }
+                                                                   && User32.IsWindow( p.Handle ) ) )
+        {
+            User32.SendMessage( pluginInfo.Handle, WinMsg.WM_COPYDATA, 0, (ulong)pCds );
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        // if none of plugins send back message after 100 ms, host will force switch desktop
+        Interlocked.Increment( ref _forceSwitchOnTimeout );
+        Task.Run( () =>
+        {
+            Thread.Sleep( 100 );
+            if ( _forceSwitchOnTimeout == 0 )
+            {
+                return;
             }
 
-            RETURN:
-            return IntPtr.Zero;
-        }
+            DesktopWrapper.MakeVisibleByGuid( desktopOrder[VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
+        } );
 
-        private static void SwitchToDesktopById( Guid guid )
-        {
-            if ( guid == Guid.Empty ) return;
-            if ( SwitchDesktopTimer.ElapsedMilliseconds <= Const.SwitchDesktopInterval ) return;
-
-            DesktopWrapper.MakeVisibleByGuid( guid );
-            SwitchDesktopTimer.Restart();
-        }
-
-        private void SwitchDesktopByDirection( IntPtr lParam )
-        {
-            if ( SwitchDesktopTimer.ElapsedMilliseconds <= Const.SwitchDesktopInterval ) return;
-
-            var desktopOrder              = Manager.CurrentProfile.DesktopOrder;
-            var currentVdIndex            = desktopOrder!.IndexOf( DesktopWrapper.CurrentGuid );
-            var currentDesktopMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( currentVdIndex );
-
-            var dir = lParam.ToInt32();
-            var targetMatrixIndex = Navigation.CalculateTargetIndex(
-                DesktopWrapper.Count,
-                currentVdIndex,
-                (Keys)dir,
-                Manager.CurrentProfile.Navigation );
-
-            var switchInfo = new VirtualSpace.PluginContracts.VirtualDesktopSwitchInfo
-            {
-                HostHandle  = Handle,
-                VdCount     = DesktopWrapper.Count,
-                FromIndex   = currentDesktopMatrixIndex,
-                Dir         = dir,
-                TargetIndex = targetMatrixIndex
-            };
-            PluginHost.Publish( PluginEvents.VirtualDesktopSwitch, switchInfo );
-
-            var vDsi = new VirtualSpace.Commons.VirtualDesktopSwitchInfo
-            {
-                hostHandle  = Handle,
-                vdCount     = DesktopWrapper.Count,
-                fromIndex   = currentDesktopMatrixIndex,
-                dir         = dir,
-                targetIndex = targetMatrixIndex
-            };
-            var vDsiSize = Marshal.SizeOf<VirtualSpace.Commons.VirtualDesktopSwitchInfo>();
-            var pVDsi    = Marshal.AllocHGlobal( vDsiSize );
-            Marshal.StructureToPtr( vDsi, pVDsi, true );
-
-            var cds = new COPYDATASTRUCT
-            {
-                dwData = WinMsg.UM_SWITCHDESKTOP,
-                cbData = vDsiSize,
-                lpData = pVDsi
-            };
-            var pCds = Marshal.AllocHGlobal( Marshal.SizeOf<COPYDATASTRUCT>() );
-            Marshal.StructureToPtr( cds, pCds, true );
-
-            foreach ( var pluginInfo in PluginHost.Plugins.Where( p => p is { Kind: PluginKind.ExternalProcess, Type: PluginType.VD_SWITCH_OBSERVER }
-                                                                       && User32.IsWindow( p.Handle ) ) )
-            {
-                User32.SendMessage( pluginInfo.Handle, WinMsg.WM_COPYDATA, 0, (ulong)pCds );
-            }
-
-            ////////////////////////////////////////////////////////////////////////////////////
-            // if none of plugins send back message after 100 ms, host will force switch desktop
-            Interlocked.Increment( ref _forceSwitchOnTimeout );
-            Task.Run( () =>
-            {
-                Thread.Sleep( 100 );
-                if ( _forceSwitchOnTimeout == 0 ) return;
-                DesktopWrapper.MakeVisibleByGuid( desktopOrder[VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
-            } );
-
-            Marshal.FreeHGlobal( pVDsi );
-            Marshal.FreeHGlobal( pCds );
-            SwitchDesktopTimer.Restart();
-        }
+        Marshal.FreeHGlobal( pVDsi );
+        Marshal.FreeHGlobal( pCds );
+        SwitchDesktopTimer.Restart();
     }
 }

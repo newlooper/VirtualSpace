@@ -10,15 +10,14 @@
 
 using VirtualSpace.Config.DataAnnotations;
 
-namespace VirtualSpace.Config.Entity
+namespace VirtualSpace.Config.Entity;
+
+public class Mouse
 {
-    public class Mouse
-    {
-        public                                       int  LeftClickOnCanvas                  { get; set; }
-        public                                       int  RightClickOnCanvas                 { get; set; }
-        public                                       int  MiddleClickOnCanvas                { get; set; }
-        public                                       bool UseWheelSwitchDesktopWhenOnTaskbar { get; set; }
-        [PropertyProtector( 10, 1, 100 )]     public int  DragSizeFactor                     { get; set; }
-        [PropertyProtector( 100, 100, 1000 )] public int  TaskbarVisibilityThreshold         { get; set; }
-    }
+    public                                       int  LeftClickOnCanvas                  { get; set; }
+    public                                       int  RightClickOnCanvas                 { get; set; }
+    public                                       int  MiddleClickOnCanvas                { get; set; }
+    public                                       bool UseWheelSwitchDesktopWhenOnTaskbar { get; set; }
+    [PropertyProtector( 10, 1, 100 )]     public int  DragSizeFactor                     { get; set; }
+    [PropertyProtector( 100, 100, 1000 )] public int  TaskbarVisibilityThreshold         { get; set; }
 }

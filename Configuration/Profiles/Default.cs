@@ -12,48 +12,47 @@ You should have received a copy of the GNU General Public License along with Vir
 using System.Drawing;
 using VirtualSpace.Config.Entity;
 
-namespace VirtualSpace.Config.Profiles
+namespace VirtualSpace.Config.Profiles;
+
+public class Default : Profile
 {
-    public class Default : Profile
+    public Default()
     {
-        public Default()
+        UI = new UserInterface
         {
-            UI = new UserInterface
-            {
-                CanvasOpacity          = 100,
-                CanvasBackColor        = new Colour { R = 55, G = 55, B = 55 },
-                VDWMargin              = 8,
-                VDWShadowSize          = 6,
-                VDWBorderSize          = 1,
-                VDWPadding             = 0,
-                VDWDefaultBackColor    = new Colour { R = 55, G             = 55, B             = 55 },
-                VDWCurrentBackColor    = new Colour { R = Color.Beige.R, G  = Color.Beige.G, B  = Color.Beige.B },
-                VDWHighlightBackColor  = new Colour { R = Color.Tomato.R, G = Color.Tomato.G, B = Color.Tomato.B },
-                VDWDragTargetOpacity   = 0.8f,
-                ThumbMargin            = new Margin { Top = 20, Left = 10 },
-                ThumbDragSourceOpacity = 150,
-                Language               = Agent.FallbackLanguage,
-                DesktopArrangement     = 0,
-                ShowVdName             = true,
-                ShowVdIndex            = true,
-                ShowVdIndexType        = 0
-            };
-            DaemonAutoStart = true;
-            Mouse = new Mouse
-            {
-                DragSizeFactor                     = 10,
-                LeftClickOnCanvas                  = 1,
-                RightClickOnCanvas                 = 0,
-                MiddleClickOnCanvas                = 0,
-                UseWheelSwitchDesktopWhenOnTaskbar = false,
-                TaskbarVisibilityThreshold         = 100
-            };
-            Navigation = new Navigation
-            {
-                CirculationH     = false,
-                CirculationV     = false,
-                CirculationHType = 0
-            };
-        }
+            CanvasOpacity          = 100,
+            CanvasBackColor        = new Colour { R = 55, G = 55, B = 55 },
+            VDWMargin              = 8,
+            VDWShadowSize          = 6,
+            VDWBorderSize          = 1,
+            VDWPadding             = 0,
+            VDWDefaultBackColor    = new Colour { R = 55, G             = 55, B             = 55 },
+            VDWCurrentBackColor    = new Colour { R = Color.Beige.R, G  = Color.Beige.G, B  = Color.Beige.B },
+            VDWHighlightBackColor  = new Colour { R = Color.Tomato.R, G = Color.Tomato.G, B = Color.Tomato.B },
+            VDWDragTargetOpacity   = 0.8f,
+            ThumbMargin            = new Margin { Top = 20, Left = 10 },
+            ThumbDragSourceOpacity = 150,
+            Language               = Agent.FallbackLanguage,
+            DesktopArrangement     = 0,
+            ShowVdName             = true,
+            ShowVdIndex            = true,
+            ShowVdIndexType        = 0
+        };
+        DaemonAutoStart = true;
+        Mouse = new Mouse
+        {
+            DragSizeFactor                     = 10,
+            LeftClickOnCanvas                  = 1,
+            RightClickOnCanvas                 = 0,
+            MiddleClickOnCanvas                = 0,
+            UseWheelSwitchDesktopWhenOnTaskbar = false,
+            TaskbarVisibilityThreshold         = 100
+        };
+        Navigation = new Navigation
+        {
+            CirculationH     = false,
+            CirculationV     = false,
+            CirculationHType = 0
+        };
     }
 }

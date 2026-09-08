@@ -10,93 +10,105 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace VirtualSpace.Plugin
-{
-    internal sealed class PluginLoadContext : AssemblyLoadContext
-    {
-        private readonly AssemblyDependencyResolver _resolver;
-        private readonly string                     _pluginDir;
+namespace VirtualSpace.Plugin;
 
-        public PluginLoadContext( string pluginPath ) : base( isCollectible: true )
+internal sealed class PluginLoadContext : AssemblyLoadContext
+{
+    private readonly string                     _pluginDir;
+    private readonly AssemblyDependencyResolver _resolver;
+
+    public PluginLoadContext( string pluginPath ) : base( true )
+    {
+        _resolver  = new AssemblyDependencyResolver( pluginPath );
+        _pluginDir = Path.GetDirectoryName( pluginPath ) ?? string.Empty;
+    }
+
+    protected override Assembly? Load( AssemblyName assemblyName )
+    {
+        if ( assemblyName.Name is null )
         {
-            _resolver  = new AssemblyDependencyResolver( pluginPath );
-            _pluginDir = Path.GetDirectoryName( pluginPath ) ?? string.Empty;
+            return null;
         }
 
-        protected override Assembly? Load( AssemblyName assemblyName )
+        if ( IsSharedWithHost( assemblyName.Name ) )
         {
-            if ( assemblyName.Name is null ) return null;
+            EnsureLoadedInDefaultContext( assemblyName );
+            return null;
+        }
 
-            if ( IsSharedWithHost( assemblyName.Name ) )
+        foreach ( var assembly in Default.Assemblies )
+        {
+            if ( string.Equals( assembly.GetName().Name, assemblyName.Name, StringComparison.OrdinalIgnoreCase ) )
             {
-                EnsureLoadedInDefaultContext( assemblyName );
                 return null;
             }
-
-            foreach ( var assembly in Default.Assemblies )
-            {
-                if ( string.Equals( assembly.GetName().Name, assemblyName.Name, StringComparison.OrdinalIgnoreCase ) )
-                    return null;
-            }
-
-            var path = _resolver.ResolveAssemblyToPath( assemblyName ) ?? Path.Combine( _pluginDir, assemblyName.Name + ".dll" );
-            return File.Exists( path ) ? LoadFromAssemblyPath( path ) : null;
         }
 
-        private static bool IsSharedWithHost( string assemblyName )
+        var path = _resolver.ResolveAssemblyToPath( assemblyName ) ?? Path.Combine( _pluginDir, assemblyName.Name + ".dll" );
+        return File.Exists( path ) ? LoadFromAssemblyPath( path ) : null;
+    }
+
+    private static bool IsSharedWithHost( string assemblyName )
+    {
+        return string.Equals( assemblyName, "VirtualSpace.PluginContracts", StringComparison.OrdinalIgnoreCase )
+               || string.Equals( assemblyName, "Microsoft.Windows.SDK.NET", StringComparison.OrdinalIgnoreCase )
+               || string.Equals( assemblyName, "WinRT.Runtime", StringComparison.OrdinalIgnoreCase )
+               || string.Equals( assemblyName, "MaterialDesignThemes.Wpf", StringComparison.OrdinalIgnoreCase )
+               || string.Equals( assemblyName, "MaterialDesignColors", StringComparison.OrdinalIgnoreCase )
+               || string.Equals( assemblyName, "Microsoft.Xaml.Behaviors", StringComparison.OrdinalIgnoreCase )
+               || string.Equals( assemblyName, "WPFLocalizeExtension", StringComparison.OrdinalIgnoreCase )
+               || string.Equals( assemblyName, "XAMLMarkupExtensions", StringComparison.OrdinalIgnoreCase );
+    }
+
+    private void EnsureLoadedInDefaultContext( AssemblyName assemblyName )
+    {
+        if ( string.Equals( assemblyName.Name, "Microsoft.Windows.SDK.NET", StringComparison.OrdinalIgnoreCase ) )
         {
-            return string.Equals( assemblyName, "VirtualSpace.PluginContracts", StringComparison.OrdinalIgnoreCase )
-                   || string.Equals( assemblyName, "Microsoft.Windows.SDK.NET", StringComparison.OrdinalIgnoreCase )
-                   || string.Equals( assemblyName, "WinRT.Runtime", StringComparison.OrdinalIgnoreCase )
-                   || string.Equals( assemblyName, "MaterialDesignThemes.Wpf", StringComparison.OrdinalIgnoreCase )
-                   || string.Equals( assemblyName, "MaterialDesignColors", StringComparison.OrdinalIgnoreCase )
-                   || string.Equals( assemblyName, "Microsoft.Xaml.Behaviors", StringComparison.OrdinalIgnoreCase )
-                   || string.Equals( assemblyName, "WPFLocalizeExtension", StringComparison.OrdinalIgnoreCase )
-                   || string.Equals( assemblyName, "XAMLMarkupExtensions", StringComparison.OrdinalIgnoreCase );
+            EnsureLoadedInDefaultContext( new AssemblyName( "WinRT.Runtime" ) );
         }
 
-        private void EnsureLoadedInDefaultContext( AssemblyName assemblyName )
+        if ( string.Equals( assemblyName.Name, "MaterialDesignThemes.Wpf", StringComparison.OrdinalIgnoreCase ) )
         {
-            if ( string.Equals( assemblyName.Name, "Microsoft.Windows.SDK.NET", StringComparison.OrdinalIgnoreCase ) )
-                EnsureLoadedInDefaultContext( new AssemblyName( "WinRT.Runtime" ) );
+            EnsureLoadedInDefaultContext( new AssemblyName( "MaterialDesignColors" ) );
+            EnsureLoadedInDefaultContext( new AssemblyName( "Microsoft.Xaml.Behaviors" ) );
+        }
 
-            if ( string.Equals( assemblyName.Name, "MaterialDesignThemes.Wpf", StringComparison.OrdinalIgnoreCase ) )
+        if ( string.Equals( assemblyName.Name, "WPFLocalizeExtension", StringComparison.OrdinalIgnoreCase ) )
+        {
+            EnsureLoadedInDefaultContext( new AssemblyName( "XAMLMarkupExtensions" ) );
+        }
+
+        foreach ( var assembly in Default.Assemblies )
+        {
+            if ( string.Equals( assembly.GetName().Name, assemblyName.Name, StringComparison.OrdinalIgnoreCase ) )
             {
-                EnsureLoadedInDefaultContext( new AssemblyName( "MaterialDesignColors" ) );
-                EnsureLoadedInDefaultContext( new AssemblyName( "Microsoft.Xaml.Behaviors" ) );
-            }
-
-            if ( string.Equals( assemblyName.Name, "WPFLocalizeExtension", StringComparison.OrdinalIgnoreCase ) )
-                EnsureLoadedInDefaultContext( new AssemblyName( "XAMLMarkupExtensions" ) );
-
-            foreach ( var assembly in Default.Assemblies )
-            {
-                if ( string.Equals( assembly.GetName().Name, assemblyName.Name, StringComparison.OrdinalIgnoreCase ) )
-                    return;
-            }
-
-            var hostPath = Path.Combine( AppContext.BaseDirectory, assemblyName.Name + ".dll" );
-            if ( File.Exists( hostPath ) )
-            {
-                Default.LoadFromAssemblyPath( hostPath );
                 return;
             }
-
-            var path = _resolver.ResolveAssemblyToPath( assemblyName );
-            if ( path is null ) return;
-
-            Default.LoadFromAssemblyPath( path );
         }
 
-        protected override IntPtr LoadUnmanagedDll( string unmanagedDllName )
+        var hostPath = Path.Combine( AppContext.BaseDirectory, assemblyName.Name + ".dll" );
+        if ( File.Exists( hostPath ) )
         {
-            var path = _resolver.ResolveUnmanagedDllToPath( unmanagedDllName )
-                       ?? Path.Combine( _pluginDir, unmanagedDllName );
-            return File.Exists( path ) ? LoadUnmanagedDllFromPath( path ) : IntPtr.Zero;
+            Default.LoadFromAssemblyPath( hostPath );
+            return;
         }
+
+        var path = _resolver.ResolveAssemblyToPath( assemblyName );
+        if ( path is null )
+        {
+            return;
+        }
+
+        Default.LoadFromAssemblyPath( path );
+    }
+
+    protected override IntPtr LoadUnmanagedDll( string unmanagedDllName )
+    {
+        var path = _resolver.ResolveUnmanagedDllToPath( unmanagedDllName )
+                   ?? Path.Combine( _pluginDir, unmanagedDllName );
+        return File.Exists( path ) ? LoadUnmanagedDllFromPath( path ) : IntPtr.Zero;
     }
 }

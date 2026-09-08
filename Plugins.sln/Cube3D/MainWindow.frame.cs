@@ -13,65 +13,74 @@ using System.Threading.Tasks;
 using ScreenCapture;
 using VirtualSpace.PluginContracts;
 
-namespace Cube3D
+namespace Cube3D;
+
+public partial class MainWindow
 {
-    public partial class MainWindow
+    private D3D9ShareCapture? _capture;
+    private FrameToD3DImage?  _frameProcessor;
+
+    private Task StartPrimaryMonitorCapture()
     {
-        private D3D9ShareCapture? _capture;
-        private FrameToD3DImage?  _frameProcessor;
+        var monitor = TryGetPrimaryMonitor();
+        return monitor == null ? Task.CompletedTask : StartMonitorCapture( monitor, _windowLoadGeneration );
+    }
 
-        private Task StartPrimaryMonitorCapture()
+    private async Task StartMonitorCapture( MonitorInfo mi, int loadGeneration )
+    {
+        if ( !await WarmupMonitorCaptureAsync( loadGeneration, mi ).ConfigureAwait( true ) )
         {
-            var monitor = TryGetPrimaryMonitor();
-            return monitor == null ? Task.CompletedTask : StartMonitorCapture( monitor, _windowLoadGeneration );
+            ScheduleCaptureRetry();
+        }
+    }
+
+    private async Task<bool> WarmupMonitorCaptureAsync( int loadGeneration, MonitorInfo? monitor = null )
+    {
+        monitor ??= TryGetPrimaryMonitor();
+        if ( monitor == null )
+        {
+            return false;
         }
 
-        private async Task StartMonitorCapture( MonitorInfo mi, int loadGeneration )
+        _frameProcessor ??= new FrameToD3DImage( D3DImages.D3DImages.D3DImageDict );
+
+        if ( !TryStartCapture( monitor ) )
         {
-            if ( !await WarmupMonitorCaptureAsync( loadGeneration, mi ).ConfigureAwait( true ) )
-                ScheduleCaptureRetry();
+            return false;
         }
-
-        private async Task<bool> WarmupMonitorCaptureAsync( int loadGeneration, MonitorInfo? monitor = null )
-        {
-            monitor ??= TryGetPrimaryMonitor();
-            if ( monitor == null ) return false;
-
-            _frameProcessor ??= new FrameToD3DImage( D3DImages.D3DImages.D3DImageDict );
-
-            if ( !TryStartCapture( monitor ) )
-                return false;
 
 #if DEBUG
-            await Task.Delay( 50 ).ConfigureAwait( true );
+        await Task.Delay( 50 ).ConfigureAwait( true );
 #endif
-            if ( !IsLoadCurrent( loadGeneration ) || !IsLoaded )
-            {
-                StopCapture();
-                return true;
-            }
-
+        if ( !IsLoadCurrent( loadGeneration ) || !IsLoaded )
+        {
             StopCapture();
             return true;
         }
 
-        private bool TryStartCapture( MonitorInfo mi )
+        StopCapture();
+        return true;
+    }
+
+    private bool TryStartCapture( MonitorInfo mi )
+    {
+        StopCapture();
+
+        _frameProcessor ??= new FrameToD3DImage( D3DImages.D3DImages.D3DImageDict );
+        _capture        =   D3D9ShareCapture.Create( mi, _frameProcessor );
+        if ( _capture == null )
         {
-            StopCapture();
-
-            _frameProcessor ??= new FrameToD3DImage( D3DImages.D3DImages.D3DImageDict );
-            _capture = D3D9ShareCapture.Create( mi, _frameProcessor );
-            if ( _capture == null )
-            {
-                PluginLog.Error( "Cube3D", "capture create failed." );
-                return false;
-            }
-
-            if ( _capture.StartCaptureSession() ) return true;
-
-            PluginLog.Error( "Cube3D", "capture session failed." );
-            StopCapture();
+            PluginLog.Error( "Cube3D", "capture create failed." );
             return false;
         }
+
+        if ( _capture.StartCaptureSession() )
+        {
+            return true;
+        }
+
+        PluginLog.Error( "Cube3D", "capture session failed." );
+        StopCapture();
+        return false;
     }
 }

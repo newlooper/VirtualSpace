@@ -13,44 +13,43 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace VirtualSpace.Helpers
+namespace VirtualSpace.Helpers;
+
+public static partial class GlobalHotKey
 {
-    public static partial class GlobalHotKey
+    [Flags]
+    public enum KeyModifiers
     {
-        [Flags]
-        public enum KeyModifiers
+        None       = 0,
+        Alt        = 1,
+        Ctrl       = 2,
+        Shift      = 4,
+        WindowsKey = 8
+    }
+
+    private static          IntPtr    _handle = IntPtr.Zero;
+    private static readonly List<int> Ids     = [];
+
+    public static bool RegHotKey( IntPtr hWnd, int id, KeyModifiers fsModifiers, int vk )
+    {
+        _handle = hWnd;
+        Ids.Add( id );
+        return RegisterHotKey( hWnd, id, fsModifiers, vk );
+    }
+
+    [LibraryImport( "user32.dll" )]
+    [return: MarshalAs( UnmanagedType.Bool )]
+    private static partial bool RegisterHotKey( IntPtr hWnd, int id, KeyModifiers fsModifiers, int vk );
+
+    [LibraryImport( "user32.dll" )]
+    [return: MarshalAs( UnmanagedType.Bool )]
+    public static partial bool UnregisterHotKey( IntPtr hWnd, int id );
+
+    public static void UnRegAllHotKey()
+    {
+        foreach ( var id in Ids )
         {
-            None       = 0,
-            Alt        = 1,
-            Ctrl       = 2,
-            Shift      = 4,
-            WindowsKey = 8
-        }
-
-        private static          IntPtr    _handle = IntPtr.Zero;
-        private static readonly List<int> Ids     = new();
-
-        public static bool RegHotKey( IntPtr hWnd, int id, KeyModifiers fsModifiers, int vk )
-        {
-            _handle = hWnd;
-            Ids.Add( id );
-            return RegisterHotKey( hWnd, id, fsModifiers, vk );
-        }
-
-        [LibraryImport( "user32.dll" )]
-        [return: MarshalAs( UnmanagedType.Bool )]
-        private static partial bool RegisterHotKey( IntPtr hWnd, int id, KeyModifiers fsModifiers, int vk );
-
-        [LibraryImport( "user32.dll" )]
-        [return: MarshalAs( UnmanagedType.Bool )]
-        public static partial bool UnregisterHotKey( IntPtr hWnd, int id );
-
-        public static void UnRegAllHotKey()
-        {
-            foreach ( var id in Ids )
-            {
-                UnregisterHotKey( _handle, id );
-            }
+            UnregisterHotKey( _handle, id );
         }
     }
 }

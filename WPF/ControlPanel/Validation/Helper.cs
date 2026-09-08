@@ -20,7 +20,10 @@ public abstract class Helper
         {
             var bd = control.GetBindingExpression( dp );
             bd?.UpdateSource();
-            if ( bd?.ValidationError != null ) return true;
+            if ( bd?.ValidationError != null )
+            {
+                return true;
+            }
         }
 
         return false;

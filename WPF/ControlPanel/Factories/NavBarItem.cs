@@ -59,6 +59,8 @@ public class NavBarItem : TabItem
     public static void InitNavBar( TabControl tc )
     {
         foreach ( var kv in NavBarItemsInfo )
+        {
             tc.Items.Add( new NavBarItem( kv.Key, kv.Value.kind, kv.Value.locKey ) );
+        }
     }
 }

@@ -8,12 +8,11 @@
 //
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace.PluginContracts
+namespace VirtualSpace.PluginContracts;
+
+public static class PluginEvents
 {
-    public static class PluginEvents
-    {
-        public const string VirtualDesktopSwitch = nameof( VirtualDesktopSwitch );
-        public const string ShowSettings         = nameof( ShowSettings );
-        public const string Restart              = nameof( Restart );
-    }
+    public const string VirtualDesktopSwitch = nameof( VirtualDesktopSwitch );
+    public const string ShowSettings         = nameof( ShowSettings );
+    public const string Restart              = nameof( Restart );
 }

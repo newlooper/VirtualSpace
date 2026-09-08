@@ -15,8 +15,8 @@
     </WindowChrome.WindowChrome>
     <Grid x:Name="Canvas">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="0"></RowDefinition>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0" />
         </Grid.RowDefinitions>
         <Grid x:Name="MainGrid" />
     </Grid>

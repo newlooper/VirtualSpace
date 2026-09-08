@@ -13,71 +13,82 @@ using System.Collections.Generic;
 using VirtualSpace.AppLogs;
 using VirtualSpace.PluginContracts;
 
-namespace VirtualSpace.Plugin
+namespace VirtualSpace.Plugin;
+
+public sealed class HostContext : IHostContext
 {
-    public sealed class HostContext : IHostContext
+    private readonly Dictionary<string, List<(object? Owner, Action<object> Handler)>> _handlers = new();
+
+    public IntPtr  MainWindowHandle { get; set; }
+    public Version HostVersion      { get; set; } = new( 0, 0 );
+
+    public string GetPluginDataPath( string pluginName )
     {
-        private readonly Dictionary<string, List<(object? Owner, Action<object> Handler)>> _handlers = new();
+        return PluginPaths.GetPluginDataDirectory( pluginName );
+    }
 
-        public IntPtr  MainWindowHandle { get; set; }
-        public Version HostVersion      { get; set; } = new( 0, 0 );
-
-        public event Action<int>? DesktopSwitchRequested;
-
-        public string GetPluginDataPath( string pluginName )
+    public void Subscribe( string eventName, Action<object> handler )
+    {
+        if ( string.IsNullOrEmpty( eventName ) || handler is null )
         {
-            return PluginPaths.GetPluginDataDirectory( pluginName );
+            return;
         }
 
-        public void Subscribe( string eventName, Action<object> handler )
+        if ( !_handlers.TryGetValue( eventName, out var list ) )
         {
-            if ( string.IsNullOrEmpty( eventName ) || handler is null ) return;
+            list                 = [];
+            _handlers[eventName] = list;
+        }
 
-            if ( !_handlers.TryGetValue( eventName, out var list ) )
+        list.Add( ( PluginLoader.ActivePlugin, handler ) );
+    }
+
+    public void Unsubscribe( string eventName, Action<object> handler )
+    {
+        if ( !_handlers.TryGetValue( eventName, out var list ) )
+        {
+            return;
+        }
+
+        list.RemoveAll( item => item.Handler == handler );
+    }
+
+    public void RequestDesktopSwitch( int targetIndex )
+    {
+        DesktopSwitchRequested?.Invoke( targetIndex );
+    }
+
+    public event Action<int>? DesktopSwitchRequested;
+
+    public void UnsubscribeAll( object plugin )
+    {
+        foreach ( var list in _handlers.Values )
+        {
+            list.RemoveAll( item => ReferenceEquals( item.Owner, plugin ) );
+        }
+    }
+
+    public bool HasSubscribers( string eventName )
+    {
+        return _handlers.TryGetValue( eventName, out var list ) && list.Count > 0;
+    }
+
+    public void Publish( string eventName, object payload )
+    {
+        if ( !_handlers.TryGetValue( eventName, out var list ) || list.Count == 0 )
+        {
+            return;
+        }
+
+        foreach ( var item in list.ToArray() )
+        {
+            try
             {
-                list = new List<(object? Owner, Action<object> Handler)>();
-                _handlers[eventName] = list;
+                item.Handler( payload );
             }
-
-            list.Add( ( PluginLoader.ActivePlugin, handler ) );
-        }
-
-        public void Unsubscribe( string eventName, Action<object> handler )
-        {
-            if ( !_handlers.TryGetValue( eventName, out var list ) ) return;
-            list.RemoveAll( item => item.Handler == handler );
-        }
-
-        public void UnsubscribeAll( object plugin )
-        {
-            foreach ( var list in _handlers.Values )
-                list.RemoveAll( item => ReferenceEquals( item.Owner, plugin ) );
-        }
-
-        public void RequestDesktopSwitch( int targetIndex )
-        {
-            DesktopSwitchRequested?.Invoke( targetIndex );
-        }
-
-        public bool HasSubscribers( string eventName )
-        {
-            return _handlers.TryGetValue( eventName, out var list ) && list.Count > 0;
-        }
-
-        public void Publish( string eventName, object payload )
-        {
-            if ( !_handlers.TryGetValue( eventName, out var list ) || list.Count == 0 ) return;
-
-            foreach ( var item in list.ToArray() )
+            catch ( Exception ex )
             {
-                try
-                {
-                    item.Handler( payload );
-                }
-                catch ( Exception ex )
-                {
-                    Logger.Warning( $"[PLUGIN] handler for {eventName} failed: {ex.Message}" );
-                }
+                Logger.Warning( $"[PLUGIN] handler for {eventName} failed: {ex.Message}" );
             }
         }
     }

@@ -16,129 +16,147 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
 
-namespace Cube3D.Effects
+namespace Cube3D.Effects;
+
+public abstract class Effect
 {
-    public abstract class Effect
+    protected static readonly double           MeshHeight  = SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth;
+    protected static readonly double           MeshWidth   = 1.0;
+    protected static readonly AmbientLight     CommonLight = new() { Color = Colors.White };
+    protected readonly        Transform3DGroup TransGroup  = new();
+    protected                 Timeline         Animation;
+    protected                 Transform3D      Transform3D;
+
+    protected static void AddTriangleIndices( MeshGeometry3D meshGeometry3D )
     {
-        protected static readonly double           MeshHeight  = SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth;
-        protected static readonly double           MeshWidth   = 1.0;
-        protected static readonly AmbientLight     CommonLight = new() {Color = Colors.White};
-        protected readonly        Transform3DGroup TransGroup  = new();
-        protected                 Timeline         Animation;
-        protected                 Transform3D      Transform3D;
-
-        protected static void AddTriangleIndices( MeshGeometry3D meshGeometry3D )
-        {
-            meshGeometry3D.TriangleIndices.Add( 0 );
-            meshGeometry3D.TriangleIndices.Add( 1 );
-            meshGeometry3D.TriangleIndices.Add( 2 );
-            meshGeometry3D.TriangleIndices.Add( 2 );
-            meshGeometry3D.TriangleIndices.Add( 3 );
-            meshGeometry3D.TriangleIndices.Add( 0 );
-        }
-
-        protected static void AddTextureCoordinatesFront( MeshGeometry3D meshGeometry3D )
-        {
-            meshGeometry3D.TextureCoordinates.Add( new Point( 0, 1 ) );
-            meshGeometry3D.TextureCoordinates.Add( new Point( 1, 1 ) );
-            meshGeometry3D.TextureCoordinates.Add( new Point( 1, 0 ) );
-            meshGeometry3D.TextureCoordinates.Add( new Point( 0, 0 ) );
-        }
-
-        public abstract void Build( Model3DGroup model3DGroup );
-
-        public abstract void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null );
-
-        public void AddAnimationCompletedListener( EventHandler handler )
-        {
-            Animation.Completed += handler;
-        }
+        meshGeometry3D.TriangleIndices.Add( 0 );
+        meshGeometry3D.TriangleIndices.Add( 1 );
+        meshGeometry3D.TriangleIndices.Add( 2 );
+        meshGeometry3D.TriangleIndices.Add( 2 );
+        meshGeometry3D.TriangleIndices.Add( 3 );
+        meshGeometry3D.TriangleIndices.Add( 0 );
     }
 
-    public enum KeyCode
+    protected static void AddTextureCoordinatesFront( MeshGeometry3D meshGeometry3D )
     {
-        Left  = 0x25,
-        Up    = 0x26,
-        Right = 0x27,
-        Down  = 0x28
+        meshGeometry3D.TextureCoordinates.Add( new Point( 0, 1 ) );
+        meshGeometry3D.TextureCoordinates.Add( new Point( 1, 1 ) );
+        meshGeometry3D.TextureCoordinates.Add( new Point( 1, 0 ) );
+        meshGeometry3D.TextureCoordinates.Add( new Point( 0, 0 ) );
     }
 
-    public static class EffectFactory
+    public abstract void Build( Model3DGroup model3DGroup );
+
+    public abstract void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null );
+
+    public void AddAnimationCompletedListener( EventHandler handler )
     {
-        public static readonly IReadOnlyList<Type> Types = new[]
+        Animation.Completed += handler;
+    }
+}
+
+public enum KeyCode
+{
+    Left  = 0x25,
+    Up    = 0x26,
+    Right = 0x27,
+    Down  = 0x28
+}
+
+public static class EffectFactory
+{
+    public static readonly IReadOnlyList<Type> Types = new[]
+    {
+        typeof( Cube ),
+        typeof( InsideCube ),
+        typeof( Slide ),
+        typeof( Reveal ),
+        typeof( Fade ),
+        typeof( Flip )
+    };
+
+    public static string Default { get; } = Types[0].Name;
+
+    public static IReadOnlyList<string> Names { get; } =
+        Types.Select( t => t.Name ).ToArray();
+
+    public static Effect Create( string name )
+    {
+        foreach ( var type in Types )
         {
-            typeof( Cube ),
-            typeof( InsideCube ),
-            typeof( Slide ),
-            typeof( Reveal ),
-            typeof( Fade ),
-            typeof( Flip )
-        };
-
-        public static string Default { get; } = Types[0].Name;
-
-        public static IReadOnlyList<string> Names { get; } =
-            Types.Select( t => t.Name ).ToArray();
-
-        public static Effect Create( string name )
-        {
-            foreach ( var type in Types )
+            if ( type.Name != name )
             {
-                if ( type.Name != name ) continue;
-                return (Effect)Activator.CreateInstance( type );
+                continue;
             }
 
-            return (Effect)Activator.CreateInstance( Types[0] );
+            return (Effect)Activator.CreateInstance( type );
         }
 
-        internal static string NameFromLegacyIndex( int index )
-        {
-            if ( index < 0 || index >= Types.Count ) return Default;
-            return Types[index].Name;
-        }
+        return (Effect)Activator.CreateInstance( Types[0] );
     }
 
-    public static class EaseFactory
+    internal static string NameFromLegacyIndex( int index )
     {
-        public const string None = nameof( None );
-
-        public static readonly IReadOnlyList<Type> Types = new[]
+        if ( index < 0 || index >= Types.Count )
         {
-            typeof( BackEase ),
-            typeof( BounceEase ),
-            typeof( CircleEase ),
-            typeof( CubicEase ),
-            typeof( ElasticEase ),
-            typeof( ExponentialEase ),
-            typeof( PowerEase ),
-            typeof( QuadraticEase ),
-            typeof( QuarticEase ),
-            typeof( QuinticEase ),
-            typeof( SineEase )
-        };
+            return Default;
+        }
 
-        public static IReadOnlyList<string> Names { get; } =
-            new[] { None }.Concat( Types.Select( t => t.Name ) ).ToArray();
+        return Types[index].Name;
+    }
+}
 
-        public static EasingFunctionBase GetEaseByName( string name, EasingMode mode )
+public static class EaseFactory
+{
+    public const string None = nameof( None );
+
+    public static readonly IReadOnlyList<Type> Types = new[]
+    {
+        typeof( BackEase ),
+        typeof( BounceEase ),
+        typeof( CircleEase ),
+        typeof( CubicEase ),
+        typeof( ElasticEase ),
+        typeof( ExponentialEase ),
+        typeof( PowerEase ),
+        typeof( QuadraticEase ),
+        typeof( QuarticEase ),
+        typeof( QuinticEase ),
+        typeof( SineEase )
+    };
+
+    public static IReadOnlyList<string> Names { get; } =
+        new[] { None }.Concat( Types.Select( t => t.Name ) ).ToArray();
+
+    public static EasingFunctionBase GetEaseByName( string name, EasingMode mode )
+    {
+        if ( string.IsNullOrEmpty( name ) || name == None )
         {
-            if ( string.IsNullOrEmpty( name ) || name == None ) return null;
-
-            foreach ( var type in Types )
-            {
-                if ( type.Name != name ) continue;
-                var ef = (EasingFunctionBase)Activator.CreateInstance( type );
-                ef.EasingMode = mode;
-                return ef;
-            }
-
             return null;
         }
 
-        internal static string NameFromLegacyIndex( int index )
+        foreach ( var type in Types )
         {
-            if ( index <= 0 || index > Types.Count ) return None;
-            return Types[index - 1].Name;
+            if ( type.Name != name )
+            {
+                continue;
+            }
+
+            var ef = (EasingFunctionBase)Activator.CreateInstance( type );
+            ef.EasingMode = mode;
+            return ef;
         }
+
+        return null;
+    }
+
+    internal static string NameFromLegacyIndex( int index )
+    {
+        if ( index <= 0 || index > Types.Count )
+        {
+            return None;
+        }
+
+        return Types[index - 1].Name;
     }
 }

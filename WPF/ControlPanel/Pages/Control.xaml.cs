@@ -48,7 +48,10 @@ public partial class Control
     {
         foreach ( var item in KeyboardTreeView.Items )
         {
-            if ( item is not TreeViewItem node ) continue;
+            if ( item is not TreeViewItem node )
+            {
+                continue;
+            }
 
             var tag = node.Tag;
             node.Header = Agent.Langs.GetString( tag is null ? node.Name : tag.ToString()! );
@@ -61,7 +64,10 @@ public partial class Control
     {
         foreach ( var child in item.Items )
         {
-            if ( child is not TreeViewItem childItem ) continue;
+            if ( child is not TreeViewItem childItem )
+            {
+                continue;
+            }
 
             var tag = childItem.Tag;
             if ( tag is null )
@@ -84,7 +90,9 @@ public partial class Control
             }
 
             if ( childItem.Items.Count > 0 )
+            {
                 VisitTreeViewItem( childItem );
+            }
         }
     }
 

@@ -8,11 +8,10 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
-namespace VirtualSpace.Config.Entity
+namespace VirtualSpace.Config.Entity;
+
+public class LogConfig
 {
-    public class LogConfig
-    {
-        public bool   ShowLogsInGui { get; set; }
-        public string LogLevel      { get; set; }
-    }
+    public bool   ShowLogsInGui { get; set; }
+    public string LogLevel      { get; set; }
 }

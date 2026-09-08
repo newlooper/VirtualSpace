@@ -21,185 +21,217 @@ using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
 
-namespace VirtualSpace.VirtualDesktop
+namespace VirtualSpace.VirtualDesktop;
+
+internal static partial class VirtualDesktopManager
 {
-    internal static partial class VirtualDesktopManager
+    private static Color         _vdwDefaultBackColor;
+    private static List<Guid>    _lastDesktopOrder = [];
+    public static  UserInterface Ui => ConfigManager.CurrentProfile.UI;
+
+    private static void SyncVirtualDesktops()
     {
-        private static Color         _vdwDefaultBackColor;
-        private static List<Guid>    _lastDesktopOrder = new();
-        public static  UserInterface Ui => ConfigManager.CurrentProfile.UI;
+        var commonSize = GetCommonVdwSize();
 
-        private static void SyncVirtualDesktops()
+        var survivalDesktops = new List<VirtualDesktopWindow>();
+        for ( var index = 0; index < DesktopWrapper.Count; index++ ) // build new list according to current system vd list
         {
-            var commonSize = GetCommonVdwSize();
-
-            var survivalDesktops = new List<VirtualDesktopWindow>();
-            for ( var index = 0; index < DesktopWrapper.Count; index++ ) // build new list according to current system vd list
+            var guid = DesktopManagerWrapper.GetIdByIndex( index );
+            if ( guid == Guid.Empty )
             {
-                var guid = DesktopManagerWrapper.GetIdByIndex( index );
-                if ( guid == Guid.Empty ) continue;
-                var survival = _virtualDesktops.Find( v => v.VdId == guid );
-                if ( survival == null )
-                    survival = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
-                else
-                    survival.VdIndex = index;
-
-                survivalDesktops.Add( survival );
+                continue;
             }
 
-            var sysGuids = survivalDesktops.Select( v => v.VdId ).ToList();
-            foreach ( var old in _virtualDesktops.Where( old => !sysGuids.Contains( old.VdId ) ) ) old.RealClose();
+            var survival = _virtualDesktops.Find( v => v.VdId == guid );
+            if ( survival == null )
+            {
+                survival = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
+            }
+            else
+            {
+                survival.VdIndex = index;
+            }
 
-            _virtualDesktops = survivalDesktops; // system vd list order at this moment
-
-            ReOrder(); // reorder by profile
+            survivalDesktops.Add( survival );
         }
 
-        private static Size GetCommonVdwSize()
+        var sysGuids = survivalDesktops.Select( v => v.VdId ).ToList();
+        foreach ( var old in _virtualDesktops.Where( old => !sysGuids.Contains( old.VdId ) ) )
         {
-            var dpi       = SysInfo.Dpi;
-            var size      = MainWindow.GetCellSizeByMatrixIndex( 0 );
-            var vdwWidth  = ( size.Width - 2 * Ui.VDWBorderSize ) * dpi.ScaleX + 1;
-            var vdwHeight = ( size.Height - 2 * Ui.VDWBorderSize ) * dpi.ScaleY + 1;
-            return new Size( (int)vdwWidth, (int)vdwHeight );
+            old.RealClose();
         }
 
-        private static void ReOrder( bool needSort = false )
+        _virtualDesktops = survivalDesktops; // system vd list order at this moment
+
+        ReOrder(); // reorder by profile
+    }
+
+    private static Size GetCommonVdwSize()
+    {
+        var dpi       = SysInfo.Dpi;
+        var size      = MainWindow.GetCellSizeByMatrixIndex( 0 );
+        var vdwWidth  = ( size.Width - 2 * Ui.VDWBorderSize ) * dpi.ScaleX + 1;
+        var vdwHeight = ( size.Height - 2 * Ui.VDWBorderSize ) * dpi.ScaleY + 1;
+        return new Size( (int)vdwWidth, (int)vdwHeight );
+    }
+
+    private static void ReOrder( bool needSort = false )
+    {
+        if ( needSort )
         {
-            if ( needSort )
-                _virtualDesktops.Sort( ( x, y ) => x.VdIndex.CompareTo( y.VdIndex ) );
-
-            var profile  = ConfigManager.CurrentProfile;
-            var sysGuids = _virtualDesktops.Select( vdw => vdw.VdId ).ToList();
-
-            if ( profile.DesktopOrder == null || profile.DesktopOrder.Count == 0 ) // no custom order, using system's
-            {
-                SaveOrder( sysGuids );
-                return;
-            }
-
-            profile.DesktopOrder.RemoveAll( g => !sysGuids.Contains( g ) );
-
-            var orderedByProfile = new List<VirtualDesktopWindow>();
-            for ( var idx = 0; idx < profile.DesktopOrder.Count; idx++ )
-            {
-                var vdw = _virtualDesktops.Find( vdw => vdw.VdId == profile.DesktopOrder[idx] );
-                if ( vdw is null ) continue;
-                vdw.VdIndex = idx; // reposition
-                orderedByProfile.Add( vdw );
-                _virtualDesktops.Remove( vdw );
-            }
-
-            foreach ( var restVdw in _virtualDesktops )
-            {
-                restVdw.VdIndex = orderedByProfile.Count;
-                orderedByProfile.Add( restVdw ); // increase orderedByProfile.Count every turn, so that vdw.VdIndex can be set properly.
-                profile.DesktopOrder.Add( restVdw.VdId ); // append to tail
-            }
-
-            _virtualDesktops = orderedByProfile;
-            SaveOrder();
+            _virtualDesktops.Sort( ( x, y ) => x.VdIndex.CompareTo( y.VdIndex ) );
         }
 
-        private static void UpdateMainView( VirtualDesktopNotification? vdn = null )
+        var profile  = ConfigManager.CurrentProfile;
+        var sysGuids = _virtualDesktops.Select( vdw => vdw.VdId ).ToList();
+
+        if ( profile.DesktopOrder == null || profile.DesktopOrder.Count == 0 ) // no custom order, using system's
         {
-            if ( !MainWindow.IsShowing() ) return;
-
-            FixLayout();
-            ShowAllVirtualDesktops();
-
-            if ( vdn is null ) return;
-
-            try
-            {
-                var fallback = _virtualDesktops[GetVdIndexByGuid( vdn.NewId )];
-                ShowVisibleWindowsForDesktops( new List<VirtualDesktopWindow> { fallback } );
-            }
-            catch ( Exception e )
-            {
-                Logger.Warning( "Update MainView: " + e.StackTrace );
-            }
+            SaveOrder( sysGuids );
+            return;
         }
 
-        public static void FixLayout()
+        profile.DesktopOrder.RemoveAll( g => !sysGuids.Contains( g ) );
+
+        var orderedByProfile = new List<VirtualDesktopWindow>();
+        for ( var idx = 0; idx < profile.DesktopOrder.Count; idx++ )
         {
-            try
+            var vdw = _virtualDesktops.Find( vdw => vdw.VdId == profile.DesktopOrder[idx] );
+            if ( vdw is null )
             {
-                MainWindow.ResetMainGrid();
-            }
-            catch
-            {
-                MainWindow.NotifyDesktopManagerReset();
-                return;
+                continue;
             }
 
-            SyncVirtualDesktops();
+            vdw.VdIndex = idx; // reposition
+            orderedByProfile.Add( vdw );
+            _virtualDesktops.Remove( vdw );
         }
 
-        public static async Task InitLayout()
+        foreach ( var restVdw in _virtualDesktops )
+        {
+            restVdw.VdIndex = orderedByProfile.Count;
+            orderedByProfile.Add( restVdw ); // increase orderedByProfile.Count every turn, so that vdw.VdIndex can be set properly.
+            profile.DesktopOrder.Add( restVdw.VdId ); // append to tail
+        }
+
+        _virtualDesktops = orderedByProfile;
+        SaveOrder();
+    }
+
+    private static void UpdateMainView( VirtualDesktopNotification? vdn = null )
+    {
+        if ( !MainWindow.IsShowing() )
+        {
+            return;
+        }
+
+        FixLayout();
+        ShowAllVirtualDesktops();
+
+        if ( vdn is null )
+        {
+            return;
+        }
+
+        try
+        {
+            var fallback = _virtualDesktops[GetVdIndexByGuid( vdn.NewId )];
+            ShowVisibleWindowsForDesktops( [fallback] );
+        }
+        catch ( Exception e )
+        {
+            Logger.Warning( "Update MainView: " + e.StackTrace );
+        }
+    }
+
+    public static void FixLayout()
+    {
+        try
         {
             MainWindow.ResetMainGrid();
+        }
+        catch
+        {
+            MainWindow.NotifyDesktopManagerReset();
+            return;
+        }
 
-            var commonSize = GetCommonVdwSize();
+        SyncVirtualDesktops();
+    }
 
-            var tasks = new List<Task>();
-            for ( var i = 0; i < DesktopWrapper.Count; i++ )
+    public static async Task InitLayout()
+    {
+        MainWindow.ResetMainGrid();
+
+        var commonSize = GetCommonVdwSize();
+
+        var tasks = new List<Task>();
+        for ( var i = 0; i < DesktopWrapper.Count; i++ )
+        {
+            var index = i;
+            tasks.Add( Task.Run( () =>
             {
-                var index = i;
-                tasks.Add( Task.Run( () =>
+                var guid = DesktopManagerWrapper.GetIdByIndex( index );
+                var vdw  = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
+
+                lock ( _virtualDesktops ) // thread safe
                 {
-                    var guid = DesktopManagerWrapper.GetIdByIndex( index );
-                    var vdw  = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
+                    _virtualDesktops.Add( vdw ); // added in random order, need call "ReOrder( true )" afterwards
+                }
+            } ) );
+        }
 
-                    lock ( _virtualDesktops ) // thread safe
-                    {
-                        _virtualDesktops.Add( vdw ); // added in random order, need call "ReOrder( true )" afterwards
-                    }
-                } ) );
-            }
+        try
+        {
+            await Task.WhenAll( tasks.ToArray() );
+        }
+        catch ( Exception ex )
+        {
+            Logger.Error( "Init Layout: " + ex.Message );
+            return;
+        }
 
-            try
+        ReOrder( true );
+    }
+
+    public static void UpdateVdwBackground()
+    {
+        MainWindow.RenderCellBorder();
+    }
+
+    public static void SaveOrder( List<Guid>? newOrder = null )
+    {
+        static bool IsSameGuidList( List<Guid> a, List<Guid> b )
+        {
+            if ( a.Count != b.Count )
             {
-                await Task.WhenAll( tasks.ToArray() );
-            }
-            catch ( Exception ex )
-            {
-                Logger.Error( "Init Layout: " + ex.Message );
-                return;
+                return false;
             }
 
-            ReOrder( true );
+            return !a.Where( ( t, i ) => t != b[i] ).Any();
         }
 
-        public static void UpdateVdwBackground()
+        if ( newOrder != null )
         {
-            MainWindow.RenderCellBorder();
+            ConfigManager.CurrentProfile.DesktopOrder = newOrder;
         }
 
-        public static void SaveOrder( List<Guid>? newOrder = null )
+        if ( IsSameGuidList( _lastDesktopOrder, ConfigManager.CurrentProfile.DesktopOrder! ) )
         {
-            static bool IsSameGuidList( List<Guid> a, List<Guid> b )
-            {
-                if ( a.Count != b.Count ) return false;
-                return !a.Where( ( t, i ) => t != b[i] ).Any();
-            }
-
-            if ( newOrder != null ) ConfigManager.CurrentProfile.DesktopOrder = newOrder;
-
-            if ( IsSameGuidList( _lastDesktopOrder, ConfigManager.CurrentProfile.DesktopOrder! ) ) return;
-
-            ConfigManager.Save( reason: "sync&save", reasonName: "ConfigManager.CurrentProfile.DesktopOrder" );
-            _lastDesktopOrder = new List<Guid>( ConfigManager.CurrentProfile.DesktopOrder! );
+            return;
         }
 
-        public static int GetVdIndexByGuid( Guid guid )
-        {
-            return ( from vdw in _virtualDesktops where vdw.VdId == guid select vdw.VdIndex ).FirstOrDefault();
-        }
+        ConfigManager.Save( reason: "sync&save", reasonName: "ConfigManager.CurrentProfile.DesktopOrder" );
+        _lastDesktopOrder = [.. ConfigManager.CurrentProfile.DesktopOrder!];
+    }
 
-        public static void Bootstrap()
-        {
-            _vdwDefaultBackColor = Color.FromArgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B );
-        }
+    public static int GetVdIndexByGuid( Guid guid )
+    {
+        return ( from vdw in _virtualDesktops where vdw.VdId == guid select vdw.VdIndex ).FirstOrDefault();
+    }
+
+    public static void Bootstrap()
+    {
+        _vdwDefaultBackColor = Color.FromArgb( Ui.VDWDefaultBackColor!.R, Ui.VDWDefaultBackColor.G, Ui.VDWDefaultBackColor.B );
     }
 }

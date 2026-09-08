@@ -13,26 +13,25 @@ using System;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
 
-namespace VirtualSpace.VirtualDesktop
+namespace VirtualSpace.VirtualDesktop;
+
+internal static partial class VirtualDesktopManager
 {
-    internal static partial class VirtualDesktopManager
+    public static int GetMatrixIndexByVdIndex( int vdIndex )
     {
-        public static int GetMatrixIndexByVdIndex( int vdIndex )
-        {
-            var rowsCols    = (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) );
-            var rc          = Navigation.RowColFromIndex( rowsCols, vdIndex, ConfigManager.CurrentProfile.UI.DesktopArrangement );
-            var matrixIndex = Navigation.IndexFromRowCol( rowsCols, rc, 0 );
+        var rowsCols    = (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) );
+        var rc          = Navigation.RowColFromIndex( rowsCols, vdIndex, ConfigManager.CurrentProfile.UI.DesktopArrangement );
+        var matrixIndex = Navigation.IndexFromRowCol( rowsCols, rc, 0 );
 
-            return matrixIndex;
-        }
+        return matrixIndex;
+    }
 
-        public static int GetVdIndexByMatrixIndex( int matrixIndex )
-        {
-            var rowsCols = (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) );
-            var rc       = Navigation.RowColFromIndex( rowsCols, matrixIndex, 0 );
-            var vdIndex  = Navigation.IndexFromRowCol( rowsCols, rc, ConfigManager.CurrentProfile.UI.DesktopArrangement );
+    public static int GetVdIndexByMatrixIndex( int matrixIndex )
+    {
+        var rowsCols = (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) );
+        var rc       = Navigation.RowColFromIndex( rowsCols, matrixIndex, 0 );
+        var vdIndex  = Navigation.IndexFromRowCol( rowsCols, rc, ConfigManager.CurrentProfile.UI.DesktopArrangement );
 
-            return vdIndex;
-        }
+        return vdIndex;
     }
 }

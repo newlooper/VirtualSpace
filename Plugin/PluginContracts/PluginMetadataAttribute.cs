@@ -11,45 +11,44 @@
 using System;
 using VirtualSpace.Plugin;
 
-namespace VirtualSpace.PluginContracts
+namespace VirtualSpace.PluginContracts;
+
+[AttributeUsage( AttributeTargets.Assembly )]
+public sealed class PluginMetadataAttribute : Attribute
 {
-    [AttributeUsage( AttributeTargets.Assembly )]
-    public sealed class PluginMetadataAttribute : Attribute
+    public PluginMetadataAttribute( string name, string display, string version, string description, string author, string email )
     {
-        public PluginMetadataAttribute( string name, string display, string version, string description, string author, string email )
+        Name        = name;
+        Display     = display;
+        Version     = version;
+        Description = description;
+        Author      = author;
+        Email       = email;
+    }
+
+    public string Name        { get; }
+    public string Display     { get; }
+    public string Version     { get; }
+    public string Description { get; }
+    public string Author      { get; }
+    public string Email       { get; }
+
+    public PluginType      Type                   { get; set; }
+    public bool            DefaultAutoStart       { get; set; }
+    public AutoStartTiming DefaultAutoStartTiming { get; set; } = AutoStartTiming.MainWindowLoaded;
+    public int             MinWinMajor            { get; set; } = 10;
+    public int             MinWinBuild            { get; set; } = 19041;
+    public string?         MinHostVersion         { get; set; }
+
+    public Requirements ToRequirements()
+    {
+        return new Requirements
         {
-            Name        = name;
-            Display     = display;
-            Version     = version;
-            Description = description;
-            Author      = author;
-            Email       = email;
-        }
-
-        public string Name        { get; }
-        public string Display     { get; }
-        public string Version     { get; }
-        public string Description { get; }
-        public string Author      { get; }
-        public string Email       { get; }
-
-        public PluginType      Type                     { get; set; }
-        public bool            DefaultAutoStart         { get; set; }
-        public AutoStartTiming DefaultAutoStartTiming   { get; set; } = AutoStartTiming.MainWindowLoaded;
-        public int             MinWinMajor              { get; set; } = 10;
-        public int             MinWinBuild              { get; set; } = 19041;
-        public string?         MinHostVersion           { get; set; }
-
-        public Requirements ToRequirements()
-        {
-            return new Requirements
+            WinVer = new WinVer
             {
-                WinVer = new WinVer
-                {
-                    Min = new Ver { Major = MinWinMajor, Build = MinWinBuild }
-                },
-                HostVersion = string.IsNullOrEmpty( MinHostVersion ) ? null : new Version( MinHostVersion )
-            };
-        }
+                Min = new Ver { Major = MinWinMajor, Build = MinWinBuild }
+            },
+            HostVersion = string.IsNullOrEmpty( MinHostVersion ) ? null : new Version( MinHostVersion )
+        };
     }
 }

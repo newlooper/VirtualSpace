@@ -15,34 +15,33 @@ using Cube3D.Config;
 using Cube3D.Effects;
 using ScreenCapture;
 
-namespace Cube3D
+namespace Cube3D;
+
+public partial class MainWindow
 {
-    public partial class MainWindow
+    private static Effect _effect;
+
+    private void CameraPosition( MonitorInfo mi )
     {
-        private static Effect _effect;
-
-        private void CameraPosition( MonitorInfo mi )
+        var ratio          = mi.ScreenSize.Y / mi.ScreenSize.X;
+        var workAreaWidth  = 1.0;
+        var workAreaHeight = workAreaWidth * ratio;
+        var radianFov      = MainCamera.FieldOfView * ( Math.PI / 180 );
+        var cameraX        = workAreaWidth / 2;
+        var cameraY        = workAreaHeight / 2;
+        var cameraZ        = workAreaWidth / 2 / Math.Tan( radianFov / 2 );
+        MainCamera = new PerspectiveCamera
         {
-            var ratio          = mi.ScreenSize.Y / mi.ScreenSize.X;
-            var workAreaWidth  = 1.0;
-            var workAreaHeight = workAreaWidth * ratio;
-            var radianFov      = MainCamera.FieldOfView * ( Math.PI / 180 );
-            var cameraX        = workAreaWidth / 2;
-            var cameraY        = workAreaHeight / 2;
-            var cameraZ        = workAreaWidth / 2 / Math.Tan( radianFov / 2 );
-            MainCamera = new PerspectiveCamera
-            {
-                LookDirection = new Vector3D( 0, 0, -1 ),
-                Position = new Point3D( cameraX, cameraY, cameraZ )
-            };
-            Vp3D.Camera = MainCamera;
-        }
+            LookDirection = new Vector3D( 0, 0, -1 ),
+            Position      = new Point3D( cameraX, cameraY, cameraZ )
+        };
+        Vp3D.Camera = MainCamera;
+    }
 
-        public void Build3D()
-        {
-            _effect = EffectFactory.Create( SettingsManager.Settings.SelectedEffect );
-            _effect.Build( MainModel3DGroup );
-            _effect.AddAnimationCompletedListener( AnimationCompleted );
-        }
+    public void Build3D()
+    {
+        _effect = EffectFactory.Create( SettingsManager.Settings.SelectedEffect );
+        _effect.Build( MainModel3DGroup );
+        _effect.AddAnimationCompletedListener( AnimationCompleted );
     }
 }

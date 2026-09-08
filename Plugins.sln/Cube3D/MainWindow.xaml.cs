@@ -17,7 +17,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Threading;
 using Cube3D.Config;
 using ScreenCapture;
@@ -26,228 +25,253 @@ using VirtualSpace.PluginContracts;
 
 #pragma warning disable CA1416
 
-namespace Cube3D
+namespace Cube3D;
+
+/// <summary>
+///     Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    ///     Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    private static readonly List<MainWindow> OtherScreens = [];
+
+    internal static Action       RestartRequested;
+    private         IntPtr       _handle;
+    private         IHostContext _host;
+
+    private MonitorInfo _monitorInfo;
+
+    public MainWindow()
     {
-        private static readonly List<MainWindow> OtherScreens = new();
+        InitializeComponent();
 
-        private MonitorInfo  _monitorInfo;
-        private IntPtr       _handle;
-        private IHostContext _host;
+        _monitorInfo = ( from m in MonitorEnumerationHelper.GetMonitors() where m.IsPrimary select m ).First();
 
-        public MainWindow()
+        var dpi = GetDpiForMonitor( _monitorInfo.Hmon );
+        Left   = 0;
+        Top    = 0;
+        Width  = _monitorInfo.ScreenSize.X / dpi.ScaleX;
+        Height = _monitorInfo.ScreenSize.Y / dpi.ScaleY;
+
+        Topmost       = true;
+        ShowActivated = false;
+
+        new WindowInteropHelper( this ).EnsureHandle();
+    }
+
+    private MainWindow( MonitorInfo mi )
+    {
+        InitializeComponent();
+
+        _monitorInfo = mi;
+
+        var dpi = GetDpiForMonitor( _monitorInfo.Hmon );
+        Left   = _monitorInfo.WorkArea.Left / dpi.ScaleX;
+        Top    = _monitorInfo.WorkArea.Top / dpi.ScaleY;
+        Width  = _monitorInfo.ScreenSize.X / dpi.ScaleX;
+        Height = _monitorInfo.ScreenSize.Y / dpi.ScaleY;
+
+        Topmost       = true;
+        ShowActivated = false;
+
+        new WindowInteropHelper( this ).EnsureHandle();
+    }
+
+    private static (double ScaleX, double ScaleY) GetDpiForMonitor( IntPtr hMon )
+    {
+        _ = User32.GetDpiForMonitor( hMon, User32.MonitorDpiType.MDT_EFFECTIVE_DPI, out var dpiX, out var dpiY );
+        return new ValueTuple<double, double>( dpiX / 96.0, dpiY / 96.0 );
+    }
+
+    protected override void OnSourceInitialized( EventArgs e )
+    {
+        base.OnSourceInitialized( e );
+        _handle = new WindowInteropHelper( this ).EnsureHandle();
+        var source = HwndSource.FromHwnd( _handle );
+        source?.AddHook( WndProc );
+    }
+
+    internal void AttachHost( IHostContext host )
+    {
+        _host = host;
+    }
+
+    internal void OnVirtualDesktopSwitch( VirtualDesktopSwitchInfo vdSwitchInfo )
+    {
+        if ( _mainWindowRunningAnimationCount != 0 )
         {
-            InitializeComponent();
-
-            _monitorInfo = ( from m in MonitorEnumerationHelper.GetMonitors() where m.IsPrimary select m ).First();
-
-            var dpi = GetDpiForMonitor( _monitorInfo.Hmon );
-            Left = 0;
-            Top = 0;
-            Width = _monitorInfo.ScreenSize.X / dpi.ScaleX;
-            Height = _monitorInfo.ScreenSize.Y / dpi.ScaleY;
-
-            Topmost = true;
-            ShowActivated = false;
-
-            new WindowInteropHelper( this ).EnsureHandle();
+            return;
         }
 
-        private MainWindow( MonitorInfo mi )
+        Task.Run( () => { Dispatcher.Invoke( () => PerformAnimationPrimary( vdSwitchInfo ) ); } );
+        foreach ( var other in OtherScreens )
         {
-            InitializeComponent();
-
-            _monitorInfo = mi;
-
-            var dpi = GetDpiForMonitor( _monitorInfo.Hmon );
-            Left = _monitorInfo.WorkArea.Left / dpi.ScaleX;
-            Top = _monitorInfo.WorkArea.Top / dpi.ScaleY;
-            Width = _monitorInfo.ScreenSize.X / dpi.ScaleX;
-            Height = _monitorInfo.ScreenSize.Y / dpi.ScaleY;
-
-            Topmost = true;
-            ShowActivated = false;
-
-            new WindowInteropHelper( this ).EnsureHandle();
+            other.PerformAnimationOthers( vdSwitchInfo );
         }
+    }
 
-        private static (double ScaleX, double ScaleY) GetDpiForMonitor( IntPtr hMon )
+    internal void OpenSettings()
+    {
+        if ( _sw is null || PresentationSource.FromVisual( _sw ) == null )
         {
-            _ = User32.GetDpiForMonitor( hMon, User32.MonitorDpiType.MDT_EFFECTIVE_DPI, out var dpiX, out var dpiY );
-            return new ValueTuple<double, double>( dpiX / 96.0, dpiY / 96.0 );
+            _sw = new SettingsWindow();
+            _sw.SetMainWindow( this );
+            _sw.ShowDialog();
         }
-
-        protected override void OnSourceInitialized( EventArgs e )
+        else
         {
-            base.OnSourceInitialized( e );
-            _handle = new WindowInteropHelper( this ).EnsureHandle();
-            var source = HwndSource.FromHwnd( _handle );
-            source?.AddHook( WndProc );
+            _sw.Activate();
         }
+    }
 
-        internal static Action RestartRequested;
+    internal void CloseAll()
+    {
+        InvalidateLoadsOnClose();
+        _displayChangeDebounceTimer?.Stop();
+        StopCapture();
+        _sw?.Close();
+        _sw = null;
+        ClearOtherScreens();
+        Close();
+    }
 
-        internal void AttachHost( IHostContext host )
+    internal void SetOtherScreensVisible( bool visible )
+    {
+        if ( visible )
         {
-            _host = host;
-        }
-
-        internal void OnVirtualDesktopSwitch( VirtualDesktopSwitchInfo vdSwitchInfo )
-        {
-            if ( _mainWindowRunningAnimationCount != 0 ) return;
-
-            Task.Run( () => { Dispatcher.Invoke( () => PerformAnimationPrimary( vdSwitchInfo ) ); } );
-            foreach ( var other in OtherScreens )
-            {
-                other.PerformAnimationOthers( vdSwitchInfo );
-            }
-        }
-
-        internal void OpenSettings()
-        {
-            if ( _sw is null || PresentationSource.FromVisual( _sw ) == null )
-            {
-                _sw = new SettingsWindow();
-                _sw.SetMainWindow( this );
-                _sw.ShowDialog();
-            }
-            else
-            {
-                _sw.Activate();
-            }
-        }
-
-        internal void CloseAll()
-        {
-            InvalidateLoadsOnClose();
-            _displayChangeDebounceTimer?.Stop();
-            StopCapture();
-            _sw?.Close();
-            _sw = null;
-            ClearOtherScreens();
-            Close();
-        }
-
-        internal void SetOtherScreensVisible( bool visible )
-        {
-            if ( visible ) CreateOtherScreens();
-            else ClearOtherScreens();
-        }
-
-        private void Register()
-        {
-            if ( !_monitorInfo.IsPrimary || _host == null ) return;
-
-            User32.SetWindowLongPtr( new HandleRef( this, _handle ),
-                (int)GetWindowLongFields.GWL_HWNDPARENT,
-                _host.MainWindowHandle.ToInt32()
-            );
-        }
-
-        private void Bootstrap()
-        {
-            Register();
-
-            FixStyle();
-
-            CameraPosition( _monitorInfo );
-
-            _animationNotifyGrid.Completed += AnimationCompleted;
-        }
-
-        private void FixStyle()
-        {
-            _ = User32.SetWindowDisplayAffinity( _handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
-
-            var style = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_STYLE );
-            style = unchecked(style | (int)0x80000000); // WS_POPUP
-            User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_STYLE, style );
-
-            var exStyle = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_EXSTYLE );
-            exStyle |= 0x08000000; // WS_EX_NOACTIVATE
-            exStyle &= ~0x00040000; // WS_EX_APPWINDOW
-            User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
-        }
-
-        private async void Window_Loaded( object sender, RoutedEventArgs e )
-        {
-            _windowLoadGeneration = Interlocked.Increment( ref _loadGeneration );
-            var loadGeneration = _windowLoadGeneration;
-
-            FakeHide();
-
-            SetTransitionType();
-
-            Bootstrap();
-
-            if ( !_monitorInfo.IsPrimary ) return;
-
-            Build3D();
             CreateOtherScreens();
-
-            await Dispatcher.Yield( DispatcherPriority.Background );
-            if ( !IsLoadCurrent( loadGeneration ) || !IsLoaded ) return;
-
-            await D3D9ShareCapture.PreloadD3D11Async();
-            if ( !IsLoadCurrent( loadGeneration ) || !IsLoaded ) return;
-
-            if ( !await WarmupMonitorCaptureAsync( loadGeneration ).ConfigureAwait( true ) )
-                ScheduleCaptureRetry();
         }
-
-        public void SetTransitionType()
+        else
         {
-            if ( SettingsManager.Settings.TransitionType == TransitionType.NotificationGridOnly || !_monitorInfo.IsPrimary )
-            {
-                Background = PluginUi.BackgroundTrans;
-                WinChrome.GlassFrameThickness = new Thickness( -1 );
-                Vp3D.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                Background = PluginUi.BackgroundLgb;
-                WinChrome.GlassFrameThickness = new Thickness( 0 );
-                Vp3D.Visibility = Visibility.Visible;
-            }
-
-            NotifyContainer.Visibility = ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 || !_monitorInfo.IsPrimary
-                ? Visibility.Visible
-                : Visibility.Hidden;
-        }
-
-        private void CreateOtherScreens()
-        {
-            if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) == 0 ||
-                 !SettingsManager.Settings.ShowNotificationGridOnAllScreens ) return;
-
             ClearOtherScreens();
-            var others = ( from m in MonitorEnumerationHelper.GetMonitors()
-                where !m.IsPrimary
-                select m ).ToList();
-            foreach ( var ow in from mi in others select new MainWindow( mi ) )
-            {
-                OtherScreens.Add( ow );
-                User32.SetWindowLongPtr( new HandleRef( ow, ow._handle ),
-                    (int)GetWindowLongFields.GWL_HWNDPARENT,
-                    _handle.ToInt32()
-                );
-                ow.Show();
-            }
         }
+    }
 
-        private static void ClearOtherScreens()
+    private void Register()
+    {
+        if ( !_monitorInfo.IsPrimary || _host == null )
         {
-            foreach ( var ow in OtherScreens )
-            {
-                ow.Close();
-            }
-
-            OtherScreens.Clear();
+            return;
         }
+
+        User32.SetWindowLongPtr( new HandleRef( this, _handle ),
+            (int)GetWindowLongFields.GWL_HWNDPARENT,
+            _host.MainWindowHandle.ToInt32()
+        );
+    }
+
+    private void Bootstrap()
+    {
+        Register();
+
+        FixStyle();
+
+        CameraPosition( _monitorInfo );
+
+        _animationNotifyGrid.Completed += AnimationCompleted;
+    }
+
+    private void FixStyle()
+    {
+        _ = User32.SetWindowDisplayAffinity( _handle, User32.WDA_EXCLUDEFROMCAPTURE ); // self exclude from screen capture
+
+        var style = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_STYLE );
+        style = unchecked( style | (int)0x80000000 ); // WS_POPUP
+        User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_STYLE, style );
+
+        var exStyle = User32.GetWindowLong( _handle, (int)GetWindowLongFields.GWL_EXSTYLE );
+        exStyle |= 0x08000000; // WS_EX_NOACTIVATE
+        exStyle &= ~0x00040000; // WS_EX_APPWINDOW
+        User32.SetWindowLongPtr( new HandleRef( this, _handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
+    }
+
+    private async void Window_Loaded( object sender, RoutedEventArgs e )
+    {
+        _windowLoadGeneration = Interlocked.Increment( ref _loadGeneration );
+        var loadGeneration = _windowLoadGeneration;
+
+        FakeHide();
+
+        SetTransitionType();
+
+        Bootstrap();
+
+        if ( !_monitorInfo.IsPrimary )
+        {
+            return;
+        }
+
+        Build3D();
+        CreateOtherScreens();
+
+        await Dispatcher.Yield( DispatcherPriority.Background );
+        if ( !IsLoadCurrent( loadGeneration ) || !IsLoaded )
+        {
+            return;
+        }
+
+        await D3D9ShareCapture.PreloadD3D11Async();
+        if ( !IsLoadCurrent( loadGeneration ) || !IsLoaded )
+        {
+            return;
+        }
+
+        if ( !await WarmupMonitorCaptureAsync( loadGeneration ).ConfigureAwait( true ) )
+        {
+            ScheduleCaptureRetry();
+        }
+    }
+
+    public void SetTransitionType()
+    {
+        if ( SettingsManager.Settings.TransitionType == TransitionType.NotificationGridOnly || !_monitorInfo.IsPrimary )
+        {
+            Background                    = PluginUi.BackgroundTrans;
+            WinChrome.GlassFrameThickness = new Thickness( -1 );
+            Vp3D.Visibility               = Visibility.Hidden;
+        }
+        else
+        {
+            Background                    = PluginUi.BackgroundLgb;
+            WinChrome.GlassFrameThickness = new Thickness( 0 );
+            Vp3D.Visibility               = Visibility.Visible;
+        }
+
+        NotifyContainer.Visibility = ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 || !_monitorInfo.IsPrimary
+            ? Visibility.Visible
+            : Visibility.Hidden;
+    }
+
+    private void CreateOtherScreens()
+    {
+        if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) == 0 ||
+             !SettingsManager.Settings.ShowNotificationGridOnAllScreens )
+        {
+            return;
+        }
+
+        ClearOtherScreens();
+        var others = ( from m in MonitorEnumerationHelper.GetMonitors()
+            where !m.IsPrimary
+            select m ).ToList();
+        foreach ( var ow in from mi in others select new MainWindow( mi ) )
+        {
+            OtherScreens.Add( ow );
+            User32.SetWindowLongPtr( new HandleRef( ow, ow._handle ),
+                (int)GetWindowLongFields.GWL_HWNDPARENT,
+                _handle.ToInt32()
+            );
+            ow.Show();
+        }
+    }
+
+    private static void ClearOtherScreens()
+    {
+        foreach ( var ow in OtherScreens )
+        {
+            ow.Close();
+        }
+
+        OtherScreens.Clear();
     }
 }
 

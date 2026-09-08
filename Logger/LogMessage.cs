@@ -9,20 +9,19 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace VirtualSpace.AppLogs
-{
-    public class LogMessage
-    {
-        public string Type    { get; private init; }
-        public string Message { get; private init; }
+namespace VirtualSpace.AppLogs;
 
-        public static LogMessage CreateMessage( string type, string msg )
+public class LogMessage
+{
+    public string Type    { get; private init; }
+    public string Message { get; private init; }
+
+    public static LogMessage CreateMessage( string type, string msg )
+    {
+        return new LogMessage
         {
-            return new LogMessage
-            {
-                Type    = type,
-                Message = msg
-            };
-        }
+            Type    = type,
+            Message = msg
+        };
     }
 }

@@ -9,52 +9,53 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 using System.Windows;
 using VirtualSpace.Config;
 using VirtualSpace.VirtualDesktop;
 
-namespace VirtualSpace
+namespace VirtualSpace;
+
+public partial class MainWindow
 {
-    public partial class MainWindow
+    private void ToggleWindowFilter()
     {
-        private void ToggleWindowFilter()
+        if ( !IsShowing() )
         {
-            if ( !IsShowing() ) return;
-
-            var filterRow = Canvas.RowDefinitions[1];
-            if ( filterRow.Height.Value == 0 )
-            {
-                filterRow.Height = new GridLength( Const.Window.WINDOW_FILTER_BAR_HEIGHT, GridUnitType.Pixel );
-                ShowFilterWindow();
-            }
-            else
-            {
-                filterRow.Height = new GridLength( 0 );
-                HideFilterWindow( false );
-            }
-
-            UpdateLayout();
-            VirtualDesktopManager.ShowAllVirtualDesktops();
+            return;
         }
 
-        private void ShowFilterWindow()
+        var filterRow = Canvas.RowDefinitions[1];
+        if ( filterRow.Height.Value == 0 )
         {
-            var wf = WindowFilter.GetInstance( _instance.Handle );
-            wf.Width = Width;
-            wf.Left  = Left;
-            wf.Top   = Height - Const.Window.WINDOW_FILTER_BAR_HEIGHT;
-            wf.Show();
-            wf.SetFocus();
+            filterRow.Height = new GridLength( Const.Window.WINDOW_FILTER_BAR_HEIGHT, GridUnitType.Pixel );
+            ShowFilterWindow();
         }
-
-        private static void HideFilterWindow( bool clearKeyword = true )
+        else
         {
-            var filterRow = _instance.Canvas.RowDefinitions[1];
             filterRow.Height = new GridLength( 0 );
-
-            var wf = WindowFilter.GetInstance( _instance.Handle );
-            wf.ClearAndHide( clearKeyword );
+            HideFilterWindow( false );
         }
+
+        UpdateLayout();
+        VirtualDesktopManager.ShowAllVirtualDesktops();
+    }
+
+    private void ShowFilterWindow()
+    {
+        var wf = WindowFilter.GetInstance( _instance.Handle );
+        wf.Width = Width;
+        wf.Left  = Left;
+        wf.Top   = Height - Const.Window.WINDOW_FILTER_BAR_HEIGHT;
+        wf.Show();
+        wf.SetFocus();
+    }
+
+    private static void HideFilterWindow( bool clearKeyword = true )
+    {
+        var filterRow = _instance.Canvas.RowDefinitions[1];
+        filterRow.Height = new GridLength( 0 );
+
+        var wf = WindowFilter.GetInstance( _instance.Handle );
+        wf.ClearAndHide( clearKeyword );
     }
 }
