@@ -32,8 +32,9 @@ internal static partial class VirtualDesktopManager
     private static void SyncVirtualDesktops()
     {
         var commonSize = GetCommonVdwSize();
+        var existing   = _virtualDesktops.ToDictionary( v => v.VdId );
+        var survival   = new List<VirtualDesktopWindow>( DesktopWrapper.Count );
 
-        var survivalDesktops = new List<VirtualDesktopWindow>();
         for ( var index = 0; index < DesktopWrapper.Count; index++ ) // build new list according to current system vd list
         {
             var guid = DesktopManagerWrapper.GetIdByIndex( index );
@@ -42,27 +43,24 @@ internal static partial class VirtualDesktopManager
                 continue;
             }
 
-            var survival = _virtualDesktops.Find( v => v.VdId == guid );
-            if ( survival == null )
+            if ( existing.Remove( guid, out var vdw ) )
             {
-                survival = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
+                vdw.VdIndex = index;
             }
             else
             {
-                survival.VdIndex = index;
+                vdw = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
             }
 
-            survivalDesktops.Add( survival );
+            survival.Add( vdw );
         }
 
-        var sysGuids = survivalDesktops.Select( v => v.VdId ).ToList();
-        foreach ( var old in _virtualDesktops.Where( old => !sysGuids.Contains( old.VdId ) ) )
+        foreach ( var old in existing.Values )
         {
             old.RealClose();
         }
 
-        _virtualDesktops = survivalDesktops; // system vd list order at this moment
-
+        _virtualDesktops = survival; // system vd list order at this moment
         ReOrder(); // reorder by profile
     }
 
@@ -82,36 +80,35 @@ internal static partial class VirtualDesktopManager
             _virtualDesktops.Sort( ( x, y ) => x.VdIndex.CompareTo( y.VdIndex ) );
         }
 
-        var profile  = ConfigManager.CurrentProfile;
-        var sysGuids = _virtualDesktops.Select( vdw => vdw.VdId ).ToList();
+        var profile = ConfigManager.CurrentProfile;
+        var byGuid  = _virtualDesktops.ToDictionary( vdw => vdw.VdId );
 
         if ( profile.DesktopOrder == null || profile.DesktopOrder.Count == 0 ) // no custom order, using system's
         {
-            SaveOrder( sysGuids );
+            SaveOrder( [.. _virtualDesktops.Select( vdw => vdw.VdId )] );
             return;
         }
 
-        profile.DesktopOrder.RemoveAll( g => !sysGuids.Contains( g ) );
+        profile.DesktopOrder.RemoveAll( g => !byGuid.ContainsKey( g ) );
 
-        var orderedByProfile = new List<VirtualDesktopWindow>();
-        for ( var idx = 0; idx < profile.DesktopOrder.Count; idx++ )
+        var orderedByProfile = new List<VirtualDesktopWindow>( byGuid.Count );
+        foreach ( var guid in profile.DesktopOrder )
         {
-            var vdw = _virtualDesktops.Find( vdw => vdw.VdId == profile.DesktopOrder[idx] );
-            if ( vdw is null )
+            if ( !byGuid.Remove( guid, out var vdw ) )
             {
                 continue;
             }
 
-            vdw.VdIndex = idx; // reposition
+            vdw.VdIndex = orderedByProfile.Count;
             orderedByProfile.Add( vdw );
-            _virtualDesktops.Remove( vdw );
         }
 
-        foreach ( var restVdw in _virtualDesktops )
+        // remaining entries keep system relative order (dictionary insertion order)
+        foreach ( var restVdw in byGuid.Values )
         {
             restVdw.VdIndex = orderedByProfile.Count;
-            orderedByProfile.Add( restVdw ); // increase orderedByProfile.Count every turn, so that vdw.VdIndex can be set properly.
-            profile.DesktopOrder.Add( restVdw.VdId ); // append to tail
+            orderedByProfile.Add( restVdw );
+            profile.DesktopOrder.Add( restVdw.VdId );
         }
 
         _virtualDesktops = orderedByProfile;
@@ -201,16 +198,6 @@ internal static partial class VirtualDesktopManager
 
     public static void SaveOrder( List<Guid>? newOrder = null )
     {
-        static bool IsSameGuidList( List<Guid> a, List<Guid> b )
-        {
-            if ( a.Count != b.Count )
-            {
-                return false;
-            }
-
-            return !a.Where( ( t, i ) => t != b[i] ).Any();
-        }
-
         if ( newOrder != null )
         {
             ConfigManager.CurrentProfile.DesktopOrder = newOrder;
@@ -221,8 +208,20 @@ internal static partial class VirtualDesktopManager
             return;
         }
 
-        ConfigManager.Save( reason: "sync&save", reasonName: "ConfigManager.CurrentProfile.DesktopOrder" );
         _lastDesktopOrder = [.. ConfigManager.CurrentProfile.DesktopOrder!];
+        ConfigManager.Save( reason: "sync&save", reasonName: "ConfigManager.CurrentProfile.DesktopOrder" );
+
+        return;
+
+        static bool IsSameGuidList( List<Guid> a, List<Guid> b )
+        {
+            if ( a.Count != b.Count )
+            {
+                return false;
+            }
+
+            return !a.Where( ( t, i ) => t != b[i] ).Any();
+        }
     }
 
     public static int GetVdIndexByGuid( Guid guid )
