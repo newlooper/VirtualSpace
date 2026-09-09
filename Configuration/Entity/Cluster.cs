@@ -15,15 +15,16 @@ namespace VirtualSpace.Config.Entity;
 
 public class Cluster
 {
-    public bool HideMainViewIfItsShown           { get; set; }
-    public bool NotificationOnVdChanged          { get; set; }
-    public bool ShowVDIndexOnTrayIcon            { get; set; }
-    public int  StyleOfVDIndexOnTrayIcon         { get; set; }
-    public bool HideOnStart                      { get; set; }
-    public bool ForceFocusForegroundWindow       { get; set; } = true;
-    public bool EnableDoubleBufferedForVDW       { get; set; } = true;
-    public bool EnableWindowFilter               { get; set; }
-    public bool TryHarderActivateMinimizedWindow { get; set; }
+    public bool HideMainViewIfItsShown              { get; set; }
+    public bool NotificationOnVdChanged             { get; set; }
+    public bool ShowVDIndexOnTrayIcon               { get; set; }
+    public int  StyleOfVDIndexOnTrayIcon            { get; set; }
+    public bool HideOnStart                         { get; set; }
+    public bool ForceFocusForegroundWindow          { get; set; } = true;
+    public bool EnableDoubleBufferedForVDW          { get; set; } = true;
+    public bool EnableWindowFilter                  { get; set; }
+    public bool TryHarderActivateMinimizedWindow    { get; set; }
+    public bool ForceSetForegroundWindowForMainView { get; set; } = true;
 
     [PropertyProtector( 50L, 30L, 100L )]  public long VdwWallpaperQuality                      { get; set; }
     [PropertyProtector( 200, 100, 1000 )]  public int  ToggleWindowFilterDoublePressMaxInterval { get; set; }

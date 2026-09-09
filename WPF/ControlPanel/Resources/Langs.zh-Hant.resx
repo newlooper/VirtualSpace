@@ -612,6 +612,9 @@
     <data name="Page.General.EnableWindowFilter" xml:space="preserve">
     <value>當主檢視顯示時，[雙擊左SHIFT]開啟視窗過濾器。</value>
   </data>
+    <data name="Page.General.ForceSetForegroundWindowForMainView" xml:space="preserve">
+    <value>喚起主檢視時，強制釋放滑鼠(避免滑鼠被某些程式鎖住)</value>
+  </data>
     <data name="Window.RuleDefinition" xml:space="preserve">
     <value>規則定義</value>
   </data>

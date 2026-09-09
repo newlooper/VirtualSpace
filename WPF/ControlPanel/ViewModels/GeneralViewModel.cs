@@ -122,22 +122,24 @@ public partial class GeneralViewModel : ViewModelBase
 
         public ClusterProxy( Cluster cluster )
         {
-            _cluster                 = cluster;
-            HideMainViewIfItsShown   = cluster.HideMainViewIfItsShown;
-            NotificationOnVdChanged  = cluster.NotificationOnVdChanged;
-            ShowVDIndexOnTrayIcon    = cluster.ShowVDIndexOnTrayIcon;
-            StyleOfVDIndexOnTrayIcon = cluster.StyleOfVDIndexOnTrayIcon;
-            HideOnStart              = cluster.HideOnStart;
-            EnableWindowFilter       = cluster.EnableWindowFilter;
-            _isInitialized           = true;
+            _cluster                            = cluster;
+            HideMainViewIfItsShown              = cluster.HideMainViewIfItsShown;
+            NotificationOnVdChanged             = cluster.NotificationOnVdChanged;
+            ShowVDIndexOnTrayIcon               = cluster.ShowVDIndexOnTrayIcon;
+            StyleOfVDIndexOnTrayIcon            = cluster.StyleOfVDIndexOnTrayIcon;
+            HideOnStart                         = cluster.HideOnStart;
+            EnableWindowFilter                  = cluster.EnableWindowFilter;
+            ForceSetForegroundWindowForMainView = cluster.ForceSetForegroundWindowForMainView;
+            _isInitialized                      = true;
         }
 
-        public new bool HideMainViewIfItsShown   { get; set; }
-        public new bool NotificationOnVdChanged  { get; set; }
-        public new bool ShowVDIndexOnTrayIcon    { get; set; }
-        public new int  StyleOfVDIndexOnTrayIcon { get; set; }
-        public new bool HideOnStart              { get; set; }
-        public new bool EnableWindowFilter       { get; set; }
+        public new bool HideMainViewIfItsShown              { get; set; }
+        public new bool NotificationOnVdChanged             { get; set; }
+        public new bool ShowVDIndexOnTrayIcon               { get; set; }
+        public new int  StyleOfVDIndexOnTrayIcon            { get; set; }
+        public new bool HideOnStart                         { get; set; }
+        public new bool EnableWindowFilter                  { get; set; }
+        public new bool ForceSetForegroundWindowForMainView { get; set; }
 
         public void OnPropertyChanged( string propertyName, object before, object after )
         {
@@ -169,6 +171,9 @@ public partial class GeneralViewModel : ViewModelBase
                         break;
                     case nameof( EnableWindowFilter ):
                         _cluster.EnableWindowFilter = EnableWindowFilter;
+                        break;
+                    case nameof( ForceSetForegroundWindowForMainView ):
+                        _cluster.ForceSetForegroundWindowForMainView = ForceSetForegroundWindowForMainView;
                         break;
                 }
 

@@ -78,7 +78,11 @@ public partial class MainWindow : Window, IAppController
         Topmost = false;
         Topmost = true;
 
-        User32.ClipCursor( IntPtr.Zero );
+        if ( Manager.Configs.Cluster.ForceSetForegroundWindowForMainView )
+        {
+            User32.SetForegroundWindow( _handle );
+            User32.ClipCursor( IntPtr.Zero );
+        }
     }
 
     public void SetMainWindowHandle( IntPtr handle )
