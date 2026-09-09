@@ -212,8 +212,8 @@ public static class MouseAction
     public static          string MOUSE_NODE_WINDOW_PREFIX  = "mouse_node_w_";
     public static readonly string NoneKeyCode               = ( (int)Keys.None ).ToString( "X2" );
 
-    private static readonly Dictionary<MouseButtons, string> MouseButtonsName;
-    public static readonly  Dictionary<Keys, string>         KeysName;
+    public static readonly Dictionary<MouseButtons, string> MouseButtonsName;
+    public static readonly Dictionary<Keys, string>         KeysName;
 
     ////////////////////////////////////////////////////////////////
     // 鼠标动作表，信息包含默认行为
@@ -229,7 +229,9 @@ public static class MouseAction
         {
             { MouseButtons.Left, "Left" },
             { MouseButtons.Middle, "Middle" },
-            { MouseButtons.Right, "Right" }
+            { MouseButtons.Right, "Right" },
+            { MouseButtons.XButton1, "XButton1" },
+            { MouseButtons.XButton2, "XButton2" }
         };
 
         KeysName = new Dictionary<Keys, string>
@@ -244,10 +246,14 @@ public static class MouseAction
             { MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.DesktopVisibleAndCloseView },
             { MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.DesktopVisibleOnly },
             { MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu },
+            { MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.XButton1], Action.DoNothing },
+            { MOUSE_NODE_DESKTOP_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.XButton2], Action.DoNothing },
 
             { MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Left], Action.WindowActiveDesktopVisibleAndCloseView },
             { MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Middle], Action.WindowActiveDesktopVisibleOnly },
-            { MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu }
+            { MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.Right], Action.ContextMenu },
+            { MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.XButton1], Action.DoNothing },
+            { MOUSE_NODE_WINDOW_PREFIX + NoneKeyCode + KEY_SPLITTER + MouseButtonsName[MouseButtons.XButton2], Action.DoNothing }
         };
 
         Info1 = new Dictionary<string, Action>
@@ -289,8 +295,11 @@ public static class MouseAction
 
         var keyCode = ( (int)key ).ToString( "X2" );
 
-        var actionId = prefix + keyCode + KEY_SPLITTER + MouseButtonsName[mb];
+        if ( !MouseButtonsName.TryGetValue( mb, out var buttonName ) )
+        {
+            throw new KeyNotFoundException( $"Unsupported mouse button: {mb}" );
+        }
 
-        return actionId;
+        return prefix + keyCode + KEY_SPLITTER + buttonName;
     }
 }

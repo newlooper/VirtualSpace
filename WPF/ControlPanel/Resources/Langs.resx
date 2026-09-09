@@ -418,6 +418,12 @@ if the conditions are not satisfied, the program will automatically reset to the
     <data name="Page.Control.MouseButtons.Right" xml:space="preserve">
     <value>Right</value>
   </data>
+    <data name="Page.Control.MouseButtons.XButton1" xml:space="preserve">
+    <value>Side Button 1</value>
+  </data>
+    <data name="Page.Control.MouseButtons.XButton2" xml:space="preserve">
+    <value>Side Button 2</value>
+  </data>
     <data name="Page.Rules.Rule.Op.=" xml:space="preserve">
     <value>is</value>
   </data>

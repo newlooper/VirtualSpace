@@ -10,6 +10,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using PropertyChanged;
 using VirtualSpace.Config;
@@ -66,15 +67,8 @@ public partial class MouseActionModel : ViewModelBase
 
     public string MouseButton { get; set; } = "Left";
 
-    private static List<object> GetMouseButtons()
-    {
-        return
-        [
-            new { Value = "Left", Text   = "" },
-            new { Value = "Middle", Text = "" },
-            new { Value = "Right", Text  = "" }
-        ];
-    }
+    private static List<object> GetMouseButtons() =>
+        [.. MouseAction.MouseButtonsName.Values.Select( name => (object)new { Value = name, Text = "" } )];
 
     public void OnPropertyChanged( string propertyName, object before, object after )
     {

@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -120,6 +121,40 @@ public partial class VirtualDesktopWindow
             return;
         }
 
+        try
+        {
+            HandleMouseUp( sender, e );
+        }
+        catch ( Exception ex )
+        {
+            CultureInfo.CurrentUICulture = new CultureInfo( ConfigManager.CurrentProfile.UI.Language );
+            Logger.Error(
+                $"MouseUp: {ex.Message}",
+                new NotifyObject
+                {
+                    Title   = Agent.Langs.GetString( "Error.Title" )!,
+                    Message = ex.Message
+                } );
+        }
+        finally
+        {
+            VirtualDesktopManager.UpdateVdwBackground();
+
+            if ( _dw != null )
+            {
+                _ = DwmApi.DwmUnregisterThumbnail( _dw.Thumb );
+                _dw.Close();
+                _dw = null;
+            }
+
+            _dragState      = 0;
+            _selectedWindow = null;
+            _dragBounds     = Rectangle.Empty;
+        }
+    }
+
+    private void HandleMouseUp( object sender, MouseEventArgs e )
+    {
         _hoverVdIndex = HoverOnDesktop( sender, e );
         if ( _hoverVdIndex < 0 )
         {
@@ -301,19 +336,6 @@ public partial class VirtualDesktopWindow
                 }
             }
         }
-
-        VirtualDesktopManager.UpdateVdwBackground();
-
-        if ( _dw != null )
-        {
-            _ = DwmApi.DwmUnregisterThumbnail( _dw.Thumb );
-            _dw.Close();
-            _dw = null;
-        }
-
-        _dragState      = 0;
-        _selectedWindow = null;
-        _dragBounds     = Rectangle.Empty;
     }
 
     private int HoverOnDesktop( object sender, MouseEventArgs e )

@@ -417,6 +417,12 @@
     <data name="Page.Control.MouseButtons.Right" xml:space="preserve">
     <value>右鍵</value>
   </data>
+    <data name="Page.Control.MouseButtons.XButton1" xml:space="preserve">
+    <value>側鍵一</value>
+  </data>
+    <data name="Page.Control.MouseButtons.XButton2" xml:space="preserve">
+    <value>側鍵二</value>
+  </data>
     <data name="Page.Rules.Rule.Op.=" xml:space="preserve">
     <value>是</value>
   </data>
