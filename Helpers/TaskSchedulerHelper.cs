@@ -23,6 +23,9 @@ public static class TaskSchedulerHelper
             throw new Exception( "General.RunOnStartup.Error.Permission" );
         }
 
+        var taskPath = GetTaskPath( taskName, taskFolder );
+        DeleteTaskIfExists( taskPath );
+
         var td = TaskService.Instance.NewTask();
         td.RegistrationInfo.Description = "autorun " + taskName + " at system startup.";
         td.Principal.RunLevel           = TaskRunLevel.Highest;
@@ -36,7 +39,7 @@ public static class TaskSchedulerHelper
         var ea = new ExecAction( $"\"{fullAppPath}\"", "" );
         td.Actions.Add( ea );
 
-        TaskService.Instance.RootFolder.RegisterTaskDefinition( GetTaskPath( taskName, taskFolder ), td );
+        TaskService.Instance.RootFolder.RegisterTaskDefinition( taskPath, td );
     }
 
     public static void DeleteTaskByName( string taskName, string taskFolder = "" )
@@ -54,7 +57,43 @@ public static class TaskSchedulerHelper
     {
         using var ts = new TaskService();
         var       t  = ts.GetTask( GetTaskPath( taskName, taskFolder ) );
-        return t != null;
+        if ( t is null )
+        {
+            return false;
+        }
+
+        var currentPath = NormalizePath( Environment.ProcessPath );
+        if ( string.IsNullOrEmpty( currentPath ) )
+        {
+            return false;
+        }
+
+        foreach ( var action in t.Definition.Actions )
+        {
+            if ( action is ExecAction exec &&
+                 string.Equals( NormalizePath( exec.Path ), currentPath, StringComparison.OrdinalIgnoreCase ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void DeleteTaskIfExists( string taskPath )
+    {
+        using var ts = new TaskService();
+        if ( ts.GetTask( taskPath ) is null )
+        {
+            return;
+        }
+
+        ts.RootFolder.DeleteTask( taskPath );
+    }
+
+    private static string NormalizePath( string? path )
+    {
+        return string.IsNullOrEmpty( path ) ? string.Empty : path.Trim().Trim( '"' );
     }
 
     private static string GetTaskPath( string taskName, string taskFolder )
