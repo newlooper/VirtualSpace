@@ -96,10 +96,10 @@ public partial class MainWindow
         Bootstrap();
     }
 
-    private async void Window_Loaded( object sender, RoutedEventArgs e )
+    private void Window_Loaded( object sender, RoutedEventArgs e )
     {
         VirtualDesktopManager.Bootstrap();
-        await VirtualDesktopManager.InitLayout();
+        VirtualDesktopManager.InitLayout();
 
         UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
 

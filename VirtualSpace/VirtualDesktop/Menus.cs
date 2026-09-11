@@ -136,7 +136,7 @@ public static class Menus
 
         ////////////////////////////////////////////////////////////////
         // Show Window ContextMenu 
-        _ctm.Show( mi.Sender as Control, mi.Location );
+        _ctm.Show( mi.Self.ClientPixelToScreen( mi.Location ) );
     }
 
     public static void VdCtm( MenuInfo mi )
@@ -262,7 +262,7 @@ public static class Menus
 
         ///////////////////////////////////
         // Show Virtual Desktop ContextMenu 
-        _ctm.Show( mi.Sender as Control, mi.Location );
+        _ctm.Show( mi.Self.ClientPixelToScreen( mi.Location ) );
     }
 
     public static void CloseContextMenu()

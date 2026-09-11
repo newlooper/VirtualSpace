@@ -1,0 +1,21 @@
+<Window x:Class="VirtualSpace.VirtualDesktop.VdwSurface"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False"
+        ShowActivated="False" Topmost="True" Focusable="False"
+        SnapsToDevicePixels="True" UseLayoutRounding="True"
+        Background="#FF000000">
+    <Grid>
+        <Image x:Name="WallpaperImage" Stretch="Fill"
+               RenderOptions.BitmapScalingMode="NearestNeighbor" />
+        <TextBlock x:Name="DesktopLabel"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   Margin="2,0,0,2"
+                   Foreground="Beige"
+                   FontFamily="Segoe UI Emoji"
+                   FontSize="13"
+                   IsHitTestVisible="False" />
+    </Grid>
+</Window>

@@ -27,31 +27,6 @@ public static class WinRegistry
     private const string PATH_COLOR_REGISTRY        = @"HKEY_CURRENT_USER\Control Panel\Colors\";
     private const string PATH_APP_USE_LIGHT_THEME   = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\";
 
-    public static Wallpaper GetWallpaperByDesktopGuid( Guid guid, int width, int height, string cachePath, long quality )
-    {
-        var wallpaper = new Wallpaper();
-
-        var path = GetWallPaperPathByGuid( guid );
-
-        if ( string.IsNullOrEmpty( path ) )
-        {
-            wallpaper.Color = GetBackColor();
-        }
-        else
-        {
-            wallpaper.Image = Images.GetScaledBitmap( width, height, path, ref wallpaper, cachePath, quality );
-        }
-
-        return wallpaper;
-    }
-
-    public static Wallpaper GetWallpaperByPath( string path, int width, int height, string cachePath, long quality )
-    {
-        var wallpaper = new Wallpaper();
-        wallpaper.Image = Images.GetScaledBitmap( width, height, path, ref wallpaper, cachePath, quality );
-        return wallpaper;
-    }
-
     public static string? GetDefaultWallpaperPath()
     {
         return Registry.GetValue( PATH_WALLPAPER_REGISTRY, "Wallpaper", "" )!.ToString();

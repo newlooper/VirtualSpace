@@ -19,40 +19,49 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
+using Cursor = System.Windows.Forms.Cursor;
+using MouseAction = VirtualSpace.Config.MouseAction;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using WinFormsKeys = System.Windows.Forms.Keys;
+using WinFormsMouseButtons = System.Windows.Forms.MouseButtons;
 
 namespace VirtualSpace.VirtualDesktop;
 
 public partial class VirtualDesktopWindow
 {
-    private static int            _hoverVdIndex;
-    private static Point          _startPoint;
-    private static int            _dragState;
-    private static Rectangle      _dragBounds = Rectangle.Empty;
-    private static VisibleWindow? _selectedWindow;
-    private static DragWindow?    _dw;
-    private        bool           _isTheOnlyOneInMainView;
+    private static int                  _hoverVdIndex;
+    private static Point                _startPoint;
+    private static System.Windows.Point _startDip;
+    private static int                  _dragState;
+    private static Rectangle            _dragBounds = Rectangle.Empty;
+    private static VisibleWindow?       _selectedWindow;
+    private static DragWindow?          _dw;
+    private        bool                 _isTheOnlyOneInMainView;
 
     public void ResetOnlyOneStatus()
     {
         _isTheOnlyOneInMainView = false;
     }
 
-    private void VirtualDesktopWindow_MouseDown( object sender, MouseEventArgs e )
+    private void VirtualDesktopWindow_MouseDown( object sender, MouseButtonEventArgs e )
     {
+        _surface.CaptureMouse();
         _virtualDesktops = VirtualDesktopManager.GetAllVirtualDesktops();
-        _startPoint      = e.Location;
+        _startDip        = e.GetPosition( _surface );
+        _startPoint      = ToPixel( _startDip );
         var dragSize = SystemInformation.DragSize * ConfigManager.CurrentProfile.Mouse.DragSizeFactor;
         _dragBounds = new Rectangle(
             new Point( _startPoint.X - dragSize.Width / 2, _startPoint.Y - dragSize.Height / 2 ),
             dragSize );
 
-        _selectedWindow = _visibleWindows.FirstOrDefault( w => w.Rect.Contains( e.Location ) );
+        _selectedWindow = _visibleWindows.FirstOrDefault( w => w.Rect.Contains( _startPoint ) );
         if ( _selectedWindow != null )
         {
             Logger.Verbose( $"SELECT.Win {_selectedWindow.Title}" );
@@ -66,7 +75,10 @@ public partial class VirtualDesktopWindow
 
     private void VirtualDesktopWindow_MouseMove( object sender, MouseEventArgs e )
     {
-        if ( _dragState == 0 && e.Button == MouseButtons.Left && IsOutBounds( e.Location ) )
+        var dip   = e.GetPosition( _surface );
+        var pixel = ToPixel( dip );
+
+        if ( _dragState == 0 && e.LeftButton == MouseButtonState.Pressed && IsOutBounds( pixel ) )
         {
             _dragState = 1;
         }
@@ -76,7 +88,7 @@ public partial class VirtualDesktopWindow
             return;
         }
 
-        HoverOnDesktop( sender, e );
+        HoverOnDesktop();
 
         if ( _selectedWindow != null )
         {
@@ -108,22 +120,16 @@ public partial class VirtualDesktopWindow
         }
         else
         {
-            var vdw = sender as Form;
-            vdw!.Left = e.X + vdw.Left - _startPoint.X;
-            vdw.Top   = e.Y + vdw.Top - _startPoint.Y;
+            Left = dip.X + Left - _startDip.X;
+            Top  = dip.Y + Top - _startDip.Y;
         }
     }
 
-    private void VirtualDesktopWindow_MouseUp( object? sender, MouseEventArgs e )
+    private void VirtualDesktopWindow_MouseUp( object sender, MouseButtonEventArgs e )
     {
-        if ( null == sender )
-        {
-            return;
-        }
-
         try
         {
-            HandleMouseUp( sender, e );
+            HandleMouseUp( ToWinFormsButton( e.ChangedButton ), ToPixel( e.GetPosition( _surface ) ) );
         }
         catch ( Exception ex )
         {
@@ -138,6 +144,11 @@ public partial class VirtualDesktopWindow
         }
         finally
         {
+            if ( _surface.IsMouseCaptured )
+            {
+                _surface.ReleaseMouseCapture();
+            }
+
             VirtualDesktopManager.UpdateVdwBackground();
 
             if ( _dw != null )
@@ -153,9 +164,9 @@ public partial class VirtualDesktopWindow
         }
     }
 
-    private void HandleMouseUp( object sender, MouseEventArgs e )
+    private void HandleMouseUp( WinFormsMouseButtons button, Point location )
     {
-        _hoverVdIndex = HoverOnDesktop( sender, e );
+        _hoverVdIndex = HoverOnDesktop();
         if ( _hoverVdIndex < 0 )
         {
             return;
@@ -206,7 +217,8 @@ public partial class VirtualDesktopWindow
             {
                 if ( _hoverVdIndex == VdIndex )
                 {
-                    Location = _fixedPosition;
+                    Left = _fixedPosition.X;
+                    Top  = _fixedPosition.Y;
                 }
                 else
                 {
@@ -240,7 +252,7 @@ public partial class VirtualDesktopWindow
                 }
 
                 var action = ConfigManager.Configs.GetMouseActionById(
-                    MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
+                    MouseAction.GetActionId( button, CurrentModifierKeys(), MouseAction.MOUSE_NODE_WINDOW_PREFIX ) );
                 switch ( action )
                 {
                     case MouseAction.Action.WindowActiveDesktopVisibleAndCloseView:
@@ -258,8 +270,8 @@ public partial class VirtualDesktopWindow
                         Menus.ThumbCtm( new MenuInfo
                         {
                             Vw       = _selectedWindow,
-                            Sender   = sender,
-                            Location = e.Location,
+                            Sender   = this,
+                            Location = location,
                             Self     = this
                         } );
                         break;
@@ -303,7 +315,7 @@ public partial class VirtualDesktopWindow
             else // click on a virtual desktop
             {
                 var action = ConfigManager.Configs.GetMouseActionById(
-                    MouseAction.GetActionId( e.Button, ModifierKeys, MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) );
+                    MouseAction.GetActionId( button, CurrentModifierKeys(), MouseAction.MOUSE_NODE_DESKTOP_PREFIX ) );
                 switch ( action )
                 {
                     case MouseAction.Action.DesktopVisibleAndCloseView:
@@ -316,8 +328,8 @@ public partial class VirtualDesktopWindow
                     case MouseAction.Action.ContextMenu:
                         Menus.VdCtm( new MenuInfo
                             {
-                                Sender   = sender,
-                                Location = e.Location,
+                                Sender   = this,
+                                Location = location,
                                 Self     = this,
                                 Vdws     = _virtualDesktops!
                             }
@@ -338,7 +350,7 @@ public partial class VirtualDesktopWindow
         }
     }
 
-    private int HoverOnDesktop( object sender, MouseEventArgs e )
+    private int HoverOnDesktop()
     {
         if ( _virtualDesktops is null )
         {
@@ -347,12 +359,13 @@ public partial class VirtualDesktopWindow
 
         _hoverVdIndex = VdIndex;
 
-        var cellIndex = MainWindow.InCell( new System.Windows.Point( Cursor.Position.X, Cursor.Position.Y ) );
+        var cursor    = Cursor.Position;
+        var cellIndex = MainWindow.InCell( new System.Windows.Point( cursor.X, cursor.Y ) );
         MainWindow.UpdateHoverBorder( cellIndex );
         foreach ( var vdw in _virtualDesktops )
         {
-            var controlRectangle = vdw.RectangleToScreen( vdw.ClientRectangle );
-            if ( controlRectangle.Contains( Cursor.Position ) )
+            var controlRectangle = vdw.PixelBoundsOnScreen;
+            if ( controlRectangle.Contains( cursor ) )
             {
                 if ( vdw.VdIndex == VdIndex )
                 {
@@ -412,8 +425,6 @@ public partial class VirtualDesktopWindow
             }
         }
 
-        // _ = User32.ShowWindow( vw.Handle, 0 );
-
         User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
 
         await Task.Run( () =>
@@ -422,18 +433,22 @@ public partial class VirtualDesktopWindow
             while ( sw.ElapsedMilliseconds < Const.WindowCloseTimeout )
             {
                 Thread.Sleep( 100 );
-                // if ( User32.IsWindow( vw.Handle ) ) continue; // 严格的判断
-                if ( User32.IsWindowVisible( vw.Handle ) )
+                if ( !User32.IsWindowVisible( vw.Handle ) )
                 {
-                    continue; // 宽松的判断
+                    break;
                 }
-
-                RefreshVDs( isWindowPinned );
-                return;
             }
-
-            RefreshVDs( isWindowPinned );
         } ).ConfigureAwait( false );
+
+        void DoRefresh() => RefreshVDs( isWindowPinned );
+        if ( _surface.Dispatcher.CheckAccess() )
+        {
+            DoRefresh();
+        }
+        else
+        {
+            _surface.Dispatcher.Invoke( DoRefresh );
+        }
     }
 
     public void MakeTheOnlyOne( int pId = 0 )
@@ -453,5 +468,46 @@ public partial class VirtualDesktopWindow
             VirtualDesktopManager.ShowAllVirtualDesktops();
             VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this], pId );
         }
+    }
+
+    private Point ToPixel( System.Windows.Point dip )
+    {
+        var (scaleX, scaleY) = SysInfo.Dpi;
+        return new Point( (int)Math.Round( dip.X * scaleX ), (int)Math.Round( dip.Y * scaleY ) );
+    }
+
+    private static WinFormsMouseButtons ToWinFormsButton( MouseButton button )
+    {
+        return button switch
+        {
+            MouseButton.Left => WinFormsMouseButtons.Left,
+            MouseButton.Right => WinFormsMouseButtons.Right,
+            MouseButton.Middle => WinFormsMouseButtons.Middle,
+            MouseButton.XButton1 => WinFormsMouseButtons.XButton1,
+            MouseButton.XButton2 => WinFormsMouseButtons.XButton2,
+            _ => WinFormsMouseButtons.None
+        };
+    }
+
+    private static WinFormsKeys CurrentModifierKeys()
+    {
+        var keys = WinFormsKeys.None;
+        var mods = Keyboard.Modifiers;
+        if ( ( mods & ModifierKeys.Control ) != 0 )
+        {
+            keys |= WinFormsKeys.Control;
+        }
+
+        if ( ( mods & ModifierKeys.Alt ) != 0 )
+        {
+            keys |= WinFormsKeys.Alt;
+        }
+
+        if ( ( mods & ModifierKeys.Shift ) != 0 )
+        {
+            keys |= WinFormsKeys.Shift;
+        }
+
+        return keys;
     }
 }

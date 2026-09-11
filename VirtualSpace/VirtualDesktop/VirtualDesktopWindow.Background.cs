@@ -9,46 +9,35 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Helpers;
 using ConfigManager = VirtualSpace.Config.Manager;
-using Point = System.Drawing.Point;
-using Size = System.Drawing.Size;
 
 namespace VirtualSpace.VirtualDesktop;
 
 public partial class VirtualDesktopWindow
 {
-    private string? _cacheBuildKey;
-    private Size    _initSize = Size.Empty;
-    private Font?   _nameFont;
-    private Bitmap? _wallpaperBmp;
-    private string? _wallpaperKey;
+    private string?       _cacheBuildKey;
+    private string?       _wallpaperKey;
+    private BitmapSource? _wallpaperSource;
 
     private static long WallpaperQuality => ConfigManager.Configs.Cluster.VdwWallpaperQuality;
-
-    private static string WallpaperKey( string path, int width, int height, long quality )
-    {
-        return $"{path}|{width}|{height}|{quality}";
-    }
 
     public void UpdateWallpaper()
     {
         void InvalidateAndRefresh()
         {
-            _wallpaperKey  = null;
+            DetachWallpaper();
             _cacheBuildKey = null;
-            Refresh();
+            RefreshWallpaper();
         }
 
-        if ( InvokeRequired )
+        if ( !_surface.Dispatcher.CheckAccess() )
         {
-            Invoke( (MethodInvoker)InvalidateAndRefresh );
+            _surface.Dispatcher.Invoke( InvalidateAndRefresh );
         }
         else
         {
@@ -59,56 +48,42 @@ public partial class VirtualDesktopWindow
     public void UpdateDesktopName( string name )
     {
         _desktopName = name;
-        Invalidate( new Rectangle( 0, Math.Max( 0, Height - 30 ), Width, 30 ) );
+        UpdateDesktopLabel();
     }
 
     private void ReleaseWallpaperResources()
     {
-        _wallpaperBmp?.Dispose();
-        _wallpaperBmp  = null;
-        _wallpaperKey  = null;
+        DetachWallpaper();
         _cacheBuildKey = null;
-        _nameFont?.Dispose();
-        _nameFont = null;
     }
 
-    private void AdoptWallpaper( Wallpaper wp, string key )
+    private void DetachWallpaper()
     {
-        var image = wp.Image;
-        wp.Image = null;
-        wp.Release();
-
-        if ( image is null )
-        {
-            return;
-        }
-
-        _wallpaperBmp?.Dispose();
-        _wallpaperBmp = image;
-        _wallpaperKey = key;
+        WallpaperImages.Release( _wallpaperKey );
+        _wallpaperKey    = null;
+        _wallpaperSource = null;
+        _surface.SetWallpaper( null );
     }
 
-    private void DrawWallpaper( Graphics g )
+    private void AttachWallpaper( string path, int width, int height )
     {
-        if ( _wallpaperBmp is null )
+        var key = WallpaperImages.Key( path, width, height );
+        if ( _wallpaperSource != null && _wallpaperKey == key )
         {
+            _surface.SetWallpaper( _wallpaperSource );
             return;
         }
 
-        if ( _wallpaperBmp.Width == Width && _wallpaperBmp.Height == Height )
-        {
-            g.DrawImageUnscaled( _wallpaperBmp, 0, 0 );
-            return;
-        }
-
-        g.InterpolationMode = InterpolationMode.NearestNeighbor;
-        g.PixelOffsetMode   = PixelOffsetMode.Half;
-        g.DrawImage( _wallpaperBmp, 0, 0, Width, Height );
+        var source = WallpaperImages.Retain( path, width, height, ConfigManager.GetCachePath(), WallpaperQuality );
+        WallpaperImages.Release( _wallpaperKey );
+        _wallpaperKey    = source is null ? null : key;
+        _wallpaperSource = source;
+        _surface.SetWallpaper( source );
     }
 
     private void RequestDiskCache( string path, int width, int height )
     {
-        var key = WallpaperKey( path, width, height, WallpaperQuality );
+        var key = WallpaperImages.Key( path, width, height );
         if ( _cacheBuildKey == key )
         {
             return;
@@ -120,55 +95,47 @@ public partial class VirtualDesktopWindow
         var quality   = WallpaperQuality;
         Task.Run( () =>
         {
-            WinRegistry.GetWallpaperByPath( path, width, height, cachePath, quality ).Release();
+            WallpaperImages.EnsureCache( path, width, height, cachePath, quality );
             User32.PostMessage( hWnd, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
         } );
     }
 
-    private void PaintWallpaper( PaintEventArgs e, (bool isCached, string path, Color? color) wpInfo )
+    private void ApplyWallpaper( (bool isCached, string path, Color? color) wpInfo )
     {
         if ( wpInfo.color != null )
         {
-            BackColor = (Color)wpInfo.color;
-            if ( _wallpaperBmp is null )
-            {
-                return;
-            }
-
-            _wallpaperBmp.Dispose();
-            _wallpaperBmp = null;
-            _wallpaperKey = null;
+            _surface.SetBackColor( (Color)wpInfo.color );
+            DetachWallpaper();
             return;
         }
 
-        if ( Width < 1 || Height < 1 )
+        if ( PixelWidth < 1 || PixelHeight < 1 )
         {
             return;
         }
 
-        var key = WallpaperKey( wpInfo.path, Width, Height, WallpaperQuality );
-        if ( _wallpaperBmp != null && _wallpaperKey == key )
+        var key = WallpaperImages.Key( wpInfo.path, PixelWidth, PixelHeight );
+        if ( _wallpaperSource != null && _wallpaperKey == key )
         {
-            DrawWallpaper( e.Graphics );
+            _surface.SetWallpaper( _wallpaperSource );
             return;
         }
 
         if ( wpInfo.isCached || VirtualDesktopManager.IsBatchCreate )
         {
-            AdoptWallpaper(
-                WinRegistry.GetWallpaperByPath( wpInfo.path, Width, Height,
-                    ConfigManager.GetCachePath(), WallpaperQuality ),
-                key );
-            DrawWallpaper( e.Graphics );
+            AttachWallpaper( wpInfo.path, PixelWidth, PixelHeight );
             return;
         }
 
-        Logger.Event( $"Create cache image({Width}*{Height}) for Desktop[{VdIndex}]" );
-        RequestDiskCache( wpInfo.path, Width, Height );
-        DrawWallpaper( e.Graphics );
+        Logger.Event( $"Create cache image({PixelWidth}*{PixelHeight}) for Desktop[{VdIndex}]" );
+        RequestDiskCache( wpInfo.path, PixelWidth, PixelHeight );
+        if ( _wallpaperSource != null )
+        {
+            _surface.SetWallpaper( _wallpaperSource );
+        }
     }
 
-    private void PaintDesktopLabel( PaintEventArgs e )
+    private void UpdateDesktopLabel()
     {
         var ui  = ConfigManager.CurrentProfile.UI;
         var str = "";
@@ -183,42 +150,33 @@ public partial class VirtualDesktopWindow
             str += ui.ShowVdIndexType == 0 ? $"[{VdIndex}]" : $"[{VdIndex + 1}]";
         }
 
-        if ( str == "" )
-        {
-            return;
-        }
-
-        _nameFont ??= new Font( "Segoe UI emoji", 10 );
-        e.Graphics.DrawString( str, _nameFont, Brushes.Beige, new Point( 2, Height - 30 ) );
+        _surface.SetDesktopLabel( str, str != "" );
     }
 
-    private void Background_Paint( object sender, PaintEventArgs e )
+    private void RefreshWallpaper()
     {
-        if ( _initSize == Size.Empty )
+        if ( PixelWidth < 1 || PixelHeight < 1 )
         {
-            Logger.Event( $"Init Desktop[{VdIndex}] background." );
-            _initSize =  Size;
-            Resize    += RefreshThumbs;
+            return;
         }
 
         var wpPath = WinRegistry.GetWallPaperPathByGuid( VdId );
         if ( wpPath is null )
         {
-            PaintWallpaper( e, ( false, "", WinRegistry.GetBackColor() ) );
-            PaintDesktopLabel( e );
+            ApplyWallpaper( ( false, "", WinRegistry.GetBackColor() ) );
+            UpdateDesktopLabel();
             return;
         }
 
-        var key = WallpaperKey( wpPath, Width, Height, WallpaperQuality );
-        if ( _wallpaperBmp != null && _wallpaperKey == key )
+        var key = WallpaperImages.Key( wpPath, PixelWidth, PixelHeight );
+        if ( _wallpaperSource != null && _wallpaperKey == key )
         {
-            DrawWallpaper( e.Graphics );
-            PaintDesktopLabel( e );
+            UpdateDesktopLabel();
             return;
         }
 
-        var (exists, _) = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), Width, Height );
-        PaintWallpaper( e, ( exists, wpPath, null ) );
-        PaintDesktopLabel( e );
+        var (exists, _) = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), PixelWidth, PixelHeight );
+        ApplyWallpaper( ( exists, wpPath, null ) );
+        UpdateDesktopLabel();
     }
 }

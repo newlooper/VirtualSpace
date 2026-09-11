@@ -14,107 +14,138 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using System.Windows;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
-using ConfigManager = VirtualSpace.Config.Manager;
-using Point = System.Drawing.Point;
-using Size = System.Drawing.Size;
+using DrawingColor = System.Drawing.Color;
+using DrawingPoint = System.Drawing.Point;
+using Point = System.Windows.Point;
 
 namespace VirtualSpace.VirtualDesktop;
 
-public partial class VirtualDesktopWindow : Form
+public partial class VirtualDesktopWindow
 {
     private static   List<VirtualDesktopWindow>? _virtualDesktops;
+    private readonly VdwSurface                  _surface;
+    private readonly int                         _vdwPadding;
     private readonly List<VisibleWindow>         _visibleWindows = [];
     public           Guid                        VdId;
-    private          string                      _desktopName;
+    private          bool                        _allowClose;
+    private          string                      _desktopName = "";
     private          Point                       _fixedPosition;
+    private          bool                        _sizeHooked;
 
-    private VirtualDesktopWindow()
+    private VirtualDesktopWindow( int vdwPadding )
     {
-        InitializeComponent();
-        base.DoubleBuffered = ConfigManager.Configs.Cluster.EnableDoubleBufferedForVDW;
-        SetStyle( ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true );
-        UpdateStyles();
+        _vdwPadding               =  vdwPadding;
+        _surface                  =  new VdwSurface( WndProc );
+        _surface.Closing          += Surface_Closing;
+        _surface.PreviewMouseDown += VirtualDesktopWindow_MouseDown;
+        _surface.PreviewMouseMove += VirtualDesktopWindow_MouseMove;
+        _surface.PreviewMouseUp   += VirtualDesktopWindow_MouseUp;
+        _surface.Loaded           += Surface_Loaded;
     }
 
-    [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
     public int VdIndex { get; set; }
 
-    protected override CreateParams CreateParams
+    public IntPtr Handle => _surface.Handle;
+
+    public double Opacity
+    {
+        get => _surface.Opacity;
+        set => _surface.Opacity = value;
+    }
+
+    private double Left
+    {
+        get => _surface.Left;
+        set => _surface.Left = value;
+    }
+
+    private double Top
+    {
+        get => _surface.Top;
+        set => _surface.Top = value;
+    }
+
+    private int PixelWidth => Math.Max( 0, (int)Math.Round( _surface.Width * SysInfo.Dpi.ScaleX ) );
+
+    private int PixelHeight => Math.Max( 0, (int)Math.Round( _surface.Height * SysInfo.Dpi.ScaleY ) );
+
+    private Rectangle PixelBoundsOnScreen
     {
         get
         {
-            var cp = base.CreateParams;
-            cp.ExStyle |= 0x00000080; // WS_EX_TOOLWINDOW
-            cp.ExStyle |= 0x08000000; // WS_EX_NOACTIVATE
-            cp.Style   =  unchecked( cp.Style | (int)0x80000000 ); // WS_POPUP
-            return cp;
+            var topLeft     = _surface.PointToScreen( new Point( 0, 0 ) );
+            var bottomRight = _surface.PointToScreen( new Point( _surface.ActualWidth, _surface.ActualHeight ) );
+            return Rectangle.FromLTRB(
+                (int)Math.Round( topLeft.X ),
+                (int)Math.Round( topLeft.Y ),
+                (int)Math.Round( bottomRight.X ),
+                (int)Math.Round( bottomRight.Y ) );
         }
     }
 
-    protected override bool ShowWithoutActivation => true;
-
-    protected override void WndProc( ref Message m )
+    private IntPtr WndProc( IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
     {
-        switch ( m.Msg )
+        switch ( msg )
         {
             case WinMsg.WM_QUERYENDSESSION:
-                m.Result = new IntPtr( 1 );
-                return;
+                handled = true;
+                return new IntPtr( 1 );
             case WinMsg.WM_HOTKEY:
-                switch ( m.WParam.ToInt32() )
+                switch ( wParam.ToInt32() )
                 {
                     case UserMessage.ShowVdw:
                         ShowByVdIndex();
-                        return;
+                        handled = true;
+                        return IntPtr.Zero;
                     case UserMessage.RefreshVdw:
-                        Refresh();
-                        return;
+                        RefreshWallpaper();
+                        handled = true;
+                        return IntPtr.Zero;
                     case UserMessage.ShowThumbsOfVdw:
                         ShowThumbnails();
-                        return;
+                        handled = true;
+                        return IntPtr.Zero;
                 }
 
                 break;
         }
 
-        base.WndProc( ref m );
+        return IntPtr.Zero;
     }
 
-    public static VirtualDesktopWindow Create( int index, Guid guid, Size initSize, Color defaultBackColor, int vdwPadding )
+    public static VirtualDesktopWindow Create( int index, Guid guid, DrawingColor defaultBackColor, int vdwPadding )
     {
-        var vdw = new VirtualDesktopWindow
+        var dispatcher = MainWindow.GetMainWindow().Dispatcher;
+        if ( !dispatcher.CheckAccess() )
         {
-            StartPosition = FormStartPosition.Manual,
-            TabStop       = false,
-            TopLevel      = true,
-            TopMost       = true,
-            Name          = "vdw_" + index,
-            VdId          = guid,
-            VdIndex       = index,
-            Size          = initSize,
-            BackColor     = defaultBackColor,
-            Padding       = new Padding( vdwPadding ),
-            ResizeRedraw  = true,
-            Text          = Const.Window.VD_CONTAINER_TITLE
+            return dispatcher.Invoke( () => Create( index, guid, defaultBackColor, vdwPadding ) );
+        }
+
+        var vdw = new VirtualDesktopWindow( vdwPadding )
+        {
+            VdId    = guid,
+            VdIndex = index,
+            _surface =
+            {
+                Name   = "vdw_" + index,
+                Title  = Const.Window.VD_CONTAINER_TITLE,
+                Width  = 0,
+                Height = 0
+            }
         };
+
+        vdw._surface.SetBackColor( defaultBackColor );
+        vdw._surface.EnsureCreated();
         vdw.SetOwner( MainWindow.GetMainWindow() );
         return vdw;
     }
 
     private void SetOwner( MainWindow owner )
     {
-        void DoSetOwner()
-        {
-            User32.SetWindowLongPtr( new HandleRef( this, Handle ),
-                (int)GetWindowLongFields.GWL_HWNDPARENT,
-                owner.Handle.ToInt32()
-            );
-        }
-
         if ( owner.Dispatcher.CheckAccess() )
         {
             DoSetOwner();
@@ -123,19 +154,55 @@ public partial class VirtualDesktopWindow : Form
         {
             owner.Dispatcher.Invoke( DoSetOwner );
         }
+
+        return;
+
+        void DoSetOwner()
+        {
+            User32.SetWindowLongPtr( new HandleRef( this, Handle ),
+                (int)GetWindowLongFields.GWL_HWNDPARENT,
+                owner.Handle.ToInt32()
+            );
+        }
     }
 
-    private void VirtualDesktopWindow_Closing( object? sender, FormClosingEventArgs e )
+    private void Surface_Closing( object? sender, CancelEventArgs e )
     {
-        e.Cancel = true;
+        if ( !_allowClose )
+        {
+            e.Cancel = true;
+        }
+    }
+
+    private void Surface_Loaded( object sender, RoutedEventArgs e )
+    {
+        if ( _sizeHooked )
+        {
+            return;
+        }
+
+        _sizeHooked          =  true;
+        _surface.SizeChanged += RefreshThumbs;
+    }
+
+    public void Hide()
+    {
+        _surface.Hide();
     }
 
     public void RealClose()
     {
-        FormClosing -= VirtualDesktopWindow_Closing;
+        _allowClose = true;
         ClearVisibleWindows();
         ReleaseWallpaperResources();
-        Close();
+        _surface.Close();
+    }
+
+    public DrawingPoint ClientPixelToScreen( DrawingPoint client )
+    {
+        var (scaleX, scaleY) = SysInfo.Dpi;
+        var screen = _surface.PointToScreen( new Point( client.X / scaleX, client.Y / scaleY ) );
+        return new DrawingPoint( (int)Math.Round( screen.X ), (int)Math.Round( screen.Y ) );
     }
 
     private void ShowByVdIndex()
@@ -145,34 +212,44 @@ public partial class VirtualDesktopWindow : Form
 
         var matrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( VdIndex );
         var location    = MainWindow.GetCellLocationByMatrixIndex( matrixIndex );
-        var point       = new Point( (int)( ( location.X + ui.VDWBorderSize ) * scaleX ), (int)( ( location.Y + ui.VDWBorderSize ) * scaleY ) );
-        Location       = point;
-        _fixedPosition = point;
+        var left        = location.X + ui.VDWBorderSize;
+        var top         = location.Y + ui.VDWBorderSize;
+        Left           = left;
+        Top            = top;
+        _fixedPosition = new Point( left, top );
 
-        var size      = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
-        var vdwWidth  = ( size.Width - 2 * ui.VDWBorderSize ) * scaleX + 1;
-        var vdwHeight = ( size.Height - 2 * ui.VDWBorderSize ) * scaleY + 1;
+        var size         = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
+        var vdwWidthDip  = size.Width - 2 * ui.VDWBorderSize;
+        var vdwHeightDip = size.Height - 2 * ui.VDWBorderSize;
+        var vdwWidthPx   = vdwWidthDip * scaleX;
+        var vdwHeightPx  = vdwHeightDip * scaleY;
 
         ////////////////////////////////////////////////////////////////
         // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面尺寸强制归零
-        if ( vdwWidth < Const.VirtualDesktop.VdwSizeFloor || vdwHeight < Const.VirtualDesktop.VdwSizeFloor )
+        if ( vdwWidthPx < Const.VirtualDesktop.VdwSizeFloor || vdwHeightPx < Const.VirtualDesktop.VdwSizeFloor )
         {
-            Size = Size.Empty; // 强制归零，从而避免接收到鼠标事件
+            _surface.Width            = 0;
+            _surface.Height           = 0;
+            _surface.IsHitTestVisible = false;
         }
         else
         {
+            _surface.IsHitTestVisible = true;
             var vdName = DesktopWrapper.DesktopNameFromGuid( VdId );
             if ( vdName != _desktopName )
             {
                 UpdateDesktopName( vdName );
             }
 
-            Size = new Size( (int)vdwWidth, (int)vdwHeight );
+            _surface.Width  = vdwWidthDip;
+            _surface.Height = vdwHeightDip;
 
-            if ( !Visible )
+            if ( !_surface.IsVisible )
             {
-                Show();
+                _surface.Show();
             }
+
+            RefreshWallpaper();
         }
     }
 }

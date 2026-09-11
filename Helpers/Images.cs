@@ -11,14 +11,9 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
-using VirtualSpace.AppLogs;
-using Encoder = System.Drawing.Imaging.Encoder;
 
 namespace VirtualSpace.Helpers;
 
@@ -55,59 +50,6 @@ internal static class PathInfo
 
 public static class Images
 {
-    public static Bitmap GetScaledBitmap( int width, int height, string path, ref Wallpaper wp, string cachePath, long quality )
-    {
-        var cached = Wallpaper.CachedWallPaper( path, cachePath, width, height );
-
-        if ( cached != null )
-        {
-            return cached;
-        }
-
-        using var src  = new Bitmap( path );
-        var       dest = new Bitmap( width, height, PixelFormat.Format32bppPArgb );
-        using ( var gr = Graphics.FromImage( dest ) )
-        {
-            gr.DrawImage( src, new Rectangle( Point.Empty, dest.Size ) );
-        }
-
-        var (fullString, str0, str1) = PathInfo.Md5Hash( path );
-        var file = Path.Combine( cachePath, str0, str1,
-            PathInfo.GenImageName( fullString, width, height ) +
-            PathInfo.FILE_NAME_SPLITTER + Environment.CurrentManagedThreadId );
-
-        // dest.Save( file, ImageFormat.Jpeg );
-
-        var jpgEncoder        = GetEncoder( ImageFormat.Jpeg );
-        var encoder           = Encoder.Quality;
-        var encoderParameters = new EncoderParameters( 1 );
-        var encoderParameter  = new EncoderParameter( encoder, quality );
-        encoderParameters.Param[0] = encoderParameter;
-        dest.Save( file, jpgEncoder, encoderParameters );
-
-        wp.Fullpath = file;
-
-        return dest;
-    }
-
-    private static ImageCodecInfo GetEncoder( ImageFormat format )
-    {
-        var codecs = ImageCodecInfo.GetImageEncoders();
-        return codecs.FirstOrDefault( codec => codec.FormatID == format.Guid )!;
-    }
-
-    public static Bitmap LoadWithoutFileLock( string path )
-    {
-        var       bytes = File.ReadAllBytes( path );
-        using var ms    = new MemoryStream( bytes, false );
-        using var src   = new Bitmap( ms );
-        var       dest  = new Bitmap( src.Width, src.Height, PixelFormat.Format32bppPArgb );
-        using var g     = Graphics.FromImage( dest );
-        g.DrawImageUnscaled( src, 0, 0 );
-
-        return dest;
-    }
-
     public static Icon BytesToIcon( object bytes )
     {
         using var ms = new MemoryStream( (byte[])bytes );
@@ -121,18 +63,8 @@ public static class Images
     }
 }
 
-public class Wallpaper
+public static class Wallpaper
 {
-    public Bitmap? Image    { get; set; }
-    public Color   Color    { get; set; }
-    public string? Fullpath { get; set; }
-
-    public static Bitmap? CachedWallPaper( string path, string cachePath, int width, int height )
-    {
-        var cached = CachedWallPaperInfo( path, cachePath, width, height );
-        return cached.Exists ? Images.LoadWithoutFileLock( cached.Path ) : null;
-    }
-
     public static (bool Exists, string Path) CachedWallPaperInfo( string path, string cachePath, int width, int height )
     {
         var (fullString, str0, str1) = PathInfo.Md5Hash( path );
@@ -141,32 +73,5 @@ public class Wallpaper
         var filepath = Path.Combine( targetPath, PathInfo.GenImageName( fullString, width, height ) );
 
         return new ValueTuple<bool, string>( File.Exists( filepath ), filepath );
-    }
-
-    public void Release()
-    {
-        Image?.Dispose();
-        Image = null;
-        if ( string.IsNullOrEmpty( Fullpath ) )
-        {
-            return;
-        }
-
-        try
-        {
-            var file = Regex.Replace( Fullpath, @"(.*?)_\d+$", "$1" );
-            if ( !File.Exists( file ) )
-            {
-                File.Move( Fullpath, file );
-            }
-        }
-        catch ( Exception ex )
-        {
-            Logger.Warning( "Delete cache file: " + ex.Message );
-        }
-        finally
-        {
-            File.Delete( Fullpath );
-        }
     }
 }

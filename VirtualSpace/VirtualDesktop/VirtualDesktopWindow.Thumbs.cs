@@ -10,7 +10,8 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Windows.Forms;
+using System.Windows;
+using System.Windows.Threading;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Helpers;
 
@@ -18,6 +19,8 @@ namespace VirtualSpace.VirtualDesktop;
 
 public partial class VirtualDesktopWindow
 {
+    private bool _thumbsRefreshQueued;
+
     public void AddWindow( VisibleWindow wnd )
     {
         _visibleWindows.Add( wnd );
@@ -29,8 +32,20 @@ public partial class VirtualDesktopWindow
         _visibleWindows.Clear();
     }
 
-    private void RefreshThumbs( object? o, EventArgs e )
+    private void RefreshThumbs( object? o, SizeChangedEventArgs e )
     {
+        if ( _thumbsRefreshQueued )
+        {
+            return;
+        }
+
+        _thumbsRefreshQueued = true;
+        _ = _surface.Dispatcher.InvokeAsync( RefreshThumbsCore, DispatcherPriority.Render );
+    }
+
+    private void RefreshThumbsCore()
+    {
+        _thumbsRefreshQueued = false;
         Logger.Event( $"Repaint thumbs in Desktop[{VdIndex}] due to size changed." );
         ReleaseThumbnails();
         ShowThumbnails();
@@ -38,12 +53,13 @@ public partial class VirtualDesktopWindow
 
     public void ShowThumbnails()
     {
+        if ( !_surface.Dispatcher.CheckAccess() )
+        {
+            _surface.Dispatcher.Invoke( ShowThumbnails );
+            return;
+        }
+
         var wndCount = _visibleWindows.Count;
-        // if ( !string.IsNullOrEmpty( WindowFilter.Keyword ) )
-        // {
-        //     _visibleWindows.RemoveAll( wnd => !wnd.Title.Contains( WindowFilter.Keyword, StringComparison.CurrentCultureIgnoreCase ) );
-        //     wndCount = _visibleWindows.Count;
-        // }
 
         if ( wndCount < 1 )
         {
@@ -60,14 +76,16 @@ public partial class VirtualDesktopWindow
 
         //////////////////////////////////////
         // thumb container size
-        var thumbWidth  = ( Width - ( cols + 1 ) * marginH ) / cols;
-        var thumbHeight = ( Height - ( rows + 1 ) * marginV ) / rows;
+        var pixelWidth  = PixelWidth;
+        var pixelHeight = PixelHeight;
+        var thumbWidth  = ( pixelWidth - ( cols + 1 ) * marginH ) / cols;
+        var thumbHeight = ( pixelHeight - ( rows + 1 ) * marginV ) / rows;
 
         //////////////////////////////////////
         // show thumbnails
         for ( int index = 0, row = 0; row < rows; row++ )
         {
-            var topLeftY = Padding.Top + ( row + 1 ) * marginV + row * thumbHeight;
+            var topLeftY = _vdwPadding + ( row + 1 ) * marginV + row * thumbHeight;
 
             for ( var col = 0; col < cols; col++ )
             {
@@ -76,25 +94,9 @@ public partial class VirtualDesktopWindow
                     break;
                 }
 
-                var topLeftX = Padding.Left + ( col + 1 ) * marginH + col * thumbWidth;
+                var topLeftX = _vdwPadding + ( col + 1 ) * marginH + col * thumbWidth;
 
-                var i     = -1;
-                var thumb = IntPtr.Zero;
-                if ( InvokeRequired )
-                {
-                    var idx = index;
-
-                    void Invoker()
-                    {
-                        i = DwmApi.DwmRegisterThumbnail( Handle, _visibleWindows[idx].Handle, out thumb );
-                    }
-
-                    Invoke( (MethodInvoker)Invoker );
-                }
-                else
-                {
-                    i = DwmApi.DwmRegisterThumbnail( Handle, _visibleWindows[index].Handle, out thumb );
-                }
+                var i = DwmApi.DwmRegisterThumbnail( Handle, _visibleWindows[index].Handle, out var thumb );
 
                 if ( i == 0 )
                 {

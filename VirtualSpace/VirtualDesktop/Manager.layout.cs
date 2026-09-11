@@ -13,11 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Commons;
 using VirtualSpace.Config.Entity;
-using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
 
@@ -31,9 +29,8 @@ internal static partial class VirtualDesktopManager
 
     private static void SyncVirtualDesktops()
     {
-        var commonSize = GetCommonVdwSize();
-        var existing   = _virtualDesktops.ToDictionary( v => v.VdId );
-        var survival   = new List<VirtualDesktopWindow>( DesktopWrapper.Count );
+        var existing = _virtualDesktops.ToDictionary( v => v.VdId );
+        var survival = new List<VirtualDesktopWindow>( DesktopWrapper.Count );
 
         for ( var index = 0; index < DesktopWrapper.Count; index++ ) // build new list according to current system vd list
         {
@@ -49,7 +46,7 @@ internal static partial class VirtualDesktopManager
             }
             else
             {
-                vdw = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
+                vdw = VirtualDesktopWindow.Create( index, guid, _vdwDefaultBackColor, Ui.VDWPadding );
             }
 
             survival.Add( vdw );
@@ -64,22 +61,8 @@ internal static partial class VirtualDesktopManager
         ReOrder(); // reorder by profile
     }
 
-    private static Size GetCommonVdwSize()
+    private static void ReOrder()
     {
-        var dpi       = SysInfo.Dpi;
-        var size      = MainWindow.GetCellSizeByMatrixIndex( 0 );
-        var vdwWidth  = ( size.Width - 2 * Ui.VDWBorderSize ) * dpi.ScaleX + 1;
-        var vdwHeight = ( size.Height - 2 * Ui.VDWBorderSize ) * dpi.ScaleY + 1;
-        return new Size( (int)vdwWidth, (int)vdwHeight );
-    }
-
-    private static void ReOrder( bool needSort = false )
-    {
-        if ( needSort )
-        {
-            _virtualDesktops.Sort( ( x, y ) => x.VdIndex.CompareTo( y.VdIndex ) );
-        }
-
         var profile = ConfigManager.CurrentProfile;
         var byGuid  = _virtualDesktops.ToDictionary( vdw => vdw.VdId );
 
@@ -156,31 +139,17 @@ internal static partial class VirtualDesktopManager
         SyncVirtualDesktops();
     }
 
-    public static async Task InitLayout()
+    public static void InitLayout()
     {
         MainWindow.ResetMainGrid();
 
-        var commonSize = GetCommonVdwSize();
-
-        var tasks = new List<Task>();
-        for ( var i = 0; i < DesktopWrapper.Count; i++ )
-        {
-            var index = i;
-            tasks.Add( Task.Run( () =>
-            {
-                var guid = DesktopManagerWrapper.GetIdByIndex( index );
-                var vdw  = VirtualDesktopWindow.Create( index, guid, commonSize, _vdwDefaultBackColor, Ui.VDWPadding );
-
-                lock ( _virtualDesktops ) // thread safe
-                {
-                    _virtualDesktops.Add( vdw ); // added in random order, need call "ReOrder( true )" afterwards
-                }
-            } ) );
-        }
-
         try
         {
-            await Task.WhenAll( tasks.ToArray() );
+            for ( var i = 0; i < DesktopWrapper.Count; i++ )
+            {
+                var guid = DesktopManagerWrapper.GetIdByIndex( i );
+                _virtualDesktops.Add( VirtualDesktopWindow.Create( i, guid, _vdwDefaultBackColor, Ui.VDWPadding ) );
+            }
         }
         catch ( Exception ex )
         {
@@ -188,7 +157,7 @@ internal static partial class VirtualDesktopManager
             return;
         }
 
-        ReOrder( true );
+        ReOrder();
     }
 
     public static void UpdateVdwBackground()
