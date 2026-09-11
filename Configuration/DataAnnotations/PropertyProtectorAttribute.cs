@@ -13,6 +13,7 @@ using System.Linq;
 
 namespace VirtualSpace.Config.DataAnnotations;
 
+[AttributeUsage(AttributeTargets.Property)]
 public class PropertyProtectorAttribute : Attribute
 {
     public PropertyProtectorAttribute()
@@ -21,30 +22,27 @@ public class PropertyProtectorAttribute : Attribute
 
     public PropertyProtectorAttribute( byte defaultV, byte min )
     {
-        Values = new object[] { defaultV, min };
+        Values = [defaultV, min];
     }
 
     public PropertyProtectorAttribute( int defaultV, int min, int max )
     {
-        Values = new object[] { defaultV, min, max };
+        Values = [defaultV, min, max];
     }
 
     public PropertyProtectorAttribute( long defaultV, long min, long max )
     {
-        Values = new object[] { defaultV, min, max };
+        Values = [defaultV, min, max];
     }
 
-    public object[] Values { get; }
+    public object[]? Values { get; }
 }
 
-public class PropertyProtectorAttribute<TEnum> : Attribute where TEnum : struct, Enum
+[AttributeUsage(AttributeTargets.Property)]
+public class PropertyProtectorAttribute<TEnum>( TEnum defaultV ) : Attribute
+    where TEnum : struct, Enum
 {
-    public PropertyProtectorAttribute( TEnum defaultV )
-    {
-        Default = defaultV;
-    }
-
-    public TEnum Default { get; }
+    public TEnum Default { get; } = defaultV;
 }
 
 public abstract class PropertyProtector
@@ -95,7 +93,7 @@ public abstract class PropertyProtector
             else
             {
                 //////////////////////////////////////////////
-                // if validation fail, reset to default value
+                // checking, if validation fail, reset to default value
                 // only support byte, int, long for now
                 switch ( pair.Attr.Values[0] )
                 {
