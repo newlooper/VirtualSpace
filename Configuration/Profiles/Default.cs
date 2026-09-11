@@ -36,7 +36,9 @@ public class Default : Profile
             DesktopArrangement     = 0,
             ShowVdName             = true,
             ShowVdIndex            = true,
-            ShowVdIndexType        = 0
+            ShowVdIndexType        = 0,
+            ShowVdNamePosition     = VdNamePosition.BottomLeft,
+            EnableVdNameColorEmoji = false
         };
         DaemonAutoStart = true;
         Mouse = new Mouse

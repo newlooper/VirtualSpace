@@ -342,6 +342,21 @@
     <data name="Page.UI.ShowVdName" xml:space="preserve">
     <value>Show Virtual Desktop Name</value>
   </data>
+    <data name="Page.UI.ShowVdNamePosition.TopLeft" xml:space="preserve">
+    <value>Top left</value>
+  </data>
+    <data name="Page.UI.ShowVdNamePosition.TopRight" xml:space="preserve">
+    <value>Top right</value>
+  </data>
+    <data name="Page.UI.ShowVdNamePosition.BottomLeft" xml:space="preserve">
+    <value>Bottom left</value>
+  </data>
+    <data name="Page.UI.ShowVdNamePosition.BottomRight" xml:space="preserve">
+    <value>Bottom right</value>
+  </data>
+    <data name="Page.UI.EnableVdNameColorEmoji" xml:space="preserve">
+    <value>Enable Virtual Desktop Name Color Emoji</value>
+  </data>
     <data name="Page.UI.ShowVdIndex" xml:space="preserve">
     <value>Show Virtual Desktop Index</value>
   </data>

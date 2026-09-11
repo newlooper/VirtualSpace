@@ -342,6 +342,21 @@
     <data name="Page.UI.ShowVdName" xml:space="preserve">
     <value>显示虚拟桌面名称</value>
   </data>
+    <data name="Page.UI.ShowVdNamePosition.TopLeft" xml:space="preserve">
+    <value>左上</value>
+  </data>
+    <data name="Page.UI.ShowVdNamePosition.TopRight" xml:space="preserve">
+    <value>右上</value>
+  </data>
+    <data name="Page.UI.ShowVdNamePosition.BottomLeft" xml:space="preserve">
+    <value>左下</value>
+  </data>
+    <data name="Page.UI.ShowVdNamePosition.BottomRight" xml:space="preserve">
+    <value>右下</value>
+  </data>
+    <data name="Page.UI.EnableVdNameColorEmoji" xml:space="preserve">
+    <value>启用虚拟桌面名称彩色 Emoji</value>
+  </data>
     <data name="Page.UI.ShowVdIndex" xml:space="preserve">
     <value>显示虚拟桌面索引</value>
   </data>

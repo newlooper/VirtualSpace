@@ -15,15 +15,20 @@ namespace VirtualSpace.Config.Entity;
 
 public class UserInterface
 {
-    [PropertyProtector] public             Colour? CanvasBackColor        { get; set; }
-    [PropertyProtector] public             Colour? VDWDefaultBackColor    { get; set; }
-    [PropertyProtector] public             Colour? VDWCurrentBackColor    { get; set; }
-    [PropertyProtector] public             Colour? VDWHighlightBackColor  { get; set; }
-    public                                 float   VDWDragTargetOpacity   { get; set; }
-    public                                 string  Language               { get; set; } = string.Empty;
-    public                                 bool    ShowVdName             { get; set; } = true;
-    public                                 bool    ShowVdIndex            { get; set; } = true;
-    [PropertyProtector( 0, 0, 1 )]  public int     ShowVdIndexType        { get; set; }
+    [PropertyProtector] public            Colour? CanvasBackColor       { get; set; }
+    [PropertyProtector] public            Colour? VDWDefaultBackColor   { get; set; }
+    [PropertyProtector] public            Colour? VDWCurrentBackColor   { get; set; }
+    [PropertyProtector] public            Colour? VDWHighlightBackColor { get; set; }
+    public                                float   VDWDragTargetOpacity  { get; set; }
+    public                                string  Language              { get; set; } = string.Empty;
+    public                                bool    ShowVdName            { get; set; } = true;
+    public                                bool    ShowVdIndex           { get; set; } = true;
+    [PropertyProtector( 0, 0, 1 )] public int     ShowVdIndexType       { get; set; }
+
+    [PropertyProtector<VdNamePosition>( VdNamePosition.BottomLeft )]
+    public VdNamePosition ShowVdNamePosition { get; set; } = VdNamePosition.BottomLeft;
+
+    public                                 bool    EnableVdNameColorEmoji { get; set; }
     [PropertyProtector( 0, 0, 50 )] public int     VDWPadding             { get; set; }
     [PropertyProtector( 5, 0, 50 )] public int     VDWBorderSize          { get; set; }
     [PropertyProtector( 8, 8, 50 )] public int     VDWMargin              { get; set; }

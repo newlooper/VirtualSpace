@@ -145,6 +145,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -152,6 +153,16 @@
                     </Grid.ColumnDefinitions>
                     <CheckBox Content="{lex:Loc Page.UI.ShowVdName}" Margin="10"
                               IsChecked="{Binding ShowVdName}" />
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                        <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.TopLeft}" Margin="10,0"
+                                     IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=0}" />
+                        <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.TopRight}" Margin="10,0"
+                                     IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=1}" />
+                        <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.BottomLeft}" Margin="10,0"
+                                     IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=2}" />
+                        <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.BottomRight}" Margin="10,0"
+                                     IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=3}" />
+                    </StackPanel>
                     <CheckBox Content="{lex:Loc Page.UI.ShowVdIndex}" Grid.Row="1" Grid.Column="0" Margin="10"
                               IsChecked="{Binding ShowVdIndex}" />
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
@@ -160,6 +171,8 @@
                         <RadioButton Content="{lex:Loc Page.UI.ShowVdIndex.OneBased}" Margin="10,0"
                                      IsChecked="{Binding ShowVdIndexType,Converter={StaticResource CheckBoxConverter},ConverterParameter=1}" />
                     </StackPanel>
+                    <CheckBox Content="{lex:Loc Page.UI.EnableVdNameColorEmoji}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10"
+                              IsChecked="{Binding EnableVdNameColorEmoji}" />
                 </Grid>
 
             </StackPanel>

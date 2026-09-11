@@ -6,16 +6,8 @@
         ShowActivated="False" Topmost="True" Focusable="False"
         SnapsToDevicePixels="True" UseLayoutRounding="True"
         Background="#FF000000">
-    <Grid>
+    <Grid x:Name="Root">
         <Image x:Name="WallpaperImage" Stretch="Fill"
                RenderOptions.BitmapScalingMode="NearestNeighbor" />
-        <TextBlock x:Name="DesktopLabel"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Bottom"
-                   Margin="2,0,0,2"
-                   Foreground="Beige"
-                   FontFamily="Segoe UI Emoji"
-                   FontSize="13"
-                   IsHitTestVisible="False" />
     </Grid>
 </Window>

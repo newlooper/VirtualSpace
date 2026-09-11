@@ -37,17 +37,44 @@ public class PropertyProtectorAttribute : Attribute
     public object[] Values { get; }
 }
 
+public class PropertyProtectorAttribute<TEnum> : Attribute where TEnum : struct, Enum
+{
+    public PropertyProtectorAttribute( TEnum defaultV )
+    {
+        Default = defaultV;
+    }
+
+    public TEnum Default { get; }
+}
+
 public abstract class PropertyProtector
 {
     public static void Walk( object obj )
     {
-        var props = from prop in obj.GetType().GetProperties()
-            let attrs = prop.GetCustomAttributes( typeof( PropertyProtectorAttribute ), false )
-            where attrs.Length != 0
-            select new { Obj = obj, Property = prop, Attr = (PropertyProtectorAttribute)attrs.First() };
-
-        foreach ( var pair in props )
+        foreach ( var prop in obj.GetType().GetProperties() )
         {
+            var generic = prop.GetCustomAttributes( false ).FirstOrDefault( a =>
+                a.GetType().IsGenericType &&
+                a.GetType().GetGenericTypeDefinition() == typeof( PropertyProtectorAttribute<> ) );
+            if ( generic is not null )
+            {
+                var defaultV = generic.GetType().GetProperty( "Default" )!.GetValue( generic )!;
+                var current  = prop.GetValue( obj );
+                if ( current is null || !Enum.IsDefined( prop.PropertyType, current ) )
+                {
+                    prop.SetValue( obj, defaultV );
+                }
+
+                continue;
+            }
+
+            var attrs = prop.GetCustomAttributes( typeof( PropertyProtectorAttribute ), false );
+            if ( attrs.Length == 0 )
+            {
+                continue;
+            }
+
+            var pair = new { Obj = obj, Property = prop, Attr = (PropertyProtectorAttribute)attrs.First() };
             if ( pair.Attr.Values is null ) // an object that have some properties which modified by [PropertyProtector( xxx )]
             {
                 var type = pair.Property.PropertyType;

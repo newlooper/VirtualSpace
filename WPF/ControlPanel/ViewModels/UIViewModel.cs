@@ -12,6 +12,7 @@ using System.ComponentModel;
 using PropertyChanged;
 using VirtualSpace.Commons;
 using VirtualSpace.Config;
+using VirtualSpace.Config.Entity;
 using VirtualSpace.VirtualDesktop.Api;
 
 namespace ControlPanel.ViewModels;
@@ -21,12 +22,14 @@ public partial class UIViewModel : ViewModelBase
 {
     public UIViewModel()
     {
-        VdArrangement   = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
-        VdCount         = DesktopWrapper.Count;
-        ShowVdName      = Manager.CurrentProfile.UI.ShowVdName;
-        ShowVdIndex     = Manager.CurrentProfile.UI.ShowVdIndex;
-        ShowVdIndexType = Manager.CurrentProfile.UI.ShowVdIndexType;
-        _isInitialized  = true;
+        VdArrangement          = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
+        VdCount                = DesktopWrapper.Count;
+        ShowVdName             = Manager.CurrentProfile.UI.ShowVdName;
+        ShowVdIndex            = Manager.CurrentProfile.UI.ShowVdIndex;
+        ShowVdIndexType        = Manager.CurrentProfile.UI.ShowVdIndexType;
+        ShowVdNamePosition     = (int)Manager.CurrentProfile.UI.ShowVdNamePosition;
+        EnableVdNameColorEmoji = Manager.CurrentProfile.UI.EnableVdNameColorEmoji;
+        _isInitialized         = true;
 
         DesktopManagerWrapper.DesktopCreatedEvent -= OnDesktopCreatedEvent;
         DesktopManagerWrapper.DesktopCreatedEvent += OnDesktopCreatedEvent;
@@ -34,11 +37,13 @@ public partial class UIViewModel : ViewModelBase
         DesktopManagerWrapper.DesktopDeletedEvent += OnDesktopDeletedEvent;
     }
 
-    public bool ShowVdName      { get; set; }
-    public bool ShowVdIndex     { get; set; }
-    public int  ShowVdIndexType { get; set; }
-    public int  VdArrangement   { get; set; }
-    public int  VdCount         { get; set; }
+    public bool ShowVdName             { get; set; }
+    public bool ShowVdIndex            { get; set; }
+    public int  ShowVdIndexType        { get; set; }
+    public int  ShowVdNamePosition     { get; set; }
+    public bool EnableVdNameColorEmoji { get; set; }
+    public int  VdArrangement          { get; set; }
+    public int  VdCount                { get; set; }
 
     private void OnDesktopCreatedEvent()
     {
@@ -79,6 +84,14 @@ public partial class UIViewModel : ViewModelBase
                 case nameof( ShowVdIndexType ):
                     Manager.CurrentProfile.UI.ShowVdIndexType = (int)after;
                     Manager.Save( reason: Manager.CurrentProfile.UI.ShowVdIndexType );
+                    break;
+                case nameof( ShowVdNamePosition ):
+                    Manager.CurrentProfile.UI.ShowVdNamePosition = (VdNamePosition)(int)after;
+                    Manager.Save( reason: Manager.CurrentProfile.UI.ShowVdNamePosition );
+                    break;
+                case nameof( EnableVdNameColorEmoji ):
+                    Manager.CurrentProfile.UI.EnableVdNameColorEmoji = (bool)after;
+                    Manager.Save( reason: Manager.CurrentProfile.UI.EnableVdNameColorEmoji );
                     break;
             }
         }

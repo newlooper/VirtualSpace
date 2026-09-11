@@ -12,10 +12,14 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
+using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
 using Color = System.Drawing.Color;
+using ConfigManager = VirtualSpace.Config.Manager;
 
 namespace VirtualSpace.VirtualDesktop;
 
@@ -24,7 +28,10 @@ namespace VirtualSpace.VirtualDesktop;
 /// </summary>
 internal partial class VdwSurface : Window
 {
+    private static readonly DropShadowEffect LabelOutline = CreateLabelOutline();
+
     private readonly HwndSourceHook _hook;
+    private          TextBlock?     _desktopLabel;
 
     internal VdwSurface( HwndSourceHook hook )
     {
@@ -55,8 +62,86 @@ internal partial class VdwSurface : Window
 
     internal void SetDesktopLabel( string text, bool visible )
     {
-        DesktopLabel.Text       = text;
-        DesktopLabel.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+        EnsureDesktopLabel();
+        ApplyLabelChrome( _desktopLabel! );
+        SetLabelText( text );
+        _desktopLabel!.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void EnsureDesktopLabel()
+    {
+        var useColorEmoji = ConfigManager.CurrentProfile.UI.EnableVdNameColorEmoji;
+        if ( _desktopLabel != null && ( _desktopLabel is Emoji.Wpf.TextBlock ) == useColorEmoji )
+        {
+            return;
+        }
+
+        if ( _desktopLabel != null )
+        {
+            Root.Children.Remove( _desktopLabel );
+        }
+
+        _desktopLabel = useColorEmoji
+            ? new Emoji.Wpf.TextBlock()
+            : new TextBlock();
+        _desktopLabel.FontSize         = 13;
+        _desktopLabel.Foreground       = Brushes.Beige;
+        _desktopLabel.FontFamily       = new FontFamily( "Segoe UI, Segoe UI Emoji" );
+        _desktopLabel.IsHitTestVisible = false;
+        _desktopLabel.Effect           = LabelOutline;
+        Root.Children.Add( _desktopLabel );
+    }
+
+    private static DropShadowEffect CreateLabelOutline()
+    {
+        var effect = new DropShadowEffect
+        {
+            Color         = Colors.Black,
+            ShadowDepth   = 1,
+            BlurRadius    = 2,
+            Opacity       = 1,
+            RenderingBias = RenderingBias.Performance
+        };
+        effect.Freeze();
+        return effect;
+    }
+
+    private static void ApplyLabelChrome( FrameworkElement label )
+    {
+        switch ( ConfigManager.CurrentProfile.UI.ShowVdNamePosition )
+        {
+            case VdNamePosition.TopLeft:
+                label.HorizontalAlignment = HorizontalAlignment.Left;
+                label.VerticalAlignment   = VerticalAlignment.Top;
+                break;
+            case VdNamePosition.TopRight:
+                label.HorizontalAlignment = HorizontalAlignment.Right;
+                label.VerticalAlignment   = VerticalAlignment.Top;
+                break;
+            case VdNamePosition.BottomLeft:
+                label.HorizontalAlignment = HorizontalAlignment.Left;
+                label.VerticalAlignment   = VerticalAlignment.Bottom;
+                break;
+            case VdNamePosition.BottomRight:
+            default:
+                label.HorizontalAlignment = HorizontalAlignment.Right;
+                label.VerticalAlignment   = VerticalAlignment.Bottom;
+                break;
+        }
+
+        label.Margin = new Thickness( 2, 2, 5, 2 );
+    }
+
+    private void SetLabelText( string text )
+    {
+        if ( _desktopLabel is Emoji.Wpf.TextBlock emoji )
+        {
+            emoji.Text = text;
+        }
+        else
+        {
+            _desktopLabel!.Text = text;
+        }
     }
 
     internal void SetBackColor( Color color )

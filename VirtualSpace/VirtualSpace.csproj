@@ -29,6 +29,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Emoji.Wpf" Version="0.3.4" />
         <ProjectReference Include="..\WinForms\AppController\AppController.csproj" Condition="$([System.String]::Copy(';$(DefineConstants);').Contains(';USE_OLD_AC;'))" />
         <ProjectReference Include="..\WPF\ControlPanel\ControlPanel.csproj" />
         <ProjectReference Include="..\Plugins.sln\Cube3D\Cube3D.csproj">

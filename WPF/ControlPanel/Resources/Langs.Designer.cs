@@ -1495,6 +1495,51 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bottom left.
+        /// </summary>
+        internal static string Page_UI_ShowVdNamePosition_BottomLeft {
+            get {
+                return ResourceManager.GetString("Page.UI.ShowVdNamePosition.BottomLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bottom right.
+        /// </summary>
+        internal static string Page_UI_ShowVdNamePosition_BottomRight {
+            get {
+                return ResourceManager.GetString("Page.UI.ShowVdNamePosition.BottomRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top left.
+        /// </summary>
+        internal static string Page_UI_ShowVdNamePosition_TopLeft {
+            get {
+                return ResourceManager.GetString("Page.UI.ShowVdNamePosition.TopLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top right.
+        /// </summary>
+        internal static string Page_UI_ShowVdNamePosition_TopRight {
+            get {
+                return ResourceManager.GetString("Page.UI.ShowVdNamePosition.TopRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Virtual Desktop Name Color Emoji.
+        /// </summary>
+        internal static string Page_UI_EnableVdNameColorEmoji {
+            get {
+                return ResourceManager.GetString("Page.UI.EnableVdNameColorEmoji", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Virtual Desktop Arrangement.
         /// </summary>
         internal static string Page_UI_VdArrangement {
