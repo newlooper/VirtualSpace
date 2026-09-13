@@ -33,6 +33,10 @@ public class Profile
         CirculationHType = 0
     };
 
+    public PrimarySecondaryState PrimarySecondary { get; set; } = new();
+
+    public bool IsPsLayout => PrimarySecondary is { Kind: not PsKind.None };
+
     public Profile Clone()
     {
         var profile = JsonSerializer.Deserialize<Profile>( JsonSerializer.Serialize( this ) );

@@ -19,7 +19,7 @@ namespace VirtualSpace.VirtualDesktop;
 
 public partial class VirtualDesktopWindow
 {
-    private bool _thumbsRefreshQueued;
+    private bool _surfaceRefreshQueued;
 
     public void AddWindow( VisibleWindow wnd )
     {
@@ -32,20 +32,23 @@ public partial class VirtualDesktopWindow
         _visibleWindows.Clear();
     }
 
-    private void RefreshThumbs( object? o, SizeChangedEventArgs e )
+    private void RefreshSurface( object? o, SizeChangedEventArgs e )
     {
-        if ( _thumbsRefreshQueued )
+        if ( _surfaceRefreshQueued )
         {
             return;
         }
 
-        _thumbsRefreshQueued = true;
-        _ = _surface.Dispatcher.InvokeAsync( RefreshThumbsCore, DispatcherPriority.Render );
+        _surfaceRefreshQueued = true;
+        _                     = _surface.Dispatcher.InvokeAsync( RefreshSurfaceCore, DispatcherPriority.Render );
     }
 
-    private void RefreshThumbsCore()
+    private void RefreshSurfaceCore()
     {
-        _thumbsRefreshQueued = false;
+        _surfaceRefreshQueued = false;
+
+        RefreshWallpaper();
+
         Logger.Event( $"Repaint thumbs in Desktop[{VdIndex}] due to size changed." );
         ReleaseThumbnails();
         ShowThumbnails();

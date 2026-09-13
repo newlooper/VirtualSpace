@@ -637,4 +637,31 @@ some settings may need restart program to take effect.</value>
     <data name="Menus.Commons.Preferences" xml:space="preserve">
     <value>Preferences</value>
   </data>
+    <data name="Page.UI.Tab.AutoLayout" xml:space="preserve">
+    <value>Automatic Layout</value>
+  </data>
+    <data name="Page.UI.Tab.PsLayout" xml:space="preserve">
+    <value>Primary / Secondary Layout</value>
+  </data>
+    <data name="Page.UI.PsLayout.Hint" xml:space="preserve">
+    <value>This layout uses {0} cells. You currently have {1} virtual desktop(s).</value>
+  </data>
+    <data name="Page.UI.PsLayout.CreateExtras" xml:space="preserve">
+    <value>Create {0} additional virtual desktop(s)</value>
+  </data>
+    <data name="Page.UI.PsLayout.CornerNW" xml:space="preserve">
+    <value>Primary top-left</value>
+  </data>
+    <data name="Page.UI.PsLayout.CornerNE" xml:space="preserve">
+    <value>Primary top-right</value>
+  </data>
+    <data name="Page.UI.PsLayout.CornerSW" xml:space="preserve">
+    <value>Primary bottom-left</value>
+  </data>
+    <data name="Page.UI.PsLayout.CornerSE" xml:space="preserve">
+    <value>Primary bottom-right</value>
+  </data>
+    <data name="Page.UI.PsLayout.Center" xml:space="preserve">
+    <value>Primary center</value>
+  </data>
 </root>

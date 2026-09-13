@@ -1558,6 +1558,87 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatic Layout.
+        /// </summary>
+        internal static string Page_UI_Tab_AutoLayout {
+            get {
+                return ResourceManager.GetString("Page.UI.Tab.AutoLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary / Secondary Layout.
+        /// </summary>
+        internal static string Page_UI_Tab_PsLayout {
+            get {
+                return ResourceManager.GetString("Page.UI.Tab.PsLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This layout uses {0} cells. You currently have {1} virtual desktop(s).
+        /// </summary>
+        internal static string Page_UI_PsLayout_Hint {
+            get {
+                return ResourceManager.GetString("Page.UI.PsLayout.Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create {0} additional virtual desktop(s).
+        /// </summary>
+        internal static string Page_UI_PsLayout_CreateExtras {
+            get {
+                return ResourceManager.GetString("Page.UI.PsLayout.CreateExtras", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary top-left.
+        /// </summary>
+        internal static string Page_UI_PsLayout_CornerNW {
+            get {
+                return ResourceManager.GetString("Page.UI.PsLayout.CornerNW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary top-right.
+        /// </summary>
+        internal static string Page_UI_PsLayout_CornerNE {
+            get {
+                return ResourceManager.GetString("Page.UI.PsLayout.CornerNE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary bottom-left.
+        /// </summary>
+        internal static string Page_UI_PsLayout_CornerSW {
+            get {
+                return ResourceManager.GetString("Page.UI.PsLayout.CornerSW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary bottom-right.
+        /// </summary>
+        internal static string Page_UI_PsLayout_CornerSE {
+            get {
+                return ResourceManager.GetString("Page.UI.PsLayout.CornerSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary center.
+        /// </summary>
+        internal static string Page_UI_PsLayout_Center {
+            get {
+                return ResourceManager.GetString("Page.UI.PsLayout.Center", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field is required..
         /// </summary>
         internal static string Validation_Error_Required {

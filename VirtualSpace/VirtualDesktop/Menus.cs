@@ -239,8 +239,13 @@ public static class Menus
                     DesktopWrapper.Create();
                 }
 
+                var exitOnlyOne = VirtualDesktopManager.TryExitOnlyOneInMainView();
                 VirtualDesktopManager.FixLayout();
                 VirtualDesktopManager.ShowAllVirtualDesktops();
+                if ( exitOnlyOne )
+                {
+                    VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+                }
 
                 VirtualDesktopManager.IsBatchCreate = false;
             }

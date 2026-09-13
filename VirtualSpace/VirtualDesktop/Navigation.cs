@@ -18,123 +18,174 @@ public static class Navigation
 {
     public static int CalculateTargetIndex( int vdCount, int fromIndex, Keys dir, Config.Entity.Navigation nav )
     {
+        if ( Manager.CurrentProfile.IsPsLayout )
+        {
+            return CalculatePsTargetIndex( fromIndex, dir, nav );
+        }
+
         var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
         var maxIndex = vdCount - 1;
 
         var da = Manager.CurrentProfile.UI.DesktopArrangement;
 
         var currentRowCol = RowColFromIndex( rowsCols, fromIndex, da );
-        var targetRowCol  = TargetRowColByDirection( rowsCols, currentRowCol, dir, currentRowCol );
+        var targetRowCol  = TargetRowColByDirection( rowsCols, currentRowCol, dir, currentRowCol, nav );
         var targetIndex   = IndexFromRowCol( rowsCols, targetRowCol, da );
 
         while ( targetIndex > maxIndex ) // 暴力应对目标桌面不存在的情况
         {
-            targetRowCol = TargetRowColByDirection( rowsCols, targetRowCol, dir, currentRowCol );
+            targetRowCol = TargetRowColByDirection( rowsCols, targetRowCol, dir, currentRowCol, nav );
             targetIndex  = IndexFromRowCol( rowsCols, targetRowCol, da );
         }
 
         return IndexFromRowCol( rowsCols, targetRowCol, 0 );
+    }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-        /// 导航不受 DesktopArrangement 影响，或者说：导航永远按照 DesktopArrarngement 为 0 的情况下进行
-        /// 也即：桌面按照配置文件中的顺序，从左上角开始，行满换行的方式填充到矩阵中
-        /// 
-        /// 此函数假设导航的目标桌面一定存在(也就是无法应对桌面数量不是 n 的平方的情况)，若不满足则由单独的代码处理
-        (int R, int C) TargetRowColByDirection( int n, (int R, int C) currentRC, Keys direction, (int R, int C) validRC )
+    private static int CalculatePsTargetIndex( int fromIndex, Keys dir, Config.Entity.Navigation nav )
+    {
+        var profile = Manager.CurrentProfile;
+        var ps      = profile.PrimarySecondary;
+        var order   = profile.DesktopOrder;
+        if ( !PsLayout.IsValid( ps ) || order is null || fromIndex < 0 || fromIndex >= order.Count )
         {
-            var r         = currentRC.R;
-            var c         = currentRC.C;
-            var targetRow = currentRC.R;
-            var targetCol = currentRC.C;
+            return fromIndex;
+        }
 
-            switch ( direction )
+        var fromGuid = order[fromIndex];
+        var fromSlot = PsLayout.SlotOf( ps, fromGuid );
+        if ( fromSlot < 0 )
+        {
+            return fromIndex;
+        }
+
+        var n     = ps.N;
+        var map   = PsLayout.BuildCellToSlot( ps.Kind, n, ps.Corner );
+        var start = PsLayout.SlotOrigin( ps.Kind, n, ps.Corner, fromSlot );
+        var rc    = start;
+        var guard = n * n + 1;
+        for ( var step = 0; step < guard; step++ )
+        {
+            var next = TargetRowColByDirection( n, rc, dir, start, nav );
+            if ( next == start && rc == start )
             {
-                case Keys.Left:
-                    if ( c == 0 )
-                    {
-                        if ( nav.CirculationH )
-                        {
-                            if ( nav.CirculationHType == Const.VirtualDesktop.NavHTypeNextRow )
-                            {
-                                targetRow = r == 0 ? n - 1 : r - 1;
-                            }
-
-                            targetCol = n - 1;
-                        }
-                        else
-                        {
-                            return validRC;
-                        }
-                    }
-                    else
-                    {
-                        targetCol--;
-                    }
-
-                    break;
-                case Keys.Right:
-                    if ( c == n - 1 )
-                    {
-                        if ( nav.CirculationH )
-                        {
-                            if ( nav.CirculationHType == Const.VirtualDesktop.NavHTypeNextRow )
-                            {
-                                targetRow = r == n - 1 ? 0 : r + 1;
-                            }
-
-                            targetCol = 0;
-                        }
-                        else
-                        {
-                            return validRC;
-                        }
-                    }
-                    else
-                    {
-                        targetCol++;
-                    }
-
-                    break;
-                case Keys.Up:
-                    if ( r == 0 )
-                    {
-                        if ( nav.CirculationV )
-                        {
-                            targetRow = n - 1;
-                        }
-                        else
-                        {
-                            return validRC;
-                        }
-                    }
-                    else
-                    {
-                        targetRow--;
-                    }
-
-                    break;
-                case Keys.Down:
-                    if ( r == n - 1 )
-                    {
-                        if ( nav.CirculationV )
-                        {
-                            targetRow = 0;
-                        }
-                        else
-                        {
-                            return validRC;
-                        }
-                    }
-                    else
-                    {
-                        targetRow++;
-                    }
-
-                    break;
+                return fromSlot;
             }
 
-            return ( targetRow, targetCol );
+            rc = next;
+            if ( rc == start )
+            {
+                return fromSlot;
+            }
+
+            var slot = map[rc.R, rc.C];
+            var guid = PsLayout.GuidAt( ps, slot );
+            if ( guid is { } id && id != fromGuid )
+            {
+                return slot;
+            }
         }
+
+        return fromSlot;
+    }
+
+    /// <summary>
+    /// 导航不受 DesktopArrangement 影响：在单位格子上按方向走，环绕规则与均等模式相同。
+    /// </summary>
+    private static (int R, int C) TargetRowColByDirection(
+        int n, (int R, int C) currentRC, Keys direction, (int R, int C) validRC, Config.Entity.Navigation nav )
+    {
+        var r         = currentRC.R;
+        var c         = currentRC.C;
+        var targetRow = currentRC.R;
+        var targetCol = currentRC.C;
+
+        switch ( direction )
+        {
+            case Keys.Left:
+                if ( c == 0 )
+                {
+                    if ( nav.CirculationH )
+                    {
+                        if ( nav.CirculationHType == Const.VirtualDesktop.NavHTypeNextRow )
+                        {
+                            targetRow = r == 0 ? n - 1 : r - 1;
+                        }
+
+                        targetCol = n - 1;
+                    }
+                    else
+                    {
+                        return validRC;
+                    }
+                }
+                else
+                {
+                    targetCol--;
+                }
+
+                break;
+            case Keys.Right:
+                if ( c == n - 1 )
+                {
+                    if ( nav.CirculationH )
+                    {
+                        if ( nav.CirculationHType == Const.VirtualDesktop.NavHTypeNextRow )
+                        {
+                            targetRow = r == n - 1 ? 0 : r + 1;
+                        }
+
+                        targetCol = 0;
+                    }
+                    else
+                    {
+                        return validRC;
+                    }
+                }
+                else
+                {
+                    targetCol++;
+                }
+
+                break;
+            case Keys.Up:
+                if ( r == 0 )
+                {
+                    if ( nav.CirculationV )
+                    {
+                        targetRow = n - 1;
+                    }
+                    else
+                    {
+                        return validRC;
+                    }
+                }
+                else
+                {
+                    targetRow--;
+                }
+
+                break;
+            case Keys.Down:
+                if ( r == n - 1 )
+                {
+                    if ( nav.CirculationV )
+                    {
+                        targetRow = 0;
+                    }
+                    else
+                    {
+                        return validRC;
+                    }
+                }
+                else
+                {
+                    targetRow++;
+                }
+
+                break;
+        }
+
+        return ( targetRow, targetCol );
     }
 
     public static int IndexFromRowCol( int n, (int R, int C) currentRC, int? desktopArrangement )

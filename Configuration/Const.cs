@@ -48,9 +48,10 @@ public static class Const
 
     public static class VirtualDesktop
     {
-        public const int NavHTypeNextRow = 0;
-        public const int NavHTypeSameRow = 1;
-        public const int VdwSizeFloor    = 100;
+        public const int   NavHTypeNextRow                          = 0;
+        public const int   NavHTypeSameRow                          = 1;
+        public const int   DefaultLayoutVdwSideLengthFloor          = 100;
+        public const float PsLayoutVdwSideLengthFloorToleranceRatio = 1.0f / 5.0f;
     }
 
     public static class Settings

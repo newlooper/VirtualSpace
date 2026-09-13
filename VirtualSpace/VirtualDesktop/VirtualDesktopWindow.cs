@@ -49,7 +49,7 @@ public partial class VirtualDesktopWindow
 
     public int VdIndex { get; set; }
 
-    public IntPtr Handle => _surface.Handle;
+    private IntPtr Handle => _surface.Handle;
 
     public double Opacity
     {
@@ -77,6 +77,11 @@ public partial class VirtualDesktopWindow
     {
         get
         {
+            if ( PresentationSource.FromVisual( _surface ) is null )
+            {
+                return Rectangle.Empty;
+            }
+
             var topLeft     = _surface.PointToScreen( new Point( 0, 0 ) );
             var bottomRight = _surface.PointToScreen( new Point( _surface.ActualWidth, _surface.ActualHeight ) );
             return Rectangle.FromLTRB(
@@ -182,7 +187,8 @@ public partial class VirtualDesktopWindow
         }
 
         _sizeHooked          =  true;
-        _surface.SizeChanged += RefreshThumbs;
+        _surface.SizeChanged += RefreshSurface;
+        RefreshWallpaper();
     }
 
     public void Hide()
@@ -207,13 +213,31 @@ public partial class VirtualDesktopWindow
 
     private void ShowByVdIndex()
     {
+        PlaceInCell();
+    }
+
+    internal void PlaceInCell()
+    {
+        if ( VirtualDesktopManager.TryGetOnlyOneInMainView( out var onlyOne ) && onlyOne != this )
+        {
+            Hide();
+            return;
+        }
+
         var ui = VirtualDesktopManager.Ui;
         var (scaleX, scaleY) = SysInfo.Dpi;
 
         var matrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( VdIndex );
-        var location    = MainWindow.GetCellLocationByMatrixIndex( matrixIndex );
-        var left        = location.X + ui.VDWBorderSize;
-        var top         = location.Y + ui.VDWBorderSize;
+        if ( matrixIndex < 0 )
+        {
+            Hide();
+            return;
+        }
+
+        var location = MainWindow.GetCellLocationByMatrixIndex( matrixIndex );
+        var left     = location.X + ui.VDWBorderSize;
+        var top      = location.Y + ui.VDWBorderSize;
+
         Left           = left;
         Top            = top;
         _fixedPosition = new Point( left, top );
@@ -226,30 +250,30 @@ public partial class VirtualDesktopWindow
 
         ////////////////////////////////////////////////////////////////
         // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面尺寸强制归零
-        if ( vdwWidthPx < Const.VirtualDesktop.VdwSizeFloor || vdwHeightPx < Const.VirtualDesktop.VdwSizeFloor )
+        var sideLengthFloor = Manager.CurrentProfile.IsPsLayout
+            ? Const.VirtualDesktop.DefaultLayoutVdwSideLengthFloor * Const.VirtualDesktop.PsLayoutVdwSideLengthFloorToleranceRatio
+            : Const.VirtualDesktop.DefaultLayoutVdwSideLengthFloor;
+        if ( vdwWidthPx < sideLengthFloor || vdwHeightPx < sideLengthFloor )
         {
             _surface.Width            = 0;
             _surface.Height           = 0;
             _surface.IsHitTestVisible = false;
+            return;
         }
-        else
+
+        _surface.IsHitTestVisible = true;
+        var vdName = DesktopWrapper.DesktopNameFromGuid( VdId );
+        if ( vdName != _desktopName )
         {
-            _surface.IsHitTestVisible = true;
-            var vdName = DesktopWrapper.DesktopNameFromGuid( VdId );
-            if ( vdName != _desktopName )
-            {
-                UpdateDesktopName( vdName );
-            }
+            UpdateDesktopName( vdName );
+        }
 
-            _surface.Width  = vdwWidthDip;
-            _surface.Height = vdwHeightDip;
+        _surface.Width  = vdwWidthDip;
+        _surface.Height = vdwHeightDip;
 
-            if ( !_surface.IsVisible )
-            {
-                _surface.Show();
-            }
-
-            RefreshWallpaper();
+        if ( !_surface.IsVisible )
+        {
+            _surface.Show();
         }
     }
 }

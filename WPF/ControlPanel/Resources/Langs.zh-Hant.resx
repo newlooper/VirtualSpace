@@ -636,4 +636,31 @@
     <data name="Menus.Commons.Preferences" xml:space="preserve">
     <value>偏好設定</value>
   </data>
+    <data name="Page.UI.Tab.AutoLayout" xml:space="preserve">
+    <value>自動佈局</value>
+  </data>
+    <data name="Page.UI.Tab.PsLayout" xml:space="preserve">
+    <value>主次佈局</value>
+  </data>
+    <data name="Page.UI.PsLayout.Hint" xml:space="preserve">
+    <value>此佈局需要 {0} 個儲存格。目前有 {1} 個虛擬桌面。</value>
+  </data>
+    <data name="Page.UI.PsLayout.CreateExtras" xml:space="preserve">
+    <value>再建立 {0} 個虛擬桌面</value>
+  </data>
+    <data name="Page.UI.PsLayout.CornerNW" xml:space="preserve">
+    <value>主桌面在左上</value>
+  </data>
+    <data name="Page.UI.PsLayout.CornerNE" xml:space="preserve">
+    <value>主桌面在右上</value>
+  </data>
+    <data name="Page.UI.PsLayout.CornerSW" xml:space="preserve">
+    <value>主桌面在左下</value>
+  </data>
+    <data name="Page.UI.PsLayout.CornerSE" xml:space="preserve">
+    <value>主桌面在右下</value>
+  </data>
+    <data name="Page.UI.PsLayout.Center" xml:space="preserve">
+    <value>主桌面置中</value>
+  </data>
 </root>

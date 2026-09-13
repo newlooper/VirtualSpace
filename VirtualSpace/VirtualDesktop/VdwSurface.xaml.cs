@@ -71,7 +71,7 @@ internal partial class VdwSurface : Window
     private void EnsureDesktopLabel()
     {
         var useColorEmoji = ConfigManager.CurrentProfile.UI.EnableVdNameColorEmoji;
-        if ( _desktopLabel != null && ( _desktopLabel is Emoji.Wpf.TextBlock ) == useColorEmoji )
+        if ( _desktopLabel != null && _desktopLabel is Emoji.Wpf.TextBlock == useColorEmoji )
         {
             return;
         }

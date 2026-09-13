@@ -43,12 +43,6 @@ public partial class VirtualDesktopWindow
     private static Rectangle            _dragBounds = Rectangle.Empty;
     private static VisibleWindow?       _selectedWindow;
     private static DragWindow?          _dw;
-    private        bool                 _isTheOnlyOneInMainView;
-
-    public void ResetOnlyOneStatus()
-    {
-        _isTheOnlyOneInMainView = false;
-    }
 
     private void VirtualDesktopWindow_MouseDown( object sender, MouseButtonEventArgs e )
     {
@@ -81,6 +75,10 @@ public partial class VirtualDesktopWindow
         if ( _dragState == 0 && e.LeftButton == MouseButtonState.Pressed && IsOutBounds( pixel ) )
         {
             _dragState = 1;
+            if ( _selectedWindow is null )
+            {
+                ShrinkPrimaryToSmallCellForDrag();
+            }
         }
 
         if ( _dragState == 0 )
@@ -149,7 +147,7 @@ public partial class VirtualDesktopWindow
                 _surface.ReleaseMouseCapture();
             }
 
-            VirtualDesktopManager.UpdateVdwBackground();
+            VirtualDesktopManager.UpdateVdwBorder();
 
             if ( _dw != null )
             {
@@ -215,7 +213,26 @@ public partial class VirtualDesktopWindow
             }
             else // if we drag a virtual desktop
             {
-                if ( _hoverVdIndex == VdIndex )
+                var cursor = Cursor.Position;
+                var slot   = MainWindow.InCell( new System.Windows.Point( cursor.X, cursor.Y ) );
+                if ( ConfigManager.CurrentProfile.IsPsLayout )
+                {
+                    if ( slot < 0 && _hoverVdIndex != VdIndex && _virtualDesktops is not null )
+                    {
+                        slot = VirtualDesktopManager.GetMatrixIndexByVdIndex( _hoverVdIndex );
+                    }
+
+                    if ( VirtualDesktopManager.RelocateDesktop( VdId, slot ) )
+                    {
+                        Logger.Verbose( $"PLACE.Desktop Desktop[{VdIndex}] ON slot[{slot}]" );
+                        User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
+                    }
+                    else
+                    {
+                        User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.ShowVdw, 0 );
+                    }
+                }
+                else if ( _hoverVdIndex == VdIndex )
                 {
                     Left = _fixedPosition.X;
                     Top  = _fixedPosition.Y;
@@ -350,6 +367,32 @@ public partial class VirtualDesktopWindow
         }
     }
 
+    private void ShrinkPrimaryToSmallCellForDrag()
+    {
+        if ( !VirtualDesktopManager.IsPsPrimaryDesktop( VdId ) )
+        {
+            return;
+        }
+
+        var ui   = VirtualDesktopManager.Ui;
+        var size = MainWindow.GetCellSizeByMatrixIndex( 1 );
+        var w    = size.Width - 2 * ui.VDWBorderSize;
+        var h    = size.Height - 2 * ui.VDWBorderSize;
+        if ( w <= 0 || h <= 0 )
+        {
+            return;
+        }
+
+        _surface.Width  = w;
+        _surface.Height = h;
+
+        var (scaleX, scaleY) = SysInfo.Dpi;
+        var cursor = Cursor.Position;
+        Left      = cursor.X / scaleX - w / 2;
+        Top       = cursor.Y / scaleY - h / 2;
+        _startDip = new System.Windows.Point( w / 2, h / 2 );
+    }
+
     private int HoverOnDesktop()
     {
         if ( _virtualDesktops is null )
@@ -413,18 +456,6 @@ public partial class VirtualDesktopWindow
     {
         var isWindowPinned = DesktopWrapper.IsWindowPinned( vw.Handle ) || DesktopWrapper.IsApplicationPinned( vw.Handle );
 
-        void RefreshVDs( bool isPinned )
-        {
-            if ( isPinned )
-            {
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-            }
-            else
-            {
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this] );
-            }
-        }
-
         User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
 
         await Task.Run( () =>
@@ -440,7 +471,6 @@ public partial class VirtualDesktopWindow
             }
         } ).ConfigureAwait( false );
 
-        void DoRefresh() => RefreshVDs( isWindowPinned );
         if ( _surface.Dispatcher.CheckAccess() )
         {
             DoRefresh();
@@ -449,28 +479,47 @@ public partial class VirtualDesktopWindow
         {
             _surface.Dispatcher.Invoke( DoRefresh );
         }
+
+        return;
+
+        void RefreshVDs( bool isPinned )
+        {
+            if ( isPinned )
+            {
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+            }
+            else
+            {
+                VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this] );
+            }
+        }
+
+        void DoRefresh()
+        {
+            RefreshVDs( isWindowPinned );
+        }
     }
 
     public void MakeTheOnlyOne( int pId = 0 )
     {
-        if ( _isTheOnlyOneInMainView )
+        if ( VirtualDesktopManager.TryGetOnlyOneInMainView( out var current ) && current == this )
         {
+            VirtualDesktopManager.ClearOnlyOneInMainView();
             MainWindow.ResetMainGrid();
             VirtualDesktopManager.HideAllVirtualDesktops();
             VirtualDesktopManager.ShowAllVirtualDesktops();
             VirtualDesktopManager.ShowVisibleWindowsForDesktops();
+            return;
         }
-        else
-        {
-            MainWindow.ResetMainGridForSingleDesktop( VdIndex );
-            VirtualDesktopManager.HideAllVirtualDesktops();
-            _isTheOnlyOneInMainView = true;
-            VirtualDesktopManager.ShowAllVirtualDesktops();
-            VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this], pId );
-        }
+
+        VirtualDesktopManager.HideAllVirtualDesktops();
+        VirtualDesktopManager.SetOnlyOneInMainView( this );
+        MainWindow.ResetMainGrid();
+        VirtualDesktopManager.ShowAllVirtualDesktops();
+        VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this], pId );
     }
 
-    private Point ToPixel( System.Windows.Point dip )
+    private static Point ToPixel( System.Windows.Point dip )
     {
         var (scaleX, scaleY) = SysInfo.Dpi;
         return new Point( (int)Math.Round( dip.X * scaleX ), (int)Math.Round( dip.Y * scaleY ) );

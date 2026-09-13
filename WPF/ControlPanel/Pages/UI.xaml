@@ -38,104 +38,92 @@
 
                 <TextBlock FontSize="20" Margin="10" Text="{lex:Loc Page.UI.VdArrangement}" />
 
-                <UniformGrid x:Name="ButtonsContainer" Rows="2" Columns="4" Margin="0,10">
-                    <UniformGrid.Resources>
-                        <Style TargetType="Button">
-                            <Style.Resources>
-                                <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="5" />
-                                </Style>
-                            </Style.Resources>
-                            <!-- <Style.Triggers> -->
-                            <!--     <Trigger Property="IsEnabled" Value="False"> -->
-                            <!--         <Setter Property="Template"> -->
-                            <!--             <Setter.Value> -->
-                            <!--                 <ControlTemplate TargetType="{x:Type Button}"> -->
-                            <!--                     <Grid Background="DimGray"> -->
-                            <!--                         <ContentPresenter x:Name="MyContentPresenter" -->
-                            <!--                                           Content="{TemplateBinding Content}" -->
-                            <!--                                           HorizontalAlignment="Center" -->
-                            <!--                                           VerticalAlignment="Center" /> -->
-                            <!--                     </Grid> -->
-                            <!--                 </ControlTemplate> -->
-                            <!--             </Setter.Value> -->
-                            <!--         </Setter> -->
-                            <!--     </Trigger> -->
-                            <!-- </Style.Triggers> -->
-                            <!-- <Setter Property="IsEnabled"> -->
-                            <!--     <Setter.Value> -->
-                            <!--         <MultiBinding Converter="{StaticResource UIButtonStyleByVdAConverter}" Mode="OneWay" ConverterParameter="C"> -->
-                            <!--             <Binding Path="VdCount" /> -->
-                            <!--             <Binding Path="Tag" RelativeSource="{RelativeSource Self}" /> -->
-                            <!--         </MultiBinding> -->
-                            <!--     </Setter.Value> -->
-                            <!-- </Setter> -->
-                            <Setter Property="Background">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource UIButtonStyleByVdAConverter}" Mode="OneWay" ConverterParameter="B">
-                                        <Binding Path="VdArrangement" />
-                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="FontSize" Value="11" />
-                            <Setter Property="Margin" Value="0,2,0,15" />
-                        </Style>
-                    </UniformGrid.Resources>
-                    <StackPanel>
-                        <Button Width="128" Height="128" Tag="0">
-                            <StaticResource ResourceKey="M0" />
-                        </Button>
-                        <TextBlock Text="{lex:Loc Page.UI.Label.m0}" />
-                    </StackPanel>
-                    <StackPanel>
-                        <Button Width="128" Height="128" Tag="1">
-                            <StaticResource ResourceKey="M1" />
-                        </Button>
-                        <TextBlock Text="{lex:Loc Page.UI.Label.m1}" />
-                    </StackPanel>
-                    <StackPanel>
-                        <Button Width="128" Height="128" Tag="2">
-                            <StaticResource ResourceKey="M2" />
-                        </Button>
-                        <TextBlock Text="{lex:Loc Page.UI.Label.m2}" />
-                    </StackPanel>
-                    <StackPanel>
-                        <Button Width="128" Height="128" Tag="3">
-                            <StaticResource ResourceKey="M3" />
-                        </Button>
-                        <TextBlock Text="{lex:Loc Page.UI.Label.m3}" />
-                    </StackPanel>
-                    <StackPanel>
-                        <Button Width="128" Height="128" Tag="4">
-                            <StaticResource ResourceKey="M4" />
-                        </Button>
-                        <TextBlock Text="{lex:Loc Page.UI.Label.m4}" />
-                    </StackPanel>
-                    <StackPanel>
-                        <Button Width="128" Height="128" Tag="5">
-                            <StaticResource ResourceKey="M5" />
-                        </Button>
-                        <TextBlock Text="{lex:Loc Page.UI.Label.m5}" />
-                    </StackPanel>
-                    <StackPanel>
-                        <Button Width="128" Height="128" Tag="6">
-                            <StaticResource ResourceKey="M6" />
-                        </Button>
-                        <TextBlock Text="{lex:Loc Page.UI.Label.m6}" />
-                    </StackPanel>
-                    <StackPanel>
-                        <Button Width="128" Height="128" Tag="7">
-                            <StaticResource ResourceKey="M7" />
-                        </Button>
-                        <TextBlock Text="{lex:Loc Page.UI.Label.m7}" />
-                    </StackPanel>
-                </UniformGrid>
-
-                <!-- <materialDesign:Chip Height="50" Margin="10,0" Content="{lex:Loc Note.DesktopArrangement}" /> -->
+                <TabControl x:Name="LayoutTabs" Margin="6,0,6,10">
+                    <TabItem Header="{lex:Loc Page.UI.Tab.AutoLayout}">
+                        <StackPanel>
+                            <UniformGrid x:Name="ButtonsContainer" Rows="2" Columns="4" Margin="0,10">
+                                <UniformGrid.Resources>
+                                    <Style TargetType="Button">
+                                        <Style.Resources>
+                                            <Style TargetType="Border">
+                                                <Setter Property="CornerRadius" Value="5" />
+                                            </Style>
+                                        </Style.Resources>
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <MultiBinding Converter="{StaticResource UIButtonStyleByVdAConverter}" Mode="OneWay" ConverterParameter="B">
+                                                    <Binding Path="VdArrangement" />
+                                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="FontSize" Value="11" />
+                                        <Setter Property="Margin" Value="0,2,0,15" />
+                                    </Style>
+                                </UniformGrid.Resources>
+                                <StackPanel>
+                                    <Button Width="128" Height="128" Tag="0">
+                                        <StaticResource ResourceKey="M0" />
+                                    </Button>
+                                    <TextBlock Text="{lex:Loc Page.UI.Label.m0}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <Button Width="128" Height="128" Tag="1">
+                                        <StaticResource ResourceKey="M1" />
+                                    </Button>
+                                    <TextBlock Text="{lex:Loc Page.UI.Label.m1}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <Button Width="128" Height="128" Tag="2">
+                                        <StaticResource ResourceKey="M2" />
+                                    </Button>
+                                    <TextBlock Text="{lex:Loc Page.UI.Label.m2}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <Button Width="128" Height="128" Tag="3">
+                                        <StaticResource ResourceKey="M3" />
+                                    </Button>
+                                    <TextBlock Text="{lex:Loc Page.UI.Label.m3}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <Button Width="128" Height="128" Tag="4">
+                                        <StaticResource ResourceKey="M4" />
+                                    </Button>
+                                    <TextBlock Text="{lex:Loc Page.UI.Label.m4}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <Button Width="128" Height="128" Tag="5">
+                                        <StaticResource ResourceKey="M5" />
+                                    </Button>
+                                    <TextBlock Text="{lex:Loc Page.UI.Label.m5}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <Button Width="128" Height="128" Tag="6">
+                                        <StaticResource ResourceKey="M6" />
+                                    </Button>
+                                    <TextBlock Text="{lex:Loc Page.UI.Label.m6}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <Button Width="128" Height="128" Tag="7">
+                                        <StaticResource ResourceKey="M7" />
+                                    </Button>
+                                    <TextBlock Text="{lex:Loc Page.UI.Label.m7}" />
+                                </StackPanel>
+                            </UniformGrid>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem Header="{lex:Loc Page.UI.Tab.PsLayout}">
+                        <StackPanel>
+                            <TextBlock x:Name="PsHintText" FontSize="14" TextWrapping="Wrap" Margin="10,12,10,4"
+                                       Foreground="{DynamicResource MaterialDesignBody}" />
+                            <WrapPanel x:Name="PsPreviewHost" HorizontalAlignment="Center" Margin="0,4" />
+                            <CheckBox x:Name="PsCreateExtrasCheck" Margin="10,8,10,12" />
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
 
                 <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource MaterialDesignDivider}" />
 

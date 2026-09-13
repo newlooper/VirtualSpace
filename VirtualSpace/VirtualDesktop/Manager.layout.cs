@@ -54,6 +54,11 @@ internal static partial class VirtualDesktopManager
 
         foreach ( var old in existing.Values )
         {
+            if ( ReferenceEquals( old, _onlyOneInMainView ) )
+            {
+                _onlyOneInMainView = null;
+            }
+
             old.RealClose();
         }
 
@@ -98,15 +103,24 @@ internal static partial class VirtualDesktopManager
         SaveOrder();
     }
 
-    private static void UpdateMainView( VirtualDesktopNotification? vdn = null )
+    private static void VdCountChangedHandler( VirtualDesktopNotification? vdn = null )
     {
+        var exitOnlyOne = TryExitOnlyOneInMainView();
+
+        FixLayout();
+
         if ( !MainWindow.IsShowing() )
         {
             return;
         }
 
-        FixLayout();
         ShowAllVirtualDesktops();
+
+        if ( exitOnlyOne )
+        {
+            ShowVisibleWindowsForDesktops();
+            return;
+        }
 
         if ( vdn is null )
         {
@@ -115,8 +129,13 @@ internal static partial class VirtualDesktopManager
 
         try
         {
-            var fallback = _virtualDesktops[GetVdIndexByGuid( vdn.NewId )];
-            ShowVisibleWindowsForDesktops( [fallback] );
+            var idx = GetVdIndexByGuid( vdn.NewId );
+            if ( idx < 0 || idx >= _virtualDesktops.Count )
+            {
+                return;
+            }
+
+            ShowVisibleWindowsForDesktops( [_virtualDesktops[idx]] );
         }
         catch ( Exception e )
         {
@@ -128,15 +147,14 @@ internal static partial class VirtualDesktopManager
     {
         try
         {
+            SyncVirtualDesktops();
+            ReconcilePrimarySecondary();
             MainWindow.ResetMainGrid();
         }
         catch
         {
             MainWindow.NotifyDesktopManagerReset();
-            return;
         }
-
-        SyncVirtualDesktops();
     }
 
     public static void InitLayout()
@@ -158,9 +176,11 @@ internal static partial class VirtualDesktopManager
         }
 
         ReOrder();
+        ReconcilePrimarySecondary();
+        MainWindow.ResetMainGrid();
     }
 
-    public static void UpdateVdwBackground()
+    public static void UpdateVdwBorder()
     {
         MainWindow.RenderCellBorder();
     }
@@ -195,7 +215,15 @@ internal static partial class VirtualDesktopManager
 
     public static int GetVdIndexByGuid( Guid guid )
     {
-        return ( from vdw in _virtualDesktops where vdw.VdId == guid select vdw.VdIndex ).FirstOrDefault();
+        foreach ( var vdw in _virtualDesktops )
+        {
+            if ( vdw.VdId == guid )
+            {
+                return vdw.VdIndex;
+            }
+        }
+
+        return -1;
     }
 
     public static void Bootstrap()

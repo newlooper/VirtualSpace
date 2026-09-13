@@ -32,6 +32,7 @@ public static class UserMessage
     public const int RefreshTrayIcon                 = 1017;
     public const int UpdateTrayLang                  = 1018;
     public const int ToggleWindowFilter              = 1019;
+    public const int ApplyPsLayout                   = 1020;
 
     public const int NavLeft  = 1201;
     public const int NavRight = 1202;

@@ -28,60 +28,157 @@ public partial class MainWindow
 {
     private const  int           SHADOW_ATLAS_SIZE  = 64;
     private const  int           SHADOW_ATLAS_INSET = 16;
-    private static int           _desktopCount;
+    private static string        _layoutKey = "";
+    private static bool          _resetting;
     private static ShadowSlices  _shadowDefault;
     private static ShadowSlices  _shadowCurrent;
     private static int           RowsCols { get; set; }
     private static UserInterface Ui       => Manager.CurrentProfile.UI;
 
+    private static readonly DependencyProperty CellSlotProperty = DependencyProperty.RegisterAttached(
+        "CellSlot",
+        typeof( int ),
+        typeof( MainWindow ),
+        new PropertyMetadata( -1 ) );
+
+    private static void SetCellSlot( DependencyObject cell, int slot ) =>
+        cell.SetValue( CellSlotProperty, slot );
+
+    private static int GetCellSlot( DependencyObject? cell ) =>
+        cell is null ? -1 : (int)cell.GetValue( CellSlotProperty );
+
+    public static void ForceResetMainGrid()
+    {
+        _layoutKey = "";
+        ResetMainGrid();
+    }
+
     public static void ResetMainGrid()
     {
-        var vdCount = DesktopWrapper.Count;
-        if ( vdCount == _desktopCount )
+        if ( _resetting )
         {
             return;
         }
 
-        var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
-
-        var mainGrid = _instance.MainGrid;
-
-        mainGrid.Children.Clear();
-        mainGrid.RowDefinitions.Clear();
-        mainGrid.ColumnDefinitions.Clear();
-
-        if ( RowsCols != rowsCols )
+        if ( VirtualDesktopManager.TryGetOnlyOneInMainView( out var onlyOne ) )
         {
-            _instance.Dispatcher.Invoke( new Action( () => { } ), DispatcherPriority.ContextIdle, null );
+            ResetMainGridForSingleDesktop( onlyOne.VdIndex );
+            return;
         }
 
+        var vdCount   = DesktopWrapper.Count;
+        var profile   = Manager.CurrentProfile;
+        var layoutKey = PsLayout.LayoutKey( profile.PrimarySecondary, vdCount );
+        if ( layoutKey == _layoutKey )
+        {
+            return;
+        }
+
+        _resetting = true;
+        _layoutKey = layoutKey;
+        try
+        {
+            var mainGrid = _instance.MainGrid;
+            mainGrid.Children.Clear();
+            mainGrid.RowDefinitions.Clear();
+            mainGrid.ColumnDefinitions.Clear();
+
+            if ( profile.IsPsLayout && PsLayout.IsValid( profile.PrimarySecondary ) )
+            {
+                BuildPsGrid( profile.PrimarySecondary );
+            }
+            else
+            {
+                BuildEqualGrid( vdCount );
+            }
+
+            _instance.UpdateLayout();
+        }
+        finally
+        {
+            _resetting = false;
+        }
+    }
+
+    private static void BuildEqualGrid( int vdCount )
+    {
+        var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
+        var mainGrid = _instance.MainGrid;
+
+        var star = new GridLength( 1, GridUnitType.Star );
         for ( var r = 0; r < rowsCols; r++ )
         {
-            mainGrid.RowDefinitions.Add( new RowDefinition() );
-            mainGrid.ColumnDefinitions.Add( new ColumnDefinition() );
+            mainGrid.RowDefinitions.Add( new RowDefinition { Height = star, MinHeight = 0 } );
+            mainGrid.ColumnDefinitions.Add( new ColumnDefinition { Width = star, MinWidth = 0 } );
             for ( var c = 0; c < rowsCols; c++ )
             {
                 var border = CreateCellBorder();
+                SetCellSlot( border, r * rowsCols + c );
                 Grid.SetRow( border, r );
                 Grid.SetColumn( border, c );
                 mainGrid.Children.Add( border );
             }
         }
 
-        _desktopCount = vdCount; // remember last count
-        RowsCols      = rowsCols;
-        _instance.UpdateLayout();
+        RowsCols = rowsCols;
+    }
+
+    private static void BuildPsGrid( PrimarySecondaryState ps )
+    {
+        var n        = ps.N;
+        var mainGrid = _instance.MainGrid;
+
+        var star = new GridLength( 1, GridUnitType.Star );
+        for ( var i = 0; i < n; i++ )
+        {
+            mainGrid.RowDefinitions.Add( new RowDefinition { Height = star, MinHeight = 0 } );
+            mainGrid.ColumnDefinitions.Add( new ColumnDefinition { Width = star, MinWidth = 0 } );
+        }
+
+        var (pr, pc, span) = PsLayout.PrimaryRect( ps.Kind, n, ps.Corner );
+        var primary = CreateCellBorder();
+        SetCellSlot( primary, 0 );
+        Grid.SetRow( primary, pr );
+        Grid.SetColumn( primary, pc );
+        Grid.SetRowSpan( primary, span );
+        Grid.SetColumnSpan( primary, span );
+        mainGrid.Children.Add( primary );
+
+        var slot = 1;
+        foreach ( var (r, c) in PsLayout.SmallCells( ps.Kind, n, ps.Corner ) )
+        {
+            var border = CreateCellBorder();
+            SetCellSlot( border, slot++ );
+            Grid.SetRow( border, r );
+            Grid.SetColumn( border, c );
+            mainGrid.Children.Add( border );
+        }
+
+        RowsCols = n;
     }
 
     public static void ResetMainGridForSingleDesktop( int vdIndex )
     {
-        var vdCount  = DesktopWrapper.Count;
-        var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
+        var vdCount   = DesktopWrapper.Count;
+        var profile   = Manager.CurrentProfile;
+        var rowsCols  = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
+        var cellIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( vdIndex );
+        var bigRow    = 0;
+        var bigCol    = 0;
 
-        vdIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex( vdIndex );
-
-        var bigRow          = vdIndex / rowsCols;
-        var bigCol          = vdIndex % rowsCols;
+        if ( profile.IsPsLayout && PsLayout.IsValid( profile.PrimarySecondary ) )
+        {
+            var ps   = profile.PrimarySecondary;
+            var orig = PsLayout.SlotOrigin( ps.Kind, ps.N, ps.Corner, Math.Max( 0, cellIndex ) );
+            rowsCols = ps.N;
+            bigRow   = orig.R;
+            bigCol   = orig.C;
+        }
+        else
+        {
+            bigRow = cellIndex / rowsCols;
+            bigCol = cellIndex % rowsCols;
+        }
         var bigGridLength   = new GridLength( 1, GridUnitType.Star );
         var smallGridLength = new GridLength( 0 );
 
@@ -109,14 +206,19 @@ public partial class MainWindow
                 var border = mainGrid.ColumnDefinitions[c].Width == smallGridLength
                     ? new Border()
                     : CreateCellBorder();
+                if ( r == bigRow && c == bigCol )
+                {
+                    SetCellSlot( border, cellIndex );
+                }
+
                 Grid.SetRow( border, r );
                 Grid.SetColumn( border, c );
                 mainGrid.Children.Add( border );
             }
         }
 
-        _desktopCount = 1; // single, single, single
-        RowsCols      = rowsCols;
+        RowsCols   = rowsCols;
+        _layoutKey = "";
         _instance.UpdateLayout();
     }
 
@@ -125,14 +227,10 @@ public partial class MainWindow
         var currentMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex(
             VirtualDesktopManager.GetVdIndexByGuid( DesktopWrapper.CurrentGuid ) );
 
-        for ( var i = 0; i < _desktopCount; i++ )
+        var cells = _instance.MainGrid.Children;
+        for ( var i = 0; i < cells.Count; i++ )
         {
-            var chrome = i == currentMatrixIndex
-                ? CellChrome.Current
-                : i == hover
-                    ? CellChrome.Hover
-                    : CellChrome.Default;
-            ApplyCellChrome( (Border)_instance.MainGrid.Children[i], chrome );
+            ApplyCellChrome( (Border)cells[i], ChromeOf( cells[i], currentMatrixIndex, hover ) );
         }
     }
 
@@ -141,12 +239,27 @@ public partial class MainWindow
         var currentMatrixIndex = VirtualDesktopManager.GetMatrixIndexByVdIndex(
             VirtualDesktopManager.GetVdIndexByGuid( DesktopWrapper.CurrentGuid ) );
 
-        for ( var i = 0; i < Math.Pow( RowsCols, 2 ); i++ )
+        var cells = _instance.MainGrid.Children;
+        for ( var i = 0; i < cells.Count; i++ )
         {
-            ApplyCellChrome(
-                (Border)_instance.MainGrid.Children[i],
-                i == currentMatrixIndex ? CellChrome.Current : CellChrome.Default );
+            ApplyCellChrome( (Border)cells[i], ChromeOf( cells[i], currentMatrixIndex ) );
         }
+    }
+
+    private static CellChrome ChromeOf( DependencyObject cell, int currentMatrixIndex, int hover = int.MinValue )
+    {
+        var slot = GetCellSlot( cell );
+        if ( slot < 0 )
+        {
+            return CellChrome.Default;
+        }
+
+        if ( slot == currentMatrixIndex )
+        {
+            return CellChrome.Current;
+        }
+
+        return slot == hover ? CellChrome.Hover : CellChrome.Default;
     }
 
     private static Border CreateCellBorder()
@@ -202,8 +315,19 @@ public partial class MainWindow
 
     private static Border GetCellLayoutBorder( int index )
     {
-        var outer = (Border)_instance.MainGrid.Children[index];
-        return GetInnerBorder( outer ) ?? outer;
+        var children = _instance.MainGrid.Children;
+        for ( var i = 0; i < children.Count; i++ )
+        {
+            if ( GetCellSlot( children[i] ) != index )
+            {
+                continue;
+            }
+
+            var outer = (Border)children[i];
+            return GetInnerBorder( outer ) ?? outer;
+        }
+
+        return new Border();
     }
 
     private static void ApplyCellChrome( Border outer, CellChrome chrome )
@@ -341,7 +465,15 @@ public partial class MainWindow
     {
         Point Location()
         {
-            return GetCellLayoutBorder( index ).TranslatePoint( new Point(), _instance );
+            if ( TryGetPsUnitRect( index, out var rect ) )
+            {
+                return rect.TopLeft;
+            }
+
+            var border = GetCellLayoutBorder( index );
+            return PresentationSource.FromVisual( border ) is null
+                ? new Point()
+                : border.TranslatePoint( new Point(), _instance );
         }
 
         return _instance.Dispatcher.CheckAccess()
@@ -351,7 +483,90 @@ public partial class MainWindow
 
     public static Size GetCellSizeByMatrixIndex( int index )
     {
+        if ( TryGetPsUnitRect( index, out var rect ) )
+        {
+            return rect.Size;
+        }
+
         return GetCellLayoutBorder( index ).RenderSize;
+    }
+
+    private static bool TryGetPsUnitRect( int slot, out Rect rect )
+    {
+        rect = default;
+        var ps = Manager.CurrentProfile.PrimarySecondary;
+        if ( !Manager.CurrentProfile.IsPsLayout || !PsLayout.IsValid( ps ) || slot < 0 )
+        {
+            return false;
+        }
+
+        var n    = ps.N;
+        var grid = _instance.MainGrid;
+        if ( n <= 0 ||
+             grid.RowDefinitions.Count != n ||
+             grid.ColumnDefinitions.Count != n ||
+             grid.ActualWidth <= 0 ||
+             grid.ActualHeight <= 0 )
+        {
+            return false;
+        }
+
+        if ( PresentationSource.FromVisual( grid ) is null )
+        {
+            return false;
+        }
+
+        int row, col, span;
+        if ( slot == 0 )
+        {
+            (row, col, span) = PsLayout.PrimaryRect( ps.Kind, n, ps.Corner );
+        }
+        else
+        {
+            (row, col) = PsLayout.SlotOrigin( ps.Kind, n, ps.Corner, slot );
+            span       = 1;
+        }
+
+        if ( (uint)row >= (uint)n || (uint)col >= (uint)n )
+        {
+            return false;
+        }
+
+        var x = SumColumnWidth( grid, 0, col );
+        var y = SumRowHeight( grid, 0, row );
+        var w = SumColumnWidth( grid, col, Math.Min( n, col + span ) );
+        var h = SumRowHeight( grid, row, Math.Min( n, row + span ) );
+
+        var origin = grid.TranslatePoint( new Point(), _instance );
+        var pad    = Ui.VDWMargin;
+        rect = new Rect(
+            origin.X + x + pad,
+            origin.Y + y + pad,
+            Math.Max( 0, w - 2 * pad ),
+            Math.Max( 0, h - 2 * pad ) );
+        return true;
+    }
+
+    private static double SumColumnWidth( Grid grid, int from, int to )
+    {
+        var sum = 0.0;
+        for ( var i = from; i < to; i++ )
+        {
+            sum += grid.ColumnDefinitions[i].ActualWidth;
+        }
+
+        return sum;
+    }
+
+    private static double SumRowHeight( Grid grid, int from, int to )
+    {
+        var sum = 0.0;
+        for ( var i = from; i < to; i++ )
+        {
+            sum += grid.RowDefinitions[i].ActualHeight;
+        }
+
+        return sum;
     }
 
     public static int InCell( Point p )
@@ -361,13 +576,18 @@ public partial class MainWindow
         var (scaleX, scaleY) = SysInfo.Dpi;
         for ( var i = 0; i < cells.Count; i++ )
         {
+            if ( PresentationSource.FromVisual( cells[i] ) is null )
+            {
+                continue;
+            }
+
             var topLeft = cells[i].TranslatePoint( new Point(), _instance );
             topLeft = new Point( topLeft.X * scaleX, topLeft.Y * scaleY );
             var bottomRight = new Point( topLeft.X + cells[i].RenderSize.Width * scaleX, topLeft.Y + cells[i].RenderSize.Height * scaleY );
             var rect        = new Rect( topLeft, bottomRight );
             if ( rect.Contains( p ) )
             {
-                index = i;
+                index = GetCellSlot( cells[i] );
                 break;
             }
         }

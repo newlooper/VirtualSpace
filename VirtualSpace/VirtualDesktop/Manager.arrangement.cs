@@ -10,6 +10,7 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using VirtualSpace.Config;
 using VirtualSpace.VirtualDesktop.Api;
 using ConfigManager = VirtualSpace.Config.Manager;
 
@@ -19,18 +20,36 @@ internal static partial class VirtualDesktopManager
 {
     public static int GetMatrixIndexByVdIndex( int vdIndex )
     {
+        var profile = ConfigManager.CurrentProfile;
+        if ( profile.IsPsLayout )
+        {
+            if ( vdIndex < 0 || profile.DesktopOrder is null || vdIndex >= profile.DesktopOrder.Count )
+            {
+                return -1;
+            }
+
+            return PsLayout.SlotOf( profile.PrimarySecondary, profile.DesktopOrder[vdIndex] );
+        }
+
         var rowsCols    = (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) );
-        var rc          = Navigation.RowColFromIndex( rowsCols, vdIndex, ConfigManager.CurrentProfile.UI.DesktopArrangement );
+        var rc          = Navigation.RowColFromIndex( rowsCols, vdIndex, profile.UI.DesktopArrangement );
         var matrixIndex = Navigation.IndexFromRowCol( rowsCols, rc, 0 );
 
         return matrixIndex;
     }
 
-    public static int GetVdIndexByMatrixIndex( int matrixIndex )
+    private static int GetVdIndexByMatrixIndex( int matrixIndex )
     {
+        var profile = ConfigManager.CurrentProfile;
+        if ( profile.IsPsLayout )
+        {
+            var guid = PsLayout.GuidAt( profile.PrimarySecondary, matrixIndex );
+            return guid is { } id ? GetVdIndexByGuid( id ) : -1;
+        }
+
         var rowsCols = (int)Math.Ceiling( Math.Sqrt( DesktopWrapper.Count ) );
         var rc       = Navigation.RowColFromIndex( rowsCols, matrixIndex, 0 );
-        var vdIndex  = Navigation.IndexFromRowCol( rowsCols, rc, ConfigManager.CurrentProfile.UI.DesktopArrangement );
+        var vdIndex  = Navigation.IndexFromRowCol( rowsCols, rc, profile.UI.DesktopArrangement );
 
         return vdIndex;
     }

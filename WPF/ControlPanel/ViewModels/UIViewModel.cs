@@ -29,6 +29,8 @@ public partial class UIViewModel : ViewModelBase
         ShowVdIndexType        = Manager.CurrentProfile.UI.ShowVdIndexType;
         ShowVdNamePosition     = (int)Manager.CurrentProfile.UI.ShowVdNamePosition;
         EnableVdNameColorEmoji = Manager.CurrentProfile.UI.EnableVdNameColorEmoji;
+        IsPsLayout             = Manager.CurrentProfile.IsPsLayout;
+        IsEqualLayout          = !IsPsLayout;
         _isInitialized         = true;
 
         DesktopManagerWrapper.DesktopCreatedEvent -= OnDesktopCreatedEvent;
@@ -44,17 +46,17 @@ public partial class UIViewModel : ViewModelBase
     public bool EnableVdNameColorEmoji { get; set; }
     public int  VdArrangement          { get; set; }
     public int  VdCount                { get; set; }
+    public bool IsEqualLayout          { get; set; }
+    public bool IsPsLayout             { get; set; }
 
     private void OnDesktopCreatedEvent()
     {
-        VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
-        VdCount       = DesktopWrapper.Count;
+        VdCount = DesktopWrapper.Count;
     }
 
     private void OnDesktopDeletedEvent( VirtualDesktopNotification vdn )
     {
-        VdArrangement = (int)Manager.CurrentProfile.UI.DesktopArrangement!;
-        VdCount       = DesktopWrapper.Count;
+        VdCount = DesktopWrapper.Count;
     }
 
     public void OnPropertyChanged( string propertyName, object before, object after )

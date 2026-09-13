@@ -51,14 +51,13 @@ public partial class MainWindow
 
     private static void ApplyDesktopSwitch( int targetMatrixIndex )
     {
-        if ( targetMatrixIndex < 0 || targetMatrixIndex >= DesktopWrapper.Count )
+        if ( !VirtualDesktopManager.TryGetGuidByMatrixIndex( targetMatrixIndex, out var guid ) )
         {
             return;
         }
 
         Interlocked.Exchange( ref _forceSwitchOnTimeout, 0 );
-        DesktopWrapper.MakeVisibleByGuid(
-            Manager.CurrentProfile.DesktopOrder![VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
+        DesktopWrapper.MakeVisibleByGuid( guid );
     }
 
     private void Window_MouseDown( object sender, MouseButtonEventArgs e )
@@ -312,6 +311,9 @@ public partial class MainWindow
                         }
 
                         break;
+                    case UserMessage.ApplyPsLayout:
+                        VirtualDesktopManager.ApplyPrimarySecondaryLayout( lParam != 0 );
+                        break;
                     case UserMessage.RefreshTrayIcon:
                         UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
                         break;
@@ -439,7 +441,10 @@ public partial class MainWindow
                 return;
             }
 
-            DesktopWrapper.MakeVisibleByGuid( desktopOrder[VirtualDesktopManager.GetVdIndexByMatrixIndex( targetMatrixIndex )] );
+            if ( VirtualDesktopManager.TryGetGuidByMatrixIndex( targetMatrixIndex, out var guid ) )
+            {
+                DesktopWrapper.MakeVisibleByGuid( guid );
+            }
         } );
 
         Marshal.FreeHGlobal( pVDsi );

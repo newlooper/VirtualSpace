@@ -32,16 +32,25 @@ internal static partial class VirtualDesktopManager
         {
             if ( !IsBatchCreate )
             {
-                UpdateMainView();
+                VdCountChangedHandler();
             }
         };
-        DesktopManagerWrapper.DesktopDeletedEvent += UpdateMainView;
+        DesktopManagerWrapper.DesktopDeletedEvent += VdCountChangedHandler;
         DesktopManagerWrapper.DesktopChangedEvent += vdn =>
         {
             LastDesktopId = vdn.OldId;
             if ( MainWindow.IsShowing() )
             {
-                UpdateVdwBackground();
+                if ( TryExitOnlyOneInMainView() )
+                {
+                    MainWindow.ResetMainGrid();
+                    ShowAllVirtualDesktops();
+                    ShowVisibleWindowsForDesktops();
+                }
+                else
+                {
+                    UpdateVdwBorder();
+                }
             }
 
             if ( ConfigManager.Configs.Cluster.NotificationOnVdChanged )

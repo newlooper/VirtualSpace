@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Windows.Threading;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
@@ -25,8 +26,48 @@ internal static partial class VirtualDesktopManager
     private static readonly List<VisibleWindow>        VisibleWindows   = [];
     private static readonly char[]                     WinInfoBuffer    = new char[Const.WindowTitleMaxLength];
     private static          List<VirtualDesktopWindow> _virtualDesktops = [];
+    private static          VirtualDesktopWindow?      _onlyOneInMainView;
     public static           Guid                       LastDesktopId    = Guid.Empty;
     public static           bool                       IsBatchCreate { get; set; }
+
+    internal static bool TryGetOnlyOneInMainView( out VirtualDesktopWindow vdw )
+    {
+        vdw = _onlyOneInMainView!;
+        if ( _onlyOneInMainView is null )
+        {
+            return false;
+        }
+
+        if ( _virtualDesktops.Contains( vdw ) )
+        {
+            return true;
+        }
+
+        _onlyOneInMainView = null;
+        vdw                = null!;
+        return false;
+    }
+
+    internal static void SetOnlyOneInMainView( VirtualDesktopWindow vdw )
+    {
+        _onlyOneInMainView = vdw;
+    }
+
+    internal static void ClearOnlyOneInMainView()
+    {
+        _onlyOneInMainView = null;
+    }
+
+    public static bool TryExitOnlyOneInMainView()
+    {
+        if ( !MainWindow.IsShowing() || !TryGetOnlyOneInMainView( out _ ) )
+        {
+            return false;
+        }
+
+        ClearOnlyOneInMainView();
+        return true;
+    }
 
     private static bool VisibleWindowFilter( IntPtr hWnd, int lParam )
     {
@@ -73,6 +114,11 @@ internal static partial class VirtualDesktopManager
         var allVisibleWindows = GetVisibleWindows();
         Logger.Verbose( $"VisibleWindows/ApplicationViews: {allVisibleWindows.Count.ToString()}/{DesktopManagerWrapper.GetViewCount().ToString()}" );
 
+        if ( vdwList is null && TryGetOnlyOneInMainView( out var onlyOne ) )
+        {
+            vdwList = [onlyOne];
+        }
+
         vdwList ??= _virtualDesktops;
 
         foreach ( var virtualDesktopWindow in vdwList )
@@ -99,7 +145,7 @@ internal static partial class VirtualDesktopManager
                      DesktopWrapper.IsApplicationPinned( win.Handle ) )
                 {
                     Logger.Debug( $"{win.Title} IS PINNED" );
-                    foreach ( var vdw in _virtualDesktops )
+                    foreach ( var vdw in vdwList )
                     {
                         vdw.AddWindow( new VisibleWindow( win.Title, win.Classname, win.Handle ) );
                     }
@@ -166,19 +212,29 @@ internal static partial class VirtualDesktopManager
 
     public static void ShowAllVirtualDesktops()
     {
-        UpdateVdwBackground();
-        foreach ( var vdw in _virtualDesktops )
+        UpdateVdwBorder();
+        if ( TryGetOnlyOneInMainView( out var onlyOne ) )
         {
-            User32.SendMessage( vdw.Handle, WinMsg.WM_HOTKEY, UserMessage.ShowVdw, 0 );
+            onlyOne.PlaceInCell();
         }
+        else
+        {
+            foreach ( var vdw in _virtualDesktops )
+            {
+                vdw.PlaceInCell();
+            }
+        }
+
+        var dispatcher = MainWindow.GetMainWindow().Dispatcher;
+        dispatcher.Invoke( static () => { }, DispatcherPriority.Render );
     }
 
     public static void HideAllVirtualDesktops()
     {
         Menus.CloseContextMenu();
+        ClearOnlyOneInMainView();
         foreach ( var vdw in _virtualDesktops )
         {
-            vdw.ResetOnlyOneStatus();
             vdw.Hide();
             vdw.ClearVisibleWindows();
         }

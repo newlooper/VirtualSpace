@@ -28,13 +28,6 @@ public partial class VirtualDesktopWindow
 
     public void UpdateWallpaper()
     {
-        void InvalidateAndRefresh()
-        {
-            DetachWallpaper();
-            _cacheBuildKey = null;
-            RefreshWallpaper();
-        }
-
         if ( !_surface.Dispatcher.CheckAccess() )
         {
             _surface.Dispatcher.Invoke( InvalidateAndRefresh );
@@ -42,6 +35,15 @@ public partial class VirtualDesktopWindow
         else
         {
             InvalidateAndRefresh();
+        }
+
+        return;
+
+        void InvalidateAndRefresh()
+        {
+            DetachWallpaper();
+            _cacheBuildKey = null;
+            RefreshWallpaper();
         }
     }
 
@@ -75,8 +77,14 @@ public partial class VirtualDesktopWindow
         }
 
         var source = WallpaperImages.Retain( path, width, height, ConfigManager.GetCachePath(), WallpaperQuality );
+        if ( source is null )
+        {
+            RequestDiskCache( path, width, height );
+            return;
+        }
+
         WallpaperImages.Release( _wallpaperKey );
-        _wallpaperKey    = source is null ? null : key;
+        _wallpaperKey    = key;
         _wallpaperSource = source;
         _surface.SetWallpaper( source );
     }
@@ -124,10 +132,15 @@ public partial class VirtualDesktopWindow
         if ( wpInfo.isCached || VirtualDesktopManager.IsBatchCreate )
         {
             AttachWallpaper( wpInfo.path, PixelWidth, PixelHeight );
+            if ( _wallpaperSource is null )
+            {
+                RequestDiskCache( wpInfo.path, PixelWidth, PixelHeight );
+            }
+
             return;
         }
 
-        Logger.Event( $"Create cache image({PixelWidth}*{PixelHeight}) for Desktop[{VdIndex}]" );
+        Logger.Verbose( $"Create cache image({PixelWidth}*{PixelHeight}) for Desktop[{VdIndex}]" );
         RequestDiskCache( wpInfo.path, PixelWidth, PixelHeight );
         if ( _wallpaperSource != null )
         {
@@ -171,11 +184,14 @@ public partial class VirtualDesktopWindow
         var key = WallpaperImages.Key( wpPath, PixelWidth, PixelHeight );
         if ( _wallpaperSource != null && _wallpaperKey == key )
         {
+            Logger.Verbose( $"Reuse Wallpaper: {key}" );
+            _surface.SetWallpaper( _wallpaperSource );
             UpdateDesktopLabel();
             return;
         }
 
         var (exists, _) = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), PixelWidth, PixelHeight );
+        Logger.Verbose( "Applied Wallpaper src=" + ( exists ? wpPath : "pending" ) + " key=" + key );
         ApplyWallpaper( ( exists, wpPath, null ) );
         UpdateDesktopLabel();
     }
