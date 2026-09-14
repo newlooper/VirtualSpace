@@ -147,8 +147,7 @@ public partial class MainWindow
         {
             var (key, _) = PluginHost.CareAboutMessages.First( m => m.Value == msg );
             foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
-                         plugin.RestartPolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
-                         plugin.RestartPolicy.Enabled &&
+                         plugin.RestartPolicy is { Trigger: PolicyTrigger.WINDOWS_MESSAGE, Enabled: true } &&
                          plugin.RestartPolicy.Values.Contains( key ) ) )
             {
                 Logger.Info( $"Restart Plugin {plugin.Display} because {key}" );
@@ -156,8 +155,7 @@ public partial class MainWindow
             }
 
             foreach ( var plugin in PluginHost.Plugins.Where( plugin =>
-                         plugin.ClosePolicy?.Trigger == PolicyTrigger.WINDOWS_MESSAGE &&
-                         plugin.ClosePolicy.Enabled &&
+                         plugin.ClosePolicy is { Trigger: PolicyTrigger.WINDOWS_MESSAGE, Enabled: true } &&
                          plugin.ClosePolicy.Values.Contains( key ) ) )
             {
                 Logger.Info( $"Close Plugin {plugin.Display} because {key}" );
@@ -165,44 +163,6 @@ public partial class MainWindow
             }
 
             goto RETURN;
-        }
-
-        void SwitchByIndex( int index )
-        {
-            if ( Manager.CurrentProfile.DesktopOrder!.Count > index )
-            {
-                DesktopWrapper.MakeVisibleByGuid( Manager.CurrentProfile.DesktopOrder[index] );
-            }
-        }
-
-        void MoveForegroundWindowToDesktop( int sysIndex, bool follow = false )
-        {
-            if ( sysIndex >= DesktopWrapper.Count )
-            {
-                return;
-            }
-
-            var fw = User32.GetForegroundWindow();
-            if ( fw == IntPtr.Zero )
-            {
-                return;
-            }
-
-            try
-            {
-                DesktopWrapper.MoveWindowToDesktop( fw, sysIndex );
-
-                if ( !follow )
-                {
-                    return;
-                }
-
-                WindowTool.ActivateWindow( fw, sysIndex );
-            }
-            catch ( Exception ex )
-            {
-                Logger.Error( $"Move Foreground Window To Desktop[{sysIndex}] ∵ " + ex.Message );
-            }
         }
 
         switch ( msg )
@@ -230,52 +190,68 @@ public partial class MainWindow
                         MoveForegroundWindowToDesktop( um % UserMessage.Meta.MWF_START - 1, true );
                         break;
                     case UserMessage.RiseView:
+                        if ( !TryAcceptRiseView() )
+                        {
+                            break;
+                        }
+
                         if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
                         {
                             HideAll();
                         }
-                        else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                        else
                         {
                             BringToTop();
-                            RiseViewTimer.Restart();
                         }
 
                         break;
                     case UserMessage.RiseViewForActiveApp:
+                        if ( !TryAcceptRiseView() )
+                        {
+                            break;
+                        }
+
                         _ = User32.GetWindowThreadProcessId( User32.GetForegroundWindow(), out var processId );
                         if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
                         {
                             HideAll();
                         }
-                        else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                        else
                         {
                             BringToTop( processId );
-                            RiseViewTimer.Restart();
                         }
 
                         break;
                     case UserMessage.RiseViewForCurrentVD:
+                        if ( !TryAcceptRiseView() )
+                        {
+                            break;
+                        }
+
                         if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
                         {
                             HideAll();
                         }
-                        else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                        else
                         {
                             BringToTopForCurrentVd();
-                            RiseViewTimer.Restart();
                         }
 
                         break;
                     case UserMessage.RiseViewForActiveAppInCurrentVD:
+                        if ( !TryAcceptRiseView() )
+                        {
+                            break;
+                        }
+
                         _ = User32.GetWindowThreadProcessId( User32.GetForegroundWindow(), out var pId );
                         if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
                         {
                             HideAll();
                         }
-                        else if ( RiseViewTimer.ElapsedMilliseconds > Const.RiseViewInterval )
+                        else
                         {
                             BringToTopForCurrentVd( pId );
-                            RiseViewTimer.Restart();
                         }
 
                         break;
@@ -357,6 +333,44 @@ public partial class MainWindow
 
         RETURN:
         return IntPtr.Zero;
+
+        void MoveForegroundWindowToDesktop( int sysIndex, bool follow = false )
+        {
+            if ( sysIndex >= DesktopWrapper.Count )
+            {
+                return;
+            }
+
+            var fw = User32.GetForegroundWindow();
+            if ( fw == IntPtr.Zero )
+            {
+                return;
+            }
+
+            try
+            {
+                DesktopWrapper.MoveWindowToDesktop( fw, sysIndex );
+
+                if ( !follow )
+                {
+                    return;
+                }
+
+                WindowTool.ActivateWindow( fw, sysIndex );
+            }
+            catch ( Exception ex )
+            {
+                Logger.Error( $"Move Foreground Window To Desktop[{sysIndex}] ∵ " + ex.Message );
+            }
+        }
+
+        void SwitchByIndex( int index )
+        {
+            if ( Manager.CurrentProfile.DesktopOrder!.Count > index )
+            {
+                DesktopWrapper.MakeVisibleByGuid( Manager.CurrentProfile.DesktopOrder[index] );
+            }
+        }
     }
 
     private static void SwitchToDesktopById( Guid guid )
@@ -451,5 +465,16 @@ public partial class MainWindow
         Marshal.FreeHGlobal( pVDsi );
         Marshal.FreeHGlobal( pCds );
         SwitchDesktopTimer.Restart();
+    }
+
+    private static bool TryAcceptRiseView()
+    {
+        if ( RiseViewTimer.ElapsedMilliseconds <= Const.RiseViewInterval )
+        {
+            return false;
+        }
+
+        RiseViewTimer.Restart();
+        return true;
     }
 }

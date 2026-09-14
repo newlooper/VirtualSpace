@@ -24,9 +24,9 @@ using VirtualSpace.VirtualDesktop.Api;
 
 namespace VirtualSpace.VirtualDesktop;
 
-public static class Menus
+public static partial class Menus
 {
-    private static ContextMenuStrip _ctm;
+    private static ContextMenuStrip? _ctm;
 
     public static void ThumbCtm( MenuInfo mi )
     {
@@ -176,7 +176,7 @@ public static class Menus
         void OnUnHideWindow( object? s, EventArgs evt )
         {
             var item = s as ToolStripMenuItem;
-            var m    = Regex.Match( item?.Text!, $@".*{Const.HideWindowSplitter}(.*)" );
+            var m    = MyRegex().Match(item?.Text!);
 
             var h = (IntPtr)int.Parse( m.Groups[1].Value );
 
@@ -274,6 +274,9 @@ public static class Menus
     {
         _ctm?.Close();
     }
+
+    [GeneratedRegex(".*🔙🔜(.*)")]
+    private static partial Regex MyRegex();
 }
 
 public class MenuInfo
