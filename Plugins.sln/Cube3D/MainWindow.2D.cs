@@ -12,12 +12,13 @@ You should have received a copy of the GNU General Public License along with Cub
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using VirtualSpace.PluginContracts;
 
 namespace Cube3D;
 
 public partial class MainWindow
 {
-    private void NotificationGridLayout( int vdCount )
+    private void NotificationGridLayout( VirtualDesktopSwitchInfo info )
     {
         ////////////////////////////////////////////////////////////////
         // position and size
@@ -32,37 +33,116 @@ public partial class MainWindow
             Top = centerY + NotifyContainer.Height
         };
 
-        ////////////////////////////////////////////////////////////////
-        // contents
-        var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
-        var maxCount = rowsCols * rowsCols;
-        if ( NotifyGrid.Children.Count != maxCount )
-        {
-            NotifyGrid.Children.Clear();
-            for ( var i = 0; i < maxCount; i++ )
-            {
-                NotifyGrid.Children.Add( new Button
-                {
-                    // Content = i.ToString(),
-                    Template = Resources["NotifyButtonTemplate"] as ControlTemplate
-                } );
-            }
-        }
-
+        ApplyNotifyGrid( info );
         UpdateLayout();
-        var firstCell = (Button)NotifyGrid.Children[0]; // 因为至少有一个桌面，所以 0 索引子元素必然存在
+
+        var n = Math.Max( NotifyGrid.RowDefinitions.Count, 1 );
         var buttonMargin = new Thickness
         {
-            Left = firstCell.ActualWidth / 10.0,
-            Top  = firstCell.ActualHeight / 10.0
+            Left = NotifyGrid.ActualWidth / n / 10.0,
+            Top  = NotifyGrid.ActualHeight / n / 10.0
         };
 
         Resources["NotifyButtonMargin"] = buttonMargin;
         NotifyBorder.Padding            = new Thickness { Right = buttonMargin.Left, Bottom = buttonMargin.Top };
 
         UpdateLayout();
+        PlaceIndicatorOnCell( info.FromIndex );
+    }
 
-        CurrentIndicator.Width  = firstCell.ActualWidth;
-        CurrentIndicator.Height = firstCell.ActualHeight;
+    private void ApplyNotifyGrid( VirtualDesktopSwitchInfo info )
+    {
+        var cells = info.Cells is { Length: > 0 } ? info.Cells : FallbackEqualCells( info.VdCount );
+        var n     = info.BoardN > 0 ? info.BoardN : FallbackBoardN( cells.Length );
+
+        if ( NotifyGrid.RowDefinitions.Count != n )
+        {
+            NotifyGrid.RowDefinitions.Clear();
+            NotifyGrid.ColumnDefinitions.Clear();
+            var star = new GridLength( 1, GridUnitType.Star );
+            for ( var i = 0; i < n; i++ )
+            {
+                NotifyGrid.RowDefinitions.Add( new RowDefinition { Height      = star } );
+                NotifyGrid.ColumnDefinitions.Add( new ColumnDefinition { Width = star } );
+            }
+        }
+
+        if ( NotifyGrid.Children.Count != cells.Length )
+        {
+            NotifyGrid.Children.Clear();
+            for ( var i = 0; i < cells.Length; i++ )
+            {
+                NotifyGrid.Children.Add( new Button() );
+            }
+        }
+
+        for ( var i = 0; i < cells.Length; i++ )
+        {
+            var cell = cells[i];
+            var btn  = (Button)NotifyGrid.Children[i];
+            btn.Tag      = cell.Index;
+            btn.Template = Resources[cell.Occupied ? "NotifyButtonTemplate" : "NotifyButtonTemplateEmpty"] as ControlTemplate;
+            Grid.SetRow( btn, cell.Row );
+            Grid.SetColumn( btn, cell.Col );
+            Grid.SetRowSpan( btn, Math.Max( 1, cell.RowSpan ) );
+            Grid.SetColumnSpan( btn, Math.Max( 1, cell.ColSpan ) );
+        }
+    }
+
+    private void PlaceIndicatorOnCell( int index )
+    {
+        var el = FindNotifyCell( index );
+        if ( el == null )
+        {
+            return;
+        }
+
+        var pos = el.TranslatePoint( new Point( 0, 0 ), NotifyContainer );
+        CurrentIndicator.BeginAnimation( MarginProperty, null );
+        CurrentIndicator.BeginAnimation( WidthProperty, null );
+        CurrentIndicator.BeginAnimation( HeightProperty, null );
+        CurrentIndicator.Width  = el.ActualWidth;
+        CurrentIndicator.Height = el.ActualHeight;
+        CurrentIndicator.Margin = new Thickness( pos.X, pos.Y, 0, 0 );
+    }
+
+    private FrameworkElement? FindNotifyCell( int index )
+    {
+        foreach ( Button btn in NotifyGrid.Children )
+        {
+            if ( btn.Tag is int tag && tag == index )
+            {
+                return btn;
+            }
+        }
+
+        return index >= 0 && index < NotifyGrid.Children.Count
+            ? (FrameworkElement)NotifyGrid.Children[index]
+            : null;
+    }
+
+    private static int FallbackBoardN( int cellCount )
+    {
+        return Math.Max( 1, (int)Math.Ceiling( Math.Sqrt( Math.Max( cellCount, 1 ) ) ) );
+    }
+
+    private static VirtualDesktopCell[] FallbackEqualCells( int vdCount )
+    {
+        var n     = FallbackBoardN( vdCount );
+        var cells = new VirtualDesktopCell[n * n];
+        for ( var i = 0; i < cells.Length; i++ )
+        {
+            cells[i] = new VirtualDesktopCell
+            {
+                Index    = i,
+                Row      = i / n,
+                Col      = i % n,
+                RowSpan  = 1,
+                ColSpan  = 1,
+                Occupied = i < vdCount
+            };
+        }
+
+        return cells;
     }
 }

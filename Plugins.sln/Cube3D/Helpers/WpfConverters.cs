@@ -17,7 +17,7 @@ namespace VirtualSpace.Helpers;
 
 public class TransitionTypeConverter : IValueConverter
 {
-    public object Convert( object value, Type targetType, object parameters, CultureInfo culture )
+    public object? Convert( object? value, Type targetType, object? parameters, CultureInfo culture )
     {
         if ( value is null )
         {
@@ -29,7 +29,7 @@ public class TransitionTypeConverter : IValueConverter
         return ( t & TransitionType.NotificationGridOnly ) > 0;
     }
 
-    public object ConvertBack( object value, Type targetType, object parameters, CultureInfo culture )
+    public object ConvertBack( object? value, Type targetType, object? parameters, CultureInfo culture )
     {
         throw new NotImplementedException();
     }

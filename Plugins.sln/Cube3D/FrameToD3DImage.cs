@@ -21,17 +21,17 @@ namespace Cube3D;
 
 public class FrameToD3DImage : FrameProcessor
 {
-    private readonly Dictionary<string, D3DImageInfo> _d3DImageDict;
-    private readonly Duration                         _duration = new( new TimeSpan( 0, 0, 0, 0, 5 ) );
-    private          Action                           _animation;
+    private readonly Dictionary<string, D3DImageInfo>? _d3DImageDict;
+    private readonly Duration                          _duration = new( new TimeSpan( 0, 0, 0, 0, 5 ) );
+    private          Action?                           _animation;
 
     private FrameToD3DImage()
     {
     }
 
-    public FrameToD3DImage( Dictionary<string, D3DImageInfo> d3dImageDict )
+    public FrameToD3DImage( Dictionary<string, D3DImageInfo> d3DImageDict )
     {
-        _d3DImageDict = d3dImageDict;
+        _d3DImageDict = d3DImageDict;
     }
 
     public void SetAction( Action action )
@@ -43,7 +43,7 @@ public class FrameToD3DImage : FrameProcessor
     {
         if ( frameNumber == 1 )
         {
-            Paint( _d3DImageDict[Const.Front], pointer );
+            Paint( _d3DImageDict![Const.Front], pointer );
         }
         else
         {
@@ -52,7 +52,7 @@ public class FrameToD3DImage : FrameProcessor
                 _animation?.Invoke();
             }
 
-            Paint( _d3DImageDict[Const.Others], pointer );
+            Paint( _d3DImageDict![Const.Others], pointer );
         }
     }
 
@@ -60,7 +60,7 @@ public class FrameToD3DImage : FrameProcessor
     {
         var useSoftRender = IsSoftRender();
 
-        var d3DImage = dii.Image;
+        var d3DImage = dii.Image!;
 
         if ( !useSoftRender && !d3DImage.IsFrontBufferAvailable )
         {
@@ -85,5 +85,5 @@ public class FrameToD3DImage : FrameProcessor
 
 public class D3DImageInfo
 {
-    public D3DImage Image { get; set; }
+    public D3DImage? Image { get; init; }
 }

@@ -54,8 +54,8 @@ public class Flip : Effect
     private readonly GeometryModel3D _faceFront     = new();
     private readonly MeshGeometry3D  _faceFrontMesh = new();
 
-    private DiffuseMaterial _backH;
-    private DiffuseMaterial _backV;
+    private DiffuseMaterial? _backH;
+    private DiffuseMaterial? _backV;
 
     public Flip()
     {
@@ -114,7 +114,7 @@ public class Flip : Effect
         model3DGroup.Children.Add( CommonLight );
     }
 
-    public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null )
+    public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction? ef = null )
     {
         switch ( dir )
         {
@@ -147,10 +147,10 @@ public class Flip : Effect
 
         model3DGroup.Transform = TransGroup;
 
-        var animation = (DoubleAnimation)Animation;
+        var animation = (DoubleAnimation)Animation!;
         animation.Duration       = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
         animation.EasingFunction = ef;
-        var transform = (RotateTransform3D)Transform3D;
+        var transform = (RotateTransform3D)Transform3D!;
         transform.Rotation.BeginAnimation( AxisAngleRotation3D.AngleProperty, animation );
     }
 

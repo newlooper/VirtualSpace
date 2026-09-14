@@ -18,14 +18,14 @@ namespace Cube3D.D3DImages;
 
 public static class D3DImages
 {
-    public static D3DImage FrontD3DImage  { get; private set; }
-    public static D3DImage OthersD3DImage { get; private set; }
+    public static D3DImage? FrontD3DImage  { get; private set; }
+    public static D3DImage? OthersD3DImage { get; private set; }
 
     public static Dictionary<string, D3DImageInfo> D3DImageDict { get; private set; } = new();
 
-    public static void Initialize( ResourceDictionary resources )
+    public static void Initialize( ResourceDictionary? resources )
     {
-        FrontD3DImage  = (D3DImage)resources[Const.Front];
+        FrontD3DImage  = (D3DImage)resources![Const.Front];
         OthersD3DImage = (D3DImage)resources[Const.Others];
         D3DImageDict = new Dictionary<string, D3DImageInfo>
         {
@@ -40,10 +40,10 @@ public static class D3DImages
         ClearBackBuffer( OthersD3DImage );
         FrontD3DImage  = null;
         OthersD3DImage = null;
-        D3DImageDict   = new Dictionary<string, D3DImageInfo>();
+        D3DImageDict   = [];
     }
 
-    private static void ClearBackBuffer( D3DImage image )
+    private static void ClearBackBuffer( D3DImage? image )
     {
         if ( image == null )
         {

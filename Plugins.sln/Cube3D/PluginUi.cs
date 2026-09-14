@@ -18,8 +18,8 @@ internal static class PluginUi
     public const string BackgroundLgbKey   = "BackgroundLgb";
     public const string BackgroundTransKey = "BackgroundTrans";
 
-    public static ResourceDictionary Resources { get; set; }
+    public static ResourceDictionary? Resources { get; set; }
 
-    public static Brush BackgroundLgb   => (Brush)Resources[BackgroundLgbKey];
-    public static Brush BackgroundTrans => (Brush)Resources[BackgroundTransKey];
+    public static Brush BackgroundLgb   => (Brush)Resources![BackgroundLgbKey]!;
+    public static Brush BackgroundTrans => (Brush)Resources![BackgroundTransKey]!;
 }

@@ -88,9 +88,9 @@ public class Fade : Effect
         model3DGroup.Children.Add( CommonLight );
     }
 
-    public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null )
+    public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction? ef = null )
     {
-        var animationOfFace1 = (DoubleAnimation)Animation;
+        var animationOfFace1 = (DoubleAnimation)Animation!;
         animationOfFace1.Duration        = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
         animationOfFace1.EasingFunction  = ef;
         _animationOfFace2.Duration       = animationOfFace1.Duration;

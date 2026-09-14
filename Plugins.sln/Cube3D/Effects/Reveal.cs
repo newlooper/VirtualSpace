@@ -94,10 +94,10 @@ public class Reveal : Effect
         model3DGroup.Children.Add( CommonLight );
     }
 
-    public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null )
+    public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction? ef = null )
     {
         var offsetProperty = TranslateTransform3D.OffsetXProperty;
-        var animation      = (DoubleAnimation)Animation;
+        var animation      = (DoubleAnimation)Animation!;
         animation.Duration       = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
         animation.EasingFunction = ef;
 
@@ -125,7 +125,7 @@ public class Reveal : Effect
 
         if ( TransGroup.Children.Count == 0 )
         {
-            TransGroup.Children.Add( Transform3D );
+            TransGroup.Children.Add( Transform3D! );
         }
         else
         {
@@ -134,7 +134,7 @@ public class Reveal : Effect
 
         _face1.Transform = TransGroup;
 
-        var transform = (TranslateTransform3D)Transform3D;
+        var transform = (TranslateTransform3D)Transform3D!;
         transform.BeginAnimation( offsetProperty, animation );
     }
 }

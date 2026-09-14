@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Cub
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -37,13 +38,13 @@ namespace Cube3D;
 
 public sealed class Cube3DPlugin : PluginBase
 {
-    private readonly object             _restartLock = new();
-    private          IHostContext       _host;
-    private          MainWindow         _mainWindow;
-    private          Action<object>     _onSwitch;
-    private          ResourceDictionary _resources;
+    private readonly Lock                _restartLock = new();
+    private          IHostContext?       _host;
+    private          MainWindow?         _mainWindow;
+    private          Action<object>?     _onSwitch;
+    private          ResourceDictionary? _resources;
 
-    public override IReadOnlyList<string> SubscribedEvents { get; } = new[] { PluginEvents.VirtualDesktopSwitch };
+    public override IReadOnlyList<string> SubscribedEvents { get; } = [PluginEvents.VirtualDesktopSwitch];
 
     public override void Initialize( IHostContext hostContext )
     {
@@ -71,16 +72,6 @@ public sealed class Cube3DPlugin : PluginBase
             _host.Unsubscribe( PluginEvents.VirtualDesktopSwitch, _onSwitch );
         }
 
-        void TearDown()
-        {
-            _mainWindow?.CloseAll();
-            _mainWindow = null;
-            D3DImages.D3DImages.Reset();
-            D3D9ShareCapture.ReleaseSharedDevices();
-            PluginUi.Resources = null;
-            _resources         = null;
-        }
-
         var dispatcher = _mainWindow?.Dispatcher ?? Application.Current?.Dispatcher;
         if ( dispatcher != null && !dispatcher.CheckAccess() )
         {
@@ -93,6 +84,17 @@ public sealed class Cube3DPlugin : PluginBase
 
         _onSwitch = null;
         _host     = null;
+        return;
+
+        void TearDown()
+        {
+            _mainWindow?.CloseAll();
+            _mainWindow = null;
+            D3DImages.D3DImages.Reset();
+            D3D9ShareCapture.ReleaseSharedDevices();
+            PluginUi.Resources = null;
+            _resources         = null;
+        }
     }
 
     public override void ShowSettings()

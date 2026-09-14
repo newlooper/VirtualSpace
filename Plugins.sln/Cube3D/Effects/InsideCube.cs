@@ -185,7 +185,7 @@ public class InsideCube : Effect
         model3DGroup.Children.Add( CommonLight );
     }
 
-    public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null )
+    public override void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction? ef = null )
     {
         switch ( dir )
         {
@@ -205,7 +205,7 @@ public class InsideCube : Effect
 
         if ( TransGroup.Children.Count == 0 )
         {
-            TransGroup.Children.Add( Transform3D );
+            TransGroup.Children.Add( Transform3D! );
         }
         else
         {
@@ -214,10 +214,10 @@ public class InsideCube : Effect
 
         model3DGroup.Transform = TransGroup;
 
-        var animation = (DoubleAnimation)Animation;
+        var animation = (DoubleAnimation)Animation!;
         animation.Duration       = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
         animation.EasingFunction = ef;
-        var transform = (RotateTransform3D)Transform3D;
+        var transform = (RotateTransform3D)Transform3D!;
         transform.Rotation.BeginAnimation( AxisAngleRotation3D.AngleProperty, animation );
     }
 }

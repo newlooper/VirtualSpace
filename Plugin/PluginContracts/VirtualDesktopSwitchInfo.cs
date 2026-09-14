@@ -9,16 +9,26 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System;
-using System.Runtime.InteropServices;
 
 namespace VirtualSpace.PluginContracts;
 
-[StructLayout( LayoutKind.Sequential )]
-public struct VirtualDesktopSwitchInfo
+public struct VirtualDesktopCell
 {
-    public IntPtr HostHandle;
-    public int    VdCount;
-    public int    FromIndex;
-    public int    Dir;
-    public int    TargetIndex;
+    public int  Index;
+    public int  Row;
+    public int  Col;
+    public int  RowSpan;
+    public int  ColSpan;
+    public bool Occupied;
+}
+
+public class VirtualDesktopSwitchInfo
+{
+    public IntPtr               HostHandle;
+    public int                  VdCount;
+    public int                  FromIndex;
+    public int                  Dir;
+    public int                  TargetIndex;
+    public int                  BoardN;
+    public VirtualDesktopCell[] Cells = [];
 }

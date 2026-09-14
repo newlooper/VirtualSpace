@@ -23,9 +23,9 @@ namespace Cube3D;
 
 public partial class MainWindow
 {
-    private static   SettingsWindow _sw;
-    private readonly StringBuilder  _sbWinInfo = new( 1024 );
-    private          bool           _isTopmost;
+    private static   SettingsWindow? _sw;
+    private readonly StringBuilder   _sbWinInfo = new( 1024 );
+    private          bool            _isTopmost;
 
     private void FakeHide( bool stopCapture = false )
     {
@@ -163,7 +163,7 @@ public partial class MainWindow
 
         if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 )
         {
-            NotificationGridLayout( vdSwitchInfo.VdCount );
+            NotificationGridLayout( vdSwitchInfo );
         }
 
         var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, SettingsManager.Settings.EaseMode );
@@ -177,14 +177,14 @@ public partial class MainWindow
 
             if ( ( SettingsManager.Settings.TransitionType & TransitionType.NotificationGridOnly ) > 0 )
             {
-                NotificationGridAnimation( vdSwitchInfo.FromIndex, vdSwitchInfo.TargetIndex, vdSwitchInfo.VdCount, ef );
+                NotificationGridAnimation( vdSwitchInfo, ef );
                 Interlocked.Increment( ref _mainWindowRunningAnimationCount );
             }
 
             if ( vdSwitchInfo.TargetIndex != vdSwitchInfo.FromIndex &&
                  ( SettingsManager.Settings.TransitionType & TransitionType.AnimationOnly ) > 0 )
             {
-                _effect.AnimationInDirection( (KeyCode)vdSwitchInfo.Dir, MainModel3DGroup, ef );
+                _effect?.AnimationInDirection( (KeyCode)vdSwitchInfo.Dir, MainModel3DGroup, ef );
                 Interlocked.Increment( ref _mainWindowRunningAnimationCount );
             }
 
@@ -199,13 +199,13 @@ public partial class MainWindow
             return;
         }
 
-        NotificationGridLayout( vdSwitchInfo.VdCount );
+        NotificationGridLayout( vdSwitchInfo );
 
         var ef = EaseFactory.GetEaseByName( SettingsManager.Settings.EaseType, SettingsManager.Settings.EaseMode );
 
         RealShow();
 
-        NotificationGridAnimation( vdSwitchInfo.FromIndex, vdSwitchInfo.TargetIndex, vdSwitchInfo.VdCount, ef );
+        NotificationGridAnimation( vdSwitchInfo, ef );
     }
 }
 

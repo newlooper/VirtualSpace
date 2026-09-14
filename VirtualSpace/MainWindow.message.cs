@@ -401,6 +401,7 @@ public partial class MainWindow
             Dir         = dir,
             TargetIndex = targetMatrixIndex
         };
+        PopulatePluginSwitchBoard( switchInfo );
         PluginHost.Publish( PluginEvents.VirtualDesktopSwitch, switchInfo );
 
         var vDsi = new VirtualSpace.Commons.VirtualDesktopSwitchInfo

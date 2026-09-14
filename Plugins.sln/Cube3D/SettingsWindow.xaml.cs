@@ -19,8 +19,8 @@ namespace Cube3D;
 
 public partial class SettingsWindow : Window
 {
-    private bool       _isLoaded;
-    private MainWindow _mainWindow;
+    private bool        _isLoaded;
+    private MainWindow? _mainWindow;
 
     public SettingsWindow()
     {
@@ -50,14 +50,14 @@ public partial class SettingsWindow : Window
 
         ComboBoxEase.SelectedItem = SettingsManager.Settings.EaseType;
 
-        foreach ( EasingMode easeMode in Enum.GetValues( typeof( EasingMode ) ) )
+        foreach ( var easeMode in Enum.GetValues<EasingMode>() )
         {
             ComboBoxEaseMode.Items.Add( easeMode );
         }
 
         ComboBoxEaseMode.SelectedItem = SettingsManager.Settings.EaseMode;
 
-        foreach ( TransitionType tt in Enum.GetValues( typeof( TransitionType ) ) )
+        foreach ( var tt in Enum.GetValues<TransitionType>() )
         {
             ComboBoxTransitionType.Items.Add( tt );
         }
@@ -116,7 +116,7 @@ public partial class SettingsWindow : Window
         }
 
         SettingsManager.SaveJson();
-        _mainWindow.SetTransitionType();
+        _mainWindow?.SetTransitionType();
     }
 
     public void SetMainWindow( MainWindow mw )
@@ -126,7 +126,7 @@ public partial class SettingsWindow : Window
 
     private void ApplyEffect_OnClick( object sender, RoutedEventArgs e )
     {
-        _mainWindow.Build3D();
+        _mainWindow?.Build3D();
     }
 
     private void Close_OnClick( object sender, RoutedEventArgs e )
@@ -144,7 +144,7 @@ public partial class SettingsWindow : Window
 
         SettingsManager.Settings.ShowNotificationGridOnAllScreens = true;
         SettingsManager.SaveJson();
-        _mainWindow.SetOtherScreensVisible( true );
+        _mainWindow?.SetOtherScreensVisible( true );
     }
 
     private void CbNgOnAllScreens_OnUnchecked( object sender, RoutedEventArgs e )
@@ -156,6 +156,6 @@ public partial class SettingsWindow : Window
 
         SettingsManager.Settings.ShowNotificationGridOnAllScreens = false;
         SettingsManager.SaveJson();
-        _mainWindow.SetOtherScreensVisible( false );
+        _mainWindow?.SetOtherScreensVisible( false );
     }
 }

@@ -19,6 +19,7 @@ using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
+using VirtualSpace.PluginContracts;
 using VirtualSpace.VirtualDesktop;
 using VirtualSpace.VirtualDesktop.Api;
 
@@ -155,6 +156,52 @@ public partial class MainWindow
         }
 
         RowsCols = n;
+    }
+
+    private static void PopulatePluginSwitchBoard( VirtualDesktopSwitchInfo info )
+    {
+        var profile = Manager.CurrentProfile;
+        if ( profile.IsPsLayout && PsLayout.IsValid( profile.PrimarySecondary ) )
+        {
+            var ps             = profile.PrimarySecondary;
+            var n              = ps.N;
+            var (pr, pc, span) = PsLayout.PrimaryRect( ps.Kind, n, ps.Corner );
+            var smalls         = PsLayout.SmallCells( ps.Kind, n, ps.Corner );
+            var cells          = new VirtualDesktopCell[1 + smalls.Count];
+            cells[0] = CreateSwitchCell( 0, pr, pc, span, span );
+            for ( var i = 0; i < smalls.Count; i++ )
+            {
+                var (r, c) = smalls[i];
+                cells[i + 1] = CreateSwitchCell( i + 1, r, c, 1, 1 );
+            }
+
+            info.BoardN = n;
+            info.Cells  = cells;
+            return;
+        }
+
+        var rowsCols = (int)Math.Ceiling( Math.Sqrt( Math.Max( info.VdCount, 1 ) ) );
+        var equal    = new VirtualDesktopCell[rowsCols * rowsCols];
+        for ( var i = 0; i < equal.Length; i++ )
+        {
+            equal[i] = CreateSwitchCell( i, i / rowsCols, i % rowsCols, 1, 1 );
+        }
+
+        info.BoardN = rowsCols;
+        info.Cells  = equal;
+    }
+
+    private static VirtualDesktopCell CreateSwitchCell( int index, int row, int col, int rowSpan, int colSpan )
+    {
+        return new VirtualDesktopCell
+        {
+            Index    = index,
+            Row      = row,
+            Col      = col,
+            RowSpan  = rowSpan,
+            ColSpan  = colSpan,
+            Occupied = VirtualDesktopManager.TryGetGuidByMatrixIndex( index, out _ )
+        };
     }
 
     public static void ResetMainGridForSingleDesktop( int vdIndex )

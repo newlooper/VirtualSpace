@@ -34,9 +34,9 @@ public partial class MainWindow : Window
 {
     private static readonly List<MainWindow> OtherScreens = [];
 
-    internal static Action       RestartRequested;
-    private         IntPtr       _handle;
-    private         IHostContext _host;
+    internal static Action?       RestartRequested;
+    private         IntPtr        _handle;
+    private         IHostContext? _host;
 
     private MonitorInfo _monitorInfo;
 

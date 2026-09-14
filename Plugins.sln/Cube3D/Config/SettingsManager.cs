@@ -41,7 +41,7 @@ public class SettingsManager
         Settings = LoadFromJson( dest ) ?? new Settings();
     }
 
-    private static Settings LoadFromJson( string file )
+    private static Settings? LoadFromJson( string file )
     {
         using var fs     = new FileStream( file, FileMode.Open, FileAccess.Read );
         var       buffer = new byte[fs.Length];
@@ -50,7 +50,7 @@ public class SettingsManager
         return JsonSerializer.Deserialize<Settings>( ref utf8Reader );
     }
 
-    public static void SaveJson( string file = null )
+    public static void SaveJson( string? file = null )
     {
         file ??= Path.Combine( _dataDirectory, PLUGIN_SETTING_FILE );
         Directory.CreateDirectory( Path.GetDirectoryName( file )! );

@@ -24,8 +24,8 @@ public abstract class Effect
     protected static readonly double           MeshWidth   = 1.0;
     protected static readonly AmbientLight     CommonLight = new() { Color = Colors.White };
     protected readonly        Transform3DGroup TransGroup  = new();
-    protected                 Timeline         Animation;
-    protected                 Transform3D      Transform3D;
+    protected                 Timeline?        Animation;
+    protected                 Transform3D?     Transform3D;
 
     protected static void AddTriangleIndices( MeshGeometry3D meshGeometry3D )
     {
@@ -47,11 +47,11 @@ public abstract class Effect
 
     public abstract void Build( Model3DGroup model3DGroup );
 
-    public abstract void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction ef = null );
+    public abstract void AnimationInDirection( KeyCode dir, Model3DGroup model3DGroup, IEasingFunction? ef = null );
 
     public void AddAnimationCompletedListener( EventHandler handler )
     {
-        Animation.Completed += handler;
+        Animation?.Completed += handler;
     }
 }
 
@@ -65,20 +65,20 @@ public enum KeyCode
 
 public static class EffectFactory
 {
-    public static readonly IReadOnlyList<Type> Types = new[]
-    {
+    private static readonly IReadOnlyList<Type> Types =
+    [
         typeof( Cube ),
         typeof( InsideCube ),
         typeof( Slide ),
         typeof( Reveal ),
         typeof( Fade ),
         typeof( Flip )
-    };
+    ];
 
     public static string Default { get; } = Types[0].Name;
 
     public static IReadOnlyList<string> Names { get; } =
-        Types.Select( t => t.Name ).ToArray();
+        [.. Types.Select( t => t.Name )];
 
     public static Effect Create( string name )
     {
@@ -89,10 +89,10 @@ public static class EffectFactory
                 continue;
             }
 
-            return (Effect)Activator.CreateInstance( type );
+            return (Effect)Activator.CreateInstance( type )!;
         }
 
-        return (Effect)Activator.CreateInstance( Types[0] );
+        return (Effect)Activator.CreateInstance( Types[0] )!;
     }
 
     internal static string NameFromLegacyIndex( int index )
@@ -110,8 +110,8 @@ public static class EaseFactory
 {
     public const string None = nameof( None );
 
-    public static readonly IReadOnlyList<Type> Types = new[]
-    {
+    private static readonly IReadOnlyList<Type> Types =
+    [
         typeof( BackEase ),
         typeof( BounceEase ),
         typeof( CircleEase ),
@@ -123,12 +123,12 @@ public static class EaseFactory
         typeof( QuarticEase ),
         typeof( QuinticEase ),
         typeof( SineEase )
-    };
+    ];
 
     public static IReadOnlyList<string> Names { get; } =
-        new[] { None }.Concat( Types.Select( t => t.Name ) ).ToArray();
+        [None, .. Types.Select( t => t.Name )];
 
-    public static EasingFunctionBase GetEaseByName( string name, EasingMode mode )
+    public static EasingFunctionBase? GetEaseByName( string name, EasingMode mode )
     {
         if ( string.IsNullOrEmpty( name ) || name == None )
         {
@@ -142,7 +142,7 @@ public static class EaseFactory
                 continue;
             }
 
-            var ef = (EasingFunctionBase)Activator.CreateInstance( type );
+            var ef = (EasingFunctionBase)Activator.CreateInstance( type )!;
             ef.EasingMode = mode;
             return ef;
         }

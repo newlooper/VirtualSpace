@@ -19,7 +19,7 @@ namespace Cube3D;
 
 public partial class MainWindow
 {
-    private static Effect _effect;
+    private static Effect? _effect;
 
     private void CameraPosition( MonitorInfo mi )
     {

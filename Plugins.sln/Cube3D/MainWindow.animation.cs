@@ -12,10 +12,10 @@ You should have received a copy of the GNU General Public License along with Cub
 using System;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
 using Cube3D.Config;
+using VirtualSpace.PluginContracts;
 
 namespace Cube3D;
 
@@ -28,7 +28,17 @@ public partial class MainWindow
         FillBehavior = FillBehavior.Stop
     };
 
-    private void AnimationCompleted( object sender, EventArgs e )
+    private readonly DoubleAnimation _animationNotifyHeight = new()
+    {
+        FillBehavior = FillBehavior.Stop
+    };
+
+    private readonly DoubleAnimation _animationNotifyWidth = new()
+    {
+        FillBehavior = FillBehavior.Stop
+    };
+
+    private void AnimationCompleted( object? sender, EventArgs e )
     {
         if ( _monitorInfo.IsPrimary )
         {
@@ -44,46 +54,46 @@ public partial class MainWindow
         }
     }
 
-    private void NotificationGridAnimation( int fromIndex, int toIndex, int vdCount, IEasingFunction ef = null )
+    private void NotificationGridAnimation( VirtualDesktopSwitchInfo info, IEasingFunction? ef = null )
     {
-        var oneCell = (Button)NotifyGrid.Children[fromIndex]; // 用 0 也行，UniformGrid 的 cell 尺寸一样
-
-        var rowsCols = (int)Math.Ceiling( Math.Sqrt( vdCount ) );
-        var fromRow  = fromIndex / rowsCols; // divide
-        var fromCol  = fromIndex % rowsCols; // modulus 
-        var toRow    = toIndex / rowsCols; // divide
-        var toCol    = toIndex % rowsCols; // modulus 
-
-        var buttonMargin = (Thickness)Resources["NotifyButtonMargin"];
-
-        var cellCenterToCell00Distance = rowsCols - 1; // 默认 margin all=0 在中心，需计算与左上角的单位距离
-        var cell00Margin = new Thickness // 左上角 cell 的 margin，行索引=列索引=子元素索引=0，便于计算
+        var fromEl = FindNotifyCell( info.FromIndex );
+        var toEl   = FindNotifyCell( info.TargetIndex ) ?? fromEl;
+        if ( fromEl == null )
         {
-            Left = -buttonMargin.Left - cellCenterToCell00Distance * oneCell.ActualWidth,
-            Top  = -buttonMargin.Top - cellCenterToCell00Distance * oneCell.ActualHeight
-        };
+            return;
+        }
 
-        ///////////////////////////////////////////////////////////////////
-        // 所有非 0 索引的 cell，其 margin 都基于左上角 cell 计算，籍此进行定位
-        CurrentIndicator.Margin = new Thickness // 当前索引作为动画起始 cell
-        {
-            Left = cell00Margin.Left + 2 * fromCol * oneCell.ActualWidth, // 宽度对应列系数
-            Top  = cell00Margin.Top + 2 * fromRow * oneCell.ActualHeight // 高度对应行系数
-        };
+        var fromPos    = fromEl.TranslatePoint( new Point( 0, 0 ), NotifyContainer );
+        var toPos      = toEl!.TranslatePoint( new Point( 0, 0 ), NotifyContainer );
+        var fromMargin = new Thickness( fromPos.X, fromPos.Y, 0, 0 );
+        var toMargin   = new Thickness( toPos.X, toPos.Y, 0, 0 );
 
-        var targetCellMargin = new Thickness // 目标 cell 作为动画结束 cell
-        {
-            Left = cell00Margin.Left + 2 * toCol * oneCell.ActualWidth, // 宽度对应列系数
-            Top  = cell00Margin.Top + 2 * toRow * oneCell.ActualHeight // 高度对应行系数
-        };
+        CurrentIndicator.BeginAnimation( MarginProperty, null );
+        CurrentIndicator.BeginAnimation( WidthProperty, null );
+        CurrentIndicator.BeginAnimation( HeightProperty, null );
+        CurrentIndicator.Width  = fromEl.ActualWidth;
+        CurrentIndicator.Height = fromEl.ActualHeight;
+        CurrentIndicator.Margin = fromMargin;
 
-        ////////////////////////////////////////////////////////////////
-        // animation
-        _animationNotifyGrid.From           = CurrentIndicator.Margin;
-        _animationNotifyGrid.To             = targetCellMargin;
-        _animationNotifyGrid.Duration       = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
+        var duration = new Duration( TimeSpan.FromMilliseconds( SettingsManager.Settings.AnimationDuration ) );
+
+        _animationNotifyGrid.From           = fromMargin;
+        _animationNotifyGrid.To             = toMargin;
+        _animationNotifyGrid.Duration       = duration;
         _animationNotifyGrid.EasingFunction = ef;
         CurrentIndicator.BeginAnimation( MarginProperty, _animationNotifyGrid );
+
+        _animationNotifyWidth.From           = fromEl.ActualWidth;
+        _animationNotifyWidth.To             = toEl.ActualWidth;
+        _animationNotifyWidth.Duration       = duration;
+        _animationNotifyWidth.EasingFunction = ef;
+        CurrentIndicator.BeginAnimation( WidthProperty, _animationNotifyWidth );
+
+        _animationNotifyHeight.From           = fromEl.ActualHeight;
+        _animationNotifyHeight.To             = toEl.ActualHeight;
+        _animationNotifyHeight.Duration       = duration;
+        _animationNotifyHeight.EasingFunction = ef;
+        CurrentIndicator.BeginAnimation( HeightProperty, _animationNotifyHeight );
     }
 
     private void CameraAnimation()
