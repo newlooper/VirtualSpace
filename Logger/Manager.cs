@@ -9,83 +9,117 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
-using Serilog;
-using Serilog.Core;
-using Serilog.Events;
+using System.Collections.Generic;
+using System.IO;
+using Microsoft.Extensions.Logging;
+using ZLogger;
 
 namespace VirtualSpace.AppLogs;
 
 public static class LogManager
 {
-    private static readonly LoggingLevelSwitch  LevelSwitch = new( LogEventLevel.Verbose );
-    public static           Serilog.Core.Logger RootLogger { get; private set; } = null!;
-    public static           string              LogsPath   { get; private set; } = "";
-    public const            string              PROP_IS_EVENT = "IsEvent";
+    private static readonly List<ILoggerFactory> Factories = [];
+    private static          LogLevel             _minLevel = LogLevel.Trace;
+
+    public static   string  LogsPath { get; private set; } = "";
+    internal static ILogger Verbose  { get; private set; } = null!;
+    internal static ILogger Debug    { get; private set; } = null!;
+    internal static ILogger Event    { get; private set; } = null!;
+    internal static ILogger Plugin   { get; private set; } = null!;
+    internal static ILogger Info     { get; private set; } = null!;
+    internal static ILogger Warning  { get; private set; } = null!;
+    internal static ILogger Error    { get; private set; } = null!;
+    internal static ILogger Fatal    { get; private set; } = null!;
 
     public static void InitLogger( string folder )
     {
         LogsPath = folder;
+        Directory.CreateDirectory( LogsPath );
 
-        RootLogger = new LoggerConfiguration()
-            .MinimumLevel.ControlledBy( LevelSwitch )
-            .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Verbose )
-                .WriteTo.File( $"{LogsPath}/verbose.txt", LogEventLevel.Verbose, shared: true, rollOnFileSizeLimit: true ) )
-            .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Debug )
-                .WriteTo.File( $"{LogsPath}/debug.txt", LogEventLevel.Debug, shared: true, rollOnFileSizeLimit: true ) )
-
-            // 普通 Information：排除包含 PROP_IS_EVENT 属性的日志
-            .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt =>
-                    evt.Level == LogEventLevel.Information &&
-                    !( evt.Properties.TryGetValue( PROP_IS_EVENT, out var v ) && v is ScalarValue { Value: true } ) )
-                .WriteTo.File( $"{LogsPath}/info.txt", LogEventLevel.Information, shared: true, rollOnFileSizeLimit: true ) )
-
-            // Event 日志：借用 Information，并用 PROP_IS_EVENT 属性筛选
-            .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt =>
-                    evt.Properties.TryGetValue( PROP_IS_EVENT, out var v ) && v is ScalarValue { Value: true } )
-                .WriteTo.File(
-                    $"{LogsPath}/event.txt",
-                    LogEventLevel.Information,
-                    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [EVT] {Message:lj}{NewLine}{Exception}",
-                    shared: true,
-                    rollOnFileSizeLimit: true ) )
-            .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Warning )
-                .WriteTo.File( $"{LogsPath}/warning.txt", LogEventLevel.Warning, shared: true, rollOnFileSizeLimit: true ) )
-            .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Error )
-                .WriteTo.File( $"{LogsPath}/error.txt", LogEventLevel.Error, shared: true, rollOnFileSizeLimit: true ) )
-            .WriteTo.Logger( c => c.Filter.ByIncludingOnly( evt => evt.Level == LogEventLevel.Fatal )
-                .WriteTo.File( $"{LogsPath}/fatal.txt", LogEventLevel.Fatal, shared: true, rollOnFileSizeLimit: true ) )
-            .CreateLogger();
+        Verbose = CreateFileLogger( "verbose.txt" );
+        Debug   = CreateFileLogger( "debug.txt" );
+        Event   = CreateFileLogger( "event.txt", "EVT" );
+        Plugin  = CreateFileLogger( "plugin.txt" );
+        Info    = CreateFileLogger( "info.txt" );
+        Warning = CreateFileLogger( "warning.txt" );
+        Error   = CreateFileLogger( "error.txt" );
+        Fatal   = CreateFileLogger( "fatal.txt" );
     }
 
     public static void CloseAndFlush()
     {
-        RootLogger?.Dispose();
-        RootLogger = null!;
+        foreach ( var factory in Factories )
+        {
+            factory.Dispose();
+        }
+
+        Factories.Clear();
     }
 
     public static void GorgeousDividingLine()
     {
-        string line = new( '=', 50 );
-        RootLogger.Verbose( line );
-        RootLogger.Debug( line );
-        RootLogger.Information( line );
-        RootLogger.ForContext( PROP_IS_EVENT, true ).Information( "{Message}", line ); // same Level as Information
-        RootLogger.Warning( line );
-        RootLogger.Error( line );
-        RootLogger.Fatal( line );
+        var line = new string( '=', 50 );
+        Write( Verbose, LogLevel.Trace, line );
+        Write( Debug, LogLevel.Debug, line );
+        Write( Event, LogLevel.Debug, line );
+        Write( Plugin, LogLevel.Debug, line );
+        Write( Info, LogLevel.Information, line );
+        Write( Warning, LogLevel.Warning, line );
+        Write( Error, LogLevel.Error, line );
+        Write( Fatal, LogLevel.Critical, line );
     }
 
     public static void SetLogLevel( string level )
     {
-        LevelSwitch.MinimumLevel = level switch
+        _minLevel = level switch
         {
-            "VERBOSE" => LogEventLevel.Verbose,
-            "DEBUG" => LogEventLevel.Debug,
-            "EVENT" or "INFO" => LogEventLevel.Information,
-            "WARNING" => LogEventLevel.Warning,
-            "ERROR" => LogEventLevel.Error,
-            "FATAL" => LogEventLevel.Fatal,
-            _ => LogEventLevel.Information
+            "VERBOSE" => LogLevel.Trace,
+            "DEBUG" or "EVENT" => LogLevel.Debug,
+            "INFO" => LogLevel.Information,
+            "WARNING" => LogLevel.Warning,
+            "ERROR" => LogLevel.Error,
+            "FATAL" => LogLevel.Critical,
+            _ => LogLevel.Information
         };
+    }
+
+    internal static void Write( ILogger logger, LogLevel level, string message )
+    {
+        if ( level < _minLevel )
+        {
+            return;
+        }
+
+        logger.Log( level, "{Message}", message );
+    }
+
+    private static ILogger CreateFileLogger( string fileName, string? levelTag = null )
+    {
+        var factory = LoggerFactory.Create( builder =>
+        {
+            builder.ClearProviders();
+            builder.SetMinimumLevel( LogLevel.Trace );
+            builder.AddZLoggerFile( Path.Combine( LogsPath, fileName ), options =>
+            {
+                options.UsePlainTextFormatter( formatter =>
+                {
+                    if ( levelTag is null )
+                    {
+                        formatter.SetPrefixFormatter( $"{0:longdate} [{1:short}] ",
+                            ( in template, in info ) =>
+                                template.Format( info.Timestamp, info.LogLevel ) );
+                    }
+                    else
+                    {
+                        formatter.SetPrefixFormatter( $"{0:longdate} [{1}] ",
+                            ( in template, in info ) =>
+                                template.Format( info.Timestamp, levelTag ) );
+                    }
+                } );
+            } );
+        } );
+
+        Factories.Add( factory );
+        return factory.CreateLogger( "VirtualSpace" );
     }
 }

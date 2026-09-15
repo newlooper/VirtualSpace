@@ -24,7 +24,7 @@ public static class Program
     public static void Main()
     {
         LogManager.InitLogger( Path.Combine( Manager.GetConfigRoot(), Const.Settings.LogsFolder ) );
-        PluginLog.Bind( Logger.Event, msg => Logger.Error( msg ) );
+        PluginLog.Bind( Logger.Plugin, Logger.Plugin );
 
         AppDomain.CurrentDomain.AssemblyResolve += DesktopWrapper.AutoResolver;
         var app = new App

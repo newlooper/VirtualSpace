@@ -13,6 +13,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Threading.Channels;
 using System.Windows.Media;
+using Microsoft.Extensions.Logging;
 using Notification.Core;
 using Notification.Wpf;
 using Notification.Wpf.Constants;
@@ -28,39 +29,43 @@ public static class Logger
     public static void Verbose( string str )
     {
         LogToGui( "VERBOSE", str );
-        LogManager.RootLogger.Verbose( str );
+        LogManager.Write( LogManager.Verbose, LogLevel.Trace, str );
     }
 
     public static void Debug( string str )
     {
         LogToGui( "DEBUG", str );
-        LogManager.RootLogger.Debug( str );
+        LogManager.Write( LogManager.Debug, LogLevel.Debug, str );
     }
 
     public static void Event( string str )
     {
         LogToGui( "EVENT", str );
-        LogManager.RootLogger
-            .ForContext( LogManager.PROP_IS_EVENT, true )
-            .Information( "{Message}", str );
+        LogManager.Write( LogManager.Event, LogLevel.Debug, str );
+    }
+
+    public static void Plugin( string str )
+    {
+        LogToGui( "DEBUG", str );
+        LogManager.Write( LogManager.Plugin, LogLevel.Debug, str );
     }
 
     public static void Info( string str )
     {
         LogToGui( "INFO", str );
-        LogManager.RootLogger.Information( str );
+        LogManager.Write( LogManager.Info, LogLevel.Information, str );
     }
 
     public static void Warning( string str )
     {
         LogToGui( "WARNING", str );
-        LogManager.RootLogger.Warning( str );
+        LogManager.Write( LogManager.Warning, LogLevel.Warning, str );
     }
 
     public static void Error( string str, NotifyObject? notify = null )
     {
         LogToGui( "ERROR", str );
-        LogManager.RootLogger.Error( str );
+        LogManager.Write( LogManager.Error, LogLevel.Error, str );
         if ( notify != null )
         {
             notify.Background = new SolidColorBrush( Colors.DarkRed );
