@@ -12,5 +12,5 @@ namespace ControlPanel.ViewModels;
 
 public abstract class ViewModelBase
 {
-    protected bool _isInitialized;
+    protected bool IsInitialized;
 }

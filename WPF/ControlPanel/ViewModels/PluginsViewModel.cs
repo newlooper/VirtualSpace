@@ -21,15 +21,15 @@ public partial class PluginsViewModel : ViewModelBase
 {
     public PluginsViewModel()
     {
-        Plugins        = new ObservableCollection<PluginItemViewModel>( PluginHost.Plugins.Select( p => new PluginItemViewModel( p ) ) );
+        Plugins        = [.. PluginHost.Plugins.Select( p => new PluginItemViewModel( p ) )];
         RefreshCommand = new RelayCommand( Refresh );
-        _isInitialized = true;
+        IsInitialized  = true;
     }
 
     public ObservableCollection<PluginItemViewModel> Plugins        { get; set; }
     public ICommand                                  RefreshCommand { get; }
 
-    public void Refresh()
+    private void Refresh()
     {
         PluginHost.RefreshPlugins();
         Plugins.Clear();

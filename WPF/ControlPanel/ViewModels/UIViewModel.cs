@@ -31,7 +31,7 @@ public partial class UIViewModel : ViewModelBase
         EnableVdNameColorEmoji = Manager.CurrentProfile.UI.EnableVdNameColorEmoji;
         IsPsLayout             = Manager.CurrentProfile.IsPsLayout;
         IsEqualLayout          = !IsPsLayout;
-        _isInitialized         = true;
+        IsInitialized          = true;
 
         DesktopManagerWrapper.DesktopCreatedEvent -= OnDesktopCreatedEvent;
         DesktopManagerWrapper.DesktopCreatedEvent += OnDesktopCreatedEvent;
@@ -67,7 +67,7 @@ public partial class UIViewModel : ViewModelBase
             return;
         }
 
-        if ( _isInitialized )
+        if ( IsInitialized )
         {
             switch ( propertyName )
             {

@@ -40,7 +40,7 @@ public partial class PluginItemViewModel : ViewModelBase
             PluginManager.SavePluginInfo( _info );
             RefreshLoadState();
         } );
-        _isInitialized = true;
+        IsInitialized = true;
     }
 
     public string Name            { get; set; } = string.Empty;
@@ -58,7 +58,7 @@ public partial class PluginItemViewModel : ViewModelBase
 
     public void OnPropertyChanged( string propertyName, object before, object after )
     {
-        if ( _isInitialized && propertyName == nameof( IsLoaded ) && (bool)after != (bool)before )
+        if ( IsInitialized && propertyName == nameof( IsLoaded ) && (bool)after != (bool)before )
         {
             ApplyLoadState( (bool)after );
         }
@@ -66,7 +66,7 @@ public partial class PluginItemViewModel : ViewModelBase
         PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
     }
 
-    public void SyncFrom( PluginInfo info )
+    private void SyncFrom( PluginInfo info )
     {
         Name            = info.Display;
         Version         = info.Version;
@@ -78,12 +78,12 @@ public partial class PluginItemViewModel : ViewModelBase
         ShowCloseButton = info.Kind == PluginKind.ExternalProcess;
     }
 
-    public void RefreshLoadState()
+    private void RefreshLoadState()
     {
-        var wasInit = _isInitialized;
-        _isInitialized = false;
+        var wasInit = IsInitialized;
+        IsInitialized = false;
         SyncFrom( _info );
-        _isInitialized = wasInit;
+        IsInitialized = wasInit;
     }
 
     private void ApplyLoadState( bool load )

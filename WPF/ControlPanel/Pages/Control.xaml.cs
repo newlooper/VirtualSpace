@@ -76,7 +76,7 @@ public partial class Control
             }
             else
             {
-                var currentHeader = childItem.Header.ToString();
+                var currentHeader = childItem.Header?.ToString();
                 var m             = MyRegex().Match( currentHeader! );
                 if ( m.Success )
                 {

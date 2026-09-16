@@ -21,27 +21,21 @@ public static partial class DesktopManagerWrapper
     {
         try
         {
-            if ( SysInfo.IsWin10 )
-            {
-                return VirtualDesktop10::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
-            }
-
-            return VirtualDesktop11::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
+            return SysInfo.IsWin10
+                ? VirtualDesktop10::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId()
+                : VirtualDesktop11::VirtualDesktop.DesktopManager.GetDesktop( index ).GetId();
         }
         catch
         {
-            return default;
+            return Guid.Empty;
         }
     }
 
     public static int GetViewCount()
     {
-        if ( SysInfo.IsWin10 )
-        {
-            return VirtualDesktop10::VirtualDesktop.DesktopManager.GetViewCount();
-        }
-
-        return VirtualDesktop11::VirtualDesktop.DesktopManager.GetViewCount();
+        return SysInfo.IsWin10
+            ? VirtualDesktop10::VirtualDesktop.DesktopManager.GetViewCount()
+            : VirtualDesktop11::VirtualDesktop.DesktopManager.GetViewCount();
     }
 
     public static void ResetDesktopManager()

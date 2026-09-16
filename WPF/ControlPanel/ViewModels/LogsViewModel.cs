@@ -20,8 +20,8 @@ public partial class LogsViewModel : ViewModelBase
 {
     public LogsViewModel()
     {
-        IsPrintLogs    = Manager.Configs.LogConfig.ShowLogsInGui;
-        _isInitialized = true;
+        IsPrintLogs   = Manager.Configs.LogConfig.ShowLogsInGui;
+        IsInitialized = true;
     }
 
     public bool IsPrintLogs { get; set; }
@@ -34,7 +34,7 @@ public partial class LogsViewModel : ViewModelBase
             return;
         }
 
-        if ( _isInitialized )
+        if ( IsInitialized )
         {
             Logger.ShowLogsInGui                    = (bool)after;
             Manager.Configs.LogConfig.ShowLogsInGui = Logger.ShowLogsInGui;

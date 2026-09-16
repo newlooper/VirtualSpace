@@ -17,7 +17,7 @@ public class MenuContainerViewModel : ViewModelBase
 {
     public MenuContainerViewModel()
     {
-        _isInitialized = true;
+        IsInitialized = true;
     }
 
     public string       HeaderKey { get; set; } = "";

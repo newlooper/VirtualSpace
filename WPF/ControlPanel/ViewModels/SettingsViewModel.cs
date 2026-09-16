@@ -29,13 +29,13 @@ public partial class SettingsViewModel : ViewModelBase
         Theme          = Manager.CurrentProfile.UI.Theme;
         Language       = Manager.CurrentProfile.UI.Language;
         CurrentProfile = Manager.Configs.CurrentProfileName;
-        ProfileList    = new ObservableCollection<object>();
+        ProfileList    = [];
         foreach ( var profileName in Manager.Configs.Profiles.Keys )
         {
             ProfileList.Add( new { Value = profileName } );
         }
 
-        _isInitialized = true;
+        IsInitialized = true;
     }
 
     public string ConfigRootPath { get; set; } = Manager.ConfigRootFolder;
@@ -61,7 +61,7 @@ public partial class SettingsViewModel : ViewModelBase
             return;
         }
 
-        if ( _isInitialized )
+        if ( IsInitialized )
         {
             switch ( propertyName )
             {
@@ -95,7 +95,7 @@ public partial class SettingsViewModel : ViewModelBase
 
         propertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
 
-        if ( _isInitialized )
+        if ( IsInitialized )
         {
             switch ( propertyName )
             {

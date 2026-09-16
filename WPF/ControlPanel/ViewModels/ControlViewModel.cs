@@ -23,7 +23,7 @@ public partial class ControlViewModel : ViewModelBase
 {
     public ControlViewModel()
     {
-        _isInitialized = true;
+        IsInitialized = true;
     }
 }
 
@@ -32,7 +32,7 @@ public partial class MouseActionModel : ViewModelBase
 {
     public MouseActionModel()
     {
-        _isInitialized = true;
+        IsInitialized = true;
     }
 
     public static List<object> DesktopActions { get; } =
@@ -67,8 +67,10 @@ public partial class MouseActionModel : ViewModelBase
 
     public string MouseButton { get; set; } = "Left";
 
-    private static List<object> GetMouseButtons() =>
-        [.. MouseAction.MouseButtonsName.Values.Select( name => (object)new { Value = name, Text = "" } )];
+    private static List<object> GetMouseButtons()
+    {
+        return [.. MouseAction.MouseButtonsName.Values.Select( object ( name ) => new { Value = name, Text = "" } )];
+    }
 
     public void OnPropertyChanged( string propertyName, object before, object after )
     {
@@ -78,7 +80,7 @@ public partial class MouseActionModel : ViewModelBase
             return;
         }
 
-        if ( _isInitialized && propertyName == nameof( UseWheelSwitchDesktopWhenOnTaskbar ) )
+        if ( IsInitialized && propertyName == nameof( UseWheelSwitchDesktopWhenOnTaskbar ) )
         {
             Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar = (bool)after;
             Manager.Save( reason: Manager.CurrentProfile.Mouse.UseWheelSwitchDesktopWhenOnTaskbar );
@@ -101,8 +103,8 @@ public partial class KeyBindingModel : ViewModelBase
 {
     public KeyBindingModel()
     {
-        BoxVisible     = Visibility.Hidden;
-        _isInitialized = true;
+        BoxVisible    = Visibility.Hidden;
+        IsInitialized = true;
     }
 
     public Visibility BoxVisible { get; set; }

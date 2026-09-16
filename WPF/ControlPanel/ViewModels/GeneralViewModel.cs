@@ -33,7 +33,7 @@ public partial class GeneralViewModel : ViewModelBase
                        TaskSchedulerHelper.IsTaskExistsByName( Const.AppName );
         Cluster                =  new ClusterProxy( Manager.Configs.Cluster );
         Manager.ProfileChanged += UpdateClusterProxy;
-        _isInitialized         =  true;
+        IsInitialized          =  true;
     }
 
     public bool         NavH         { get; set; }
@@ -56,7 +56,7 @@ public partial class GeneralViewModel : ViewModelBase
             return;
         }
 
-        if ( _isInitialized )
+        if ( IsInitialized )
         {
             switch ( propertyName )
             {
