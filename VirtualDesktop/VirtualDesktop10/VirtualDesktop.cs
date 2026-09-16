@@ -23,7 +23,9 @@ namespace VirtualDesktop;
 
 public class Desktop : IDesktop
 {
-    private readonly IVirtualDesktop _ivd;
+    private readonly        IVirtualDesktop _ivd;
+    private static readonly Guid            AppOnAllDesktops    = new( "BB64D5B7-4DE3-4AB2-A87C-DB7601AEA7DC" );
+    private static readonly Guid            WindowOnAllDesktops = new( "C2DDEA68-66F2-4CF9-8264-1BFD00FBBBAC" );
 
     private Desktop( IVirtualDesktop desktop )
     {
@@ -128,10 +130,13 @@ public class Desktop : IDesktop
         }
 
         var id = DesktopManager.VirtualDesktopManager.GetWindowDesktopId( hWnd );
+        if ( id.CompareTo( AppOnAllDesktops ) == 0 || id.CompareTo( WindowOnAllDesktops ) == 0 )
+            return new Desktop( DesktopManager.VirtualDesktopManagerInternal.GetCurrentDesktop() );
+
         return new Desktop( DesktopManager.VirtualDesktopManagerInternal.FindDesktop( ref id ) );
     }
 
-    public static int SysIndexFromDesktop( Desktop desktop )
+    public static int SysIndexFromDesktop( Desktop? desktop )
     {
         // return index of desktop object or -1 if not found
         if ( desktop == null )
@@ -321,7 +326,7 @@ public class Desktop : IDesktop
             }
             catch
             {
-                // could not move active window, try main window (or whatever windows thinks is the main window)
+                // could not move active window, try main window (or whatever Windows thinks is the main window)
                 DesktopManager.ApplicationViewCollection.GetViewForHWnd(
                     Process.GetProcessById( processId ).MainWindowHandle,
                     out view );
