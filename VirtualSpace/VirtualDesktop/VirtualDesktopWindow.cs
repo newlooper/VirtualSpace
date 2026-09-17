@@ -33,7 +33,6 @@ public partial class VirtualDesktopWindow
     public           Guid                        VdId;
     private          bool                        _allowClose;
     private          string                      _desktopName = "";
-    private          Point                       _fixedPosition;
     private          bool                        _sizeHooked;
 
     private VirtualDesktopWindow( int vdwPadding )
@@ -238,9 +237,8 @@ public partial class VirtualDesktopWindow
         var left     = location.X + ui.VDWBorderSize;
         var top      = location.Y + ui.VDWBorderSize;
 
-        Left           = left;
-        Top            = top;
-        _fixedPosition = new Point( left, top );
+        Left = left;
+        Top  = top;
 
         var size         = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
         var vdwWidthDip  = size.Width - 2 * ui.VDWBorderSize;
@@ -250,6 +248,7 @@ public partial class VirtualDesktopWindow
 
         ////////////////////////////////////////////////////////////////
         // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面尺寸强制归零
+        // 由于主次布局的次要窗口会大比例拉低宽高下限，因此需要给她一个比自动布局的更小的值
         var sideLengthFloor = Manager.CurrentProfile.IsPsLayout
             ? Const.VirtualDesktop.DefaultLayoutVdwSideLengthFloor * Const.VirtualDesktop.PsLayoutVdwSideLengthFloorToleranceRatio
             : Const.VirtualDesktop.DefaultLayoutVdwSideLengthFloor;

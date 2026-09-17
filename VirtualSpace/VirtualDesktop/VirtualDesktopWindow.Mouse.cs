@@ -234,8 +234,7 @@ public partial class VirtualDesktopWindow
                 }
                 else if ( _hoverVdIndex == VdIndex )
                 {
-                    Left = _fixedPosition.X;
-                    Top  = _fixedPosition.Y;
+                    PlaceInCell();
                 }
                 else
                 {
