@@ -9,6 +9,7 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Logging;
@@ -35,6 +36,13 @@ public static class LogManager
     {
         LogsPath = folder;
         Directory.CreateDirectory( LogsPath );
+        ArchiveAndReset();
+    }
+
+    public static void ArchiveAndReset()
+    {
+        CloseAndFlush();
+        LogArchiver.RotateAndArchiveInBackground( LogsPath );
 
         Verbose = CreateFileLogger( "verbose.txt" );
         Debug   = CreateFileLogger( "debug.txt" );
@@ -56,19 +64,6 @@ public static class LogManager
         Factories.Clear();
     }
 
-    public static void GorgeousDividingLine()
-    {
-        var line = new string( '=', 50 );
-        Write( Verbose, LogLevel.Trace, line );
-        Write( Debug, LogLevel.Debug, line );
-        Write( Event, LogLevel.Debug, line );
-        Write( Plugin, LogLevel.Debug, line );
-        Write( Info, LogLevel.Information, line );
-        Write( Warning, LogLevel.Warning, line );
-        Write( Error, LogLevel.Error, line );
-        Write( Fatal, LogLevel.Critical, line );
-    }
-
     public static void SetLogLevel( string level )
     {
         _minLevel = level switch
@@ -85,12 +80,18 @@ public static class LogManager
 
     internal static void Write( ILogger logger, LogLevel level, string message )
     {
-        if ( level < _minLevel )
+        if ( level < _minLevel || Factories.Count == 0 )
         {
             return;
         }
 
-        logger.Log( level, "{Message}", message );
+        try
+        {
+            logger.Log( level, "{Message}", message );
+        }
+        catch ( ObjectDisposedException )
+        {
+        }
     }
 
     private static ILogger CreateFileLogger( string fileName, string? levelTag = null )

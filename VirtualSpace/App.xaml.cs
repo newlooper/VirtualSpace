@@ -10,6 +10,7 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -36,15 +37,14 @@ namespace VirtualSpace;
 /// </summary>
 public partial class App : Application
 {
-    private static Mutex? _mutex;
-    private        bool   _shuttingDown;
-    public         bool   HideOnStart { get; private set; }
+    private static Mutex?            _mutex;
+    private static ProcessStartInfo? _pendingRestart;
+    private        bool              _shuttingDown;
+    public         bool              HideOnStart { get; private set; }
 
     protected override void OnStartup( StartupEventArgs e )
     {
         base.OnStartup( e );
-
-        LogManager.GorgeousDividingLine();
 
         if ( SystemTool.VersionCheck() &&
              SingleInstanceCheck() &&
@@ -158,8 +158,40 @@ public partial class App : Application
         Daemon.Stop();
         IpcPipeServer.SimpleShutdown();
         LogManager.CloseAndFlush();
+        TryStartPendingRestart();
 
         base.OnExit( e );
+    }
+
+    public static void RequestRestart( bool runas = false )
+    {
+        _pendingRestart = new ProcessStartInfo
+        {
+            FileName        = ConfigManager.AppPath,
+            UseShellExecute = true
+        };
+
+        if ( runas )
+        {
+            _pendingRestart.Verb = "runas";
+        }
+    }
+
+    private static void TryStartPendingRestart()
+    {
+        if ( _pendingRestart is null )
+        {
+            return;
+        }
+
+        try
+        {
+            Process.Start( _pendingRestart );
+        }
+        catch
+        {
+            // UAC cancelled or the new process failed to start; this instance is already exiting.
+        }
     }
 
     public static void ReleaseMutex()

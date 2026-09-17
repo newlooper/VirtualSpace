@@ -219,28 +219,8 @@ public partial class MainWindow
 
     private static void RestartApp( bool runas = false )
     {
-        var app = (App)Application.Current;
-        var psi = new ProcessStartInfo
-        {
-            FileName        = ConfigManager.AppPath,
-            UseShellExecute = true
-        };
-
-        if ( runas )
-        {
-            psi.Verb = "runas";
-        }
-
-        try
-        {
-            App.ReleaseMutex();
-            Process.Start( psi );
-            Application.Current.Shutdown();
-        }
-        catch
-        {
-            App.TryMutex();
-        }
+        App.RequestRestart( runas );
+        Application.Current.Shutdown();
     }
 
     public static void Quit()

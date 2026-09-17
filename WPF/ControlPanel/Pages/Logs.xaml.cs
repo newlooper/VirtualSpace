@@ -251,6 +251,7 @@ public partial class Logs
 
     public static void ClearAll()
     {
+        LogManager.ArchiveAndReset();
         TbInfo    = null!;
         TbDebug   = null!;
         TbVerbose = null!;

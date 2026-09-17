@@ -184,35 +184,6 @@ public partial class MainWindow : Window, IAppController
         _instance.Close();
     }
 
-    public static void TryQuit()
-    {
-        _instance.Quit();
-    }
-
-    public static void RestartApp( bool runas = false )
-    {
-        var psi = new ProcessStartInfo
-        {
-            FileName        = Environment.ProcessPath,
-            UseShellExecute = true
-        };
-
-        if ( runas )
-        {
-            psi.Verb = "runas";
-        }
-
-        try
-        {
-            Process.Start( psi );
-            Application.Current.Shutdown();
-        }
-        catch
-        {
-            //
-        }
-    }
-
     private void NavBar_OnSelectionChanged( object sender, SelectionChangedEventArgs e )
     {
         var tab = (TabControl)sender;
