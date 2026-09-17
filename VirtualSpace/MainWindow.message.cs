@@ -363,7 +363,7 @@ public partial class MainWindow
                     return;
                 }
 
-                WindowTool.ActivateWindow( fw, sysIndex );
+                WindowTool.ActivateWindow( fw, sysIndex, "Hotkey.MoveWindow" );
             }
             catch ( Exception ex )
             {

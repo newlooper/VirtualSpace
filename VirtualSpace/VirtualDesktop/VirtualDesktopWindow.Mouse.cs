@@ -264,7 +264,7 @@ public partial class VirtualDesktopWindow
                         _ = DwmApi.DwmUnregisterThumbnail( _selectedWindow.Thumb );
                     }
 
-                    WindowTool.ActivateWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder![_hoverVdIndex] );
+                    WindowTool.ActivateWindow( _selectedWindow.Handle, ConfigManager.CurrentProfile.DesktopOrder![_hoverVdIndex], "MouseClick.ActivateWindow" );
                 }
 
                 var action = ConfigManager.Configs.GetMouseActionById(
@@ -447,7 +447,7 @@ public partial class VirtualDesktopWindow
 
     private void MakeVisible()
     {
-        Logger.Verbose( $"SWITCH TO DESKTOP Desktop[{_hoverVdIndex.ToString()}]" );
+        Logger.Verbose( $"Try Switch To Desktop[{_hoverVdIndex.ToString()}]" );
         DesktopWrapper.MakeVisibleByGuid( VdId );
     }
 

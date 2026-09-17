@@ -100,7 +100,7 @@ internal static class Daemon
                 DesktopWrapper.MoveWindowToDesktop( action.Handle, action.MoveToDesktop );
                 if ( action.FollowWindow )
                 {
-                    WindowTool.ActivateWindow( action.Handle, action.MoveToDesktop );
+                    WindowTool.ActivateWindow( action.Handle, action.MoveToDesktop, "Rule.FollowWindow" );
                 }
             }
             catch

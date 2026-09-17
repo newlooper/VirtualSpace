@@ -110,23 +110,23 @@ public static class WindowTool
         return index;
     }
 
-    public static void ActivateWindow( IntPtr hWnd, int desktopIndex )
+    public static void ActivateWindow( IntPtr hWnd, int desktopIndex, string? reason = null )
     {
         if ( DesktopWrapper.CurrentIndex != desktopIndex )
         {
-            Logger.Verbose( $"CHANGE CURRENT DESKTOP TO Desktop[{desktopIndex.ToString()}]" );
+            Logger.Verbose( $"Try Switch To Desktop[{desktopIndex.ToString()}], reason: {reason}" );
             DesktopWrapper.MakeVisibleByIndex( desktopIndex );
         }
 
         TryActivateWindow( hWnd );
     }
 
-    public static void ActivateWindow( IntPtr hWnd, Guid guid )
+    public static void ActivateWindow( IntPtr hWnd, Guid guid, string? reason = null )
     {
         if ( DesktopWrapper.CurrentGuid != guid )
         {
             var sysIndex = DesktopWrapper.IndexFromGuid( guid );
-            Logger.Verbose( $"CHANGE CURRENT DESKTOP TO Desktop[{sysIndex.ToString()}]" );
+            Logger.Verbose( $"Try Switch To Desktop[{sysIndex.ToString()}], reason: {reason}" );
             DesktopWrapper.MakeVisibleByGuid( guid, false );
         }
 

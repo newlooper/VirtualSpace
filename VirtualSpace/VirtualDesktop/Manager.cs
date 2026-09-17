@@ -144,7 +144,7 @@ internal static partial class VirtualDesktopManager
                 if ( DesktopWrapper.IsWindowPinned( win.Handle ) ||
                      DesktopWrapper.IsApplicationPinned( win.Handle ) )
                 {
-                    Logger.Debug( $"{win.Title} IS PINNED" );
+                    Logger.Debug( $"Desktop[ALL]{win.Title} Is Pinned." );
                     foreach ( var vdw in vdwList )
                     {
                         vdw.AddWindow( new VisibleWindow( win.Title, win.Classname, win.Handle ) );

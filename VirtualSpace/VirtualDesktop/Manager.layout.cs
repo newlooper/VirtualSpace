@@ -139,7 +139,7 @@ internal static partial class VirtualDesktopManager
         }
         catch ( Exception e )
         {
-            Logger.Warning( "Update MainView: " + e.StackTrace );
+            Logger.Warning( "Refresh Thumbs due to VdCountChange: " + e.StackTrace );
         }
     }
 

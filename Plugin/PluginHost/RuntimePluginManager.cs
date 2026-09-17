@@ -125,12 +125,11 @@ public sealed class RuntimePluginManager
         try
         {
             User32.PostMessage( pluginInfo.Handle, WinMsg.UM_RESTART, 0, PluginConst.RestartDelay );
-            Logger.Info( $"[PLUGIN] {pluginInfo.Display} Restarted." );
+            Logger.Info( $"[PLUGIN.ExternalProcess] {pluginInfo.Display} Restarted." );
         }
         catch ( Exception ex )
         {
-            Logger.Warning( "Failed Restart Plugin, Abort Operation." );
-            Logger.Warning( ex.Message );
+            Logger.Warning( $"Failed Restart Plugin, Abort Operation: {ex.Message}" );
         }
     }
 
@@ -306,14 +305,14 @@ public sealed class RuntimePluginManager
 
             if ( pluginInfo.Requirements is null )
             {
-                Logger.Warning( $"[PLUGIN] {pluginInfo.Display} has no 'Requirements' info" );
+                Logger.Warning( $"[PLUGIN.ExternalProcess] {pluginInfo.Display} has no 'Requirements' info" );
                 continue;
             }
 
             if ( pluginInfo.Requirements.HostVersion == null ||
                  pluginInfo.Requirements.HostVersion > HostContext.HostVersion )
             {
-                Logger.Warning( $"[PLUGIN] {pluginInfo.Display} not satisfy the host version" );
+                Logger.Warning( $"[PLUGIN.ExternalProcess] {pluginInfo.Display} not satisfy the host version" );
                 continue;
             }
 
@@ -322,7 +321,7 @@ public sealed class RuntimePluginManager
             pluginInfo.LoadStatus = PluginLoadStatus.Available;
             OverlayPersisted( pluginInfo );
             Plugins.Add( pluginInfo );
-            Logger.Info( $"[PLUGIN] {pluginInfo.Display} Registered." );
+            Logger.Info( $"[PLUGIN.ExternalProcess] {pluginInfo.Display} Registered." );
         }
     }
 
