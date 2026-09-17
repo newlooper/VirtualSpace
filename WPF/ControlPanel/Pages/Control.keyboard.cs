@@ -117,6 +117,7 @@ public partial class Control
             CreateKbNode( Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP ),
             CreateKbNode( Const.Hotkey.RISE_VIEW_FOR_CURRENT_VD ),
             CreateKbNode( Const.Hotkey.RISE_VIEW_FOR_ACTIVE_APP_IN_CURRENT_VD ),
+            CreateKbNode( Const.Hotkey.TOGGLE_LAYOUT ),
             CreateKbNode( Const.Hotkey.TOGGLE_WINDOW_FILTER, hidden: true ) );
 
         var nodeDesktopSwitch = CreateKbNode( "K_D_S" );

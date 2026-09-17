@@ -120,7 +120,7 @@
                             <TextBlock x:Name="PsHintText" FontSize="14" TextWrapping="Wrap" Margin="10,12,10,4"
                                        Foreground="{DynamicResource MaterialDesignBody}" />
                             <WrapPanel x:Name="PsPreviewHost" HorizontalAlignment="Center" Margin="0,4" />
-                            <CheckBox x:Name="PsCreateExtrasCheck" Margin="10,8,10,12" />
+                            <CheckBox x:Name="PsCreateExtrasCheck" Margin="10,8,10,12" IsChecked="False" />
                         </StackPanel>
                     </TabItem>
                 </TabControl>

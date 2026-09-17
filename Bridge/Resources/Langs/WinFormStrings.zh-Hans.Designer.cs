@@ -191,6 +191,15 @@ namespace VirtualSpace.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 切换自动布局/主次布局.
+        /// </summary>
+        internal static string hk_node_toggle_layout {
+            get {
+                return ResourceManager.GetString("hk_node_toggle_layout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 开关窗口过滤器.
         /// </summary>
         internal static string hk_node_toggle_window_filter {

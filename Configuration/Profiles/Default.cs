@@ -56,5 +56,6 @@ public class Default : Profile
             CirculationV     = false,
             CirculationHType = 0
         };
+        Layout = LayoutKind.Auto;
     }
 }

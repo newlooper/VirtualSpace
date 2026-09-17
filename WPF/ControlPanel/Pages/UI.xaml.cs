@@ -73,9 +73,7 @@ public partial class UI
         _vm.VdArrangement = int.Parse( btn.Tag.ToString()! );
         if ( Manager.CurrentProfile.IsPsLayout )
         {
-            var ps = Manager.CurrentProfile.PrimarySecondary ??= new PrimarySecondaryState();
-            ps.Kind  = PsKind.None;
-            ps.Slots = [];
+            Manager.CurrentProfile.Layout = LayoutKind.Auto;
             Manager.Save( reason: "apply automatic layout" );
             User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.ApplyPsLayout, 0 );
         }
@@ -97,6 +95,7 @@ public partial class UI
         ps.Corner = _psCorner;
         ps.N      = _psN;
         ps.Slots  = [];
+        Manager.CurrentProfile.Layout = LayoutKind.PrimarySecondary;
         Manager.Save( reason: "apply primary/secondary layout" );
         var extras = PsCreateExtrasCheck.IsChecked == true && _psExtra > 0;
         User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.ApplyPsLayout, (ulong)( extras ? 1 : 0 ) );
@@ -159,7 +158,7 @@ public partial class UI
         {
             PsCreateExtrasCheck.Visibility = Visibility.Visible;
             PsCreateExtrasCheck.Content    = string.Format( Langs.Page_UI_PsLayout_CreateExtras, _psExtra );
-            PsCreateExtrasCheck.IsChecked  = true;
+            PsCreateExtrasCheck.IsChecked  = false;
         }
         else
         {

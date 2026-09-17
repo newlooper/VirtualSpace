@@ -290,6 +290,13 @@ public partial class MainWindow
                     case UserMessage.ApplyPsLayout:
                         VirtualDesktopManager.ApplyPrimarySecondaryLayout( lParam != 0 );
                         break;
+                    case UserMessage.ToggleLayout:
+                        if ( IsShowing() )
+                        {
+                            VirtualDesktopManager.ToggleLayout();
+                        }
+
+                        break;
                     case UserMessage.RefreshTrayIcon:
                         UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
                         break;

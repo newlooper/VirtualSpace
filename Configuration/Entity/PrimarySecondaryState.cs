@@ -31,10 +31,8 @@ public enum PsCorner : byte
 
 public class PrimarySecondaryState
 {
-    public PsKind       Kind   { get; set; }
-    public PsCorner     Corner { get; set; }
-    public int          N      { get; set; }
-    public List<Guid?>  Slots  { get; set; } = [];
-
-    public bool IsActive => Kind is not PsKind.None;
+    public PsKind      Kind   { get; set; }
+    public PsCorner    Corner { get; set; }
+    public int         N      { get; set; }
+    public List<Guid?> Slots  { get; set; } = [];
 }

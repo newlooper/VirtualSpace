@@ -26,34 +26,38 @@ internal static partial class VirtualDesktopManager
         var profile = ConfigManager.CurrentProfile;
         var ps      = profile.PrimarySecondary ??= new PrimarySecondaryState();
 
-        if ( ps.IsActive && PsLayout.IsValid( ps ) )
+        if ( profile.IsPsLayout )
         {
-            var cap  = PsLayout.Capacity( ps.Kind, ps.N );
-            var need = cap - DesktopWrapper.Count;
-            if ( createExtras && need > 0 )
+            EnsurePsConfigured( ps );
+            if ( PsLayout.IsValid( ps ) )
             {
-                IsBatchCreate = true;
-                try
+                var cap  = PsLayout.Capacity( ps.Kind, ps.N );
+                var need = cap - DesktopWrapper.Count;
+                if ( createExtras && need > 0 )
                 {
-                    for ( var i = 0; i < need; i++ )
+                    IsBatchCreate = true;
+                    try
                     {
-                        DesktopWrapper.Create();
+                        for ( var i = 0; i < need; i++ )
+                        {
+                            DesktopWrapper.Create();
+                        }
+                    }
+                    finally
+                    {
+                        IsBatchCreate = false;
                     }
                 }
-                finally
-                {
-                    IsBatchCreate = false;
-                }
-            }
 
-            SyncVirtualDesktops();
-            SeedFromCurrent( ps );
-            ConfigManager.Save( reason: "apply primary/secondary layout" );
-        }
-        else
-        {
-            ps.Kind  = PsKind.None;
-            ps.Slots = [];
+                SyncVirtualDesktops();
+                SeedFromCurrent( ps );
+                ConfigManager.Save( reason: "apply primary/secondary layout" );
+            }
+            else
+            {
+                profile.Layout = LayoutKind.Auto;
+                ConfigManager.Save( reason: "invalid primary/secondary layout" );
+            }
         }
 
         MainWindow.ForceResetMainGrid();
@@ -63,19 +67,48 @@ internal static partial class VirtualDesktopManager
         }
     }
 
+    public static void ToggleLayout()
+    {
+        var profile = ConfigManager.CurrentProfile;
+        var ps      = profile.PrimarySecondary ??= new PrimarySecondaryState();
+        if ( profile.IsPsLayout )
+        {
+            profile.Layout = LayoutKind.Auto;
+            ConfigManager.Save( reason: "toggle automatic layout" );
+            ApplyPrimarySecondaryLayout( false );
+            return;
+        }
+
+        profile.Layout = LayoutKind.PrimarySecondary;
+        EnsurePsConfigured( ps );
+        ConfigManager.Save( reason: "toggle primary/secondary layout" );
+        ApplyPrimarySecondaryLayout( false );
+    }
+
+    private static void EnsurePsConfigured( PrimarySecondaryState ps )
+    {
+        if ( PsLayout.IsValid( ps ) )
+        {
+            return;
+        }
+
+        var (kind, n, _) = PsLayout.Fit( DesktopWrapper.Count );
+        ps.Kind          = kind;
+        ps.N             = n;
+    }
+
     private static void ReconcilePrimarySecondary()
     {
         var profile = ConfigManager.CurrentProfile;
         var ps      = profile.PrimarySecondary;
-        if ( ps is null || !ps.IsActive )
+        if ( !profile.IsPsLayout || ps is null )
         {
             return;
         }
 
         if ( !PsLayout.IsValid( ps ) )
         {
-            ps.Kind  = PsKind.None;
-            ps.Slots = [];
+            profile.Layout = LayoutKind.Auto;
             ConfigManager.Save( reason: "invalid primary/secondary layout" );
             return;
         }
@@ -130,14 +163,16 @@ internal static partial class VirtualDesktopManager
 
     public static bool IsPsPrimaryDesktop( Guid vdId )
     {
-        var ps = ConfigManager.CurrentProfile.PrimarySecondary;
-        return ps is { Kind: not PsKind.None } && PsLayout.SlotOf( ps, vdId ) == 0;
+        var profile = ConfigManager.CurrentProfile;
+        var ps      = profile.PrimarySecondary;
+        return profile.IsPsLayout && ps is not null && PsLayout.SlotOf( ps, vdId ) == 0;
     }
 
     public static bool RelocateDesktop( Guid vdId, int targetSlot )
     {
-        var ps = ConfigManager.CurrentProfile.PrimarySecondary;
-        if ( ps is null || !ps.IsActive )
+        var profile = ConfigManager.CurrentProfile;
+        var ps      = profile.PrimarySecondary;
+        if ( !profile.IsPsLayout || ps is null )
         {
             return false;
         }

@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using VirtualSpace.Config.DataAnnotations;
 using VirtualSpace.Config.Entity;
 
@@ -33,9 +34,17 @@ public class Profile
         CirculationHType = 0
     };
 
+    public LayoutKind?           Layout           { get; set; }
     public PrimarySecondaryState PrimarySecondary { get; set; } = new();
 
-    public bool IsPsLayout => PrimarySecondary is { Kind: not PsKind.None };
+    [JsonIgnore]
+    public LayoutKind CurrentLayout =>
+        Layout ?? ( PrimarySecondary is { Kind: not PsKind.None }
+            ? LayoutKind.PrimarySecondary
+            : LayoutKind.Auto );
+
+    [JsonIgnore]
+    public bool IsPsLayout => CurrentLayout == LayoutKind.PrimarySecondary;
 
     public Profile Clone()
     {

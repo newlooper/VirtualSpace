@@ -38,7 +38,8 @@ public class ConfigTemplate
         { Const.Hotkey.NAV_RIGHT, new KeyBinding { GhkCode           = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.NAV_RIGHT].MessageId } },
         { Const.Hotkey.NAV_UP, new KeyBinding { GhkCode              = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.NAV_UP].MessageId } },
         { Const.Hotkey.NAV_DOWN, new KeyBinding { GhkCode            = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.NAV_DOWN].MessageId } },
-        { Const.Hotkey.SWITCH_BACK_LAST, new KeyBinding { GhkCode    = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.SWITCH_BACK_LAST].MessageId } }
+        { Const.Hotkey.SWITCH_BACK_LAST, new KeyBinding { GhkCode    = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.SWITCH_BACK_LAST].MessageId } },
+        { Const.Hotkey.TOGGLE_LAYOUT, new KeyBinding { GhkCode       = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.TOGGLE_LAYOUT].MessageId } }
     };
 
     public Dictionary<string, MouseAction.Action>? MouseAction  { get; init; } = new();

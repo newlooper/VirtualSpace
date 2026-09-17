@@ -191,6 +191,15 @@ namespace Bridge.Resources.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle Auto / Primary-Secondary Layout.
+        /// </summary>
+        internal static string hk_node_toggle_layout {
+            get {
+                return ResourceManager.GetString("hk_node_toggle_layout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toggle Window Filter.
         /// </summary>
         internal static string hk_node_toggle_window_filter {

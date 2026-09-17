@@ -107,6 +107,7 @@ public static class Const
         public const string NAV_UP                                 = "hk_node_nav_up";
         public const string NAV_DOWN                               = "hk_node_nav_down";
         public const string SWITCH_BACK_LAST                       = "hk_node_svd_back_last";
+        public const string TOGGLE_LAYOUT                          = "hk_node_toggle_layout";
 
         ///////////////////////////////////////////////////
         // 不是所有的功能都支持自定义快捷键，但为了能进入 Dictionary<> Info，必须有唯一的键
@@ -132,7 +133,8 @@ public static class Const
             { NAV_UP, ( "Up", UserMessage.NavUp, "LWin+Ctrl+Up" ) },
             { NAV_DOWN, ( "Down", UserMessage.NavDown, "LWin+Ctrl+Down" ) },
             { SWITCH_BACK_LAST, ( "Switch Back To Last Desktop", UserMessage.SwitchBackToLastDesktop, "" ) },
-            { TOGGLE_WINDOW_FILTER, ( "Toggle Window Filter", UserMessage.ToggleWindowFilter, "" ) }
+            { TOGGLE_WINDOW_FILTER, ( "Toggle Window Filter", UserMessage.ToggleWindowFilter, "" ) },
+            { TOGGLE_LAYOUT, ( "Toggle Auto / Primary-Secondary Layout", UserMessage.ToggleLayout, "" ) }
         };
 
         public static string GetFuncDesc( string key )

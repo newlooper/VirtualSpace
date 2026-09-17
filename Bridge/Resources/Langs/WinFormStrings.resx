@@ -404,4 +404,7 @@ Duplicate one and edit it.</value>
     <data name="hk_node_toggle_window_filter" xml:space="preserve">
     <value>Toggle Window Filter</value>
   </data>
+    <data name="hk_node_toggle_layout" xml:space="preserve">
+    <value>Toggle Auto / Primary-Secondary Layout</value>
+  </data>
 </root>

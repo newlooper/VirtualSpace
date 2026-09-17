@@ -404,4 +404,7 @@ Windows 11 23H2(22631)
     <data name="hk_node_toggle_window_filter" xml:space="preserve">
     <value>开关窗口过滤器</value>
   </data>
+    <data name="hk_node_toggle_layout" xml:space="preserve">
+    <value>切换自动布局/主次布局</value>
+  </data>
 </root>
