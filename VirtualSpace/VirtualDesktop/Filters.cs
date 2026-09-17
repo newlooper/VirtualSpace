@@ -19,25 +19,26 @@ namespace VirtualSpace.VirtualDesktop;
 public static class Filters
 {
     public static readonly string[] WndClsIgnoreList =
-    {
+    [
         "Progman",
         "RainmeterMeterWindow",
         "SysDragImage",
         "DuiMenuWnd",
         "PerryShadowWnd",
         "SysShadow",
-        "Xaml_WindowedPopupClass"
-    };
+        "Xaml_WindowedPopupClass",
+        "TopLevelWindowForOverflowXamlIsland"
+    ];
 
     public static readonly string[] WndTitleIgnoreList =
-    {
+    [
         Const.Window.VD_FRAME_TITLE,
         Const.Window.VD_CONTAINER_TITLE,
         Const.Window.VD_DRAG_TITLE,
         Const.Window.VS_CONTROLLER_TITLE,
         Const.Window.VS_WINDOW_FILTER_TITLE,
         "WinFormsDesigner"
-    };
+    ];
 
     public static ImmutableList<IntPtr> WndHandleIgnoreListByError  = ImmutableList<IntPtr>.Empty;
     public static ImmutableList<IntPtr> WndHandleIgnoreListByManual = ImmutableList<IntPtr>.Empty;
