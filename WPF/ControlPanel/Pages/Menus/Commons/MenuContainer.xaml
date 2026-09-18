@@ -15,9 +15,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <materialDesign:Card Margin="10,10,10,0"
-                         Background="{DynamicResource PrimaryHueMidBrush}"
-                         Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
+    <materialDesign:Card Margin="10,10,10,0" materialDesign:ElevationAssist.Elevation="Dp4">
         <DockPanel>
             <materialDesign:PopupBox x:Name="commonPopupBox" DockPanel.Dock="Right" Margin="10"
                                      PlacementMode="BottomAndAlignRightEdges"
