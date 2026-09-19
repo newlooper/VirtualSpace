@@ -36,6 +36,7 @@ public partial class VirtualDesktopWindow
     {
         if ( Math.Abs( _surface.Width - width ) < TOLERANCE && Math.Abs( _surface.Height - height ) < TOLERANCE )
         {
+            Logger.Verbose( $"Desktop[{VdIndex}] size not changed." );
             return;
         }
 
@@ -59,9 +60,10 @@ public partial class VirtualDesktopWindow
     {
         _surfaceRefreshQueued = false;
 
+        Logger.Event( $"Refresh background/Repaint thumbs in Desktop[{VdIndex}] due to size changed." );
+
         RefreshWallpaper();
 
-        Logger.Event( $"Repaint thumbs in Desktop[{VdIndex}] due to size changed." );
         ReleaseThumbnails();
         ShowThumbnails();
     }

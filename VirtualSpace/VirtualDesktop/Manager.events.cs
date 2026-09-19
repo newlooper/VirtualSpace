@@ -74,7 +74,7 @@ internal static partial class VirtualDesktopManager
             () =>
             {
                 Logger.Event( "Wallpaper Changed" );
-                Parallel.ForEach( GetAllVirtualDesktops(), ( vdw, _ ) => { vdw.UpdateWallpaper(); } );
+                Parallel.ForEach( GetAllVirtualDesktops(), ( vdw, _ ) => { vdw.WallpaperChangedHandler(); } );
             },
             ( guid, path ) =>
             {
@@ -85,7 +85,7 @@ internal static partial class VirtualDesktopManager
                     return;
                 }
 
-                vd.UpdateWallpaper();
+                vd.WallpaperChangedHandler();
                 Logger.Event( $"Desktop[{vd.VdIndex.ToString()}] Wallpaper Changed: {path}" );
             }
         );

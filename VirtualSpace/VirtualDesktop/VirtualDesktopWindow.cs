@@ -15,6 +15,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
+using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
@@ -248,19 +249,17 @@ public partial class VirtualDesktopWindow
         var vdwHeightPx  = vdwHeightDip * scaleY;
 
         ////////////////////////////////////////////////////////////////
-        // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面尺寸强制归零
+        // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面直接不显示
         // 由于主次布局的次要窗口会大比例拉低宽高下限，因此需要给她一个比自动布局的更小的值
         var sideLengthFloor = Manager.CurrentProfile.IsPsLayout
             ? Const.VirtualDesktop.DefaultLayoutVdwSideLengthFloor * Const.VirtualDesktop.PsLayoutVdwSideLengthFloorToleranceRatio
             : Const.VirtualDesktop.DefaultLayoutVdwSideLengthFloor;
         if ( vdwWidthPx < sideLengthFloor || vdwHeightPx < sideLengthFloor )
         {
-            SetSurfaceSize( 0, 0 );
-            _surface.IsHitTestVisible = false;
+            Logger.Warning( $"Desktop[{VdIndex}] hit sideLengthFloor, just hide." );
+            Hide();
             return;
         }
-
-        _surface.IsHitTestVisible = true;
 
         SetSurfaceSize( vdwWidthDip, vdwHeightDip );
 

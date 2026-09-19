@@ -26,7 +26,7 @@ public partial class VirtualDesktopWindow
 
     private static long WallpaperQuality => ConfigManager.Configs.Cluster.VdwWallpaperQuality;
 
-    public void UpdateWallpaper()
+    public void WallpaperChangedHandler()
     {
         if ( !_surface.Dispatcher.CheckAccess() )
         {
