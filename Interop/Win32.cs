@@ -396,3 +396,20 @@ public enum RedrawWindowFlags : uint
     RDW_FRAME           = 0x0400,
     RDW_NOFRAME         = 0x0800
 }
+
+[StructLayout( LayoutKind.Sequential )]
+public struct WNDCLASSEX
+{
+    public uint   cbSize;
+    public uint   style;
+    public IntPtr lpfnWndProc;
+    public int    cbClsExtra;
+    public int    cbWndExtra;
+    public IntPtr hInstance;
+    public IntPtr hIcon;
+    public IntPtr hCursor;
+    public IntPtr hbrBackground;
+    public IntPtr lpszMenuName;
+    public IntPtr lpszClassName;
+    public IntPtr hIconSm;
+}

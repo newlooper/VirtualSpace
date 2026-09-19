@@ -18,7 +18,6 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using VirtualSpace.AppLogs;
-using VirtualSpace.Commons;
 using VirtualSpace.Config;
 using VirtualSpace.Factory;
 using VirtualSpace.Helpers;
@@ -38,6 +37,7 @@ namespace VirtualSpace;
 public partial class App : Application
 {
     private static Mutex?            _mutex;
+    private static bool              _ownsMutex;
     private static ProcessStartInfo? _pendingRestart;
     private        bool              _shuttingDown;
     public         bool              HideOnStart { get; private set; }
@@ -60,8 +60,8 @@ public partial class App : Application
             var mw = CreateCanvas( e );
             Current.MainWindow = mw;
 
-            IpcPipeServer.MainWindowHandle          = mw.Handle;
             PluginHost.HostContext.MainWindowHandle = mw.Handle;
+            InstanceNotifyWindow.Create();
 
             if ( ConfigManager.Configs.Cluster.HideOnStart || HideOnStart )
             {
@@ -154,9 +154,9 @@ public partial class App : Application
             Logger.Warning( $"Plugin unload on exit failed: {ex.Message}" );
         }
 
+        InstanceNotifyWindow.Destroy();
         ReleaseMutex();
         Daemon.Stop();
-        IpcPipeServer.SimpleShutdown();
         LogManager.CloseAndFlush();
         TryStartPendingRestart();
 
@@ -194,11 +194,25 @@ public partial class App : Application
         }
     }
 
-    public static void ReleaseMutex()
+    private static void ReleaseMutex()
     {
-        _mutex?.ReleaseMutex();
-        _mutex?.Dispose();
-        _mutex = null;
+        try
+        {
+            if ( _ownsMutex )
+            {
+                _mutex?.ReleaseMutex();
+            }
+        }
+        catch ( ApplicationException )
+        {
+            // This instance never owned the mutex (second instance, or integrity-level mismatch).
+        }
+        finally
+        {
+            _mutex?.Dispose();
+            _mutex      = null;
+            _ownsMutex  = false;
+        }
     }
 
     private static bool SingleInstanceCheck()
@@ -206,20 +220,41 @@ public partial class App : Application
         var createdNew = TryMutex();
         if ( createdNew )
         {
-            IpcPipeServer.Start();
+            InstanceNotifyWindow.Create();
         }
         else
         {
-            IpcPipeServer.AsClient();
+            TryNotifyRunningInstance();
         }
 
         return createdNew;
     }
 
-    public static bool TryMutex()
+    private static void TryNotifyRunningInstance()
     {
-        _mutex = new Mutex( true, "乱花渐欲迷人眼", out var createdNew );
-        return createdNew;
+        var hwnd = InstanceNotifyWindow.Find();
+        if ( hwnd == IntPtr.Zero )
+        {
+            return;
+        }
+
+        User32.PostMessage( hwnd, WinMsg.UM_CLIENTNOTIFY, 0, 0 );
+    }
+
+    private static bool TryMutex()
+    {
+        try
+        {
+            _mutex     = new Mutex( true, "乱花渐欲迷人眼", out var createdNew );
+            _ownsMutex = createdNew;
+            return createdNew;
+        }
+        catch ( UnauthorizedAccessException )
+        {
+            _mutex     = null;
+            _ownsMutex = false;
+            return false;
+        }
     }
 
     private MainWindow CreateCanvas( StartupEventArgs args )
@@ -244,7 +279,7 @@ public partial class App : Application
     private static void BootInfo()
     {
         var screen = Screen.FromPoint( new Point() );
-        var (W, H) = SysInfo.GetAspectRadioOfScreen();
+        var (w, h) = SysInfo.GetAspectRadioOfScreen();
         Logger.Info( $"Application Start Successfully: {ConfigManager.AppPath}" );
         LogForVersion();
         Logger.Info( $"System Version: {SysInfo.OSVersion}" );
@@ -252,7 +287,7 @@ public partial class App : Application
         Logger.Info( $"Total Screens: {Screen.AllScreens.Length}" );
         Logger.Info( $"Total VirtualDesktops: {DesktopWrapper.Count}" );
         Logger.Info( $"Start Screen: {screen.DeviceName} ({screen.DeviceFriendlyName()})" );
-        Logger.Info( $"Start Screen Aspect Ratio: [{W}:{H}]" );
+        Logger.Info( $"Start Screen Aspect Ratio: [{w}:{h}]" );
         Logger.Info( $"Start VirtualDesktop: Desktop[{DesktopWrapper.CurrentIndex}]" );
         Logger.Info( $"Start Position: [{Screen.PrimaryScreen!.Bounds.Location.X}, {Screen.PrimaryScreen.Bounds.Location.Y}]" );
         Logger.Info( $"Start Size: {Screen.PrimaryScreen.Bounds.Width}*{Screen.PrimaryScreen.Bounds.Height}" );

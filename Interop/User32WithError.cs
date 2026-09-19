@@ -14,7 +14,7 @@ public static partial class User32
 
     // LibraryImport is ExactSpelling: use *W entry points (DllImport CharSet.Auto used to append W).
     [LibraryImport( "user32.dll", EntryPoint = "FindWindowW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16 )]
-    public static partial IntPtr FindWindow( string lpClassName, string lpWindowName );
+    public static partial IntPtr FindWindow( string? lpClassName, string? lpWindowName );
 
     [LibraryImport( "user32.dll", EntryPoint = "GetWindowLongW", SetLastError = true )]
     public static partial int GetWindowLong( IntPtr hWnd, int nIndex );
@@ -155,5 +155,9 @@ public static partial class User32
     [LibraryImport( "user32.dll", SetLastError = true )]
     [return: MarshalAs( UnmanagedType.Bool )]
     public static partial bool ClipCursor( IntPtr lpRect );
+
+    [LibraryImport( "user32.dll", SetLastError = true )]
+    [return: MarshalAs( UnmanagedType.Bool )]
+    public static partial bool ChangeWindowMessageFilterEx( IntPtr hWnd, uint message, uint action, IntPtr pChangeFilterStruct );
 }
 #endif

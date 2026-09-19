@@ -13,14 +13,6 @@ using System.Runtime.InteropServices;
 
 namespace VirtualSpace.Commons;
 
-public class PipeMessage
-{
-    public PipeMessageType Type      { get; set; }
-    public int             Handle    { get; set; }
-    public int             ProcessId { get; set; }
-    public string          Name      { get; set; }
-}
-
 [StructLayout( LayoutKind.Sequential )]
 public struct COPYDATASTRUCT
 {

@@ -175,6 +175,13 @@ public partial class MainWindow
                 }
 
                 break;
+            case WinMsg.UM_CLIENTNOTIFY:
+                if ( TryAcceptRiseView() )
+                {
+                    ToggleOrRiseMainView();
+                }
+
+                break;
             case WinMsg.WM_HOTKEY:
 
                 var um = wParam.ToInt32();
@@ -190,18 +197,9 @@ public partial class MainWindow
                         MoveForegroundWindowToDesktop( um % UserMessage.Meta.MWF_START - 1, true );
                         break;
                     case UserMessage.RiseView:
-                        if ( !TryAcceptRiseView() )
+                        if ( TryAcceptRiseView() )
                         {
-                            break;
-                        }
-
-                        if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
-                        {
-                            HideAll();
-                        }
-                        else
-                        {
-                            BringToTop();
+                            ToggleOrRiseMainView();
                         }
 
                         break;
@@ -476,6 +474,18 @@ public partial class MainWindow
         Marshal.FreeHGlobal( pVDsi );
         Marshal.FreeHGlobal( pCds );
         SwitchDesktopTimer.Restart();
+    }
+
+    private static void ToggleOrRiseMainView()
+    {
+        if ( Manager.Configs.Cluster.HideMainViewIfItsShown && IsShowing() )
+        {
+            HideAll();
+        }
+        else
+        {
+            BringToTop();
+        }
     }
 
     private static bool TryAcceptRiseView()

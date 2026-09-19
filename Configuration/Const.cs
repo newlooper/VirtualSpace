@@ -39,6 +39,7 @@ public static class Const
     public static class Window
     {
         public const string VD_FRAME_TITLE           = "VirtualSpace__VirtualDesktopFrame!";
+        public const string INSTANCE_CLASS           = "VirtualSpace__InstanceNotify!";
         public const string VD_CONTAINER_TITLE       = "VirtualSpace__VirtualDesktopWindow!";
         public const string VD_DRAG_TITLE            = "VirtualSpace__VirtualDesktopDragWindow!";
         public const string VS_CONTROLLER_TITLE      = "[Virtual Space Controller]";

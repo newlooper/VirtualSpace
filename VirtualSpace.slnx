@@ -9,7 +9,6 @@
     <Project Path="Helpers/Helpers.csproj" />
     <Project Path="Interop/Interop.csproj" />
     <Project Path="Ipc/Commons/Ipc.csproj" />
-    <Project Path="Ipc/IpcServer/IpcServer.csproj" />
     <Project Path="LinqExpressionBuilder/LinqExpressionBuilder.csproj" />
     <Project Path="Logger/Logger.csproj" />
     <Project Path="Plugin/PluginContracts/PluginContracts.csproj" />

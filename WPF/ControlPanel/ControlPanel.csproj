@@ -29,7 +29,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Configuration\Configuration.csproj" />
-        <ProjectReference Include="..\..\Ipc\IpcServer\IpcServer.csproj" />
+        <ProjectReference Include="..\..\Ipc\Commons\Ipc.csproj" />
+        <ProjectReference Include="..\..\Plugin\PluginHost\PluginHost.csproj" />
         <ProjectReference Include="..\..\VirtualDesktopWrapper\VirtualDesktopWrapper.csproj" />
     </ItemGroup>
 

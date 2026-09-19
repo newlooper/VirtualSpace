@@ -31,11 +31,16 @@ public static class WinMsg
     public const int WM_COPYDATA        = 0x004A;
     public const int MA_NOACTIVATE      = 0x3;
 
+    public const uint MSGFLT_RESET    = 0;
+    public const uint MSGFLT_ALLOW    = 1;
+    public const uint MSGFLT_DISALLOW = 2;
+
     private const int WM_USER           = 0x0400;
     public const  int UM_SWITCHDESKTOP  = WM_USER + 1;
     public const  int UM_PLUGINSETTINGS = WM_USER + 2;
     public const  int UM_OTHERSCREENS   = WM_USER + 3;
     public const  int UM_RESTART        = WM_USER + 4;
+    public const  int UM_CLIENTNOTIFY   = WM_USER + 5;
 
     public const int ENDSESSION_CLOSEAPP = 0x00000001;
     public const int ENDSESSION_CRITICAL = 0x40000000;
