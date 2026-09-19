@@ -89,7 +89,7 @@ public static class Navigation
     }
 
     /// <summary>
-    /// 导航不受 DesktopArrangement 影响：在单位格子上按方向走，环绕规则与均等模式相同。
+    ///     导航不受 DesktopArrangement 影响：在单位格子上按方向走，环绕规则与均等模式相同。
     /// </summary>
     private static (int R, int C) TargetRowColByDirection(
         int n, (int R, int C) currentRC, Keys direction, (int R, int C) validRC, Config.Entity.Navigation nav )

@@ -27,7 +27,7 @@ internal static partial class VirtualDesktopManager
     private static readonly char[]                     WinInfoBuffer    = new char[Const.WindowTitleMaxLength];
     private static          List<VirtualDesktopWindow> _virtualDesktops = [];
     private static          VirtualDesktopWindow?      _onlyOneInMainView;
-    public static           Guid                       LastDesktopId    = Guid.Empty;
+    public static           Guid                       LastDesktopId = Guid.Empty;
     public static           bool                       IsBatchCreate { get; set; }
 
     internal static bool TryGetOnlyOneInMainView( out VirtualDesktopWindow vdw )

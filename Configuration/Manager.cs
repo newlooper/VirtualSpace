@@ -17,6 +17,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config.DataAnnotations;
@@ -45,9 +46,9 @@ public static class Manager
         {
             _configFilePath = Path.Combine( ConfigRootFolder, Settings.SettingsFile );
 
-            CheckFolders();
-
             InitConfig( _configFilePath );
+            
+            CheckFolders();
 
             LogManager.SetLogLevel( Configs.LogConfig.LogLevel );
         }
@@ -101,19 +102,42 @@ public static class Manager
 
             PropertyProtector.Walk( Configs );
 
-            Save( filePath, "init", "Setting File" );
+            Save( filePath, "init", "Setting File", LogLevel.Information );
             SaveCluster( Configs.Cluster );
         }
     }
 
-    public static async void Save( string? filePath = null, object? reason = null, [CallerArgumentExpression( "reason" )] string reasonName = "" )
+    public static async void Save( string?            filePath   = null,
+        object?                                       reason     = null,
+        [CallerArgumentExpression( "reason" )] string reasonName = "",
+        LogLevel                                      logLevel   = LogLevel.Debug )
     {
         try
         {
             filePath ??= _configFilePath;
             var contents = JsonSerializer.SerializeToUtf8Bytes( Configs, JsonWriteOptions );
             await File.WriteAllBytesAsync( filePath, contents ).ConfigureAwait( false );
-            Logger.Info( $"Settings Saved [{reasonName}: {reason}]." );
+
+            switch ( logLevel )
+            {
+                case LogLevel.Information:
+                    Logger.Info( $"Settings Saved [{reasonName}: {reason}]." );
+                    break;
+                case LogLevel.Debug:
+                    Logger.Debug( $"Settings Saved [{reasonName}: {reason}]." );
+                    break;
+                case LogLevel.Trace:
+                    Logger.Verbose( $"Settings Saved [{reasonName}: {reason}]." );
+                    break;
+                case LogLevel.Warning:
+                    Logger.Warning( $"Settings Saved [{reasonName}: {reason}]." );
+                    break;
+                case LogLevel.Error:
+                case LogLevel.Critical:
+                case LogLevel.None:
+                default:
+                    break;
+            }
 
             if ( reasonName.Contains( ".Configs.Cluster" ) )
             {
@@ -255,7 +279,9 @@ public static class Manager
         ProfileFolder = Path.Combine( ConfigRootFolder, Settings.ProfilesFolder );
         Directory.CreateDirectory( ProfileFolder );
 
-        _cacheFolder = Path.Combine( ConfigRootFolder, Settings.CacheFolder );
+        _cacheFolder = Configs.Cluster.UseSystemTempForCache
+            ? Path.Combine( Path.GetTempPath(), Const.AppName, Settings.CacheFolder )
+            : Path.Combine( ConfigRootFolder, Settings.CacheFolder );
         Directory.CreateDirectory( _cacheFolder );
 
         _pluginsFolder = Path.Combine( ConfigRootFolder, Settings.PluginsFolder );

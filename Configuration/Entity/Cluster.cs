@@ -25,6 +25,7 @@ public class Cluster
     public bool EnableWindowFilter                  { get; set; }
     public bool TryHarderActivateMinimizedWindow    { get; set; }
     public bool ForceSetForegroundWindowForMainView { get; set; } = true;
+    public bool UseSystemTempForCache               { get; set; }
 
     [PropertyProtector( 50L, 30L, 100L )]  public long VdwWallpaperQuality                      { get; set; }
     [PropertyProtector( 200, 100, 1000 )]  public int  ToggleWindowFilterDoublePressMaxInterval { get; set; }

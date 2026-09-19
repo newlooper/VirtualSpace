@@ -176,7 +176,7 @@ public static partial class Menus
         void OnUnHideWindow( object? s, EventArgs evt )
         {
             var item = s as ToolStripMenuItem;
-            var m    = MyRegex().Match(item?.Text!);
+            var m    = MyRegex().Match( item?.Text! );
 
             var h = (IntPtr)int.Parse( m.Groups[1].Value );
 
@@ -275,7 +275,7 @@ public static partial class Menus
         _ctm?.Close();
     }
 
-    [GeneratedRegex(".*🔙🔜(.*)")]
+    [GeneratedRegex( ".*🔙🔜(.*)" )]
     private static partial Regex MyRegex();
 }
 
