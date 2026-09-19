@@ -33,7 +33,6 @@ public partial class VirtualDesktopWindow
     public           Guid                        VdId;
     private          bool                        _allowClose;
     private          string                      _desktopName = "";
-    private          bool                        _sizeHooked;
 
     private VirtualDesktopWindow( int vdwPadding )
     {
@@ -46,7 +45,11 @@ public partial class VirtualDesktopWindow
         _surface.Loaded           += Surface_Loaded;
     }
 
-    public int VdIndex { get; set; }
+    public int VdIndex
+    {
+        get => _surface.VdIndex;
+        set => _surface.VdIndex = value;
+    }
 
     private IntPtr Handle => _surface.Handle;
 
@@ -135,7 +138,6 @@ public partial class VirtualDesktopWindow
             VdIndex = index,
             _surface =
             {
-                Name   = "vdw_" + index,
                 Title  = Const.Window.VD_CONTAINER_TITLE,
                 Width  = 0,
                 Height = 0
@@ -180,13 +182,6 @@ public partial class VirtualDesktopWindow
 
     private void Surface_Loaded( object sender, RoutedEventArgs e )
     {
-        if ( _sizeHooked )
-        {
-            return;
-        }
-
-        _sizeHooked          =  true;
-        _surface.SizeChanged += RefreshSurface;
         RefreshWallpaper();
     }
 
@@ -254,8 +249,7 @@ public partial class VirtualDesktopWindow
             : Const.VirtualDesktop.DefaultLayoutVdwSideLengthFloor;
         if ( vdwWidthPx < sideLengthFloor || vdwHeightPx < sideLengthFloor )
         {
-            _surface.Width            = 0;
-            _surface.Height           = 0;
+            SetSurfaceSize( 0, 0 );
             _surface.IsHitTestVisible = false;
             return;
         }
@@ -267,8 +261,7 @@ public partial class VirtualDesktopWindow
             UpdateDesktopName( vdName );
         }
 
-        _surface.Width  = vdwWidthDip;
-        _surface.Height = vdwHeightDip;
+        SetSurfaceSize( vdwWidthDip, vdwHeightDip );
 
         if ( !_surface.IsVisible )
         {

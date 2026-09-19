@@ -225,11 +225,10 @@ public partial class VirtualDesktopWindow
                     if ( VirtualDesktopManager.RelocateDesktop( VdId, slot ) )
                     {
                         Logger.Verbose( $"PLACE.Desktop Desktop[{VdIndex}] ON slot[{slot}]" );
-                        User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdw, 0 );
                     }
                     else
                     {
-                        User32.PostMessage( Handle, WinMsg.WM_HOTKEY, UserMessage.ShowVdw, 0 );
+                        PlaceInCell();
                     }
                 }
                 else if ( _hoverVdIndex == VdIndex )
@@ -382,8 +381,7 @@ public partial class VirtualDesktopWindow
             return;
         }
 
-        _surface.Width  = w;
-        _surface.Height = h;
+        SetSurfaceSize( w, h );
 
         var (scaleX, scaleY) = SysInfo.Dpi;
         var cursor = Cursor.Position;

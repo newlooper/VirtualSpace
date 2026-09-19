@@ -10,7 +10,6 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.Windows;
 using System.Windows.Threading;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Helpers;
@@ -19,7 +18,8 @@ namespace VirtualSpace.VirtualDesktop;
 
 public partial class VirtualDesktopWindow
 {
-    private bool _surfaceRefreshQueued;
+    private const double TOLERANCE = 0.0000000001;
+    private       bool   _surfaceRefreshQueued;
 
     public void AddWindow( VisibleWindow wnd )
     {
@@ -32,7 +32,19 @@ public partial class VirtualDesktopWindow
         _visibleWindows.Clear();
     }
 
-    private void RefreshSurface( object? o, SizeChangedEventArgs e )
+    private void SetSurfaceSize( double width, double height )
+    {
+        if ( Math.Abs( _surface.Width - width ) < TOLERANCE && Math.Abs( _surface.Height - height ) < TOLERANCE )
+        {
+            return;
+        }
+
+        _surface.Width  = width;
+        _surface.Height = height;
+        QueueRefreshSurface();
+    }
+
+    private void QueueRefreshSurface()
     {
         if ( _surfaceRefreshQueued )
         {

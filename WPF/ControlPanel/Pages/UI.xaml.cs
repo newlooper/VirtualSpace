@@ -12,11 +12,14 @@ You should have received a copy of the GNU General Public License along with Vir
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using ControlPanel.Resources;
 using ControlPanel.ViewModels;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.Logging;
+using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
@@ -47,9 +50,9 @@ public partial class UI
         mdc.IconKind  = iconKind;
         _vm           = new UIViewModel();
         DataContext   = _vm;
-        ButtonsContainer.AddHandler( Button.ClickEvent, new RoutedEventHandler( OnVdArrangementButtonClicked ) );
+        ButtonsContainer.AddHandler( ButtonBase.ClickEvent, new RoutedEventHandler( OnVdArrangementButtonClicked ) );
         _vm.PropertyChanged += OnViewModelPropertyChanged;
-        IsVisibleChanged    += ( _, e ) =>
+        IsVisibleChanged += ( _, e ) =>
         {
             if ( e.NewValue is true )
             {
@@ -70,16 +73,23 @@ public partial class UI
             return;
         }
 
-        _vm.VdArrangement = int.Parse( btn.Tag.ToString()! );
+        var newVdA = int.Parse( btn.Tag.ToString()! );
+
         if ( Manager.CurrentProfile.IsPsLayout )
         {
             Manager.CurrentProfile.Layout = LayoutKind.Auto;
-            Manager.Save( reason: "apply automatic layout" );
-            User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.ApplyPsLayout, 0 );
+            if ( _vm.VdArrangement == newVdA )
+            {
+                Manager.Save( reason: "apply automatic layout", reasonName: "Layout", logLevel: LogLevel.Trace );
+            }
+            else
+            {
+                Logger.Verbose( "apply automatic layout." );
+            }
         }
 
+        _vm.VdArrangement = newVdA;
         User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.DesktopArrangement, 0 );
-        _instance?.SyncActiveTab();
         e.Handled = true;
     }
 
@@ -88,18 +98,33 @@ public partial class UI
         return _instance ??= new UI( headerKey, iconKind );
     }
 
+    public static void SyncLayoutSelection()
+    {
+        if ( _instance is null )
+        {
+            return;
+        }
+
+        if ( _instance.Dispatcher.CheckAccess() )
+        {
+            _instance.SyncActiveTab();
+        }
+        else
+        {
+            _instance.Dispatcher.BeginInvoke( static () => _instance!.SyncActiveTab() );
+        }
+    }
+
     private void ApplyPsLayout()
     {
         var ps = Manager.CurrentProfile.PrimarySecondary ??= new PrimarySecondaryState();
-        ps.Kind   = _psKind;
-        ps.Corner = _psCorner;
-        ps.N      = _psN;
-        ps.Slots  = [];
+        ps.Kind                       = _psKind;
+        ps.Corner                     = _psCorner;
+        ps.N                          = _psN;
+        ps.Slots                      = [];
         Manager.CurrentProfile.Layout = LayoutKind.PrimarySecondary;
-        Manager.Save( reason: "apply primary/secondary layout" );
         var extras = PsCreateExtrasCheck.IsChecked == true && _psExtra > 0;
         User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.ApplyPsLayout, (ulong)( extras ? 1 : 0 ) );
-        SyncActiveTab();
     }
 
     private void OnViewModelPropertyChanged( object? sender, System.ComponentModel.PropertyChangedEventArgs e )
@@ -119,8 +144,8 @@ public partial class UI
     private void SyncActiveTab()
     {
         var ps = Manager.CurrentProfile.IsPsLayout;
-        _vm.IsPsLayout    = ps;
-        _vm.IsEqualLayout = !ps;
+        _vm.IsPsLayout           = ps;
+        _vm.IsEqualLayout        = !ps;
         LayoutTabs.SelectedIndex = ps ? 1 : 0;
     }
 
@@ -143,11 +168,11 @@ public partial class UI
 
     private void RebuildPsPreviews()
     {
-        var count          = DesktopWrapper.Count;
-        var (kind, n, k)   = PsLayout.Fit( count );
-        _psKind            = kind;
-        _psN               = n;
-        _psExtra           = k - count;
+        var count = DesktopWrapper.Count;
+        var (kind, n, k) = PsLayout.Fit( count );
+        _psKind          = kind;
+        _psN             = n;
+        _psExtra         = k - count;
         if ( _psExtra < 0 )
         {
             _psExtra = 0;
@@ -158,13 +183,13 @@ public partial class UI
         {
             PsCreateExtrasCheck.Visibility = Visibility.Visible;
             PsCreateExtrasCheck.Content    = string.Format( Langs.Page_UI_PsLayout_CreateExtras, _psExtra );
-            PsCreateExtrasCheck.IsChecked  = false;
         }
         else
         {
             PsCreateExtrasCheck.Visibility = Visibility.Collapsed;
-            PsCreateExtrasCheck.IsChecked  = false;
         }
+
+        PsCreateExtrasCheck.IsChecked = false;
 
         PsPreviewHost.Children.Clear();
         _psSelected = null;
@@ -309,7 +334,7 @@ public partial class UI
         }
 
         var (pr, pc, span) = PsLayout.PrimaryRect( kind, n, corner );
-        var primary        = PsCell();
+        var primary = PsCell();
         Grid.SetRow( primary, pr );
         Grid.SetColumn( primary, pc );
         Grid.SetRowSpan( primary, span );
@@ -357,7 +382,7 @@ public partial class UI
 
     private sealed class PsPreviewItem
     {
-        public required PsCorner      Corner { get; init; }
+        public required PsCorner     Corner { get; init; }
         public required List<Border> Cells  { get; init; }
     }
 }

@@ -245,9 +245,9 @@ public static class PsLayout
         return g is { } id && id != Guid.Empty ? id : null;
     }
 
-    public static string LayoutKey( PrimarySecondaryState? ps, int vdCount )
+    public static string LayoutKey( PrimarySecondaryState? ps, int vdCount, bool isPsLayout )
     {
-        if ( ps is not { Kind: not PsKind.None } )
+        if ( !isPsLayout || ps is null || !IsValid( ps ) )
         {
             return $"eq-{vdCount}";
         }

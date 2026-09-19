@@ -31,30 +31,19 @@ internal static class WallpaperImages
 
     public static BitmapSource? Retain( string path, int width, int height, string cachePath, long quality )
     {
-        var key = Key( path, width, height );
-        lock ( Gate )
-        {
-            if ( Shared.TryGetValue( key, out var hit ) )
-            {
-                hit.Refs++;
-                return hit.Source;
-            }
-        }
-
-        EnsureCache( path, width, height, cachePath, quality );
-        var (exists, file) = Wallpaper.CachedWallPaperInfo( path, cachePath, width, height );
-        if ( !exists )
+        var key    = Key( path, width, height );
+        var source = LoadOrBuild( path, width, height, cachePath, quality );
+        if ( source is null )
         {
             return null;
         }
 
-        var source = LoadJpeg( file );
         lock ( Gate )
         {
-            if ( Shared.TryGetValue( key, out var race ) )
+            if ( Shared.TryGetValue( key, out var entry ) )
             {
-                race.Refs++;
-                return race.Source;
+                entry.Refs++;
+                return entry.Source;
             }
 
             Shared[key] = new SharedEntry { Source = source, Refs = 1 };
@@ -86,18 +75,48 @@ internal static class WallpaperImages
 
     public static void EnsureCache( string path, int width, int height, string cachePath, long quality )
     {
-        var (exists, dest) = Wallpaper.CachedWallPaperInfo( path, cachePath, width, height );
-        if ( exists )
+        _ = LoadOrBuild( path, width, height, cachePath, quality );
+    }
+
+    private static BitmapSource? LoadOrBuild( string path, int width, int height, string cachePath, long quality )
+    {
+        var key = Key( path, width, height );
+        lock ( Gate )
         {
-            return;
+            if ( Shared.TryGetValue( key, out var hit ) )
+            {
+                return hit.Source;
+            }
         }
 
+        var (exists, dest) = Wallpaper.CachedWallPaperInfo( path, cachePath, width, height );
+        var source = exists ? LoadJpeg( dest ) : BuildCache( path, width, height, dest, quality );
+        if ( source is null )
+        {
+            return null;
+        }
+
+        lock ( Gate )
+        {
+            if ( Shared.TryGetValue( key, out var race ) )
+            {
+                return race.Source;
+            }
+
+            Shared[key] = new SharedEntry { Source = source, Refs = 0 };
+            return source;
+        }
+    }
+
+    private static BitmapSource? BuildCache( string path, int width, int height, string dest, long quality )
+    {
         var temp = dest + "_" + Environment.CurrentManagedThreadId;
         try
         {
+            BitmapSource? scaled = null;
             RunSta( () =>
             {
-                var scaled = DecodeScaled( path, width, height );
+                scaled = DecodeScaled( path, width, height );
                 var encoder = new JpegBitmapEncoder
                 {
                     QualityLevel = (int)Math.Clamp( quality, 1, 100 )
@@ -108,11 +127,13 @@ internal static class WallpaperImages
             } );
 
             CommitCacheFile( temp, dest );
+            return scaled;
         }
         catch ( Exception ex )
         {
             Logger.Warning( "Wallpaper cache: " + ex.Message );
             TryDelete( temp );
+            return null;
         }
     }
 

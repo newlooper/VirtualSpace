@@ -40,6 +40,8 @@ internal partial class VdwSurface : Window
         WindowStartupLocation = WindowStartupLocation.Manual;
     }
 
+    internal int VdIndex { get; set; }
+
     internal IntPtr Handle { get; private set; }
 
     internal void EnsureCreated()

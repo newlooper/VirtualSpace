@@ -117,10 +117,14 @@
                     </TabItem>
                     <TabItem Header="{lex:Loc Page.UI.Tab.PsLayout}">
                         <StackPanel>
-                            <TextBlock x:Name="PsHintText" FontSize="14" TextWrapping="Wrap" Margin="10,12,10,4"
-                                       Foreground="{DynamicResource MaterialDesignBody}" />
+                            <materialDesign:Chip Height="80" Margin="0,5,0,0">
+                                <StackPanel>
+                                    <TextBlock x:Name="PsHintText" FontSize="14" TextWrapping="Wrap" Margin="10,10,10,0"
+                                               Foreground="{DynamicResource MaterialDesignBody}" />
+                                    <CheckBox x:Name="PsCreateExtrasCheck" Margin="1 0 0 5" IsChecked="False" />
+                                </StackPanel>
+                            </materialDesign:Chip>
                             <WrapPanel x:Name="PsPreviewHost" HorizontalAlignment="Center" Margin="0,4" />
-                            <CheckBox x:Name="PsCreateExtrasCheck" Margin="10,8,10,12" IsChecked="False" />
                         </StackPanel>
                     </TabItem>
                 </TabControl>

@@ -30,7 +30,6 @@ public partial class MainWindow
     private const  int           SHADOW_ATLAS_SIZE  = 64;
     private const  int           SHADOW_ATLAS_INSET = 16;
     private static string        _layoutKey = "";
-    private static bool          _resetting;
     private static ShadowSlices  _shadowDefault;
     private static ShadowSlices  _shadowCurrent;
     private static int           RowsCols { get; set; }
@@ -48,19 +47,8 @@ public partial class MainWindow
     private static int GetCellSlot( DependencyObject? cell ) =>
         cell is null ? -1 : (int)cell.GetValue( CellSlotProperty );
 
-    public static void ForceResetMainGrid()
-    {
-        _layoutKey = "";
-        ResetMainGrid();
-    }
-
     public static void ResetMainGrid()
     {
-        if ( _resetting )
-        {
-            return;
-        }
-
         if ( VirtualDesktopManager.TryGetOnlyOneInMainView( out var onlyOne ) )
         {
             ResetMainGridForSingleDesktop( onlyOne.VdIndex );
@@ -69,36 +57,28 @@ public partial class MainWindow
 
         var vdCount   = DesktopWrapper.Count;
         var profile   = Manager.CurrentProfile;
-        var layoutKey = PsLayout.LayoutKey( profile.PrimarySecondary, vdCount );
+        var layoutKey = PsLayout.LayoutKey( profile.PrimarySecondary, vdCount, profile.IsPsLayout );
         if ( layoutKey == _layoutKey )
         {
             return;
         }
 
-        _resetting = true;
         _layoutKey = layoutKey;
-        try
-        {
-            var mainGrid = _instance.MainGrid;
-            mainGrid.Children.Clear();
-            mainGrid.RowDefinitions.Clear();
-            mainGrid.ColumnDefinitions.Clear();
+        var mainGrid = _instance.MainGrid;
+        mainGrid.Children.Clear();
+        mainGrid.RowDefinitions.Clear();
+        mainGrid.ColumnDefinitions.Clear();
 
-            if ( profile.IsPsLayout && PsLayout.IsValid( profile.PrimarySecondary ) )
-            {
-                BuildPsGrid( profile.PrimarySecondary );
-            }
-            else
-            {
-                BuildEqualGrid( vdCount );
-            }
-
-            _instance.UpdateLayout();
-        }
-        finally
+        if ( profile.IsPsLayout && PsLayout.IsValid( profile.PrimarySecondary ) )
         {
-            _resetting = false;
+            BuildPsGrid( profile.PrimarySecondary );
         }
+        else
+        {
+            BuildEqualGrid( vdCount );
+        }
+
+        _instance.UpdateLayout();
     }
 
     private static void BuildEqualGrid( int vdCount )
@@ -204,7 +184,7 @@ public partial class MainWindow
         };
     }
 
-    public static void ResetMainGridForSingleDesktop( int vdIndex )
+    private static void ResetMainGridForSingleDesktop( int vdIndex )
     {
         var vdCount   = DesktopWrapper.Count;
         var profile   = Manager.CurrentProfile;

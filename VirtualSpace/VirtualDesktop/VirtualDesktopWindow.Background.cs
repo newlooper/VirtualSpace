@@ -101,6 +101,9 @@ public partial class VirtualDesktopWindow
         var hWnd      = Handle;
         var cachePath = ConfigManager.GetCachePath();
         var quality   = WallpaperQuality;
+        
+        Logger.Verbose( $"Create cache image({PixelWidth}*{PixelHeight}) for Desktop[{VdIndex}]" );
+        
         Task.Run( () =>
         {
             WallpaperImages.EnsureCache( path, width, height, cachePath, quality );
@@ -112,6 +115,7 @@ public partial class VirtualDesktopWindow
     {
         if ( wpInfo.color != null )
         {
+            Logger.Verbose( "Applied Wallpaper: Pure Color." );
             _surface.SetBackColor( (Color)wpInfo.color );
             DetachWallpaper();
             return;
@@ -125,27 +129,19 @@ public partial class VirtualDesktopWindow
         var key = WallpaperImages.Key( wpInfo.path, PixelWidth, PixelHeight );
         if ( _wallpaperSource != null && _wallpaperKey == key )
         {
+            Logger.Verbose( $"Apply Wallpaper: src=Memory, key={key}" );
             _surface.SetWallpaper( _wallpaperSource );
             return;
         }
 
-        if ( wpInfo.isCached || VirtualDesktopManager.IsBatchCreate )
+        if ( wpInfo.isCached )
         {
+            Logger.Verbose( $"Apply Wallpaper: cached={wpInfo.isCached}, key={key}" );
             AttachWallpaper( wpInfo.path, PixelWidth, PixelHeight );
-            if ( _wallpaperSource is null )
-            {
-                RequestDiskCache( wpInfo.path, PixelWidth, PixelHeight );
-            }
-
             return;
         }
 
-        Logger.Verbose( $"Create cache image({PixelWidth}*{PixelHeight}) for Desktop[{VdIndex}]" );
         RequestDiskCache( wpInfo.path, PixelWidth, PixelHeight );
-        if ( _wallpaperSource != null )
-        {
-            _surface.SetWallpaper( _wallpaperSource );
-        }
     }
 
     private void UpdateDesktopLabel()
@@ -191,7 +187,6 @@ public partial class VirtualDesktopWindow
         }
 
         var (exists, _) = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), PixelWidth, PixelHeight );
-        Logger.Verbose( "Applied Wallpaper src=" + ( exists ? wpPath : "pending" ) + " key=" + key );
         ApplyWallpaper( ( exists, wpPath, null ) );
         UpdateDesktopLabel();
     }

@@ -281,6 +281,7 @@ public partial class MainWindow
                         SwitchToDesktopById( VirtualDesktopManager.LastDesktopId );
                         break;
                     case UserMessage.DesktopArrangement:
+                        ResetMainGrid();
                         if ( IsShowing() )
                         {
                             VirtualDesktopManager.ShowAllVirtualDesktops();

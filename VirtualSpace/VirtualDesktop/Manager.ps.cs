@@ -12,6 +12,8 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ControlPanel.Pages;
+using Microsoft.Extensions.Logging;
 using VirtualSpace.Config;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.VirtualDesktop.Api;
@@ -21,46 +23,53 @@ namespace VirtualSpace.VirtualDesktop;
 
 internal static partial class VirtualDesktopManager
 {
-    public static void ApplyPrimarySecondaryLayout( bool createExtras )
+    public static void ApplyPrimarySecondaryLayout( bool createExtras, string from = "apply" )
     {
         var profile = ConfigManager.CurrentProfile;
-        var ps      = profile.PrimarySecondary ??= new PrimarySecondaryState();
-
-        if ( profile.IsPsLayout )
+        if ( !profile.IsPsLayout )
         {
-            EnsurePsConfigured( ps );
-            if ( PsLayout.IsValid( ps ) )
-            {
-                var cap  = PsLayout.Capacity( ps.Kind, ps.N );
-                var need = cap - DesktopWrapper.Count;
-                if ( createExtras && need > 0 )
-                {
-                    IsBatchCreate = true;
-                    try
-                    {
-                        for ( var i = 0; i < need; i++ )
-                        {
-                            DesktopWrapper.Create();
-                        }
-                    }
-                    finally
-                    {
-                        IsBatchCreate = false;
-                    }
-                }
+            return;
+        }
 
-                SyncVirtualDesktops();
-                SeedFromCurrent( ps );
-                ConfigManager.Save( reason: "apply primary/secondary layout" );
-            }
-            else
+        var ps = profile.PrimarySecondary ??= new PrimarySecondaryState();
+        TryFit( ps, DesktopWrapper.Count );
+        if ( !PsLayout.IsValid( ps ) )
+        {
+            profile.Layout = LayoutKind.Auto;
+            ConfigManager.Save( reason: "invalid primary/secondary layout", reasonName: "Layout", logLevel: LogLevel.Trace );
+            MainWindow.ResetMainGrid();
+            if ( MainWindow.IsShowing() )
             {
-                profile.Layout = LayoutKind.Auto;
-                ConfigManager.Save( reason: "invalid primary/secondary layout" );
+                ShowAllVirtualDesktops();
+            }
+
+            return;
+        }
+
+        var cap  = PsLayout.Capacity( ps.Kind, ps.N );
+        var need = cap - DesktopWrapper.Count;
+        if ( createExtras && need > 0 )
+        {
+            IsBatchCreate = true;
+            try
+            {
+                for ( var i = 0; i < need; i++ )
+                {
+                    DesktopWrapper.Create();
+                }
+            }
+            finally
+            {
+                IsBatchCreate = false;
             }
         }
 
-        MainWindow.ForceResetMainGrid();
+        SyncVirtualDesktops();
+        TryFit( ps, DesktopWrapper.Count );
+        SeedFromCurrent( ps );
+        ConfigManager.Save( reason: $"{from} primary/secondary layout", reasonName: "Layout", logLevel: LogLevel.Information );
+
+        MainWindow.ResetMainGrid();
         if ( MainWindow.IsShowing() )
         {
             ShowAllVirtualDesktops();
@@ -70,31 +79,36 @@ internal static partial class VirtualDesktopManager
     public static void ToggleLayout()
     {
         var profile = ConfigManager.CurrentProfile;
-        var ps      = profile.PrimarySecondary ??= new PrimarySecondaryState();
         if ( profile.IsPsLayout )
         {
             profile.Layout = LayoutKind.Auto;
-            ConfigManager.Save( reason: "toggle automatic layout" );
-            ApplyPrimarySecondaryLayout( false );
-            return;
+            ConfigManager.Save( reason: "toggle automatic layout", reasonName: "Layout", logLevel: LogLevel.Information );
+            MainWindow.ResetMainGrid();
+            if ( MainWindow.IsShowing() )
+            {
+                ShowAllVirtualDesktops();
+            }
+        }
+        else
+        {
+            profile.Layout = LayoutKind.PrimarySecondary;
+            ApplyPrimarySecondaryLayout( false, "toggle" );
         }
 
-        profile.Layout = LayoutKind.PrimarySecondary;
-        EnsurePsConfigured( ps );
-        ConfigManager.Save( reason: "toggle primary/secondary layout" );
-        ApplyPrimarySecondaryLayout( false );
+        UI.SyncLayoutSelection();
     }
 
-    private static void EnsurePsConfigured( PrimarySecondaryState ps )
+    private static bool TryFit( PrimarySecondaryState ps, int needed )
     {
-        if ( PsLayout.IsValid( ps ) )
+        var (kind, n, _) = PsLayout.Fit( needed );
+        if ( ps.Kind == kind && ps.N == n )
         {
-            return;
+            return false;
         }
 
-        var (kind, n, _) = PsLayout.Fit( DesktopWrapper.Count );
-        ps.Kind          = kind;
-        ps.N             = n;
+        ps.Kind = kind;
+        ps.N    = n;
+        return true;
     }
 
     private static void ReconcilePrimarySecondary()
@@ -106,15 +120,15 @@ internal static partial class VirtualDesktopManager
             return;
         }
 
-        if ( !PsLayout.IsValid( ps ) )
+        var order = AliveOrder( profile );
+        if ( TryFit( ps, order.Count ) )
         {
-            profile.Layout = LayoutKind.Auto;
-            ConfigManager.Save( reason: "invalid primary/secondary layout" );
+            SeedFromCurrent( ps );
+            ConfigManager.Save( reason: "fit primary/secondary layout", reasonName: "Layout", logLevel: LogLevel.Trace );
             return;
         }
 
         PsLayout.EnsureSlotCount( ps );
-        var order = AliveOrder( profile );
         var alive = order.ToHashSet();
         var dirty = false;
 
@@ -129,13 +143,6 @@ internal static partial class VirtualDesktopManager
             dirty       = true;
         }
 
-        if ( order.Count > PsLayout.Capacity( ps.Kind, ps.N ) )
-        {
-            ExpandToFit( ps, order.Count );
-            ConfigManager.Save( reason: "expand primary/secondary layout" );
-            return;
-        }
-
         foreach ( var guid in order )
         {
             if ( PsLayout.SlotOf( ps, guid ) >= 0 )
@@ -146,8 +153,9 @@ internal static partial class VirtualDesktopManager
             var empty = FirstEmptySlot( ps );
             if ( empty < 0 )
             {
-                ExpandToFit( ps, order.Count );
-                ConfigManager.Save( reason: "expand primary/secondary layout" );
+                TryFit( ps, order.Count );
+                SeedFromCurrent( ps );
+                ConfigManager.Save( reason: "fit primary/secondary layout", reasonName: "Layout", logLevel: LogLevel.Trace );
                 return;
             }
 
@@ -157,7 +165,7 @@ internal static partial class VirtualDesktopManager
 
         if ( dirty )
         {
-            ConfigManager.Save( reason: "reconcile primary/secondary occupancy" );
+            ConfigManager.Save( reason: "reconcile primary/secondary occupancy", reasonName: "Layout", logLevel: LogLevel.Trace );
         }
     }
 
@@ -170,12 +178,7 @@ internal static partial class VirtualDesktopManager
 
     public static bool RelocateDesktop( Guid vdId, int targetSlot )
     {
-        var profile = ConfigManager.CurrentProfile;
-        var ps      = profile.PrimarySecondary;
-        if ( !profile.IsPsLayout || ps is null )
-        {
-            return false;
-        }
+        var ps = ConfigManager.CurrentProfile.PrimarySecondary;
 
         PsLayout.EnsureSlotCount( ps );
         var from = PsLayout.SlotOf( ps, vdId );
@@ -185,7 +188,7 @@ internal static partial class VirtualDesktopManager
         }
 
         ( ps.Slots[from], ps.Slots[targetSlot] ) = ( ps.Slots[targetSlot], ps.Slots[from] );
-        ConfigManager.Save( reason: "relocate primary/secondary slot" );
+        ConfigManager.Save( reason: "relocate primary/secondary slot", reasonName: "Layout", logLevel: LogLevel.Trace );
         if ( MainWindow.IsShowing() )
         {
             ShowAllVirtualDesktops();
@@ -254,14 +257,6 @@ internal static partial class VirtualDesktopManager
         }
 
         ps.Slots = slots;
-    }
-
-    private static void ExpandToFit( PrimarySecondaryState ps, int needed )
-    {
-        var (kind, n, _) = PsLayout.Fit( needed );
-        ps.Kind          = kind;
-        ps.N             = n;
-        SeedFromCurrent( ps );
     }
 
     private static int FirstEmptySlot( PrimarySecondaryState ps )
