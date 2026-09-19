@@ -13,6 +13,7 @@ using PropertyChanged;
 using VirtualSpace.Commons;
 using VirtualSpace.Config;
 using VirtualSpace.Config.Entity;
+using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
 
 namespace ControlPanel.ViewModels;
@@ -69,11 +70,13 @@ public partial class UIViewModel : ViewModelBase
 
         if ( IsInitialized )
         {
+            var refreshVdLabel = true;
             switch ( propertyName )
             {
                 case nameof( VdArrangement ):
                     Manager.CurrentProfile.UI.DesktopArrangement = (int)after;
-                    Manager.Save( reason: Manager.CurrentProfile.UI.DesktopArrangement );
+                    // Manager.Save( reason: Manager.CurrentProfile.UI.DesktopArrangement ); /* Pages/UI.xaml.cs already done it. */
+                    refreshVdLabel = false;
                     break;
                 case nameof( ShowVdName ):
                     Manager.CurrentProfile.UI.ShowVdName = (bool)after;
@@ -95,6 +98,11 @@ public partial class UIViewModel : ViewModelBase
                     Manager.CurrentProfile.UI.EnableVdNameColorEmoji = (bool)after;
                     Manager.Save( reason: Manager.CurrentProfile.UI.EnableVdNameColorEmoji );
                     break;
+            }
+
+            if ( refreshVdLabel )
+            {
+                User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdLabel, 0 );
             }
         }
 

@@ -298,6 +298,9 @@ public partial class MainWindow
                         }
 
                         break;
+                    case UserMessage.RefreshVdLabel:
+                        VirtualDesktopManager.RefreshDesktopLabels();
+                        break;
                     case UserMessage.RefreshTrayIcon:
                         UpdateVDIndexOnTrayIcon( DesktopWrapper.CurrentGuid );
                         break;

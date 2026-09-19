@@ -245,6 +245,14 @@ internal static partial class VirtualDesktopManager
         return _virtualDesktops;
     }
 
+    public static void RefreshDesktopLabels()
+    {
+        foreach ( var vdw in _virtualDesktops )
+        {
+            User32.PostMessage( vdw.Handle, WinMsg.WM_HOTKEY, UserMessage.RefreshVdLabel, 0 );
+        }
+    }
+
     public static VirtualDesktopWindow GetCurrentVdw()
     {
         return _virtualDesktops.Single( v => v.VdId == DesktopWrapper.CurrentGuid );

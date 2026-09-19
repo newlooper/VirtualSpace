@@ -65,9 +65,9 @@ internal partial class VdwSurface : Window
     internal void SetDesktopLabel( string text, bool visible )
     {
         EnsureDesktopLabel();
-        ApplyLabelChrome( _desktopLabel! );
+        ApplyLabelChrome( _desktopLabel );
         SetLabelText( text );
-        _desktopLabel!.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+        _desktopLabel?.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
     }
 
     private void EnsureDesktopLabel()
@@ -108,8 +108,10 @@ internal partial class VdwSurface : Window
         return effect;
     }
 
-    private static void ApplyLabelChrome( FrameworkElement label )
+    private static void ApplyLabelChrome( FrameworkElement? label )
     {
+        if ( label == null ) return;
+
         switch ( ConfigManager.CurrentProfile.UI.ShowVdNamePosition )
         {
             case VdNamePosition.TopLeft:
@@ -142,7 +144,7 @@ internal partial class VdwSurface : Window
         }
         else
         {
-            _desktopLabel!.Text = text;
+            _desktopLabel?.Text = text;
         }
     }
 

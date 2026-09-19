@@ -51,7 +51,7 @@ public partial class VirtualDesktopWindow
         set => _surface.VdIndex = value;
     }
 
-    private IntPtr Handle => _surface.Handle;
+    internal IntPtr Handle => _surface.Handle;
 
     public double Opacity
     {
@@ -114,6 +114,10 @@ public partial class VirtualDesktopWindow
                         return IntPtr.Zero;
                     case UserMessage.ShowThumbsOfVdw:
                         ShowThumbnails();
+                        handled = true;
+                        return IntPtr.Zero;
+                    case UserMessage.RefreshVdLabel:
+                        RefreshDesktopLabel();
                         handled = true;
                         return IntPtr.Zero;
                 }
@@ -183,6 +187,8 @@ public partial class VirtualDesktopWindow
     private void Surface_Loaded( object sender, RoutedEventArgs e )
     {
         RefreshWallpaper();
+        _desktopName = DesktopWrapper.DesktopNameFromGuid( VdId );
+        RefreshDesktopLabel();
     }
 
     public void Hide()
@@ -255,11 +261,6 @@ public partial class VirtualDesktopWindow
         }
 
         _surface.IsHitTestVisible = true;
-        var vdName = DesktopWrapper.DesktopNameFromGuid( VdId );
-        if ( vdName != _desktopName )
-        {
-            UpdateDesktopName( vdName );
-        }
 
         SetSurfaceSize( vdwWidthDip, vdwHeightDip );
 

@@ -50,7 +50,7 @@ public partial class VirtualDesktopWindow
     public void UpdateDesktopName( string name )
     {
         _desktopName = name;
-        UpdateDesktopLabel();
+        RefreshDesktopLabel();
     }
 
     private void ReleaseWallpaperResources()
@@ -67,9 +67,8 @@ public partial class VirtualDesktopWindow
         _surface.SetWallpaper( null );
     }
 
-    private void AttachWallpaper( string path, int width, int height )
+    private void AttachWallpaper( string path, int width, int height, string key )
     {
-        var key = WallpaperImages.Key( path, width, height );
         if ( _wallpaperSource != null && _wallpaperKey == key )
         {
             _surface.SetWallpaper( _wallpaperSource );
@@ -79,7 +78,7 @@ public partial class VirtualDesktopWindow
         var source = WallpaperImages.Retain( path, width, height, ConfigManager.GetCachePath(), WallpaperQuality );
         if ( source is null )
         {
-            RequestDiskCache( path, width, height );
+            RequestDiskCache( path, width, height, key );
             return;
         }
 
@@ -89,9 +88,8 @@ public partial class VirtualDesktopWindow
         _surface.SetWallpaper( source );
     }
 
-    private void RequestDiskCache( string path, int width, int height )
+    private void RequestDiskCache( string path, int width, int height, string key )
     {
-        var key = WallpaperImages.Key( path, width, height );
         if ( _cacheBuildKey == key )
         {
             return;
@@ -111,40 +109,26 @@ public partial class VirtualDesktopWindow
         } );
     }
 
-    private void ApplyWallpaper( (bool isCached, string path, Color? color) wpInfo )
+    private void ApplyWallpaper( Color color )
     {
-        if ( wpInfo.color != null )
-        {
-            Logger.Verbose( "Applied Wallpaper: Pure Color." );
-            _surface.SetBackColor( (Color)wpInfo.color );
-            DetachWallpaper();
-            return;
-        }
-
-        if ( PixelWidth < 1 || PixelHeight < 1 )
-        {
-            return;
-        }
-
-        var key = WallpaperImages.Key( wpInfo.path, PixelWidth, PixelHeight );
-        if ( _wallpaperSource != null && _wallpaperKey == key )
-        {
-            Logger.Verbose( $"Apply Wallpaper: src=Memory, key={key}" );
-            _surface.SetWallpaper( _wallpaperSource );
-            return;
-        }
-
-        if ( wpInfo.isCached )
-        {
-            Logger.Verbose( $"Apply Wallpaper: cached={wpInfo.isCached}, key={key}" );
-            AttachWallpaper( wpInfo.path, PixelWidth, PixelHeight );
-            return;
-        }
-
-        RequestDiskCache( wpInfo.path, PixelWidth, PixelHeight );
+        Logger.Verbose( "Apply Wallpaper: Pure Color." );
+        _surface.SetBackColor( color );
+        DetachWallpaper();
     }
 
-    private void UpdateDesktopLabel()
+    private void ApplyWallpaper( bool isCached, string path, string key )
+    {
+        if ( isCached )
+        {
+            Logger.Verbose( $"Apply Wallpaper: cached={isCached}, key={key}" );
+            AttachWallpaper( path, PixelWidth, PixelHeight, key );
+            return;
+        }
+
+        RequestDiskCache( path, PixelWidth, PixelHeight, key );
+    }
+
+    private void RefreshDesktopLabel()
     {
         var ui  = ConfigManager.CurrentProfile.UI;
         var str = "";
@@ -172,22 +156,19 @@ public partial class VirtualDesktopWindow
         var wpPath = WinRegistry.GetWallPaperPathByGuid( VdId );
         if ( wpPath is null )
         {
-            ApplyWallpaper( ( false, "", WinRegistry.GetBackColor() ) );
-            UpdateDesktopLabel();
+            ApplyWallpaper( WinRegistry.GetBackColor() );
             return;
         }
 
         var key = WallpaperImages.Key( wpPath, PixelWidth, PixelHeight );
         if ( _wallpaperSource != null && _wallpaperKey == key )
         {
-            Logger.Verbose( $"Reuse Wallpaper: {key}" );
+            Logger.Verbose( $"Reuse Wallpaper: key={key}" );
             _surface.SetWallpaper( _wallpaperSource );
-            UpdateDesktopLabel();
             return;
         }
 
         var (exists, _) = Wallpaper.CachedWallPaperInfo( wpPath, ConfigManager.GetCachePath(), PixelWidth, PixelHeight );
-        ApplyWallpaper( ( exists, wpPath, null ) );
-        UpdateDesktopLabel();
+        ApplyWallpaper( exists, wpPath, key );
     }
 }

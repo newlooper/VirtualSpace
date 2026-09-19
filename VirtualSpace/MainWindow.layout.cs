@@ -29,7 +29,7 @@ public partial class MainWindow
 {
     private const  int           SHADOW_ATLAS_SIZE  = 64;
     private const  int           SHADOW_ATLAS_INSET = 16;
-    private static string        _layoutKey = "";
+    private static string        _layoutKey         = "";
     private static ShadowSlices  _shadowDefault;
     private static ShadowSlices  _shadowCurrent;
     private static int           RowsCols { get; set; }
@@ -89,8 +89,8 @@ public partial class MainWindow
         var star = new GridLength( 1, GridUnitType.Star );
         for ( var r = 0; r < rowsCols; r++ )
         {
-            mainGrid.RowDefinitions.Add( new RowDefinition { Height = star, MinHeight = 0 } );
-            mainGrid.ColumnDefinitions.Add( new ColumnDefinition { Width = star, MinWidth = 0 } );
+            mainGrid.RowDefinitions.Add( new RowDefinition { Height      = star, MinHeight = 0 } );
+            mainGrid.ColumnDefinitions.Add( new ColumnDefinition { Width = star, MinWidth  = 0 } );
             for ( var c = 0; c < rowsCols; c++ )
             {
                 var border = CreateCellBorder();
@@ -112,8 +112,8 @@ public partial class MainWindow
         var star = new GridLength( 1, GridUnitType.Star );
         for ( var i = 0; i < n; i++ )
         {
-            mainGrid.RowDefinitions.Add( new RowDefinition { Height = star, MinHeight = 0 } );
-            mainGrid.ColumnDefinitions.Add( new ColumnDefinition { Width = star, MinWidth = 0 } );
+            mainGrid.RowDefinitions.Add( new RowDefinition { Height      = star, MinHeight = 0 } );
+            mainGrid.ColumnDefinitions.Add( new ColumnDefinition { Width = star, MinWidth  = 0 } );
         }
 
         var (pr, pc, span) = PsLayout.PrimaryRect( ps.Kind, n, ps.Corner );
@@ -143,15 +143,15 @@ public partial class MainWindow
         var profile = Manager.CurrentProfile;
         if ( profile.IsPsLayout && PsLayout.IsValid( profile.PrimarySecondary ) )
         {
-            var ps             = profile.PrimarySecondary;
-            var n              = ps.N;
+            var ps = profile.PrimarySecondary;
+            var n  = ps.N;
             var (pr, pc, span) = PsLayout.PrimaryRect( ps.Kind, n, ps.Corner );
-            var smalls         = PsLayout.SmallCells( ps.Kind, n, ps.Corner );
-            var cells          = new VirtualDesktopCell[1 + smalls.Count];
+            var smalls = PsLayout.SmallCells( ps.Kind, n, ps.Corner );
+            var cells  = new VirtualDesktopCell[1 + smalls.Count];
             cells[0] = CreateSwitchCell( 0, pr, pc, span, span );
             for ( var i = 0; i < smalls.Count; i++ )
             {
-                var (r, c) = smalls[i];
+                var (r, c)   = smalls[i];
                 cells[i + 1] = CreateSwitchCell( i + 1, r, c, 1, 1 );
             }
 
@@ -206,6 +206,7 @@ public partial class MainWindow
             bigRow = cellIndex / rowsCols;
             bigCol = cellIndex % rowsCols;
         }
+
         var bigGridLength   = new GridLength( 1, GridUnitType.Star );
         var smallGridLength = new GridLength( 0 );
 
@@ -292,8 +293,6 @@ public partial class MainWindow
     private static Border CreateCellBorder()
     {
         EnsureShadowSlices();
-
-        Logger.Verbose( "Create Cell Border" );
 
         var inner = new Border { Background = Brushes.Transparent };
         var grid  = new Grid();
@@ -546,12 +545,12 @@ public partial class MainWindow
         int row, col, span;
         if ( slot == 0 )
         {
-            (row, col, span) = PsLayout.PrimaryRect( ps.Kind, n, ps.Corner );
+            ( row, col, span ) = PsLayout.PrimaryRect( ps.Kind, n, ps.Corner );
         }
         else
         {
-            (row, col) = PsLayout.SlotOrigin( ps.Kind, n, ps.Corner, slot );
-            span       = 1;
+            ( row, col ) = PsLayout.SlotOrigin( ps.Kind, n, ps.Corner, slot );
+            span         = 1;
         }
 
         if ( (uint)row >= (uint)n || (uint)col >= (uint)n )

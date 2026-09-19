@@ -73,22 +73,19 @@ public partial class UI
             return;
         }
 
-        var newVdA = int.Parse( btn.Tag.ToString()! );
+        var newVda = int.Parse( btn.Tag.ToString()! );
 
         if ( Manager.CurrentProfile.IsPsLayout )
         {
             Manager.CurrentProfile.Layout = LayoutKind.Auto;
-            if ( _vm.VdArrangement == newVdA )
-            {
-                Manager.Save( reason: "apply automatic layout", reasonName: "Layout", logLevel: LogLevel.Trace );
-            }
-            else
-            {
-                Logger.Verbose( "apply automatic layout." );
-            }
+            Manager.Save( reason: "apply automatic layout", reasonName: "Layout", logLevel: LogLevel.Information );
+        }
+        else if ( _vm.VdArrangement != newVda )
+        {
+            _vm.VdArrangement = newVda;
+            Manager.Save( reason: "apply automatic layout", reasonName: "Layout", logLevel: LogLevel.Information );
         }
 
-        _vm.VdArrangement = newVdA;
         User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.DesktopArrangement, 0 );
         e.Handled = true;
     }
