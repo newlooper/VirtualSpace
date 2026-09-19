@@ -21,11 +21,11 @@ public class Cluster
     public int  StyleOfVDIndexOnTrayIcon            { get; set; }
     public bool HideOnStart                         { get; set; }
     public bool ForceFocusForegroundWindow          { get; set; } = true;
-    public bool EnableDoubleBufferedForVDW          { get; set; } = true;
     public bool EnableWindowFilter                  { get; set; }
     public bool TryHarderActivateMinimizedWindow    { get; set; }
     public bool ForceSetForegroundWindowForMainView { get; set; } = true;
     public bool UseSystemTempForCache               { get; set; }
+    public bool ForceRefreshVDWBackground           { get; set; } = true;
 
     [PropertyProtector( 50L, 30L, 100L )]  public long VdwWallpaperQuality                      { get; set; }
     [PropertyProtector( 200, 100, 1000 )]  public int  ToggleWindowFilterDoublePressMaxInterval { get; set; }

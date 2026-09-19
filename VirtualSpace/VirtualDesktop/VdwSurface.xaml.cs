@@ -11,11 +11,13 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
+using System.Windows.Threading;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
 using Color = System.Drawing.Color;
@@ -38,6 +40,7 @@ internal partial class VdwSurface : Window
         _hook = hook;
         InitializeComponent();
         WindowStartupLocation = WindowStartupLocation.Manual;
+        IsVisibleChanged     += OnIsVisibleChanged;
     }
 
     internal int VdIndex { get; set; }
@@ -60,6 +63,27 @@ internal partial class VdwSurface : Window
     internal void SetWallpaper( ImageSource? source )
     {
         WallpaperImage.Source = source;
+    }
+
+    private void OnIsVisibleChanged( object sender, DependencyPropertyChangedEventArgs e )
+    {
+        if ( ConfigManager.Configs.Cluster.ForceRefreshVDWBackground && e.NewValue is true )
+        {
+            ScheduleWallpaperInvalidate();
+        }
+    }
+
+    private async void ScheduleWallpaperInvalidate()
+    {
+        await Task.Delay( 50 );
+        if ( !IsVisible )
+        {
+            return;
+        }
+
+        _ = Dispatcher.BeginInvoke(
+            DispatcherPriority.Render,
+            new Action( () => WallpaperImage.InvalidateVisual() ) );
     }
 
     internal void SetDesktopLabel( string text, bool visible )

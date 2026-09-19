@@ -10,6 +10,7 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config.Converter;
 using VirtualSpace.Config.DataAnnotations;
@@ -42,10 +43,11 @@ public class ConfigTemplate
         { Const.Hotkey.TOGGLE_LAYOUT, new KeyBinding { GhkCode       = "", MessageId                 = Const.Hotkey.Info[Const.Hotkey.TOGGLE_LAYOUT].MessageId } }
     };
 
-    public Dictionary<string, MouseAction.Action>? MouseAction  { get; init; } = new();
-    public Dictionary<string, MouseAction.Action>  MouseActions { get; set; }  = new();
+    [JsonIgnore] public Dictionary<string, MouseAction.Action>? MouseAction  { get; init; } = new();
+    public              Dictionary<string, MouseAction.Action>  MouseActions { get; set; }  = new();
 
     [PropertyProtector]
+    [JsonIgnore]
     public Cluster Cluster { get; set; } = new()
     {
         HideMainViewIfItsShown  = false,

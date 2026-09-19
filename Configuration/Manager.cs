@@ -63,6 +63,8 @@ public static class Manager
 
     private static void InitConfig( string filePath )
     {
+        EnsureProfileFolder();
+
         if ( File.Exists( filePath ) )
         {
             using var fs     = new FileStream( filePath, FileMode.Open, FileAccess.Read );
@@ -74,6 +76,11 @@ public static class Manager
             if ( cluster is not null )
             {
                 Configs.Cluster = cluster;
+            }
+            else if ( TryReadLegacyCluster( buffer ) is { } legacyCluster )
+            {
+                Configs.Cluster = legacyCluster;
+                SaveCluster( Configs.Cluster );
             }
 
             PropertyProtector.Walk( Configs );
@@ -138,11 +145,6 @@ public static class Manager
                 default:
                     break;
             }
-
-            if ( reasonName.Contains( ".Configs.Cluster" ) )
-            {
-                SaveCluster( Configs.Cluster );
-            }
         }
         catch ( Exception ex )
         {
@@ -184,6 +186,25 @@ public static class Manager
     private static Cluster? ReadCluster()
     {
         return ReadProfile<Cluster>( Path.Combine( ProfileFolder, Configs.CurrentProfileName + Settings.ClusterFileExt ) );
+    }
+
+    private static Cluster? TryReadLegacyCluster( byte[] settingsUtf8 )
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse( settingsUtf8 );
+            if ( !doc.RootElement.TryGetProperty( nameof( ConfigTemplate.Cluster ), out var clusterEl ) )
+            {
+                return null;
+            }
+
+            return JsonSerializer.Deserialize<Cluster>( clusterEl.GetRawText() );
+        }
+        catch ( Exception ex )
+        {
+            Logger.Error( $"Failed to migrate Cluster from settings.json: {ex.Message}" );
+            return null;
+        }
     }
 
     private static async void SaveProfile<T>( string path, T p )
@@ -274,10 +295,15 @@ public static class Manager
         return ConfigRootFolder;
     }
 
-    private static void CheckFolders()
+    private static void EnsureProfileFolder()
     {
         ProfileFolder = Path.Combine( ConfigRootFolder, Settings.ProfilesFolder );
         Directory.CreateDirectory( ProfileFolder );
+    }
+
+    private static void CheckFolders()
+    {
+        EnsureProfileFolder();
 
         _cacheFolder = Configs.Cluster.UseSystemTempForCache
             ? Path.Combine( Path.GetTempPath(), Const.AppName, Settings.CacheFolder )

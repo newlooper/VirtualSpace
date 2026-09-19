@@ -177,7 +177,7 @@ public partial class GeneralViewModel : ViewModelBase
                         break;
                 }
 
-                Manager.Save( reason: Manager.Configs.Cluster );
+                Manager.SaveCluster( Manager.Configs.Cluster );
             }
 
             propertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
