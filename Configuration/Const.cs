@@ -9,7 +9,9 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows.Forms;
 using VirtualSpace.Helpers;
 using KeyBinding = VirtualSpace.Config.Entity.KeyBinding;
@@ -305,5 +307,64 @@ public static class MouseAction
         }
 
         return prefix + keyCode + KEY_SPLITTER + buttonName;
+    }
+
+    public static bool TryParseActionId( string maId, out string prefix, out Keys keys, out string mouseButton )
+    {
+        prefix      = string.Empty;
+        keys        = Keys.None;
+        mouseButton = string.Empty;
+
+        if ( maId.StartsWith( MOUSE_NODE_DESKTOP_PREFIX, StringComparison.Ordinal ) )
+        {
+            prefix = MOUSE_NODE_DESKTOP_PREFIX;
+        }
+        else if ( maId.StartsWith( MOUSE_NODE_WINDOW_PREFIX, StringComparison.Ordinal ) )
+        {
+            prefix = MOUSE_NODE_WINDOW_PREFIX;
+        }
+        else
+        {
+            return false;
+        }
+
+        var combined = maId[prefix.Length..];
+        var parts    = combined.Split( KEY_SPLITTER );
+        if ( parts.Length != 2 ||
+             !int.TryParse( parts[0], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var keyValue ) ||
+             !MouseButtonsName.ContainsValue( parts[1] ) )
+        {
+            return false;
+        }
+
+        keys        = (Keys)keyValue;
+        mouseButton = parts[1];
+        return true;
+    }
+
+    public static string FormatModifierPrefix( Keys keys )
+    {
+        var parts = new List<string>();
+        if ( ( keys & Keys.LWin ) == Keys.LWin )
+        {
+            parts.Add( "LWin" );
+        }
+
+        if ( ( keys & Keys.Control ) == Keys.Control )
+        {
+            parts.Add( "Ctrl" );
+        }
+
+        if ( ( keys & Keys.Alt ) == Keys.Alt )
+        {
+            parts.Add( "Alt" );
+        }
+
+        if ( ( keys & Keys.Shift ) == Keys.Shift )
+        {
+            parts.Add( "Shift" );
+        }
+
+        return parts.Count == 0 ? string.Empty : string.Join( KEY_SPLITTER, parts ) + KEY_SPLITTER;
     }
 }

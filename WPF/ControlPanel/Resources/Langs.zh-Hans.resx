@@ -615,6 +615,18 @@
     <data name="Page.Control.MouseAction.ExpanderHeader" xml:space="preserve">
     <value>展开详情</value>
   </data>
+    <data name="Page.Control.MouseAction.Unbind" xml:space="preserve">
+    <value>解绑</value>
+  </data>
+    <data name="Page.Control.MouseAction.Column.Gesture" xml:space="preserve">
+    <value>快捷键</value>
+  </data>
+    <data name="Page.Control.MouseAction.Column.Action" xml:space="preserve">
+    <value>行为</value>
+  </data>
+    <data name="Page.Control.MouseAction.Column.Operations" xml:space="preserve">
+    <value>操作</value>
+  </data>
     <data name="Page.Rules.Rule.Tag" xml:space="preserve">
     <value>标签(分组)</value>
   </data>

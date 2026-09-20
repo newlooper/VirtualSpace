@@ -616,6 +616,18 @@ some settings may need restart program to take effect.</value>
     <data name="Page.Control.MouseAction.ExpanderHeader" xml:space="preserve">
     <value>Expand for details.</value>
   </data>
+    <data name="Page.Control.MouseAction.Unbind" xml:space="preserve">
+    <value>Unbind</value>
+  </data>
+    <data name="Page.Control.MouseAction.Column.Gesture" xml:space="preserve">
+    <value>Shortcut</value>
+  </data>
+    <data name="Page.Control.MouseAction.Column.Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+    <data name="Page.Control.MouseAction.Column.Operations" xml:space="preserve">
+    <value>Operations</value>
+  </data>
     <data name="Page.Rules.Rule.Tag" xml:space="preserve">
     <value>Tag(Group)</value>
   </data>

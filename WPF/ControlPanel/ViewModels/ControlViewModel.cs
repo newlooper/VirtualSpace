@@ -9,6 +9,7 @@
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -30,10 +31,25 @@ public partial class ControlViewModel : ViewModelBase
 [AddINotifyPropertyChangedInterface]
 public partial class MouseActionModel : ViewModelBase
 {
-    public MouseActionModel()
+    public MouseActionModel( string prefix )
     {
+        foreach ( var (id, action) in Manager.Configs.MouseActions ?? [] )
+        {
+            if ( !id.StartsWith( prefix ) )
+            {
+                continue;
+            }
+
+            if ( MouseBindingItem.TryCreate( id, action, out var item ) )
+            {
+                Bindings.Add( item );
+            }
+        }
+
         IsInitialized = true;
     }
+
+    public ObservableCollection<MouseBindingItem> Bindings { get; } = [];
 
     public static List<object> DesktopActions { get; } =
     [
@@ -120,5 +136,32 @@ public partial class KeyBindingModel : ViewModelBase
     {
         LWin = Ctrl = Alt = Shift = false;
         Key  = Const.Hotkey.NONE;
+    }
+}
+
+[AddINotifyPropertyChangedInterface]
+public partial class MouseBindingItem : ViewModelBase
+{
+    public string Id             { get; set; } = null!;
+    public string ActionName     { get; set; } = null!;
+    public string ModifierPrefix { get; set; } = null!;
+    public string MouseButton    { get; set; } = null!;
+
+    public static bool TryCreate( string id, MouseAction.Action action, out MouseBindingItem item )
+    {
+        item = null!;
+        if ( !MouseAction.TryParseActionId( id, out _, out var keys, out var mouseButton ) )
+        {
+            return false;
+        }
+
+        item = new MouseBindingItem
+        {
+            Id             = id,
+            ActionName     = action.ToString(),
+            ModifierPrefix = MouseAction.FormatModifierPrefix( keys ),
+            MouseButton    = mouseButton
+        };
+        return true;
     }
 }

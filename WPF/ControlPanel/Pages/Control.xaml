@@ -24,6 +24,59 @@
             <converters:MouseActionConverter x:Key="MouseActionConverter" />
             <x:Static Member="config:MouseAction.MOUSE_NODE_DESKTOP_PREFIX" x:Key="madp" />
             <x:Static Member="config:MouseAction.MOUSE_NODE_WINDOW_PREFIX" x:Key="mawp" />
+            <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+                <Setter Property="Padding" Value="5,5" />
+            </Style>
+            <Style x:Key="MouseBindingListViewStyle" TargetType="ListView" BasedOn="{StaticResource {x:Type ListView}}">
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListView">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="{TemplateBinding Padding}"
+                                    SnapsToDevicePixels="True">
+                                <DockPanel>
+                                    <GridViewHeaderRowPresenter DockPanel.Dock="Top"
+                                                                Columns="{Binding View.Columns, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderContainerStyle="{Binding View.ColumnHeaderContainerStyle, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderTemplate="{Binding View.ColumnHeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderTemplateSelector="{Binding View.ColumnHeaderTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                AllowsColumnReorder="{Binding View.AllowsColumnReorder, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderContextMenu="{Binding View.ColumnHeaderContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderToolTip="{Binding View.ColumnHeaderToolTip, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </DockPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="MouseBindingListButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignPaperSecondaryLightButton}">
+                <Setter Property="Margin" Value="0,5,20,5" />
+                <Setter Property="Height" Value="30" />
+            </Style>
+            <DataTemplate x:Key="MouseBindingGestureTemplate">
+                <TextBlock VerticalAlignment="Center">
+                    <Run Text="{Binding ModifierPrefix, Mode=OneWay}" /><Run Text="{lex:Loc {Binding MouseButton, Mode=OneWay,
+                                 Converter={StaticResource LocConverter},
+                                 ConverterParameter=ControlPanel:Langs:Page.Control.MouseButtons.}}" />
+                </TextBlock>
+            </DataTemplate>
+            <DataTemplate x:Key="MouseBindingActionTemplate">
+                <TextBlock VerticalAlignment="Center" TextWrapping="Wrap"
+                           Text="{lex:Loc {Binding ActionName, Mode=OneWay,
+                                  Converter={StaticResource LocConverter},
+                                  ConverterParameter=ControlPanel:Langs:Mouse.Action.}}" />
+            </DataTemplate>
+            <DataTemplate x:Key="MouseBindingOperationsTemplate">
+                <Button Content="{lex:Loc ControlPanel:Langs:Page.Control.MouseAction.Unbind}"
+                        Style="{StaticResource MouseBindingListButtonStyle}"
+                        Click="MouseActionUnbind_OnClick" />
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -185,171 +238,215 @@
                             <TextBlock HorizontalAlignment="Center" FontSize="13" Text="{lex:Loc Page.Control.Mouse}" />
                         </StackPanel>
                     </TabItem.Header>
-                    <StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel>
 
-                        <TextBlock FontSize="25" Margin="10" Text="{lex:Loc Page.Control.MouseAction.OnDesktop}" />
+                            <TextBlock FontSize="25" Margin="10" Text="{lex:Loc Page.Control.MouseAction.OnDesktop}" />
 
-                        <Grid x:Name="DesktopMouseActionBox">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                            <Grid x:Name="DesktopMouseActionBox">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                            <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0" Grid.Column="0">
-                                <StackPanel.Resources>
+                                <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0" Grid.Column="0">
+                                    <StackPanel.Resources>
 
-                                </StackPanel.Resources>
-                                <UniformGrid Columns="4">
-                                    <CheckBox IsChecked="{Binding LWin}">LWin</CheckBox>
-                                    <CheckBox IsChecked="{Binding Ctrl}">Ctrl</CheckBox>
-                                    <CheckBox IsChecked="{Binding Alt}">Alt</CheckBox>
-                                    <CheckBox IsChecked="{Binding Shift}">Shift</CheckBox>
-                                </UniformGrid>
-                                <ComboBox MinWidth="100"
-                                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                          ItemsSource="{Binding MouseButtons}"
-                                          SelectedValuePath="Value"
-                                          SelectedValue="{Binding MouseButton}" FontSize="15" Padding="5">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock
-                                                Text="{lex:Loc {Binding Value,Mode=OneWay,
+                                    </StackPanel.Resources>
+                                    <UniformGrid Columns="4">
+                                        <CheckBox IsChecked="{Binding LWin}">LWin</CheckBox>
+                                        <CheckBox IsChecked="{Binding Ctrl}">Ctrl</CheckBox>
+                                        <CheckBox IsChecked="{Binding Alt}">Alt</CheckBox>
+                                        <CheckBox IsChecked="{Binding Shift}">Shift</CheckBox>
+                                    </UniformGrid>
+                                    <ComboBox MinWidth="100"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              ItemsSource="{Binding MouseButtons}"
+                                              SelectedValuePath="Value"
+                                              SelectedValue="{Binding MouseButton}" FontSize="15" Padding="5">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                    Text="{lex:Loc {Binding Value,Mode=OneWay,
                                                 Converter={StaticResource LocConverter},ConverterParameter=Page.Control.MouseButtons.}}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                            </StackPanel>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left">
-                                <TextBlock FontSize="30" Margin="0,8,10,10" Text="{lex:Loc Page.Control.MouseAction.Behavior}" />
-                                <ComboBox MinWidth="200" Width="400" x:Name="cbbDesktopActions"
-                                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                          ItemsSource="{Binding DesktopActions}"
-                                          SelectedValuePath="Value"
-                                          FontSize="15" Padding="5">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock
-                                                Text="{lex:Loc {Binding Value,Mode=OneWay,
+                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left">
+                                    <TextBlock FontSize="30" Margin="0,8,10,10" Text="{lex:Loc Page.Control.MouseAction.Behavior}" />
+                                    <ComboBox MinWidth="200" Width="450" x:Name="cbbDesktopActions"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              ItemsSource="{Binding DesktopActions}"
+                                              SelectedValuePath="Value"
+                                              FontSize="15" Padding="5">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                    Text="{lex:Loc {Binding Value,Mode=OneWay,
                                                 Converter={StaticResource LocConverter},ConverterParameter=Mouse.Action.}}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                    <ComboBox.SelectedValue>
-                                        <MultiBinding Converter="{StaticResource MouseActionConverter}" Mode="OneWay">
-                                            <Binding Path="." Source="{StaticResource madp}" />
-                                            <Binding Path="LWin" />
-                                            <Binding Path="Ctrl" />
-                                            <Binding Path="Alt" />
-                                            <Binding Path="Shift" />
-                                            <Binding Path="MouseButton" />
-                                        </MultiBinding>
-                                    </ComboBox.SelectedValue>
-                                </ComboBox>
-                                <Button Content="{lex:Loc Page.Control.MouseAction.Bind}" Click="DesktopActionBind_OnClick" />
-                            </StackPanel>
-                            <!-- <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" -->
-                            <!--           HorizontalAlignment="Stretch" materialDesign:ExpanderAssist.HorizontalHeaderPadding="10 0" -->
-                            <!--           Header="{lex:Loc Page.Control.MouseAction.ExpanderHeader}"> -->
-                            <!--     <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="10"> -->
-                            <!--         <TextBlock Text="{lex:Loc Page.Control.MouseAction.DesktopBindings}" /> -->
-                            <!--     </StackPanel> -->
-                            <!-- </Expander> -->
-                        </Grid>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                        <ComboBox.SelectedValue>
+                                            <MultiBinding Converter="{StaticResource MouseActionConverter}" Mode="OneWay">
+                                                <Binding Path="." Source="{StaticResource madp}" />
+                                                <Binding Path="LWin" />
+                                                <Binding Path="Ctrl" />
+                                                <Binding Path="Alt" />
+                                                <Binding Path="Shift" />
+                                                <Binding Path="MouseButton" />
+                                            </MultiBinding>
+                                        </ComboBox.SelectedValue>
+                                    </ComboBox>
+                                    <Button Content="{lex:Loc Page.Control.MouseAction.Bind}" Click="DesktopActionBind_OnClick" />
+                                </StackPanel>
+                                <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                          HorizontalAlignment="Stretch" materialDesign:ExpanderAssist.HorizontalHeaderPadding="10 0"
+                                          Header="{lex:Loc Page.Control.MouseAction.ExpanderHeader}">
+                                    <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="10">
+                                        <TextBlock Text="{lex:Loc Page.Control.MouseAction.DesktopBindings}" TextWrapping="Wrap" Margin="0,0,0,10" />
+                                        <materialDesign:Card materialDesign:ElevationAssist.Elevation="Dp2"
+                                                             Background="{DynamicResource MaterialDesign.Brush.Background}">
+                                            <ListView x:Name="DesktopBindingList"
+                                                      Style="{StaticResource MouseBindingListViewStyle}"
+                                                      ItemsSource="{Binding Bindings}"
+                                                      SelectionChanged="MouseBindingList_OnSelectionChanged">
+                                                <ListView.View>
+                                                    <GridView>
+                                                        <GridViewColumn Width="220" CellTemplate="{StaticResource MouseBindingGestureTemplate}">
+                                                            <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Control.MouseAction.Column.Gesture}" />
+                                                        </GridViewColumn>
+                                                        <GridViewColumn Width="450" CellTemplate="{StaticResource MouseBindingActionTemplate}">
+                                                            <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Control.MouseAction.Column.Action}" />
+                                                        </GridViewColumn>
+                                                        <GridViewColumn Width="140" CellTemplate="{StaticResource MouseBindingOperationsTemplate}">
+                                                            <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Control.MouseAction.Column.Operations}" />
+                                                        </GridViewColumn>
+                                                    </GridView>
+                                                </ListView.View>
+                                            </ListView>
+                                        </materialDesign:Card>
+                                    </StackPanel>
+                                </Expander>
+                            </Grid>
 
-                        <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource MaterialDesignDivider}" />
+                            <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource MaterialDesignDivider}" />
 
-                        <TextBlock FontSize="25" Margin="10" Text="{lex:Loc Page.Control.MouseAction.OnThumb}" />
+                            <TextBlock FontSize="25" Margin="10" Text="{lex:Loc Page.Control.MouseAction.OnThumb}" />
 
-                        <Grid x:Name="WindowMouseActionBox">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0" Grid.Column="0">
+                            <Grid x:Name="WindowMouseActionBox">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0" Grid.Column="0">
 
-                                <UniformGrid Columns="4">
-                                    <CheckBox IsChecked="{Binding LWin}">LWin</CheckBox>
-                                    <CheckBox IsChecked="{Binding Ctrl}">Ctrl</CheckBox>
-                                    <CheckBox IsChecked="{Binding Alt}">Alt</CheckBox>
-                                    <CheckBox IsChecked="{Binding Shift}">Shift</CheckBox>
-                                </UniformGrid>
+                                    <UniformGrid Columns="4">
+                                        <CheckBox IsChecked="{Binding LWin}">LWin</CheckBox>
+                                        <CheckBox IsChecked="{Binding Ctrl}">Ctrl</CheckBox>
+                                        <CheckBox IsChecked="{Binding Alt}">Alt</CheckBox>
+                                        <CheckBox IsChecked="{Binding Shift}">Shift</CheckBox>
+                                    </UniformGrid>
 
-                                <ComboBox MinWidth="100"
-                                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                          ItemsSource="{Binding MouseButtons}"
-                                          SelectedValuePath="Value"
-                                          SelectedValue="{Binding MouseButton}" FontSize="15" Padding="5">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock
-                                                Text="{lex:Loc {Binding Value,Mode=OneWay,
+                                    <ComboBox MinWidth="100"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              ItemsSource="{Binding MouseButtons}"
+                                              SelectedValuePath="Value"
+                                              SelectedValue="{Binding MouseButton}" FontSize="15" Padding="5">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                    Text="{lex:Loc {Binding Value,Mode=OneWay,
                                                 Converter={StaticResource LocConverter},ConverterParameter=Page.Control.MouseButtons.}}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left">
-                                <TextBlock FontSize="30" Margin="0,8,10,10" Text="{lex:Loc Page.Control.MouseAction.Behavior}" />
-                                <ComboBox MinWidth="200" Width="400" x:Name="cbbWindowActions"
-                                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                          ItemsSource="{Binding WindowActions}"
-                                          SelectedValuePath="Value"
-                                          FontSize="15" Padding="5">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock
-                                                Text="{lex:Loc {Binding Value,Mode=OneWay,
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left">
+                                    <TextBlock FontSize="30" Margin="0,8,10,10" Text="{lex:Loc Page.Control.MouseAction.Behavior}" />
+                                    <ComboBox MinWidth="200" Width="450" x:Name="cbbWindowActions"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              ItemsSource="{Binding WindowActions}"
+                                              SelectedValuePath="Value"
+                                              FontSize="15" Padding="5">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                    Text="{lex:Loc {Binding Value,Mode=OneWay,
                                                 Converter={StaticResource LocConverter},ConverterParameter=Mouse.Action.}}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                    <ComboBox.SelectedValue>
-                                        <MultiBinding Converter="{StaticResource MouseActionConverter}" Mode="OneWay">
-                                            <Binding Path="." Source="{StaticResource mawp}" />
-                                            <Binding Path="LWin" />
-                                            <Binding Path="Ctrl" />
-                                            <Binding Path="Alt" />
-                                            <Binding Path="Shift" />
-                                            <Binding Path="MouseButton" />
-                                        </MultiBinding>
-                                    </ComboBox.SelectedValue>
-                                </ComboBox>
-                                <Button Content="{lex:Loc Page.Control.MouseAction.Bind}" Click="WindowActionBind_OnClick" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                        <ComboBox.SelectedValue>
+                                            <MultiBinding Converter="{StaticResource MouseActionConverter}" Mode="OneWay">
+                                                <Binding Path="." Source="{StaticResource mawp}" />
+                                                <Binding Path="LWin" />
+                                                <Binding Path="Ctrl" />
+                                                <Binding Path="Alt" />
+                                                <Binding Path="Shift" />
+                                                <Binding Path="MouseButton" />
+                                            </MultiBinding>
+                                        </ComboBox.SelectedValue>
+                                    </ComboBox>
+                                    <Button Content="{lex:Loc Page.Control.MouseAction.Bind}" Click="WindowActionBind_OnClick" />
+                                </StackPanel>
+                                <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                          HorizontalAlignment="Stretch" materialDesign:ExpanderAssist.HorizontalHeaderPadding="10 0"
+                                          Header="{lex:Loc Page.Control.MouseAction.ExpanderHeader}">
+                                    <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="10">
+                                        <TextBlock Text="{lex:Loc Page.Control.MouseAction.WindowBindings}" TextWrapping="Wrap" Margin="0,0,0,10" />
+                                        <materialDesign:Card materialDesign:ElevationAssist.Elevation="Dp2"
+                                                             Background="{DynamicResource MaterialDesign.Brush.Background}">
+                                            <ListView x:Name="WindowBindingList"
+                                                      Style="{StaticResource MouseBindingListViewStyle}"
+                                                      ItemsSource="{Binding Bindings}"
+                                                      SelectionChanged="MouseBindingList_OnSelectionChanged">
+                                                <ListView.View>
+                                                    <GridView>
+                                                        <GridViewColumn Width="220" CellTemplate="{StaticResource MouseBindingGestureTemplate}">
+                                                            <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Control.MouseAction.Column.Gesture}" />
+                                                        </GridViewColumn>
+                                                        <GridViewColumn Width="450" CellTemplate="{StaticResource MouseBindingActionTemplate}">
+                                                            <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Control.MouseAction.Column.Action}" />
+                                                        </GridViewColumn>
+                                                        <GridViewColumn Width="140" CellTemplate="{StaticResource MouseBindingOperationsTemplate}">
+                                                            <GridViewColumnHeader Content="{lex:Loc ControlPanel:Langs:Page.Control.MouseAction.Column.Operations}" />
+                                                        </GridViewColumn>
+                                                    </GridView>
+                                                </ListView.View>
+                                            </ListView>
+                                        </materialDesign:Card>
+                                    </StackPanel>
+                                </Expander>
+                            </Grid>
+
+                            <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource MaterialDesignDivider}" />
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="10" FontSize="25" Text="{lex:Loc Page.Control.Mouse.UseWheelSwitchDesktopWhenOnTaskbar}" />
+                                <ToggleButton x:Name="UseWheelSwitchDesktopWhenOnTaskbar"
+                                              Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                              Width="50" Margin="5,5"
+                                              IsChecked="{Binding Path=UseWheelSwitchDesktopWhenOnTaskbar, Mode=TwoWay}" />
                             </StackPanel>
-                            <!-- <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" -->
-                            <!--           HorizontalAlignment="Stretch" materialDesign:ExpanderAssist.HorizontalHeaderPadding="10 0" -->
-                            <!--           Header="{lex:Loc Page.Control.MouseAction.ExpanderHeader}"> -->
-                            <!--     <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="10"> -->
-                            <!--         <TextBlock Text="{lex:Loc Page.Control.MouseAction.WindowBindings}" /> -->
-                            <!--     </StackPanel> -->
-                            <!-- </Expander> -->
-                        </Grid>
 
-                        <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource MaterialDesignDivider}" />
+                            <UniformGrid Rows="2" Columns="2" Width="500" MinWidth="500" HorizontalAlignment="Left" Margin="0 0 0 50">
+                                <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.Up}" />
+                                <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.Down}" />
+                                <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.SUp}" />
+                                <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.SDown}" />
+                            </UniformGrid>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="10" FontSize="25" Text="{lex:Loc Page.Control.Mouse.UseWheelSwitchDesktopWhenOnTaskbar}" />
-                            <ToggleButton x:Name="UseWheelSwitchDesktopWhenOnTaskbar"
-                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                          Width="50" Margin="5,5"
-                                          IsChecked="{Binding Path=UseWheelSwitchDesktopWhenOnTaskbar, Mode=TwoWay}" />
                         </StackPanel>
-
-                        <UniformGrid Rows="2" Columns="2" Width="500" MinWidth="500" HorizontalAlignment="Left">
-                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.Up}" />
-                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.Down}" />
-                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.SUp}" />
-                            <TextBlock Margin="10,5" Text="{lex:Loc Page.Control.Mouse.Wheel.SDown}" />
-                        </UniformGrid>
-
-                    </StackPanel>
+                    </ScrollViewer>
 
                 </TabItem>
             </TabControl>

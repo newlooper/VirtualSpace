@@ -15,6 +15,7 @@ using System.Windows.Controls;
 using ControlPanel.ViewModels;
 using MaterialDesignThemes.Wpf;
 using VirtualSpace;
+using VirtualSpace.Config;
 
 namespace ControlPanel.Pages;
 
@@ -34,8 +35,8 @@ public partial class Control
         mdc.IconKind  = iconKind;
 
         KeyBindingBox.DataContext                      = new KeyBindingModel();
-        DesktopMouseActionBox.DataContext              = new MouseActionModel();
-        WindowMouseActionBox.DataContext               = new MouseActionModel();
+        DesktopMouseActionBox.DataContext              = new MouseActionModel( MouseAction.MOUSE_NODE_DESKTOP_PREFIX );
+        WindowMouseActionBox.DataContext               = new MouseActionModel( MouseAction.MOUSE_NODE_WINDOW_PREFIX );
         UseWheelSwitchDesktopWhenOnTaskbar.DataContext = WindowMouseActionBox.DataContext;
 
         LoadKeyboardTreeView();

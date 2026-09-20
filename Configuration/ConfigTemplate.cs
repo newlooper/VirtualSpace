@@ -44,7 +44,7 @@ public class ConfigTemplate
     };
 
     [JsonIgnore] public Dictionary<string, MouseAction.Action>? MouseAction  { get; init; } = new();
-    public              Dictionary<string, MouseAction.Action>  MouseActions { get; set; }  = new();
+    public              Dictionary<string, MouseAction.Action>? MouseActions { get; set; }
 
     [PropertyProtector]
     [JsonIgnore]
@@ -58,17 +58,13 @@ public class ConfigTemplate
 
     public MouseAction.Action GetMouseActionById( string id )
     {
-        if ( MouseActions.Count == 0 )
-        {
-            MouseActions = Config.MouseAction.Info;
-        }
-
-        return MouseActions.GetValueOrDefault( id, Config.MouseAction.Action.DoNothing );
+        return MouseActions?.GetValueOrDefault( id, Config.MouseAction.Action.DoNothing )
+               ?? Config.MouseAction.Action.DoNothing;
     }
 
     public static void ConvertOldMouseAction( ConfigTemplate configs )
     {
-        if ( configs.MouseActions.Count != 0 )
+        if ( configs.MouseActions is not null )
         {
             return;
         }
@@ -82,6 +78,7 @@ public class ConfigTemplate
         else
         {
             Logger.Info( "Old version MouseActions found, try to convert to new version." );
+            configs.MouseActions = new Dictionary<string, MouseAction.Action>();
             try
             {
                 EntityConverter.ConvertMouseAction( configs.MouseAction, configs.MouseActions );
