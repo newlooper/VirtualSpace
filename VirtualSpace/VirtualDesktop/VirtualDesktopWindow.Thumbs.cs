@@ -93,6 +93,8 @@ public partial class VirtualDesktopWindow
 
         //////////////////////////////////////
         // thumb container size
+        var ox          = VdwSurface.ChromeInsetPixelX;
+        var oy          = VdwSurface.ChromeInsetPixelY;
         var pixelWidth  = PixelWidth;
         var pixelHeight = PixelHeight;
         var thumbWidth  = ( pixelWidth - ( cols + 1 ) * marginH ) / cols;
@@ -102,7 +104,7 @@ public partial class VirtualDesktopWindow
         // show thumbnails
         for ( int index = 0, row = 0; row < rows; row++ )
         {
-            var topLeftY = _vdwPadding + ( row + 1 ) * marginV + row * thumbHeight;
+            var topLeftY = oy + _vdwPadding + ( row + 1 ) * marginV + row * thumbHeight;
 
             for ( var col = 0; col < cols; col++ )
             {
@@ -111,7 +113,7 @@ public partial class VirtualDesktopWindow
                     break;
                 }
 
-                var topLeftX = _vdwPadding + ( col + 1 ) * marginH + col * thumbWidth;
+                var topLeftX = ox + _vdwPadding + ( col + 1 ) * marginH + col * thumbWidth;
 
                 var i = DwmApi.DwmRegisterThumbnail( Handle, _visibleWindows[index].Handle, out var thumb );
 

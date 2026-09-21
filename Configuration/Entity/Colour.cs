@@ -24,3 +24,10 @@ public class Colour
         return (uint)( R * 0x10000 + G * 0x100 + B );
     }
 }
+
+public class ShadowColour
+{
+    [PropertyProtector( 255, 0 )] public byte R { get; set; }
+    [PropertyProtector( 255, 0 )] public byte G { get; set; }
+    [PropertyProtector( 255, 0 )] public byte B { get; set; }
+}

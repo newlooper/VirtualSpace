@@ -39,8 +39,8 @@ internal partial class VdwSurface : Window
     {
         _hook = hook;
         InitializeComponent();
-        WindowStartupLocation = WindowStartupLocation.Manual;
-        IsVisibleChanged     += OnIsVisibleChanged;
+        WindowStartupLocation =  WindowStartupLocation.Manual;
+        IsVisibleChanged      += OnIsVisibleChanged;
     }
 
     internal int VdIndex { get; set; }
@@ -104,7 +104,7 @@ internal partial class VdwSurface : Window
 
         if ( _desktopLabel != null )
         {
-            Root.Children.Remove( _desktopLabel );
+            ContentRoot.Children.Remove( _desktopLabel );
         }
 
         _desktopLabel = useColorEmoji
@@ -115,7 +115,7 @@ internal partial class VdwSurface : Window
         _desktopLabel.FontFamily       = new FontFamily( "Segoe UI, Segoe UI Emoji" );
         _desktopLabel.IsHitTestVisible = false;
         _desktopLabel.Effect           = LabelOutline;
-        Root.Children.Add( _desktopLabel );
+        ContentRoot.Children.Add( _desktopLabel );
     }
 
     private static DropShadowEffect CreateLabelOutline()
@@ -172,9 +172,59 @@ internal partial class VdwSurface : Window
         }
     }
 
+    internal static double ChromeInsetDip => VdwShadow.MaxDip + Math.Max( 0, ConfigManager.CurrentProfile.UI.VDWBorderSize );
+
+    internal static int ChromeInsetPixelX => Math.Max( 0, (int)Math.Round( ChromeInsetDip * SysInfo.Dpi.ScaleX ) );
+
+    internal static int ChromeInsetPixelY => Math.Max( 0, (int)Math.Round( ChromeInsetDip * SysInfo.Dpi.ScaleY ) );
+
+    internal void ApplyChrome( bool isCurrent, bool hover = false )
+    {
+        var ui    = ConfigManager.CurrentProfile.UI;
+        var max   = VdwShadow.MaxDip;
+        var shown = isCurrent ? VdwShadow.CurrentDip : VdwShadow.DefaultDip;
+        var ring  = new GridLength( max );
+
+        ShadowLeft.Width    = ring;
+        ShadowRight.Width   = ring;
+        ShadowTop.Height    = ring;
+        ShadowBottom.Height = ring;
+
+        SizeTowardContent( ShadowTl, shown, shown );
+        SizeTowardContent( ShadowTr, shown, shown );
+        SizeTowardContent( ShadowBl, shown, shown );
+        SizeTowardContent( ShadowBr, shown, shown );
+        SizeTowardContent( ShadowT, double.NaN, shown );
+        SizeTowardContent( ShadowB, double.NaN, shown );
+        SizeTowardContent( ShadowL, shown, double.NaN );
+        SizeTowardContent( ShadowR, shown, double.NaN );
+
+        var slices = isCurrent ? VdwShadow.CurrentSlices : VdwShadow.DefaultSlices;
+        ShadowTl.Source = slices.Tl;
+        ShadowT.Source  = slices.T;
+        ShadowTr.Source = slices.Tr;
+        ShadowL.Source  = slices.L;
+        ShadowR.Source  = slices.R;
+        ShadowBl.Source = slices.Bl;
+        ShadowB.Source  = slices.B;
+        ShadowBr.Source = slices.Br;
+
+        ContentBorder.BorderThickness = new Thickness( Math.Max( 0, ui.VDWBorderSize ) );
+        var c = hover ? ui.VDWHighlightBackColor!
+            : isCurrent ? ui.VDWCurrentBackColor!
+            : ui.VDWDefaultBackColor!;
+        ContentBorder.BorderBrush = new SolidColorBrush( System.Windows.Media.Color.FromRgb( c.R, c.G, c.B ) );
+    }
+
+    private static void SizeTowardContent( FrameworkElement el, double width, double height )
+    {
+        el.Width  = width;
+        el.Height = height;
+    }
+
     internal void SetBackColor( Color color )
     {
-        Background = new SolidColorBrush( System.Windows.Media.Color.FromRgb( color.R, color.G, color.B ) );
+        ContentBorder.Background = new SolidColorBrush( System.Windows.Media.Color.FromRgb( color.R, color.G, color.B ) );
     }
 
     private void FixStyle()

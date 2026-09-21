@@ -72,9 +72,13 @@ public partial class VirtualDesktopWindow
         set => _surface.Top = value;
     }
 
-    private int PixelWidth => Math.Max( 0, (int)Math.Round( _surface.Width * SysInfo.Dpi.ScaleX ) );
+    private int PixelWidth => Math.Max( 0, (int)Math.Round( ContentWidthDip * SysInfo.Dpi.ScaleX ) );
 
-    private int PixelHeight => Math.Max( 0, (int)Math.Round( _surface.Height * SysInfo.Dpi.ScaleY ) );
+    private int PixelHeight => Math.Max( 0, (int)Math.Round( ContentHeightDip * SysInfo.Dpi.ScaleY ) );
+
+    private double ContentWidthDip => Math.Max( 0, _surface.Width - 2 * VdwSurface.ChromeInsetDip );
+
+    private double ContentHeightDip => Math.Max( 0, _surface.Height - 2 * VdwSurface.ChromeInsetDip );
 
     private Rectangle PixelBoundsOnScreen
     {
@@ -236,17 +240,12 @@ public partial class VirtualDesktopWindow
         }
 
         var location = MainWindow.GetCellLocationByMatrixIndex( matrixIndex );
-        var left     = location.X + ui.VDWBorderSize;
-        var top      = location.Y + ui.VDWBorderSize;
-
-        Left = left;
-        Top  = top;
-
-        var size         = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
-        var vdwWidthDip  = size.Width - 2 * ui.VDWBorderSize;
-        var vdwHeightDip = size.Height - 2 * ui.VDWBorderSize;
-        var vdwWidthPx   = vdwWidthDip * scaleX;
-        var vdwHeightPx  = vdwHeightDip * scaleY;
+        var size     = MainWindow.GetCellSizeByMatrixIndex( matrixIndex );
+        var maxS     = VdwShadow.MaxDip;
+        var contentW = size.Width - 2 * ui.VDWBorderSize;
+        var contentH = size.Height - 2 * ui.VDWBorderSize;
+        var vdwWidthPx   = contentW * scaleX;
+        var vdwHeightPx  = contentH * scaleY;
 
         ////////////////////////////////////////////////////////////////
         // 虚拟桌面容器的宽/高下限，宽/高任意一个低于此值，虚拟桌面直接不显示
@@ -261,11 +260,25 @@ public partial class VirtualDesktopWindow
             return;
         }
 
-        SetSurfaceSize( vdwWidthDip, vdwHeightDip );
+        SetSurfaceSize( size.Width + 2 * maxS, size.Height + 2 * maxS );
+        Left = location.X - maxS;
+        Top  = location.Y - maxS;
+        _surface.ApplyChrome( VdId == DesktopWrapper.CurrentGuid );
 
         if ( !_surface.IsVisible )
         {
             _surface.Show();
         }
+    }
+
+    public void RefreshChrome( bool hover = false )
+    {
+        if ( !_surface.Dispatcher.CheckAccess() )
+        {
+            _surface.Dispatcher.Invoke( () => RefreshChrome( hover ) );
+            return;
+        }
+
+        _surface.ApplyChrome( VdId == DesktopWrapper.CurrentGuid, hover );
     }
 }

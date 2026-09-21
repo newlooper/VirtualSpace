@@ -5,9 +5,44 @@
         WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False"
         ShowActivated="False" Topmost="True" Focusable="False"
         SnapsToDevicePixels="True" UseLayoutRounding="True"
-        Background="#FF000000">
+        Background="#01000000">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="-1" CaptionHeight="0" />
+    </WindowChrome.WindowChrome>
     <Grid x:Name="Root">
-        <Image x:Name="WallpaperImage" Stretch="Fill"
-               RenderOptions.BitmapScalingMode="NearestNeighbor" />
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="ShadowTop" Height="0" />
+            <RowDefinition Height="*" />
+            <RowDefinition x:Name="ShadowBottom" Height="0" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="ShadowLeft" Width="0" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition x:Name="ShadowRight" Width="0" />
+        </Grid.ColumnDefinitions>
+
+        <Image x:Name="ShadowTl" Grid.Row="0" Grid.Column="0" Stretch="Fill" IsHitTestVisible="False"
+               HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+        <Image x:Name="ShadowT" Grid.Row="0" Grid.Column="1" Stretch="Fill" IsHitTestVisible="False"
+               VerticalAlignment="Bottom" />
+        <Image x:Name="ShadowTr" Grid.Row="0" Grid.Column="2" Stretch="Fill" IsHitTestVisible="False"
+               HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+        <Image x:Name="ShadowL" Grid.Row="1" Grid.Column="0" Stretch="Fill" IsHitTestVisible="False"
+               HorizontalAlignment="Right" />
+        <Image x:Name="ShadowR" Grid.Row="1" Grid.Column="2" Stretch="Fill" IsHitTestVisible="False"
+               HorizontalAlignment="Left" />
+        <Image x:Name="ShadowBl" Grid.Row="2" Grid.Column="0" Stretch="Fill" IsHitTestVisible="False"
+               HorizontalAlignment="Right" VerticalAlignment="Top" />
+        <Image x:Name="ShadowB" Grid.Row="2" Grid.Column="1" Stretch="Fill" IsHitTestVisible="False"
+               VerticalAlignment="Top" />
+        <Image x:Name="ShadowBr" Grid.Row="2" Grid.Column="2" Stretch="Fill" IsHitTestVisible="False"
+               HorizontalAlignment="Left" VerticalAlignment="Top" />
+
+        <Border x:Name="ContentBorder" Grid.Row="1" Grid.Column="1" BorderThickness="0">
+            <Grid x:Name="ContentRoot">
+                <Image x:Name="WallpaperImage" Stretch="Fill"
+                       RenderOptions.BitmapScalingMode="NearestNeighbor" />
+            </Grid>
+        </Border>
     </Grid>
 </Window>

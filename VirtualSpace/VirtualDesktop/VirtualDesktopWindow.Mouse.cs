@@ -380,13 +380,16 @@ public partial class VirtualDesktopWindow
             return;
         }
 
-        SetSurfaceSize( w, h );
+        var maxS = VdwShadow.MaxDip;
+        var winW = size.Width + 2 * maxS;
+        var winH = size.Height + 2 * maxS;
+        SetSurfaceSize( winW, winH );
 
         var (scaleX, scaleY) = SysInfo.Dpi;
         var cursor = Cursor.Position;
-        Left      = cursor.X / scaleX - w / 2;
-        Top       = cursor.Y / scaleY - h / 2;
-        _startDip = new System.Windows.Point( w / 2, h / 2 );
+        Left      = cursor.X / scaleX - winW / 2;
+        Top       = cursor.Y / scaleY - winH / 2;
+        _startDip = new System.Windows.Point( winW / 2, winH / 2 );
     }
 
     private int HoverOnDesktop()
