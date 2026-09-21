@@ -10,32 +10,73 @@ You should have received a copy of the GNU General Public License along with Vir
 */
 
 using System;
-using System.ComponentModel;
-using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Interop;
 using VirtualSpace.Config;
+using VirtualSpace.Helpers;
 
 namespace VirtualSpace.VirtualDesktop;
 
-public partial class DragWindow : Form
+internal partial class DragWindow : Window
 {
     private DragWindow()
     {
         InitializeComponent();
+        WindowStartupLocation = WindowStartupLocation.Manual;
     }
 
-    [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
-    public IntPtr Thumb { get; set; }
+    internal IntPtr Handle { get; private set; }
 
-    public static DragWindow CreateAndShow( int width, int height )
+    internal IntPtr Thumb { get; set; }
+
+    internal int PixelWidth => Math.Max( 0, (int)Math.Round( Width * SysInfo.Dpi.ScaleX ) );
+
+    internal int PixelHeight => Math.Max( 0, (int)Math.Round( Height * SysInfo.Dpi.ScaleY ) );
+
+    internal static DragWindow CreateAndShow( int width, int height )
     {
-        var dw = new DragWindow();
-        dw.TopLevel      = true;
-        dw.TopMost       = true;
-        dw.ShowInTaskbar = false;
-        dw.Width         = width;
-        dw.Height        = height;
-        dw.Text          = Const.Window.VD_DRAG_TITLE;
+        var (scaleX, scaleY) = SysInfo.Dpi;
+        var dw = new DragWindow
+        {
+            Title  = Const.Window.VD_DRAG_TITLE,
+            Width  = Math.Max( 1, width ) / scaleX,
+            Height = Math.Max( 1, height ) / scaleY
+        };
+        dw.EnsureCreated();
         dw.Show();
         return dw;
+    }
+
+    internal void MoveCenterToScreenPixel( int x, int y )
+    {
+        var (scaleX, scaleY) = SysInfo.Dpi;
+        Left                 = x / scaleX - Width / 2;
+        Top                  = y / scaleY - Height / 2;
+    }
+
+    private void EnsureCreated()
+    {
+        new WindowInteropHelper( this ).EnsureHandle();
+    }
+
+    protected override void OnSourceInitialized( EventArgs e )
+    {
+        base.OnSourceInitialized( e );
+        Handle = new WindowInteropHelper( this ).EnsureHandle();
+        FixStyle();
+    }
+
+    private void FixStyle()
+    {
+        var style = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_STYLE );
+        style = unchecked( style | (int)0x80000000 ); // WS_POPUP
+        User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_STYLE, style );
+
+        var exStyle = User32.GetWindowLong( Handle, (int)GetWindowLongFields.GWL_EXSTYLE );
+        exStyle |= 0x00000080; // WS_EX_TOOLWINDOW
+        exStyle |= 0x08000000; // WS_EX_NOACTIVATE
+        exStyle &= ~0x00040000; // WS_EX_APPWINDOW
+        User32.SetWindowLongPtr( new HandleRef( this, Handle ), (int)GetWindowLongFields.GWL_EXSTYLE, exStyle );
     }
 }

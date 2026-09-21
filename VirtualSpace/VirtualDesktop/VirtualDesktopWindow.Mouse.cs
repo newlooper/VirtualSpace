@@ -102,7 +102,7 @@ public partial class VirtualDesktopWindow
                         fVisible      = true,
                         dwFlags       = DwmApi.DWM_TNP_VISIBLE | DwmApi.DWM_TNP_RECTDESTINATION | DwmApi.DWM_TNP_OPACITY,
                         opacity       = byte.MaxValue,
-                        rcDestination = new RECT( 0, 0, _dw.Width, _dw.Height )
+                        rcDestination = new RECT( 0, 0, _dw.PixelWidth, _dw.PixelHeight )
                     };
                     _dw.Thumb = thumb;
                     UpdateThumbnail( _dw.Thumb, props );
@@ -113,8 +113,7 @@ public partial class VirtualDesktopWindow
                 _           = DwmApi.DwmUpdateThumbnailProperties( _selectedWindow.Thumb, ref dtp );
             }
 
-            _dw.Left = Cursor.Position.X - _dw.Width / 2;
-            _dw.Top  = Cursor.Position.Y - _dw.Height / 2;
+            _dw.MoveCenterToScreenPixel( Cursor.Position.X, Cursor.Position.Y );
         }
         else
         {
