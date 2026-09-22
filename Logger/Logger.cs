@@ -29,43 +29,43 @@ public static class Logger
     public static void Verbose( string str )
     {
         LogToGui( "VERBOSE", str );
-        LogManager.Write( LogManager.Verbose, LogLevel.Trace, str );
+        LogManager.Write( LogFile.Verbose, LogLevel.Trace, str );
     }
 
     public static void Debug( string str )
     {
         LogToGui( "DEBUG", str );
-        LogManager.Write( LogManager.Debug, LogLevel.Debug, str );
+        LogManager.Write( LogFile.Debug, LogLevel.Debug, str );
     }
 
     public static void Event( string str )
     {
         LogToGui( "EVENT", str );
-        LogManager.Write( LogManager.Event, LogLevel.Debug, str );
+        LogManager.Write( LogFile.Event, LogLevel.Debug, str );
     }
 
     public static void Plugin( string str )
     {
         LogToGui( "DEBUG", str );
-        LogManager.Write( LogManager.Plugin, LogLevel.Debug, str );
+        LogManager.Write( LogFile.Plugin, LogLevel.Debug, str );
     }
 
     public static void Info( string str )
     {
         LogToGui( "INFO", str );
-        LogManager.Write( LogManager.Info, LogLevel.Information, str );
+        LogManager.Write( LogFile.Info, LogLevel.Information, str );
     }
 
     public static void Warning( string str )
     {
         LogToGui( "WARNING", str );
-        LogManager.Write( LogManager.Warning, LogLevel.Warning, str );
+        LogManager.Write( LogFile.Warning, LogLevel.Warning, str );
     }
 
     public static void Error( string str, NotifyObject? notify = null )
     {
         LogToGui( "ERROR", str );
-        LogManager.Write( LogManager.Error, LogLevel.Error, str );
+        LogManager.Write( LogFile.Error, LogLevel.Error, str );
         if ( notify != null )
         {
             notify.Background = new SolidColorBrush( Colors.DarkRed );

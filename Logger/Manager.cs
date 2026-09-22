@@ -12,25 +12,33 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using Microsoft.Extensions.Logging;
 using ZLogger;
 
 namespace VirtualSpace.AppLogs;
 
+internal enum LogFile
+{
+    Verbose,
+    Debug,
+    Event,
+    Plugin,
+    Info,
+    Warning,
+    Error,
+    Fatal
+}
+
 public static class LogManager
 {
-    private static readonly List<ILoggerFactory> Factories = [];
-    private static          LogLevel             _minLevel = LogLevel.Trace;
+    private static readonly Lock                         Sync      = new();
+    private static readonly List<ILoggerFactory>         Factories = [];
+    private static readonly Dictionary<LogFile, ILogger> Loggers   = [];
+    private static          LogLevel                     _minLevel = LogLevel.Trace;
+    private static          bool                         _open;
 
-    public static   string  LogsPath { get; private set; } = "";
-    internal static ILogger Verbose  { get; private set; } = null!;
-    internal static ILogger Debug    { get; private set; } = null!;
-    internal static ILogger Event    { get; private set; } = null!;
-    internal static ILogger Plugin   { get; private set; } = null!;
-    internal static ILogger Info     { get; private set; } = null!;
-    internal static ILogger Warning  { get; private set; } = null!;
-    internal static ILogger Error    { get; private set; } = null!;
-    internal static ILogger Fatal    { get; private set; } = null!;
+    public static string LogsPath { get; private set; } = "";
 
     public static void InitLogger( string folder )
     {
@@ -44,24 +52,26 @@ public static class LogManager
         CloseAndFlush();
         LogArchiver.RotateAndArchiveInBackground( LogsPath );
 
-        Verbose = CreateFileLogger( "verbose.txt" );
-        Debug   = CreateFileLogger( "debug.txt" );
-        Event   = CreateFileLogger( "event.txt", "EVT" );
-        Plugin  = CreateFileLogger( "plugin.txt" );
-        Info    = CreateFileLogger( "info.txt" );
-        Warning = CreateFileLogger( "warning.txt" );
-        Error   = CreateFileLogger( "error.txt" );
-        Fatal   = CreateFileLogger( "fatal.txt" );
+        lock ( Sync )
+        {
+            _open = true;
+        }
     }
 
     public static void CloseAndFlush()
     {
-        foreach ( var factory in Factories )
+        lock ( Sync )
         {
-            factory.Dispose();
-        }
+            _open = false;
 
-        Factories.Clear();
+            foreach ( var factory in Factories )
+            {
+                factory.Dispose();
+            }
+
+            Factories.Clear();
+            Loggers.Clear();
+        }
     }
 
     public static void SetLogLevel( string level )
@@ -78,20 +88,60 @@ public static class LogManager
         };
     }
 
-    internal static void Write( ILogger logger, LogLevel level, string message )
+    internal static void Write( LogFile file, LogLevel level, string message )
     {
-        if ( level < _minLevel || Factories.Count == 0 )
+        if ( level < _minLevel )
         {
             return;
         }
 
+        ILogger logger;
+        lock ( Sync )
+        {
+            if ( !_open )
+            {
+                return;
+            }
+
+            logger = GetOrCreate( file );
+        }
+
         try
         {
+            if ( !logger.IsEnabled( level ) )
+            {
+                return;
+            }
+
             logger.Log( level, "{Message}", message );
         }
         catch ( ObjectDisposedException )
         {
         }
+    }
+
+    private static ILogger GetOrCreate( LogFile file )
+    {
+        if ( Loggers.TryGetValue( file, out var logger ) )
+        {
+            return logger;
+        }
+
+        logger = file switch
+        {
+            LogFile.Verbose => CreateFileLogger( "verbose.txt" ),
+            LogFile.Debug => CreateFileLogger( "debug.txt" ),
+            LogFile.Event => CreateFileLogger( "event.txt", "EVT" ),
+            LogFile.Plugin => CreateFileLogger( "plugin.txt" ),
+            LogFile.Info => CreateFileLogger( "info.txt" ),
+            LogFile.Warning => CreateFileLogger( "warning.txt" ),
+            LogFile.Error => CreateFileLogger( "error.txt" ),
+            LogFile.Fatal => CreateFileLogger( "fatal.txt" ),
+            _ => throw new ArgumentOutOfRangeException( nameof( file ), file, null )
+        };
+
+        Loggers[file] = logger;
+        return logger;
     }
 
     private static ILogger CreateFileLogger( string fileName, string? levelTag = null )
