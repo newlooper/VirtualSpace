@@ -42,6 +42,9 @@ public static class WinMsg
     public const  int UM_RESTART        = WM_USER + 4;
     public const  int UM_CLIENTNOTIFY   = WM_USER + 5;
 
+    public const int UM_CLIENTNOTIFY_SECOND_INSTANCE = 0;
+    public const int UM_CLIENTNOTIFY_IGNORE_WINDOW   = 1;
+
     public const int ENDSESSION_CLOSEAPP = 0x00000001;
     public const int ENDSESSION_CRITICAL = 0x40000000;
 }

@@ -167,6 +167,9 @@ public static class User32
     [DllImport( "user32.dll" )]
     public static extern int GetWindowText( IntPtr hWnd, StringBuilder buf, int nMaxCount );
 
+    [DllImport( "user32.dll", EntryPoint = "SendMessageW" )]
+    public static extern IntPtr SendMessage( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam );
+
     [DllImport( "shcore.dll" )]
     public static extern uint GetDpiForMonitor( IntPtr hmonitor, MonitorDpiType dpiType, out uint dpiX, out uint dpiY );
 }

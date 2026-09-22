@@ -179,7 +179,7 @@ internal static partial class VirtualDesktopManager
                 if ( win.Classname != Const.ApplicationFrameWindow )
                 {
                     Logger.Warning( $"{ex.Message} ∵ {win.Title}({win.Handle.ToString( "X2" )}), WndClass: {win.Classname}" );
-                    ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByError, list => list.Add( win.Handle ) );
+                    IgnoreWindowHandle( win.Handle );
                 }
             }
         }
@@ -201,7 +201,7 @@ internal static partial class VirtualDesktopManager
             }
             else
             {
-                ShowVisibleWindowsForDesktops( vdwList.ToList() );
+                ShowVisibleWindowsForDesktops( [.. vdwList] );
             }
         }
         catch ( Exception ex )
@@ -256,5 +256,16 @@ internal static partial class VirtualDesktopManager
     public static VirtualDesktopWindow GetCurrentVdw()
     {
         return _virtualDesktops.Single( v => v.VdId == DesktopWrapper.CurrentGuid );
+    }
+
+    internal static void IgnoreWindowHandle( IntPtr hWnd )
+    {
+        if ( hWnd == IntPtr.Zero )
+        {
+            return;
+        }
+
+        ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByError, list =>
+            list.Contains( hWnd ) ? list : list.Add( hWnd ) );
     }
 }

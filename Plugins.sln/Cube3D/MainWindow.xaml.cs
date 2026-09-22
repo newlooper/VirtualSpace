@@ -95,6 +95,17 @@ public partial class MainWindow : Window
         _host = host;
     }
 
+    internal void NotifyHostIgnoreWindow( IntPtr hostHwnd = 0 )
+    {
+        var dest = hostHwnd != IntPtr.Zero ? hostHwnd : _host?.MainWindowHandle ?? IntPtr.Zero;
+        if ( dest == IntPtr.Zero || _handle == IntPtr.Zero )
+        {
+            return;
+        }
+
+        User32.SendMessage( dest, WinMsg.UM_CLIENTNOTIFY, WinMsg.UM_CLIENTNOTIFY_IGNORE_WINDOW, _handle );
+    }
+
     internal void OnVirtualDesktopSwitch( VirtualDesktopSwitchInfo vdSwitchInfo )
     {
         if ( _mainWindowRunningAnimationCount != 0 )
@@ -260,6 +271,7 @@ public partial class MainWindow : Window
                 (int)GetWindowLongFields.GWL_HWNDPARENT,
                 _handle.ToInt32()
             );
+            ow.NotifyHostIgnoreWindow( _host?.MainWindowHandle ?? IntPtr.Zero );
             ow.Show();
         }
     }

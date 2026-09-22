@@ -176,9 +176,18 @@ public partial class MainWindow
 
                 break;
             case WinMsg.UM_CLIENTNOTIFY:
-                if ( TryAcceptRiseView() )
+                switch ( wParam.ToInt32() )
                 {
-                    ToggleOrRiseMainView();
+                    case WinMsg.UM_CLIENTNOTIFY_SECOND_INSTANCE:
+                        if ( TryAcceptRiseView() )
+                        {
+                            ToggleOrRiseMainView();
+                        }
+
+                        break;
+                    case WinMsg.UM_CLIENTNOTIFY_IGNORE_WINDOW:
+                        VirtualDesktopManager.IgnoreWindowHandle( lParam );
+                        break;
                 }
 
                 break;

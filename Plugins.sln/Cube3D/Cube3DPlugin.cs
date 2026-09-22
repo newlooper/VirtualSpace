@@ -121,6 +121,7 @@ public sealed class Cube3DPlugin : PluginBase
 
         _mainWindow = new MainWindow();
         _mainWindow.AttachHost( _host );
+        _mainWindow.NotifyHostIgnoreWindow();
         _mainWindow.Show();
     }
 

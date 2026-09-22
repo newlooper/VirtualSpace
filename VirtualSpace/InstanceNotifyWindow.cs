@@ -106,18 +106,29 @@ internal static class InstanceNotifyWindow
 
     private static IntPtr WndProc( IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam )
     {
-        if ( msg == WinMsg.UM_CLIENTNOTIFY )
+        if ( msg != WinMsg.UM_CLIENTNOTIFY )
         {
-            var main = MainWindow.GetMainWindow();
-            if ( main is { Handle: not 0 } )
-            {
-                Logger.Info( "Only single instance allowed, just bring to top." );
-                User32.PostMessage( main.Handle, WinMsg.UM_CLIENTNOTIFY, 0, 0 );
-            }
+            return User32.DefWindowProc( hWnd, msg, wParam, lParam );
+        }
 
+        var main = MainWindow.GetMainWindow();
+        if ( main is not { Handle: not 0 } )
+        {
             return IntPtr.Zero;
         }
 
-        return User32.DefWindowProc( hWnd, msg, wParam, lParam );
+        var kind = wParam.ToInt32();
+        if ( kind == WinMsg.UM_CLIENTNOTIFY_SECOND_INSTANCE )
+        {
+            Logger.Info( "Only single instance allowed, just bring to top." );
+            User32.PostMessage( main.Handle, WinMsg.UM_CLIENTNOTIFY, WinMsg.UM_CLIENTNOTIFY_SECOND_INSTANCE, 0 );
+        }
+        else
+        {
+            User32.SendMessage( main.Handle, WinMsg.UM_CLIENTNOTIFY, (ulong)kind, (ulong)lParam.ToInt64() );
+        }
+
+        return IntPtr.Zero;
+
     }
 }

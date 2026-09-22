@@ -238,7 +238,7 @@ public partial class App : Application
             return;
         }
 
-        User32.PostMessage( hwnd, WinMsg.UM_CLIENTNOTIFY, 0, 0 );
+        User32.PostMessage( hwnd, WinMsg.UM_CLIENTNOTIFY, WinMsg.UM_CLIENTNOTIFY_SECOND_INSTANCE, 0 );
     }
 
     private static bool TryMutex()
