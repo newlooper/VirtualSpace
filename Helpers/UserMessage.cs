@@ -35,6 +35,7 @@ public static class UserMessage
     public const int ApplyPsLayout                   = 1020;
     public const int ToggleLayout                    = 1021;
     public const int RefreshVdLabel                  = 1022;
+    public const int SyncThumbnailWatch              = 1023;
 
     public const int NavLeft  = 1201;
     public const int NavRight = 1202;

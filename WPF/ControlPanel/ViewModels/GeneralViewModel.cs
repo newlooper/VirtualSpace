@@ -129,6 +129,7 @@ public partial class GeneralViewModel : ViewModelBase
             StyleOfVDIndexOnTrayIcon            = cluster.StyleOfVDIndexOnTrayIcon;
             HideOnStart                         = cluster.HideOnStart;
             EnableWindowFilter                  = cluster.EnableWindowFilter;
+            TrackVisibleWindows                 = cluster.TrackVisibleWindows;
             ForceSetForegroundWindowForMainView = cluster.ForceSetForegroundWindowForMainView;
             _isInitialized                      = true;
         }
@@ -139,6 +140,7 @@ public partial class GeneralViewModel : ViewModelBase
         public new int  StyleOfVDIndexOnTrayIcon            { get; set; }
         public new bool HideOnStart                         { get; set; }
         public new bool EnableWindowFilter                  { get; set; }
+        public new bool TrackVisibleWindows                 { get; set; }
         public new bool ForceSetForegroundWindowForMainView { get; set; }
 
         public void OnPropertyChanged( string propertyName, object before, object after )
@@ -171,6 +173,10 @@ public partial class GeneralViewModel : ViewModelBase
                         break;
                     case nameof( EnableWindowFilter ):
                         _cluster.EnableWindowFilter = EnableWindowFilter;
+                        break;
+                    case nameof( TrackVisibleWindows ):
+                        _cluster.TrackVisibleWindows = TrackVisibleWindows;
+                        User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.SyncThumbnailWatch, 0 );
                         break;
                     case nameof( ForceSetForegroundWindowForMainView ):
                         _cluster.ForceSetForegroundWindowForMainView = ForceSetForegroundWindowForMainView;

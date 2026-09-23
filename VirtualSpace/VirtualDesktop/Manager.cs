@@ -111,82 +111,15 @@ internal static partial class VirtualDesktopManager
 
     public static void ShowVisibleWindowsForDesktops( List<VirtualDesktopWindow>? vdwList = null, int processId = 0 )
     {
-        var allVisibleWindows = GetVisibleWindows();
-        Logger.Verbose( $"VisibleWindows/ApplicationViews: {allVisibleWindows.Count.ToString()}/{DesktopManagerWrapper.GetViewCount().ToString()}" );
-
-        if ( vdwList is null && TryGetOnlyOneInMainView( out var onlyOne ) )
+        ApplyThumbnailSnapshot( vdwList, processId );
+        _thumbWatchProcessId = processId;
+        if ( Manager.Configs.Cluster.TrackVisibleWindows && MainWindow.IsShowing() )
         {
-            vdwList = [onlyOne];
+            StartThumbnailWatch( processId );
         }
-
-        vdwList ??= _virtualDesktops;
-
-        foreach ( var virtualDesktopWindow in vdwList )
+        else
         {
-            virtualDesktopWindow.ClearVisibleWindows();
-        }
-
-        foreach ( var win in allVisibleWindows.Where( win =>
-                     string.IsNullOrEmpty( WindowFilter.Keyword ) ||
-                     win.Title.Contains( WindowFilter.Keyword, StringComparison.CurrentCultureIgnoreCase ) ) )
-        {
-            try
-            {
-                if ( processId != 0 )
-                {
-                    _ = User32.GetWindowThreadProcessId( win.Handle, out var pId );
-                    if ( processId != pId )
-                    {
-                        continue;
-                    }
-                }
-
-                if ( DesktopWrapper.IsWindowPinned( win.Handle ) ||
-                     DesktopWrapper.IsApplicationPinned( win.Handle ) )
-                {
-                    Logger.Debug( $"Desktop[ALL]{win.Title} Is Pinned." );
-                    foreach ( var vdw in vdwList )
-                    {
-                        vdw.AddWindow( new VisibleWindow( win.Title, win.Classname, win.Handle ) );
-                    }
-
-                    continue;
-                }
-
-                var ownerId = DesktopWrapper.GuidFromWindow( win.Handle );
-                if ( vdwList.Count == _virtualDesktops.Count ) // show for all VDs
-                {
-                    var owner = vdwList.Find( v => v.VdId == ownerId );
-                    if ( owner is null )
-                    {
-                        continue;
-                    }
-
-                    owner.AddWindow( win );
-                    Logger.Debug( $"Desktop[{owner.VdIndex.ToString()}]({DesktopWrapper.DesktopNameFromIndex( owner.VdIndex )}) CONTAINS {win.Title}" );
-                }
-                else // show for specific VDs
-                {
-                    foreach ( var vdw in vdwList.Where( vdw => vdw.VdId == ownerId ) )
-                    {
-                        vdw.AddWindow( win );
-                        Logger.Debug( $"Desktop[{vdw.VdIndex.ToString()}]({DesktopWrapper.DesktopNameFromIndex( vdw.VdIndex )}) CONTAINS {win.Title}" );
-                    }
-                }
-            }
-            catch ( Exception ex )
-            {
-                if ( win.Classname != Const.ApplicationFrameWindow )
-                {
-                    Logger.Warning( $"{ex.Message} ∵ {win.Title}({win.Handle.ToString( "X2" )}), WndClass: {win.Classname}" );
-                    IgnoreWindowHandle( win.Handle );
-                }
-            }
-        }
-
-        foreach ( var vdw in vdwList )
-        {
-            vdw.ShowThumbnails();
+            StopThumbnailWatch();
         }
     }
 
@@ -231,6 +164,7 @@ internal static partial class VirtualDesktopManager
 
     public static void HideAllVirtualDesktops()
     {
+        StopThumbnailWatch();
         Menus.CloseContextMenu();
         ClearOnlyOneInMainView();
         foreach ( var vdw in _virtualDesktops )

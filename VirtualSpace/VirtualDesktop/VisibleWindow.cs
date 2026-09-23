@@ -34,6 +34,8 @@ public class VisibleWindow
 
     public IntPtr Thumb { get; set; }
 
+    internal RECT ThumbCell { get; set; }
+
     internal DWM_THUMBNAIL_PROPERTIES DTP { get; set; }
 
     internal void SetValidArea( DWM_THUMBNAIL_PROPERTIES props )

@@ -685,6 +685,15 @@ namespace ControlPanel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When the MainView shown, track changes to visible windows..
+        /// </summary>
+        internal static string Page_General_TrackVisibleWindows {
+            get {
+                return ResourceManager.GetString("Page.General.TrackVisibleWindows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When use hotkey rise the MainView, Close it if the MainView already shown..
         /// </summary>
         internal static string Page_General_HideMainViewIfItsShown {

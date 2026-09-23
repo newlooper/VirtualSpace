@@ -97,6 +97,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <CheckBox Content="{lex:Loc Page.General.HideMainViewIfItsShown}"
                                   IsChecked="{Binding Path=Cluster.HideMainViewIfItsShown}" />
@@ -133,6 +134,9 @@
                         <CheckBox Grid.Row="5" Margin="0,10,0,0"
                                   Content="{lex:Loc Page.General.ForceSetForegroundWindowForMainView}"
                                   IsChecked="{Binding Path=Cluster.ForceSetForegroundWindowForMainView}" />
+                        <CheckBox Grid.Row="6" Margin="0,10,0,0"
+                                  Content="{lex:Loc Page.General.TrackVisibleWindows}"
+                                  IsChecked="{Binding Path=Cluster.TrackVisibleWindows}" />
                     </Grid>
                 </StackPanel>
 

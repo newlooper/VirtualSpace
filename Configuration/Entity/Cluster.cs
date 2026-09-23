@@ -22,6 +22,7 @@ public class Cluster
     public bool HideOnStart                         { get; set; }
     public bool ForceFocusForegroundWindow          { get; set; } = true;
     public bool EnableWindowFilter                  { get; set; }
+    public bool TrackVisibleWindows                 { get; set; } = true;
     public bool TryHarderActivateMinimizedWindow    { get; set; }
     public bool ForceSetForegroundWindowForMainView { get; set; } = true;
     public bool UseSystemTempForCache               { get; set; }

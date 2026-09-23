@@ -21,6 +21,8 @@ namespace VirtualSpace.Tools;
 
 public static class WindowTool
 {
+    private const int WPF_SETMINPOSITION = 0x0001;
+
     private static void MoveWindowToScreen( IntPtr hWnd, Screen destScreen )
     {
         var srcScreen = Screen.FromHandle( hWnd );
@@ -36,32 +38,26 @@ public static class WindowTool
             return;
         }
 
-        var rect         = wp.NormalPosition;
-        var targetX      = destScreen.WorkingArea.X + rect.Left - srcScreen.WorkingArea.Left;
-        var targetY      = destScreen.WorkingArea.Y + rect.Top - srcScreen.WorkingArea.Top;
-        var targetWidth  = rect.Right - rect.Left;
-        var targetHeight = rect.Bottom - rect.Top;
+        var dx = destScreen.WorkingArea.X - srcScreen.WorkingArea.X;
+        var dy = destScreen.WorkingArea.Y - srcScreen.WorkingArea.Y;
+        wp.NormalPosition.Left   += dx;
+        wp.NormalPosition.Top    += dy;
+        wp.NormalPosition.Right  += dx;
+        wp.NormalPosition.Bottom += dy;
 
-        switch ( wp.ShowCmd )
+        if ( IsMinimized( wp.ShowCmd ) )
         {
-            case ShowState.SW_SHOWMAXIMIZED:
-                _ = User32.ShowWindow( hWnd, (short)ShowState.SW_RESTORE );
-                User32.SetWindowPos( hWnd, IntPtr.Zero,
-                    targetX, targetY, targetWidth, targetHeight, 0 );
-                _ = User32.ShowWindow( hWnd, (short)ShowState.SW_MAXIMIZE );
-                break;
-            case ShowState.SW_MINIMIZE:
-            case ShowState.SW_SHOWMINIMIZED:
-                _ = User32.ShowWindow( hWnd, (short)ShowState.SW_RESTORE );
-                User32.SetWindowPos( hWnd, IntPtr.Zero,
-                    targetX, targetY, targetWidth, targetHeight, 0 );
-                // User32.ShowWindow( mi.Vw.Handle, (short)ShowState.SW_SHOWMINIMIZED );
-                break;
-            case ShowState.SW_NORMAL:
-                User32.SetWindowPos( hWnd, IntPtr.Zero,
-                    targetX, targetY, targetWidth, targetHeight, 0 );
-                break;
+            wp.Flags         |= WPF_SETMINPOSITION;
+            wp.MinPosition.X += dx;
+            wp.MinPosition.Y += dy;
         }
+
+        _ = User32.SetWindowPlacement( hWnd, ref wp );
+    }
+
+    private static bool IsMinimized( ShowState showCmd )
+    {
+        return showCmd is ShowState.SW_MINIMIZE or ShowState.SW_SHOWMINIMIZED or ShowState.SW_SHOWMINNOACTIVE or ShowState.SW_FORCEMINIMIZE;
     }
 
     public static void MoveWindowToScreen( IntPtr hWnd, int index )

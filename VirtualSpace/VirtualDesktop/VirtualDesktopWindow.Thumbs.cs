@@ -121,16 +121,15 @@ public partial class VirtualDesktopWindow
                 {
                     _visibleWindows[index].Thumb = thumb;
 
-                    var props = ScaleCenter(
-                        thumb,
-                        new RECT(
-                            (int)topLeftX,
-                            (int)topLeftY,
-                            (int)( topLeftX + thumbWidth ),
-                            (int)( topLeftY + thumbHeight )
-                        )
+                    var cell = new RECT(
+                        (int)topLeftX,
+                        (int)topLeftY,
+                        (int)( topLeftX + thumbWidth ),
+                        (int)( topLeftY + thumbHeight )
                     );
+                    var props = ScaleCenter( thumb, cell );
 
+                    _visibleWindows[index].ThumbCell = cell;
                     _visibleWindows[index].SetValidArea( props );
                     UpdateThumbnail( thumb, props );
                 }

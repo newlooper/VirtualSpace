@@ -25,7 +25,6 @@ public static class Const
     public const int    WindowCheckTimesLimit  = 10;
     public const int    OneSecond              = 1000;
     public const int    OneMinute              = 60 * OneSecond;
-    public const int    WindowCloseTimeout     = 60 * OneSecond;
     public const int    RiseViewInterval       = 100;
     public const int    SwitchDesktopInterval  = 100;
     public const int    FakeHideX              = -10000;

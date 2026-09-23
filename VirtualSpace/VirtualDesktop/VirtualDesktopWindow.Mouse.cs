@@ -12,12 +12,9 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using VirtualSpace.AppLogs;
@@ -451,52 +448,9 @@ public partial class VirtualDesktopWindow
         DesktopWrapper.MakeVisibleByGuid( VdId );
     }
 
-    public async void CloseSelectedWindow( VisibleWindow vw )
+    public void CloseSelectedWindow( VisibleWindow vw )
     {
-        var isWindowPinned = DesktopWrapper.IsWindowPinned( vw.Handle ) || DesktopWrapper.IsApplicationPinned( vw.Handle );
-
         User32.PostMessage( vw.Handle, WinMsg.WM_SYSCOMMAND, WinMsg.SC_CLOSE, 0 );
-
-        await Task.Run( () =>
-        {
-            var sw = Stopwatch.StartNew();
-            while ( sw.ElapsedMilliseconds < Const.WindowCloseTimeout )
-            {
-                Thread.Sleep( 100 );
-                if ( !User32.IsWindowVisible( vw.Handle ) )
-                {
-                    break;
-                }
-            }
-        } ).ConfigureAwait( false );
-
-        if ( _surface.Dispatcher.CheckAccess() )
-        {
-            DoRefresh();
-        }
-        else
-        {
-            _surface.Dispatcher.Invoke( DoRefresh );
-        }
-
-        return;
-
-        void RefreshVDs( bool isPinned )
-        {
-            if ( isPinned )
-            {
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops();
-            }
-            else
-            {
-                VirtualDesktopManager.ShowVisibleWindowsForDesktops( [this] );
-            }
-        }
-
-        void DoRefresh()
-        {
-            RefreshVDs( isWindowPinned );
-        }
     }
 
     public void MakeTheOnlyOne( int pId = 0 )

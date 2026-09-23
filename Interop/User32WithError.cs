@@ -132,6 +132,10 @@ public static partial class User32
 
     [LibraryImport( "user32.dll", SetLastError = true )]
     [return: MarshalAs( UnmanagedType.Bool )]
+    public static partial bool SetWindowPlacement( IntPtr hWnd, ref WINDOWPLACEMENT lpWndPl );
+
+    [LibraryImport( "user32.dll", SetLastError = true )]
+    [return: MarshalAs( UnmanagedType.Bool )]
     public static partial bool AttachThreadInput( int idAttach, int idAttachTo, [MarshalAs( UnmanagedType.Bool )] bool fAttach );
 
     [LibraryImport( "user32.dll", SetLastError = true )]
