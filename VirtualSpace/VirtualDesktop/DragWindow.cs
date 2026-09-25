@@ -64,6 +64,7 @@ internal partial class DragWindow : Window
     {
         base.OnSourceInitialized( e );
         Handle = new WindowInteropHelper( this ).EnsureHandle();
+        VirtualDesktopManager.IgnoreWindowHandle( Handle );
         FixStyle();
     }
 

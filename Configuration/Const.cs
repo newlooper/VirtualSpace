@@ -43,7 +43,8 @@ public static class Const
         public const string INSTANCE_CLASS           = "VirtualSpace__InstanceNotify!";
         public const string VD_CONTAINER_TITLE       = "VirtualSpace__VirtualDesktopWindow!";
         public const string VD_DRAG_TITLE            = "VirtualSpace__VirtualDesktopDragWindow!";
-        public const string VS_CONTROLLER_TITLE      = "[Virtual Space Controller]";
+        public const string VS_CONTROLLER_TITLE      = "Virtual Space";
+        public const string VS_RULE_EDITOR_TITLE     = "Virtual Space";
         public const string VS_WINDOW_FILTER_TITLE   = "VirtualSpace__WindowFilter!";
         public const int    WINDOW_FILTER_BAR_HEIGHT = 100;
     }

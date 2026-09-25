@@ -56,6 +56,7 @@ internal partial class VdwSurface : Window
     {
         base.OnSourceInitialized( e );
         Handle = new WindowInteropHelper( this ).EnsureHandle();
+        VirtualDesktopManager.IgnoreWindowHandle( Handle );
         FixStyle();
         HwndSource.FromHwnd( Handle )?.AddHook( _hook );
     }

@@ -50,13 +50,30 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <commons:MenuContainer x:Name="MenuContainer" Grid.Row="0" />
 
-        <materialDesign:Card materialDesign:ElevationAssist.Elevation="Dp2" Grid.Row="1" Margin="10,10,10,0" Background="{DynamicResource MaterialDesign.Brush.Background}"
-                             Visibility="{Binding Path=IsBottomDrawerOpen, ElementName=DrawerHost, Converter={StaticResource DrawerStateMutexConverter}}">
+        <materialDesign:DrawerHost Grid.Row="1" x:Name="DrawerHost"
+                                   OverlayBackground="Transparent" Width="{Binding ActualWidth, ElementName=MenuContainer}"
+                                   MinWidth="700" Margin="10,0,10,10" HorizontalAlignment="Center" VerticalAlignment="Stretch" BottomDrawerCornerRadius="10">
+
+            <materialDesign:DrawerHost.BottomDrawerContent>
+                <GroupBox VerticalAlignment="Stretch" Margin="10,0"
+                          Height="{Binding ActualHeight, ElementName=DrawerHost}"
+                          Header="{lex:Loc {Binding Path=Id,Converter={StaticResource RuleHeaderByStateConverter}}}">
+                    <userControls:RuleForm x:Name="UserControlRuleEditor" />
+                </GroupBox>
+            </materialDesign:DrawerHost.BottomDrawerContent>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <materialDesign:Card Grid.Row="0" materialDesign:ElevationAssist.Elevation="Dp2" Margin="0,10,0,0" Background="{DynamicResource MaterialDesign.Brush.Background}"
+                                     Visibility="{Binding Path=IsBottomDrawerOpen, ElementName=DrawerHost, Converter={StaticResource DrawerStateMutexConverter}}">
             <ListView x:Name="RuleList" SelectionMode="Single"
                       SelectionChanged="RuleList_OnSelectionChanged"
                       PreviewKeyDown="RuleList_OnPreviewKeyDown"
@@ -103,21 +120,9 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-        </materialDesign:Card>
+                </materialDesign:Card>
 
-        <materialDesign:DrawerHost Grid.Row="2" x:Name="DrawerHost"
-                                   OverlayBackground="Transparent" Width="{Binding ActualWidth, ElementName=MenuContainer}"
-                                   MinWidth="700" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" BottomDrawerCornerRadius="10">
-
-            <materialDesign:DrawerHost.BottomDrawerContent>
-                <GroupBox MinHeight="680" VerticalAlignment="Top" Margin="10,0"
-                          Header="{lex:Loc {Binding Path=Id,Converter={StaticResource RuleHeaderByStateConverter}}}"
-                          Height="{Binding Path=ActualHeight,ElementName=RulesFrame,Converter={StaticResource WidthHeightConverter},ConverterParameter=80}">
-                    <userControls:RuleForm x:Name="UserControlRuleEditor" />
-                </GroupBox>
-            </materialDesign:DrawerHost.BottomDrawerContent>
-
-            <Grid>
+                <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -135,6 +140,7 @@
                     <Button x:Name="btnCloneRule" Content="{lex:Loc Page.Rules.Clone}" IsEnabled="False" Click="BtnCloneRule_OnClick" />
                     <Button x:Name="btnDeleteRule" Content="{lex:Loc Page.Rules.Delete}" IsEnabled="False" Click="BtnDeleteRule_OnClick" />
                 </StackPanel>
+                </Grid>
             </Grid>
 
         </materialDesign:DrawerHost>

@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using ControlPanel.ViewModels;
 using VirtualSpace.Config;
 using VirtualSpace.Config.Events.Entity;
@@ -28,6 +29,12 @@ public partial class RuleEditorWindow
     private RuleEditorWindow()
     {
         InitializeComponent();
+        Title = Const.Window.VS_RULE_EDITOR_TITLE;
+        var self = new WindowInteropHelper( this ).EnsureHandle();
+        if ( MainWindow.MainWindowHandle != IntPtr.Zero )
+        {
+            User32.SendMessage( MainWindow.MainWindowHandle, WinMsg.UM_CLIENTNOTIFY, (ulong)WinMsg.UM_CLIENTNOTIFY_IGNORE_WINDOW, (ulong)self.ToInt64() );
+        }
         AddHandler( Button.ClickEvent, new RoutedEventHandler( ClickEventFromSubControl ) );
     }
 
@@ -112,6 +119,6 @@ public partial class RuleEditorWindow
     private void RuleEditorWindow_OnClosing( object? sender, CancelEventArgs e )
     {
         e.Cancel = true;
-        Hide();
+        Dispatcher.BeginInvoke( Hide );
     }
 }

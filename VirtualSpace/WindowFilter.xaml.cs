@@ -91,6 +91,7 @@ public partial class WindowFilter : Window
     {
         base.OnSourceInitialized( e );
         _handle = new WindowInteropHelper( this ).EnsureHandle();
+        VirtualDesktopManager.IgnoreWindowHandle( _handle );
     }
 
     public void SetFocus()

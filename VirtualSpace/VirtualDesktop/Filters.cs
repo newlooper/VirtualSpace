@@ -11,7 +11,6 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Immutable;
-using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 
 namespace VirtualSpace.VirtualDesktop;
@@ -32,11 +31,6 @@ public static class Filters
 
     public static readonly string[] WndTitleIgnoreList =
     [
-        Const.Window.VD_FRAME_TITLE,
-        Const.Window.VD_CONTAINER_TITLE,
-        Const.Window.VD_DRAG_TITLE,
-        Const.Window.VS_CONTROLLER_TITLE,
-        Const.Window.VS_WINDOW_FILTER_TITLE,
         "WinFormsDesigner"
     ];
 

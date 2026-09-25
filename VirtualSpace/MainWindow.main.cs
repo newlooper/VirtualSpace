@@ -90,6 +90,7 @@ public partial class MainWindow
     {
         base.OnSourceInitialized( e );
         Handle = new WindowInteropHelper( this ).EnsureHandle();
+        VirtualDesktopManager.IgnoreWindowHandle( Handle );
         var source = HwndSource.FromHwnd( Handle );
         source?.AddHook( WndProc );
 

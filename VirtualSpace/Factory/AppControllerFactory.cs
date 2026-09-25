@@ -11,6 +11,7 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using ControlPanel;
+using VirtualSpace.VirtualDesktop;
 
 namespace VirtualSpace.Factory;
 
@@ -23,6 +24,7 @@ public static class AppControllerFactory
 #else
         mergedDictionaries?.Add( ExportResourceDictionary.Instance );
         var mw = new ControlPanel.MainWindow();
+        VirtualDesktopManager.IgnoreWindowHandle( mw.WindowHandle );
         mw.ForceLoad();
         return mw;
 #endif

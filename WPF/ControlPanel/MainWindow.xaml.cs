@@ -56,6 +56,8 @@ public partial class MainWindow : Window, IAppController
 
     public static IntPtr MainWindowHandle => _instance._mainWindowHandle;
 
+    public IntPtr WindowHandle => _handle;
+
     public void BringToTop()
     {
         Left = ( SystemParameters.PrimaryScreenWidth - Width ) / 2;
