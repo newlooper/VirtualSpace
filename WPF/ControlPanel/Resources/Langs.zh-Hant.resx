@@ -357,6 +357,18 @@
     <data name="Page.UI.EnableVdNameColorEmoji" xml:space="preserve">
     <value>啟用虛擬桌面名稱彩色 Emoji</value>
   </data>
+    <data name="Page.UI.ThumbCaptionMode" xml:space="preserve">
+    <value>縮略圖標題欄</value>
+  </data>
+    <data name="Page.UI.ThumbCaptionMode.0" xml:space="preserve">
+    <value>不展示</value>
+  </data>
+    <data name="Page.UI.ThumbCaptionMode.1" xml:space="preserve">
+    <value>在縮略圖上展示視窗標題</value>
+  </data>
+    <data name="Page.UI.ThumbCaptionMode.3" xml:space="preserve">
+    <value>縮略圖按顯示器分組(標題欄強制展示)</value>
+  </data>
     <data name="Page.UI.ShowVdIndex" xml:space="preserve">
     <value>顯示虛擬桌面索引</value>
   </data>

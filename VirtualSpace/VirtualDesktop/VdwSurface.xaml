@@ -42,6 +42,7 @@
             <Grid x:Name="ContentRoot">
                 <Image x:Name="WallpaperImage" Stretch="Fill"
                        RenderOptions.BitmapScalingMode="NearestNeighbor" />
+                <Canvas x:Name="ThumbCaptions" IsHitTestVisible="False" />
             </Grid>
         </Border>
     </Grid>

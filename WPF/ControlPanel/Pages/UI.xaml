@@ -22,6 +22,7 @@
             </Style>
             <converters:UIButtonStyleByVdAConverter x:Key="UIButtonStyleByVdAConverter" />
             <converters:CheckBoxConverter x:Key="CheckBoxConverter" />
+            <converters:LocConverter x:Key="LocConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -34,140 +35,161 @@
         <commons:MenuContainer x:Name="MenuContainer" Grid.Row="0" />
 
         <materialDesign:Card Grid.Row="1" materialDesign:ElevationAssist.Elevation="Dp2" Margin="10,10,10,12" Background="{DynamicResource MaterialDesign.Brush.Background}">
-            <StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
 
-                <TextBlock FontSize="20" Margin="10" Text="{lex:Loc Page.UI.VdArrangement}" />
+                    <TextBlock FontSize="20" Margin="10" Text="{lex:Loc Page.UI.VdArrangement}" />
 
-                <TabControl x:Name="LayoutTabs" Margin="6,0,6,10">
-                    <TabItem Header="{lex:Loc Page.UI.Tab.AutoLayout}">
-                        <StackPanel>
-                            <UniformGrid x:Name="ButtonsContainer" Rows="2" Columns="4" Margin="0,10">
-                                <UniformGrid.Resources>
-                                    <Style TargetType="Button">
-                                        <Style.Resources>
-                                            <Style TargetType="Border">
-                                                <Setter Property="CornerRadius" Value="5" />
-                                            </Style>
-                                        </Style.Resources>
-                                        <Setter Property="Background">
-                                            <Setter.Value>
-                                                <MultiBinding Converter="{StaticResource UIButtonStyleByVdAConverter}" Mode="OneWay" ConverterParameter="B">
-                                                    <Binding Path="VdArrangement" />
-                                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
-                                                </MultiBinding>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="HorizontalAlignment" Value="Center" />
-                                        <Setter Property="FontSize" Value="11" />
-                                        <Setter Property="Margin" Value="0,2,0,15" />
-                                    </Style>
-                                </UniformGrid.Resources>
-                                <StackPanel>
-                                    <Button Width="128" Height="128" Tag="0">
-                                        <StaticResource ResourceKey="M0" />
-                                    </Button>
-                                    <TextBlock Text="{lex:Loc Page.UI.Label.m0}" />
-                                </StackPanel>
-                                <StackPanel>
-                                    <Button Width="128" Height="128" Tag="1">
-                                        <StaticResource ResourceKey="M1" />
-                                    </Button>
-                                    <TextBlock Text="{lex:Loc Page.UI.Label.m1}" />
-                                </StackPanel>
-                                <StackPanel>
-                                    <Button Width="128" Height="128" Tag="2">
-                                        <StaticResource ResourceKey="M2" />
-                                    </Button>
-                                    <TextBlock Text="{lex:Loc Page.UI.Label.m2}" />
-                                </StackPanel>
-                                <StackPanel>
-                                    <Button Width="128" Height="128" Tag="3">
-                                        <StaticResource ResourceKey="M3" />
-                                    </Button>
-                                    <TextBlock Text="{lex:Loc Page.UI.Label.m3}" />
-                                </StackPanel>
-                                <StackPanel>
-                                    <Button Width="128" Height="128" Tag="4">
-                                        <StaticResource ResourceKey="M4" />
-                                    </Button>
-                                    <TextBlock Text="{lex:Loc Page.UI.Label.m4}" />
-                                </StackPanel>
-                                <StackPanel>
-                                    <Button Width="128" Height="128" Tag="5">
-                                        <StaticResource ResourceKey="M5" />
-                                    </Button>
-                                    <TextBlock Text="{lex:Loc Page.UI.Label.m5}" />
-                                </StackPanel>
-                                <StackPanel>
-                                    <Button Width="128" Height="128" Tag="6">
-                                        <StaticResource ResourceKey="M6" />
-                                    </Button>
-                                    <TextBlock Text="{lex:Loc Page.UI.Label.m6}" />
-                                </StackPanel>
-                                <StackPanel>
-                                    <Button Width="128" Height="128" Tag="7">
-                                        <StaticResource ResourceKey="M7" />
-                                    </Button>
-                                    <TextBlock Text="{lex:Loc Page.UI.Label.m7}" />
-                                </StackPanel>
-                            </UniformGrid>
+                    <TabControl x:Name="LayoutTabs" Margin="6,0,6,10">
+                        <TabItem Header="{lex:Loc Page.UI.Tab.AutoLayout}">
+                            <StackPanel>
+                                <UniformGrid x:Name="ButtonsContainer" Rows="2" Columns="4" Margin="0,10">
+                                    <UniformGrid.Resources>
+                                        <Style TargetType="Button">
+                                            <Style.Resources>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="CornerRadius" Value="5" />
+                                                </Style>
+                                            </Style.Resources>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <MultiBinding Converter="{StaticResource UIButtonStyleByVdAConverter}" Mode="OneWay" ConverterParameter="B">
+                                                        <Binding Path="VdArrangement" />
+                                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                    </MultiBinding>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="FontSize" Value="11" />
+                                            <Setter Property="Margin" Value="0,2,0,15" />
+                                        </Style>
+                                    </UniformGrid.Resources>
+                                    <StackPanel>
+                                        <Button Width="128" Height="128" Tag="0">
+                                            <StaticResource ResourceKey="M0" />
+                                        </Button>
+                                        <TextBlock Text="{lex:Loc Page.UI.Label.m0}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <Button Width="128" Height="128" Tag="1">
+                                            <StaticResource ResourceKey="M1" />
+                                        </Button>
+                                        <TextBlock Text="{lex:Loc Page.UI.Label.m1}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <Button Width="128" Height="128" Tag="2">
+                                            <StaticResource ResourceKey="M2" />
+                                        </Button>
+                                        <TextBlock Text="{lex:Loc Page.UI.Label.m2}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <Button Width="128" Height="128" Tag="3">
+                                            <StaticResource ResourceKey="M3" />
+                                        </Button>
+                                        <TextBlock Text="{lex:Loc Page.UI.Label.m3}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <Button Width="128" Height="128" Tag="4">
+                                            <StaticResource ResourceKey="M4" />
+                                        </Button>
+                                        <TextBlock Text="{lex:Loc Page.UI.Label.m4}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <Button Width="128" Height="128" Tag="5">
+                                            <StaticResource ResourceKey="M5" />
+                                        </Button>
+                                        <TextBlock Text="{lex:Loc Page.UI.Label.m5}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <Button Width="128" Height="128" Tag="6">
+                                            <StaticResource ResourceKey="M6" />
+                                        </Button>
+                                        <TextBlock Text="{lex:Loc Page.UI.Label.m6}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <Button Width="128" Height="128" Tag="7">
+                                            <StaticResource ResourceKey="M7" />
+                                        </Button>
+                                        <TextBlock Text="{lex:Loc Page.UI.Label.m7}" />
+                                    </StackPanel>
+                                </UniformGrid>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Header="{lex:Loc Page.UI.Tab.PsLayout}">
+                            <StackPanel>
+                                <materialDesign:Chip Height="80" Margin="0,5,0,0">
+                                    <StackPanel>
+                                        <TextBlock x:Name="PsHintText" FontSize="14" TextWrapping="Wrap" Margin="10,10,10,0"
+                                                   Foreground="{DynamicResource MaterialDesignBody}" />
+                                        <CheckBox x:Name="PsCreateExtrasCheck" Margin="1 0 0 5" IsChecked="False" />
+                                    </StackPanel>
+                                </materialDesign:Chip>
+                                <WrapPanel x:Name="PsPreviewHost" HorizontalAlignment="Center" Margin="0,4" />
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+
+                    <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource MaterialDesignDivider}" />
+
+                    <TextBlock FontSize="20" Margin="10" Text="{lex:Loc Page.UI.VdView}" />
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Content="{lex:Loc Page.UI.ShowVdName}" Margin="10"
+                                  IsChecked="{Binding ShowVdName}" />
+                        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                            <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.TopLeft}" Margin="10,0"
+                                         IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=0}" />
+                            <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.TopRight}" Margin="10,0"
+                                         IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=1}" />
+                            <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.BottomLeft}" Margin="10,0"
+                                         IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=2}" />
+                            <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.BottomRight}" Margin="10,0"
+                                         IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=3}" />
                         </StackPanel>
-                    </TabItem>
-                    <TabItem Header="{lex:Loc Page.UI.Tab.PsLayout}">
-                        <StackPanel>
-                            <materialDesign:Chip Height="80" Margin="0,5,0,0">
-                                <StackPanel>
-                                    <TextBlock x:Name="PsHintText" FontSize="14" TextWrapping="Wrap" Margin="10,10,10,0"
-                                               Foreground="{DynamicResource MaterialDesignBody}" />
-                                    <CheckBox x:Name="PsCreateExtrasCheck" Margin="1 0 0 5" IsChecked="False" />
-                                </StackPanel>
-                            </materialDesign:Chip>
-                            <WrapPanel x:Name="PsPreviewHost" HorizontalAlignment="Center" Margin="0,4" />
+                        <CheckBox Content="{lex:Loc Page.UI.ShowVdIndex}" Grid.Row="1" Grid.Column="0" Margin="10"
+                                  IsChecked="{Binding ShowVdIndex}" />
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                            <RadioButton Content="{lex:Loc Page.UI.ShowVdIndex.ZeroBased}" Margin="10,0"
+                                         IsChecked="{Binding ShowVdIndexType,Converter={StaticResource CheckBoxConverter},ConverterParameter=0}" />
+                            <RadioButton Content="{lex:Loc Page.UI.ShowVdIndex.OneBased}" Margin="10,0"
+                                         IsChecked="{Binding ShowVdIndexType,Converter={StaticResource CheckBoxConverter},ConverterParameter=1}" />
                         </StackPanel>
-                    </TabItem>
-                </TabControl>
 
-                <Rectangle Height="1" Margin="0,10" Fill="{DynamicResource MaterialDesignDivider}" />
+                        <CheckBox Content="{lex:Loc Page.UI.EnableVdNameColorEmoji}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10"
+                                  IsChecked="{Binding EnableVdNameColorEmoji}" />
 
-                <TextBlock FontSize="20" Margin="10" Text="{lex:Loc Page.UI.VdView}" />
+                        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10,0">
+                            <TextBlock Text="{lex:Loc Page.UI.ThumbCaptionMode}" VerticalAlignment="Center" Margin="10 0 0 0" />
+                            <ComboBox Margin="10" MinWidth="280"
+                                      HorizontalAlignment="Left"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      ItemsSource="{Binding ThumbCaptionModeList}"
+                                      SelectedValuePath="Value"
+                                      SelectedValue="{Binding ThumbCaptionMode}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Text="{lex:Loc {Binding Value, Mode=OneWay, Converter={StaticResource LocConverter}, ConverterParameter=Page.UI.ThumbCaptionMode.}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <CheckBox Content="{lex:Loc Page.UI.ShowVdName}" Margin="10"
-                              IsChecked="{Binding ShowVdName}" />
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                        <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.TopLeft}" Margin="10,0"
-                                     IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=0}" />
-                        <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.TopRight}" Margin="10,0"
-                                     IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=1}" />
-                        <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.BottomLeft}" Margin="10,0"
-                                     IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=2}" />
-                        <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.BottomRight}" Margin="10,0"
-                                     IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=3}" />
-                    </StackPanel>
-                    <CheckBox Content="{lex:Loc Page.UI.ShowVdIndex}" Grid.Row="1" Grid.Column="0" Margin="10"
-                              IsChecked="{Binding ShowVdIndex}" />
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                        <RadioButton Content="{lex:Loc Page.UI.ShowVdIndex.ZeroBased}" Margin="10,0"
-                                     IsChecked="{Binding ShowVdIndexType,Converter={StaticResource CheckBoxConverter},ConverterParameter=0}" />
-                        <RadioButton Content="{lex:Loc Page.UI.ShowVdIndex.OneBased}" Margin="10,0"
-                                     IsChecked="{Binding ShowVdIndexType,Converter={StaticResource CheckBoxConverter},ConverterParameter=1}" />
-                    </StackPanel>
-                    <CheckBox Content="{lex:Loc Page.UI.EnableVdNameColorEmoji}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10"
-                              IsChecked="{Binding EnableVdNameColorEmoji}" />
-                </Grid>
-
-            </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
 
         </materialDesign:Card>
     </Grid>

@@ -15,7 +15,7 @@ using VirtualSpace.Helpers;
 
 namespace VirtualSpace.VirtualDesktop;
 
-public class VisibleWindow
+public partial class VisibleWindow
 {
     public VisibleWindow( string title, string classname, IntPtr handle )
     {

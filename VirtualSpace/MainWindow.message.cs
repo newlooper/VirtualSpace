@@ -308,6 +308,13 @@ public partial class MainWindow
                     case UserMessage.RefreshVdLabel:
                         VirtualDesktopManager.RefreshDesktopLabels();
                         break;
+                    case UserMessage.RefreshThumbGrouping:
+                        if ( IsShowing() )
+                        {
+                            VirtualDesktopManager.RelayoutThumbnails();
+                        }
+
+                        break;
                     case UserMessage.SyncThumbnailWatch:
                         VirtualDesktopManager.SyncThumbnailWatch();
                         break;

@@ -9,9 +9,32 @@ VirtualSpace is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using VirtualSpace.Config.DataAnnotations;
 
 namespace VirtualSpace.Config.Entity;
+
+[Flags]
+public enum ThumbCaptionMode
+{
+    None          = 0,
+    Title         = 1,
+    Group         = 2,
+    TitleAndGroup = Title | Group
+}
+
+public static class ThumbCaptionModeOps
+{
+    public static bool ShowsCaption( this ThumbCaptionMode mode )
+    {
+        return ( mode & ( ThumbCaptionMode.Title | ThumbCaptionMode.Group ) ) != 0;
+    }
+
+    public static bool GroupsByMonitor( this ThumbCaptionMode mode )
+    {
+        return ( mode & ThumbCaptionMode.Group ) != 0;
+    }
+}
 
 public class UserInterface
 {
@@ -30,7 +53,10 @@ public class UserInterface
     [PropertyProtector<VdNamePosition>( VdNamePosition.BottomLeft )]
     public VdNamePosition ShowVdNamePosition { get; set; } = VdNamePosition.BottomLeft;
 
-    public                                  bool    EnableVdNameColorEmoji  { get; set; }
+    public                                  bool              EnableVdNameColorEmoji { get; set; }
+
+    [PropertyProtector<ThumbCaptionMode>( ThumbCaptionMode.None )]
+    public ThumbCaptionMode ThumbCaptionMode { get; set; } = ThumbCaptionMode.None;
     [PropertyProtector( 0, 0, 50 )]  public int     VDWPadding              { get; set; }
     [PropertyProtector( 5, 0, 50 )]  public int     VDWBorderSize           { get; set; }
     [PropertyProtector( 8, 8, 50 )]  public int     VDWMargin               { get; set; }

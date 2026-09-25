@@ -43,7 +43,8 @@ public class Default : Profile
             ShowVdIndex             = true,
             ShowVdIndexType         = 0,
             ShowVdNamePosition      = VdNamePosition.BottomLeft,
-            EnableVdNameColorEmoji  = false
+            EnableVdNameColorEmoji  = false,
+            ThumbCaptionMode        = ThumbCaptionMode.None
         };
         DaemonAutoStart = true;
         Mouse = new Mouse

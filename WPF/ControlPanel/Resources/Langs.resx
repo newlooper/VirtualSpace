@@ -357,6 +357,18 @@
     <data name="Page.UI.EnableVdNameColorEmoji" xml:space="preserve">
     <value>Enable Virtual Desktop Name Color Emoji</value>
   </data>
+    <data name="Page.UI.ThumbCaptionMode" xml:space="preserve">
+    <value>Thumbnail title bar</value>
+  </data>
+    <data name="Page.UI.ThumbCaptionMode.0" xml:space="preserve">
+    <value>Don't show</value>
+  </data>
+    <data name="Page.UI.ThumbCaptionMode.1" xml:space="preserve">
+    <value>Show window title on thumbnails</value>
+  </data>
+    <data name="Page.UI.ThumbCaptionMode.3" xml:space="preserve">
+    <value>Group thumbnails by monitor (title bar always shown)</value>
+  </data>
     <data name="Page.UI.ShowVdIndex" xml:space="preserve">
     <value>Show Virtual Desktop Index</value>
   </data>

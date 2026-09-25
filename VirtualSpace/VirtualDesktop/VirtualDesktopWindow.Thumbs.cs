@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Vir
 using System;
 using System.Windows.Threading;
 using VirtualSpace.AppLogs;
+using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
 
 namespace VirtualSpace.VirtualDesktop;
@@ -30,6 +31,7 @@ public partial class VirtualDesktopWindow
     {
         ReleaseThumbnails();
         _visibleWindows.Clear();
+        ClearThumbCaptions();
     }
 
     private void SetSurfaceSize( double width, double height )
@@ -80,10 +82,21 @@ public partial class VirtualDesktopWindow
 
         if ( wndCount < 1 )
         {
+            ClearThumbCaptions();
             return;
         }
 
-        _visibleWindows.Sort( ( x, y ) => string.Compare( x.Title, y.Title, StringComparison.Ordinal ) );
+        var captionMode    = VirtualDesktopManager.Ui.ThumbCaptionMode;
+        var groupByMonitor = captionMode.GroupsByMonitor();
+        var showCaption    = captionMode.ShowsCaption();
+        if ( groupByMonitor )
+        {
+            SortByScreenThenTitle();
+        }
+        else
+        {
+            _visibleWindows.Sort( ( x, y ) => string.Compare( x.Title, y.Title, StringComparison.Ordinal ) );
+        }
 
         var rows = Math.Floor( Math.Sqrt( wndCount ) );
         var cols = Math.Ceiling( wndCount / rows );
@@ -121,21 +134,40 @@ public partial class VirtualDesktopWindow
                 {
                     _visibleWindows[index].Thumb = thumb;
 
-                    var cell = new RECT(
+                    var card = new RECT(
                         (int)topLeftX,
                         (int)topLeftY,
                         (int)( topLeftX + thumbWidth ),
                         (int)( topLeftY + thumbHeight )
                     );
-                    var props = ScaleCenter( thumb, cell );
+                    DWM_THUMBNAIL_PROPERTIES props;
+                    if ( showCaption )
+                    {
+                        var image = CaptionImageRect( card );
+                        props = ScaleCenter( thumb, image );
+                        PinThumbnailUnderCaption( ref props, card, image );
+                    }
+                    else
+                    {
+                        props = ScaleCenter( thumb, card );
+                    }
 
-                    _visibleWindows[index].ThumbCell = cell;
+                    _visibleWindows[index].ThumbCell = card;
                     _visibleWindows[index].SetValidArea( props );
                     UpdateThumbnail( thumb, props );
                 }
 
                 index++;
             }
+        }
+
+        if ( showCaption )
+        {
+            RefreshThumbCaptions();
+        }
+        else
+        {
+            ClearThumbCaptions();
         }
     }
 

@@ -8,6 +8,7 @@
 // 
 // You should have received a copy of the GNU General Public License along with VirtualSpace. If not, see <https://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
 using System.ComponentModel;
 using PropertyChanged;
 using VirtualSpace.Commons;
@@ -30,6 +31,7 @@ public partial class UIViewModel : ViewModelBase
         ShowVdIndexType        = Manager.CurrentProfile.UI.ShowVdIndexType;
         ShowVdNamePosition     = (int)Manager.CurrentProfile.UI.ShowVdNamePosition;
         EnableVdNameColorEmoji = Manager.CurrentProfile.UI.EnableVdNameColorEmoji;
+        ThumbCaptionMode       = (int)Manager.CurrentProfile.UI.ThumbCaptionMode;
         IsPsLayout             = Manager.CurrentProfile.IsPsLayout;
         IsEqualLayout          = !IsPsLayout;
         IsInitialized          = true;
@@ -45,6 +47,14 @@ public partial class UIViewModel : ViewModelBase
     public int  ShowVdIndexType        { get; set; }
     public int  ShowVdNamePosition     { get; set; }
     public bool EnableVdNameColorEmoji { get; set; }
+    public int ThumbCaptionMode { get; set; }
+
+    public List<object> ThumbCaptionModeList { get; } =
+    [
+        new { Value = (int)VirtualSpace.Config.Entity.ThumbCaptionMode.None },
+        new { Value = (int)VirtualSpace.Config.Entity.ThumbCaptionMode.Title },
+        new { Value = (int)( VirtualSpace.Config.Entity.ThumbCaptionMode.Title | VirtualSpace.Config.Entity.ThumbCaptionMode.Group ) }
+    ];
     public int  VdArrangement          { get; set; }
     public int  VdCount                { get; set; }
     public bool IsEqualLayout          { get; set; }
@@ -97,6 +107,12 @@ public partial class UIViewModel : ViewModelBase
                 case nameof( EnableVdNameColorEmoji ):
                     Manager.CurrentProfile.UI.EnableVdNameColorEmoji = (bool)after;
                     Manager.Save( reason: Manager.CurrentProfile.UI.EnableVdNameColorEmoji );
+                    break;
+                case nameof( ThumbCaptionMode ):
+                    Manager.CurrentProfile.UI.ThumbCaptionMode = (VirtualSpace.Config.Entity.ThumbCaptionMode)(int)after;
+                    Manager.Save( reason: Manager.CurrentProfile.UI.ThumbCaptionMode );
+                    refreshVdLabel = false;
+                    User32.PostMessage( MainWindow.MainWindowHandle, WinMsg.WM_HOTKEY, UserMessage.RefreshThumbGrouping, 0 );
                     break;
             }
 

@@ -18,7 +18,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 using VirtualSpace.AppLogs;
-using VirtualSpace.Config;
 using VirtualSpace.Helpers;
 using VirtualSpace.Tools;
 using VirtualSpace.VirtualDesktop.Api;
@@ -52,7 +51,7 @@ public partial class VirtualDesktopWindow
             new Point( _startPoint.X - dragSize.Width / 2, _startPoint.Y - dragSize.Height / 2 ),
             dragSize );
 
-        _selectedWindow = _visibleWindows.FirstOrDefault( w => w.Rect.Contains( _startPoint ) );
+        _selectedWindow = _visibleWindows.FirstOrDefault( w => CapturesPoint( w, _startPoint ) );
         if ( _selectedWindow != null )
         {
             Logger.Verbose( $"SELECT.Win {_selectedWindow.Title}" );

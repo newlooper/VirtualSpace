@@ -15,6 +15,7 @@ using System.Linq;
 using System.Windows.Threading;
 using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
+using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
 
@@ -65,7 +66,17 @@ public partial class VirtualDesktopWindow
             return;
         }
 
-        var props = ScaleCenter( window.Thumb, window.ThumbCell );
+        DWM_THUMBNAIL_PROPERTIES props;
+        if ( VirtualDesktopManager.Ui.ThumbCaptionMode.ShowsCaption() )
+        {
+            var image = CaptionImageRect( window.ThumbCell );
+            props = ScaleCenter( window.Thumb, image );
+            PinThumbnailUnderCaption( ref props, window.ThumbCell, image );
+        }
+        else
+        {
+            props = ScaleCenter( window.Thumb, window.ThumbCell );
+        }
         window.SetValidArea( props );
         UpdateThumbnail( window.Thumb, props );
     }
@@ -157,7 +168,7 @@ internal static partial class VirtualDesktopManager
 
     /// <summary>
     ///     先记无效源，再探测已抑制的源能否恢复，成员变了才整表重排。
-    ///     成员没变时只按源尺寸重贴比例，标题和屏幕位置不触发重排。拖动进行中直接跳过，避免碰到拖动用的另一张缩略图。
+    ///     成员没变时按源尺寸重贴比例。物理显示器变了才重排该虚拟桌面的缩略图和标题栏。标题变化不重排。拖动进行中直接跳过。
     /// </summary>
     private static void OnThumbnailWatch( object? sender, EventArgs e )
     {
@@ -195,6 +206,7 @@ internal static partial class VirtualDesktopManager
                 return;
             }
 
+            RelayoutChangedScreens( targets );
             UpdateStableThumbnailAspects( targets );
             PruneThumbnailCaches( targets );
         }
@@ -585,6 +597,7 @@ internal static partial class VirtualDesktopManager
     {
         foreach ( var vdw in targets )
         {
+            var refit = false;
             foreach ( var window in vdw.ShownWindows )
             {
                 if ( !ThumbHasPixels( window, out var size ) )
@@ -605,6 +618,12 @@ internal static partial class VirtualDesktopManager
 
                 SourceSizes[window.Handle] = size;
                 VirtualDesktopWindow.RefitThumbnail( window );
+                refit = true;
+            }
+
+            if ( refit && VirtualDesktopManager.Ui.ThumbCaptionMode.ShowsCaption() )
+            {
+                vdw.RefreshThumbCaptions();
             }
         }
     }
