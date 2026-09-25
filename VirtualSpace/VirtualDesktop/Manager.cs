@@ -71,7 +71,7 @@ internal static partial class VirtualDesktopManager
 
     private static bool VisibleWindowFilter( IntPtr hWnd, int lParam )
     {
-        if ( Filters.WndHandleIgnoreListByError.Contains( hWnd ) ||
+        if ( Filters.IsIgnoredWindow( Filters.WndHandleIgnoreListByError, hWnd ) ||
              Filters.WndHandleIgnoreListByManual.Contains( hWnd ) ||
              !User32.IsWindowVisible( hWnd ) ||
              Filters.IsCloaked( hWnd ) )
@@ -199,7 +199,12 @@ internal static partial class VirtualDesktopManager
             return;
         }
 
-        ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByError, list =>
-            list.Contains( hWnd ) ? list : list.Add( hWnd ) );
+        _ = User32.GetWindowThreadProcessId( hWnd, out var pid );
+        if ( pid == 0 )
+        {
+            return;
+        }
+
+        ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByError, dict => dict.SetItem( hWnd, pid ) );
     }
 }

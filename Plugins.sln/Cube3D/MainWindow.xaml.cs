@@ -126,6 +126,7 @@ public partial class MainWindow : Window
         {
             _sw = new SettingsWindow();
             _sw.SetMainWindow( this );
+            _sw.NotifyHostIgnoreWindow( _host?.MainWindowHandle ?? IntPtr.Zero );
             _sw.ShowDialog();
         }
         else

@@ -38,8 +38,9 @@ public static class Conditions
     private static readonly Channel<Behavior>                 ActionProducer            = Channels.ActionChannel;
     private static readonly Channel<Window>                   VisibleWindowsConsumer    = Channels.VisibleWindowsChannel;
     private static readonly ConcurrentDictionary<IntPtr, int> WindowCheckTimes          = new();
-    public static           ImmutableList<IntPtr>             WndHandleIgnoreListByRule = ImmutableList<IntPtr>.Empty;
-    private static          long                              _updateRuleLock;
+    public static           ImmutableDictionary<IntPtr, int>  WndHandleIgnoreListByRule = ImmutableDictionary<IntPtr, int>.Empty; // 键为 HWND，值为忽略时的进程号。过滤时须与窗口当前进程号一致才视为同一窗口。
+
+    private static long _updateRuleLock;
 
     private static JsonSerializerOptions? _readOptions;
     private static JsonSerializerOptions? _writeOptions;
@@ -182,7 +183,7 @@ public static class Conditions
 
                 if ( hasMatchedRule )
                 {
-                    ImmutableInterlocked.Update( ref WndHandleIgnoreListByRule, list => list.Add( win.Handle ) );
+                    ImmutableInterlocked.Update( ref WndHandleIgnoreListByRule, dict => dict.SetItem( win.Handle, pId ) );
                     WindowCheckTimes.TryRemove( win.Handle, out _ );
                     return;
                 }
@@ -196,7 +197,7 @@ public static class Conditions
                      WindowCheckTimes[win.Handle] >= Const.WindowCheckTimesLimit - 1 )
                 {
                     Logger.Debug( $"Try find rules for [{win.Title}] too many times, ignore the window." );
-                    ImmutableInterlocked.Update( ref WndHandleIgnoreListByRule, list => list.Add( win.Handle ) );
+                    ImmutableInterlocked.Update( ref WndHandleIgnoreListByRule, dict => dict.SetItem( win.Handle, pId ) );
                     WindowCheckTimes.TryRemove( win.Handle, out _ );
                     return;
                 }

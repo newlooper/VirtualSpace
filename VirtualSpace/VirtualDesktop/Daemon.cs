@@ -180,16 +180,15 @@ internal static class Daemon
 
                 if ( sw.ElapsedMilliseconds >= Const.OneMinute )
                 {
-                    _ = User32.EnumWindows( CleanIgnoreList, 0 );
+                    ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByError, Filters.DropStaleIgnoredWindows );
+                    ImmutableInterlocked.Update( ref Conditions.WndHandleIgnoreListByRule, Filters.DropStaleIgnoredWindows );
                     Logger.Debug( "Daemon running normally in last minute." );
                     sw.Restart();
                 }
-                else
-                {
-                    _ = User32.EnumWindows( WindowRuleFilter, 0 );
-                }
 
-                if ( WaitHandle.WaitAny( new WaitHandle[] { StopEvent }, _runlevel * Const.OneSecond ) == 0 )
+                _ = User32.EnumWindows( WindowRuleFilter, 0 );
+
+                if ( WaitHandle.WaitAny( [StopEvent], _runlevel * Const.OneSecond ) == 0 )
                 {
                     return;
                 }
@@ -199,8 +198,8 @@ internal static class Daemon
 
     private static bool WindowRuleFilter( IntPtr hWnd, int lParam )
     {
-        if ( Conditions.WndHandleIgnoreListByRule.Contains( hWnd ) ||
-             Filters.WndHandleIgnoreListByError.Contains( hWnd ) ||
+        if ( Filters.IsIgnoredWindow( Conditions.WndHandleIgnoreListByRule, hWnd ) ||
+             Filters.IsIgnoredWindow( Filters.WndHandleIgnoreListByError, hWnd ) ||
              !User32.IsWindowVisible( hWnd ) ||
              Filters.IsCloaked( hWnd ) )
         {
@@ -240,27 +239,5 @@ internal static class Daemon
     private static void SendToCheckingRule( IntPtr hWnd, string title, string classname )
     {
         VisibleWindowsProducer.Writer.TryWrite( new Window { Title = title, WndClass = classname, Handle = hWnd } );
-    }
-
-    /// <summary>
-    ///     概要：非可靠的清理窗口规则忽略列表的办法，可满足日常使用。
-    ///     原有问题：对于窗口规则重度使用场景，无论因何种原因导致已销毁窗口的 HWND 被新窗口复用，若该 HWND 在忽略列表中，将无法再进行窗口规则检查。
-    ///     现有方案：尽量保持原有机制且不增加资源占用的前提下，大幅降低上述问题的概率
-    ///     成立前提：借助 _daemonTask 中的 Const.OneMinute 心跳，期望的是“在某窗口被销毁的一分钟内，不会有相同 HWND 的窗口被创建出来”。
-    ///     额外说明：最可靠的是 HWND+PID+TIMESTAMP 做键，但代价过于高昂，因此保留通过 HWND 判断的机制。
-    /// </summary>
-    /// <param name="hWnd"></param>
-    /// <param name="lParam"></param>
-    private static bool CleanIgnoreList( IntPtr hWnd, int lParam )
-    {
-        if ( User32.IsWindow( hWnd ) )
-        {
-            return true;
-        }
-
-        ImmutableInterlocked.Update( ref Conditions.WndHandleIgnoreListByRule, list => list.Remove( hWnd ) );
-        ImmutableInterlocked.Update( ref Filters.WndHandleIgnoreListByError, list => list.Remove( hWnd ) );
-
-        return true;
     }
 }

@@ -34,8 +34,54 @@ public static class Filters
         "WinFormsDesigner"
     ];
 
-    public static ImmutableList<IntPtr> WndHandleIgnoreListByError  = ImmutableList<IntPtr>.Empty;
+    /// <summary>
+    ///     键为 HWND，值为忽略时的进程号。过滤时须与窗口当前进程号一致才视为同一窗口。
+    ///     别的进程复用该句柄时当场放行。同一进程内句柄被复用仍会跳过。
+    /// </summary>
+    public static ImmutableDictionary<IntPtr, int> WndHandleIgnoreListByError = ImmutableDictionary<IntPtr, int>.Empty;
+
     public static ImmutableList<IntPtr> WndHandleIgnoreListByManual = ImmutableList<IntPtr>.Empty;
+
+    public static bool IsIgnoredWindow( ImmutableDictionary<IntPtr, int> ignored, IntPtr hWnd )
+    {
+        if ( !ignored.TryGetValue( hWnd, out var storedPid ) )
+        {
+            return false;
+        }
+
+        _ = User32.GetWindowThreadProcessId( hWnd, out var pid );
+        return pid != 0 && pid == storedPid;
+    }
+
+    /// <summary>
+    ///     扫忽略表本身，去掉已销毁的句柄，以及句柄还在但进程号已经换过的项。
+    /// </summary>
+    public static ImmutableDictionary<IntPtr, int> DropStaleIgnoredWindows( ImmutableDictionary<IntPtr, int> ignored )
+    {
+        if ( ignored.IsEmpty )
+        {
+            return ignored;
+        }
+
+        var builder = ignored.ToBuilder();
+        var removed = false;
+        foreach ( var (hWnd, storedPid) in ignored )
+        {
+            if ( User32.IsWindow( hWnd ) )
+            {
+                _ = User32.GetWindowThreadProcessId( hWnd, out var pid );
+                if ( pid == storedPid )
+                {
+                    continue;
+                }
+            }
+
+            builder.Remove( hWnd );
+            removed = true;
+        }
+
+        return removed ? builder.ToImmutable() : ignored;
+    }
 
     public static bool IsCloaked( IntPtr handle )
     {

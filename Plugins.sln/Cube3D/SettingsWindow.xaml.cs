@@ -11,9 +11,11 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using Cube3D.Config;
 using Cube3D.Effects;
+using VirtualSpace.Helpers;
 
 namespace Cube3D;
 
@@ -122,6 +124,17 @@ public partial class SettingsWindow : Window
     public void SetMainWindow( MainWindow mw )
     {
         _mainWindow = mw;
+    }
+
+    internal void NotifyHostIgnoreWindow( IntPtr hostHwnd )
+    {
+        var self = new WindowInteropHelper( this ).EnsureHandle();
+        if ( hostHwnd == IntPtr.Zero || self == IntPtr.Zero )
+        {
+            return;
+        }
+
+        User32.SendMessage( hostHwnd, WinMsg.UM_CLIENTNOTIFY, (IntPtr)WinMsg.UM_CLIENTNOTIFY_IGNORE_WINDOW, self );
     }
 
     private void ApplyEffect_OnClick( object sender, RoutedEventArgs e )
