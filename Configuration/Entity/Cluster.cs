@@ -32,4 +32,5 @@ public class Cluster
     [PropertyProtector( 200, 100, 1000 )]  public int  ToggleWindowFilterDoublePressMaxInterval { get; set; }
     [PropertyProtector( 1000, 100, 1000 )] public int  WindowFilterKeywordScanningInterval      { get; set; }
     [PropertyProtector( 30, 10, 1000 )]    public int  ActivateWindowTimeout                    { get; set; }
+    [PropertyProtector( 300, 100, 1000 )]  public int  ThumbnailWatchInterval                   { get; set; }
 }

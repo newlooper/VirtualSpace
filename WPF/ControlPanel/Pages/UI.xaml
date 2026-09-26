@@ -119,14 +119,15 @@
                         </TabItem>
                         <TabItem Header="{lex:Loc Page.UI.Tab.PsLayout}">
                             <StackPanel>
-                                <materialDesign:Chip Height="80" Margin="0,5,0,0">
-                                    <StackPanel>
-                                        <TextBlock x:Name="PsHintText" FontSize="14" TextWrapping="Wrap" Margin="10,10,10,0"
+                                <WrapPanel x:Name="PsPreviewHost" HorizontalAlignment="Center" Margin="0,4" />
+                                <materialDesign:Chip Height="50" >
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock x:Name="PsHintText" FontSize="14" TextWrapping="Wrap" Margin="10,0,10,0"
+                                                   VerticalAlignment="Center"
                                                    Foreground="{DynamicResource MaterialDesignBody}" />
-                                        <CheckBox x:Name="PsCreateExtrasCheck" Margin="1 0 0 5" IsChecked="False" />
+                                        <CheckBox x:Name="PsCreateExtrasCheck" VerticalAlignment="Center" IsChecked="False" />
                                     </StackPanel>
                                 </materialDesign:Chip>
-                                <WrapPanel x:Name="PsPreviewHost" HorizontalAlignment="Center" Margin="0,4" />
                             </StackPanel>
                         </TabItem>
                     </TabControl>
@@ -137,7 +138,6 @@
 
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition />
                             <RowDefinition />
                             <RowDefinition />
                             <RowDefinition />
@@ -157,6 +157,9 @@
                                          IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=2}" />
                             <RadioButton Content="{lex:Loc Page.UI.ShowVdNamePosition.BottomRight}" Margin="10,0"
                                          IsChecked="{Binding ShowVdNamePosition,Converter={StaticResource CheckBoxConverter},ConverterParameter=3}" />
+                            <CheckBox Content="{lex:Loc Page.UI.EnableVdNameColorEmoji}" Margin="10,0"
+                                      VerticalAlignment="Center"
+                                      IsChecked="{Binding EnableVdNameColorEmoji}" />
                         </StackPanel>
                         <CheckBox Content="{lex:Loc Page.UI.ShowVdIndex}" Grid.Row="1" Grid.Column="0" Margin="10"
                                   IsChecked="{Binding ShowVdIndex}" />
@@ -167,10 +170,7 @@
                                          IsChecked="{Binding ShowVdIndexType,Converter={StaticResource CheckBoxConverter},ConverterParameter=1}" />
                         </StackPanel>
 
-                        <CheckBox Content="{lex:Loc Page.UI.EnableVdNameColorEmoji}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10"
-                                  IsChecked="{Binding EnableVdNameColorEmoji}" />
-
-                        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10,0">
+                        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10,0">
                             <TextBlock Text="{lex:Loc Page.UI.ThumbCaptionMode}" VerticalAlignment="Center" Margin="10 0 0 0" />
                             <ComboBox Margin="10" MinWidth="280"
                                       HorizontalAlignment="Left"

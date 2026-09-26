@@ -95,7 +95,7 @@ public partial class VirtualDesktopWindow
         }
         else
         {
-            _visibleWindows.Sort( ( x, y ) => string.Compare( x.Title, y.Title, StringComparison.Ordinal ) );
+            _visibleWindows.Sort( WindowTitleOrder() );
         }
 
         var rows = Math.Floor( Math.Sqrt( wndCount ) );

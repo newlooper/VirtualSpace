@@ -104,7 +104,6 @@ internal static partial class VirtualDesktopManager
     // 只在主视图显示且 TrackVisibleWindows 打开时跑。关掉开关会停掉定时器，不再占 Dispatcher。
     // 稳定期盖住启动后的空源、短暂 cloak 和短暂不可见。壳层 cloak 表示窗口在其他虚拟桌面，仍然显示。
     // 稳定期结束后，源连续 INVALID_SOURCE_STREAK 次没有像素才抑制；隐藏或重度 cloak 的窗口连续缺席 ABSENT_SOURCE_STREAK 次才拿掉。
-    private const int THUMBNAIL_WATCH_INTERVAL_MS = 400;
     private const int THUMBNAIL_SETTLE_MS         = 2000;
     private const int INVALID_SOURCE_STREAK       = 2;
     private const int ABSENT_SOURCE_STREAK        = 4;
@@ -148,7 +147,7 @@ internal static partial class VirtualDesktopManager
 
         var dispatcher = MainWindow.GetMainWindow().Dispatcher;
         _thumbWatch = new DispatcherTimer(
-            TimeSpan.FromMilliseconds( THUMBNAIL_WATCH_INTERVAL_MS ),
+            TimeSpan.FromMilliseconds( Manager.Configs.Cluster.ThumbnailWatchInterval ),
             DispatcherPriority.Background,
             OnThumbnailWatch,
             dispatcher );

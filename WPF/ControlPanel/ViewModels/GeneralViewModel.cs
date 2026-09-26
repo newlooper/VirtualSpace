@@ -131,6 +131,7 @@ public partial class GeneralViewModel : ViewModelBase
             EnableWindowFilter                  = cluster.EnableWindowFilter;
             TrackVisibleWindows                 = cluster.TrackVisibleWindows;
             ForceSetForegroundWindowForMainView = cluster.ForceSetForegroundWindowForMainView;
+            ThumbnailWatchInterval              = cluster.ThumbnailWatchInterval;
             _isInitialized                      = true;
         }
 
@@ -142,6 +143,7 @@ public partial class GeneralViewModel : ViewModelBase
         public new bool EnableWindowFilter                  { get; set; }
         public new bool TrackVisibleWindows                 { get; set; }
         public new bool ForceSetForegroundWindowForMainView { get; set; }
+        public new int  ThumbnailWatchInterval              { get; set; }
 
         public void OnPropertyChanged( string propertyName, object before, object after )
         {
@@ -183,6 +185,7 @@ public partial class GeneralViewModel : ViewModelBase
                         break;
                 }
 
+                _cluster.ThumbnailWatchInterval = ThumbnailWatchInterval;
                 Manager.SaveCluster( Manager.Configs.Cluster );
             }
 

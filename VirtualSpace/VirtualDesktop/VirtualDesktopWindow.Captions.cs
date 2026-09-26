@@ -11,12 +11,15 @@ You should have received a copy of the GNU General Public License along with Vir
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Media;
 using VirtualSpace.Config;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
 using VirtualSpace.VirtualDesktop.Api;
+using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
 
 namespace VirtualSpace.VirtualDesktop;
@@ -27,7 +30,13 @@ public partial class VirtualDesktopWindow
     private const double CAPTION_FONT_DIP = 12;
     private const double CAPTION_BAR_DIP  = CAPTION_FACE_DIP + VdwSurface.CAPTION_RADIUS_DIP;
 
-    // Windows 设置 → 个性化 → 颜色 → 主题色里的深色。下标对应 Screen.AllScreens 序号，顺序固定。
+    private const int TITLE_GROUP_DIGIT = 0;
+    private const int TITLE_GROUP_LATIN = 1;
+    private const int TITLE_GROUP_HAN   = 2;
+    private const int TITLE_GROUP_OTHER = 3;
+
+    // 大都来自 Windows 设置 \ 个性化 \ 颜色 \ 主题色里的深色。
+    // 下标对应 Screen.AllScreens 序号，顺序固定。
     private static readonly Color[] AccentColors =
     [
         Color.FromRgb( 0x00, 0x63, 0xB1 ),
@@ -47,10 +56,10 @@ public partial class VirtualDesktopWindow
     // 只展示标题、不按显示器分组时，所有标题栏用同一种深灰。
     private static readonly SolidColorBrush CaptionPlainBackground = FrozenBrush( Color.FromRgb( 0x50, 0x50, 0x50 ) );
 
+    private static readonly CompareInfo PinyinTitleOrder = CultureInfo.GetCultureInfo( "zh-Hans" ).CompareInfo;
+
     private readonly List<ThumbCaptionBand> _thumbCaptions = [];
     private          bool                   _thumbCaptionBold;
-
-    private readonly record struct ScreenSlot( int Index, string Name );
 
     internal bool ScreenOwnershipChanged()
     {
@@ -88,6 +97,7 @@ public partial class VirtualDesktopWindow
             window.ScreenDevice = slot.Name;
         }
 
+        var byTitle = WindowTitleOrder();
         _visibleWindows.Sort( ( a, b ) =>
         {
             var byScreen = a.ScreenIndex.CompareTo( b.ScreenIndex );
@@ -96,7 +106,7 @@ public partial class VirtualDesktopWindow
                 return byScreen;
             }
 
-            return string.Compare( a.Title, b.Title, StringComparison.Ordinal );
+            return byTitle( a, b );
         } );
     }
 
@@ -154,7 +164,7 @@ public partial class VirtualDesktopWindow
         _surface.SetThumbCaptions( _thumbCaptions );
     }
 
-    internal void RefreshChromeCaptionWeight()
+    private void RefreshChromeCaptionWeight()
     {
         var current = VdId == DesktopWrapper.CurrentGuid;
         if ( _thumbCaptionBold == current || !VirtualDesktopManager.Ui.ThumbCaptionMode.ShowsCaption() )
@@ -165,7 +175,7 @@ public partial class VirtualDesktopWindow
         RefreshThumbCaptions();
     }
 
-    private static bool CapturesPoint( VisibleWindow window, System.Drawing.Point point )
+    private static bool CapturesPoint( VisibleWindow window, Point point )
     {
         if ( window.Rect.Contains( point ) || !VirtualDesktopManager.Ui.ThumbCaptionMode.ShowsCaption() )
         {
@@ -179,7 +189,7 @@ public partial class VirtualDesktopWindow
             return false;
         }
 
-        var strip = new System.Drawing.Rectangle(
+        var strip = new Rectangle(
             thumb.Left,
             window.ThumbCell.Top,
             thumb.Right - thumb.Left,
@@ -247,6 +257,93 @@ public partial class VirtualDesktopWindow
         return Math.Min( bar, Math.Max( 1, cardHeight / 2 ) );
     }
 
+    private static Comparison<VisibleWindow> WindowTitleOrder()
+    {
+        var language = VirtualDesktopManager.Ui.Language;
+        if ( language.StartsWith( "zh", StringComparison.OrdinalIgnoreCase ) )
+        {
+            return CompareTitleByScript;
+        }
+
+        return ( a, b ) => string.Compare( a.Title, b.Title, StringComparison.Ordinal );
+    }
+
+    private static int CompareTitleByScript( VisibleWindow a, VisibleWindow b )
+    {
+        var left      = a.Title ?? "";
+        var right     = b.Title ?? "";
+        var leftGroup = TitleGroup( left );
+        var byGroup   = leftGroup - TitleGroup( right );
+        if ( byGroup != 0 )
+        {
+            return byGroup;
+        }
+
+        return leftGroup == TITLE_GROUP_HAN
+            ? PinyinTitleOrder.Compare( left, right, CompareOptions.IgnoreCase )
+            : string.Compare( left, right, StringComparison.OrdinalIgnoreCase );
+    }
+
+    private static int TitleGroup( string title )
+    {
+        for ( var i = 0; i < title.Length; i++ )
+        {
+            var c = title[i];
+            if ( char.IsWhiteSpace( c ) || char.IsPunctuation( c ) || char.IsSymbol( c ) )
+            {
+                continue;
+            }
+
+            if ( char.IsDigit( c ) )
+            {
+                return TITLE_GROUP_DIGIT;
+            }
+
+            if ( IsLatinLetter( c ) )
+            {
+                return TITLE_GROUP_LATIN;
+            }
+
+            if ( IsHan( title, i ) )
+            {
+                return TITLE_GROUP_HAN;
+            }
+
+            return TITLE_GROUP_OTHER;
+        }
+
+        return TITLE_GROUP_OTHER;
+    }
+
+    private static bool IsLatinLetter( char c )
+    {
+        return c is >= 'A' and <= 'Z' or >= 'a' and <= 'z'
+            or >= '\uFF21' and <= '\uFF3A' or >= '\uFF41' and <= '\uFF5A';
+    }
+
+    private static bool IsHan( string title, int index )
+    {
+        var c = title[index];
+        if ( char.IsHighSurrogate( c ) )
+        {
+            if ( index + 1 >= title.Length || !char.IsLowSurrogate( title[index + 1] ) )
+            {
+                return false;
+            }
+
+            var codePoint = char.ConvertToUtf32( c, title[index + 1] );
+            return codePoint is >= 0x20000 and <= 0x2A6DF
+                or >= 0x2A700 and <= 0x2B73F
+                or >= 0x2B740 and <= 0x2B81F
+                or >= 0x2B820 and <= 0x2CEAF
+                or >= 0x2CEB0 and <= 0x2EBEF
+                or >= 0x30000 and <= 0x3134F
+                or >= 0x2F800 and <= 0x2FA1F;
+        }
+
+        return c is >= '\u3400' and <= '\u4DBF' or >= '\u4E00' and <= '\u9FFF' or >= '\uF900' and <= '\uFAFF';
+    }
+
     private static string CaptionIndex( int screenIndex )
     {
         return screenIndex is < 0 or int.MaxValue ? "" : ( screenIndex + 1 ).ToString();
@@ -290,6 +387,8 @@ public partial class VirtualDesktopWindow
         brush.Freeze();
         return brush;
     }
+
+    private readonly record struct ScreenSlot( int Index, string Name );
 }
 
 internal static partial class VirtualDesktopManager
