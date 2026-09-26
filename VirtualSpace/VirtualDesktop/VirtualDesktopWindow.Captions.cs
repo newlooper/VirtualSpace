@@ -16,6 +16,7 @@ using System.Windows.Media;
 using VirtualSpace.Config;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
+using VirtualSpace.VirtualDesktop.Api;
 using Color = System.Windows.Media.Color;
 
 namespace VirtualSpace.VirtualDesktop;
@@ -35,10 +36,10 @@ public partial class VirtualDesktopWindow
         Color.FromRgb( 0xCA, 0x50, 0x10 ),
         Color.FromRgb( 0x88, 0x17, 0x98 ),
         Color.FromRgb( 0x01, 0x85, 0x74 ),
-        Color.FromRgb( 0x9A, 0x00, 0x89 ),
+        Color.FromRgb( 0x53, 0x6B, 0xC6 ),
         Color.FromRgb( 0x49, 0x82, 0x05 ),
         Color.FromRgb( 0x48, 0x68, 0x60 ),
-        Color.FromRgb( 0x4A, 0x54, 0x59 )
+        Color.FromRgb( 0x70, 0x3C, 0x00 )
     ];
 
     private static readonly SolidColorBrush[] AccentBackgrounds = BuildBackgrounds();
@@ -47,6 +48,7 @@ public partial class VirtualDesktopWindow
     private static readonly SolidColorBrush CaptionPlainBackground = FrozenBrush( Color.FromRgb( 0x50, 0x50, 0x50 ) );
 
     private readonly List<ThumbCaptionBand> _thumbCaptions = [];
+    private          bool                   _thumbCaptionBold;
 
     private readonly record struct ScreenSlot( int Index, string Name );
 
@@ -106,6 +108,7 @@ public partial class VirtualDesktopWindow
 
     internal void RefreshThumbCaptions()
     {
+        _thumbCaptionBold = VdId == DesktopWrapper.CurrentGuid;
         _thumbCaptions.Clear();
         foreach ( var window in _visibleWindows )
         {
@@ -141,13 +144,25 @@ public partial class VirtualDesktopWindow
             Title      = window.Title,
             Background = grouped ? CaptionBackground( window.ScreenIndex ) : CaptionPlainBackground,
             Foreground = Brushes.White,
-            FontSize   = CaptionFontSize( barPx / (double)scaleY )
+            FontSize   = CaptionFontSize( barPx / (double)scaleY ),
+            Bold       = _thumbCaptionBold
         } );
     }
 
     private void PresentThumbCaptions()
     {
         _surface.SetThumbCaptions( _thumbCaptions );
+    }
+
+    internal void RefreshChromeCaptionWeight()
+    {
+        var current = VdId == DesktopWrapper.CurrentGuid;
+        if ( _thumbCaptionBold == current || !VirtualDesktopManager.Ui.ThumbCaptionMode.ShowsCaption() )
+        {
+            return;
+        }
+
+        RefreshThumbCaptions();
     }
 
     private static bool CapturesPoint( VisibleWindow window, System.Drawing.Point point )

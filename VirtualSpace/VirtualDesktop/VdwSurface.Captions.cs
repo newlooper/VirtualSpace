@@ -28,6 +28,7 @@ internal readonly struct ThumbCaptionBand
     internal Brush  Background { get; init; }
     internal Brush  Foreground { get; init; }
     internal double FontSize   { get; init; }
+    internal bool   Bold       { get; init; }
 }
 
 internal partial class VdwSurface
@@ -97,7 +98,7 @@ internal partial class VdwSurface
             Foreground        = band.Foreground,
             FontFamily        = SystemFonts.MessageFontFamily,
             FontSize          = band.FontSize,
-            FontWeight        = FontWeights.Bold,
+            FontWeight        = band.Bold ? FontWeights.Bold : FontWeights.Normal,
             TextAlignment     = align,
             TextTrimming      = TextTrimming.CharacterEllipsis,
             TextWrapping      = TextWrapping.NoWrap,

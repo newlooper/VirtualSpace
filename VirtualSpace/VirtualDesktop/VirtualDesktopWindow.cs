@@ -280,5 +280,6 @@ public partial class VirtualDesktopWindow
         }
 
         _surface.ApplyChrome( VdId == DesktopWrapper.CurrentGuid, hover );
+        RefreshChromeCaptionWeight();
     }
 }
