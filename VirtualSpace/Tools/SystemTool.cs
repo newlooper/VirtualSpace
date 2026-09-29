@@ -18,7 +18,7 @@ public static class SystemTool
     public static bool VersionCheck()
     {
         var version = Environment.OSVersion.Version;
-        if ( version is { Major: >= 10, Build: >= 17763 and <= 26200 } )
+        if ( version is { Major: >= 10, Build: >= 17763 and <= 26300 } )
         {
             return true;
         }
