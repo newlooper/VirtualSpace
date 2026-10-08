@@ -46,7 +46,8 @@ public partial class App : Application
     {
         base.OnStartup( e );
 
-        if ( SystemTool.VersionCheck() &&
+        var versionOk = e.Args.Contains( Const.Args.SKIP_SYSTEM_VERSION_CHECK ) || SystemTool.VersionCheck();
+        if ( versionOk &&
              SingleInstanceCheck() &&
              ConfigManager.Init() )
         {
@@ -57,7 +58,7 @@ public partial class App : Application
                 HideOnStart = true;
             }
 
-            var mw = CreateCanvas( e );
+            var mw = CreateCanvas();
             Current.MainWindow = mw;
 
             PluginHost.HostContext.MainWindowHandle = mw.Handle;
@@ -257,7 +258,7 @@ public partial class App : Application
         }
     }
 
-    private MainWindow CreateCanvas( StartupEventArgs args )
+    private MainWindow CreateCanvas()
     {
         var canvas = VirtualSpace.MainWindow.Create( AppControllerFactory.Create( Resources.MergedDictionaries ) );
         return canvas;

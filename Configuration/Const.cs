@@ -79,7 +79,8 @@ public static class Const
 
     public static class Args
     {
-        public const string HIDE_ON_START = "--HideOnStart";
+        public const string HIDE_ON_START             = "--HideOnStart";
+        public const string SKIP_SYSTEM_VERSION_CHECK = "--SkipSystemVersionCheck";
     }
 
     public static class Hotkey
