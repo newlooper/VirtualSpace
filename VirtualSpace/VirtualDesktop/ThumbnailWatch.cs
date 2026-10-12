@@ -104,12 +104,17 @@ internal static partial class VirtualDesktopManager
     // 只在主视图显示且 TrackVisibleWindows 打开时跑。关掉开关会停掉定时器，不再占 Dispatcher。
     // 稳定期盖住启动后的空源、短暂 cloak 和短暂不可见。壳层 cloak 表示窗口在其他虚拟桌面，仍然显示。
     // 稳定期结束后，源连续 INVALID_SOURCE_STREAK 次没有像素才抑制；隐藏或重度 cloak 的窗口连续缺席 ABSENT_SOURCE_STREAK 次才拿掉。
-    private const int THUMBNAIL_SETTLE_MS         = 2000;
-    private const int INVALID_SOURCE_STREAK       = 2;
-    private const int ABSENT_SOURCE_STREAK        = 4;
-    private const int DWM_CLOAKED_SHELL           = 2;
+    // 句柄集合没变时，IDENTITY_REFRESH_MS 内不再查询钉住状态和桌面身份。已抑制的源每 SUPPRESSED_PROBE_INTERVAL 拍才探测一次。
+    private const int THUMBNAIL_SETTLE_MS       = 2000;
+    private const int IDENTITY_REFRESH_MS       = 2000;
+    private const int INVALID_SOURCE_STREAK     = 2;
+    private const int ABSENT_SOURCE_STREAK      = 4;
+    private const int SUPPRESSED_PROBE_INTERVAL = 4;
+    private const int DWM_CLOAKED_SHELL         = 2;
 
     private static readonly HashSet<IntPtr>          SuppressedSources = [];
+    private static readonly HashSet<IntPtr>          CandidateHandles  = [];
+    private static readonly HashSet<IntPtr>          LastCandidates    = [];
     private static readonly Dictionary<IntPtr, int>  SourceStreak      = [];
     private static readonly Dictionary<IntPtr, int>  AbsentStreak      = [];
     private static readonly Dictionary<IntPtr, SIZE> SourceSizes       = [];
@@ -117,6 +122,8 @@ internal static partial class VirtualDesktopManager
     private static          DispatcherTimer?         _thumbWatch;
     private static          int                      _thumbWatchProcessId;
     private static          bool                     _thumbWatchBusy;
+    private static          long                     _lastIdentityRefreshAt;
+    private static          int                      _probeTick;
 
     /// <summary>
     ///     开关或主视图可见性变化时调用。需要追踪才创建定时器，并立刻扫一次，避免干等第一个间隔。
@@ -159,10 +166,14 @@ internal static partial class VirtualDesktopManager
         _thumbWatch     = null;
         _thumbWatchBusy = false;
         SuppressedSources.Clear();
+        CandidateHandles.Clear();
+        LastCandidates.Clear();
         SourceStreak.Clear();
         AbsentStreak.Clear();
         SourceSizes.Clear();
         ThumbnailSeenAt.Clear();
+        _lastIdentityRefreshAt = 0;
+        _probeTick             = 0;
     }
 
     /// <summary>
@@ -194,7 +205,8 @@ internal static partial class VirtualDesktopManager
             NoteUnhealthySources( targets );
             RecoverSuppressed( targets );
 
-            if ( ThumbnailAssignmentsDiffer( targets, _thumbWatchProcessId ) )
+            if ( NeedsIdentityMatch( targets ) &&
+                 ThumbnailAssignmentsDiffer( targets, _thumbWatchProcessId ) )
             {
                 if ( VirtualDesktopWindow.IsDragInProgress )
                 {
@@ -263,6 +275,73 @@ internal static partial class VirtualDesktopManager
             if ( !vdw.ShowsHandles( expected ) )
             {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///     句柄集合没变，且格子上没有已经离开枚举结果的窗口时，IDENTITY_REFRESH_MS 内跳过钉住和桌面身份查询。
+    ///     窗口换桌面或钉住变化不改变句柄集合，靠这段慢刷新补上。
+    /// </summary>
+    private static bool NeedsIdentityMatch( List<VirtualDesktopWindow> targets )
+    {
+        RefreshCandidateHandles( _thumbWatchProcessId );
+        var now          = Environment.TickCount64;
+        var due          = now - _lastIdentityRefreshAt >= IDENTITY_REFRESH_MS;
+        var changed      = !CandidateHandles.SetEquals( LastCandidates );
+        var shownMissing = ShownHandleMissing( targets, CandidateHandles );
+        if ( !due && !changed && !shownMissing )
+        {
+            return false;
+        }
+
+        LastCandidates.Clear();
+        LastCandidates.UnionWith( CandidateHandles );
+        _lastIdentityRefreshAt = now;
+        return true;
+    }
+
+    private static void RefreshCandidateHandles( int processId )
+    {
+        CandidateHandles.Clear();
+        foreach ( var win in GetVisibleWindows() )
+        {
+            if ( !string.IsNullOrEmpty( WindowFilter.Keyword ) &&
+                 !win.Title.Contains( WindowFilter.Keyword, StringComparison.CurrentCultureIgnoreCase ) )
+            {
+                continue;
+            }
+
+            if ( processId != 0 )
+            {
+                _ = User32.GetWindowThreadProcessId( win.Handle, out var pId );
+                if ( processId != pId )
+                {
+                    continue;
+                }
+            }
+
+            if ( ShouldSkipSource( win.Handle ) )
+            {
+                continue;
+            }
+
+            CandidateHandles.Add( win.Handle );
+        }
+    }
+
+    private static bool ShownHandleMissing( List<VirtualDesktopWindow> targets, HashSet<IntPtr> candidates )
+    {
+        foreach ( var vdw in targets )
+        {
+            foreach ( var window in vdw.ShownWindows )
+            {
+                if ( !candidates.Contains( window.Handle ) )
+                {
+                    return true;
+                }
             }
         }
 
@@ -549,15 +628,40 @@ internal static partial class VirtualDesktopManager
     }
 
     /// <summary>
-    ///     句柄还挂在格子上时不探测。离开格子后临时注册一张缩略图，源尺寸非 0 才解除抑制。
+    ///     已销毁的句柄每拍清掉。离开格子的源每 SUPPRESSED_PROBE_INTERVAL 拍才临时注册一张缩略图，源尺寸非 0 才解除抑制。
     /// </summary>
     private static void RecoverSuppressed( List<VirtualDesktopWindow> targets )
     {
         if ( SuppressedSources.Count == 0 )
         {
+            _probeTick = 0;
             return;
         }
 
+        foreach ( var handle in SuppressedSources.ToArray() )
+        {
+            if ( User32.IsWindow( handle ) )
+            {
+                continue;
+            }
+
+            SuppressedSources.Remove( handle );
+            SourceStreak.Remove( handle );
+        }
+
+        if ( SuppressedSources.Count == 0 )
+        {
+            _probeTick = 0;
+            return;
+        }
+
+        _probeTick++;
+        if ( _probeTick < SUPPRESSED_PROBE_INTERVAL )
+        {
+            return;
+        }
+
+        _probeTick = 0;
         var shown = new HashSet<IntPtr>();
         foreach ( var vdw in targets )
         {
@@ -664,7 +768,7 @@ internal static partial class VirtualDesktopManager
 
         foreach ( var handle in ThumbnailSeenAt.Keys.ToArray() )
         {
-            if ( !live.Contains( handle ) && !User32.IsWindow( handle ) )
+            if ( !live.Contains( handle ) )
             {
                 ThumbnailSeenAt.Remove( handle );
             }
