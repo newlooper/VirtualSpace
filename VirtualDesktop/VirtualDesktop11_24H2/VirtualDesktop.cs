@@ -126,7 +126,7 @@ public class Desktop : IDesktop
 
         var id = DesktopManager.VirtualDesktopManager.GetWindowDesktopId( hWnd );
 
-        return GetDesktopByGuid( id );
+        return FromId( id );
     }
 
     public static int SysIndexFromDesktop( Desktop desktop )
@@ -493,35 +493,13 @@ public class Desktop : IDesktop
 
     public static Desktop? FromId( Guid guid )
     {
-        return GetDesktopByGuid( guid );
-    }
-
-    private static Desktop? GetDesktopByGuid( Guid guid )
-    {
-        Desktop? desktop = null;
-
         try
         {
-            var count = DesktopManager.GetDesktopCount();
-            DesktopManager.VirtualDesktopManagerInternal.GetDesktops( out var desktops );
-
-            for ( var i = 0; i < count; i++ )
-            {
-                desktops.GetAt( i, typeof( IVirtualDesktop ).GUID, out var objDesktop );
-                if ( guid.CompareTo( ( (IVirtualDesktop)objDesktop ).GetId() ) != 0 )
-                {
-                    continue;
-                }
-
-                desktop = new Desktop( (IVirtualDesktop)objDesktop );
-            }
-
-            Marshal.ReleaseComObject( desktops );
-            return desktop;
+            return new Desktop( DesktopManager.VirtualDesktopManagerInternal.FindDesktop( ref guid ) );
         }
         catch
         {
-            return desktop;
+            return null;
         }
     }
 }
