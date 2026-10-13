@@ -24,6 +24,7 @@ public static class WinRegistry
 {
     private const string PATH_VD_WALLPAPER_REGISTRY = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops\Desktops\";
     private const string PATH_WALLPAPER_REGISTRY    = @"HKEY_CURRENT_USER\Control Panel\Desktop\";
+    private const string PATH_WALLPAPERS_REGISTRY   = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers\";
     private const string PATH_COLOR_REGISTRY        = @"HKEY_CURRENT_USER\Control Panel\Colors\";
     private const string PATH_APP_USE_LIGHT_THEME   = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\";
 
@@ -42,6 +43,16 @@ public static class WinRegistry
         }
 
         return string.IsNullOrEmpty( path ) ? null : path;
+    }
+
+    public static int GetBackgroundType()
+    {
+        return Registry.GetValue( PATH_WALLPAPERS_REGISTRY, "BackgroundType", 0 ) is int type ? type : 0;
+    }
+
+    public static bool IsSolidColorBackground()
+    {
+        return GetBackgroundType() == 1;
     }
 
     public static Color GetBackColor()

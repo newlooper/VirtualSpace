@@ -14,10 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Update="Resources\Langs.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Langs.Designer.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Fody" Version="6.9.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -44,14 +40,6 @@
         <Resource Include="Resources\Images\m5.png" />
         <Resource Include="Resources\Images\m6.png" />
         <Resource Include="Resources\Images\m7.png" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Resources\Langs.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Langs.resx</DependentUpon>
-        </Compile>
     </ItemGroup>
 
     <ItemGroup>

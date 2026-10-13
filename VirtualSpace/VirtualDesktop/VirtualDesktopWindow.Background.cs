@@ -154,7 +154,7 @@ public partial class VirtualDesktopWindow
         }
 
         var wpPath = WinRegistry.GetWallPaperPathByGuid( VdId );
-        if ( wpPath is null )
+        if ( wpPath is null || WinRegistry.IsSolidColorBackground() )
         {
             ApplyWallpaper( WinRegistry.GetBackColor() );
             return;

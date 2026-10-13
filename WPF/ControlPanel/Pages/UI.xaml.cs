@@ -19,7 +19,6 @@ using ControlPanel.Resources;
 using ControlPanel.ViewModels;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
-using VirtualSpace.AppLogs;
 using VirtualSpace.Config;
 using VirtualSpace.Config.Entity;
 using VirtualSpace.Helpers;
@@ -175,11 +174,11 @@ public partial class UI
             _psExtra = 0;
         }
 
-        PsHintText.Text = string.Format( Langs.Page_UI_PsLayout_Hint, k, count );
+        PsHintText.Text = string.Format( Langs.ResourceManager.GetString( "Page.UI.PsLayout.Hint" )!, k, count );
         if ( _psExtra > 0 )
         {
             PsCreateExtrasCheck.Visibility = Visibility.Visible;
-            PsCreateExtrasCheck.Content    = string.Format( Langs.Page_UI_PsLayout_CreateExtras, _psExtra );
+            PsCreateExtrasCheck.Content    = string.Format( Langs.ResourceManager.GetString( "Page.UI.PsLayout.CreateExtras" )!, _psExtra );
         }
         else
         {
@@ -192,14 +191,14 @@ public partial class UI
         _psSelected = null;
         if ( _psKind == PsKind.Center )
         {
-            AddPsPreview( PsCorner.NorthWest, Langs.Page_UI_PsLayout_Center );
+            AddPsPreview( PsCorner.NorthWest, Langs.ResourceManager.GetString( "Page.UI.PsLayout.Center" )! );
         }
         else
         {
-            AddPsPreview( PsCorner.NorthWest, Langs.Page_UI_PsLayout_CornerNW );
-            AddPsPreview( PsCorner.NorthEast, Langs.Page_UI_PsLayout_CornerNE );
-            AddPsPreview( PsCorner.SouthWest, Langs.Page_UI_PsLayout_CornerSW );
-            AddPsPreview( PsCorner.SouthEast, Langs.Page_UI_PsLayout_CornerSE );
+            AddPsPreview( PsCorner.NorthWest, Langs.ResourceManager.GetString( "Page.UI.PsLayout.CornerNW" )! );
+            AddPsPreview( PsCorner.NorthEast, Langs.ResourceManager.GetString( "Page.UI.PsLayout.CornerNE" )! );
+            AddPsPreview( PsCorner.SouthWest, Langs.ResourceManager.GetString( "Page.UI.PsLayout.CornerSW" )! );
+            AddPsPreview( PsCorner.SouthEast, Langs.ResourceManager.GetString( "Page.UI.PsLayout.CornerSE" )! );
         }
 
         var current = Manager.CurrentProfile.PrimarySecondary;
